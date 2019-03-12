@@ -14,8 +14,8 @@ class RuleDict(dict):
         return dict.__getitem__(self,key).append(value)
 
 class Builtins:
-    def literal(name):
-        return Node(name)
+    def accept(*args, exclude=None):
+        return Node(args)
 
 class Metaclass(type):
     @classmethod
@@ -25,7 +25,13 @@ class Metaclass(type):
             if not k.startswith("_"):
                 dict.__setitem__(r, k, v)
         return r
+    def __new__(metacls, name, bases, attrs, start=None, **args):
+        return super().__new__(metacls, name, bases, attrs)
+        
     # transform after initialisation
+
+class Grammar(metaclass=Metaclass):
+    pass
 
 class Node:
     def __init__(self, rules=None):
@@ -39,6 +45,15 @@ class Node:
             return Node(rules)
 
 class builder:
+    def accept(self):
+        pass
+
+    def reject(self):
+        pass
+
+    def choice(self):
+            pass
+
     def literal(self, name):
         pass
 
@@ -47,16 +62,14 @@ class builder:
 
     def repeat(self, min=None, max=None):
         pass
+    
+    def optional(self):
+        pass
 
 class repeatbuilder:
     pass
 
 def build(class_def):
     pass
-
-class Grammar(metaclass=Metaclass):
-    def __init_subclass__(cls, start, **kwargs):
-        print(kwargs)
-        super().__init_subclass__(**kwargs)
 
 
