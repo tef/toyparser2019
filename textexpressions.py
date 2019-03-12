@@ -13,7 +13,12 @@ class Metaclass(type):
 class Builtins:
     def accept(*args, exclude=None):
         return LiteralRule(args, exclude)
-
+    def repeat(*args, min=0, max=None):
+        return RepeatRule(args, min=min, max=max)
+    def optional(*args):
+        return RepeatRule(args, min=0, max=1)
+    def choice(*args):
+        return ChoiceRule(args)
 class GrammarDict(dict):
     def __init__(self):
         dict.__init__(self)
@@ -63,11 +68,26 @@ class GrammarDict(dict):
 
         for name in rules:
             named_rule = self.named_rules.get(name, NamedRule(name))
-            def callback(self):
+            def callback(self, named_rule=named_rule):
                 return self.rule(named_rule)
             setattr(Builder, name, callback)
 
-        new_attrs['rules'] = {k:r.build_rule(Builder) for k,r in rules.items()}
+        build_rule = None        
+        def build_rule(rule):
+            if isinstance(rule, FunctionType):
+                builder = Builder()
+                rule(builder)
+                return builder.build_rule()
+            elif isinstance(rule, (tuple, list)):
+                if len(rule) == 1:
+                    return rule[0]
+                return SequenceRule(rule)
+            elif isinstance(rule, Rule):
+                return rule
+            else:
+                raise SyntaxError()
+
+        new_attrs['rules'] = {k:r.build_rule(build_rule) for k,r in rules.items()}
         return new_attrs
                 
 class RuleSet:
@@ -83,11 +103,8 @@ class RuleSet:
     def build_rule(self, rulebuilder):
         rules = []
         for rule in self.rules:
-            if isinstance(rule, FunctionType):
-                builder = rulebuilder()
-                rule(builder)
-                rule = builder.build_rule()
-            rules.append(rule)
+            r = rulebuilder(rule)
+            rules.append(r.build_rule(rulebuilder))
         if len(rules) == 1:
             return rules[0]
         return ChoiceRule(rules)
@@ -105,6 +122,9 @@ class NamedRule(Rule):
     def __or__(self, right):
         return ChoiceRule([self, right])
 
+    def build_rule(self, builder):
+        return self
+
 class ChoiceRule(Rule):
     def __init__(self, rules):
         self.rules = rules
@@ -115,81 +135,124 @@ class ChoiceRule(Rule):
         rules.append(right)
         return ChoiceRule(rules)
 
+    def build_rule(self):
+        if len(self.rules) == 1:
+            return self.rules[0]
+        return self
+
 class SequenceRule(Rule):
     def __init__(self, rules):
         self.rules = rules
     def __str__(self):
         return f"({' '.join(str(x) for x in self.rules)})"
 
+    def build_rule(self, builder):
+        if len(self.rules) == 1:
+            return self.rules[0]
+        return self
+
 class RepeatRule(Rule):
-    def __init__(self, rules):
+    def __init__(self, rules, min=0, max=None):
+        self.min = min
+        self.max = max
         self.rules = rules
     def __str__(self):
-        return f"({' '.join(str(x) for x in self.rules)})*"
+        if self.min == 0 and self.max == 1:
+            return f"({' '.join(str(x) for x in self.rules)})?"
+        elif self.min == 0 and self.max == None:
+            return f"({' '.join(str(x) for x in self.rules)})*"
+        elif self.min == 1 and self.max == None:
+            return f"({' '.join(str(x) for x in self.rules)})+"
+        else:
+            return f"({' '.join(str(x) for x in self.rules)})^[{self.min},{self.max}]"
+    def build_rule(self, builder):
+        return self
 
 class LiteralRule(Rule):
     def __init__(self, args,exclude):
         self.args = args
         self.exclude = exclude
 
+    def build_rule(self, rulebuilder):
+        return self
+
     def __str__(self):
         if len(self.args) == 1:
             return "{!r}".format(self.args[0])
-        return "{!r}".format(self.args)
+        return "|".join("{!r}".format(a) for a in self.args)
 
 
 class RuleBuilder:
     def __init__(self):
         self.rules = [] 
+        self.choice_block = False
 
     def rule(self, rule):
+        if self.choice_block: raise SyntaxError()
         self.rules.append(rule)
 
     def accept(self, *args, exclude=None):
+        if self.choice_block: raise SyntaxError()
         self.rules.append(LiteralRule(args, exclude))
 
     def reject(self):
+        if self.choice_block: raise SyntaxError()
         pass
 
     @contextmanager
     def choice(self):
+        if self.choice_block: raise SyntaxError()
         rules = self.rules
         self.rules = []
+        self.choice_block = True
         yield
+        self.choice_block = False
         rules.append(ChoiceRule(self.rules))
         self.rules = rules
 
 
     @contextmanager
     def case(self):
+        if not self.choice_block: raise SyntaxError()
         rules = self.rules
         self.rules = []
+        self.choice_block = False
         yield
+        self.choice_block = True
         rules.append(SequenceRule(self.rules))
         self.rules = rules
 
     @contextmanager
-    def repeat(self, min=None, max=None):
+    def repeat(self, min=0, max=None):
+        if self.choice_block: raise SyntaxError()
         rules = self.rules
         self.rules = []
         yield
-        rules.append(RepeatRule(self.rules))
+        rules.append(RepeatRule(self.rules, min=min, max=max))
         self.rules = rules
     
     @contextmanager
     def optional(self):
+        if self.choice_block: raise SyntaxError()
         rules = self.rules
         self.rules = []
         yield
-        rules.append(RepeatRule(self.rules))
+        rules.append(RepeatRule(self.rules, min=0, max=1))
         self.rules = rules
 
     def build_rule(self):
+        if self.choice_block: raise SyntaxError()
         if len(self.rules) == 1:
             return self.rules[0]
         return SequenceRule(self.rules)
 
 class Grammar(metaclass=Metaclass):
+    def Tokenizer(self):
+        pass
+    def canonicalise(self):
+        pass
+
+class Schema:
     pass
 
 

@@ -78,5 +78,5 @@ class JSON(Grammar, start="document"):
         self.accept("}")
 
 for name, value in JSON.rules.items():
-    print(name, value)
+    print(name, '<--', value,'.')
     print()
