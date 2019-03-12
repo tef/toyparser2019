@@ -26,7 +26,11 @@ class Metaclass(type):
                 dict.__setitem__(r, k, v)
         return r
     def __new__(metacls, name, bases, attrs, start=None, **args):
-        return super().__new__(metacls, name, bases, attrs)
+        print(metacls, name, bases, attrs, args)
+        new_attrs = {}
+        for key, value in attrs.items():
+            new_attrs[key] = value
+        return super().__new__(metacls, name, bases, new_attrs)
         
     # transform after initialisation
 
