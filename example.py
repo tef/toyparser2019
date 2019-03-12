@@ -1,7 +1,8 @@
-from textexpressions import Grammar, Node
+from textexpressions import Grammar
 
 class JSON(Grammar, start="document"):
-    document = json_list | json_object
+    document = json_list 
+    document = json_object
 
     json_value = ( 
         json_list | json_object |
@@ -76,9 +77,11 @@ class JSON(Grammar, start="document"):
                 self.json_value()
         self.accept("}")
 
-for name, value in JSON.__dict__.items():
-    if name.startswith('_'): continue
-    print(name, value)
-    if isinstance(value, Node):
-        for r in value.rules:
+for name, value in JSON.rules.items():
+    print(name)
+    for r in value.rules:
+        if hasattr(r, "name"):
+            print('\t', r.name)
+        else:
             print('\t', r)
+    print()
