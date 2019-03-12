@@ -7,6 +7,7 @@ class Metaclass(type):
         return GrammarDict()
     def __new__(metacls, name, bases, attrs, start=None, **args):
         attrs = attrs.build_attrs() 
+        attrs['start'] = start
         return super().__new__(metacls, name, bases, attrs)
 
 class Builtins:
@@ -61,8 +62,9 @@ class GrammarDict(dict):
             pass
 
         for name in rules:
+            named_rule = self.named_rules.get(name, NamedRule(name))
             def callback(self):
-                return self.rule(name)
+                return self.rule(named_rule)
             setattr(Builder, name, callback)
 
         new_attrs['rules'] = {k:r.build_rule(Builder) for k,r in rules.items()}
@@ -114,10 +116,16 @@ class ChoiceRule(Rule):
         return ChoiceRule(rules)
 
 class SequenceRule(Rule):
-    pass
+    def __init__(self, rules):
+        self.rules = rules
+    def __str__(self):
+        return f"({' '.join(str(x) for x in self.rules)})"
 
 class RepeatRule(Rule):
-    pass
+    def __init__(self, rules):
+        self.rules = rules
+    def __str__(self):
+        return f"({' '.join(str(x) for x in self.rules)})*"
 
 class LiteralRule(Rule):
     def __init__(self, args,exclude):
@@ -132,35 +140,54 @@ class LiteralRule(Rule):
 
 class RuleBuilder:
     def __init__(self):
-        pass
+        self.rules = [] 
 
-    def rule(self, name):
-        pass
+    def rule(self, rule):
+        self.rules.append(rule)
 
     def accept(self, *args, exclude=None):
-        pass
+        self.rules.append(LiteralRule(args, exclude))
 
     def reject(self):
         pass
 
     @contextmanager
     def choice(self):
+        rules = self.rules
+        self.rules = []
         yield
+        rules.append(ChoiceRule(self.rules))
+        self.rules = rules
+
 
     @contextmanager
     def case(self):
+        rules = self.rules
+        self.rules = []
         yield
+        rules.append(SequenceRule(self.rules))
+        self.rules = rules
 
     @contextmanager
     def repeat(self, min=None, max=None):
+        rules = self.rules
+        self.rules = []
         yield
+        rules.append(RepeatRule(self.rules))
+        self.rules = rules
     
     @contextmanager
     def optional(self):
+        rules = self.rules
+        self.rules = []
         yield
+        rules.append(RepeatRule(self.rules))
+        self.rules = rules
 
     def build_rule(self):
-        return NamedRule('unfinished')
+        if len(self.rules) == 1:
+            return self.rules[0]
+        return SequenceRule(self.rules)
 
 class Grammar(metaclass=Metaclass):
     pass
