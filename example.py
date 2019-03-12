@@ -78,10 +78,5 @@ class JSON(Grammar, start="document"):
         self.accept("}")
 
 for name, value in JSON.rules.items():
-    print(name)
-    for r in value.rules:
-        if hasattr(r, "name"):
-            print('\t', r.name)
-        else:
-            print('\t', r)
+    print(name, value)
     print()

@@ -1,61 +1,76 @@
-class GrammarDict(dict):
-    def __init__(self):
-        dict.__init__(self)
-        self.rules = {}
-        for k, v in Builtins.__dict__.items():
-            if not k.startswith("_"):
-                dict.__setitem__(self, k, v)
+from contextlib import contextmanager
+from types import FunctionType
 
-    def __getitem__(self, key):
-        if key.startswith('_'):
-            return dict.__getitem__(self,key)
-        if key not in self:
-            rule = self.rules.get(key, NamedRule(key))
-            self.rules[key] = rule
-            return rule
-        return dict.__getitem__(self,key)
-
-    def __setitem__(self, key, value):
-        if key.startswith('_'):
-            return dict.__setitem__(self,key, value)
-        if key not in self:
-            rule = self.rules.get(key, NamedRule(key))
-            dict.__setitem__(self, key, rule)
-        return dict.__getitem__(self,key).append(value)
+class Metaclass(type):
+    @classmethod
+    def __prepare__(metacls, name, bases, **args):
+        return GrammarDict()
+    def __new__(metacls, name, bases, attrs, start=None, **args):
+        attrs = attrs.build_attrs() 
+        return super().__new__(metacls, name, bases, attrs)
 
 class Builtins:
     def accept(*args, exclude=None):
         return LiteralRule(args, exclude)
 
-class Metaclass(type):
-    @classmethod
-    def __prepare__(metacls, name, bases, **args):
-        r = GrammarDict()
-        return r
-    def __new__(metacls, name, bases, attrs, start=None, **args):
+class GrammarDict(dict):
+    def __init__(self):
+        dict.__init__(self)
+        self.named_rules = {}
+        self.rulesets = {}
+
+        for k, v in Builtins.__dict__.items():
+            if not k.startswith("_"):
+                dict.__setitem__(self, k, v)
+
+    def __getitem__(self, key):
+        if key.startswith('_') or key in self:
+            return dict.__getitem__(self,key)
+
+        if key in self.named_rules:
+            return self.named_rules[key]
+        else:
+            rule = NamedRule(key)
+            self.named_rules[key] = rule
+            return rule
+
+    def __setitem__(self, key, value):
+        if key.startswith('_'):
+            dict.__setitem__(self,key, value)
+        elif key in self:
+            dict.__getitem__(self,key).append(value)
+        else:
+            rule = RuleSet()
+            dict.__setitem__(self, key, rule)
+            rule.append(value)
+
+    def build_attrs(self):
         rules = {}
-        new_attrs = {'rules':rules}
+        attrs = dict(self)
+        new_attrs = {}
         for key, value in attrs.items():
             if key.startswith("_"):
                 new_attrs[key] = value
             elif value == Builtins.__dict__.get(key):
                 pass # decorators need to be kept as called afterwards, lol
-            elif isinstance(value, NamedRule):
+            elif isinstance(value, RuleSet):
                 rules[key] = value
             else:
                 new_attrs[key] = value
+        class Builder(RuleBuilder):
+            pass
+
+        for name in rules:
+            def callback(self):
+                return self.rule(name)
+            setattr(Builder, name, callback)
+
+        new_attrs['rules'] = {k:r.build_rule(Builder) for k,r in rules.items()}
+        return new_attrs
                 
-        return super().__new__(metacls, name, bases, new_attrs)
-        
-    # transform after initialisation
-
-class NamedRule:
-    def __init__(self, name):
+class RuleSet:
+    def __init__(self):
         self.rules = []
-        self.name = name
-
-    def __str__(self):
-        return f"<{self.name} {self.rules}>"
 
     def append(self, rule):
         if isinstance(rule, ChoiceRule):
@@ -63,55 +78,89 @@ class NamedRule:
         else:
             self.rules.append(rule)
 
+    def build_rule(self, rulebuilder):
+        rules = []
+        for rule in self.rules:
+            if isinstance(rule, FunctionType):
+                builder = rulebuilder()
+                rule(builder)
+                rule = builder.build_rule()
+            rules.append(rule)
+        if len(rules) == 1:
+            return rules[0]
+        return ChoiceRule(rules)
+
+class Rule:
+    pass
+
+class NamedRule(Rule):
+    def __init__(self, name):
+        self.name = name
+
+    def __str__(self):
+        return self.name
+
     def __or__(self, right):
         return ChoiceRule([self, right])
 
-class ChoiceRule:
+class ChoiceRule(Rule):
     def __init__(self, rules):
         self.rules = rules
+    def __str__(self):
+        return f"({' | '.join(str(x) for x in self.rules)})"
     def __or__(self, right):
         rules = list(self.rules)
         rules.append(right)
         return ChoiceRule(rules)
 
-class SequenceRule:
+class SequenceRule(Rule):
     pass
 
-class RepeatRule:
+class RepeatRule(Rule):
     pass
 
-class LiteralRule:
+class LiteralRule(Rule):
     def __init__(self, args,exclude):
         self.args = args
         self.exclude = exclude
 
-class builder:
-    def accept(self):
+    def __str__(self):
+        if len(self.args) == 1:
+            return "{!r}".format(self.args[0])
+        return "{!r}".format(self.args)
+
+
+class RuleBuilder:
+    def __init__(self):
+        pass
+
+    def rule(self, name):
+        pass
+
+    def accept(self, *args, exclude=None):
         pass
 
     def reject(self):
         pass
 
+    @contextmanager
     def choice(self):
-            pass
+        yield
 
-    def literal(self, name):
-        pass
+    @contextmanager
+    def case(self):
+        yield
 
-    def any_literal(self, name):
-        pass
-
+    @contextmanager
     def repeat(self, min=None, max=None):
-        pass
+        yield
     
+    @contextmanager
     def optional(self):
-        pass
+        yield
 
-class repeatbuilder:
-    pass
-
-def build(class_def):
-    pass
+    def build_rule(self):
+        return NamedRule('unfinished')
 
 class Grammar(metaclass=Metaclass):
     pass
