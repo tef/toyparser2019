@@ -6,11 +6,19 @@ class Metaclass(type):
     def __prepare__(metacls, name, bases, **args):
         return GrammarDict()
     def __new__(metacls, name, bases, attrs, start=None, **args):
-        attrs = attrs.build_attrs() 
+        attrs = attrs.build_attrs()
         attrs['start'] = start
         return super().__new__(metacls, name, bases, attrs)
 
 class Builtins:
+    def rule(*args, inline=False):
+        if len(args) > 0:
+            return SequenceRule(args)
+        else:
+            def _decorator(fn):
+                return FunctionRule(fn)
+            return _decorator
+
     def accept(*args, exclude=None):
         return LiteralRule(args, exclude)
     def repeat(*args, min=0, max=None):
@@ -44,11 +52,21 @@ class GrammarDict(dict):
         if key.startswith('_'):
             dict.__setitem__(self,key, value)
         elif key in self:
-            dict.__getitem__(self,key).append(value)
-        else:
-            rule = RuleSet()
-            dict.__setitem__(self, key, rule)
+            ruleset = dict.__getitem__(self,key)
+            is_ruleset = isinstance(ruleset, RuleSet)
+            is_rule = isinstance(value, Rule)
+            if is_ruleset and is_rule:
+                ruleset.append(value)
+            elif not is_ruleset and not is_rule:
+                dict.__setitem__(self,key, value)
+            else:
+                raise SyntaxError('rule / non rule mismatch in assignments')
+        elif isinstance(value, Rule):
+            rule = RuleSet([])
             rule.append(value)
+            dict.__setitem__(self, key, rule)
+        else:
+            dict.__setitem__(self,key, value)
 
     def build_attrs(self):
         rules = {}
@@ -72,45 +90,45 @@ class GrammarDict(dict):
                 return self.rule(named_rule)
             setattr(Builder, name, callback)
 
-        build_rule = None        
+        build_rule = None
         def build_rule(rule):
-            if isinstance(rule, FunctionType):
-                builder = Builder()
-                rule(builder)
-                return builder.build_rule()
-            elif isinstance(rule, (tuple, list)):
-                if len(rule) == 1:
-                    return rule[0]
-                return SequenceRule(rule)
-            elif isinstance(rule, Rule):
-                return rule
-            else:
-                raise SyntaxError()
+            builder = Builder()
+            rule(builder)
+            return builder.build_rule()
+            raise SyntaxError()
 
         new_attrs['rules'] = {k:r.build_rule(build_rule) for k,r in rules.items()}
         return new_attrs
-                
+
 class RuleSet:
-    def __init__(self):
-        self.rules = []
+    def __init__(self, rules):
+        self.rules = rules
 
     def append(self, rule):
         if isinstance(rule, ChoiceRule):
             self.rules.extend(rule.rules)
-        else:
+        elif isinstance(rule, Rule):
             self.rules.append(rule)
+        else:
+            raise SyntaxError('rule')
 
     def build_rule(self, rulebuilder):
         rules = []
         for rule in self.rules:
-            r = rulebuilder(rule)
-            rules.append(r.build_rule(rulebuilder))
+            rules.append(rule.build_rule(rulebuilder))
         if len(rules) == 1:
             return rules[0]
         return ChoiceRule(rules)
 
 class Rule:
     pass
+
+class FunctionRule(Rule):
+    def __init__(self, name):
+        self.name = name
+
+    def build_rule(self, builder):
+        return builder(self.name)
 
 class NamedRule(Rule):
     def __init__(self, name):
@@ -135,7 +153,7 @@ class ChoiceRule(Rule):
         rules.append(right)
         return ChoiceRule(rules)
 
-    def build_rule(self):
+    def build_rule(self, builder):
         if len(self.rules) == 1:
             return self.rules[0]
         return self
@@ -184,7 +202,7 @@ class LiteralRule(Rule):
 
 class RuleBuilder:
     def __init__(self):
-        self.rules = [] 
+        self.rules = []
         self.choice_block = False
 
     def rule(self, rule):
@@ -230,7 +248,7 @@ class RuleBuilder:
         yield
         rules.append(RepeatRule(self.rules, min=min, max=max))
         self.rules = rules
-    
+
     @contextmanager
     def optional(self):
         if self.choice_block: raise SyntaxError()

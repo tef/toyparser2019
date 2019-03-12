@@ -4,7 +4,7 @@ class JSON(Grammar, start="document"):
     document = json_list 
     document = json_object
 
-    json_value = ( 
+    json_value = rule( 
         json_list | json_object |
         json_string | json_number |
         json_true | json_false | 
@@ -15,6 +15,7 @@ class JSON(Grammar, start="document"):
     json_false = accept("false")
     json_null = accept("null")
 
+    @rule()
     def json_number(self):
         with self.optional():
             self.accept("-")
@@ -36,6 +37,7 @@ class JSON(Grammar, start="document"):
                 with self.repeat():
                     self.accept(*"012345689")
 
+    @rule()
     def json_string(self):
         self.accept("\"")
         with self.repeat(), self.choice():
@@ -55,6 +57,7 @@ class JSON(Grammar, start="document"):
                 self.accept(exclude=["\\", "\""])
         self.accept("\"")
 
+    @rule()
     def json_list(self):
         self.accept("[")
         with self.repeat(max=1):
@@ -64,6 +67,7 @@ class JSON(Grammar, start="document"):
                 self.json_value()
         self.accept("]")
 
+    @rule()
     def json_object(self):
         self.accept("{")
         with self.optional():
@@ -80,3 +84,6 @@ class JSON(Grammar, start="document"):
 for name, value in JSON.rules.items():
     print(name, '<--', value,'.')
     print()
+
+# build a recogniser, give it captures
+# get back tree of (start, end, children) nodes, well something which exposes start,end and children 
