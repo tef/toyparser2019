@@ -4,23 +4,8 @@ from types import FunctionType
 class Rule:
     pass
 
-class Builtins:
-    def rule(*args, inline=False):
-        if len(args) > 0:
-            return SequenceRule(args)
-        else:
-            def _decorator(fn):
-                return FunctionRule(fn)
-            return _decorator
-
-    def accept(*args, exclude=None):
-        return LiteralRule(args, exclude)
-    def repeat(*args, min=0, max=None):
-        return RepeatRule(args, min=min, max=max)
-    def optional(*args):
-        return RepeatRule(args, min=0, max=1)
-    def choice(*args):
-        return ChoiceRule(args)
+# Rules (aka right hand side of grammar)
+#       not built directly
 
 class FunctionRule(Rule):
     def __init__(self, name):
@@ -100,8 +85,23 @@ class LiteralRule(Rule):
     def __str__(self):
         if len(self.args) == 1:
             return "{!r}".format(self.args[0])
-        return "|".join("{!r}".format(a) for a in self.args)
+        return "|".join("{}".format(repr(a)) for a in self.args)
 
+class RangeLiteralRule(Rule):
+    def __init__(self, args,invert):
+        self.args = args
+        self.invert = invert
+
+    def build_rule(self, rulebuilder):
+        return self
+
+    def __str__(self):
+        invert = "^" if self.invert else ""
+        if len(self.args) == 1:
+            return "[{}{}]".format(invert, self.args[0])
+        return "[{}{}]".format(invert, "".join(repr(a)[1:-1] for a in self.args))
+# Builders
+#
 
 class RuleBuilder:
     def __init__(self, names):
@@ -121,9 +121,9 @@ class RuleBuilder:
         if self.block_mode: raise SyntaxError()
         self.rules.append(LiteralRule(args, exclude))
 
-    def range(self, start, end):
+    def range(self, *args, invert=False):
         if self.block_mode: raise SyntaxError()
-        self.rules.append(LiteralRule(args, exclude))
+        self.rules.append(RangeLiteralRule(args, invert))
 
     def reject(self):
         if self.block_mode: raise SyntaxError()
@@ -187,7 +187,33 @@ class RuleBuilder:
             return rules[0]
         return SequenceRule(rules)
 
+class Builtins:
+    """ These methods are exported as functions inside the class defintion """
+    def rule(*args, inline=False):
+        if len(args) > 0:
+            return SequenceRule(args)
+        else:
+            def _decorator(fn):
+                return FunctionRule(fn)
+            return _decorator
+
+    def accept(*args, exclude=None):
+        return LiteralRule(args, exclude)
+    def range(*args, exclude=None):
+        return LiteralRule(args, exclude)
+    def repeat(*args, min=0, max=None):
+        return RepeatRule(args, min=min, max=max)
+    def optional(*args):
+        return RepeatRule(args, min=0, max=1)
+    def choice(*args):
+        return ChoiceRule(args)
+
 class Metaclass(type):
+    """
+    Allows us to provide Grammar with a special class dictionary
+    and perform post processing
+    """
+
     @classmethod
     def __prepare__(metacls, name, bases, **args):
         return RuleDict({k:v for k,v in Builtins.__dict__.items() if not k.startswith("_")})
@@ -197,27 +223,9 @@ class Metaclass(type):
         return super().__new__(metacls, name, bases, attrs)
 
 
-class RuleSet:
-    def __init__(self, rules):
-        self.rules = rules
-
-    def append(self, rule):
-        if isinstance(rule, ChoiceRule):
-            self.rules.extend(rule.rules)
-        elif isinstance(rule, Rule):
-            self.rules.append(rule)
-        else:
-            raise SyntaxError('rule')
-
-    def build_rule(self, rulebuilder):
-        rules = []
-        for rule in self.rules:
-            rules.append(rule.build_rule(rulebuilder))
-        if len(rules) == 1:
-            return rules[0]
-        return ChoiceRule(rules)
-
 class RuleDict(dict):
+    """ A Special class dictionary that does all the sugar """
+
     def __init__(self, defaults):
         dict.__init__(self)
         self.named_rules = {}
@@ -281,20 +289,34 @@ class RuleDict(dict):
         new_attrs['rules'] = {k:r.build_rule(builder.build) for k,r in rules.items()}
         return new_attrs
 
+class RuleSet:
+    """ Allows for multiple definitions of rules """
+
+    def __init__(self, rules):
+        self.rules = rules
+
+    def append(self, rule):
+        if isinstance(rule, ChoiceRule):
+            self.rules.extend(rule.rules)
+        elif isinstance(rule, Rule):
+            self.rules.append(rule)
+        else:
+            raise SyntaxError('rule')
+
+    def build_rule(self, rulebuilder):
+        rules = []
+        for rule in self.rules:
+            rules.append(rule.build_rule(rulebuilder))
+        if len(rules) == 1:
+            return rules[0]
+        return ChoiceRule(rules)
+
 class Grammar(metaclass=Metaclass):
     def Tokenizer(self):
         pass
     def canonicalise(self):
         pass
 
-class Schema:
-    pass
+class Schema: pass
 
-
-# character classes
-
-
-# codegen?
-# regex classes (groups, inversions)
-# captures
 

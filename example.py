@@ -23,19 +23,19 @@ class JSON(Grammar, start="document"):
             with self.case():
                 self.accept("0")
             with self.case():
-                self.accept(*"12345689")
+                self.range("1-9")
                 with self.repeat():
-                    self.accept(*"012345689")
+                    self.range("0-9")
         with self.optional():
             self.accept(".")
             with self.repeat():
-                self.accept(*"012345689")
+                self.range("0-9")
         with self.optional():
             self.accept("e", "E")
             with self.optional():
                 self.accept("+", "-")
                 with self.repeat():
-                    self.accept(*"012345689")
+                    self.range("0-9")
 
     @rule()
     def json_string(self):
@@ -43,18 +43,18 @@ class JSON(Grammar, start="document"):
         with self.repeat(), self.choice():
             with self.case():
                 self.accept("\\u")
-                self.accept(*"0123456789abcedfABCDEF")
-                self.accept(*"0123456789abcedfABCDEF")
-                self.accept(*"0123456789abcedfABCDEF")
-                self.accept(*"0123456789abcedfABCDEF")
+                self.range("0-9", "a-f", "A-F")
+                self.range("0-9", "a-f", "A-F")
+                self.range("0-9", "a-f", "A-F")
+                self.range("0-9", "a-f", "A-F")
             with self.case():
                 self.accept("\\")
-                self.accept(
+                self.range(
                     "\"", "\\", "/", "b", 
                     "f", "n", "r", "t",
                 )
             with self.case():
-                self.accept(exclude=["\\", "\""])
+                self.range("\\", "\"", invert=True)
         self.accept("\"")
 
     @rule()
