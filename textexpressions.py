@@ -338,8 +338,8 @@ class Grammar(metaclass=Metaclass):
     pass
 
 @classmethod
-def _parser(self):
-    return Parser(self)
+def _parser(self, builder):
+    return Parser(self, builder)
 
 Grammar.parser = _parser
 
@@ -367,10 +367,11 @@ class Parser:
         end = self.parse_rule(start, buf, offset)
         stack, self.stack = self.stack, None
         if end:
+            name = self.grammar.start
             if name in self.builder:
                 return self.builder[name](buf[offset:end])
             else:
-                return ParseNode(self.grammar.start, offset, end, stack)
+                return ParseNode(name, offset, end, stack)
 
     def parse_rule(self, rule, buf, offset):
         if isinstance(rule, NamedRule):
@@ -407,7 +408,10 @@ class Parser:
                 if offset is None:
                     break
             if offset:
-                stack.append(ParseNode(rule.name, start, offset, self.stack))
+                if rule.name in self.builder:
+                    stack.append(self.builder[rule.name](buf[start:offset]))
+                else:
+                    stack.append(ParseNode(rule.name, start, offset, self.stack))
             self.stack = stack
 
             return offset
