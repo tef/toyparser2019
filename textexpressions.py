@@ -53,6 +53,16 @@ class SequenceRule(Rule):
             return self.rules[0]
         return self
 
+class CaptureRule(Rule):
+    def __init__(self, name, rules):
+        self.rules = rules
+        self.name = name
+    def __str__(self):
+        return f"({' '.join(str(x) for x in self.rules)})"
+
+    def build_rule(self, builder):
+        return self
+
 class RepeatRule(Rule):
     def __init__(self, rules, min=0, max=None):
         self.min = min
@@ -130,6 +140,15 @@ class RuleBuilder:
         pass
 
     @contextmanager
+    def capture(self, name):
+        if self.block_mode: raise SyntaxError()
+        rules = self.rules
+        self.rules = []
+        yield
+        rules.append(CaptureRule(name, self.rules))
+        self.rules = rules
+
+    @contextmanager
     def choice(self):
         if self.block_mode: raise SyntaxError()
         rules = self.rules
@@ -197,6 +216,8 @@ class Builtins:
                 return FunctionRule(fn)
             return _decorator
 
+    def capture(name, *args):
+        return CaptureRule(name, args)
     def accept(*args, exclude=None):
         return LiteralRule(args, exclude)
     def range(*args, exclude=None):
@@ -311,12 +332,103 @@ class RuleSet:
             return rules[0]
         return ChoiceRule(rules)
 
-class Grammar(metaclass=Metaclass):
-    def Tokenizer(self):
-        pass
-    def canonicalise(self):
-        pass
-
 class Schema: pass
+
+class Grammar(metaclass=Metaclass):
+    pass
+
+@classmethod
+def _parser(self):
+    return Parser(self)
+
+Grammar.parser = _parser
+
+class ParseNode:
+    def __init__(self, name, start, end, children):
+        self.name = name
+        self.start = start
+        self.end = end
+        self.children = children
+
+    def __str__(self):
+        children = ", ".join(str(x) for x in self.children)
+        children = " ({})".format(children) if children else ""
+        return "{}[{}:{}]{}".format(self.name, self.start, self.end, children)
+
+class Parser:
+    def __init__(self, grammar, builder):
+        self.grammar = grammar
+        self.builder = builder
+        self.stack = None
+
+    def parse(self, buf, offset=0):
+        start = self.grammar.rules[self.grammar.start]
+        self.stack = []
+        end = self.parse_rule(start, buf, offset)
+        stack, self.stack = self.stack, None
+        if end:
+            if name in self.builder:
+                return self.builder[name](buf[offset:end])
+            else:
+                return ParseNode(self.grammar.start, offset, end, stack)
+
+    def parse_rule(self, rule, buf, offset):
+        if isinstance(rule, NamedRule):
+            end = self.parse_rule(self.grammar.rules[rule.name], buf, offset)
+            return end
+
+        if isinstance(rule, ChoiceRule):
+            for option in rule.rules:
+                o = self.parse_rule(option, buf, offset)
+                if o is not None:
+                    return o
+        if isinstance(rule, RepeatRule):
+            start, end = rule.min, rule.max
+            c= 0
+            while c < start:
+                for step in rule.rules:
+                    offset = self.parse_rule(step, buf, offset)
+                    if offset is None:
+                        return None
+                c+=1
+            while end is None or c < end:
+                for step in rule.rules:
+                    new_offset = self.parse_rule(step, buf, offset)
+                    if new_offset is None:
+                        return offset
+                    offset = new_offset
+                c+=1
+            return offset
+        if isinstance(rule, CaptureRule):
+            start = offset
+            stack, self.stack = self.stack, []
+            for step in rule.rules:
+                offset = self.parse_rule(step, buf, offset)
+                if offset is None:
+                    break
+            if offset:
+                stack.append(ParseNode(rule.name, start, offset, self.stack))
+            self.stack = stack
+
+            return offset
+
+        if isinstance(rule, SequenceRule):
+            for step in rule.rules:
+                offset = self.parse_rule(step, buf, offset)
+                if offset is None:
+                    return None
+            return offset
+        if isinstance(rule, LiteralRule):
+            for text in rule.args:
+                if buf[offset:].startswith(text):
+                    return offset + len(text)
+        if isinstance(rule, RangeLiteralRule):
+            for text in rule.args:
+                if '-' in text:
+                    start, end = ord(text[0]), ord(text[2])
+                    if start <= ord(buf[offset]) <= end:
+                        return offset + 1
+                elif buf[offset:].startswith(text):
+                    return offset + len(text)
 
 
