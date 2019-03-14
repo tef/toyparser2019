@@ -351,9 +351,10 @@ class ParseNode:
         self.children = children
 
     def __str__(self):
-        children = ", ".join(str(x) for x in self.children)
-        children = " ({})".format(children) if children else ""
-        return "{}[{}:{}]{}".format(self.name, self.start, self.end, children)
+        # children = ", ".join(str(x) for x in self.children)
+        # children = " ({})".format(children) if children else ""
+        # return "{}[{}:{}]{}".format(self.name, self.start, self.end, children)
+        return "{}[{}:{}]".format(self.name, self.start, self.end)
 
 class Parser:
     def __init__(self, grammar, builder):
@@ -369,7 +370,7 @@ class Parser:
         if end:
             name = self.grammar.start
             if name in self.builder:
-                return self.builder[name](buf[offset:end])
+                return self.builder[name](buf[offset:end], stack)
             else:
                 return ParseNode(name, offset, end, stack)
 
@@ -409,7 +410,7 @@ class Parser:
                     break
             if offset:
                 if rule.name in self.builder:
-                    stack.append(self.builder[rule.name](buf[start:offset]))
+                    stack.append(self.builder[rule.name](buf[start:offset], self.stack))
                 else:
                     stack.append(ParseNode(rule.name, start, offset, self.stack))
             self.stack = stack
