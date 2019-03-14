@@ -1,4 +1,4 @@
-from textexpressions import Grammar
+from textexpressions import *
 
 class JSON(Grammar, start="document"):
     document = json_list 
@@ -84,6 +84,66 @@ class JSON(Grammar, start="document"):
 for name, value in JSON.rules.items():
     print(name, '<--', value,'.')
     print()
+
+
+def parse_rule(rule, buf, offset):
+    if isinstance(rule, NamedRule):
+        end = parse_rule(JSON.rules[rule.name], buf, offset)
+        if end:
+            print(rule.name, buf[offset:end])
+        return end
+
+    if isinstance(rule, ChoiceRule):
+        for option in rule.rules:
+            o = parse_rule(option, buf, offset)
+            if o is not None:
+                return o
+    if isinstance(rule, RepeatRule):
+        start, end = rule.min, rule.max
+        c= 0
+        while c < start:
+            for step in rule.rules:
+                offset = parse_rule(step, buf, offset)
+                if offset is None:
+                    return None
+            c+=1
+        while end is None or c < end:
+            for step in rule.rules:
+                new_offset = parse_rule(step, buf, offset)
+                if new_offset is None:
+                    return offset
+                offset = new_offset
+            c+=1
+        return offset
+
+    if isinstance(rule, SequenceRule):
+        for step in rule.rules:
+            offset = parse_rule(step, buf, offset)
+            if offset is None:
+                return None
+        return offset
+    if isinstance(rule, LiteralRule):
+        for text in rule.args:
+            if buf[offset:].startswith(text):
+                return offset + len(text)
+    if isinstance(rule, RangeLiteralRule):
+        for text in rule.args:
+            if '-' in text:
+                start, end = ord(text[0]), ord(text[2])
+                if start <= ord(buf[offset]) <= end:
+                    return offset + 1
+            elif buf[offset:].startswith(text):
+                return offset + len(text)
+
+
+
+
+    
+
+
+rule = JSON.rules[JSON.start]
+print(parse_rule(rule, "[1,2,3]", 0))
+
 
 # build a recogniser, give it captures
 # get back tree of (start, end, children) nodes, well something which exposes start,end and children 
