@@ -1,8 +1,7 @@
 from textexpressions import Grammar
 
 class JSON(Grammar, start="document"):
-    document = json_list 
-    document = json_object
+    document = rule(whitespace, rule(json_list | json_object, capture="document"))
 
     json_value = rule( 
         json_list | json_object |
@@ -11,9 +10,11 @@ class JSON(Grammar, start="document"):
         json_null
     )
     
-    json_true = capture("bool", accept("true"))
-    json_false = capture("bool", accept("false"))
-    json_null = capture("null", accept("null"))
+    json_true = rule(accept("true"), capture="bool")
+    json_false = rule(accept("false"), capture="bool")
+    json_null = rule(accept("null"), capture="null")
+
+    whitespace = rule(repeat(range(" ", "\t", "\r", "\n")), capture=None)
 
     @rule()
     def json_number(self):
@@ -61,25 +62,36 @@ class JSON(Grammar, start="document"):
     @rule()
     def json_list(self):
         self.accept("[")
+        self.whitespace()
         with self.capture("list"), self.repeat(max=1):
             self.json_value()
             with self.repeat(min=0):
+                self.whitespace()
                 self.accept(",")
+                self.whitespace()
                 self.json_value()
         self.accept("]")
 
     @rule()
     def json_object(self):
         self.accept("{")
+        self.whitespace()
         with self.capture("object"), self.optional():
             self.json_string()
+            self.whitespace()
             self.accept(":")
+            self.whitespace()
             self.json_value()
+            self.whitespace()
             with self.repeat(min=0):
                 self.accept(",")
+                self.whitespace()
                 self.json_string()
+                self.whitespace()
                 self.accept(":")
+                self.whitespace()
                 self.json_value()
+                self.whitespace()
         self.accept("}")
 
 for name, value in JSON.rules.items():
@@ -87,7 +99,7 @@ for name, value in JSON.rules.items():
     print()
 
 parser = JSON.parser({})
-node = parser.parse("[1,2,3]")
+node = parser.parse("[1, 2, 3]")
 
 def walk(node, indent):
     print(indent, node)
@@ -100,13 +112,17 @@ print()
 import codecs
 
 builder = {
-    'number': (lambda buf, stack: int(buf)),
-    'string': (lambda buf, stack: codecs.decode(buf, 'unicode_escape')),
-    'list': (lambda buf, stack: stack),
-    'object': (lambda buf, stack: dict(stack)),
-    'document': (lambda buf, stack: stack[0]),
+    'number': (lambda buf, children: int(buf)),
+    'string': (lambda buf, children: codecs.decode(buf, 'unicode_escape')),
+    'list': (lambda buf, children: children),
+    'object': (lambda buf, children: dict(children)),
+    'document': (lambda buf, children: children[0]),
 }
 
 parser = JSON.parser(builder)
-print(parser.parse("[1,2,3]"))
+print(parser.parse("[1, 2, 3]"))
 print()
+
+rules = JSON.rules
+
+
