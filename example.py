@@ -149,6 +149,19 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
                 self.object_rule()
 
     @rule()
+    def end_of_line(self):
+        with self.repeat(), self.choice():
+            with self.case():
+                self.whitespace()
+                self.accept('#')
+                with self.repeat():
+                    self.range("\n", invert=True)
+                self.newline()
+            with self.case():
+                self.whitespace()
+                self.newline()
+
+    @rule()
     def value_flow_rule(self):
         with self.choice():
             with self.case():
@@ -178,16 +191,14 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
                     self.whitespace()
                     self.value_flow_rule()
                 with self.case():
-                    self.whitespace()
-                    self.newline()
+                    self.end_of_line()
                     self.indent()
                     self.accept(' ')
                     self.whitespace()
                     self.value_flow_rule()
 
             with self.repeat():
-                self.whitespace()
-                self.newline()
+                self.end_of_line()
                 self.indent()
                 self.accept("-")
                 with self.choice():
@@ -195,8 +206,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
                         self.whitespace()
                         self.value_flow_rule()
                     with self.case():
-                        self.whitespace()
-                        self.newline()
+                        self.end_of_line()
                         self.indent()
                         self.whitespace()
                         self.value_flow_rule()
@@ -221,16 +231,14 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
                         self.whitespace()
                         self.value_flow_rule()
                     with self.case():
-                        self.whitespace()
-                        self.newline()
+                        self.end_of_line()
                         self.indent()
                         self.accept(' ')
                         self.whitespace()
                         self.value_flow_rule()
 
             with self.repeat(), self.capture("pair"):
-                self.whitespace()
-                self.newline()
+                self.end_of_line()
                 self.indent()
                 self.identifier()
                 self.whitespace()
@@ -240,8 +248,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
                         self.whitespace()
                         self.value_flow_rule()
                     with self.case():
-                        self.whitespace()
-                        self.newline()
+                        self.end_of_line()
                         self.indent()
                         self.whitespace()
                         self.value_flow_rule()
