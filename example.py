@@ -135,81 +135,16 @@ print(parser.parse("[1, 2, 3]"))
 print()
 
 class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
-    @rule()
-    def document(self):
-        self.whitespace()
-        with self.capture("document"), self.choice():
-            with self.case():
-                self.object_flow_rule()
-            with self.case():
-                self.list_flow_rule()
-            with self.case():
-                self.list_rule()
-            with self.case():
-                self.object_rule()
-
-    @rule()
-    def end_of_line(self):
-        with self.repeat(), self.choice():
-            with self.case():
-                self.whitespace()
-                self.accept('#')
-                with self.repeat():
-                    self.range("\n", invert=True)
-                self.newline()
-            with self.case():
-                self.whitespace()
-                self.newline()
-
-    @rule()
-    def value_flow_rule(self):
-        with self.choice():
-            with self.case():
-                self.object_flow_rule()
-            with self.case():
-                self.list_flow_rule()
-            with self.case():
-                self.value_rule()
-
-    value_rule = rule( 
-        list_rule | object_rule |
-        string_rule | number_rule |
-        true_rule | false_rule | 
-        null_rule
+    literal = rule( 
+        list_literal | object_literal |
+        string_literal | number_literal |
+        true_literal | false_literal | 
+        null_literal
     )
-    
-    true_rule = rule(accept("true"), capture="bool")
-    false_rule = rule(accept("false"), capture="bool")
-    null_rule = rule(accept("null"), capture="null")
 
-    @rule()
-    def list_flow_rule(self):
-        with self.indented(), self.capture('list'):
-            self.accept("-")
-            with self.choice():
-                with self.case():
-                    self.whitespace()
-                    self.value_flow_rule()
-                with self.case():
-                    self.end_of_line()
-                    self.indent()
-                    self.accept(' ')
-                    self.whitespace()
-                    self.value_flow_rule()
-
-            with self.repeat():
-                self.end_of_line()
-                self.indent()
-                self.accept("-")
-                with self.choice():
-                    with self.case():
-                        self.whitespace()
-                        self.value_flow_rule()
-                    with self.case():
-                        self.end_of_line()
-                        self.indent()
-                        self.whitespace()
-                        self.value_flow_rule()
+    true_literal = rule(accept("true"), capture="bool")
+    false_literal = rule(accept("false"), capture="bool")
+    null_literal = rule(accept("null"), capture="null")
 
     @rule()
     def identifier(self):
@@ -217,44 +152,10 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
             with self.case(), self.capture('identifier'), self.repeat(min=1):
                 self.range("a-z","A-Z","_")
             with self.case():
-                self.string_rule()
+                self.string_literal()
 
     @rule()
-    def object_flow_rule(self):
-        with self.indented(), self.capture('object'):
-            with self.capture("pair"):
-                self.identifier()
-                self.whitespace()
-                self.accept(":")
-                with self.choice():
-                    with self.case():
-                        self.whitespace()
-                        self.value_flow_rule()
-                    with self.case():
-                        self.end_of_line()
-                        self.indent()
-                        self.accept(' ')
-                        self.whitespace()
-                        self.value_flow_rule()
-
-            with self.repeat(), self.capture("pair"):
-                self.end_of_line()
-                self.indent()
-                self.identifier()
-                self.whitespace()
-                self.accept(":")
-                with self.choice():
-                    with self.case():
-                        self.whitespace()
-                        self.value_flow_rule()
-                    with self.case():
-                        self.end_of_line()
-                        self.indent()
-                        self.whitespace()
-                        self.value_flow_rule()
-
-    @rule()
-    def number_rule(self):
+    def number_literal(self):
         with self.capture("number"):
             with self.optional():
                 self.range("-", "+")
@@ -272,7 +173,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
                         self.range("0-9")
 
     @rule()
-    def string_rule(self):
+    def string_literal(self):
         self.accept("\"")
         with self.capture("string"), self.repeat(), self.choice():
             with self.case():
@@ -292,39 +193,143 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
         self.accept("\"")
 
     @rule()
-    def list_rule(self):
+    def list_literal(self):
         self.accept("[")
         self.whitespace()
         with self.capture("list"), self.repeat(max=1):
-            self.value_rule()
+            self.literal()
             with self.repeat(min=0):
                 self.whitespace()
                 self.accept(",")
                 self.whitespace()
-                self.value_rule()
+                self.literal()
         self.accept("]")
 
     @rule()
-    def object_rule(self):
+    def object_literal(self):
         self.accept("{")
         self.whitespace()
         with self.capture("object"), self.optional():
-            self.string_rule()
+            self.string_literal()
             self.whitespace()
             self.accept(":")
             self.whitespace()
-            self.value_rule()
+            self.literal()
             self.whitespace()
             with self.repeat(min=0):
                 self.accept(",")
                 self.whitespace()
-                self.string_rule()
+                self.string_literal()
                 self.whitespace()
                 self.accept(":")
                 self.whitespace()
-                self.value_rule()
+                self.literal()
                 self.whitespace()
         self.accept("}")
+
+    @rule()
+    def end_of_line(self):
+        with self.repeat(), self.choice():
+            with self.case():
+                self.whitespace()
+                self.accept('#')
+                with self.repeat():
+                    self.range("\n", invert=True)
+                self.newline()
+            with self.case():
+                self.whitespace()
+                self.newline()
+
+    
+    @rule()
+    def indented_list(self):
+        with self.indented(), self.capture('list'):
+            self.accept("-")
+            with self.choice():
+                with self.case():
+                    self.whitespace()
+                    self.indented_value()
+                with self.case():
+                    self.end_of_line()
+                    self.indent()
+                    self.accept(' ')
+                    self.whitespace()
+                    self.indented_value()
+
+            with self.repeat():
+                self.end_of_line()
+                self.indent()
+                self.accept("-")
+                with self.choice():
+                    with self.case():
+                        self.whitespace()
+                        self.indented_value()
+                    with self.case():
+                        self.end_of_line()
+                        self.indent()
+                        self.whitespace()
+                        self.indented_value()
+
+    @rule()
+    def indented_object(self):
+        with self.indented(), self.capture('object'):
+            with self.capture("pair"):
+                self.identifier()
+                self.whitespace()
+                self.accept(":")
+                with self.choice():
+                    with self.case():
+                        self.whitespace()
+                        self.indented_value()
+                    with self.case():
+                        self.end_of_line()
+                        self.indent()
+                        self.accept(' ')
+                        self.whitespace()
+                        self.indented_value()
+
+            with self.repeat(), self.capture("pair"):
+                self.end_of_line()
+                self.indent()
+                self.identifier()
+                self.whitespace()
+                self.accept(":")
+                with self.choice():
+                    with self.case():
+                        self.whitespace()
+                        self.indented_value()
+                    with self.case():
+                        self.end_of_line()
+                        self.indent()
+                        self.whitespace()
+                        self.indented_value()
+
+    @rule()
+    def indented_value(self):
+        with self.choice():
+            with self.case():
+                self.indented_object()
+            with self.case():
+                self.indented_list()
+            with self.case():
+                self.literal()
+
+    @rule()
+    def document(self):
+        with self.optional():
+            self.whitespace()
+            self.end_of_line()
+        with self.capture("document"), self.choice():
+            with self.case():
+                self.indented_object()
+            with self.case():
+                self.indented_list()
+            with self.case():
+                self.list_literal()
+            with self.case():
+                self.object_literal()
+
+
 
 for name, value in YAML.rules.items():
     print(name, '<--', value,'.')
@@ -361,14 +366,19 @@ example: 2
 
 yaml("""\
 title: "SafeYAML Example"
+
 database:
   server: "192.168.1.1"
+
   ports:
     - 8000
     - 8001
     - 8002
+
   enabled: true
+
 servers:
+  # JSON-style objects
   alpha: {
     "ip": "10.0.0.1",
     "names": [

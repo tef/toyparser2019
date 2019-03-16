@@ -557,12 +557,12 @@ class Parser:
     def parse_rule(self, rule, state):
         if state.offset == len(state.buf):
             return
-        print(repr(state.buf[state.offset:state.offset+5]), rule)
         if isinstance(rule, NamedRule):
-            print(rule.name)
+            # print(rule.name)
             end = self.parse_rule(self.grammar.rules[rule.name], state)
             return end
 
+        # print(rule, repr(state.buf[state.offset:state.offset+5]))
         if isinstance(rule, ChoiceRule):
             for option in rule.rules:
                 # nprint('choice', repr(state.buf[state.offset:state.offset+5]), option)
@@ -574,7 +574,7 @@ class Parser:
             c= 0
             while c < start:
                 for step in rule.rules:
-                    print('rep', repr(state.buf[state.offset:state.offset+5]), step, rule)
+                    # print('rep', repr(state.buf[state.offset:state.offset+5]), step, rule)
                     state = self.parse_rule(step, state)
                     if state is None:
                         return None
@@ -617,10 +617,10 @@ class Parser:
                     return new_state
         if isinstance(rule, RangeRule):
             if rule.invert:
-                print(rule, state.buf[state.offset:], rule.args)
+                # print(rule, state.buf[state.offset:], rule.args)
                 for text in rule.args:
                     new_state = state.advance_range(text)
-                    print(new_state, text)
+                    # print(new_state, text)
                     if new_state:
                         return
                 return state.clone(offset=state.offset+1)
