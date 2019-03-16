@@ -555,6 +555,8 @@ class Parser:
         return start.children[-1]
 
     def parse_rule(self, rule, state):
+        if state.offset == len(state.buf):
+            return
         # nprint(repr(state.buf[state.offset:state.offset+5]), rule)
         if isinstance(rule, NamedRule):
             # print(rule.name)
@@ -572,7 +574,7 @@ class Parser:
             c= 0
             while c < start:
                 for step in rule.rules:
-                    # print('rep', repr(state.buf[state.offset:state.offset+5]), step, rule)
+                    print('rep', repr(state.buf[state.offset:state.offset+5]), step, rule)
                     state = self.parse_rule(step, state)
                     if state is None:
                         return None
@@ -614,10 +616,19 @@ class Parser:
                 if new_state:
                     return new_state
         if isinstance(rule, RangeRule):
-            for text in rule.args:
-                new_state = state.advance_range(text)
-                if new_state:
-                    return new_state
+            if rule.invert:
+                print(rule, state.buf[state.offset:], rule.args)
+                for text in rule.args:
+                    new_state = state.advance_range(text)
+                    print(new_state, text)
+                    if new_state:
+                        return
+                return state.clone(offset=state.offset+1)
+            else:
+                for text in rule.args:
+                    new_state = state.advance_range(text)
+                    if new_state:
+                        return new_state
         if isinstance(rule, WhitespaceRule):
             if rule.kind == "ws":
                 return state.advance_whitespace(self.grammar.whitespace)

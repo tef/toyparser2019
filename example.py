@@ -15,7 +15,11 @@ builder = {
     'string': (lambda buf, children: unescape(buf)),
     'list': (lambda buf, children: children),
     'object': (lambda buf, children: dict(children)),
+    'pair': (lambda buf, children: children),
     'document': (lambda buf, children: children[0]),
+    'identifier': (lambda buf, children: str(buf)),
+    'bool': (lambda buf, children: bool(buf)),
+    'null': (lambda buf, children: None),
 }
 
 class JSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n"]):
@@ -93,20 +97,22 @@ class JSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n"]):
         self.accept("{")
         self.whitespace()
         with self.capture("object"), self.optional():
-            self.json_string()
-            self.whitespace()
-            self.accept(":")
-            self.whitespace()
-            self.json_value()
-            self.whitespace()
-            with self.repeat(min=0):
-                self.accept(",")
-                self.whitespace()
+            with self.capture("pair"):
                 self.json_string()
                 self.whitespace()
                 self.accept(":")
                 self.whitespace()
                 self.json_value()
+            self.whitespace()
+            with self.repeat(min=0):
+                self.accept(",")
+                self.whitespace()
+                with self.capture("pair"):
+                    self.json_string()
+                    self.whitespace()
+                    self.accept(":")
+                    self.whitespace()
+                    self.json_value()
                 self.whitespace()
         self.accept("}")
 
@@ -115,7 +121,7 @@ for name, value in JSON.rules.items():
 
 print()
 parser = JSON.parser({})
-buf = "[1, 2, 3]"
+buf = '[1, 2, 3, "fooo"]'
 node = parser.parse(buf)
 
 walk(node, "")
@@ -128,18 +134,40 @@ parser = JSON.parser(builder)
 print(parser.parse("[1, 2, 3]"))
 print()
 
-
 class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
     @rule()
     def document(self):
         self.whitespace()
         with self.capture("document"), self.choice():
             with self.case():
+                self.object_flow_rule()
+            with self.case():
                 self.list_flow_rule()
             with self.case():
                 self.list_rule()
             with self.case():
                 self.object_rule()
+
+    @rule()
+    def value_flow_rule(self):
+        with self.choice():
+            with self.case():
+                self.object_flow_rule()
+            with self.case():
+                self.list_flow_rule()
+            with self.case():
+                self.value_rule()
+
+    value_rule = rule( 
+        list_rule | object_rule |
+        string_rule | number_rule |
+        true_rule | false_rule | 
+        null_rule
+    )
+    
+    true_rule = rule(accept("true"), capture="bool")
+    false_rule = rule(accept("false"), capture="bool")
+    null_rule = rule(accept("null"), capture="null")
 
     @rule()
     def list_flow_rule(self):
@@ -174,23 +202,49 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
                         self.value_flow_rule()
 
     @rule()
-    def value_flow_rule(self):
+    def identifier(self):
         with self.choice():
+            with self.case(), self.capture('identifier'), self.repeat(min=1):
+                self.range("a-z","A-Z","_")
             with self.case():
-                self.number_rule()
-            with self.case():
-                self.list_flow_rule()
+                self.string_rule()
 
-    value_rule = rule( 
-        list_rule | object_rule |
-        string_rule | number_rule |
-        true_rule | false_rule | 
-        null_rule
-    )
-    
-    true_rule = rule(accept("true"), capture="bool")
-    false_rule = rule(accept("false"), capture="bool")
-    null_rule = rule(accept("null"), capture="null")
+    @rule()
+    def object_flow_rule(self):
+        with self.indented(), self.capture('object'):
+            with self.capture("pair"):
+                self.identifier()
+                self.whitespace()
+                self.accept(":")
+                with self.choice():
+                    with self.case():
+                        self.whitespace()
+                        self.value_flow_rule()
+                    with self.case():
+                        self.whitespace()
+                        self.newline()
+                        self.indent()
+                        self.accept(' ')
+                        self.whitespace()
+                        self.value_flow_rule()
+
+            with self.repeat(), self.capture("pair"):
+                self.whitespace()
+                self.newline()
+                self.indent()
+                self.identifier()
+                self.whitespace()
+                self.accept(":")
+                with self.choice():
+                    with self.case():
+                        self.whitespace()
+                        self.value_flow_rule()
+                    with self.case():
+                        self.whitespace()
+                        self.newline()
+                        self.indent()
+                        self.whitespace()
+                        self.value_flow_rule()
 
     @rule()
     def number_rule(self):
@@ -268,8 +322,13 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
 for name, value in YAML.rules.items():
     print(name, '<--', value,'.')
 
-parser = YAML.parser({})
-buf = """\
+def yaml(buf):
+    parser = YAML.parser({})
+    node = parser.parse(buf)
+    walk(node)
+    print(node.build(buf, builder))
+
+yaml("""\
 - 1
 - 2
 - 
@@ -286,7 +345,32 @@ buf = """\
 - 12
 -
  13
-"""
-node = parser.parse(buf)
-walk(node)
-print(node.build(buf, builder))
+""")
+
+yaml("""\
+name: 1
+example: 2
+""")
+
+yaml("""\
+title: "SafeYAML Example"
+database:
+  server: "192.168.1.1"
+  ports:
+    - 8000
+    - 8001
+    - 8002
+  enabled: true
+servers:
+  alpha: {
+    "ip": "10.0.0.1",
+    "names": [
+      "alpha",
+      "alpha.server",
+    ],
+  }
+  beta: {
+    "ip": "10.0.0.2",
+    "names": ["beta"],
+  }
+""")
