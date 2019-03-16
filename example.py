@@ -1,5 +1,10 @@
 from textexpressions import Grammar
 
+def walk(node, indent):
+    print(indent, node)
+    for child in node.children:
+        walk(child, indent+ "  ")
+
 class JSON(Grammar, start="document"):
     document = rule(whitespace, rule(json_list | json_object, capture="document"))
 
@@ -94,21 +99,6 @@ class JSON(Grammar, start="document"):
                 self.whitespace()
         self.accept("}")
 
-for name, value in JSON.rules.items():
-    print(name, '<--', value,'.')
-    print()
-
-parser = JSON.parser({})
-node = parser.parse("[1, 2, 3]")
-
-def walk(node, indent):
-    print(indent, node)
-    for child in node.children:
-        walk(child, indent+ "  ")
-
-walk(node, "")
-print()
-
 import codecs
 
 builder = {
@@ -119,10 +109,49 @@ builder = {
     'document': (lambda buf, children: children[0]),
 }
 
+for name, value in JSON.rules.items():
+    print(name, '<--', value,'.')
+
+print()
+parser = JSON.parser({})
+buf = "[1, 2, 3]"
+node = parser.parse(buf)
+
+walk(node, "")
+print()
+
+print(node.build(buf, builder))
+print()
+
 parser = JSON.parser(builder)
 print(parser.parse("[1, 2, 3]"))
 print()
 
-rules = JSON.rules
 
+class Expression(Grammar, start="number"):
+    #expr[50] = rule(expr < 50, accept("+"), expr <= 50, capture="+")
+    # expr[0] = number
+    @rule()
+    def number(self):
+        with self.capture("number"):
+            self.range("0-9")
+            with self.optional():
+                self.accept(".")
+                with self.repeat():
+                    self.range("0-9")
+            with self.optional():
+                self.accept("e", "E")
+                with self.optional():
+                    self.accept("+", "-")
+                    with self.repeat():
+                        self.range("0-9")
 
+for name, value in Expression.rules.items():
+    print(name, '<--', value,'.')
+
+print()
+parser = Expression.parser({})
+node = parser.parse("1")
+
+walk(node, "")
+print()
