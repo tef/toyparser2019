@@ -284,6 +284,8 @@ buf = """\
     - 10
     - 11
 - 12
+-
+ 13
 """
 node = parser.parse(buf)
 walk(node)
