@@ -557,9 +557,9 @@ class Parser:
     def parse_rule(self, rule, state):
         if state.offset == len(state.buf):
             return
-        # nprint(repr(state.buf[state.offset:state.offset+5]), rule)
+        print(repr(state.buf[state.offset:state.offset+5]), rule)
         if isinstance(rule, NamedRule):
-            # print(rule.name)
+            print(rule.name)
             end = self.parse_rule(self.grammar.rules[rule.name], state)
             return end
 
