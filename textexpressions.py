@@ -90,6 +90,25 @@ class RepeatRule(Rule):
         rules = [r.build_rule(builder) for r in self.rules]
         return RepeatRule(rules, self.min, self.max)
 
+class IndentRule(Rule):
+    def __init__(self, rules):
+        self.rules = rules
+
+    def build_rule(self, builder):
+        return self
+
+    def __str__(self):
+        return "<indent {}>".format(",".join(str(x) for x in self.rules))
+class WhitespaceRule(Rule):
+    def __init__(self, kind):
+        self.kind = kind
+
+    def build_rule(self, builder):
+        return self
+
+    def __str__(self):
+        return self.kind
+
 class LiteralRule(Rule):
     def __init__(self, args,exclude):
         self.args = args
@@ -137,6 +156,14 @@ class RuleBuilder:
         if self.block_mode: raise SyntaxError()
         self.rules.append(LiteralRule(args, exclude))
 
+    def whitespace(self, *args, exclude=None):
+        if self.block_mode: raise SyntaxError()
+        self.rules.append(WhitespaceRule("ws"))
+
+    def newline(self, *args, exclude=None):
+        if self.block_mode: raise SyntaxError()
+        self.rules.append(WhitespaceRule("nl"))
+
     def range(self, *args, invert=False):
         if self.block_mode: raise SyntaxError()
         self.rules.append(RangeRule(args, invert))
@@ -145,6 +172,18 @@ class RuleBuilder:
         if self.block_mode: raise SyntaxError()
         pass
 
+    def indent(self):
+        if self.block_mode: raise SyntaxError()
+        self.rules.append(WhitespaceRule("indent"))
+
+    @contextmanager
+    def indented(self):
+        if self.block_mode: raise SyntaxError()
+        rules, self.rules = self.rules, []
+        yield
+        rules.append(IndentRule(self.rules))
+        self.rules = rules
+        
     @contextmanager
     def capture(self, name):
         if self.block_mode: raise SyntaxError()
@@ -247,6 +286,8 @@ class Builtins:
         return RepeatRule(args, min=0, max=1)
     def choice(*args):
         return ChoiceRule(args)
+    whitespace = WhitespaceRule("ws")
+    newline = WhitespaceRule("nl")
 
 class Metaclass(type):
     """
@@ -257,9 +298,8 @@ class Metaclass(type):
     @classmethod
     def __prepare__(metacls, name, bases, **args):
         return RuleDict({k:v for k,v in Builtins.__dict__.items() if not k.startswith("_")})
-    def __new__(metacls, name, bases, attrs, start=None, **args):
-        attrs = attrs.build_attrs()
-        attrs['start'] = start
+    def __new__(metacls, name, bases, attrs, start=None, whitespace=None, newline=None, **args):
+        attrs = attrs.build_class_dict(start, whitespace, newline)
         return super().__new__(metacls, name, bases, attrs)
 
 
@@ -306,14 +346,13 @@ class RuleDict(dict):
         else:
             dict.__setitem__(self,key, value)
 
-    def build_attrs(self):
+    def build_class_dict(self, start, whitespace, newline):
         for name in self.named_rules:
             if name not in self:
                 raise SyntaxError('missing rule', name)
         rules = {}
-        attrs = dict(self)
         new_attrs = {}
-        for key, value in attrs.items():
+        for key, value in self.items():
             if key.startswith("_"):
                 new_attrs[key] = value
             elif value == Builtins.__dict__.get(key):
@@ -326,9 +365,28 @@ class RuleDict(dict):
         names = {name:self.named_rules.get(name, NamedRule(name)) for name in rules}
 
         builder = RuleBuilder(names)
-        new_attrs['rules'] = {k:r.build_rule(builder.build) for k,r in rules.items()}
+        rules = {k:r.build_rule(builder.build) for k,r in rules.items()}
+
+        properties = GrammarProperties(start, rules)
+        
+        new_attrs['rules'] = rules 
+        new_attrs['properties'] = properties
+        new_attrs['start'] = start
+        new_attrs['whitespace'] = whitespace
+        new_attrs['newline'] = newline
+
         return new_attrs
 
+class GrammarProperties:
+    def __init__(self, start, rules):
+        nullable = {}
+        left_corners = {}
+        stack = [start]
+
+        while stack:
+            head = stack.pop()
+
+    
 class RuleSet:
     """ Allows for multiple definitions of rules """
 
@@ -364,41 +422,98 @@ Grammar.parser = _parser
 
 
 class ParserState:
-    def __init__(self, buf, offset, children, parent):
+    def __init__(self, buf, line_start,  offset, children, parent, indent):
         self.buf = buf
+        self.line_start = line_start
         self.offset = offset
         self.children = children
         self.parent = parent
+        self.indent = indent
+
+    @staticmethod
+    def init(buf, offset):
+        return ParserState(buf, offset, offset, [], None, None)
+
+    def clone(self, line_start=None, offset=None, children=None, parent=None, indent=None):
+        if line_start is None: line_start = self.line_start
+        if offset is None: offset = self.offset
+        if children is None: children = self.children
+        if parent is None: parent = self.parent
+        if indent is None: indent = self.indent
+
+        return ParserState(self.buf, line_start, offset, children, parent, indent)
 
     def __bool__(self):
         return True
 
+    def set_indent(self):
+        return self.clone(indent=(self.offset-self.line_start, self.indent))
+
+    def pop_indent(self):
+        # print(self.indent)
+        return self.clone(indent=self.indent[1])
+
     def advance(self, text):
         if self.buf[self.offset:].startswith(text):
-            return ParserState(self.buf, self.offset + len(text), self.children, self.parent)
+            return self.clone(offset=self.offset + len(text))
+
+    def advance_whitespace(self, literals):
+        state = self
+        while state:
+            for ws in literals:
+                new = state.advance(ws)
+                if new:
+                    state = new
+                    break
+            else:
+                break
+            continue
+                    
+        return state
+
+    def advance_newline(self, literals):
+        for nl in literals:
+            new = self.advance(nl)
+            if new:
+                return new.clone(line_start=new.offset)
+
+    def advance_indent(self, literals):
+        # nprint(self.line_start, self.offset, self.indent)
+        state = self
+        stop = self.line_start + self.indent[0]
+        while state.offset < stop:
+            for ws in literals:
+                new = state.advance(ws)
+                if new:
+                    state = new
+                    break
+            else:
+                break
+        if state.offset == stop:
+            return state
 
     def advance_range(self, text):
-        if '-' in text:
+        if '-' in text[1:2]:
             start, end = ord(text[0]), ord(text[2])
             if start <= ord(self.buf[self.offset]) <= end:
-                return ParserState(self.buf, self.offset + 1, self.children, self.parent)
+                return self.clone(offset=self.offset + 1)
         elif self.buf[self.offset:].startswith(text):
-            return ParserState(self.buf, self.offset + len(text), self.children, self.parent)
+            return self.clone(offset=self.offset + len(text))
 
     def substring(self, end):
         return self.buf[self.offset:end.offset]
 
 
     def capture(self):
-        return ParserState(self.buf, self.offset, [], self)
+        return self.clone(children=[], parent=self)
 
     def build_node(self, name):
         self.parent.children.append(ParseNode(name, self.parent.offset, self.offset, self.children))
-        return ParserState(self.buf, self.offset, self.parent.children, self.parent.parent)
+        return self.clone(children=self.parent.children, parent=self.parent.parent)
 
     def build_capture(self, builder):
         self.parent.children.append(builder(self.parent.substring(self), self.children))
-        return ParserState(self.buf, self.offset, self.parent.children, self.parent.parent)
+        return self.clone(children=self.parent.children, parent=self.parent.parent)
 
 class ParseNode:
     def __init__(self, name, start, end, children):
@@ -431,7 +546,7 @@ class Parser:
         name = self.grammar.start
         rule = self.grammar.rules[name]
 
-        start = ParserState(buf, offset, [], None)
+        start = ParserState.init(buf, offset)
         end = self.parse_rule(rule, start)
 
         if end is None:
@@ -440,12 +555,15 @@ class Parser:
         return start.children[-1]
 
     def parse_rule(self, rule, state):
+        # nprint(repr(state.buf[state.offset:state.offset+5]), rule)
         if isinstance(rule, NamedRule):
+            # print(rule.name)
             end = self.parse_rule(self.grammar.rules[rule.name], state)
             return end
 
         if isinstance(rule, ChoiceRule):
             for option in rule.rules:
+                # nprint('choice', repr(state.buf[state.offset:state.offset+5]), option)
                 s = self.parse_rule(option, state)
                 if s is not None:
                     return s
@@ -454,16 +572,20 @@ class Parser:
             c= 0
             while c < start:
                 for step in rule.rules:
+                    # print('rep', repr(state.buf[state.offset:state.offset+5]), step, rule)
                     state = self.parse_rule(step, state)
                     if state is None:
                         return None
                 c+=1
             while end is None or c < end:
+                old = state
                 for step in rule.rules:
+                    # nnprint('rep+', repr(state.buf[state.offset:state.offset+5]), step, rule)
                     new_state = self.parse_rule(step, state)
                     if new_state is None:
-                        return state
+                        return old
                     state = new_state
+                old = state
                 c+=1
             return state
         if isinstance(rule, CaptureRule):
@@ -496,4 +618,23 @@ class Parser:
                 new_state = state.advance_range(text)
                 if new_state:
                     return new_state
+        if isinstance(rule, WhitespaceRule):
+            if rule.kind == "ws":
+                return state.advance_whitespace(self.grammar.whitespace)
+            if rule.kind == "nl":
+                return state.advance_newline(self.grammar.newline)
+            if rule.kind == "indent":
+                return state.advance_indent(self.grammar.whitespace)
+        if isinstance(rule, IndentRule):
+            state = state.set_indent()
+            for step in rule.rules:
+                state = self.parse_rule(step, state)
+                if state is None:
+                    return None
+            # print('exit', state.offset, repr(state.buf[state.offset:]), state.indent)
+            return state.pop_indent()
+                
 
+
+class Regex(Grammar, whitespace=[]):
+    pattern = rule(pattern, accept("*"))
