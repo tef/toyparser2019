@@ -1,4 +1,4 @@
-from textexpressions import Grammar
+from grammar import Grammar
 
 import codecs
 
@@ -8,7 +8,7 @@ def walk(node, indent="- "):
         walk(child, indent+ "  ")
 
 def unescape(string):
-    return codecs.decode(buf, 'unicode_escape')
+    return codecs.decode(string, 'unicode_escape')
 
 builder = {
     'number': (lambda buf, children: int(buf)),

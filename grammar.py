@@ -1,11 +1,11 @@
 from contextlib import contextmanager
 from types import FunctionType
 
-class Rule:
-    pass
-
 # Rules (aka right hand side of grammar)
 #       not built directly
+
+class Rule:
+    pass
 
 class FunctionRule(Rule):
     def __init__(self, name, inline, capture):
@@ -377,16 +377,6 @@ class RuleDict(dict):
 
         return new_attrs
 
-class GrammarProperties:
-    def __init__(self, start, rules):
-        nullable = {}
-        left_corners = {}
-        stack = [start]
-
-        while stack:
-            head = stack.pop()
-
-    
 class RuleSet:
     """ Allows for multiple definitions of rules """
 
@@ -409,17 +399,16 @@ class RuleSet:
             return rules[0]
         return ChoiceRule(rules)
 
-class Schema: pass
+class GrammarProperties:
+    def __init__(self, start, rules):
+        nullable = {}
+        left_corners = {}
+        stack = [start]
 
-class Grammar(metaclass=Metaclass):
-    pass
+        while stack:
+            head = stack.pop()
 
-@classmethod
-def _parser(self, builder):
-    return Parser(self, builder)
-
-Grammar.parser = _parser
-
+    
 
 class ParserState:
     def __init__(self, buf, line_start,  offset, children, parent, indent):
@@ -645,6 +634,13 @@ class Parser:
             # print('exit', state.offset, repr(state.buf[state.offset:]), state.indent)
             return state.pop_indent()
                 
+def parser(grammar, builder):
+    return Parser(grammar, builder)
+
+class Grammar(metaclass=Metaclass):
+    pass
+
+Grammar.parser = classmethod(parser)
 
 
 class Regex(Grammar, whitespace=[]):
