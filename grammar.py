@@ -257,7 +257,8 @@ class RuleBuilder:
         return SequenceRule(rules)
 
 class RuleDef:
-    def __init__(self, rule):
+    def __init__(self, kind, rule):
+        self.kind = kind
         self.rule = rule
 
     def build_rule(self, builder):
@@ -265,16 +266,27 @@ class RuleDef:
 
 class Builtins:
     """ These methods are exported as functions inside the class defintion """
-    def rule(*args, inline=False, capture=None):
+    def rule(*args, inline=False, capture=None, kind="rule"):
         if len(args) > 0:
             if capture:
-                return RuleDef(CaptureRule(capture, args))
+                return RuleDef(kind, CaptureRule(capture, args))
+            elif len(args) > 1:
+                return RuleDef(kind, SequenceRule(args))
             else:
-                return RuleDef(SequenceRule(args))
+                return RuleDef(kind, args[0])
         else:
             def _decorator(fn):
-                return RuleDef(FunctionRule(fn, inline, capture))
+                return RuleDef(kind, FunctionRule(fn, inline, capture))
             return _decorator
+
+    def operators(*args, capture=None):
+        return Builtins.rule(*args, capture=capture, kind="operators")
+
+    def left(*args, capture=None):
+        return Builtins.rule(*args, capture=capture, kind="left")
+
+    def right(*args, capture=None):
+        return Builtins.rule(*args, capture=capture, kind="right")
 
     def capture(name, *args):
         return CaptureRule(name, args)
@@ -318,8 +330,13 @@ class RuleDict(dict):
                 dict.__setitem__(self, k, v)
 
     def __getitem__(self, key):
-        if key.startswith('_') or key in self:
+        if key.startswith('_'):
             return dict.__getitem__(self,key)
+
+        if key in self:
+            value = dict.__getitem__(self,key)
+            if not isinstance(value, RuleSet):
+                return value
 
         if key in self.named_rules:
             return self.named_rules[key]
@@ -386,7 +403,9 @@ class RuleSet:
         self.rules = rules
 
     def append(self, rule):
+        if rule is self: raise Exception()
         if isinstance(rule, ChoiceRule):
+            if self in rule.rules: raise Exception()
             self.rules.extend(rule.rules)
         elif isinstance(rule, Rule):
             self.rules.append(rule)
