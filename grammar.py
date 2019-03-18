@@ -100,8 +100,10 @@ class IndentRule(Rule):
     def __str__(self):
         return "<indent {}>".format(",".join(str(x) for x in self.rules))
 class WhitespaceRule(Rule):
-    def __init__(self, kind):
+    def __init__(self, kind, min=0, max=None):
         self.kind = kind
+        self.min = min
+        self.max = max
 
     def build_rule(self, builder):
         return self
@@ -156,9 +158,9 @@ class RuleBuilder:
         if self.block_mode: raise SyntaxError()
         self.rules.append(LiteralRule(args, exclude))
 
-    def whitespace(self, *args, exclude=None):
+    def whitespace(self, min=0, max=None):
         if self.block_mode: raise SyntaxError()
-        self.rules.append(WhitespaceRule("ws"))
+        self.rules.append(WhitespaceRule("ws", min, max))
 
     def newline(self, *args, exclude=None):
         if self.block_mode: raise SyntaxError()
@@ -446,19 +448,21 @@ class ParserState:
         if self.buf[self.offset:].startswith(text):
             return self.clone(offset=self.offset + len(text))
 
-    def advance_whitespace(self, literals):
+    def advance_whitespace(self, literals, min=0, max=None):
         state = self
-        while state:
+        count = 0
+        while max is None or count < max:
             for ws in literals:
                 new = state.advance(ws)
                 if new:
+                    count += 1
                     state = new
                     break
             else:
                 break
             continue
-                    
-        return state
+        if count >= min:
+            return state
 
     def advance_newline(self, literals):
         for nl in literals:
@@ -620,7 +624,7 @@ class Parser:
                         return new_state
         if isinstance(rule, WhitespaceRule):
             if rule.kind == "ws":
-                return state.advance_whitespace(self.grammar.whitespace)
+                return state.advance_whitespace(self.grammar.whitespace, rule.min, rule.max)
             if rule.kind == "nl":
                 return state.advance_newline(self.grammar.newline)
             if rule.kind == "indent":
