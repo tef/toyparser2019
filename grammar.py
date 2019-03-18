@@ -8,13 +8,12 @@ class Rule:
     pass
 
 class FunctionRule(Rule):
-    def __init__(self, name, inline, capture):
-        self.name = name
-        self.inline = inline
-        self.capture = capture
+    def __init__(self, fn, wrapper):
+        self.name = fn
+        self.wrapper = wrapper
 
     def build_rule(self, builder):
-        return builder(self.name, self.inline, self.capture)
+        return self.wrapper(builder(self.name))
 
 class NamedRule(Rule):
     def __init__(self, name):
@@ -137,6 +136,28 @@ class RangeRule(Rule):
         if len(self.args) == 1:
             return "[{}{}]".format(invert, self.args[0])
         return "[{}{}]".format(invert, "".join(repr(a)[1:-1] for a in self.args))
+
+class OperatorRule(Rule):
+    def __init__(self, args):
+        self.args = args
+
+    def build_rule(self, rulebuilder):
+        return self
+
+    def __str__(self):
+        return "<operator {}>".format("|".join("{}".format(repr(a)) for a in self.args))
+
+class RecursiveRule(Rule):
+    def __init__(self, direction, rule):
+        self.direction = direction
+        self.rule = rule
+
+    def build_rule(self, rulebuilder):
+        return self
+
+    def __str__(self):
+        return "<{} {}>".format(self.direction, self.rule)
+
 # Builders
 #
 
@@ -238,7 +259,7 @@ class RuleBuilder:
         rules.append(RepeatRule(self.rules, min=0, max=1))
         self.rules = rules
 
-    def build(self, rule, inline, capture):
+    def build(self, rule):
         if self.block_mode != "build": raise SyntaxError()
         self.block_mode = None
         self.rules = []
@@ -249,16 +270,10 @@ class RuleBuilder:
         self.block_mode = "build"
         rules, self.rules = self.rules, None
 
-        if capture:
-            rules = [CaptureRule(rules, capture)]
-
-        if len(rules) == 1:
-            return rules[0]
-        return SequenceRule(rules)
+        return rules
 
 class RuleDef:
-    def __init__(self, kind, rule):
-        self.kind = kind
+    def __init__(self, rule):
         self.rule = rule
 
     def build_rule(self, builder):
@@ -266,27 +281,47 @@ class RuleDef:
 
 class Builtins:
     """ These methods are exported as functions inside the class defintion """
-    def rule(*args, inline=False, capture=None, kind="rule"):
-        if len(args) > 0:
+    def rule(*args, inline=False, capture=None):
+        def _wrapper(rules):
             if capture:
-                return RuleDef(kind, CaptureRule(capture, args))
-            elif len(args) > 1:
-                return RuleDef(kind, SequenceRule(args))
+                return CaptureRule(capture, rules)
+            elif len(rules) > 1:
+                return SequenceRule(rules)
             else:
-                return RuleDef(kind, args[0])
+                return rules[0]
+        if len(args) > 0:
+            return RuleDef(_wrapper(args))
         else:
             def _decorator(fn):
-                return RuleDef(kind, FunctionRule(fn, inline, capture))
+                return RuleDef(FunctionRule(fn, _wrapper))
             return _decorator
 
-    def operators(*args, capture=None):
-        return Builtins.rule(*args, capture=capture, kind="operators")
+    def operators(*args):
+        if len(args) > 0:
+            return RuleDef(OperatorRule(args))
+        else:
+            raise SyntaxError()
+
+    def recursive(*args, capture=None, kind="left"):
+        def _wrapper(rules):
+            if capture:
+                return RecursiveRule(kind, CaptureRule(capture, rules))
+            elif len(rules) > 1:
+                return RecursiveRule(kind, SequenceRule(rules))
+            else:
+                return RecursiveRule(kind, rules[0])
+        if len(args) > 0:
+            return RuleDef(_wrapper(args))
+        else:
+            def _decorator(fn):
+                return RuleDef(FunctionRule(fn, _wrapper))
+            return _decorator
 
     def left(*args, capture=None):
-        return Builtins.rule(*args, capture=capture, kind="left")
+        return Builtins.recursive(*args, capture=capture, kind="left")
 
     def right(*args, capture=None):
-        return Builtins.rule(*args, capture=capture, kind="right")
+        return Builtins.recursive(*args, capture=capture, kind="right")
 
     def capture(name, *args):
         return CaptureRule(name, args)
