@@ -118,7 +118,7 @@ class Expr(Grammar, start="expr", whitespace=[" ", "\t"], newline=["\n"]):
     expr = rule(literal)
     expr = rule( accept("("), expr, accept(")") )
 
-    expr = operators(
+    expr = recursive(
            [mul, div],
            [add, sub],
     )

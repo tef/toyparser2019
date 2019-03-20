@@ -137,23 +137,26 @@ class RangeRule(Rule):
             return "[{}{}]".format(invert, self.args[0])
         return "[{}{}]".format(invert, "".join(repr(a)[1:-1] for a in self.args))
 
-class OperatorRule(Rule):
+class RecursiveRule(Rule):
     def __init__(self, args):
         self.args = args
 
     def build_rule(self, rulebuilder):
-        return self
+        args = [[r.build_rule(rulebuilder) for r in rules] for rules in self.args]
+        return RecursiveRule(args)
 
     def __str__(self):
-        return "<operator {}>".format("|".join("{}".format(repr(a)) for a in self.args))
+        def _fmt(args):
+            return "({})".format(",".join(str(x) for x in args))
+        return "<recursive {}>".format("|".join("{}".format(_fmt(a)) for a in self.args))
 
-class RecursiveRule(Rule):
+class OperatorRule(Rule):
     def __init__(self, direction, rule):
         self.direction = direction
         self.rule = rule
 
     def build_rule(self, rulebuilder):
-        return self
+        return OperatorRule(self.direction, self.rule.build_rule(rulebuilder))
 
     def __str__(self):
         return "<{} {}>".format(self.direction, self.rule)
@@ -296,20 +299,20 @@ class Builtins:
                 return RuleDef(FunctionRule(fn, _wrapper))
             return _decorator
 
-    def operators(*args):
+    def recursive(*args):
         if len(args) > 0:
-            return RuleDef(OperatorRule(args))
+            return RuleDef(RecursiveRule(args))
         else:
             raise SyntaxError()
 
-    def recursive(*args, capture=None, kind="left"):
+    def operator(*args, capture=None, kind="left"):
         def _wrapper(rules):
             if capture:
-                return RecursiveRule(kind, CaptureRule(capture, rules))
+                return OperatorRule(kind, CaptureRule(capture, rules))
             elif len(rules) > 1:
-                return RecursiveRule(kind, SequenceRule(rules))
+                return OperatorRule(kind, SequenceRule(rules))
             else:
-                return RecursiveRule(kind, rules[0])
+                return OperatorRule(kind, rules[0])
         if len(args) > 0:
             return RuleDef(_wrapper(args))
         else:
@@ -318,10 +321,10 @@ class Builtins:
             return _decorator
 
     def left(*args, capture=None):
-        return Builtins.recursive(*args, capture=capture, kind="left")
+        return Builtins.operator(*args, capture=capture, kind="left")
 
     def right(*args, capture=None):
-        return Builtins.recursive(*args, capture=capture, kind="right")
+        return Builtins.operator(*args, capture=capture, kind="right")
 
     def capture(name, *args):
         return CaptureRule(name, args)
@@ -491,6 +494,12 @@ class ParserState:
     def __bool__(self):
         return True
 
+    def choice(self):
+        return self.clone(children=[])
+
+    def merge_choice(self, new):
+        return new.clone(children = self.children+new.children)
+
     def set_indent(self):
         return self.clone(indent=(self.offset-self.line_start, self.indent))
 
@@ -613,9 +622,9 @@ class Parser:
         if isinstance(rule, ChoiceRule):
             for option in rule.rules:
                 # nprint('choice', repr(state.buf[state.offset:state.offset+5]), option)
-                s = self.parse_rule(option, state)
+                s = self.parse_rule(option, state.choice())
                 if s is not None:
-                    return s
+                    return state.merge_choice(s)
         if isinstance(rule, RepeatRule):
             start, end = rule.min, rule.max
             c= 0
