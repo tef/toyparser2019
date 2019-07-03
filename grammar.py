@@ -1,18 +1,24 @@
 from contextlib import contextmanager
 from types import FunctionType
 
-# Rules (aka right hand side of grammar)
-#       not built directly
-
 class Def:
     pass
+
+class Rule:
+    def __init__(self, kind, *, args=None, rules=()):
+        self.kind = kind
+        self.args = args if args else {}
+        self.rules = rules
+
+    def __str__(self):
+        return "({} {})".format(self.kind, ", ".join(str(r) for r in self.rules))
 
 class FunctionDef(Def):
     def __init__(self, fn, wrapper):
         self.fn = fn
         self.wrapper = wrapper
 
-    def build_rule(self, builder):
+    def canonical(self, builder):
         return self.wrapper(builder.from_function(self.fn))
 
 class NamedDef(Def):
@@ -25,8 +31,11 @@ class NamedDef(Def):
     def __or__(self, right):
         return ChoiceDef([self, right])
 
-    def build_rule(self, builder):
+    def canonical(self, builder):
         return self
+
+    def make_rule(self):
+        return Rule("rule", args=dict(name=self.name))
 
 class ChoiceDef(Def):
     def __init__(self, rules):
@@ -38,11 +47,14 @@ class ChoiceDef(Def):
         rules.append(right)
         return ChoiceDef(rules)
 
-    def build_rule(self, builder):
-        rules = [r.build_rule(builder) for r in self.rules]
+    def canonical(self, builder):
+        rules = [r.canonical(builder) for r in self.rules]
         if len(rules) == 1:
             return rules[0]
         return ChoiceDef(rules)
+
+    def make_rule(self):
+        return Rule("choice", rules=[r.make_rule() for r in self.rules])
 
 class SequenceDef(Def):
     def __init__(self, rules):
@@ -50,11 +62,14 @@ class SequenceDef(Def):
     def __str__(self):
         return f"({' '.join(str(x) for x in self.rules)})"
 
-    def build_rule(self, builder):
-        rules = [r.build_rule(builder) for r in self.rules]
+    def canonical(self, builder):
+        rules = [r.canonical(builder) for r in self.rules]
         if len(rules) == 1:
             return rules[0]
         return SequenceDef(rules)
+
+    def make_rule(self):
+        return Rule("seq", rules=[r.make_rule() for r in self.rules])
 
 class CaptureDef(Def):
     def __init__(self, name, rules):
@@ -63,9 +78,11 @@ class CaptureDef(Def):
     def __str__(self):
         return f"({' '.join(str(x) for x in self.rules)})"
 
-    def build_rule(self, builder):
-        rules = [r.build_rule(builder) for r in self.rules]
+    def canonical(self, builder):
+        rules = [r.canonical(builder) for r in self.rules]
         return CaptureDef(self.name, rules)
+    def make_rule(self):
+        return Rule("capture", args=dict(name=self.name), rules=[r.make_rule() for r in self.rules])
 
 class RepeatDef(Def):
     def __init__(self, rules, min=0, max=None):
@@ -85,19 +102,23 @@ class RepeatDef(Def):
             return f"({' '.join(str(x) for x in self.rules)})^{{{self.min},}}"
         else:
             return f"({' '.join(str(x) for x in self.rules)})^{{{self.min},{self.max}}}"
-    def build_rule(self, builder):
-        rules = [r.build_rule(builder) for r in self.rules]
+    def canonical(self, builder):
+        rules = [r.canonical(builder) for r in self.rules]
         return RepeatDef(rules, self.min, self.max)
+    def make_rule(self):
+        return Rule("repeat", args=dict(min=self.min, max=self.max), rules=[r.make_rule() for r in self.rules])
 
 class IndentDef(Def):
     def __init__(self, rules):
         self.rules = rules
 
-    def build_rule(self, builder):
+    def canonical(self, builder):
         return self
 
     def __str__(self):
         return "<indent {}>".format(",".join(str(x) for x in self.rules))
+    def make_rule(self):
+        return Rule("set-indent", rules=[r.make_rule() for r in self.rules])
 
 class WhitespaceDef(Def):
     def __init__(self, kind, min=0, max=None):
@@ -105,18 +126,21 @@ class WhitespaceDef(Def):
         self.min = min
         self.max = max
 
-    def build_rule(self, builder):
+    def canonical(self, builder):
         return self
 
     def __str__(self):
         return self.kind
+
+    def make_rule(self):
+        return Rule(self.kind, args=dict(min=self.min, max=self.max))
 
 class LiteralDef(Def):
     def __init__(self, args,exclude):
         self.args = args
         self.exclude = exclude
 
-    def build_rule(self, rulebuilder):
+    def canonical(self, rulebuilder):
         return self
 
     def __str__(self):
@@ -124,12 +148,15 @@ class LiteralDef(Def):
             return "{!r}".format(self.args[0])
         return "|".join("{}".format(repr(a)) for a in self.args)
 
+    def make_rule(self):
+        return Rule("literal", rules=self.args)
+
 class RangeDef(Def):
     def __init__(self, args,invert):
         self.args = args
         self.invert = invert
 
-    def build_rule(self, rulebuilder):
+    def canonical(self, rulebuilder):
         return self
 
     def __str__(self):
@@ -137,13 +164,15 @@ class RangeDef(Def):
         if len(self.args) == 1:
             return "[{}{}]".format(invert, self.args[0])
         return "[{}{}]".format(invert, "".join(repr(a)[1:-1] for a in self.args))
+    def make_rule(self):
+        return Rule("range", args=dict(invert=self.invert, range=self.args))
 
 class RecursiveDef(Def):
     def __init__(self, args):
         self.args = args
 
-    def build_rule(self, rulebuilder):
-        args = [[r.build_rule(rulebuilder) for r in rules] for rules in self.args]
+    def canonical(self, rulebuilder):
+        args = [[r.canonical(rulebuilder) for r in rules] for rules in self.args]
         return RecursiveDef(args)
 
     def __str__(self):
@@ -151,17 +180,22 @@ class RecursiveDef(Def):
             return "({})".format(",".join(str(x) for x in args))
         return "<recursive {}>".format("|".join("{}".format(_fmt(a)) for a in self.args))
 
+    def make_rule(self):
+        return Rule("recursive", args=args)
+
 class OperatorDef(Def):
     def __init__(self, direction, rule):
         self.direction = direction
         self.rule = rule
 
-    def build_rule(self, rulebuilder):
-        return OperatorDef(self.direction, self.rule.build_rule(rulebuilder))
+    def canonical(self, rulebuilder):
+        return OperatorDef(self.direction, self.rule.canonical(rulebuilder))
 
     def __str__(self):
         return "<{} {}>".format(self.direction, self.rule)
 
+    def make_rule(self):
+        return Rule("operator", args=self.direction, rules=[self.rule])
 # Builders
 #
 
@@ -185,11 +219,11 @@ class FunctionBuilder:
 
     def whitespace(self, min=0, max=None):
         if self.block_mode: raise SyntaxError()
-        self.rules.append(WhitespaceDef("ws", min, max))
+        self.rules.append(WhitespaceDef("whitespace", min, max))
 
     def newline(self, *args, exclude=None):
         if self.block_mode: raise SyntaxError()
-        self.rules.append(WhitespaceDef("nl"))
+        self.rules.append(WhitespaceDef("newline"))
 
     def range(self, *args, invert=False):
         if self.block_mode: raise SyntaxError()
@@ -201,7 +235,7 @@ class FunctionBuilder:
 
     def indent(self):
         if self.block_mode: raise SyntaxError()
-        self.rules.append(WhitespaceDef("indent"))
+        self.rules.append(WhitespaceDef("wsindent"))
 
     @contextmanager
     def indented(self):
@@ -231,7 +265,6 @@ class FunctionBuilder:
         self.block_mode = None
         rules.append(ChoiceDef(self.rules))
         self.rules = rules
-
 
     @contextmanager
     def case(self):
@@ -280,8 +313,8 @@ class RuleDef:
     def __init__(self, rule):
         self.rule = rule
 
-    def build_rule(self, builder):
-        return self.rule.build_rule(builder)
+    def canonical(self, builder):
+        return self.rule.canonical(builder)
 
 class Builtins:
     """ These methods are exported as functions inside the class defintion """
@@ -339,8 +372,8 @@ class Builtins:
         return RepeatDef(args, min=0, max=1)
     def choice(*args):
         return ChoiceDef(args)
-    whitespace = WhitespaceDef("ws")
-    newline = WhitespaceDef("nl")
+    whitespace = WhitespaceDef("whitespace")
+    newline = WhitespaceDef("newline")
 
 class Metaclass(type):
     """
@@ -423,7 +456,7 @@ class RuleDict(dict):
         names = {name:self.named_rules.get(name, NamedDef(name)) for name in rules}
 
         builder = FunctionBuilder(names)
-        rules = {k:r.build_rule(builder) for k,r in rules.items()}
+        rules = {k:r.canonical(builder).make_rule() for k,r in rules.items()}
 
         properties = GrammarProperties(start, rules)
         
@@ -451,10 +484,10 @@ class RuleSet:
         else:
             raise SyntaxError('rule')
 
-    def build_rule(self, rulebuilder):
+    def canonical(self, rulebuilder):
         rules = []
         for rule in self.rules:
-            rules.append(rule.build_rule(rulebuilder))
+            rules.append(rule.canonical(rulebuilder))
         if len(rules) == 1:
             return rules[0]
         return ChoiceDef(rules)
@@ -614,20 +647,20 @@ class Parser:
     def parse_rule(self, rule, state):
         if state.offset == len(state.buf):
             return
-        if isinstance(rule, NamedDef):
-            # print(rule.name)
-            end = self.parse_rule(self.grammar.rules[rule.name], state)
+        if rule.kind == "rule":
+            name = rule.args['name']
+            end = self.parse_rule(self.grammar.rules[name], state)
             return end
 
         # print(rule, repr(state.buf[state.offset:state.offset+5]))
-        if isinstance(rule, ChoiceDef):
+        if rule.kind == "choice":
             for option in rule.rules:
                 # nprint('choice', repr(state.buf[state.offset:state.offset+5]), option)
                 s = self.parse_rule(option, state.choice())
                 if s is not None:
                     return state.merge_choice(s)
-        if isinstance(rule, RepeatDef):
-            start, end = rule.min, rule.max
+        if rule.kind == "repeat":
+            start, end = rule.args['min'], rule.args['max']
             c= 0
             while c < start:
                 for step in rule.rules:
@@ -647,53 +680,53 @@ class Parser:
                 old = state
                 c+=1
             return state
-        if isinstance(rule, CaptureDef):
+        if rule.kind == "capture":
             start = state
+            name = rule.args['name']
             end = state.capture()
             for step in rule.rules:
                 end = self.parse_rule(step, end)
                 if end is None:
                     break
             if end:
-                if rule.name in self.builder:
-                    return end.build_capture(self.builder[rule.name])
+                if name in self.builder:
+                    return end.build_capture(self.builder[name])
                 else:
-                    return end.build_node(rule.name)
+                    return end.build_node(name)
             return None
 
-        if isinstance(rule, SequenceDef):
+        if rule.kind == "seq":
             for step in rule.rules:
                 state = self.parse_rule(step, state)
                 if state is None:
                     return None
             return state
-        if isinstance(rule, LiteralDef):
-            for text in rule.args:
+        if rule.kind == "literal":
+            for text in rule.rules:
                 new_state = state.advance(text)
                 if new_state:
                     return new_state
-        if isinstance(rule, RangeDef):
-            if rule.invert:
+        if rule.kind == "range":
+            if rule.args['invert']:
                 # print(rule, state.buf[state.offset:], rule.args)
-                for text in rule.args:
+                for text in rule.args['range']:
                     new_state = state.advance_range(text)
                     # print(new_state, text)
                     if new_state:
                         return
                 return state.clone(offset=state.offset+1)
             else:
-                for text in rule.args:
+                for text in rule.args['range']:
                     new_state = state.advance_range(text)
                     if new_state:
                         return new_state
-        if isinstance(rule, WhitespaceDef):
-            if rule.kind == "ws":
-                return state.advance_whitespace(self.grammar.whitespace, rule.min, rule.max)
-            if rule.kind == "nl":
-                return state.advance_newline(self.grammar.newline)
-            if rule.kind == "indent":
-                return state.advance_indent(self.grammar.whitespace)
-        if isinstance(rule, IndentDef):
+        if rule.kind == "whitespace":
+            return state.advance_whitespace(self.grammar.whitespace, rule.args['min'], rule.args['max'])
+        if rule.kind == "newline":
+            return state.advance_newline(self.grammar.newline)
+        if rule.kind == "wsindent":
+            return state.advance_indent(self.grammar.whitespace)
+        if rule.kind == "set-indent":
             state = state.set_indent()
             for step in rule.rules:
                 state = self.parse_rule(step, state)
@@ -705,11 +738,10 @@ class Parser:
 def parser(grammar, builder):
     return Parser(grammar, builder)
 
+
 class Grammar(metaclass=Metaclass):
     pass
 
+# cannot use decorator because classmethod won't resolve. heh
+
 Grammar.parser = classmethod(parser)
-
-
-class Regex(Grammar, whitespace=[]):
-    pattern = rule(pattern, accept("*"))
