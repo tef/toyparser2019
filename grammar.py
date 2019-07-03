@@ -4,18 +4,18 @@ from types import FunctionType
 # Rules (aka right hand side of grammar)
 #       not built directly
 
-class Rule:
+class Def:
     pass
 
-class FunctionRule(Rule):
+class FunctionDef(Def):
     def __init__(self, fn, wrapper):
-        self.name = fn
+        self.fn = fn
         self.wrapper = wrapper
 
     def build_rule(self, builder):
-        return self.wrapper(builder(self.name))
+        return self.wrapper(builder.from_function(self.fn))
 
-class NamedRule(Rule):
+class NamedDef(Def):
     def __init__(self, name):
         self.name = name
 
@@ -23,12 +23,12 @@ class NamedRule(Rule):
         return self.name
 
     def __or__(self, right):
-        return ChoiceRule([self, right])
+        return ChoiceDef([self, right])
 
     def build_rule(self, builder):
         return self
 
-class ChoiceRule(Rule):
+class ChoiceDef(Def):
     def __init__(self, rules):
         self.rules = rules
     def __str__(self):
@@ -36,15 +36,15 @@ class ChoiceRule(Rule):
     def __or__(self, right):
         rules = list(self.rules)
         rules.append(right)
-        return ChoiceRule(rules)
+        return ChoiceDef(rules)
 
     def build_rule(self, builder):
         rules = [r.build_rule(builder) for r in self.rules]
         if len(rules) == 1:
             return rules[0]
-        return ChoiceRule(rules)
+        return ChoiceDef(rules)
 
-class SequenceRule(Rule):
+class SequenceDef(Def):
     def __init__(self, rules):
         self.rules = rules
     def __str__(self):
@@ -54,9 +54,9 @@ class SequenceRule(Rule):
         rules = [r.build_rule(builder) for r in self.rules]
         if len(rules) == 1:
             return rules[0]
-        return SequenceRule(rules)
+        return SequenceDef(rules)
 
-class CaptureRule(Rule):
+class CaptureDef(Def):
     def __init__(self, name, rules):
         self.rules = rules
         self.name = name
@@ -65,9 +65,9 @@ class CaptureRule(Rule):
 
     def build_rule(self, builder):
         rules = [r.build_rule(builder) for r in self.rules]
-        return CaptureRule(self.name, rules)
+        return CaptureDef(self.name, rules)
 
-class RepeatRule(Rule):
+class RepeatDef(Def):
     def __init__(self, rules, min=0, max=None):
         self.min = min
         self.max = max
@@ -87,9 +87,9 @@ class RepeatRule(Rule):
             return f"({' '.join(str(x) for x in self.rules)})^{{{self.min},{self.max}}}"
     def build_rule(self, builder):
         rules = [r.build_rule(builder) for r in self.rules]
-        return RepeatRule(rules, self.min, self.max)
+        return RepeatDef(rules, self.min, self.max)
 
-class IndentRule(Rule):
+class IndentDef(Def):
     def __init__(self, rules):
         self.rules = rules
 
@@ -98,7 +98,8 @@ class IndentRule(Rule):
 
     def __str__(self):
         return "<indent {}>".format(",".join(str(x) for x in self.rules))
-class WhitespaceRule(Rule):
+
+class WhitespaceDef(Def):
     def __init__(self, kind, min=0, max=None):
         self.kind = kind
         self.min = min
@@ -110,7 +111,7 @@ class WhitespaceRule(Rule):
     def __str__(self):
         return self.kind
 
-class LiteralRule(Rule):
+class LiteralDef(Def):
     def __init__(self, args,exclude):
         self.args = args
         self.exclude = exclude
@@ -123,7 +124,7 @@ class LiteralRule(Rule):
             return "{!r}".format(self.args[0])
         return "|".join("{}".format(repr(a)) for a in self.args)
 
-class RangeRule(Rule):
+class RangeDef(Def):
     def __init__(self, args,invert):
         self.args = args
         self.invert = invert
@@ -137,26 +138,26 @@ class RangeRule(Rule):
             return "[{}{}]".format(invert, self.args[0])
         return "[{}{}]".format(invert, "".join(repr(a)[1:-1] for a in self.args))
 
-class RecursiveRule(Rule):
+class RecursiveDef(Def):
     def __init__(self, args):
         self.args = args
 
     def build_rule(self, rulebuilder):
         args = [[r.build_rule(rulebuilder) for r in rules] for rules in self.args]
-        return RecursiveRule(args)
+        return RecursiveDef(args)
 
     def __str__(self):
         def _fmt(args):
             return "({})".format(",".join(str(x) for x in args))
         return "<recursive {}>".format("|".join("{}".format(_fmt(a)) for a in self.args))
 
-class OperatorRule(Rule):
+class OperatorDef(Def):
     def __init__(self, direction, rule):
         self.direction = direction
         self.rule = rule
 
     def build_rule(self, rulebuilder):
-        return OperatorRule(self.direction, self.rule.build_rule(rulebuilder))
+        return OperatorDef(self.direction, self.rule.build_rule(rulebuilder))
 
     def __str__(self):
         return "<{} {}>".format(self.direction, self.rule)
@@ -164,7 +165,7 @@ class OperatorRule(Rule):
 # Builders
 #
 
-class RuleBuilder:
+class FunctionBuilder:
     def __init__(self, names):
         self.rules = None
         self.block_mode = "build"
@@ -180,19 +181,19 @@ class RuleBuilder:
 
     def accept(self, *args, exclude=None):
         if self.block_mode: raise SyntaxError()
-        self.rules.append(LiteralRule(args, exclude))
+        self.rules.append(LiteralDef(args, exclude))
 
     def whitespace(self, min=0, max=None):
         if self.block_mode: raise SyntaxError()
-        self.rules.append(WhitespaceRule("ws", min, max))
+        self.rules.append(WhitespaceDef("ws", min, max))
 
     def newline(self, *args, exclude=None):
         if self.block_mode: raise SyntaxError()
-        self.rules.append(WhitespaceRule("nl"))
+        self.rules.append(WhitespaceDef("nl"))
 
     def range(self, *args, invert=False):
         if self.block_mode: raise SyntaxError()
-        self.rules.append(RangeRule(args, invert))
+        self.rules.append(RangeDef(args, invert))
 
     def reject(self):
         if self.block_mode: raise SyntaxError()
@@ -200,14 +201,14 @@ class RuleBuilder:
 
     def indent(self):
         if self.block_mode: raise SyntaxError()
-        self.rules.append(WhitespaceRule("indent"))
+        self.rules.append(WhitespaceDef("indent"))
 
     @contextmanager
     def indented(self):
         if self.block_mode: raise SyntaxError()
         rules, self.rules = self.rules, []
         yield
-        rules.append(IndentRule(self.rules))
+        rules.append(IndentDef(self.rules))
         self.rules = rules
         
     @contextmanager
@@ -216,7 +217,7 @@ class RuleBuilder:
         rules = self.rules
         self.rules = []
         yield
-        rules.append(CaptureRule(name, self.rules))
+        rules.append(CaptureDef(name, self.rules))
         self.rules = rules
 
     @contextmanager
@@ -228,7 +229,7 @@ class RuleBuilder:
         yield
         if self.block_mode != "choice": raise SyntaxError()
         self.block_mode = None
-        rules.append(ChoiceRule(self.rules))
+        rules.append(ChoiceDef(self.rules))
         self.rules = rules
 
 
@@ -241,7 +242,7 @@ class RuleBuilder:
         yield
         if self.block_mode: raise SyntaxError()
         self.block_mode = "choice"
-        rules.append(SequenceRule(self.rules))
+        rules.append(SequenceDef(self.rules))
         self.rules = rules
 
     @contextmanager
@@ -250,7 +251,7 @@ class RuleBuilder:
         rules = self.rules
         self.rules = []
         yield
-        rules.append(RepeatRule(self.rules, min=min, max=max))
+        rules.append(RepeatDef(self.rules, min=min, max=max))
         self.rules = rules
 
     @contextmanager
@@ -259,15 +260,15 @@ class RuleBuilder:
         rules = self.rules
         self.rules = []
         yield
-        rules.append(RepeatRule(self.rules, min=0, max=1))
+        rules.append(RepeatDef(self.rules, min=0, max=1))
         self.rules = rules
 
-    def build(self, rule):
+    def from_function(self, fn):
         if self.block_mode != "build": raise SyntaxError()
         self.block_mode = None
         self.rules = []
 
-        rule(self)
+        fn(self)
 
         if self.block_mode: raise SyntaxError()
         self.block_mode = "build"
@@ -287,37 +288,37 @@ class Builtins:
     def rule(*args, inline=False, capture=None):
         def _wrapper(rules):
             if capture:
-                return CaptureRule(capture, rules)
+                return CaptureDef(capture, rules)
             elif len(rules) > 1:
-                return SequenceRule(rules)
+                return SequenceDef(rules)
             else:
                 return rules[0]
         if len(args) > 0:
             return RuleDef(_wrapper(args))
         else:
             def _decorator(fn):
-                return RuleDef(FunctionRule(fn, _wrapper))
+                return RuleDef(FunctionDef(fn, _wrapper))
             return _decorator
 
     def recursive(*args):
         if len(args) > 0:
-            return RuleDef(RecursiveRule(args))
+            return RuleDef(RecursiveDef(args))
         else:
             raise SyntaxError()
 
     def operator(*args, capture=None, kind="left"):
         def _wrapper(rules):
             if capture:
-                return OperatorRule(kind, CaptureRule(capture, rules))
+                return OperatorDef(kind, CaptureDef(capture, rules))
             elif len(rules) > 1:
-                return OperatorRule(kind, SequenceRule(rules))
+                return OperatorDef(kind, SequenceDef(rules))
             else:
-                return OperatorRule(kind, rules[0])
+                return OperatorDef(kind, rules[0])
         if len(args) > 0:
             return RuleDef(_wrapper(args))
         else:
             def _decorator(fn):
-                return RuleDef(FunctionRule(fn, _wrapper))
+                return RuleDef(FunctionDef(fn, _wrapper))
             return _decorator
 
     def left(*args, capture=None):
@@ -327,19 +328,19 @@ class Builtins:
         return Builtins.operator(*args, capture=capture, kind="right")
 
     def capture(name, *args):
-        return CaptureRule(name, args)
+        return CaptureDef(name, args)
     def accept(*args, exclude=None):
-        return LiteralRule(args, exclude)
+        return LiteralDef(args, exclude)
     def range(*args, exclude=None):
-        return RangeRule(args, exclude)
+        return RangeDef(args, exclude)
     def repeat(*args, min=0, max=None):
-        return RepeatRule(args, min=min, max=max)
+        return RepeatDef(args, min=min, max=max)
     def optional(*args):
-        return RepeatRule(args, min=0, max=1)
+        return RepeatDef(args, min=0, max=1)
     def choice(*args):
-        return ChoiceRule(args)
-    whitespace = WhitespaceRule("ws")
-    newline = WhitespaceRule("nl")
+        return ChoiceDef(args)
+    whitespace = WhitespaceDef("ws")
+    newline = WhitespaceDef("nl")
 
 class Metaclass(type):
     """
@@ -379,7 +380,7 @@ class RuleDict(dict):
         if key in self.named_rules:
             return self.named_rules[key]
         else:
-            rule = NamedRule(key)
+            rule = NamedDef(key)
             self.named_rules[key] = rule
             return rule
 
@@ -419,10 +420,10 @@ class RuleDict(dict):
             else:
                 new_attrs[key] = value
 
-        names = {name:self.named_rules.get(name, NamedRule(name)) for name in rules}
+        names = {name:self.named_rules.get(name, NamedDef(name)) for name in rules}
 
-        builder = RuleBuilder(names)
-        rules = {k:r.build_rule(builder.build) for k,r in rules.items()}
+        builder = FunctionBuilder(names)
+        rules = {k:r.build_rule(builder) for k,r in rules.items()}
 
         properties = GrammarProperties(start, rules)
         
@@ -442,10 +443,10 @@ class RuleSet:
 
     def append(self, rule):
         if rule is self: raise Exception()
-        if isinstance(rule, ChoiceRule):
+        if isinstance(rule, ChoiceDef):
             if self in rule.rules: raise Exception()
             self.rules.extend(rule.rules)
-        elif isinstance(rule, Rule):
+        elif isinstance(rule, Def):
             self.rules.append(rule)
         else:
             raise SyntaxError('rule')
@@ -456,7 +457,7 @@ class RuleSet:
             rules.append(rule.build_rule(rulebuilder))
         if len(rules) == 1:
             return rules[0]
-        return ChoiceRule(rules)
+        return ChoiceDef(rules)
 
 class GrammarProperties:
     def __init__(self, start, rules):
@@ -613,19 +614,19 @@ class Parser:
     def parse_rule(self, rule, state):
         if state.offset == len(state.buf):
             return
-        if isinstance(rule, NamedRule):
+        if isinstance(rule, NamedDef):
             # print(rule.name)
             end = self.parse_rule(self.grammar.rules[rule.name], state)
             return end
 
         # print(rule, repr(state.buf[state.offset:state.offset+5]))
-        if isinstance(rule, ChoiceRule):
+        if isinstance(rule, ChoiceDef):
             for option in rule.rules:
                 # nprint('choice', repr(state.buf[state.offset:state.offset+5]), option)
                 s = self.parse_rule(option, state.choice())
                 if s is not None:
                     return state.merge_choice(s)
-        if isinstance(rule, RepeatRule):
+        if isinstance(rule, RepeatDef):
             start, end = rule.min, rule.max
             c= 0
             while c < start:
@@ -646,7 +647,7 @@ class Parser:
                 old = state
                 c+=1
             return state
-        if isinstance(rule, CaptureRule):
+        if isinstance(rule, CaptureDef):
             start = state
             end = state.capture()
             for step in rule.rules:
@@ -660,18 +661,18 @@ class Parser:
                     return end.build_node(rule.name)
             return None
 
-        if isinstance(rule, SequenceRule):
+        if isinstance(rule, SequenceDef):
             for step in rule.rules:
                 state = self.parse_rule(step, state)
                 if state is None:
                     return None
             return state
-        if isinstance(rule, LiteralRule):
+        if isinstance(rule, LiteralDef):
             for text in rule.args:
                 new_state = state.advance(text)
                 if new_state:
                     return new_state
-        if isinstance(rule, RangeRule):
+        if isinstance(rule, RangeDef):
             if rule.invert:
                 # print(rule, state.buf[state.offset:], rule.args)
                 for text in rule.args:
@@ -685,14 +686,14 @@ class Parser:
                     new_state = state.advance_range(text)
                     if new_state:
                         return new_state
-        if isinstance(rule, WhitespaceRule):
+        if isinstance(rule, WhitespaceDef):
             if rule.kind == "ws":
                 return state.advance_whitespace(self.grammar.whitespace, rule.min, rule.max)
             if rule.kind == "nl":
                 return state.advance_newline(self.grammar.newline)
             if rule.kind == "indent":
                 return state.advance_indent(self.grammar.whitespace)
-        if isinstance(rule, IndentRule):
+        if isinstance(rule, IndentDef):
             state = state.set_indent()
             for step in rule.rules:
                 state = self.parse_rule(step, state)
