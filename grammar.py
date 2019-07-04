@@ -235,7 +235,7 @@ class FunctionBuilder:
 
     def indent(self):
         if self.block_mode: raise SyntaxError()
-        self.rules.append(WhitespaceDef("wsindent"))
+        self.rules.append(WhitespaceDef("match-indent"))
 
     @contextmanager
     def indented(self):
@@ -724,7 +724,7 @@ class Parser:
             return state.advance_whitespace(self.grammar.whitespace, rule.args['min'], rule.args['max'])
         if rule.kind == "newline":
             return state.advance_newline(self.grammar.newline)
-        if rule.kind == "wsindent":
+        if rule.kind == "match-indent":
             return state.advance_indent(self.grammar.whitespace)
         if rule.kind == "set-indent":
             state = state.set_indent()
