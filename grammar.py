@@ -492,16 +492,7 @@ class RuleSet:
             return rules[0]
         return ChoiceDef(rules)
 
-class GrammarProperties:
-    def __init__(self, start, rules):
-        nullable = {}
-        left_corners = {}
-        stack = [start]
-
-        while stack:
-            head = stack.pop()
-
-    
+### 
 
 class ParserState:
     def __init__(self, buf, line_start,  offset, children, parent, indent):
@@ -735,13 +726,12 @@ class Parser:
             # print('exit', state.offset, repr(state.buf[state.offset:]), state.indent)
             return state.pop_indent()
                 
-def parser(grammar, builder):
-    return Parser(grammar, builder)
-
-
 class Grammar(metaclass=Metaclass):
     pass
 
 # cannot use decorator because classmethod won't resolve. heh
+
+def parser(grammar, builder):
+    return Parser(grammar, builder)
 
 Grammar.parser = classmethod(parser)
