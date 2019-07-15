@@ -85,6 +85,18 @@ class BlockDef(Def):
     def make_rule(self):
         return Rule(self.kind, rules=[r.make_rule() for r in self.rules])
 
+class ValueDef(Def):
+    def __init__(self, value):
+        self.value = value
+    def __str__(self):
+        return f"({self.value})"
+
+    def canonical(self, builder):
+        return self
+
+    def make_rule(self):
+        return Rule('value', args=dict(value=self.value))
+
 class CaptureDef(Def):
     def __init__(self, name, rules):
         self.rules = rules
@@ -234,6 +246,10 @@ class FunctionBuilder:
     def whitespace(self, min=0, max=None):
         if self.block_mode: raise SyntaxError()
         self.rules.append(BuiltinDef("whitespace", min, max))
+
+    def capture_value(self, value):
+        if self.block_mode: raise SyntaxError()
+        self.rules.append(ValueDef(value))
 
     def newline(self, *args, exclude=None):
         if self.block_mode: raise SyntaxError()
@@ -403,6 +419,8 @@ class Builtins:
 
     def capture(name, *args):
         return CaptureDef(name, args)
+    def capture_value(arg):
+        return ValueDef(arg)
     def accept(*args):
         return LiteralDef(args)
     def reject(*args):
@@ -637,22 +655,31 @@ class ParserState:
         return self.clone(children=[], parent=self)
 
     def build_node(self, name):
-        self.parent.children.append(ParseNode(name, self.parent.offset, self.offset, self.children))
+        self.parent.children.append(ParseNode(name, self.parent.offset, self.offset, self.children, None))
         return self.clone(children=self.parent.children, parent=self.parent.parent)
 
     def build_capture(self, builder):
         self.parent.children.append(builder(self.parent.substring(self), self.children))
         return self.clone(children=self.parent.children, parent=self.parent.parent)
 
+    def add_child(self, value):
+        self.children.append(value)
+
+    def add_child_node(self, value):
+        value = ParseNode('value', self.offset, self.offset, [],value)
+        self.children.append(value)
+
 class ParseNode:
-    def __init__(self, name, start, end, children):
+    def __init__(self, name, start, end, children, value):
         self.name = name
         self.start = start
         self.end = end
         self.children = children
+        self.value = value
 
     def build(self, buf, builder):
         children = [child.build(buf, builder) for child in self.children]
+        if self.name == "value": return self.value
         return builder[self.name](buf[self.start:self.end], children)
 
     def walk_top(self):
@@ -743,14 +770,22 @@ class Parser:
                 if end is None:
                     break
             if end:
-                if name in self.builder:
+                if self.builder:
                     return end.build_capture(self.builder[name])
                 else:
                     return end.build_node(name)
             return None
+        elif rule.kind == "value":
+            value = rule.args['value']
+
+            if self.builder:
+                state.add_child(value)
+            else:
+                state.add_child_node(value)
+            return state
 
         elif rule.kind == "lookahead":
-            new_state = state
+            new_state = state.capture()
             for step in rule.rules:
                 new_state = self.parse_rule(step, new_state)
                 if new_state is None:
@@ -758,7 +793,7 @@ class Parser:
             return state
 
         elif rule.kind == "reject":
-            new_state = state
+            new_state = state.capture()
             for step in rule.rules:
                 new_state = self.parse_rule(step, new_state)
                 if new_state is None:
@@ -769,6 +804,7 @@ class Parser:
             start, end = rule.args['min'], rule.args['max']
             c= 0
             while c < start:
+                start_offset = state.offset
                 for step in rule.rules:
                     # print('rep', repr(state.buf[state.offset:state.offset+5]), step, rule)
                     state = self.parse_rule(step, state)
@@ -783,6 +819,8 @@ class Parser:
                     if new_state is None:
                         return old
                     state = new_state
+                if old.offset == state.offset:
+                    return state
                 old = state
                 c+=1
             return state

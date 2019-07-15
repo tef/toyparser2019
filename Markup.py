@@ -27,7 +27,7 @@ class Markup(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
         self.eof()
 
     element = rule(
-        header | para | empty_lines
+        header | para | hr | empty_lines
     )
 
     inline_element = rule(word)
@@ -82,6 +82,14 @@ class Markup(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
                 with self.case(): self.eof()
                 with self.case(): self.newline()
             
+    @rule()
+    def hr(self):
+        self.whitespace()
+        self.accept("---")
+        self.whitespace()
+        with self.choice():
+            with self.case(): self.eof()
+            with self.case(): self.newline()
     @rule()
     def empty_lines(self):
         with self.repeat(min=1):
