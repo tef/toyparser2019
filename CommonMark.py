@@ -17,8 +17,10 @@ builder = {
     'atx_level': (lambda buf, children: len(buf)),
     'setext_heading': (lambda buf, children: {"heading":children[::-1]}),
     'indented_code': (lambda buf, children: {"indented_code":children}),
+    'fenced_code': (lambda buf, children: {"fenced_code":children}),
     'para': (lambda buf, children: {"para":children}),
     'text': (lambda buf, children: buf),
+    'info': (lambda buf, children: {"info":buf}),
 }
 
 class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
@@ -34,6 +36,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
 
     block_element = rule(
         indented_code_block | 
+        fenced_code_block |
         atx_heading |  
             # 4.1 Ex 29. Headers take precidence over thematic breaks
         thematic_break |  
@@ -141,6 +144,63 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             with self.case(): self.eof()
             with self.case(): self.newline()
 
+    @rule()
+    def fenced_code_block(self):
+        self.whitespace(max=3)
+        with self.capture('fenced_code'):
+            with self.choice():
+                with self.case():
+                    self.tilde_code_block()
+                with self.case():
+                    self.backtick_code_block()
+
+    @rule()
+    def start_fenced_block(self):
+        self.whitespace(max=3)
+        with self.choice():
+            with self.case(): self.accept("```")
+            with self.case(): self.accept("~~~")
+
+    @rule()
+    def backtick_code_block(self):
+        fence = "```"
+        self.accept(fence)
+        with self.capture('info'), self.repeat(min=1):
+            with self.reject():
+                self.accept(fence)
+            self.range("\n", invert=True)
+        self.end_of_line()
+        with self.repeat():
+            with self.reject():
+                self.whitespace(max=3)
+                self.accept(fence)
+            with self.capture('text'), self.repeat(min=1):
+                self.range("\n", invert=True)
+            self.end_of_line()
+        self.whitespace(max=3)
+        self.accept(fence)
+        self.end_of_line()
+
+
+    @rule()
+    def tilde_code_block(self):
+        fence = "~~~"
+        self.accept(fence)
+        with self.capture('info'), self.repeat(min=1):
+            with self.reject():
+                self.accept(fence)
+            self.range("\n", invert=True)
+        self.end_of_line()
+        with self.repeat():
+            with self.reject():
+                self.whitespace(max=3)
+                self.accept(fence)
+            with self.capture('text'), self.repeat(min=1):
+                self.range("\n", invert=True)
+            self.end_of_line()
+        self.whitespace(max=3)
+        self.accept(fence)
+        self.end_of_line()
 
     @rule()
     def para(self):
@@ -157,9 +217,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             with self.choice():
                 # 4.1 Ex 27, 28. Thematic Breaks can interrupt a paragraph
                 with self.case(), self.lookahead():
-                    self.thematic_break()
-                with self.case(), self.lookahead():
-                    self.setext_heading_line()
+                    self.para_interrupt()
                 with self.case(): self.eof()
                 with self.case(): self.newline()
             
@@ -183,11 +241,16 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                     self.whitespace()
             # 4.1 Ex 27, 28. Thematic Breaks can interrupt a paragraph
             with self.reject():
-                self.thematic_break()
-            with self.reject():
-                self.setext_heading_line()
+                self.para_interrupt()
             with self.capture('text'):
                 self.inline_element()
+
+    @rule()
+    def para_interrupt(self):
+        with self.choice():
+            with self.case(): self.thematic_break()
+            with self.case(): self.setext_heading_line()
+            with self.case(): self.start_fenced_block()
     @rule()
     def empty_lines(self):
         with self.repeat(min=1):
@@ -276,4 +339,23 @@ butt
     butt
 
     butt
+""")
+markup("""\
+```
+    buttt
+    ubtt
+
+    uttt
+```
+
+    buttt
+
+butt
+
+~~~ nice
+    butt
+    butt
+~~~
+
+butt
 """)
