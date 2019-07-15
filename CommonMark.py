@@ -41,6 +41,8 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             # 4.1 Ex 29. Headers take precidence over thematic breaks
         thematic_break |  
             # 4.1 Ex 30. Thematic Breaks take precidence over lists
+        # HTML Block
+        # Link reference_definiton
         setext_heading |     
         para | 
         empty_lines
@@ -166,7 +168,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
         fence = "```"
         self.accept(fence)
         with self.capture('info'), self.repeat(min=1):
-            with self.reject():
+            with self.reject(): # Example 115
                 self.accept(fence)
             self.range("\n", invert=True)
         self.end_of_line()
@@ -187,8 +189,6 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
         fence = "~~~"
         self.accept(fence)
         with self.capture('info'), self.repeat(min=1):
-            with self.reject():
-                self.accept(fence)
             self.range("\n", invert=True)
         self.end_of_line()
         with self.repeat():
@@ -231,12 +231,15 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                 self.newline()
                 self.whitespace()
                 self.newline()
-                self.whitespace()
             with self.choice():
                 with self.case(): 
-                    self.whitespace()
+                    self.whitespace(max=1)
                     self.newline()
                     self.whitespace()
+                with self.case():
+                    self.whitespace(min=2)
+                    self.newline()
+                    self.capture_value("\n")
                 with self.case():
                     self.whitespace()
             # 4.1 Ex 27, 28. Thematic Breaks can interrupt a paragraph
@@ -359,3 +362,9 @@ butt
 
 butt
 """)
+markup("""
+aaa bbb  
+ddd eee
+fff
+
+ggg""")
