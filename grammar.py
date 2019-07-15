@@ -11,7 +11,7 @@ class Rule:
         self.rules = rules
 
     def __str__(self):
-        return "({} {})".format(self.kind, ", ".join(str(r) for r in self.rules) or self.args)
+        return "({} {})".format(self.kind, ", ".join(str(r) for r in self.rules))
 
 class FunctionDef(Def):
     def __init__(self, fn, wrapper):
@@ -70,6 +70,19 @@ class SequenceDef(Def):
 
     def make_rule(self):
         return Rule("seq", rules=[r.make_rule() for r in self.rules])
+
+class RejectDef(Def):
+    def __init__(self, rules):
+        self.rules = rules
+    def __str__(self):
+        return f"!({' '.join(str(x) for x in self.rules)})"
+
+    def canonical(self, builder):
+        rules = [r.canonical(builder) for r in self.rules]
+        return RejectDef(rules)
+
+    def make_rule(self):
+        return Rule("reject", rules=[r.make_rule() for r in self.rules])
 
 class CaptureDef(Def):
     def __init__(self, name, rules):
@@ -149,8 +162,7 @@ class LiteralDef(Def):
         return "|".join("{}".format(repr(a)) for a in self.args)
 
     def make_rule(self):
-        name = "reject" if self.invert else "literal"
-        return Rule("literal", rules=self.args)
+        return Rule("literal", rules=self.args, args={'invert': self.invert})
 
 class RangeDef(Def):
     def __init__(self, args,invert):
@@ -214,10 +226,6 @@ class FunctionBuilder:
         if self.block_mode: raise SyntaxError()
         self.rules.append(rule)
 
-    def reject(self, *args):
-        if self.block_mode: raise SyntaxError()
-        self.rules.append(LiteralDef(args, reject=True))
-
     def accept(self, *args):
         if self.block_mode: raise SyntaxError()
         self.rules.append(LiteralDef(args))
@@ -257,6 +265,16 @@ class FunctionBuilder:
         self.rules = []
         yield
         rules.append(CaptureDef(name, self.rules))
+        self.rules = rules
+
+
+    @contextmanager
+    def reject(self):
+        if self.block_mode: raise SyntaxError()
+        rules = self.rules
+        self.rules = []
+        yield
+        rules.append(RejectDef(self.rules))
         self.rules = rules
 
     @contextmanager
@@ -370,7 +388,7 @@ class Builtins:
     def accept(*args):
         return LiteralDef(args)
     def reject(*args):
-        return LiteralDef(args, invert=True)
+        return RejectDef(args)
     def range(*args, exclude=None):
         return RangeDef(args, exclude)
     def repeat(*args, min=0, max=None):
@@ -540,10 +558,6 @@ class ParserState:
         if self.buf[self.offset:].startswith(text):
             return self.clone(offset=self.offset + len(text))
 
-    def reject(self, text):
-        if not self.buf[self.offset:].startswith(text):
-            return self
-
     def advance_whitespace(self, literals, min=0, max=None):
         state = self
         count = 0
@@ -648,8 +662,6 @@ class Parser:
         return start.children[-1]
 
     def parse_rule(self, rule, state):
-        if state.offset == len(state.buf):
-            return
         if rule.kind == "rule":
             name = rule.args['name']
             end = self.parse_rule(self.grammar.rules[name], state)
@@ -662,27 +674,6 @@ class Parser:
                 s = self.parse_rule(option, state.choice())
                 if s is not None:
                     return state.merge_choice(s)
-        if rule.kind == "repeat":
-            start, end = rule.args['min'], rule.args['max']
-            c= 0
-            while c < start:
-                for step in rule.rules:
-                    # print('rep', repr(state.buf[state.offset:state.offset+5]), step, rule)
-                    state = self.parse_rule(step, state)
-                    if state is None:
-                        return None
-                c+=1
-            while end is None or c < end:
-                old = state
-                for step in rule.rules:
-                    # print('rep+', repr(state.buf[state.offset:state.offset+5]), step, rule)
-                    new_state = self.parse_rule(step, state)
-                    if new_state is None:
-                        return old
-                    state = new_state
-                old = state
-                c+=1
-            return state
         if rule.kind == "capture":
             start = state
             name = rule.args['name']
@@ -704,20 +695,70 @@ class Parser:
                 if state is None:
                     return None
             return state
-        if rule.kind == "literal":
-            for text in rule.rules:
-                new_state = state.advance(text)
-                if new_state:
-                    return new_state
-        if rule.kind == "reject":
-            for text in rule.rules:
-                new_state = state.reject(text)
-                if not new_state:
-                    return None
+        if rule.kind == "repeat":
+            start, end = rule.args['min'], rule.args['max']
+            c= 0
+            while c < start:
+                for step in rule.rules:
+                    # print('rep', repr(state.buf[state.offset:state.offset+5]), step, rule)
+                    state = self.parse_rule(step, state)
+                    if state is None:
+                        return None
+                c+=1
+            while end is None or c < end:
+                old = state
+                for step in rule.rules:
+                    # print('rep+', repr(state.buf[state.offset:state.offset+5]), step, rule)
+                    new_state = self.parse_rule(step, state)
+                    if new_state is None:
+                        return old
+                    state = new_state
+                old = state
+                c+=1
             return state
+        if rule.kind == "reject":
+            new_state = state
+            for step in rule.rules:
+                new_state = self.parse_rule(step, new_state)
+                if new_state is None:
+                    return state
+            return None
+
+        if rule.kind == "eof":
+            if state.offset == len(state.buf):
+                return state
+
+        if rule.kind == "literal":
+            if rule.args['invert']:
+                for text in rule.rules:
+                    if state.advance(text):
+                        return None
+                return state
+            else:
+                for text in rule.rules:
+                    new_state = state.advance(text)
+                    if new_state:
+                        return new_state
+
+        if rule.kind == "whitespace":
+            return state.advance_whitespace(self.grammar.whitespace, rule.args['min'], rule.args['max'])
+        if rule.kind == "newline":
+            return state.advance_newline(self.grammar.newline)
+        if rule.kind == "match-indent":
+            return state.advance_indent(self.grammar.whitespace)
+        if rule.kind == "set-indent":
+            state = state.set_indent()
+            for step in rule.rules:
+                state = self.parse_rule(step, state)
+                if state is None:
+                    return None
+            # print('exit', state.offset, repr(state.buf[state.offset:]), state.indent)
+            return state.pop_indent()
 
         if rule.kind == "range":
             if rule.args['invert']:
+                if state.offset == len(state.buf):
+                    return None
                 # print(rule, state.buf[state.offset:], rule.args)
                 for text in rule.args['range']:
                     new_state = state.advance_range(text)
@@ -730,22 +771,6 @@ class Parser:
                     new_state = state.advance_range(text)
                     if new_state:
                         return new_state
-        if rule.kind == "whitespace":
-            return state.advance_whitespace(self.grammar.whitespace, rule.args['min'], rule.args['max'])
-        if rule.kind == "newline":
-            return state.advance_newline(self.grammar.newline)
-        if rule.kind == "eof":
-            return state.advance_eof()
-        if rule.kind == "match-indent":
-            return state.advance_indent(self.grammar.whitespace)
-        if rule.kind == "set-indent":
-            state = state.set_indent()
-            for step in rule.rules:
-                state = self.parse_rule(step, state)
-                if state is None:
-                    return None
-            # print('exit', state.offset, repr(state.buf[state.offset:]), state.indent)
-            return state.pop_indent()
                 
 class Grammar(metaclass=Metaclass):
     pass
