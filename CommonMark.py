@@ -16,6 +16,7 @@ builder = {
     'atx_heading': (lambda buf, children: {"heading":children}),
     'atx_level': (lambda buf, children: len(buf)),
     'setext_heading': (lambda buf, children: {"heading":children[::-1]}),
+    'indented_code': (lambda buf, children: {"indented_code":children}),
     'para': (lambda buf, children: {"para":children}),
     'text': (lambda buf, children: buf),
 }
@@ -32,7 +33,9 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     # 3. Block and Inline Elemnts
 
     block_element = rule(
+        indented_code_block | 
         atx_heading |  
+            # 4.1 Ex 29. Headers take precidence over thematic breaks
         thematic_break |  
             # 4.1 Ex 30. Thematic Breaks take precidence over lists
         setext_heading |     
@@ -113,7 +116,32 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                 self.capture_value(2)
         self.end_of_line()
 
-    # 4.1 Ex 29. Headers take precidence over thematic breaks
+    @rule()
+    def indented_code_block(self):
+        self.whitespace(min=4, max=4)
+        with self.indented(), self.capture('indented_code'):
+            self.whitespace()
+            self.indented_code_line()
+            with self.repeat(), self.choice():
+                with self.case():
+                    self.indent()
+                    self.indented_code_line()
+                with self.case():
+                    self.whitespace()
+                    self.newline()
+                    self.capture_value("")
+
+    @rule()
+    def indented_code_line(self):
+        with self.capture('text'), self.repeat(min=1):
+            with self.reject():
+                self.end_of_line()
+            self.range("\n", invert=True)
+        with self.choice():
+            with self.case(): self.eof()
+            with self.case(): self.newline()
+
+
     @rule()
     def para(self):
         self.whitespace(max=3)
@@ -224,8 +252,28 @@ aaaa
 1 2 3 4
 
 bbbb
+cccc
+dddd
 ----
 
 1 2 3 4
 
+""")
+
+
+markup("""\
+    buttt
+    ubtt
+
+    uttt
+
+
+    buttt
+
+butt
+
+    butt
+    butt
+
+    butt
 """)
