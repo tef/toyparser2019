@@ -24,7 +24,7 @@ builder = {
 }
 
 class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
-    _version = 0.29
+    version = 0.29
     @rule()
     def document(self):
         with self.capture("document"), self.repeat(min=0):
@@ -79,8 +79,9 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     def atx_heading(self):
         self.whitespace(max=3)
         with self.capture("atx_heading"):
-            with self.capture('atx_level'), self.repeat(min=1, max=6):
-                self.accept("#")
+            with self.count('#') as level:
+                with self.capture('atx_level'), self.repeat(min=1, max=6):
+                    self.accept("#")
             with self.choice():
                 with self.case():
                     self.end_of_line()
@@ -290,6 +291,8 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
         
 for name, value in CommonMark.rules.items():
     print(name, '<--', value,'.')
+
+print(CommonMark.version)
 
 def markup(buf):
     parser = CommonMark.parser({})

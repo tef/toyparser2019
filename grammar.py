@@ -276,6 +276,16 @@ class FunctionBuilder:
         self.rules = rules
         
     @contextmanager
+    def count(self, char):
+        if self.block_mode: raise SyntaxError()
+        rules = self.rules
+        self.rules = []
+        counter = CountDef(char, self.rules)
+        yield counter
+        rules.append(counter)
+        self.rules = rules
+
+    @contextmanager
     def capture(self, name):
         if self.block_mode: raise SyntaxError()
         rules = self.rules
@@ -365,6 +375,19 @@ class FunctionBuilder:
         rules, self.rules = self.rules, None
 
         return rules
+
+class CountDef:
+    def __init__(self, char, rules):
+        self.char = char
+        self.rules = rules
+    def __str__(self):
+        return f"'{char}' in ({' '.join(str(x) for x in self.rules)})"
+
+    def canonical(self, builder):
+        rules = [r.canonical(builder) for r in self.rules]
+        return CountDef(self.name, rules)
+    def make_rule(self):
+        return Rule("count", args=dict(char=self.char), rules=[r.make_rule() for r in self.rules])
 
 class RuleDef:
     def __init__(self, rule):
@@ -662,6 +685,10 @@ class ParserState:
         self.parent.children.append(builder(self.parent.substring(self), self.children))
         return self.clone(children=self.parent.children, parent=self.parent.parent)
 
+    def merge_parent(self):
+        self.parent.children.append(self.children)
+        return self.clone(children=self.parent.children, parent=self.parent.parent)
+
     def add_child(self, value):
         self.children.append(value)
 
@@ -748,7 +775,6 @@ class Parser:
             # print('exit', state.offset, repr(state.buf[state.offset:]), state.indent)
             return state.pop_indent()
 
-
         elif rule.kind == "choice":
             for option in rule.rules:
                 # print('choice', repr(state.buf[state.offset:state.offset+5]), option)
@@ -775,6 +801,18 @@ class Parser:
                 else:
                     return end.build_node(name)
             return None
+        elif rule.kind == "count":
+            start = state.offset
+            
+            for step in rule.rules:
+                state = self.parse_rule(step, state)
+                if state is None:
+                    return
+                    break
+            char = rule.args['char']
+            buf = state.buf[start:state.offset]
+            print('count', char,'in',buf, '=',buf.count(char))
+            return state
         elif rule.kind == "value":
             value = rule.args['value']
 
