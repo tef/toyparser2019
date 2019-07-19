@@ -80,8 +80,10 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
         self.whitespace(max=3)
         with self.capture("atx_heading"):
             with self.count('#') as level:
-                with self.capture('atx_level'), self.repeat(min=1, max=6):
+                with self.repeat(min=1, max=6):
                     self.accept("#")
+            self.capture_value(level)
+            self.print(level)
             with self.choice():
                 with self.case():
                     self.end_of_line()
@@ -390,3 +392,6 @@ ggg
 ```
 butt
 """)
+markup("# butt\n")
+markup("   ##### butt #####\n")
+markup("   ##### butt ##### a\n")

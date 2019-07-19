@@ -177,6 +177,19 @@ class LiteralDef(Def):
     def make_rule(self):
         return Rule("literal", rules=self.args, args={'invert': self.invert})
 
+class PrintDef(Def):
+    def __init__(self, args):
+        self.args = args
+
+    def canonical(self, rulebuilder):
+        return self
+
+    def __str__(self):
+        return "<print>"
+
+    def make_rule(self):
+        return Rule("print",args={'args': self.args})
+
 class RangeDef(Def):
     def __init__(self, args,invert):
         self.args = args
@@ -266,6 +279,9 @@ class FunctionBuilder:
     def indent(self):
         if self.block_mode: raise SyntaxError()
         self.rules.append(BuiltinDef("match-indent"))
+    def print(self, *args):
+        if self.block_mode: raise SyntaxError()
+        self.rules.append(PrintDef(args))
 
     @contextmanager
     def indented(self):
@@ -281,7 +297,7 @@ class FunctionBuilder:
         rules = self.rules
         self.rules = []
         counter = CountDef(char, self.rules)
-        yield counter
+        yield counter.key
         rules.append(counter)
         self.rules = rules
 
@@ -377,17 +393,18 @@ class FunctionBuilder:
         return rules
 
 class CountDef:
-    def __init__(self, char, rules):
+    def __init__(self, char, rules, key=None):
         self.char = char
         self.rules = rules
+        self.key = object() if key is None else key 
     def __str__(self):
-        return f"'{char}' in ({' '.join(str(x) for x in self.rules)})"
+        return f"'count {self.char}' in ({' '.join(str(x) for x in self.rules)})"
 
     def canonical(self, builder):
         rules = [r.canonical(builder) for r in self.rules]
-        return CountDef(self.name, rules)
+        return CountDef(self.name, rules, self.key)
     def make_rule(self):
-        return Rule("count", args=dict(char=self.char), rules=[r.make_rule() for r in self.rules])
+        return Rule("count", args=dict(char=self.char, key=self.key), rules=[r.make_rule() for r in self.rules])
 
 class RuleDef:
     def __init__(self, rule):
@@ -581,26 +598,28 @@ class RuleSet:
 ### 
 
 class ParserState:
-    def __init__(self, buf, line_start,  offset, children, parent, indent):
+    def __init__(self, buf, line_start,  offset, children, parent, indent, values):
         self.buf = buf
         self.line_start = line_start
         self.offset = offset
         self.children = children
         self.parent = parent
         self.indent = indent
+        self.values = values
 
     @staticmethod
     def init(buf, offset):
-        return ParserState(buf, offset, offset, [], None, None)
+        return ParserState(buf, offset, offset, [], None, None, {})
 
-    def clone(self, line_start=None, offset=None, children=None, parent=None, indent=None):
+    def clone(self, line_start=None, offset=None, children=None, parent=None, indent=None, values=None):
         if line_start is None: line_start = self.line_start
         if offset is None: offset = self.offset
         if children is None: children = self.children
         if parent is None: parent = self.parent
         if indent is None: indent = self.indent
+        if values is None: values = self.values
 
-        return ParserState(self.buf, line_start, offset, children, parent, indent)
+        return ParserState(self.buf, line_start, offset, children, parent, indent, values)
 
     def __bool__(self):
         return True
@@ -738,7 +757,12 @@ class Parser:
         return start.children[-1]
 
     def parse_rule(self, rule, state):
-        if rule.kind == "trace":
+        if rule.kind == "print":
+            args = [state.values.get(a,a) for a in rule.args['args']]
+            print('print', *args)
+            return state
+
+        elif rule.kind == "trace":
             print('trace', repr(state.buf[state.offset:state.offset+5]),"...")
             for step in rule.rules:
                 print('trace', state.offset, step.kind)
@@ -751,8 +775,11 @@ class Parser:
         
         elif rule.kind == "rule":
             name = rule.args['name']
-            end = self.parse_rule(self.grammar.rules[name], state)
-            return end
+            new_state = state.clone(values={})
+            new_state = self.parse_rule(self.grammar.rules[name], new_state)
+            if new_state:
+                new_state.values = state.values
+            return new_state
 
         elif rule.kind == "eof":
             if state.offset == len(state.buf):
@@ -810,11 +837,14 @@ class Parser:
                     return
                     break
             char = rule.args['char']
+            key = rule.args['key']
             buf = state.buf[start:state.offset]
             print('count', char,'in',buf, '=',buf.count(char))
+            state.values[key] = buf.count(char)
             return state
         elif rule.kind == "value":
             value = rule.args['value']
+            value = state.values.get(value, value)
 
             if self.builder:
                 state.add_child(value)
