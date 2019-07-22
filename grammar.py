@@ -111,10 +111,12 @@ class CaptureDef(Def):
         return Rule("capture", args=dict(name=self.name), rules=[r.make_rule() for r in self.rules])
 
 class RepeatDef(Def):
-    def __init__(self, rules, min=0, max=None):
+    def __init__(self, rules, min=0, max=None, key=None):
         self.min = min
         self.max = max
         self.rules = rules
+        self.key = key if key is not None else object()
+
     def __str__(self):
         if self.min == 0 and self.max == 1:
             return f"({' '.join(str(x) for x in self.rules)})?"
@@ -130,9 +132,9 @@ class RepeatDef(Def):
             return f"({' '.join(str(x) for x in self.rules)})^{{{self.min},{self.max}}}"
     def canonical(self, builder):
         rules = [r.canonical(builder) for r in self.rules]
-        return RepeatDef(rules, self.min, self.max)
+        return RepeatDef(rules, self.min, self.max, self.key)
     def make_rule(self):
-        return Rule("repeat", args=dict(min=self.min, max=self.max), rules=[r.make_rule() for r in self.rules])
+        return Rule("repeat", args=dict(min=self.min, max=self.max, key=self.key), rules=[r.make_rule() for r in self.rules])
 
 class IndentDef(Def):
     def __init__(self, rules):
@@ -189,6 +191,19 @@ class PrintDef(Def):
 
     def make_rule(self):
         return Rule("print",args={'args': self.args})
+
+class ConditionDef(GrammarDef):
+    def __init__(self, name, cond):
+        self.name = name
+        self.cond = cond
+    def canonical(self, rulebuilder):
+        return self
+
+    def __str__(self):
+        return "<cond>"
+
+    def make_rule(self):
+        return Rule(self.name,args={'cond': self.cond})
 
 class RangeDef(Def):
     def __init__(self, args,invert):
@@ -283,6 +298,15 @@ class FunctionBuilder:
         if self.block_mode: raise SyntaxError()
         self.rules.append(PrintDef(args))
 
+    def reject_if(self, cond):
+        if self.block_mode: raise SyntaxError()
+        self.rules.append(ConditionDef('reject-if', cond))
+
+    def accept_if(self, cond):
+        if self.block_mode: raise SyntaxError()
+        self.rules.append(ConditionDef('accept-if', cond))
+
+
     @contextmanager
     def indented(self):
         if self.block_mode: raise SyntaxError()
@@ -366,8 +390,9 @@ class FunctionBuilder:
         if self.block_mode: raise SyntaxError()
         rules = self.rules
         self.rules = []
-        yield
-        rules.append(RepeatDef(self.rules, min=min, max=max))
+        r = RepeatDef(self.rules, min=min, max=max)
+        yield r.key
+        rules.append(r)
         self.rules = rules
 
     @contextmanager
@@ -787,7 +812,11 @@ class Parser:
             return
 
         elif rule.kind == "whitespace":
-            return state.advance_whitespace(self.grammar.whitespace, rule.args['min'], rule.args['max'])
+            _min, _max = rule.args['min'], rule.args['max']
+            _min = state.values.get(_min, _min)
+            _max = state.values.get(_max, _max)
+            return state.advance_whitespace(self.grammar.whitespace, _min, _max)
+
         elif rule.kind == "newline":
             return state.advance_newline(self.grammar.newline)
 
@@ -827,6 +856,17 @@ class Parser:
                     return end.build_capture(self.builder[name])
                 else:
                     return end.build_node(name)
+            return None
+        elif rule.kind == "reject-if":
+            cond = rule.args['cond']
+            if cond.calculate(state.values):
+                return None
+            return state
+
+        elif rule.kind == "accept-if":
+            cond = rule.args['cond']
+            if cond.calculate(state.values):
+                return state
             return None
         elif rule.kind == "count":
             start = state.offset
@@ -870,6 +910,8 @@ class Parser:
 
         elif rule.kind == "repeat":
             start, end = rule.args['min'], rule.args['max']
+            start = state.values.get(start, start)
+            end = state.values.get(end, end)
             c= 0
             while c < start:
                 start_offset = state.offset
@@ -885,12 +927,15 @@ class Parser:
                     # print('rep+', repr(state.buf[state.offset:state.offset+5]), step, rule)
                     new_state = self.parse_rule(step, state)
                     if new_state is None:
+                        old.values[rule.args['key']] = c
                         return old
                     state = new_state
                 if old.offset == state.offset:
+                    state.values[rule.args['key']] = c
                     return state
                 old = state
                 c+=1
+            state.values[rule.args['key']] = c
             return state
 
         elif rule.kind == "literal":

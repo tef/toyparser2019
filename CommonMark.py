@@ -19,6 +19,7 @@ builder = {
     'indented_code': (lambda buf, children: {"indented_code":children}),
     'fenced_code': (lambda buf, children: {"fenced_code":children}),
     'para': (lambda buf, children: {"para":children}),
+    'blockquote': (lambda buf, children: {"blockquote":children}),
     'text': (lambda buf, children: buf),
     'info': (lambda buf, children: {"info":buf}),
 }
@@ -37,7 +38,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     block_element = rule(
         indented_code_block | 
         fenced_code_block |
-        # blockquote
+        blockquote | 
         atx_heading |  
             # 4.1 Ex 29. Headers take precidence over thematic breaks
         thematic_break |  
@@ -83,7 +84,6 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                 with self.repeat(min=1, max=6):
                     self.accept("#")
             self.capture_value(level)
-            self.print(level)
             with self.choice():
                 with self.case():
                     self.end_of_line()
@@ -217,7 +217,25 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
 
     @rule()
     def blockquote(self):
-        self.whitespace(max=3)
+        with self.trace(), self.capture("blockquote"):
+            self.whitespace(max=3)
+            with self.repeat(min=1) as level:
+                self.accept('>')
+                self.whitespace()
+            self.print(level)
+
+            self.inline_para()
+            with self.repeat():
+                with self.choice():
+                    with self.case():
+                        self.whitespace(max=3)
+                        with self.repeat(min=1, max=level):
+                            self.accept('>')
+                            self.whitespace()
+                        self.newline()
+                    with self.case():
+                        self.eof()
+            self.end_of_line()
 
 
     @rule()
@@ -272,6 +290,9 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             with self.case(): self.thematic_break()
             with self.case(): self.setext_heading_line()
             with self.case(): self.start_fenced_block()
+            with self.case(): 
+                self.whitespace(max=3)
+                self.accept(">")
     @rule()
     def empty_lines(self):
         with self.repeat(min=1):
@@ -395,3 +416,21 @@ butt
 markup("# butt\n")
 markup("   ##### butt #####\n")
 markup("   ##### butt ##### a\n")
+markup("""
+ab
+c
+
+> a
+b c d
+
+a b c
+""")
+markup("""
+ab
+c
+
+>> a
+>b c d
+
+a b c
+""")
