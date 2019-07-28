@@ -1,20 +1,68 @@
 from contextlib import contextmanager
 from types import FunctionType
 
-""" This is a lot of python magic so that you can define grammar rules inside a normal looking
-    python class:
+""" 
+This is a lot of python magic so that you can define grammar rules inside a normal looking
+python class:
 
 
-    class Example(Grammar):
-        rule_name = rule( ...)
+class Example(Grammar):
+    rule_name = rule( ...)
 
-        @rule()
-        def rule_name(self):
-            ...
+    @rule()
+    def rule_name(self):
+        ...
+
+This gets turned into 
+    rule_name = GrammarNode( .....)
+
+Then you can turn GrammarNodes into ParseRules
+    (kinda the same, with more guarantees about contents)
+
+Then you can use them to parse
 
 """
                 
-# Grammar
+class Metaclass(type):
+    """
+    Allows us to provide Grammar with a special class dictionary
+    and perform post processing
+    """
+
+    @classmethod
+    def __prepare__(metacls, name, bases, **args):
+        return GrammarDict({k:v for k,v in Builtins.__dict__.items() if not k.startswith("_")})
+    def __new__(metacls, name, bases, attrs, start=None, whitespace=None, newline=None, **args):
+        attrs = build_class_dict(attrs, start, whitespace, newline)
+        return super().__new__(metacls, name, bases, attrs)
+
+def build_class_dict(attrs, start, whitespace, newline):
+    for name in attrs.named_rules:
+        if name not in attrs:
+            raise SyntaxError('missing rule', name)
+    rules = {}
+    new_attrs = {}
+    for key, value in attrs.items():
+        if key.startswith("_"):
+            new_attrs[key] = value
+        elif value == Builtins.__dict__.get(key):
+            pass # decorators need to be kept as called afterwards, lol
+        elif isinstance(value, GrammarRuleSet):
+            rules[key] = value
+        else:
+            new_attrs[key] = value
+
+    names = {name:attrs.named_rules.get(name, NamedNode(name)) for name in rules}
+
+    builder = FunctionBuilder(names)
+    rules = {k:r.canonical(builder).make_rule() for k,r in rules.items()}
+
+    new_attrs['rules'] = rules 
+    new_attrs['start'] = start
+    new_attrs['whitespace'] = whitespace
+    new_attrs['newline'] = newline
+
+    return new_attrs
 
 class GrammarRule:
     """ Wraps rules that are assigned to the class dictionary"""
@@ -26,6 +74,7 @@ class GrammarRule:
 
 class GrammarRuleSet:
     """ Allows for multiple definitions of rules """
+
 
     def __init__(self, rules):
         self.rules = rules
@@ -98,34 +147,6 @@ class GrammarDict(dict):
             dict.__setitem__(self,key, value)
 
 
-def build_class_dict(attrs, start, whitespace, newline):
-    for name in attrs.named_rules:
-        if name not in attrs:
-            raise SyntaxError('missing rule', name)
-    rules = {}
-    new_attrs = {}
-    for key, value in attrs.items():
-        if key.startswith("_"):
-            new_attrs[key] = value
-        elif value == Builtins.__dict__.get(key):
-            pass # decorators need to be kept as called afterwards, lol
-        elif isinstance(value, GrammarRuleSet):
-            rules[key] = value
-        else:
-            new_attrs[key] = value
-
-    names = {name:attrs.named_rules.get(name, NamedNode(name)) for name in rules}
-
-    builder = FunctionBuilder(names)
-    rules = {k:r.canonical(builder).make_rule() for k,r in rules.items()}
-
-    new_attrs['rules'] = rules 
-    new_attrs['start'] = start
-    new_attrs['whitespace'] = whitespace
-    new_attrs['newline'] = newline
-
-    return new_attrs
-
 """
 
 Inside the class definiton, you can call repeat(), accept(literal), range(..)
@@ -135,6 +156,33 @@ Once to remove GrammarRule() wrappers and to convert functions into GrammarNodes
 I.e to turn it into a pure GrammarNode tree (canonical())
 Then again to conver the GrammarNode tree into ParserNodes (make_rule())
 """
+
+START_OF_LINE = 'start-of-line'
+END_OF_LINE = 'end-of-line'
+WHITESPACE = 'whitespace'
+NEWLINE = 'newline'
+END_OF_FILE = 'end-of-file'
+
+SET_INDENT = 'set-indent'
+MATCH_INDENT = 'match-indent'
+
+LOOKAHEAD = 'lookahead'
+REJECT = 'reject'
+ACCEPT_IF = 'accept-if'
+REJECT_IF = 'reject-if'
+COUNT = 'count'
+VALUE = 'value'
+
+RULE = 'rule'
+LITERAL = 'literal'
+SEQUENCE = 'seq'
+CAPTURE = 'capture'
+CHOICE = 'choice'
+REPEAT = 'repeat'
+RANGE = 'range'
+
+PRINT = 'print'
+TRACE = 'trace'
 
 class GrammarNode:
     def __init__(self, kind, *, rules=None, args=None):
@@ -181,7 +229,7 @@ class NamedNode(GrammarNode):
         return self
 
     def make_rule(self):
-        return ParserRule("rule", args=dict(name=self.name))
+        return ParserRule(RULE, args=dict(name=self.name))
 
 class ChoiceNode(GrammarNode):
     def __init__(self, rules):
@@ -202,7 +250,7 @@ class ChoiceNode(GrammarNode):
         return ChoiceNode(rules)
 
     def make_rule(self):
-        return ParserRule("choice", rules=[r.make_rule() for r in self.rules])
+        return ParserRule(CHOICE, rules=[r.make_rule() for r in self.rules])
 
 class SequenceNode(GrammarNode):
     def __init__(self, rules):
@@ -217,7 +265,7 @@ class SequenceNode(GrammarNode):
         return SequenceNode(rules)
 
     def make_rule(self):
-        return ParserRule("seq", rules=[r.make_rule() for r in self.rules])
+        return ParserRule(SEQUENCE, rules=[r.make_rule() for r in self.rules])
 
 class ValueNode(GrammarNode):
     def __init__(self, value):
@@ -242,7 +290,7 @@ class CaptureNode(GrammarNode):
         rules = [r.canonical(builder) for r in self.rules]
         return CaptureNode(self.name, rules)
     def make_rule(self):
-        return ParserRule("capture", args=dict(name=self.name), rules=[r.make_rule() for r in self.rules])
+        return ParserRule(CAPTURE, args=dict(name=self.name), rules=[r.make_rule() for r in self.rules])
 
 class RepeatNode(GrammarNode):
     def __init__(self, rules, min=0, max=None, key=None):
@@ -268,7 +316,7 @@ class RepeatNode(GrammarNode):
         rules = [r.canonical(builder) for r in self.rules]
         return RepeatNode(rules, self.min, self.max, self.key)
     def make_rule(self):
-        return ParserRule("repeat", args=dict(min=self.min, max=self.max, key=self.key), rules=[r.make_rule() for r in self.rules])
+        return ParserRule(REPEAT, args=dict(min=self.min, max=self.max, key=self.key), rules=[r.make_rule() for r in self.rules])
 
 class LiteralNode(GrammarNode):
     def __init__(self, args,invert=False):
@@ -284,7 +332,7 @@ class LiteralNode(GrammarNode):
         return "|".join("{}".format(repr(a)) for a in self.args)
 
     def make_rule(self):
-        return ParserRule("literal", rules=self.args, args={'invert': self.invert})
+        return ParserRule(LITERAL, rules=self.args, args={'invert': self.invert})
 
 class RangeNode(GrammarNode):
     def __init__(self, args,invert):
@@ -300,37 +348,8 @@ class RangeNode(GrammarNode):
             return "[{}{}]".format(invert, self.args[0])
         return "[{}{}]".format(invert, "".join(repr(a)[1:-1] for a in self.args))
     def make_rule(self):
-        return ParserRule("range", args=dict(invert=self.invert, range=self.args))
+        return ParserRule(RANGE, args=dict(invert=self.invert, range=self.args))
 
-class RecursiveNode(GrammarNode):
-    def __init__(self, args):
-        self.args = args
-
-    def canonical(self, rulebuilder):
-        args = [[r.canonical(rulebuilder) for r in rules] for rules in self.args]
-        return RecursiveNode(args)
-
-    def __str__(self):
-        def _fmt(args):
-            return "({})".format(",".join(str(x) for x in args))
-        return "<recursive {}>".format("|".join("{}".format(_fmt(a)) for a in self.args))
-
-    def make_rule(self):
-        return ParserRule("recursive", args=args)
-
-class OperatorNode(GrammarNode):
-    def __init__(self, direction, rule):
-        self.direction = direction
-        self.rule = rule
-
-    def canonical(self, rulebuilder):
-        return OperatorNode(self.direction, self.rule.canonical(rulebuilder))
-
-    def __str__(self):
-        return "<{} {}>".format(self.direction, self.rule)
-
-    def make_rule(self):
-        return ParserRule("operator", args=self.direction, rules=[self.rule])
 # Builders
 
 class FunctionBuilder:
@@ -353,19 +372,27 @@ class FunctionBuilder:
 
     def whitespace(self, min=0, max=None):
         if self.block_mode: raise SyntaxError()
-        self.rules.append(GrammarNode("whitespace", args=dict(min=min, max=max)))
+        self.rules.append(GrammarNode(WHITESPACE, args=dict(min=min, max=max)))
 
     def capture_value(self, value):
         if self.block_mode: raise SyntaxError()
         self.rules.append(ValueNode(value))
 
-    def newline(self, *args, exclude=None):
+    def newline(self):
         if self.block_mode: raise SyntaxError()
-        self.rules.append(GrammarNode("newline"))
+        self.rules.append(GrammarNode(NEWLINE))
 
-    def eof(self, *args, exclude=None):
+    def eof(self):
         if self.block_mode: raise SyntaxError()
-        self.rules.append(GrammarNode("eof"))
+        self.rules.append(GrammarNode(END_OF_FILE))
+
+    def end_of_line(self):
+        if self.block_mode: raise SyntaxError()
+        self.rules.append(GrammarNode(END_OF_LINE))
+
+    def start_of_line(self):
+        if self.block_mode: raise SyntaxError()
+        self.rules.append(GrammarNode(START_OF_LINE))
 
     def range(self, *args, invert=False):
         if self.block_mode: raise SyntaxError()
@@ -373,18 +400,18 @@ class FunctionBuilder:
 
     def indent(self):
         if self.block_mode: raise SyntaxError()
-        self.rules.append(GrammarNode("match-indent"))
+        self.rules.append(GrammarNode(MATCH_INDENT))
     def print(self, *args):
         if self.block_mode: raise SyntaxError()
-        self.rules.append(GrammarNode("print", args={'args':args}))
+        self.rules.append(GrammarNode(PRINT, args={'args':args}))
 
     def reject_if(self, cond):
         if self.block_mode: raise SyntaxError()
-        self.rules.append(GrammarNode('reject-if', args=dict(cond=cond)))
+        self.rules.append(GrammarNode(REJECT_IF, args=dict(cond=cond)))
 
     def accept_if(self, cond):
         if self.block_mode: raise SyntaxError()
-        self.rules.append(GrammarNode('accept-if', args=dict(cond=cond)))
+        self.rules.append(GrammarNode(ACCEPT_IF, args=dict(cond=cond)))
 
 
     @contextmanager
@@ -392,7 +419,7 @@ class FunctionBuilder:
         if self.block_mode: raise SyntaxError()
         rules, self.rules = self.rules, []
         yield
-        rules.append(GrammarNode('set-indent', rules=self.rules))
+        rules.append(GrammarNode(SET_INDENT, rules=self.rules))
         self.rules = rules
         
     @contextmanager
@@ -420,7 +447,7 @@ class FunctionBuilder:
         rules = self.rules
         self.rules = []
         yield
-        rules.append(GrammarNode('trace', rules=self.rules))
+        rules.append(GrammarNode(TRACE, rules=self.rules))
         self.rules = rules
 
     @contextmanager
@@ -429,7 +456,7 @@ class FunctionBuilder:
         rules = self.rules
         self.rules = []
         yield
-        rules.append(GrammarNode('lookahead', rules=self.rules))
+        rules.append(GrammarNode(LOOKAHEAD, rules=self.rules))
         self.rules = rules
 
     @contextmanager
@@ -438,7 +465,7 @@ class FunctionBuilder:
         rules = self.rules
         self.rules = []
         yield
-        rules.append(GrammarNode('reject', rules=self.rules))
+        rules.append(GrammarNode(REJECT, rules=self.rules))
         self.rules = rules
 
     @contextmanager
@@ -509,7 +536,7 @@ class CountNode(GrammarNode):
         rules = [r.canonical(builder) for r in self.rules]
         return CountNode(self.name, rules, self.key)
     def make_rule(self):
-        return ParserRule("count", args=dict(char=self.char, key=self.key), rules=[r.make_rule() for r in self.rules])
+        return ParserRule(COUNT, args=dict(char=self.char, key=self.key), rules=[r.make_rule() for r in self.rules])
 
 class Builtins:
     """ These methods are exported as functions inside the class defintion """
@@ -528,33 +555,6 @@ class Builtins:
                 return GrammarRule(FunctionNode(fn, _wrapper))
             return _decorator
 
-    def recursive(*args):
-        if len(args) > 0:
-            return GrammarRule(RecursiveNode(args))
-        else:
-            raise SyntaxError()
-
-    def operator(*args, capture=None, kind="left"):
-        def _wrapper(rules):
-            if capture:
-                return OperatorNode(kind, CaptureNode(capture, rules))
-            elif len(rules) > 1:
-                return OperatorNode(kind, SequenceNode(rules))
-            else:
-                return OperatorNode(kind, rules[0])
-        if len(args) > 0:
-            return GrammarRule(_wrapper(args))
-        else:
-            def _decorator(fn):
-                return GrammarRule(FunctionNode(fn, _wrapper))
-            return _decorator
-
-    def left(*args, capture=None):
-        return Builtins.operator(*args, capture=capture, kind="left")
-
-    def right(*args, capture=None):
-        return Builtins.operator(*args, capture=capture, kind="right")
-
     def capture(name, *args):
         return CaptureNode(name, args)
     def capture_value(arg):
@@ -562,11 +562,11 @@ class Builtins:
     def accept(*args):
         return LiteralNode(args)
     def reject(*args):
-        return GrammarNode('reject', rules=args)
+        return GrammarNode(REJECT, rules=args)
     def lookahead(*args):
-        return GrammarNode('lookahead', rules=args)
+        return GrammarNode(LOOKAHEAD, rules=args)
     def trace(*args):
-        return GrammarNode('trace', rules=args)
+        return GrammarNode(TRACE, rules=args)
     def range(*args, exclude=None):
         return RangeNode(args, exclude)
     def repeat(*args, min=0, max=None):
@@ -575,9 +575,11 @@ class Builtins:
         return RepeatNode(args, min=0, max=1)
     def choice(*args):
         return ChoiceNode(args)
-    whitespace = GrammarNode("whitespace", args={'min':0, 'max':None})
-    eof = GrammarNode('eof')
-    newline = GrammarNode("newline")
+    whitespace = GrammarNode(WHITESPACE, args={'min':0, 'max':None})
+    eof = GrammarNode(END_OF_FILE)
+    end_of_line = GrammarNode(END_OF_LINE)
+    start_of_line = GrammarNode(START_OF_LINE)
+    newline = GrammarNode(NEWLINE)
 
 class ParserRule:
     def __init__(self, kind, *, args=None, rules=()):
@@ -755,12 +757,12 @@ class Parser:
         return start.children[-1]
 
     def parse_rule(self, rule, state):
-        if rule.kind == "print":
+        if rule.kind == PRINT:
             args = [state.values.get(a,a) for a in rule.args['args']]
             print('print', *args)
             return state
 
-        elif rule.kind == "trace":
+        elif rule.kind == TRACE:
             print('trace', repr(state.buf[state.offset:state.offset+5]),"...")
             for step in rule.rules:
                 print('trace', state.offset, step.kind)
@@ -771,7 +773,7 @@ class Parser:
             print('trace', 'ok', state.offset)
             return state
         
-        elif rule.kind == "rule":
+        elif rule.kind == RULE:
             name = rule.args['name']
             new_state = state.clone(values={})
             new_state = self.parse_rule(self.grammar.rules[name], new_state)
@@ -779,23 +781,31 @@ class Parser:
                 new_state.values = state.values
             return new_state
 
-        elif rule.kind == "eof":
+        elif rule.kind == END_OF_FILE:
             if state.offset == len(state.buf):
                 return state
             return
 
-        elif rule.kind == "whitespace":
+        elif rule.kind == NEWLINE:
+            return state.advance_newline(self.grammar.newline)
+
+        elif rule.kind == START_OF_LINE:
+            if state.offset == state.line_start:
+                return state
+            return
+        elif rule.kind == END_OF_LINE:
+            if state.offset == len(state.buf):
+                return state
+            return state.advance_newline(self.grammar.newline)
+        elif rule.kind == WHITESPACE:
             _min, _max = rule.args['min'], rule.args['max']
             _min = state.values.get(_min, _min)
             _max = state.values.get(_max, _max)
             return state.advance_whitespace(self.grammar.whitespace, _min, _max)
 
-        elif rule.kind == "newline":
-            return state.advance_newline(self.grammar.newline)
-
-        elif rule.kind == "match-indent":
+        elif rule.kind == MATCH_INDENT:
             return state.advance_indent(self.grammar.whitespace)
-        elif rule.kind == "set-indent":
+        elif rule.kind == SET_INDENT:
             state = state.set_indent()
             for step in rule.rules:
                 state = self.parse_rule(step, state)
@@ -804,19 +814,19 @@ class Parser:
             # print('exit', state.offset, repr(state.buf[state.offset:]), state.indent)
             return state.pop_indent()
 
-        elif rule.kind == "choice":
+        elif rule.kind == CHOICE:
             for option in rule.rules:
                 # print('choice', repr(state.buf[state.offset:state.offset+5]), option)
                 s = self.parse_rule(option, state.choice())
                 if s is not None:
                     return state.merge_choice(s)
-        elif rule.kind == "seq":
+        elif rule.kind == SEQUENCE:
             for step in rule.rules:
                 state = self.parse_rule(step, state)
                 if state is None:
                     return None
             return state
-        elif rule.kind == "capture":
+        elif rule.kind == CAPTURE:
             start = state
             name = rule.args['name']
             end = state.capture()
@@ -830,18 +840,18 @@ class Parser:
                 else:
                     return end.build_node(name)
             return None
-        elif rule.kind == "reject-if":
+        elif rule.kind == REJECT_IF:
             cond = rule.args['cond']
             if cond.calculate(state.values):
                 return None
             return state
 
-        elif rule.kind == "accept-if":
+        elif rule.kind == ACCEPT_IF:
             cond = rule.args['cond']
             if cond.calculate(state.values):
                 return state
             return None
-        elif rule.kind == "count":
+        elif rule.kind == COUNT:
             start = state.offset
             
             for step in rule.rules:
@@ -855,7 +865,7 @@ class Parser:
             print('count', char,'in',buf, '=',buf.count(char))
             state.values[key] = buf.count(char)
             return state
-        elif rule.kind == "value":
+        elif rule.kind == VALUE:
             value = rule.args['value']
             value = state.values.get(value, value)
 
@@ -865,7 +875,7 @@ class Parser:
                 state.add_child_node(value)
             return state
 
-        elif rule.kind == "lookahead":
+        elif rule.kind == LOOKAHEAD:
             new_state = state.capture()
             for step in rule.rules:
                 new_state = self.parse_rule(step, new_state)
@@ -873,7 +883,7 @@ class Parser:
                     return None
             return state
 
-        elif rule.kind == "reject":
+        elif rule.kind == REJECT:
             new_state = state.capture()
             for step in rule.rules:
                 new_state = self.parse_rule(step, new_state)
@@ -881,7 +891,7 @@ class Parser:
                     return state
             return None
 
-        elif rule.kind == "repeat":
+        elif rule.kind == REPEAT:
             start, end = rule.args['min'], rule.args['max']
             start = state.values.get(start, start)
             end = state.values.get(end, end)
@@ -911,7 +921,7 @@ class Parser:
             state.values[rule.args['key']] = c
             return state
 
-        elif rule.kind == "literal":
+        elif rule.kind == LITERAL:
             if rule.args['invert']:
                 for text in rule.rules:
                     if state.advance(text):
@@ -923,7 +933,7 @@ class Parser:
                     if new_state:
                         return new_state
 
-        elif rule.kind == "range":
+        elif rule.kind == RANGE:
             if state.offset == len(state.buf):
                 return None
             if rule.args['invert']:
@@ -941,20 +951,6 @@ class Parser:
                         return new_state
         else:
             raise Exception(rule.kind)
-
-
-class Metaclass(type):
-    """
-    Allows us to provide Grammar with a special class dictionary
-    and perform post processing
-    """
-
-    @classmethod
-    def __prepare__(metacls, name, bases, **args):
-        return GrammarDict({k:v for k,v in Builtins.__dict__.items() if not k.startswith("_")})
-    def __new__(metacls, name, bases, attrs, start=None, whitespace=None, newline=None, **args):
-        attrs = build_class_dict(attrs, start, whitespace, newline)
-        return super().__new__(metacls, name, bases, attrs)
 
 
 class Grammar(metaclass=Metaclass):

@@ -116,7 +116,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
         self.accept("}")
 
     @rule()
-    def end_of_line(self):
+    def yaml_eol(self):
         with self.repeat(), self.choice():
             with self.case():
                 self.whitespace()
@@ -138,14 +138,14 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
                     self.whitespace()
                     self.indented_value()
                 with self.case():
-                    self.end_of_line()
+                    self.yaml_eol()
                     self.indent()
                     self.accept(' ')
                     self.whitespace()
                     self.indented_value()
 
             with self.repeat():
-                self.end_of_line()
+                self.yaml_eol()
                 self.indent()
                 self.accept("-")
                 with self.choice():
@@ -153,7 +153,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
                         self.whitespace()
                         self.indented_value()
                     with self.case():
-                        self.end_of_line()
+                        self.yaml_eol()
                         self.indent()
                         self.whitespace()
                         self.indented_value()
@@ -170,14 +170,14 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
                         self.whitespace()
                         self.indented_value()
                     with self.case():
-                        self.end_of_line()
+                        self.yaml_eol()
                         self.indent()
                         self.accept(' ')
                         self.whitespace()
                         self.indented_value()
 
             with self.repeat(), self.capture("pair"):
-                self.end_of_line()
+                self.yaml_eol()
                 self.indent()
                 self.identifier()
                 self.whitespace()
@@ -187,7 +187,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
                         self.whitespace()
                         self.indented_value()
                     with self.case():
-                        self.end_of_line()
+                        self.yaml_eol()
                         self.indent()
                         self.whitespace()
                         self.indented_value()
@@ -206,7 +206,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
     def document(self):
         with self.optional():
             self.whitespace()
-            self.end_of_line()
+            self.yaml_eol()
         with self.capture("document"), self.choice():
             with self.case():
                 self.indented_object()

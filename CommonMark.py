@@ -74,7 +74,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             with self.case(), self.repeat(min=3):
                 self.accept("_")
                 self.whitespace()
-        self.end_of_line()
+        self.line_end()
 
     @rule()
     def atx_heading(self):
@@ -86,7 +86,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             self.capture_value(level)
             with self.choice():
                 with self.case():
-                    self.end_of_line()
+                    self.line_end()
                 with self.case():
                     self.whitespace(min=1)
             with self.capture('text'):
@@ -132,7 +132,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                 with self.repeat(min=1):
                     self.accept('=')
                 self.capture_value(2)
-        self.end_of_line()
+        self.line_end()
 
     @rule()
     def indented_code_block(self):
@@ -153,7 +153,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     def indented_code_line(self):
         with self.capture('text'), self.repeat(min=1):
             with self.reject():
-                self.end_of_line()
+                self.line_end()
             self.range("\n", invert=True)
         with self.choice():
             with self.case(): self.eof()
@@ -184,17 +184,17 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             with self.reject(): # Example 115
                 self.accept(fence)
             self.range("\n", invert=True)
-        self.end_of_line()
+        self.line_end()
         with self.repeat():
             with self.reject():
                 self.whitespace(max=3)
                 self.accept(fence)
             with self.capture('text'), self.repeat(min=1):
                 self.range("\n", invert=True)
-            self.end_of_line()
+            self.line_end()
         self.whitespace(max=3)
         self.accept(fence)
-        self.end_of_line()
+        self.line_end()
 
 
     @rule()
@@ -203,17 +203,17 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
         self.accept(fence)
         with self.capture('info'), self.repeat(min=1):
             self.range("\n", invert=True)
-        self.end_of_line()
+        self.line_end()
         with self.repeat():
             with self.reject():
                 self.whitespace(max=3)
                 self.accept(fence)
             with self.capture('text'), self.repeat(min=1):
                 self.range("\n", invert=True)
-            self.end_of_line()
+            self.line_end()
         self.whitespace(max=3)
         self.accept(fence)
-        self.end_of_line()
+        self.line_end()
 
     @rule()
     def blockquote(self):
@@ -235,7 +235,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                         self.newline()
                     with self.case():
                         self.eof()
-            self.end_of_line()
+            self.line_end()
 
 
     @rule()
@@ -300,11 +300,9 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             self.newline()
 
     @rule() # 2.1 line ends by newline or eof
-    def end_of_line(self):
+    def line_end(self):
         self.whitespace()
-        with self.choice():
-            with self.case(): self.eof()
-            with self.case(): self.newline()
+        self.end_of_line()
 
     @rule()
     def word(self):
