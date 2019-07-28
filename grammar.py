@@ -1,8 +1,160 @@
 from contextlib import contextmanager
 from types import FunctionType
 
+""" This is a lot of python magic so that you can define grammar rules inside a normal looking
+    python class:
+
+
+    class Example(Grammar):
+        rule_name = rule( ...)
+
+        @rule()
+        def rule_name(self):
+            ...
+
+"""
+                
+# Grammar
+
+class GrammarRule:
+    """ Wraps rules that are assigned to the class dictionary"""
+    def __init__(self, rule):
+        self.rule = rule
+
+    def canonical(self, builder):
+        return self.rule.canonical(builder)
+
+class GrammarRuleSet:
+    """ Allows for multiple definitions of rules """
+
+    def __init__(self, rules):
+        self.rules = rules
+
+    def append(self, value):
+        rule = value.rule
+        if rule is self: raise Exception()
+        if isinstance(rule, ChoiceNode):
+            if self in rule.rules: raise Exception()
+            self.rules.extend(rule.rules)
+        elif isinstance(rule, GrammarNode):
+            self.rules.append(rule)
+        else:
+            raise SyntaxError('rule')
+
+    def canonical(self, rulebuilder):
+        rules = []
+        for rule in self.rules:
+            rules.append(rule.canonical(rulebuilder))
+        if len(rules) == 1:
+            return rules[0]
+        return ChoiceNode(rules)
+
+class GrammarDict(dict):
+    """ A Special class dictionary that handles rule assignments """
+
+    def __init__(self, defaults):
+        dict.__init__(self)
+        self.named_rules = {}
+        self.rulesets = {}
+
+        for k, v in defaults.items():
+            if not k.startswith("_"):
+                dict.__setitem__(self, k, v)
+
+    def __getitem__(self, key):
+        if key.startswith('_'):
+            return dict.__getitem__(self,key)
+
+        if key in self:
+            value = dict.__getitem__(self,key)
+            if not isinstance(value, GrammarRuleSet):
+                return value
+
+        if key in self.named_rules:
+            return self.named_rules[key]
+        else:
+            rule = NamedNode(key)
+            self.named_rules[key] = rule
+            return rule
+
+    def __setitem__(self, key, value):
+        if key.startswith('_'):
+            dict.__setitem__(self,key, value)
+        elif key in self:
+            ruleset = dict.__getitem__(self,key)
+            is_ruleset = isinstance(ruleset, GrammarRuleSet)
+            is_rule = isinstance(value, GrammarRule)
+            if is_ruleset and is_rule:
+                ruleset.append(value)
+            elif not is_ruleset and not is_rule:
+                dict.__setitem__(self,key, value)
+            else:
+                raise SyntaxError('rule / non rule mismatch in assignments')
+        elif isinstance(value, GrammarRule):
+            rule = GrammarRuleSet([])
+            rule.append(value)
+            dict.__setitem__(self, key, rule)
+        else:
+            dict.__setitem__(self,key, value)
+
+
+def build_class_dict(attrs, start, whitespace, newline):
+    for name in attrs.named_rules:
+        if name not in attrs:
+            raise SyntaxError('missing rule', name)
+    rules = {}
+    new_attrs = {}
+    for key, value in attrs.items():
+        if key.startswith("_"):
+            new_attrs[key] = value
+        elif value == Builtins.__dict__.get(key):
+            pass # decorators need to be kept as called afterwards, lol
+        elif isinstance(value, GrammarRuleSet):
+            rules[key] = value
+        else:
+            new_attrs[key] = value
+
+    names = {name:attrs.named_rules.get(name, NamedNode(name)) for name in rules}
+
+    builder = FunctionBuilder(names)
+    rules = {k:r.canonical(builder).make_rule() for k,r in rules.items()}
+
+    new_attrs['rules'] = rules 
+    new_attrs['start'] = start
+    new_attrs['whitespace'] = whitespace
+    new_attrs['newline'] = newline
+
+    return new_attrs
+
+"""
+
+Inside the class definiton, you can call repeat(), accept(literal), range(..)
+etc. These classes get transformed twice.
+
+Once to remove GrammarRule() wrappers and to convert functions into GrammarNodes
+I.e to turn it into a pure GrammarNode tree (canonical())
+Then again to conver the GrammarNode tree into ParserNodes (make_rule())
+"""
+
 class GrammarNode:
-    pass
+    def __init__(self, kind, *, rules=None, args=None):
+        self.kind = kind
+        self.rules = rules
+        self.args = args
+
+    def __str__(self):
+        rules = ' '.join(str(x) for x in self.rules) if self.rules else ''
+        args = str(self.args) if self.args else ''
+
+        return f"{self.kind} ({rules or args})"
+
+    def canonical(self, builder):
+        rules = [r.canonical(builder) for r in self.rules] if self.rules else None
+        return GrammarNode(self.kind, rules=rules, args=self.args)
+
+    def make_rule(self):
+        rules = [r.make_rule() for r in self.rules] if self.rules else None
+        return ParserRule(self.kind, rules=rules, args=self.args)
 
 class FunctionNode(GrammarNode):
     def __init__(self, fn, wrapper):
@@ -11,6 +163,9 @@ class FunctionNode(GrammarNode):
 
     def canonical(self, builder):
         return self.wrapper(builder.from_function(self.fn))
+
+    def make_rule(self):
+        raise Exception('Canonicalise first')
 
 class NamedNode(GrammarNode):
     def __init__(self, name):
@@ -31,8 +186,10 @@ class NamedNode(GrammarNode):
 class ChoiceNode(GrammarNode):
     def __init__(self, rules):
         self.rules = rules
+
     def __str__(self):
         return f"({' | '.join(str(x) for x in self.rules)})"
+
     def __or__(self, right):
         rules = list(self.rules)
         rules.append(right)
@@ -61,20 +218,6 @@ class SequenceNode(GrammarNode):
 
     def make_rule(self):
         return ParserRule("seq", rules=[r.make_rule() for r in self.rules])
-
-class BlockNode(GrammarNode):
-    def __init__(self, kind, rules):
-        self.kind = kind
-        self.rules = rules
-    def __str__(self):
-        return f"{self.kind} ({' '.join(str(x) for x in self.rules)})"
-
-    def canonical(self, builder):
-        rules = [r.canonical(builder) for r in self.rules]
-        return self.__class__(rules)
-
-    def make_rule(self):
-        return ParserRule(self.kind, rules=[r.make_rule() for r in self.rules])
 
 class ValueNode(GrammarNode):
     def __init__(self, value):
@@ -127,33 +270,6 @@ class RepeatNode(GrammarNode):
     def make_rule(self):
         return ParserRule("repeat", args=dict(min=self.min, max=self.max, key=self.key), rules=[r.make_rule() for r in self.rules])
 
-class IndentNode(GrammarNode):
-    def __init__(self, rules):
-        self.rules = rules
-
-    def canonical(self, builder):
-        return self
-
-    def __str__(self):
-        return "<indent {}>".format(",".join(str(x) for x in self.rules))
-    def make_rule(self):
-        return ParserRule("set-indent", rules=[r.make_rule() for r in self.rules])
-
-class BuiltinNode(GrammarNode):
-    def __init__(self, kind, min=0, max=None):
-        self.kind = kind
-        self.min = min
-        self.max = max
-
-    def canonical(self, builder):
-        return self
-
-    def __str__(self):
-        return self.kind
-
-    def make_rule(self):
-        return ParserRule(self.kind, args=dict(min=self.min, max=self.max))
-
 class LiteralNode(GrammarNode):
     def __init__(self, args,invert=False):
         self.args = args
@@ -169,32 +285,6 @@ class LiteralNode(GrammarNode):
 
     def make_rule(self):
         return ParserRule("literal", rules=self.args, args={'invert': self.invert})
-
-class PrintNode(GrammarNode):
-    def __init__(self, args):
-        self.args = args
-
-    def canonical(self, rulebuilder):
-        return self
-
-    def __str__(self):
-        return "<print>"
-
-    def make_rule(self):
-        return ParserRule("print",args={'args': self.args})
-
-class ConditionNode(GrammarNode):
-    def __init__(self, name, cond):
-        self.name = name
-        self.cond = cond
-    def canonical(self, rulebuilder):
-        return self
-
-    def __str__(self):
-        return "<cond>"
-
-    def make_rule(self):
-        return ParserRule(self.name,args={'cond': self.cond})
 
 class RangeNode(GrammarNode):
     def __init__(self, args,invert):
@@ -242,7 +332,6 @@ class OperatorNode(GrammarNode):
     def make_rule(self):
         return ParserRule("operator", args=self.direction, rules=[self.rule])
 # Builders
-#
 
 class FunctionBuilder:
     def __init__(self, names):
@@ -264,7 +353,7 @@ class FunctionBuilder:
 
     def whitespace(self, min=0, max=None):
         if self.block_mode: raise SyntaxError()
-        self.rules.append(BuiltinNode("whitespace", min, max))
+        self.rules.append(GrammarNode("whitespace", args=dict(min=min, max=max)))
 
     def capture_value(self, value):
         if self.block_mode: raise SyntaxError()
@@ -272,11 +361,11 @@ class FunctionBuilder:
 
     def newline(self, *args, exclude=None):
         if self.block_mode: raise SyntaxError()
-        self.rules.append(BuiltinNode("newline"))
+        self.rules.append(GrammarNode("newline"))
 
     def eof(self, *args, exclude=None):
         if self.block_mode: raise SyntaxError()
-        self.rules.append(BuiltinNode("eof"))
+        self.rules.append(GrammarNode("eof"))
 
     def range(self, *args, invert=False):
         if self.block_mode: raise SyntaxError()
@@ -284,18 +373,18 @@ class FunctionBuilder:
 
     def indent(self):
         if self.block_mode: raise SyntaxError()
-        self.rules.append(BuiltinNode("match-indent"))
+        self.rules.append(GrammarNode("match-indent"))
     def print(self, *args):
         if self.block_mode: raise SyntaxError()
-        self.rules.append(PrintNode(args))
+        self.rules.append(GrammarNode("print", args={'args':args}))
 
     def reject_if(self, cond):
         if self.block_mode: raise SyntaxError()
-        self.rules.append(ConditionNode('reject-if', cond))
+        self.rules.append(GrammarNode('reject-if', args=dict(cond=cond)))
 
     def accept_if(self, cond):
         if self.block_mode: raise SyntaxError()
-        self.rules.append(ConditionNode('accept-if', cond))
+        self.rules.append(GrammarNode('accept-if', args=dict(cond=cond)))
 
 
     @contextmanager
@@ -303,7 +392,7 @@ class FunctionBuilder:
         if self.block_mode: raise SyntaxError()
         rules, self.rules = self.rules, []
         yield
-        rules.append(IndentNode(self.rules))
+        rules.append(GrammarNode('set-indent', rules=self.rules))
         self.rules = rules
         
     @contextmanager
@@ -331,7 +420,7 @@ class FunctionBuilder:
         rules = self.rules
         self.rules = []
         yield
-        rules.append(BlockNode('trace', self.rules))
+        rules.append(GrammarNode('trace', rules=self.rules))
         self.rules = rules
 
     @contextmanager
@@ -340,7 +429,7 @@ class FunctionBuilder:
         rules = self.rules
         self.rules = []
         yield
-        rules.append(BlockNode('lookahead', self.rules))
+        rules.append(GrammarNode('lookahead', rules=self.rules))
         self.rules = rules
 
     @contextmanager
@@ -349,7 +438,7 @@ class FunctionBuilder:
         rules = self.rules
         self.rules = []
         yield
-        rules.append(BlockNode('reject', self.rules))
+        rules.append(GrammarNode('reject', rules=self.rules))
         self.rules = rules
 
     @contextmanager
@@ -473,11 +562,11 @@ class Builtins:
     def accept(*args):
         return LiteralNode(args)
     def reject(*args):
-        return BlockNode('reject', args)
+        return GrammarNode('reject', rules=args)
     def lookahead(*args):
-        return BlockNode('lookahead', args)
+        return GrammarNode('lookahead', rules=args)
     def trace(*args):
-        return BlockNode('trace', args)
+        return GrammarNode('trace', rules=args)
     def range(*args, exclude=None):
         return RangeNode(args, exclude)
     def repeat(*args, min=0, max=None):
@@ -486,15 +575,15 @@ class Builtins:
         return RepeatNode(args, min=0, max=1)
     def choice(*args):
         return ChoiceNode(args)
-    whitespace = BuiltinNode("whitespace")
-    eof = BuiltinNode('eof')
-    newline = BuiltinNode("newline")
+    whitespace = GrammarNode("whitespace", args={'min':0, 'max':None})
+    eof = GrammarNode('eof')
+    newline = GrammarNode("newline")
 
 class ParserRule:
     def __init__(self, kind, *, args=None, rules=()):
         self.kind = kind
         self.args = args if args else {}
-        self.rules = rules
+        self.rules = rules if rules else []
 
     def __str__(self):
         return "({} {})".format(self.kind, ", ".join(str(r) for r in self.rules))
@@ -849,117 +938,6 @@ class Parser:
                         return new_state
         else:
             raise Exception(rule.kind)
-                
-# Grammar
-
-class GrammarRule:
-    def __init__(self, rule):
-        self.rule = rule
-
-    def canonical(self, builder):
-        return self.rule.canonical(builder)
-
-class GrammarRuleSet:
-    """ Allows for multiple definitions of rules """
-
-    def __init__(self, rules):
-        self.rules = rules
-
-    def append(self, value):
-        rule = value.rule
-        if rule is self: raise Exception()
-        if isinstance(rule, ChoiceNode):
-            if self in rule.rules: raise Exception()
-            self.rules.extend(rule.rules)
-        elif isinstance(rule, GrammarNode):
-            self.rules.append(rule)
-        else:
-            raise SyntaxError('rule')
-
-    def canonical(self, rulebuilder):
-        rules = []
-        for rule in self.rules:
-            rules.append(rule.canonical(rulebuilder))
-        if len(rules) == 1:
-            return rules[0]
-        return ChoiceNode(rules)
-
-class GrammarDict(dict):
-    """ A Special class dictionary that does all the sugar """
-
-    def __init__(self, defaults):
-        dict.__init__(self)
-        self.named_rules = {}
-        self.rulesets = {}
-
-        for k, v in defaults.items():
-            if not k.startswith("_"):
-                dict.__setitem__(self, k, v)
-
-    def __getitem__(self, key):
-        if key.startswith('_'):
-            return dict.__getitem__(self,key)
-
-        if key in self:
-            value = dict.__getitem__(self,key)
-            if not isinstance(value, GrammarRuleSet):
-                return value
-
-        if key in self.named_rules:
-            return self.named_rules[key]
-        else:
-            rule = NamedNode(key)
-            self.named_rules[key] = rule
-            return rule
-
-    def __setitem__(self, key, value):
-        if key.startswith('_'):
-            dict.__setitem__(self,key, value)
-        elif key in self:
-            ruleset = dict.__getitem__(self,key)
-            is_ruleset = isinstance(ruleset, GrammarRuleSet)
-            is_rule = isinstance(value, GrammarRule)
-            if is_ruleset and is_rule:
-                ruleset.append(value)
-            elif not is_ruleset and not is_rule:
-                dict.__setitem__(self,key, value)
-            else:
-                raise SyntaxError('rule / non rule mismatch in assignments')
-        elif isinstance(value, GrammarRule):
-            rule = GrammarRuleSet([])
-            rule.append(value)
-            dict.__setitem__(self, key, rule)
-        else:
-            dict.__setitem__(self,key, value)
-
-
-def build_class_dict(attrs, start, whitespace, newline):
-    for name in attrs.named_rules:
-        if name not in attrs:
-            raise SyntaxError('missing rule', name)
-    rules = {}
-    new_attrs = {}
-    for key, value in attrs.items():
-        if key.startswith("_"):
-            new_attrs[key] = value
-        elif value == Builtins.__dict__.get(key):
-            pass # decorators need to be kept as called afterwards, lol
-        elif isinstance(value, GrammarRuleSet):
-            rules[key] = value
-        else:
-            new_attrs[key] = value
-
-    names = {name:attrs.named_rules.get(name, NamedNode(name)) for name in rules}
-
-    builder = FunctionBuilder(names)
-    rules = {k:r.canonical(builder).make_rule() for k,r in rules.items()}
-
-    new_attrs['rules'] = rules 
-    new_attrs['start'] = start
-    new_attrs['whitespace'] = whitespace
-    new_attrs['newline'] = newline
-
-    return new_attrs
 
 
 class Metaclass(type):
