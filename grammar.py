@@ -26,7 +26,7 @@ class NamedNode(GrammarNode):
         return self
 
     def make_rule(self):
-        return Rule("rule", args=dict(name=self.name))
+        return ParserRule("rule", args=dict(name=self.name))
 
 class ChoiceNode(GrammarNode):
     def __init__(self, rules):
@@ -45,7 +45,7 @@ class ChoiceNode(GrammarNode):
         return ChoiceNode(rules)
 
     def make_rule(self):
-        return Rule("choice", rules=[r.make_rule() for r in self.rules])
+        return ParserRule("choice", rules=[r.make_rule() for r in self.rules])
 
 class SequenceNode(GrammarNode):
     def __init__(self, rules):
@@ -60,7 +60,7 @@ class SequenceNode(GrammarNode):
         return SequenceNode(rules)
 
     def make_rule(self):
-        return Rule("seq", rules=[r.make_rule() for r in self.rules])
+        return ParserRule("seq", rules=[r.make_rule() for r in self.rules])
 
 class BlockNode(GrammarNode):
     def __init__(self, kind, rules):
@@ -74,7 +74,7 @@ class BlockNode(GrammarNode):
         return self.__class__(rules)
 
     def make_rule(self):
-        return Rule(self.kind, rules=[r.make_rule() for r in self.rules])
+        return ParserRule(self.kind, rules=[r.make_rule() for r in self.rules])
 
 class ValueNode(GrammarNode):
     def __init__(self, value):
@@ -86,7 +86,7 @@ class ValueNode(GrammarNode):
         return self
 
     def make_rule(self):
-        return Rule('value', args=dict(value=self.value))
+        return ParserRule('value', args=dict(value=self.value))
 
 class CaptureNode(GrammarNode):
     def __init__(self, name, rules):
@@ -99,7 +99,7 @@ class CaptureNode(GrammarNode):
         rules = [r.canonical(builder) for r in self.rules]
         return CaptureNode(self.name, rules)
     def make_rule(self):
-        return Rule("capture", args=dict(name=self.name), rules=[r.make_rule() for r in self.rules])
+        return ParserRule("capture", args=dict(name=self.name), rules=[r.make_rule() for r in self.rules])
 
 class RepeatNode(GrammarNode):
     def __init__(self, rules, min=0, max=None, key=None):
@@ -125,7 +125,7 @@ class RepeatNode(GrammarNode):
         rules = [r.canonical(builder) for r in self.rules]
         return RepeatNode(rules, self.min, self.max, self.key)
     def make_rule(self):
-        return Rule("repeat", args=dict(min=self.min, max=self.max, key=self.key), rules=[r.make_rule() for r in self.rules])
+        return ParserRule("repeat", args=dict(min=self.min, max=self.max, key=self.key), rules=[r.make_rule() for r in self.rules])
 
 class IndentNode(GrammarNode):
     def __init__(self, rules):
@@ -137,7 +137,7 @@ class IndentNode(GrammarNode):
     def __str__(self):
         return "<indent {}>".format(",".join(str(x) for x in self.rules))
     def make_rule(self):
-        return Rule("set-indent", rules=[r.make_rule() for r in self.rules])
+        return ParserRule("set-indent", rules=[r.make_rule() for r in self.rules])
 
 class BuiltinNode(GrammarNode):
     def __init__(self, kind, min=0, max=None):
@@ -152,7 +152,7 @@ class BuiltinNode(GrammarNode):
         return self.kind
 
     def make_rule(self):
-        return Rule(self.kind, args=dict(min=self.min, max=self.max))
+        return ParserRule(self.kind, args=dict(min=self.min, max=self.max))
 
 class LiteralNode(GrammarNode):
     def __init__(self, args,invert=False):
@@ -168,7 +168,7 @@ class LiteralNode(GrammarNode):
         return "|".join("{}".format(repr(a)) for a in self.args)
 
     def make_rule(self):
-        return Rule("literal", rules=self.args, args={'invert': self.invert})
+        return ParserRule("literal", rules=self.args, args={'invert': self.invert})
 
 class PrintNode(GrammarNode):
     def __init__(self, args):
@@ -181,7 +181,7 @@ class PrintNode(GrammarNode):
         return "<print>"
 
     def make_rule(self):
-        return Rule("print",args={'args': self.args})
+        return ParserRule("print",args={'args': self.args})
 
 class ConditionNode(GrammarNode):
     def __init__(self, name, cond):
@@ -194,7 +194,7 @@ class ConditionNode(GrammarNode):
         return "<cond>"
 
     def make_rule(self):
-        return Rule(self.name,args={'cond': self.cond})
+        return ParserRule(self.name,args={'cond': self.cond})
 
 class RangeNode(GrammarNode):
     def __init__(self, args,invert):
@@ -210,7 +210,7 @@ class RangeNode(GrammarNode):
             return "[{}{}]".format(invert, self.args[0])
         return "[{}{}]".format(invert, "".join(repr(a)[1:-1] for a in self.args))
     def make_rule(self):
-        return Rule("range", args=dict(invert=self.invert, range=self.args))
+        return ParserRule("range", args=dict(invert=self.invert, range=self.args))
 
 class RecursiveNode(GrammarNode):
     def __init__(self, args):
@@ -226,7 +226,7 @@ class RecursiveNode(GrammarNode):
         return "<recursive {}>".format("|".join("{}".format(_fmt(a)) for a in self.args))
 
     def make_rule(self):
-        return Rule("recursive", args=args)
+        return ParserRule("recursive", args=args)
 
 class OperatorNode(GrammarNode):
     def __init__(self, direction, rule):
@@ -240,7 +240,7 @@ class OperatorNode(GrammarNode):
         return "<{} {}>".format(self.direction, self.rule)
 
     def make_rule(self):
-        return Rule("operator", args=self.direction, rules=[self.rule])
+        return ParserRule("operator", args=self.direction, rules=[self.rule])
 # Builders
 #
 
@@ -420,14 +420,7 @@ class CountNode(GrammarNode):
         rules = [r.canonical(builder) for r in self.rules]
         return CountNode(self.name, rules, self.key)
     def make_rule(self):
-        return Rule("count", args=dict(char=self.char, key=self.key), rules=[r.make_rule() for r in self.rules])
-
-class RuleDef:
-    def __init__(self, rule):
-        self.rule = rule
-
-    def canonical(self, builder):
-        return self.rule.canonical(builder)
+        return ParserRule("count", args=dict(char=self.char, key=self.key), rules=[r.make_rule() for r in self.rules])
 
 class Builtins:
     """ These methods are exported as functions inside the class defintion """
@@ -440,15 +433,15 @@ class Builtins:
             else:
                 return rules[0]
         if len(args) > 0:
-            return RuleDef(_wrapper(args))
+            return GrammarRule(_wrapper(args))
         else:
             def _decorator(fn):
-                return RuleDef(FunctionNode(fn, _wrapper))
+                return GrammarRule(FunctionNode(fn, _wrapper))
             return _decorator
 
     def recursive(*args):
         if len(args) > 0:
-            return RuleDef(RecursiveNode(args))
+            return GrammarRule(RecursiveNode(args))
         else:
             raise SyntaxError()
 
@@ -461,10 +454,10 @@ class Builtins:
             else:
                 return OperatorNode(kind, rules[0])
         if len(args) > 0:
-            return RuleDef(_wrapper(args))
+            return GrammarRule(_wrapper(args))
         else:
             def _decorator(fn):
-                return RuleDef(FunctionNode(fn, _wrapper))
+                return GrammarRule(FunctionNode(fn, _wrapper))
             return _decorator
 
     def left(*args, capture=None):
@@ -497,7 +490,7 @@ class Builtins:
     eof = BuiltinNode('eof')
     newline = BuiltinNode("newline")
 
-class Rule:
+class ParserRule:
     def __init__(self, kind, *, args=None, rules=()):
         self.kind = kind
         self.args = args if args else {}
@@ -859,6 +852,38 @@ class Parser:
                 
 # Grammar
 
+class GrammarRule:
+    def __init__(self, rule):
+        self.rule = rule
+
+    def canonical(self, builder):
+        return self.rule.canonical(builder)
+
+class GrammarRuleSet:
+    """ Allows for multiple definitions of rules """
+
+    def __init__(self, rules):
+        self.rules = rules
+
+    def append(self, value):
+        rule = value.rule
+        if rule is self: raise Exception()
+        if isinstance(rule, ChoiceNode):
+            if self in rule.rules: raise Exception()
+            self.rules.extend(rule.rules)
+        elif isinstance(rule, GrammarNode):
+            self.rules.append(rule)
+        else:
+            raise SyntaxError('rule')
+
+    def canonical(self, rulebuilder):
+        rules = []
+        for rule in self.rules:
+            rules.append(rule.canonical(rulebuilder))
+        if len(rules) == 1:
+            return rules[0]
+        return ChoiceNode(rules)
+
 class GrammarDict(dict):
     """ A Special class dictionary that does all the sugar """
 
@@ -893,45 +918,20 @@ class GrammarDict(dict):
         elif key in self:
             ruleset = dict.__getitem__(self,key)
             is_ruleset = isinstance(ruleset, GrammarRuleSet)
-            is_rule = isinstance(value, RuleDef)
+            is_rule = isinstance(value, GrammarRule)
             if is_ruleset and is_rule:
                 ruleset.append(value)
             elif not is_ruleset and not is_rule:
                 dict.__setitem__(self,key, value)
             else:
                 raise SyntaxError('rule / non rule mismatch in assignments')
-        elif isinstance(value, RuleDef):
+        elif isinstance(value, GrammarRule):
             rule = GrammarRuleSet([])
             rule.append(value)
             dict.__setitem__(self, key, rule)
         else:
             dict.__setitem__(self,key, value)
 
-
-class GrammarRuleSet:
-    """ Allows for multiple definitions of rules """
-
-    def __init__(self, rules):
-        self.rules = rules
-
-    def append(self, value):
-        rule = value.rule
-        if rule is self: raise Exception()
-        if isinstance(rule, ChoiceNode):
-            if self in rule.rules: raise Exception()
-            self.rules.extend(rule.rules)
-        elif isinstance(rule, GrammarNode):
-            self.rules.append(rule)
-        else:
-            raise SyntaxError('rule')
-
-    def canonical(self, rulebuilder):
-        rules = []
-        for rule in self.rules:
-            rules.append(rule.canonical(rulebuilder))
-        if len(rules) == 1:
-            return rules[0]
-        return ChoiceNode(rules)
 
 def build_class_dict(attrs, start, whitespace, newline):
     for name in attrs.named_rules:
