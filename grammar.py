@@ -586,7 +586,10 @@ class ParserRule:
         self.rules = rules if rules else []
 
     def __str__(self):
-        return "({} {})".format(self.kind, ", ".join(str(r) for r in self.rules))
+        rules =" ".join(str(r) for r in self.rules)
+        args = " ".join(f"{k}={v}" for k,v in self.args.items())
+
+        return "({} {})".format(self.kind, rules or args)
 
 # Parser
 
