@@ -119,6 +119,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             self.inline_para()
             self.whitespace()
             self.newline()
+            self.start_of_line()
             self.setext_heading_line()
 
     @rule()
@@ -141,14 +142,16 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
         with self.indented(), self.capture('indented_code'):
             self.whitespace()
             self.indented_code_line()
-            with self.repeat(), self.choice():
-                with self.case():
-                    self.indent()
-                    self.indented_code_line()
-                with self.case():
-                    self.whitespace()
-                    self.newline()
-                    self.capture_value("")
+            with self.repeat():
+                self.start_of_line()
+                with self.choice():
+                    with self.case():
+                        self.indent()
+                        self.indented_code_line()
+                    with self.case():
+                        self.whitespace()
+                        self.newline()
+                        self.capture_value("")
 
     @rule()
     def indented_code_line(self):
@@ -185,12 +188,14 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             self.range("\n", invert=True)
         self.line_end()
         with self.repeat():
+            self.start_of_line()
             with self.reject():
                 self.whitespace(max=3)
                 self.accept(fence)
             with self.capture('text'), self.repeat(min=1):
                 self.range("\n", invert=True)
             self.line_end()
+        self.start_of_line()
         self.whitespace(max=3)
         self.accept(fence)
         self.line_end()
@@ -204,36 +209,40 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             self.range("\n", invert=True)
         self.line_end()
         with self.repeat():
+            self.start_of_line()
             with self.reject():
                 self.whitespace(max=3)
                 self.accept(fence)
             with self.capture('text'), self.repeat(min=1):
                 self.range("\n", invert=True)
             self.line_end()
+        self.start_of_line()
         self.whitespace(max=3)
         self.accept(fence)
         self.line_end()
 
     @rule()
+    def start_blockquote(self):
+        self.whitespace(max=3)
+        self.accept('>')
+        self.whitespace(max=1)
+
+
+    @rule()
     def blockquote(self):
         with self.trace(False), self.capture("blockquote"):
-            self.whitespace(max=3)
-            with self.repeat(min=1) as level:
-                self.accept('>')
-                self.whitespace()
-            self.print(level)
-
+            self.start_blockquote()
             self.inline_para()
             with self.repeat():
+                self.end_of_line()
+                self.start_of_line()
+                self.start_blockquote()
                 with self.choice():
                     with self.case():
-                        self.whitespace(max=3)
-                        with self.repeat(min=1, max=level):
-                            self.accept('>')
-                            self.whitespace()
-                        self.newline()
+                        self.inline_para()
                     with self.case():
-                        self.eof()
+                        self.capture_value('\n')
+
             self.line_end()
 
 
@@ -424,10 +433,22 @@ markup("---")
 markup("   ---   \n")
 markup("""
 d1 e2 f3
----
+----
+
 g h i
 j l k
----
+
+----
+
 b r b
 """
 )
+markup("""
+> a b
+c d e 
+> f g h
+>
+> i   j dd kkk       
+kkk    
+ddff
+""")
