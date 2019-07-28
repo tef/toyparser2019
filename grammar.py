@@ -442,12 +442,15 @@ class FunctionBuilder:
         self.rules = rules
 
     @contextmanager
-    def trace(self):
+    def trace(self, active=True):
         if self.block_mode: raise SyntaxError()
         rules = self.rules
         self.rules = []
         yield
-        rules.append(GrammarNode(TRACE, rules=self.rules))
+        if active:
+            rules.append(GrammarNode(TRACE, rules=self.rules))
+        else:
+            rules.extend(self.rules)
         self.rules = rules
 
     @contextmanager
@@ -797,6 +800,7 @@ class Parser:
             if state.offset == len(state.buf):
                 return state
             return state.advance_newline(self.grammar.newline)
+
         elif rule.kind == WHITESPACE:
             _min, _max = rule.args['min'], rule.args['max']
             _min = state.values.get(_min, _min)
@@ -805,6 +809,7 @@ class Parser:
 
         elif rule.kind == MATCH_INDENT:
             return state.advance_indent(self.grammar.whitespace)
+
         elif rule.kind == SET_INDENT:
             state = state.set_indent()
             for step in rule.rules:
@@ -820,12 +825,14 @@ class Parser:
                 s = self.parse_rule(option, state.choice())
                 if s is not None:
                     return state.merge_choice(s)
+
         elif rule.kind == SEQUENCE:
             for step in rule.rules:
                 state = self.parse_rule(step, state)
                 if state is None:
                     return None
             return state
+
         elif rule.kind == CAPTURE:
             start = state
             name = rule.args['name']

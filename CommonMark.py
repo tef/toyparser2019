@@ -15,7 +15,7 @@ builder = {
     'thematic_break': (lambda buf, children: {"hr": buf}),
     'atx_heading': (lambda buf, children: {"heading":children}),
     'atx_level': (lambda buf, children: len(buf)),
-    'setext_heading': (lambda buf, children: {"heading":children[::-1]}),
+    'setext_heading': (lambda buf, children: {"heading":[children[-1]]+children[:-1]}),
     'indented_code': (lambda buf, children: {"indented_code":children}),
     'fenced_code': (lambda buf, children: {"fenced_code":children}),
     'para': (lambda buf, children: {"para":children}),
@@ -29,6 +29,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     @rule()
     def document(self):
         with self.capture("document"), self.repeat(min=0):
+            self.start_of_line()
             self.block_element()
         self.whitespace()
         self.eof()
@@ -155,9 +156,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             with self.reject():
                 self.line_end()
             self.range("\n", invert=True)
-        with self.choice():
-            with self.case(): self.eof()
-            with self.case(): self.newline()
+        self.end_of_line()
 
     @rule()
     def fenced_code_block(self):
@@ -217,7 +216,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
 
     @rule()
     def blockquote(self):
-        with self.trace(), self.capture("blockquote"):
+        with self.trace(False), self.capture("blockquote"):
             self.whitespace(max=3)
             with self.repeat(min=1) as level:
                 self.accept('>')
@@ -336,17 +335,6 @@ b r b
 """
 )
 markup("---\n")
-markup("---")
-markup("   ---   \n")
-markup("""
-d e f
----
-g h i
-j l k
----
-b r b
-"""
-)
 markup("# butt\n")
 markup("   ##### butt #####\n")
 markup("   ##### butt ##### a\n")
@@ -432,3 +420,14 @@ c
 
 a b c
 """)
+markup("---")
+markup("   ---   \n")
+markup("""
+d1 e2 f3
+---
+g h i
+j l k
+---
+b r b
+"""
+)
