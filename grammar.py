@@ -175,11 +175,11 @@ VALUE = 'value'
 
 RULE = 'rule'
 LITERAL = 'literal'
+RANGE = 'range'
 SEQUENCE = 'seq'
 CAPTURE = 'capture'
 CHOICE = 'choice'
 REPEAT = 'repeat'
-RANGE = 'range'
 
 PRINT = 'print'
 TRACE = 'trace'
@@ -299,22 +299,10 @@ class RepeatNode(GrammarNode):
         self.rules = rules
         self.key = key if key is not None else object()
 
-    def __str__(self):
-        if self.min == 0 and self.max == 1:
-            return f"({' '.join(str(x) for x in self.rules)})?"
-        elif self.min == 0 and self.max == None:
-            return f"({' '.join(str(x) for x in self.rules)})*"
-        elif self.min == 1 and self.max == None:
-            return f"({' '.join(str(x) for x in self.rules)})+"
-        elif self.min == 0:
-            return f"({' '.join(str(x) for x in self.rules)})^{{,{self.max}}}"
-        elif self.max == None:
-            return f"({' '.join(str(x) for x in self.rules)})^{{{self.min},}}"
-        else:
-            return f"({' '.join(str(x) for x in self.rules)})^{{{self.min},{self.max}}}"
     def canonical(self, builder):
         rules = [r.canonical(builder) for r in self.rules]
         return RepeatNode(rules, self.min, self.max, self.key)
+
     def make_rule(self):
         return ParserRule(REPEAT, args=dict(min=self.min, max=self.max, key=self.key), rules=[r.make_rule() for r in self.rules])
 
@@ -332,7 +320,7 @@ class LiteralNode(GrammarNode):
         return "|".join("{}".format(repr(a)) for a in self.args)
 
     def make_rule(self):
-        return ParserRule(LITERAL, rules=self.args, args={'invert': self.invert})
+        return ParserRule(LITERAL, args={'invert': self.invert, 'literals': self.args})
 
 class RangeNode(GrammarNode):
     def __init__(self, args,invert):
@@ -412,7 +400,6 @@ class FunctionBuilder:
     def accept_if(self, cond):
         if self.block_mode: raise SyntaxError()
         self.rules.append(GrammarNode(ACCEPT_IF, args=dict(cond=cond)))
-
 
     @contextmanager
     def indented(self):
@@ -585,14 +572,14 @@ class Builtins:
     newline = GrammarNode(NEWLINE)
 
 class ParserRule:
-    def __init__(self, kind, *, args=None, rules=()):
+    def __init__(self, kind, *, args=None, rules=None):
         self.kind = kind
-        self.args = args if args else {}
-        self.rules = rules if rules else []
+        self.args = args if args else None
+        self.rules = rules if rules else None
 
     def __str__(self):
-        rules =" ".join(str(r) for r in self.rules)
-        args = " ".join(f"{k}={v}" for k,v in self.args.items())
+        rules =" ".join(str(r) for r in self.rules) if self.rules else None
+        args = " ".join(f"{k}={v}" for k,v in self.args.items()) if self.args else None
 
         return "({} {})".format(self.kind, rules or args)
 
@@ -796,6 +783,7 @@ class Parser:
             if state.offset == state.line_start:
                 return state
             return
+
         elif rule.kind == END_OF_LINE:
             if state.offset == len(state.buf):
                 return state
@@ -834,7 +822,6 @@ class Parser:
             return state
 
         elif rule.kind == CAPTURE:
-            start = state
             name = rule.args['name']
             end = state.capture()
             for step in rule.rules:
@@ -858,6 +845,7 @@ class Parser:
             if cond.calculate(state.values):
                 return state
             return None
+
         elif rule.kind == COUNT:
             start = state.offset
             
@@ -872,6 +860,7 @@ class Parser:
             print('count', char,'in',buf, '=',buf.count(char))
             state.values[key] = buf.count(char)
             return state
+
         elif rule.kind == VALUE:
             value = rule.args['value']
             value = state.values.get(value, value)
@@ -929,13 +918,14 @@ class Parser:
             return state
 
         elif rule.kind == LITERAL:
+            literals = rule.args['literals']
             if rule.args['invert']:
-                for text in rule.rules:
+                for text in literals:
                     if state.advance(text):
                         return None
                 return state
             else:
-                for text in rule.rules:
+                for text in literals:
                     new_state = state.advance(text)
                     if new_state:
                         return new_state
@@ -943,6 +933,7 @@ class Parser:
         elif rule.kind == RANGE:
             if state.offset == len(state.buf):
                 return None
+
             if rule.args['invert']:
                 # print(rule, state.buf[state.offset:], rule.args)
                 for text in rule.args['range']:
@@ -959,6 +950,141 @@ class Parser:
         else:
             raise Exception(rule.kind)
 
+class ParserBuilder:
+    def __init__(self, output, indent):
+        self.output = output
+        self.indent = indent
+
+    def add_indent(self, n=4):
+        return ParserBuilder(self.output, self.indent+n)
+
+    def append(self, line):
+        self.output.append(f"{' ' * self.indent}{line}")
+
+    def as_string(self):
+        return "\n".join(self.output)
+
+    def extend(self, lines):
+        for line in lines:
+            self.output.append(f"{' ' * self.indent}{line}")
+    
+
+class StateBuilder:
+    def __init__(self, n):
+        self.n = n
+
+    def __str__(self):
+        return f"state_{self.n}" if self.n else "state"
+
+    def incr(self):
+        return StateBuilder(self.n+1)
+
+
+def compile(grammar):
+
+    def build_steps(rule, steps, state):
+        if rule.kind == SEQUENCE:
+            for subrule in rule.rules:
+                build_steps(subrule, steps, state)
+        elif rule.kind == CHOICE:
+            steps.append(f"while {state}: # push choice")
+            steps.append(f"    pass")
+            choice = state.incr()
+            s = steps.add_indent(4)
+            s.append(f"{choice} = {state}")
+            for subrule in rule.rules:
+                build_steps(subrule, s, state)
+                s.append(f"if {state}:")
+                s.append(f"    break # next choice")
+                s.append(f"{state} = {choice}")
+            steps.append(f"if not {state}: break # pop choice")
+        elif rule.kind == CAPTURE:
+            steps.append(f"while {state}: # push capture")
+            steps.append(f"    pass")
+            steps.append(f"    {state} = {state}.start_capture()")
+            for subrule in rule.rules:
+                build_steps(subrule, steps.add_indent(), state)
+            steps.append(f"# pop capture")
+        elif rule.kind == REPEAT:
+            steps.append(f"while {state}: # start repeat")
+            steps.append(f"    pass")
+            for subrule in rule.rules:
+                build_steps(subrule, steps.add_indent(), state)
+            steps.append(f"# end repeat")
+        elif rule.kind == COUNT:
+            steps.append(f"while {state}: # start count")
+            steps.append(f"    pass")
+            for subrule in rule.rules:
+                build_steps(subrule, steps.add_indent(), state)
+            steps.append(f"# end count")
+        elif rule.rules is not None:
+            steps.append(f"# start !{rule.kind}")
+            for subrule in rule.rules:
+                build_steps(subrule, steps.add_indent(), state)
+            steps.append(f"# end  {rule.kind}")
+        elif rule.kind == RULE:
+            steps.extend((
+                f"{state} = self.parse_{rule.args['name']}({state})",
+                f"if not {state}: break",
+                f"",
+            ))
+        elif rule.kind == LITERAL:
+            literals = ", ".join(repr(l) for l in rule.args['literals'])
+            steps.extend((
+                f"{state} = {state}.advance({literals})",
+                f"if not state: break",
+                f"",
+            ))
+        elif rule.kind == WHITESPACE:
+            steps.extend((
+                f"{state} = {state}.advance_whitespace()",
+                f"if not state: break",
+                f"",
+            ))
+        else:
+            steps.append(f'# {rule}')
+
+        return steps
+
+    output = ParserBuilder([], 0)
+
+    output.append("def closure(ParserState):")
+    output = output.add_indent(4)
+    output.extend((
+        f"class Parser:",
+        f"    def __init__(self, builder):",
+        f"         self.builder = builder",
+        "",
+    ))
+
+    output = output.add_indent(4)
+
+    start_rule = grammar.start
+    output.extend((
+        f"def parse(self, buf, offset):",
+        f"    start = ParserState.init(buf, offset)",
+        f"    end = self.parse_{start_rule}(start)",
+        f"    if end:",
+        f"        return end.children[-1]",
+        f"",
+    ))
+
+    for name, rule in grammar.rules.items():
+        output.append(f"def parse_{name}(state):")
+        output.append(f"    while state:")
+        output.append(f"        pass")
+
+        build_steps(rule, output.add_indent(8), StateBuilder(0))
+        output.append(f"    return state")
+        output.append("")
+
+    output = output.add_indent(-4)
+    output.append("return Parser")
+    
+    glob, loc = {}, {}
+    print(output.as_string())
+    exec(output.as_string(), glob, loc)
+    return loc['closure'](ParserState)
 
 class Grammar(metaclass=Metaclass):
     pass
@@ -969,3 +1095,4 @@ def parser(grammar, builder):
     return Parser(grammar, builder)
 
 Grammar.parser = classmethod(parser)
+Grammar.compile = classmethod(compile)

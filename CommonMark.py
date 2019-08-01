@@ -242,7 +242,6 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                         self.inline_para()
                     with self.case():
                         self.capture_value('\n')
-
             self.line_end()
 
 

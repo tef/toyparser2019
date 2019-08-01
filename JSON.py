@@ -133,3 +133,8 @@ parser = JSON.parser(builder)
 print(parser.parse("[1, 2, 3]"))
 print()
 
+
+code = JSON.compile()
+print(code)
+
+
