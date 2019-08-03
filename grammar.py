@@ -986,6 +986,14 @@ def compile(grammar):
         if rule.kind == SEQUENCE:
             for subrule in rule.rules:
                 build_steps(subrule, steps, state)
+        elif rule.kind == CAPTURE:
+            name = repr(rule.args['name'])
+            steps.append(f"{state} = {state}.capture()")
+            steps.append(f"while {state}: # push capture")
+            for subrule in rule.rules:
+                build_steps(subrule, steps.add_indent(), state)
+            steps.append(f"    break")
+            steps.append(f"if {state}: {state} = {state}.build_node({name})")
         elif rule.kind == CHOICE:
             steps.append(f"while {state}: # push choice")
             steps.append(f"    pass")
@@ -998,13 +1006,6 @@ def compile(grammar):
                 s.append(f"    break # next choice")
                 s.append(f"{state} = {choice}")
             steps.append(f"if not {state}: break # pop choice")
-        elif rule.kind == CAPTURE:
-            steps.append(f"while {state}: # push capture")
-            steps.append(f"    pass")
-            steps.append(f"    {state} = {state}.start_capture()")
-            for subrule in rule.rules:
-                build_steps(subrule, steps.add_indent(), state)
-            steps.append(f"# pop capture")
         elif rule.kind == REPEAT:
             steps.append(f"while {state}: # start repeat")
             steps.append(f"    pass")
@@ -1037,16 +1038,25 @@ def compile(grammar):
             ))
         elif rule.kind == WHITESPACE:
             steps.extend((
-                f"{state} = {state}.advance_whitespace()",
+                f"{state} = {state}.advance_whitespace(self.WHITESPACE)",
                 f"if not state: break",
                 f"",
             ))
+        elif rule.kind == NEWLINE:
+            steps.extend((
+                f"{state} = {state}.advance_newline(self.NEWLINE)",
+                f"if not state: break",
+                f"",
+            ))
+
         else:
             steps.append(f'# {rule}')
 
         return steps
 
     output = ParserBuilder([], 0)
+    newline = repr(tuple(grammar.newline))
+    whitespace = repr(tuple(grammar.whitespace))
 
     output.append("def closure(ParserState):")
     output = output.add_indent(4)
@@ -1055,13 +1065,18 @@ def compile(grammar):
         f"    def __init__(self, builder):",
         f"         self.builder = builder",
         "",
+        f"    NEWLINE = {newline}",
+        f"    WHITESPACE = {whitespace}",
+        "",
     ))
 
     output = output.add_indent(4)
 
+    output.extend
+
     start_rule = grammar.start
     output.extend((
-        f"def parse(self, buf, offset):",
+        f"def parse(self, buf, offset=0):",
         f"    start = ParserState.init(buf, offset)",
         f"    end = self.parse_{start_rule}(start)",
         f"    if end:",
@@ -1070,12 +1085,11 @@ def compile(grammar):
     ))
 
     for name, rule in grammar.rules.items():
-        output.append(f"def parse_{name}(state):")
-        output.append(f"    while state:")
-        output.append(f"        pass")
+        output.append(f"def parse_{name}(self, state):")
+        output.append(f"    while True: # note: return at end of loop")
 
         build_steps(rule, output.add_indent(8), StateBuilder(0))
-        output.append(f"    return state")
+        output.append(f"        return state")
         output.append("")
 
     output = output.add_indent(-4)
@@ -1084,7 +1098,7 @@ def compile(grammar):
     glob, loc = {}, {}
     print(output.as_string())
     exec(output.as_string(), glob, loc)
-    return loc['closure'](ParserState)
+    return loc['closure'](ParserState)(None)
 
 class Grammar(metaclass=Metaclass):
     pass
