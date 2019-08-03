@@ -1,4 +1,4 @@
-from grammar import Grammar
+from grammar import Grammar, ParserState
 
 import codecs
 
@@ -134,7 +134,19 @@ print(parser.parse("[1, 2, 3]"))
 print()
 
 
-code = JSON.compile()
-print(code)
+parser1 = JSON.compile()
 
+import time, json
+
+s = json.dumps(list(range(20000)))
+
+def timeit(name,parser, buf):
+    t = time.time()
+    o = parser.parse(buf)
+    t = time.time() - t
+    print(name, t)
+    print()
+
+timeit("inter", parser, s)
+timeit("comp", parser1, s)
 

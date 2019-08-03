@@ -682,6 +682,8 @@ class ParserState:
     def substring(self, end):
         return self.buf[self.offset:end.offset]
 
+    def advance_any(self, n):
+        return self.clone(offset = self.offset+n)
 
     def capture(self):
         return self.clone(children=[], parent=self)
@@ -857,7 +859,7 @@ class Parser:
             char = rule.args['char']
             key = rule.args['key']
             buf = state.buf[start:state.offset]
-            print('count', char,'in',buf, '=',buf.count(char))
+            # print('count', char,'in',buf, '=',buf.count(char))
             state.values[key] = buf.count(char)
             return state
 
@@ -969,94 +971,207 @@ class ParserBuilder:
             self.output.append(f"{' ' * self.indent}{line}")
     
 
-class StateBuilder:
-    def __init__(self, n):
+class VarBuilder:
+    def __init__(self, name, n=0):
         self.n = n
+        self.name = name
 
     def __str__(self):
-        return f"state_{self.n}" if self.n else "state"
+        return f"{self.name}_{self.n}" if self.n else self.name
 
     def incr(self):
-        return StateBuilder(self.n+1)
+        return VarBuilder(self.name, self.n+1)
 
 
 def compile(grammar):
 
-    def build_steps(rule, steps, state):
+    def build_subrules(rules, steps, state, count):
+        for subrule in rules:
+            build_steps(subrule, steps, state, count)
+
+    def build_steps(rule, steps, state, count):
+        # steps.append(f"print('start', {repr(str(rule))})")
         if rule.kind == SEQUENCE:
-            for subrule in rule.rules:
-                build_steps(subrule, steps, state)
+            build_subrules(rule.rules, steps, state, count)
+
         elif rule.kind == CAPTURE:
             name = repr(rule.args['name'])
             steps.append(f"{state} = {state}.capture()")
-            steps.append(f"while {state}: # push capture")
-            for subrule in rule.rules:
-                build_steps(subrule, steps.add_indent(), state)
+            steps.append(f"while True: # start capture")
+            build_subrules(rule.rules, steps.add_indent(), state, count)
             steps.append(f"    break")
-            steps.append(f"if {state}: {state} = {state}.build_node({name})")
+            steps.append(f"if {state} is None: break")
+            steps.append(f"{state} = {state}.build_node({name})")
+
         elif rule.kind == CHOICE:
-            steps.append(f"while {state}: # push choice")
-            steps.append(f"    pass")
+            steps.append(f"while True: # start choice")
             choice = state.incr()
-            s = steps.add_indent(4)
-            s.append(f"{choice} = {state}")
+            steps_0 = steps.add_indent()
             for subrule in rule.rules:
-                build_steps(subrule, s, state)
-                s.append(f"if {state}:")
-                s.append(f"    break # next choice")
-                s.append(f"{state} = {choice}")
-            steps.append(f"if not {state}: break # pop choice")
+                steps_0.append(f"{choice} = {state}.choice()")
+                # steps_0.append(f"print('choice')")
+                steps_0.append(f"while True: # case")
+                build_steps(subrule, steps_0.add_indent(), choice, count)
+                steps_0.append(f"    break")
+                steps_0.append(f"if {choice} is not None:")
+                steps_0.append(f"    {state} = {state}.merge_choice({choice})")
+                steps_0.append(f"    break")
+                steps_0.append(f"# end case")
+                # steps_0.append(f"print('next_choice')")
+                steps_0.append(f"")
+
+            steps_0.append(f"{state} = None")
+            # steps_0.append(f"print('choice failed')")
+            steps_0.append(f"break # end choice")
+            steps.extend((
+                f"if {state} is None: break",
+                f"",
+            ))
+
         elif rule.kind == REPEAT:
-            steps.append(f"while {state}: # start repeat")
-            steps.append(f"    pass")
+            _min = rule.args['min']
+            _max = rule.args['max']
+            steps.append(f"{count} = 0")
+            new_count = count.incr()
+            if _min is not None and _min > 0:
+                _min = repr(_min) # value todo
+                steps.append(f"while {count} < {_min}:")
+                build_subrules(rule.rules, steps.add_indent(), state, new_count)
+                steps.append("    count += 1")
+                steps.append(f"if {state} is None: break")
+
+            if _max is not None:
+                _max = repr(_max) # value todo
+                steps.append(f"while {count} < {_max}:")
+            else:
+                steps.append(f"while True:")
+
+            state_0 = state.incr()
+            steps_0 = steps.add_indent()
+            steps_0.append(f"{state_0} = {state}")
             for subrule in rule.rules:
-                build_steps(subrule, steps.add_indent(), state)
-            steps.append(f"# end repeat")
+                build_steps(subrule, steps_0, state_0, new_count)
+            steps_0.append(f"if {state}.offset == {state_0}.offset: break")
+            steps_0.append(f"{state} = {state_0}")
+            steps_0.append(f"{count} += 1")
+
+            steps.append(f"if {state} is None: break")
+            steps.append("")
+
+        elif rule.kind == LOOKAHEAD:
+            pass
+
+        elif rule.kind == REJECT:
+            pass
+
+        elif rule.kind == ACCEPT_IF:
+            pass
+
+        elif rule.kind == REJECT_IF:
+            pass
+
         elif rule.kind == COUNT:
             steps.append(f"while {state}: # start count")
             steps.append(f"    pass")
             for subrule in rule.rules:
                 build_steps(subrule, steps.add_indent(), state)
             steps.append(f"# end count")
-        elif rule.rules is not None:
-            steps.append(f"# start !{rule.kind}")
-            for subrule in rule.rules:
-                build_steps(subrule, steps.add_indent(), state)
-            steps.append(f"# end  {rule.kind}")
+
+        elif rule.kind == VALUE:
+            steps.append(f'raise Exception("{rule.kind} missing") # unfinished {rule}')
+
+        elif rule.kind == SET_INDENT:
+            steps.append(f'raise Exception("{rule.kind} missing") # unfinished {rule}')
+        elif rule.kind == MATCH_INDENT:
+            steps.append(f'raise Exception("{rule.kind} missing") # unfinished {rule}')
+
         elif rule.kind == RULE:
             steps.extend((
                 f"{state} = self.parse_{rule.args['name']}({state})",
-                f"if not {state}: break",
+                f"if {state} is None: break",
                 f"",
             ))
+
+        elif rule.kind == RANGE:
+            invert = rule.args['invert']
+            steps.append(f'if {state}.advance_eof():')
+            steps.append(f'    {state} = None')
+            steps.append(f'    break')
+            steps.append(f'while True:')
+            state_0 = state.incr()
+            steps_0 = steps.add_indent()
+            for literal in rule.args['range']:
+                literal = repr(literal)
+                steps_0.append(f"{state_0} = {state}.advance_range({literal})")
+                steps_0.append(f"if {state_0} is not None: break")
+            steps_0.append('break')
+            if not invert:
+                steps.append(f'{state} = {state_0}')
+                steps.append(f'if {state} is None: break')
+            else:
+                steps.append(f'if {state_0} is not None:')
+                steps.append(f'    {state} = None')
+                steps.append(f'    break')
+                steps.append(f'else:')
+                steps.append(f'    {state} = {state}.advance_any(1)')
+            
+            steps.append('')
+
+
+            
+
         elif rule.kind == LITERAL:
-            literals = ", ".join(repr(l) for l in rule.args['literals'])
-            steps.extend((
-                f"{state} = {state}.advance({literals})",
-                f"if not state: break",
-                f"",
-            ))
+            steps.append(f'while True:')
+            state_0 = state.incr()
+            steps_0 = steps.add_indent()
+            for literal in rule.args['literals']:
+                literal = repr(literal)
+                steps_0.append(f"{state_0} = {state}.advance({literal})")
+                steps_0.append(f"if {state_0} is not None: break")
+            steps_0.append('break')
+
+            steps.append(f'{state} = {state_0}')
+            steps.append(f'if {state} is None: break')
+            steps.append(f'')
+
         elif rule.kind == WHITESPACE:
             steps.extend((
                 f"{state} = {state}.advance_whitespace(self.WHITESPACE)",
-                f"if not state: break",
+                f"if {state} is None: break",
                 f"",
             ))
+
         elif rule.kind == NEWLINE:
             steps.extend((
                 f"{state} = {state}.advance_newline(self.NEWLINE)",
-                f"if not state: break",
+                f"if {state} is None: break",
                 f"",
             ))
+        elif rule.kind == START_OF_LINE:
+            steps.append(f'raise Exception("{rule.kind} missing") # unfinished {rule}')
+            pass
+        elif rule.kind == END_OF_LINE:
+            pass
+            steps.append(f'raise Exception("{rule.kind} missing") # unfinished {rule}')
+        elif rule.kind == END_OF_FILE:
+            steps.append(f'raise Exception("{rule.kind} missing") # unfinished {rule}')
+            pass
 
+        elif rule.kind == PRINT:
+            steps.append(f'raise Exception("{rule.kind} missing") # unfinished {rule}')
+            pass
+        elif rule.kind == TRACE:
+            steps.append(f'raise Exception("{rule.kind} missing") # unfinished {rule}')
+            pass
         else:
-            steps.append(f'# {rule}')
+            raise Exception(f'Unknown kind {rule.kind}')
 
+        # steps.append(f"print('end', {repr(str(rule))}, {state})")
         return steps
 
     output = ParserBuilder([], 0)
-    newline = repr(tuple(grammar.newline))
-    whitespace = repr(tuple(grammar.whitespace))
+    newline = repr(tuple(grammar.newline)) if grammar.newline else '()'
+    whitespace = repr(tuple(grammar.whitespace)) if grammar.whitespace else '()'
 
     output.append("def closure(ParserState):")
     output = output.add_indent(4)
@@ -1079,24 +1194,27 @@ def compile(grammar):
         f"def parse(self, buf, offset=0):",
         f"    start = ParserState.init(buf, offset)",
         f"    end = self.parse_{start_rule}(start)",
-        f"    if end:",
-        f"        return end.children[-1]",
+        f"    return start.children[-1] if end else None",
         f"",
     ))
 
     for name, rule in grammar.rules.items():
         output.append(f"def parse_{name}(self, state):")
+        # output.append(f"    print('{name}')")
         output.append(f"    while True: # note: return at end of loop")
 
-        build_steps(rule, output.add_indent(8), StateBuilder(0))
-        output.append(f"        return state")
+        build_steps(rule, output.add_indent(8), VarBuilder("state"), VarBuilder("count"))
+        output.append(f"        break")
+        # output.append(f"    print('exit {name}', state)")
+        output.append(f"    return state")
         output.append("")
 
     output = output.add_indent(-4)
     output.append("return Parser")
     
     glob, loc = {}, {}
-    print(output.as_string())
+    # for lineno, line in enumerate(output.output):
+    #     print(lineno, '\t', line)
     exec(output.as_string(), glob, loc)
     return loc['closure'](ParserState)(None)
 
