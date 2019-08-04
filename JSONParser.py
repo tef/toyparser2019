@@ -1,3 +1,11 @@
+"""
+from JSON import JSON
+from grammar import compile_python
+
+with open('JSONParser.py', w') as fh:
+    fh.write(compile_python(JSON))
+"""
+
 class Parser:
     def __init__(self, builder):
          self.builder = builder
