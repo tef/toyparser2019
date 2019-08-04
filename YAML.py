@@ -223,18 +223,19 @@ for name, value in YAML.rules.items():
     print(name, '<--', value,'.')
 
 parser = YAML.parser({})
-parser2 = YAML.compile_old()
+parser2 = YAML.compile()
 import time
 
 def yaml(buf):
+    print(buf)
     t1 = time.time()
     node = parser.parse(buf)
     t1 = time.time() - t1
-    walk(node)
     t2 = time.time()
-    node = parser2.parse(buf)
+    node2 = parser2.parse(buf)
     t2 = time.time() - t2
     walk(node)
+    walk(node2)
     print(t1, t2, t2/t1)
     print()
 

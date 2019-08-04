@@ -1393,14 +1393,15 @@ def compile(grammar, builder=None):
 
         elif rule.kind == MATCH_INDENT:
             steps.extend((
-                f"{count} = 0",
-                f"while {count} < {indent}[0] and {offset} < len(buf):",
+                f"{count} = {line_start} + {indent}[0]",
+                f"if count >= len(buf):"
+                f"    {offset} == None; break",
+                f"while {offset} < {count}:",
                 f"    if buf[{offset}] in self.WHITESPACE:",
                 f"        {offset} +=1",
-                f"        {count} +=1",
                 f"    else:",
                 f"        break",
-                f"if {count} < {indent}[0]:",
+                f"if {offset} != {count}:",
                 f"    {offset} = None",
                 f"    break",
             ))
@@ -1459,6 +1460,12 @@ def compile(grammar, builder=None):
                     f"    {offset} = None",
                     f"    break",
                 ))
+            else:
+                steps.extend((
+                    f"else:",
+                    f"    {offset} += 1",
+                ))
+
             
 
         elif rule.kind == LITERAL:
@@ -1576,6 +1583,8 @@ def compile(grammar, builder=None):
         f"        self.end = end",
         f"        self.children = children",
         f"        self.value = value",
+        f"    def __str__(self):",
+        "        return '{}[{}:{}]'.format(self.name, self.start, self.end)",
         f"",
     ))
 
@@ -1590,7 +1599,7 @@ def compile(grammar, builder=None):
 
     for name, rule in grammar.rules.items():
         output.append(f"def parse_{name}(self, buf, offset, line_start, indent, children):")
-        output.append(f"    print('enter {name}')")
+        #output.append(f"    print('enter {name}')")
         output.append(f"    while True: # note: return at end of loop")
 
         build_steps(rule, 
@@ -1601,7 +1610,7 @@ def compile(grammar, builder=None):
                 VarBuilder('children'),
                 VarBuilder("count"))
         output.append(f"        break")
-        output.append(f"    print('exit {name}', offset)")
+        # output.append(f"    print('exit {name}', offset)")
         output.append(f"    return offset, line_start")
         output.append("")
 
