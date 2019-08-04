@@ -1256,7 +1256,7 @@ def compile_old(grammar, builder=None):
     exec(output.as_string(), glob, loc)
     return loc['closure'](ParserState)(builder)
 
-def compile_python(grammar, builder=None):
+def compile_python(grammar, builder=None, cython=False):
 
     def build_subrules(rules, steps, offset, line_start, indent, children, count): 
         for subrule in rules:
@@ -1276,10 +1276,18 @@ def compile_python(grammar, builder=None):
             steps.append(f"while True: # start capture")
             build_subrules(rule.rules, steps.add_indent(), offset_0, line_start, indent, children_0, count)
             steps.append(f"    break")
-            steps.append(f"if {offset_0} is None:")
-            steps.append(f"    {offset} = None")
+            steps.append(f"if {offset_0} == -1:")
+            steps.append(f"    {offset} = -1")
             steps.append(f"    break")
-            if builder:
+            if cython:
+                steps.extend((
+                    f"if self.builder is not None:",
+                    f"    {children}.append(self.ParseNode({name}, {offset}, {offset_0}, {children_0}, None))",
+                    f"else:",
+                    f"    {children}.append(ParseNode({name}, {offset}, {offset_0}, {children_0}, None))",
+                    f"    {children}.append(ParseNode({name}, {offset}, {offset_0}, {children_0}, None))"
+                ))
+            elif builder:
                 steps.append(f"{children}.append(self.builder[{name}](buf, {offset}, {offset_0}, {children_0}))")
             else:
                 steps.append(f"{children}.append(self.ParseNode({name}, {offset}, {offset_0}, {children_0}, None))")
@@ -1300,16 +1308,16 @@ def compile_python(grammar, builder=None):
                 steps_0.append(f"while True: # case")
                 build_steps(subrule, steps_0.add_indent(), offset_0, line_start_0, indent, children_0, count)
                 steps_0.append(f"    break")
-                steps_0.append(f"if {offset_0} is not None:")
+                steps_0.append(f"if {offset_0} != -1:")
                 steps_0.append(f"    {offset} = {offset_0}")
                 steps_0.append(f"    {line_start} = {line_start_0}")
                 steps_0.append(f"    {children}.extend({children_0})")
                 steps_0.append(f"    break")
                 steps_0.append(f"# end case")
 
-            steps_0.append(f"{offset} = None # no more choices")
+            steps_0.append(f"{offset} = -1 # no more choices")
             steps_0.append(f"break # end choice")
-            steps.append(f"if {offset} is None:")
+            steps.append(f"if {offset} == -1:")
             steps.append(f"    break")
 
         elif rule.kind == REPEAT:
@@ -1344,7 +1352,7 @@ def compile_python(grammar, builder=None):
             if _min is not None and _min > 0:
                 steps.extend((
                     f"if {count} < {repr(_min)}:",
-                    f"    {offset} = None",
+                    f"    {offset} = -1",
                     f"    break",
                 ))
 
@@ -1357,8 +1365,8 @@ def compile_python(grammar, builder=None):
             steps_0.append(f"{children_0} = []")
             build_subrules(rule.rules, steps_0, offset_0, line_start_0, indent, children_0, count)
 
-            steps.append(f'if {offset_0} is None:')
-            steps.append(f'    {offset} = None')
+            steps.append(f'if {offset_0} == -1:')
+            steps.append(f'    {offset} = -1')
             steps.append(f'    break')
 
         elif rule.kind == REJECT:
@@ -1370,8 +1378,8 @@ def compile_python(grammar, builder=None):
             steps_0.append(f"{children_0} = []")
             build_subrules(rule.rules, steps_0, offset_0, line_start_0, indent, children_0, count)
 
-            steps.append(f'if {offset_0} is not None:')
-            steps.append(f'    {offset} = None')
+            steps.append(f'if {offset_0} != -1:')
+            steps.append(f'    {offset} = -1')
             steps.append(f'    break')
 
         elif rule.kind == ACCEPT_IF:
@@ -1387,29 +1395,29 @@ def compile_python(grammar, builder=None):
             steps.append(f'raise Exception("{rule.kind} missing") # unfinished {rule}')
 
         elif rule.kind == SET_INDENT:
-            steps.append(f'{indent} = ({offset} - {line_start}, {indent})')
-            build_subrules(rule.rules, steps, offset, line_start, indent, children, count)
-            steps.append(f'{indent} = {indent}[1]')
+            indent_0 = indent.incr()
+            steps.append(f'{indent_0} = {offset} - {line_start}')
+            build_subrules(rule.rules, steps, offset, line_start, indent_0, children, count)
 
         elif rule.kind == MATCH_INDENT:
             steps.extend((
-                f"{count} = {line_start} + {indent}[0]",
+                f"{count} = {line_start} + {indent}]",
                 f"if count >= len(buf):"
-                f"    {offset} == None; break",
+                f"    {offset} == -1; break",
                 f"while {offset} < {count}:",
                 f"    if buf[{offset}] in self.WHITESPACE:",
                 f"        {offset} +=1",
                 f"    else:",
                 f"        break",
                 f"if {offset} != {count}:",
-                f"    {offset} = None",
+                f"    {offset} = -1",
                 f"    break",
             ))
 
         elif rule.kind == RULE:
             steps.extend((
                 f"{offset}, {line_start} = self.parse_{rule.args['name']}(buf, {offset}, {line_start}, {indent},{children})",
-                f"if {offset} is None: break",
+                f"if {offset} == -1: break",
                 f"",
             ))
             
@@ -1417,7 +1425,7 @@ def compile_python(grammar, builder=None):
             invert = rule.args['invert']
             steps.extend((
                 f"if {offset} == len(buf):",
-                f"    {offset} = None",
+                f"    {offset} = -1",
                 f"    break",
             ))
 
@@ -1429,7 +1437,7 @@ def compile_python(grammar, builder=None):
                     if invert:
                         steps.extend((
                             f"elif {start} <= buf[{offset}] <= {end}:",
-                            f"    {offset} = None",
+                            f"    {offset} = -1",
                             f"    break",
                         ))
                     else:
@@ -1443,7 +1451,7 @@ def compile_python(grammar, builder=None):
                     if invert:
                         steps.extend((
                             f"elif buf[{offset}] == {literal}:",
-                            f"    {offset} = None",
+                            f"    {offset} = -1",
                             f"    break",
                         ))
                     else:
@@ -1457,7 +1465,7 @@ def compile_python(grammar, builder=None):
             if not invert:
                 steps.extend((
                     f"else:",
-                    f"    {offset} = None",
+                    f"    {offset} = -1",
                     f"    break",
                 ))
             else:
@@ -1487,7 +1495,7 @@ def compile_python(grammar, builder=None):
 
             steps.extend((
                 f"else:",
-                f"    {offset} = None",
+                f"    {offset} = -1",
                 f"    break",
             ))
 
@@ -1500,10 +1508,15 @@ def compile_python(grammar, builder=None):
             if _max is not None:
                 cond.append(f"{count} < {repr(_max)}")
             
+            if cython:
+                cond2 = " or ".join(f"chr == {repr(chr)}" for chr in whitespace)
+            else:
+                cond2 =f"chr in self.WHITESPACE"
             steps.extend((
                 f"{count} = 0",
                 f"while {' and '.join(cond)}:",
-                f"    if buf[{offset}] in self.WHITESPACE:",
+                f"    chr = buf[{offset}]",
+                f"    if {cond2}:",
                 f"        {offset} +=1",
                 f"        {count} +=1",
                 f"    else:",
@@ -1512,39 +1525,55 @@ def compile_python(grammar, builder=None):
             if _min is not None and _min > 0:
                 steps.extend((
                     f"if {count} < {repr(_min)}:"
-                    f"    {offset} = None",
+                    f"    {offset} = -1",
                     f"    break",
                 ))
 
         elif rule.kind == NEWLINE:
+            if cython:
+                cond = " or ".join(f"chr == {repr(chr)}" for chr in newline)
+            else:
+                cond =f"chr in self.NEWLINE"
+
             steps.extend((
-                f"if {offset} < len(buf) and buf[{offset}] in self.NEWLINE:",
-                f"    {offset} +=1",
-                f"    {line_start} = {offset}",
+                f"if {offset} < len(buf)",
+                f"    chr = buf[{offset}]",
+                f"    if {cond}:",
+                f"        {offset} +=1",
+                f"        {line_start} = {offset}",
+                f"    else:",
+                f"        {offset} = -1",
+                f"        break",
                 f"else:",
-                f"    {offset} = None",
+                f"    {offset} = -1",
                 f"    break",
             ))
         elif rule.kind == START_OF_LINE:
             steps.extend((
                 f"if {offset} != {line_start}:",
-                f"    {offset} = None",
+                f"    {offset} = -1",
                 f"    break",
             ))
         elif rule.kind == END_OF_LINE:
+            if cython:
+                cond = " or ".join(f"chr == {chr}" for chr in newline)
+            else:
+                cond =f"chr in self.NEWLINE"
+
             steps.extend((
                 f"if {offset} != len(buf):",
-                f"    if buf[{offset}] in self.NEWLINE:",
+                f"    chr = buf[{offset}]",
+                f"    if {cond}:",
                 f"        {offset} +=1",
                 f"        {line_start} = {offset}",
                 f"    else:",
-                f"        {offset} = None",
+                f"        {offset} = -1",
                 f"        break",
             ))
         elif rule.kind == END_OF_FILE:
             steps.extend((
                 f"if {offset} != len(buf):",
-                f"    {offset} = None",
+                f"    {offset} = -1",
                 f"    break",
             ))
 
@@ -1563,19 +1592,8 @@ def compile_python(grammar, builder=None):
     newline = repr(tuple(grammar.newline)) if grammar.newline else '()'
     whitespace = repr(tuple(grammar.whitespace)) if grammar.whitespace else '()'
 
-    output.extend((
-        f"class Parser:",
-        f"    def __init__(self, builder):",
-        f"         self.builder = builder",
-        "",
-        f"    NEWLINE = {newline}",
-        f"    WHITESPACE = {whitespace}",
-        "",
-    ))
 
-    output = output.add_indent(4)
-
-    output.extend((
+    parse_node = (
         f"class ParseNode:",
         f"    def __init__(self, name, start, end, children, value):",
         f"        self.name = name",
@@ -1586,7 +1604,33 @@ def compile_python(grammar, builder=None):
         f"    def __str__(self):",
         "        return '{}[{}:{}]'.format(self.name, self.start, self.end)",
         f"",
-    ))
+    )
+    if cython:
+        output.append('# cython: language_level=3, boundscheck=False')
+        output.extend(parse_node)
+        output.extend((
+            f"cdef class Parser:",
+            f"    cdef object builder",
+            "",
+            f"    NEWLINE = {newline}",
+            f"    WHITESPACE = {whitespace}",
+            "",
+        ))
+        output = output.add_indent(4)
+    else:
+        output.extend((
+            f"class Parser:",
+            f"    def __init__(self, builder):",
+            f"         self.builder = builder",
+            "",
+            f"    NEWLINE = {newline}",
+            f"    WHITESPACE = {whitespace}",
+            "",
+        ))
+
+        output = output.add_indent(4)
+
+        output.extend(parse_node)
 
     start_rule = grammar.start
     output.extend((
@@ -1598,7 +1642,12 @@ def compile_python(grammar, builder=None):
     ))
 
     for name, rule in grammar.rules.items():
-        output.append(f"def parse_{name}(self, buf, offset, line_start, indent, children):")
+        if cython:
+            output.append(f"cdef (int, int) parse_{name}(self, str buf, int offset, int line_start, int indent, list children):")
+            output.append(f"    cdef int count")
+            output.append(f"    cdef Py_UNICODE chr")
+        else:
+            output.append(f"def parse_{name}(self, buf, offset, line_start, indent, children):")
         #output.append(f"    print('enter {name}')")
         output.append(f"    while True: # note: return at end of loop")
 
@@ -1618,7 +1667,7 @@ def compile_python(grammar, builder=None):
     return output.as_string()
 
 
-def compile(grammar, builder):
+def compile(grammar, builder=None):
     output = compile_python(grammar, builder)
     glob, loc = {}, {}
     exec(output, glob, loc)
