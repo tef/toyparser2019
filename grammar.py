@@ -1256,7 +1256,7 @@ def compile_old(grammar, builder=None):
     exec(output.as_string(), glob, loc)
     return loc['closure'](ParserState)(builder)
 
-def compile(grammar, builder=None):
+def compile_python(grammar, builder=None):
 
     def build_subrules(rules, steps, offset, line_start, indent, children, count): 
         for subrule in rules:
@@ -1613,12 +1613,15 @@ def compile(grammar, builder=None):
         # output.append(f"    print('exit {name}', offset)")
         output.append(f"    return offset, line_start")
         output.append("")
+    # for lineno, line in enumerate(output.output):
+    #     print(lineno, '\t', line)
+    return output.as_string()
 
-    
+
+def compile(grammar, builder):
+    output = compile_python(grammar, builder)
     glob, loc = {}, {}
-    for lineno, line in enumerate(output.output):
-        print(lineno, '\t', line)
-    exec(output.as_string(), glob, loc)
+    exec(output, glob, loc)
     return loc['Parser'](builder)
 
 class Grammar(metaclass=Metaclass):

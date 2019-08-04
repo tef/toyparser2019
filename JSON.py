@@ -115,43 +115,45 @@ class JSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n"]):
                 self.whitespace()
         self.accept("}")
 
-for name, value in JSON.rules.items():
-    print(name, '<--', value,'.')
+if __name__ == "__main__":
 
-print()
-parser = JSON.parser({})
-buf = '[1, 2, 3, "fooo"]'
-node = parser.parse(buf)
+    for name, value in JSON.rules.items():
+        print(name, '<--', value,'.')
 
-walk(node, "")
-print()
+    print()
+    parser = JSON.parser({})
+    buf = '[1, 2, 3, "fooo"]'
+    node = parser.parse(buf)
 
-print(node.build(buf, builder))
-print()
+    walk(node, "")
+    print()
 
-parser = JSON.parser(builder)
-print(parser.parse("[1, 2, 3]"))
-print()
+    print(node.build(buf, builder))
+    print()
 
-
-parser1 = JSON.compile_old(builder)
-parser2 = JSON.compile(builder)
-
-import time, json
-
-s = json.dumps(list(range(25000)))
-print('file is', len(s)/1024, 'k')
-
-def timeit(name,parser, buf):
-    t = time.time()
-    o = parser(buf)
-    t = time.time() - t
-    print(name, t)
+    parser = JSON.parser(builder)
+    print(parser.parse("[1, 2, 3]"))
+    print()
 
 
-timeit("json", json.loads, s)
-timeit("inew", parser2.parse, s)
-timeit("comp", parser1.parse, s)
-timeit("inter", parser.parse, s)
+    parser1 = JSON.compile_old(builder)
+    parser2 = JSON.compile(builder)
+
+    import time, json
+
+    s = json.dumps(list(range(25000)))
+    print('file is', len(s)/1024, 'k')
+
+    def timeit(name,parser, buf):
+        t = time.time()
+        o = parser(buf)
+        t = time.time() - t
+        print(name, t)
+
+
+    timeit("json", json.loads, s)
+    timeit("inew", parser2.parse, s)
+    timeit("comp", parser1.parse, s)
+    timeit("inter", parser.parse, s)
 
 

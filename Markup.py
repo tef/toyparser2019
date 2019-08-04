@@ -11,11 +11,10 @@ def unescape(string):
     return codecs.decode(string, 'unicode_escape')
 
 builder = {
-    'document': (lambda buf, children: children),
-    'para': (lambda buf, children: {"para":children}),
-    'header': (lambda buf, children: {"header":children}),
-    'level': (lambda buf, children: len(buf)),
-    'text': (lambda buf, children: buf),
+    'document': (lambda buf, start, end, children: children),
+    'para': (lambda buf, start, end, children: {"para":children}),
+    'header': (lambda buf, start, end, children: {"header":children}),
+    'text': (lambda buf, start, end, children: buf[start:end]),
 }
 
 class Markup(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
