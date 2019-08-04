@@ -1511,19 +1511,19 @@ def compile_python(grammar, builder=None, cython=False):
             
 
         elif rule.kind == LITERAL:
-            literal = rule.args['literals'][0]
-            length = len(literal)
-            literal = repr(literal)
-            steps.extend((
-                f"if buf[{offset}:{offset}+{length}] == {literal}:",
-                f"    {offset} += {length}",
-            ))
-
-            for literal in rule.args['literals'][1:]:
+            for idx, literal in enumerate(rule.args['literals']):
                 length = len(literal)
-                literal = repr(literal)
+                _if = {0:"if"}.get(idx, "elif")
+
+                # cond = [f"{offset} + {length} <= buf_eof"]
+                #for i, c in enumerate(literal):
+                #    cond.append(f"buf[{offset}+{i}] == {repr(c)}")
+
+                # cond = " and ".join(cond)
+                cond = f"buf[{offset}:{offset}+{length}] == {repr(literal)}"
+
                 steps.extend((
-                    f"elif buf[{offset}:{offset}+{length}] == {literal}:",
+                    f"{_if} {cond}:",
                     f"    {offset} += {length}",
                 ))
 
