@@ -11,14 +11,14 @@ def unescape(string):
     return codecs.decode(string, 'unicode_escape')
 
 builder = {
-    'number': (lambda buf, children: int(buf)),
-    'string': (lambda buf, children: unescape(buf)),
-    'list': (lambda buf, children: children),
-    'object': (lambda buf, children: dict(children)),
-    'pair': (lambda buf, children: children),
-    'document': (lambda buf, children: children[0]),
-    'bool': (lambda buf, children: bool(buf)),
-    'null': (lambda buf, children: None),
+    'number': (lambda buf, start, end, children: int(buf[start:end])),
+    'string': (lambda buf, start, end, children: unescape(buf[start:end])),
+    'list': (lambda buf, start, end, children: children),
+    'object': (lambda buf, start, end, children: dict(children)),
+    'pair': (lambda buf, start, end, children: children),
+    'document': (lambda buf, start, end, children: children[0]),
+    'bool': (lambda buf, start, end, children: bool(buf[start:end])),
+    'null': (lambda buf, start, end, children: None),
 }
 
 class JSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n"]):
@@ -139,7 +139,7 @@ parser2 = JSON.compile(builder)
 
 import time, json
 
-s = json.dumps(list(range(2500)))
+s = json.dumps(list(range(25000)))
 print('file is', len(s)/1024, 'k')
 
 def timeit(name,parser, buf):

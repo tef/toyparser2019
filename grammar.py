@@ -694,7 +694,7 @@ class ParserState:
         return self.clone(children=self.parent.children, parent=self.parent.parent)
 
     def build_capture(self, builder):
-        self.parent.children.append(builder(self.parent.substring(self), self.children))
+        self.parent.children.append(builder(self.buf, self.parent.offset, self.offset, self.children))
         return self.clone(children=self.parent.children, parent=self.parent.parent)
 
     def merge_parent(self):
@@ -719,7 +719,7 @@ class ParseNode:
     def build(self, buf, builder):
         children = [child.build(buf, builder) for child in self.children]
         if self.name == "value": return self.value
-        return builder[self.name](buf[self.start:self.end], children)
+        return builder[self.name](buf, self.start, self.end, children)
 
     def walk_top(self):
         yield self
@@ -1280,7 +1280,7 @@ def compile(grammar, builder=None):
             steps.append(f"    {offset} = None")
             steps.append(f"    break")
             if builder:
-                steps.append(f"{children}.append(self.builder[{name}](buf[{offset}:{offset_0}], {children_0}))")
+                steps.append(f"{children}.append(self.builder[{name}](buf, {offset}, {offset_0}, {children_0}))")
             else:
                 steps.append(f"{children}.append(self.ParseNode({name}, {offset}, {offset_0}, {children_0}, None))")
             steps.append(f"{offset} = {offset_0}")
