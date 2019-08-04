@@ -1453,29 +1453,35 @@ def compile_python(grammar, builder=None, cython=False):
                 f"    {offset} = -1",
                 f"    break",
                 f"",
-                f"chr = buf[{offset}]"
+                f"chr = ord(buf[{offset}])"
                 f"",
             ))
 
             for idx, literal in enumerate(rule.args['range']):
                 _if = {0:"if"}.get(idx, "elif")
                 if '-' in literal and len(literal) == 3:
-                    start, end = repr(literal[0]), repr(literal[2])
+                    start, end = ord(literal[0]), repr(ord(literal[2]))
+
+                    if start > 0:
+                        start = f"{start} <= "
+                    else:
+                        start =""
+
 
                     if invert:
                         steps.extend((
-                            f"{_if} {start} <= chr <= {end}:",
+                            f"{_if} {start}chr <= {end}:",
                             f"    {offset} = -1",
                             f"    break",
                         ))
                     else:
                         steps.extend((
-                            f"{_if} {start} <= chr <= {end}:",
+                            f"{_if} {start}chr <= {end}:",
                             f"    {offset} += 1",
                         ))
 
                 elif len(literal) == 1:
-                    literal = repr(literal)
+                    literal = repr(ord(literal))
                     if invert:
                         steps.extend((
                             f"{_if} chr == {literal}:",
@@ -1538,11 +1544,11 @@ def compile_python(grammar, builder=None, cython=False):
                 cond.append(f"{count} < {repr(_max)}")
             
             cond2 =f"chr in self.WHITESPACE"
-            if cython: cond2 = " or ".join(f"chr == {repr(chr)}" for chr in grammar.whitespace)
+            if cython: cond2 = " or ".join(f"chr == {repr(ord(chr))}" for chr in grammar.whitespace)
 
             if _newline:
                 cond3 =f"chr in self.NEWLINE"
-                if cython: cond3 = " or ".join(f"chr == {repr(chr)}" for chr in grammar.newline)
+                if cython: cond3 = " or ".join(f"chr == {repr(ord(chr))}" for chr in grammar.newline)
                 steps.extend((
                     f"{count} = 0",
                     f"while {' and '.join(cond)}:",
@@ -1579,7 +1585,7 @@ def compile_python(grammar, builder=None, cython=False):
         elif rule.kind == NEWLINE:
             cond =f"chr in self.NEWLINE"
 
-            if cython: cond = " or ".join(f"chr == {repr(chr)}" for chr in grammar.newline)
+            if cython: cond = " or ".join(f"chr == {repr(ord(chr))}" for chr in grammar.newline)
             steps.extend((
                 f"if {offset} < buf_eof:",
                 f"    chr = buf[{offset}]",
@@ -1601,7 +1607,7 @@ def compile_python(grammar, builder=None, cython=False):
             ))
         elif rule.kind == END_OF_LINE:
             cond =f"chr in self.NEWLINE"
-            if cython: cond = " or ".join(f"chr == {repr(chr)}" for chr in grammar.newline)
+            if cython: cond = " or ".join(f"chr == {repr(ord(chr))}" for chr in grammar.newline)
 
             steps.extend((
                 f"if {offset} < buf_eof:",
@@ -1649,7 +1655,7 @@ def compile_python(grammar, builder=None, cython=False):
         f"",
     )
     if cython:
-        output.append('# cython: language_level=3')
+        output.append('# cython: language_level=3, bounds_check=False')
         output.extend(parse_node)
         output.extend((
             f"cdef class Parser:",
@@ -1692,7 +1698,7 @@ def compile_python(grammar, builder=None, cython=False):
         if cython:
             output.append(f"cdef (int, int) parse_{name}(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):")
             output.append(f"    cdef int count")
-            output.append(f"    cpdef Py_UNICODE chr")
+            output.append(f"    cpdef Py_UCS4 chr")
         else:
             output.append(f"def parse_{name}(self, buf, offset, line_start, indent, buf_eof, children):")
         # output.append(f"    print('enter {name},',offset,line_start,indent, repr(buf[offset:offset+10]))")

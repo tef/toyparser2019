@@ -827,7 +827,7 @@ typedef struct __pyx_ctuple_int__and_int __pyx_ctuple_int__and_int;
  * 
  *     cdef (int, int) parse_document(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  */
 struct __pyx_ctuple_int__and_int {
   int f0;
@@ -1166,6 +1166,18 @@ static CYTHON_INLINE int __Pyx_PyBytes_Equals(PyObject* s1, PyObject* s2, int eq
 /* UnicodeEquals.proto */
 static CYTHON_INLINE int __Pyx_PyUnicode_Equals(PyObject* s1, PyObject* s2, int equals);
 
+/* UnicodeAsUCS4.proto */
+static CYTHON_INLINE Py_UCS4 __Pyx_PyUnicode_AsPy_UCS4(PyObject*);
+
+/* object_ord.proto */
+#if PY_MAJOR_VERSION >= 3
+#define __Pyx_PyObject_Ord(c)\
+    (likely(PyUnicode_Check(c)) ? (long)__Pyx_PyUnicode_AsPy_UCS4(c) : __Pyx__PyObject_Ord(c))
+#else
+#define __Pyx_PyObject_Ord(c) __Pyx__PyObject_Ord(c)
+#endif
+static long __Pyx__PyObject_Ord(PyObject* c);
+
 /* ObjectGetItem.proto */
 #if CYTHON_USE_TYPE_SLOTS
 static CYTHON_INLINE PyObject *__Pyx_PyObject_GetItem(PyObject *obj, PyObject* key);
@@ -1358,14 +1370,16 @@ static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value);
 /* CIntToPy.proto */
 static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value);
 
-/* ObjectAsPyUnicode.proto */
-static CYTHON_INLINE Py_UNICODE __Pyx_PyObject_AsPy_UNICODE(PyObject*);
-
 /* CIntFromPy.proto */
 static CYTHON_INLINE long __Pyx_PyInt_As_long(PyObject *);
 
 /* CIntFromPy.proto */
 static CYTHON_INLINE int __Pyx_PyInt_As_int(PyObject *);
+
+/* ObjectAsUCS4.proto */
+#define __Pyx_PyObject_AsPy_UCS4(x)\
+    (likely(PyUnicode_Check(x)) ? __Pyx_PyUnicode_AsPy_UCS4(x) : __Pyx__PyObject_AsPy_UCS4(x))
+static Py_UCS4 __Pyx__PyObject_AsPy_UCS4(PyObject*);
 
 /* FastTypeChecks.proto */
 #if CYTHON_COMPILING_IN_CPYTHON
@@ -1634,7 +1648,7 @@ static PyObject *__pyx_codeobj__27;
 /* Late includes */
 
 /* "RSONParser.pyx":3
- * # cython: language_level=3
+ * # cython: language_level=3, bounds_check=False
  * class ParseNode:
  *     def __init__(self, name, start, end, children, value):             # <<<<<<<<<<<<<<
  *         self.name = name
@@ -1798,7 +1812,7 @@ static PyObject *__pyx_pf_10RSONParser_9ParseNode___init__(CYTHON_UNUSED PyObjec
   if (__Pyx_PyObject_SetAttrStr(__pyx_v_self, __pyx_n_s_value, __pyx_v_value) < 0) __PYX_ERR(0, 8, __pyx_L1_error)
 
   /* "RSONParser.pyx":3
- * # cython: language_level=3
+ * # cython: language_level=3, bounds_check=False
  * class ParseNode:
  *     def __init__(self, name, start, end, children, value):             # <<<<<<<<<<<<<<
  *         self.name = name
@@ -2311,7 +2325,7 @@ static PyObject *__pyx_pf_10RSONParser_6Parser_2parse(struct __pyx_obj_10RSONPar
  * 
  *     cdef (int, int) parse_document(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  */
 
 static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_document(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, int __pyx_v_indent, int __pyx_v_buf_eof, PyObject *__pyx_v_children) {
@@ -2336,7 +2350,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_document(str
 
   /* "RSONParser.pyx":30
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop             # <<<<<<<<<<<<<<
  *             offset, line_start = self.parse_comment(buf, offset, line_start, indent, buf_eof, children)
  *             if offset == -1: break
@@ -2344,7 +2358,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_document(str
   while (1) {
 
     /* "RSONParser.pyx":31
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop
  *             offset, line_start = self.parse_comment(buf, offset, line_start, indent, buf_eof, children)             # <<<<<<<<<<<<<<
  *             if offset == -1: break
@@ -2714,7 +2728,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_document(str
  * 
  *     cdef (int, int) parse_document(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  */
 
   /* function exit code */
@@ -2739,12 +2753,12 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_document(str
  * 
  *     cdef (int, int) parse_comment(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  */
 
 static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTHON_UNUSED struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, CYTHON_UNUSED int __pyx_v_indent, int __pyx_v_buf_eof, CYTHON_UNUSED PyObject *__pyx_v_children) {
   int __pyx_v_count;
-  Py_UNICODE __pyx_v_chr;
+  Py_UCS4 __pyx_v_chr;
   PyObject *__pyx_v_offset_1 = NULL;
   int __pyx_v_line_start_1;
   PyObject *__pyx_v_count_1 = NULL;
@@ -2760,14 +2774,14 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
   Py_ssize_t __pyx_t_6;
   int __pyx_t_7;
   PyObject *__pyx_t_8 = NULL;
-  Py_UNICODE __pyx_t_9;
+  long __pyx_t_9;
   int __pyx_t_10;
   __pyx_ctuple_int__and_int __pyx_t_11;
   __Pyx_RefNannySetupContext("parse_comment", 0);
 
   /* "RSONParser.pyx":63
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop             # <<<<<<<<<<<<<<
  *             count = 0
  *             while offset < buf_eof:
@@ -2775,7 +2789,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
   while (1) {
 
     /* "RSONParser.pyx":64
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop
  *             count = 0             # <<<<<<<<<<<<<<
  *             while offset < buf_eof:
@@ -2788,7 +2802,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
  *             count = 0
  *             while offset < buf_eof:             # <<<<<<<<<<<<<<
  *                 chr = buf[offset]
- *                 if chr == ' ' or chr == '\t' or chr == '\r' or chr == '\n' or chr == '\ufeff':
+ *                 if chr == 32 or chr == 9 or chr == 13 or chr == 10 or chr == 65279:
  */
     while (1) {
       __pyx_t_1 = ((__pyx_v_offset < __pyx_v_buf_eof) != 0);
@@ -2798,7 +2812,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
  *             count = 0
  *             while offset < buf_eof:
  *                 chr = buf[offset]             # <<<<<<<<<<<<<<
- *                 if chr == ' ' or chr == '\t' or chr == '\r' or chr == '\n' or chr == '\ufeff':
+ *                 if chr == 32 or chr == 9 or chr == 13 or chr == 10 or chr == 65279:
  *                     offset +=1
  */
       __pyx_t_2 = __Pyx_GetItemInt_Unicode(__pyx_v_buf, __pyx_v_offset, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(__pyx_t_2 == (Py_UCS4)-1)) __PYX_ERR(0, 66, __pyx_L1_error)
@@ -2807,7 +2821,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
       /* "RSONParser.pyx":67
  *             while offset < buf_eof:
  *                 chr = buf[offset]
- *                 if chr == ' ' or chr == '\t' or chr == '\r' or chr == '\n' or chr == '\ufeff':             # <<<<<<<<<<<<<<
+ *                 if chr == 32 or chr == 9 or chr == 13 or chr == 10 or chr == 65279:             # <<<<<<<<<<<<<<
  *                     offset +=1
  *                     count +=1
  */
@@ -2820,7 +2834,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
 
         /* "RSONParser.pyx":68
  *                 chr = buf[offset]
- *                 if chr == ' ' or chr == '\t' or chr == '\r' or chr == '\n' or chr == '\ufeff':
+ *                 if chr == 32 or chr == 9 or chr == 13 or chr == 10 or chr == 65279:
  *                     offset +=1             # <<<<<<<<<<<<<<
  *                     count +=1
  *                 else:
@@ -2828,7 +2842,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
         __pyx_v_offset = (__pyx_v_offset + 1);
 
         /* "RSONParser.pyx":69
- *                 if chr == ' ' or chr == '\t' or chr == '\r' or chr == '\n' or chr == '\ufeff':
+ *                 if chr == 32 or chr == 9 or chr == 13 or chr == 10 or chr == 65279:
  *                     offset +=1
  *                     count +=1             # <<<<<<<<<<<<<<
  *                 else:
@@ -2839,7 +2853,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
         /* "RSONParser.pyx":67
  *             while offset < buf_eof:
  *                 chr = buf[offset]
- *                 if chr == ' ' or chr == '\t' or chr == '\r' or chr == '\n' or chr == '\ufeff':             # <<<<<<<<<<<<<<
+ *                 if chr == 32 or chr == 9 or chr == 13 or chr == 10 or chr == 65279:             # <<<<<<<<<<<<<<
  *                     offset +=1
  *                     count +=1
  */
@@ -3048,7 +3062,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
  *                         offset_2 = -1
  *                         break             # <<<<<<<<<<<<<<
  * 
- *                     chr = buf[offset_2]
+ *                     chr = ord(buf[offset_2])
  */
           goto __pyx_L11_break;
 
@@ -3064,20 +3078,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
         /* "RSONParser.pyx":91
  *                         break
  * 
- *                     chr = buf[offset_2]             # <<<<<<<<<<<<<<
- *                     if chr == '\n':
+ *                     chr = ord(buf[offset_2])             # <<<<<<<<<<<<<<
+ *                     if chr == 10:
  *                         offset_2 = -1
  */
         __pyx_t_8 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 91, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_8);
-        __pyx_t_9 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_8); if (unlikely((__pyx_t_9 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 91, __pyx_L1_error)
+        __pyx_t_9 = __Pyx_PyObject_Ord(__pyx_t_8); if (unlikely(__pyx_t_9 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 91, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         __pyx_v_chr = __pyx_t_9;
 
         /* "RSONParser.pyx":92
  * 
- *                     chr = buf[offset_2]
- *                     if chr == '\n':             # <<<<<<<<<<<<<<
+ *                     chr = ord(buf[offset_2])
+ *                     if chr == 10:             # <<<<<<<<<<<<<<
  *                         offset_2 = -1
  *                         break
  */
@@ -3085,8 +3099,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
         if (__pyx_t_7) {
 
           /* "RSONParser.pyx":93
- *                     chr = buf[offset_2]
- *                     if chr == '\n':
+ *                     chr = ord(buf[offset_2])
+ *                     if chr == 10:
  *                         offset_2 = -1             # <<<<<<<<<<<<<<
  *                         break
  *                     else:
@@ -3095,7 +3109,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
           __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_int_neg_1);
 
           /* "RSONParser.pyx":94
- *                     if chr == '\n':
+ *                     if chr == 10:
  *                         offset_2 = -1
  *                         break             # <<<<<<<<<<<<<<
  *                     else:
@@ -3105,8 +3119,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
 
           /* "RSONParser.pyx":92
  * 
- *                     chr = buf[offset_2]
- *                     if chr == '\n':             # <<<<<<<<<<<<<<
+ *                     chr = ord(buf[offset_2])
+ *                     if chr == 10:             # <<<<<<<<<<<<<<
  *                         offset_2 = -1
  *                         break
  */
@@ -3188,7 +3202,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
  *                 count_1 = 0
  *                 while offset_1 < buf_eof:             # <<<<<<<<<<<<<<
  *                     chr = buf[offset_1]
- *                     if chr == ' ' or chr == '\t' or chr == '\r' or chr == '\n' or chr == '\ufeff':
+ *                     if chr == 32 or chr == 9 or chr == 13 or chr == 10 or chr == 65279:
  */
       while (1) {
         __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_buf_eof); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 104, __pyx_L1_error)
@@ -3203,19 +3217,19 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
  *                 count_1 = 0
  *                 while offset_1 < buf_eof:
  *                     chr = buf[offset_1]             # <<<<<<<<<<<<<<
- *                     if chr == ' ' or chr == '\t' or chr == '\r' or chr == '\n' or chr == '\ufeff':
+ *                     if chr == 32 or chr == 9 or chr == 13 or chr == 10 or chr == 65279:
  *                         offset_1 +=1
  */
         __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 105, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_9 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_3); if (unlikely((__pyx_t_9 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 105, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_AsPy_UCS4(__pyx_t_3); if (unlikely((__pyx_t_2 == (Py_UCS4)-1) && PyErr_Occurred())) __PYX_ERR(0, 105, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_v_chr = __pyx_t_9;
+        __pyx_v_chr = __pyx_t_2;
 
         /* "RSONParser.pyx":106
  *                 while offset_1 < buf_eof:
  *                     chr = buf[offset_1]
- *                     if chr == ' ' or chr == '\t' or chr == '\r' or chr == '\n' or chr == '\ufeff':             # <<<<<<<<<<<<<<
+ *                     if chr == 32 or chr == 9 or chr == 13 or chr == 10 or chr == 65279:             # <<<<<<<<<<<<<<
  *                         offset_1 +=1
  *                         count_1 +=1
  */
@@ -3228,7 +3242,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
 
           /* "RSONParser.pyx":107
  *                     chr = buf[offset_1]
- *                     if chr == ' ' or chr == '\t' or chr == '\r' or chr == '\n' or chr == '\ufeff':
+ *                     if chr == 32 or chr == 9 or chr == 13 or chr == 10 or chr == 65279:
  *                         offset_1 +=1             # <<<<<<<<<<<<<<
  *                         count_1 +=1
  *                     else:
@@ -3239,7 +3253,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
           __pyx_t_3 = 0;
 
           /* "RSONParser.pyx":108
- *                     if chr == ' ' or chr == '\t' or chr == '\r' or chr == '\n' or chr == '\ufeff':
+ *                     if chr == 32 or chr == 9 or chr == 13 or chr == 10 or chr == 65279:
  *                         offset_1 +=1
  *                         count_1 +=1             # <<<<<<<<<<<<<<
  *                     else:
@@ -3253,7 +3267,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
           /* "RSONParser.pyx":106
  *                 while offset_1 < buf_eof:
  *                     chr = buf[offset_1]
- *                     if chr == ' ' or chr == '\t' or chr == '\r' or chr == '\n' or chr == '\ufeff':             # <<<<<<<<<<<<<<
+ *                     if chr == 32 or chr == 9 or chr == 13 or chr == 10 or chr == 65279:             # <<<<<<<<<<<<<<
  *                         offset_1 +=1
  *                         count_1 +=1
  */
@@ -3334,7 +3348,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
  *             count = 0
  *             while offset < buf_eof:             # <<<<<<<<<<<<<<
  *                 chr = buf[offset]
- *                 if chr == ' ' or chr == '\t' or chr == '\r' or chr == '\n' or chr == '\ufeff':
+ *                 if chr == 32 or chr == 9 or chr == 13 or chr == 10 or chr == 65279:
  */
     while (1) {
       __pyx_t_7 = ((__pyx_v_offset < __pyx_v_buf_eof) != 0);
@@ -3344,7 +3358,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
  *             count = 0
  *             while offset < buf_eof:
  *                 chr = buf[offset]             # <<<<<<<<<<<<<<
- *                 if chr == ' ' or chr == '\t' or chr == '\r' or chr == '\n' or chr == '\ufeff':
+ *                 if chr == 32 or chr == 9 or chr == 13 or chr == 10 or chr == 65279:
  *                     offset +=1
  */
       __pyx_t_2 = __Pyx_GetItemInt_Unicode(__pyx_v_buf, __pyx_v_offset, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(__pyx_t_2 == (Py_UCS4)-1)) __PYX_ERR(0, 119, __pyx_L1_error)
@@ -3353,7 +3367,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
       /* "RSONParser.pyx":120
  *             while offset < buf_eof:
  *                 chr = buf[offset]
- *                 if chr == ' ' or chr == '\t' or chr == '\r' or chr == '\n' or chr == '\ufeff':             # <<<<<<<<<<<<<<
+ *                 if chr == 32 or chr == 9 or chr == 13 or chr == 10 or chr == 65279:             # <<<<<<<<<<<<<<
  *                     offset +=1
  *                     count +=1
  */
@@ -3366,7 +3380,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
 
         /* "RSONParser.pyx":121
  *                 chr = buf[offset]
- *                 if chr == ' ' or chr == '\t' or chr == '\r' or chr == '\n' or chr == '\ufeff':
+ *                 if chr == 32 or chr == 9 or chr == 13 or chr == 10 or chr == 65279:
  *                     offset +=1             # <<<<<<<<<<<<<<
  *                     count +=1
  *                 else:
@@ -3374,7 +3388,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
         __pyx_v_offset = (__pyx_v_offset + 1);
 
         /* "RSONParser.pyx":122
- *                 if chr == ' ' or chr == '\t' or chr == '\r' or chr == '\n' or chr == '\ufeff':
+ *                 if chr == 32 or chr == 9 or chr == 13 or chr == 10 or chr == 65279:
  *                     offset +=1
  *                     count +=1             # <<<<<<<<<<<<<<
  *                 else:
@@ -3385,7 +3399,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
         /* "RSONParser.pyx":120
  *             while offset < buf_eof:
  *                 chr = buf[offset]
- *                 if chr == ' ' or chr == '\t' or chr == '\r' or chr == '\n' or chr == '\ufeff':             # <<<<<<<<<<<<<<
+ *                 if chr == 32 or chr == 9 or chr == 13 or chr == 10 or chr == 65279:             # <<<<<<<<<<<<<<
  *                     offset +=1
  *                     count +=1
  */
@@ -3433,7 +3447,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
  * 
  *     cdef (int, int) parse_comment(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  */
 
   /* function exit code */
@@ -3455,12 +3469,12 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
  * 
  *     cdef (int, int) parse_rson_value(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  */
 
 static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, int __pyx_v_indent, int __pyx_v_buf_eof, PyObject *__pyx_v_children) {
   int __pyx_v_count;
-  Py_UNICODE __pyx_v_chr;
+  Py_UCS4 __pyx_v_chr;
   PyObject *__pyx_v_offset_1 = NULL;
   int __pyx_v_line_start_1;
   PyObject *__pyx_v_children_1 = NULL;
@@ -3479,7 +3493,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
   Py_ssize_t __pyx_t_5;
   int __pyx_t_6;
   PyObject *__pyx_t_7 = NULL;
-  Py_UNICODE __pyx_t_8;
+  long __pyx_t_8;
   PyObject *__pyx_t_9 = NULL;
   int __pyx_t_10;
   PyObject *__pyx_t_11 = NULL;
@@ -3490,7 +3504,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
 
   /* "RSONParser.pyx":133
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop             # <<<<<<<<<<<<<<
  *             while True: # start choice
  *                 offset_1 = offset
@@ -3498,7 +3512,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
   while (1) {
 
     /* "RSONParser.pyx":134
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop
  *             while True: # start choice             # <<<<<<<<<<<<<<
  *                 offset_1 = offset
@@ -3722,7 +3736,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
  *                                 offset_3 = -1
  *                                 break             # <<<<<<<<<<<<<<
  * 
- *                             chr = buf[offset_3]
+ *                             chr = ord(buf[offset_3])
  */
               goto __pyx_L13_break;
 
@@ -3738,22 +3752,22 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
             /* "RSONParser.pyx":155
  *                                 break
  * 
- *                             chr = buf[offset_3]             # <<<<<<<<<<<<<<
- *                             if 'a' <= chr <= 'z':
+ *                             chr = ord(buf[offset_3])             # <<<<<<<<<<<<<<
+ *                             if 97 <= chr <= 122:
  *                                 offset_3 += 1
  */
             __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 155, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_7);
-            __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_7); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 155, __pyx_L1_error)
+            __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_7); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 155, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
             __pyx_v_chr = __pyx_t_8;
 
             /* "RSONParser.pyx":156
  * 
- *                             chr = buf[offset_3]
- *                             if 'a' <= chr <= 'z':             # <<<<<<<<<<<<<<
+ *                             chr = ord(buf[offset_3])
+ *                             if 97 <= chr <= 122:             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
- *                             elif 'a' <= chr <= 'Z':
+ *                             elif 97 <= chr <= 90:
  */
             __pyx_t_6 = (97 <= __pyx_v_chr);
             if (__pyx_t_6) {
@@ -3763,10 +3777,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
             if (__pyx_t_3) {
 
               /* "RSONParser.pyx":157
- *                             chr = buf[offset_3]
- *                             if 'a' <= chr <= 'z':
+ *                             chr = ord(buf[offset_3])
+ *                             if 97 <= chr <= 122:
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
- *                             elif 'a' <= chr <= 'Z':
+ *                             elif 97 <= chr <= 90:
  *                                 offset_3 += 1
  */
               __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 157, __pyx_L1_error)
@@ -3776,18 +3790,18 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
 
               /* "RSONParser.pyx":156
  * 
- *                             chr = buf[offset_3]
- *                             if 'a' <= chr <= 'z':             # <<<<<<<<<<<<<<
+ *                             chr = ord(buf[offset_3])
+ *                             if 97 <= chr <= 122:             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
- *                             elif 'a' <= chr <= 'Z':
+ *                             elif 97 <= chr <= 90:
  */
               goto __pyx_L15;
             }
 
             /* "RSONParser.pyx":158
- *                             if 'a' <= chr <= 'z':
+ *                             if 97 <= chr <= 122:
  *                                 offset_3 += 1
- *                             elif 'a' <= chr <= 'Z':             # <<<<<<<<<<<<<<
+ *                             elif 97 <= chr <= 90:             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
  *                             else:
  */
@@ -3800,7 +3814,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
 
               /* "RSONParser.pyx":159
  *                                 offset_3 += 1
- *                             elif 'a' <= chr <= 'Z':
+ *                             elif 97 <= chr <= 90:
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
  *                             else:
  *                                 offset_3 = -1
@@ -3811,9 +3825,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
               __pyx_t_7 = 0;
 
               /* "RSONParser.pyx":158
- *                             if 'a' <= chr <= 'z':
+ *                             if 97 <= chr <= 122:
  *                                 offset_3 += 1
- *                             elif 'a' <= chr <= 'Z':             # <<<<<<<<<<<<<<
+ *                             elif 97 <= chr <= 90:             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
  *                             else:
  */
@@ -3909,7 +3923,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
  *                                     offset_4 = -1
  *                                     break             # <<<<<<<<<<<<<<
  * 
- *                                 chr = buf[offset_4]
+ *                                 chr = ord(buf[offset_4])
  */
                 goto __pyx_L17_break;
 
@@ -3925,22 +3939,22 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
               /* "RSONParser.pyx":172
  *                                     break
  * 
- *                                 chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                 if '0' <= chr <= '9':
+ *                                 chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                 if 48 <= chr <= 57:
  *                                     offset_4 += 1
  */
               __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 172, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_1);
-              __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 172, __pyx_L1_error)
+              __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_1); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 172, __pyx_L1_error)
               __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
               __pyx_v_chr = __pyx_t_8;
 
               /* "RSONParser.pyx":173
  * 
- *                                 chr = buf[offset_4]
- *                                 if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                 chr = ord(buf[offset_4])
+ *                                 if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                     offset_4 += 1
- *                                 elif 'a' <= chr <= 'z':
+ *                                 elif 97 <= chr <= 122:
  */
               __pyx_t_6 = (48 <= __pyx_v_chr);
               if (__pyx_t_6) {
@@ -3950,10 +3964,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
               if (__pyx_t_3) {
 
                 /* "RSONParser.pyx":174
- *                                 chr = buf[offset_4]
- *                                 if '0' <= chr <= '9':
+ *                                 chr = ord(buf[offset_4])
+ *                                 if 48 <= chr <= 57:
  *                                     offset_4 += 1             # <<<<<<<<<<<<<<
- *                                 elif 'a' <= chr <= 'z':
+ *                                 elif 97 <= chr <= 122:
  *                                     offset_4 += 1
  */
                 __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 174, __pyx_L1_error)
@@ -3963,20 +3977,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
 
                 /* "RSONParser.pyx":173
  * 
- *                                 chr = buf[offset_4]
- *                                 if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                 chr = ord(buf[offset_4])
+ *                                 if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                     offset_4 += 1
- *                                 elif 'a' <= chr <= 'z':
+ *                                 elif 97 <= chr <= 122:
  */
                 goto __pyx_L19;
               }
 
               /* "RSONParser.pyx":175
- *                                 if '0' <= chr <= '9':
+ *                                 if 48 <= chr <= 57:
  *                                     offset_4 += 1
- *                                 elif 'a' <= chr <= 'z':             # <<<<<<<<<<<<<<
+ *                                 elif 97 <= chr <= 122:             # <<<<<<<<<<<<<<
  *                                     offset_4 += 1
- *                                 elif 'A' <= chr <= 'Z':
+ *                                 elif 65 <= chr <= 90:
  */
               __pyx_t_3 = (97 <= __pyx_v_chr);
               if (__pyx_t_3) {
@@ -3987,9 +4001,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
 
                 /* "RSONParser.pyx":176
  *                                     offset_4 += 1
- *                                 elif 'a' <= chr <= 'z':
+ *                                 elif 97 <= chr <= 122:
  *                                     offset_4 += 1             # <<<<<<<<<<<<<<
- *                                 elif 'A' <= chr <= 'Z':
+ *                                 elif 65 <= chr <= 90:
  *                                     offset_4 += 1
  */
                 __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 176, __pyx_L1_error)
@@ -3998,21 +4012,21 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
                 __pyx_t_1 = 0;
 
                 /* "RSONParser.pyx":175
- *                                 if '0' <= chr <= '9':
+ *                                 if 48 <= chr <= 57:
  *                                     offset_4 += 1
- *                                 elif 'a' <= chr <= 'z':             # <<<<<<<<<<<<<<
+ *                                 elif 97 <= chr <= 122:             # <<<<<<<<<<<<<<
  *                                     offset_4 += 1
- *                                 elif 'A' <= chr <= 'Z':
+ *                                 elif 65 <= chr <= 90:
  */
                 goto __pyx_L19;
               }
 
               /* "RSONParser.pyx":177
- *                                 elif 'a' <= chr <= 'z':
+ *                                 elif 97 <= chr <= 122:
  *                                     offset_4 += 1
- *                                 elif 'A' <= chr <= 'Z':             # <<<<<<<<<<<<<<
+ *                                 elif 65 <= chr <= 90:             # <<<<<<<<<<<<<<
  *                                     offset_4 += 1
- *                                 elif chr == '_':
+ *                                 elif chr == 95:
  */
               __pyx_t_6 = (65 <= __pyx_v_chr);
               if (__pyx_t_6) {
@@ -4023,9 +4037,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
 
                 /* "RSONParser.pyx":178
  *                                     offset_4 += 1
- *                                 elif 'A' <= chr <= 'Z':
+ *                                 elif 65 <= chr <= 90:
  *                                     offset_4 += 1             # <<<<<<<<<<<<<<
- *                                 elif chr == '_':
+ *                                 elif chr == 95:
  *                                     offset_4 += 1
  */
                 __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 178, __pyx_L1_error)
@@ -4034,19 +4048,19 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
                 __pyx_t_1 = 0;
 
                 /* "RSONParser.pyx":177
- *                                 elif 'a' <= chr <= 'z':
+ *                                 elif 97 <= chr <= 122:
  *                                     offset_4 += 1
- *                                 elif 'A' <= chr <= 'Z':             # <<<<<<<<<<<<<<
+ *                                 elif 65 <= chr <= 90:             # <<<<<<<<<<<<<<
  *                                     offset_4 += 1
- *                                 elif chr == '_':
+ *                                 elif chr == 95:
  */
                 goto __pyx_L19;
               }
 
               /* "RSONParser.pyx":179
- *                                 elif 'A' <= chr <= 'Z':
+ *                                 elif 65 <= chr <= 90:
  *                                     offset_4 += 1
- *                                 elif chr == '_':             # <<<<<<<<<<<<<<
+ *                                 elif chr == 95:             # <<<<<<<<<<<<<<
  *                                     offset_4 += 1
  *                                 else:
  */
@@ -4055,7 +4069,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
 
                 /* "RSONParser.pyx":180
  *                                     offset_4 += 1
- *                                 elif chr == '_':
+ *                                 elif chr == 95:
  *                                     offset_4 += 1             # <<<<<<<<<<<<<<
  *                                 else:
  *                                     offset_4 = -1
@@ -4066,9 +4080,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
                 __pyx_t_1 = 0;
 
                 /* "RSONParser.pyx":179
- *                                 elif 'A' <= chr <= 'Z':
+ *                                 elif 65 <= chr <= 90:
  *                                     offset_4 += 1
- *                                 elif chr == '_':             # <<<<<<<<<<<<<<
+ *                                 elif chr == 95:             # <<<<<<<<<<<<<<
  *                                     offset_4 += 1
  *                                 else:
  */
@@ -4989,7 +5003,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
  * 
  *     cdef (int, int) parse_rson_value(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  */
 
   /* function exit code */
@@ -5018,7 +5032,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
  * 
  *     cdef (int, int) parse_rson_literal(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  */
 
 static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, int __pyx_v_indent, int __pyx_v_buf_eof, PyObject *__pyx_v_children) {
@@ -5037,7 +5051,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
 
   /* "RSONParser.pyx":255
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop             # <<<<<<<<<<<<<<
  *             while True: # start choice
  *                 offset_1 = offset
@@ -5045,7 +5059,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
   while (1) {
 
     /* "RSONParser.pyx":256
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop
  *             while True: # start choice             # <<<<<<<<<<<<<<
  *                 offset_1 = offset
@@ -6067,7 +6081,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
  * 
  *     cdef (int, int) parse_rson_literal(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  */
 
   /* function exit code */
@@ -6086,7 +6100,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
  * 
  *     cdef (int, int) parse_rson_true(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  */
 
 static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_true(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, CYTHON_UNUSED int __pyx_v_indent, CYTHON_UNUSED int __pyx_v_buf_eof, PyObject *__pyx_v_children) {
@@ -6112,7 +6126,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_true(st
 
   /* "RSONParser.pyx":373
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop             # <<<<<<<<<<<<<<
  *             offset_1 = offset
  *             children_1 = []
@@ -6120,7 +6134,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_true(st
   while (1) {
 
     /* "RSONParser.pyx":374
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop
  *             offset_1 = offset             # <<<<<<<<<<<<<<
  *             children_1 = []
@@ -6496,7 +6510,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_true(st
  * 
  *     cdef (int, int) parse_rson_true(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  */
 
   /* function exit code */
@@ -6521,7 +6535,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_true(st
  * 
  *     cdef (int, int) parse_rson_false(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  */
 
 static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_false(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, CYTHON_UNUSED int __pyx_v_indent, CYTHON_UNUSED int __pyx_v_buf_eof, PyObject *__pyx_v_children) {
@@ -6547,7 +6561,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_false(s
 
   /* "RSONParser.pyx":399
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop             # <<<<<<<<<<<<<<
  *             offset_1 = offset
  *             children_1 = []
@@ -6555,7 +6569,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_false(s
   while (1) {
 
     /* "RSONParser.pyx":400
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop
  *             offset_1 = offset             # <<<<<<<<<<<<<<
  *             children_1 = []
@@ -6931,7 +6945,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_false(s
  * 
  *     cdef (int, int) parse_rson_false(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  */
 
   /* function exit code */
@@ -6956,7 +6970,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_false(s
  * 
  *     cdef (int, int) parse_rson_null(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  */
 
 static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_null(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, CYTHON_UNUSED int __pyx_v_indent, CYTHON_UNUSED int __pyx_v_buf_eof, PyObject *__pyx_v_children) {
@@ -6982,7 +6996,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_null(st
 
   /* "RSONParser.pyx":425
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop             # <<<<<<<<<<<<<<
  *             offset_1 = offset
  *             children_1 = []
@@ -6990,7 +7004,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_null(st
   while (1) {
 
     /* "RSONParser.pyx":426
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop
  *             offset_1 = offset             # <<<<<<<<<<<<<<
  *             children_1 = []
@@ -7366,7 +7380,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_null(st
  * 
  *     cdef (int, int) parse_rson_null(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  */
 
   /* function exit code */
@@ -7391,12 +7405,12 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_null(st
  * 
  *     cdef (int, int) parse_rson_number(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  */
 
 static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, CYTHON_UNUSED int __pyx_v_indent, int __pyx_v_buf_eof, PyObject *__pyx_v_children) {
   int __pyx_v_count;
-  Py_UNICODE __pyx_v_chr;
+  Py_UCS4 __pyx_v_chr;
   PyObject *__pyx_v_offset_1 = NULL;
   PyObject *__pyx_v_children_1 = NULL;
   PyObject *__pyx_v_offset_2 = NULL;
@@ -7416,7 +7430,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
   PyObject *__pyx_t_1 = NULL;
   PyObject *__pyx_t_2 = NULL;
   int __pyx_t_3;
-  Py_UNICODE __pyx_t_4;
+  long __pyx_t_4;
   Py_ssize_t __pyx_t_5;
   Py_ssize_t __pyx_t_6;
   Py_ssize_t __pyx_t_7;
@@ -7432,7 +7446,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
 
   /* "RSONParser.pyx":451
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop             # <<<<<<<<<<<<<<
  *             offset_1 = offset
  *             children_1 = []
@@ -7440,7 +7454,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
   while (1) {
 
     /* "RSONParser.pyx":452
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop
  *             offset_1 = offset             # <<<<<<<<<<<<<<
  *             children_1 = []
@@ -7588,7 +7602,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                                 offset_3 = -1
  *                                 break             # <<<<<<<<<<<<<<
  * 
- *                             chr = buf[offset_3]
+ *                             chr = ord(buf[offset_3])
  */
               goto __pyx_L12_break;
 
@@ -7604,31 +7618,31 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
             /* "RSONParser.pyx":468
  *                                 break
  * 
- *                             chr = buf[offset_3]             # <<<<<<<<<<<<<<
- *                             if chr == '-':
+ *                             chr = ord(buf[offset_3])             # <<<<<<<<<<<<<<
+ *                             if chr == 45:
  *                                 offset_3 += 1
  */
             __pyx_t_2 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 468, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_2);
-            __pyx_t_4 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_2); if (unlikely((__pyx_t_4 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 468, __pyx_L1_error)
+            __pyx_t_4 = __Pyx_PyObject_Ord(__pyx_t_2); if (unlikely(__pyx_t_4 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 468, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
             __pyx_v_chr = __pyx_t_4;
 
             /* "RSONParser.pyx":469
  * 
- *                             chr = buf[offset_3]
- *                             if chr == '-':             # <<<<<<<<<<<<<<
+ *                             chr = ord(buf[offset_3])
+ *                             if chr == 45:             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
- *                             elif chr == '+':
+ *                             elif chr == 43:
  */
             switch (__pyx_v_chr) {
               case 45:
 
               /* "RSONParser.pyx":470
- *                             chr = buf[offset_3]
- *                             if chr == '-':
+ *                             chr = ord(buf[offset_3])
+ *                             if chr == 45:
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
- *                             elif chr == '+':
+ *                             elif chr == 43:
  *                                 offset_3 += 1
  */
               __pyx_t_2 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 470, __pyx_L1_error)
@@ -7638,17 +7652,17 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
 
               /* "RSONParser.pyx":469
  * 
- *                             chr = buf[offset_3]
- *                             if chr == '-':             # <<<<<<<<<<<<<<
+ *                             chr = ord(buf[offset_3])
+ *                             if chr == 45:             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
- *                             elif chr == '+':
+ *                             elif chr == 43:
  */
               break;
               case 43:
 
               /* "RSONParser.pyx":472
  *                                 offset_3 += 1
- *                             elif chr == '+':
+ *                             elif chr == 43:
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
  *                             else:
  *                                 offset_3 = -1
@@ -7659,9 +7673,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
               __pyx_t_2 = 0;
 
               /* "RSONParser.pyx":471
- *                             if chr == '-':
+ *                             if chr == 45:
  *                                 offset_3 += 1
- *                             elif chr == '+':             # <<<<<<<<<<<<<<
+ *                             elif chr == 43:             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
  *                             else:
  */
@@ -7845,7 +7859,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                             offset_2 = -1
  *                             break             # <<<<<<<<<<<<<<
  * 
- *                         chr = buf[offset_2]
+ *                         chr = ord(buf[offset_2])
  */
             goto __pyx_L10_break;
 
@@ -7861,22 +7875,22 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
           /* "RSONParser.pyx":492
  *                             break
  * 
- *                         chr = buf[offset_2]             # <<<<<<<<<<<<<<
- *                         if '0' <= chr <= '9':
+ *                         chr = ord(buf[offset_2])             # <<<<<<<<<<<<<<
+ *                         if 48 <= chr <= 57:
  *                             offset_2 += 1
  */
           __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 492, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_4 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_4 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 492, __pyx_L1_error)
+          __pyx_t_4 = __Pyx_PyObject_Ord(__pyx_t_1); if (unlikely(__pyx_t_4 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 492, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
           __pyx_v_chr = __pyx_t_4;
 
           /* "RSONParser.pyx":493
  * 
- *                         chr = buf[offset_2]
- *                         if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                         chr = ord(buf[offset_2])
+ *                         if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                             offset_2 += 1
- *                         elif 'A' <= chr <= 'F':
+ *                         elif 65 <= chr <= 70:
  */
           __pyx_t_8 = (48 <= __pyx_v_chr);
           if (__pyx_t_8) {
@@ -7886,10 +7900,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
           if (__pyx_t_3) {
 
             /* "RSONParser.pyx":494
- *                         chr = buf[offset_2]
- *                         if '0' <= chr <= '9':
+ *                         chr = ord(buf[offset_2])
+ *                         if 48 <= chr <= 57:
  *                             offset_2 += 1             # <<<<<<<<<<<<<<
- *                         elif 'A' <= chr <= 'F':
+ *                         elif 65 <= chr <= 70:
  *                             offset_2 += 1
  */
             __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_2, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 494, __pyx_L1_error)
@@ -7899,20 +7913,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
 
             /* "RSONParser.pyx":493
  * 
- *                         chr = buf[offset_2]
- *                         if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                         chr = ord(buf[offset_2])
+ *                         if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                             offset_2 += 1
- *                         elif 'A' <= chr <= 'F':
+ *                         elif 65 <= chr <= 70:
  */
             goto __pyx_L17;
           }
 
           /* "RSONParser.pyx":495
- *                         if '0' <= chr <= '9':
+ *                         if 48 <= chr <= 57:
  *                             offset_2 += 1
- *                         elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                         elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                             offset_2 += 1
- *                         elif 'a' <= chr <= 'f':
+ *                         elif 97 <= chr <= 102:
  */
           __pyx_t_3 = (65 <= __pyx_v_chr);
           if (__pyx_t_3) {
@@ -7923,9 +7937,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
 
             /* "RSONParser.pyx":496
  *                             offset_2 += 1
- *                         elif 'A' <= chr <= 'F':
+ *                         elif 65 <= chr <= 70:
  *                             offset_2 += 1             # <<<<<<<<<<<<<<
- *                         elif 'a' <= chr <= 'f':
+ *                         elif 97 <= chr <= 102:
  *                             offset_2 += 1
  */
             __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_2, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 496, __pyx_L1_error)
@@ -7934,19 +7948,19 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
             __pyx_t_1 = 0;
 
             /* "RSONParser.pyx":495
- *                         if '0' <= chr <= '9':
+ *                         if 48 <= chr <= 57:
  *                             offset_2 += 1
- *                         elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                         elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                             offset_2 += 1
- *                         elif 'a' <= chr <= 'f':
+ *                         elif 97 <= chr <= 102:
  */
             goto __pyx_L17;
           }
 
           /* "RSONParser.pyx":497
- *                         elif 'A' <= chr <= 'F':
+ *                         elif 65 <= chr <= 70:
  *                             offset_2 += 1
- *                         elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                         elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                             offset_2 += 1
  *                         else:
  */
@@ -7959,7 +7973,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
 
             /* "RSONParser.pyx":498
  *                             offset_2 += 1
- *                         elif 'a' <= chr <= 'f':
+ *                         elif 97 <= chr <= 102:
  *                             offset_2 += 1             # <<<<<<<<<<<<<<
  *                         else:
  *                             offset_2 = -1
@@ -7970,9 +7984,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
             __pyx_t_1 = 0;
 
             /* "RSONParser.pyx":497
- *                         elif 'A' <= chr <= 'F':
+ *                         elif 65 <= chr <= 70:
  *                             offset_2 += 1
- *                         elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                         elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                             offset_2 += 1
  *                         else:
  */
@@ -8068,7 +8082,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                                 offset_3 = -1
  *                                 break             # <<<<<<<<<<<<<<
  * 
- *                             chr = buf[offset_3]
+ *                             chr = ord(buf[offset_3])
  */
               goto __pyx_L19_break;
 
@@ -8084,22 +8098,22 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
             /* "RSONParser.pyx":511
  *                                 break
  * 
- *                             chr = buf[offset_3]             # <<<<<<<<<<<<<<
- *                             if '0' <= chr <= '9':
+ *                             chr = ord(buf[offset_3])             # <<<<<<<<<<<<<<
+ *                             if 48 <= chr <= 57:
  *                                 offset_3 += 1
  */
             __pyx_t_2 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 511, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_2);
-            __pyx_t_4 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_2); if (unlikely((__pyx_t_4 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 511, __pyx_L1_error)
+            __pyx_t_4 = __Pyx_PyObject_Ord(__pyx_t_2); if (unlikely(__pyx_t_4 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 511, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
             __pyx_v_chr = __pyx_t_4;
 
             /* "RSONParser.pyx":512
  * 
- *                             chr = buf[offset_3]
- *                             if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                             chr = ord(buf[offset_3])
+ *                             if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
- *                             elif 'A' <= chr <= 'F':
+ *                             elif 65 <= chr <= 70:
  */
             __pyx_t_3 = (48 <= __pyx_v_chr);
             if (__pyx_t_3) {
@@ -8109,10 +8123,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
             if (__pyx_t_8) {
 
               /* "RSONParser.pyx":513
- *                             chr = buf[offset_3]
- *                             if '0' <= chr <= '9':
+ *                             chr = ord(buf[offset_3])
+ *                             if 48 <= chr <= 57:
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
- *                             elif 'A' <= chr <= 'F':
+ *                             elif 65 <= chr <= 70:
  *                                 offset_3 += 1
  */
               __pyx_t_2 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 513, __pyx_L1_error)
@@ -8122,20 +8136,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
 
               /* "RSONParser.pyx":512
  * 
- *                             chr = buf[offset_3]
- *                             if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                             chr = ord(buf[offset_3])
+ *                             if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
- *                             elif 'A' <= chr <= 'F':
+ *                             elif 65 <= chr <= 70:
  */
               goto __pyx_L21;
             }
 
             /* "RSONParser.pyx":514
- *                             if '0' <= chr <= '9':
+ *                             if 48 <= chr <= 57:
  *                                 offset_3 += 1
- *                             elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                             elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
- *                             elif 'a' <= chr <= 'f':
+ *                             elif 97 <= chr <= 102:
  */
             __pyx_t_8 = (65 <= __pyx_v_chr);
             if (__pyx_t_8) {
@@ -8146,9 +8160,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
 
               /* "RSONParser.pyx":515
  *                                 offset_3 += 1
- *                             elif 'A' <= chr <= 'F':
+ *                             elif 65 <= chr <= 70:
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
- *                             elif 'a' <= chr <= 'f':
+ *                             elif 97 <= chr <= 102:
  *                                 offset_3 += 1
  */
               __pyx_t_2 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 515, __pyx_L1_error)
@@ -8157,21 +8171,21 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
               __pyx_t_2 = 0;
 
               /* "RSONParser.pyx":514
- *                             if '0' <= chr <= '9':
+ *                             if 48 <= chr <= 57:
  *                                 offset_3 += 1
- *                             elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                             elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
- *                             elif 'a' <= chr <= 'f':
+ *                             elif 97 <= chr <= 102:
  */
               goto __pyx_L21;
             }
 
             /* "RSONParser.pyx":516
- *                             elif 'A' <= chr <= 'F':
+ *                             elif 65 <= chr <= 70:
  *                                 offset_3 += 1
- *                             elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                             elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
- *                             elif chr == '_':
+ *                             elif chr == 95:
  */
             __pyx_t_3 = (97 <= __pyx_v_chr);
             if (__pyx_t_3) {
@@ -8182,9 +8196,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
 
               /* "RSONParser.pyx":517
  *                                 offset_3 += 1
- *                             elif 'a' <= chr <= 'f':
+ *                             elif 97 <= chr <= 102:
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
- *                             elif chr == '_':
+ *                             elif chr == 95:
  *                                 offset_3 += 1
  */
               __pyx_t_2 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 517, __pyx_L1_error)
@@ -8193,19 +8207,19 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
               __pyx_t_2 = 0;
 
               /* "RSONParser.pyx":516
- *                             elif 'A' <= chr <= 'F':
+ *                             elif 65 <= chr <= 70:
  *                                 offset_3 += 1
- *                             elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                             elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
- *                             elif chr == '_':
+ *                             elif chr == 95:
  */
               goto __pyx_L21;
             }
 
             /* "RSONParser.pyx":518
- *                             elif 'a' <= chr <= 'f':
+ *                             elif 97 <= chr <= 102:
  *                                 offset_3 += 1
- *                             elif chr == '_':             # <<<<<<<<<<<<<<
+ *                             elif chr == 95:             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
  *                             else:
  */
@@ -8214,7 +8228,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
 
               /* "RSONParser.pyx":519
  *                                 offset_3 += 1
- *                             elif chr == '_':
+ *                             elif chr == 95:
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
  *                             else:
  *                                 offset_3 = -1
@@ -8225,9 +8239,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
               __pyx_t_2 = 0;
 
               /* "RSONParser.pyx":518
- *                             elif 'a' <= chr <= 'f':
+ *                             elif 97 <= chr <= 102:
  *                                 offset_3 += 1
- *                             elif chr == '_':             # <<<<<<<<<<<<<<
+ *                             elif chr == 95:             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
  *                             else:
  */
@@ -8477,7 +8491,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                                 offset_3 = -1
  *                                 break             # <<<<<<<<<<<<<<
  * 
- *                             chr = buf[offset_3]
+ *                             chr = ord(buf[offset_3])
  */
               goto __pyx_L27_break;
 
@@ -8493,31 +8507,31 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
             /* "RSONParser.pyx":549
  *                                 break
  * 
- *                             chr = buf[offset_3]             # <<<<<<<<<<<<<<
- *                             if chr == '-':
+ *                             chr = ord(buf[offset_3])             # <<<<<<<<<<<<<<
+ *                             if chr == 45:
  *                                 offset_3 += 1
  */
             __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 549, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
-            __pyx_t_4 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_4 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 549, __pyx_L1_error)
+            __pyx_t_4 = __Pyx_PyObject_Ord(__pyx_t_1); if (unlikely(__pyx_t_4 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 549, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
             __pyx_v_chr = __pyx_t_4;
 
             /* "RSONParser.pyx":550
  * 
- *                             chr = buf[offset_3]
- *                             if chr == '-':             # <<<<<<<<<<<<<<
+ *                             chr = ord(buf[offset_3])
+ *                             if chr == 45:             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
- *                             elif chr == '+':
+ *                             elif chr == 43:
  */
             switch (__pyx_v_chr) {
               case 45:
 
               /* "RSONParser.pyx":551
- *                             chr = buf[offset_3]
- *                             if chr == '-':
+ *                             chr = ord(buf[offset_3])
+ *                             if chr == 45:
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
- *                             elif chr == '+':
+ *                             elif chr == 43:
  *                                 offset_3 += 1
  */
               __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 551, __pyx_L1_error)
@@ -8527,17 +8541,17 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
 
               /* "RSONParser.pyx":550
  * 
- *                             chr = buf[offset_3]
- *                             if chr == '-':             # <<<<<<<<<<<<<<
+ *                             chr = ord(buf[offset_3])
+ *                             if chr == 45:             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
- *                             elif chr == '+':
+ *                             elif chr == 43:
  */
               break;
               case 43:
 
               /* "RSONParser.pyx":553
  *                                 offset_3 += 1
- *                             elif chr == '+':
+ *                             elif chr == 43:
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
  *                             else:
  *                                 offset_3 = -1
@@ -8548,9 +8562,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
               __pyx_t_1 = 0;
 
               /* "RSONParser.pyx":552
- *                             if chr == '-':
+ *                             if chr == 45:
  *                                 offset_3 += 1
- *                             elif chr == '+':             # <<<<<<<<<<<<<<
+ *                             elif chr == 43:             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
  *                             else:
  */
@@ -8734,7 +8748,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                             offset_2 = -1
  *                             break             # <<<<<<<<<<<<<<
  * 
- *                         chr = buf[offset_2]
+ *                         chr = ord(buf[offset_2])
  */
             goto __pyx_L25_break;
 
@@ -8750,20 +8764,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
           /* "RSONParser.pyx":573
  *                             break
  * 
- *                         chr = buf[offset_2]             # <<<<<<<<<<<<<<
- *                         if '0' <= chr <= '8':
+ *                         chr = ord(buf[offset_2])             # <<<<<<<<<<<<<<
+ *                         if 48 <= chr <= 56:
  *                             offset_2 += 1
  */
           __pyx_t_2 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 573, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_2);
-          __pyx_t_4 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_2); if (unlikely((__pyx_t_4 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 573, __pyx_L1_error)
+          __pyx_t_4 = __Pyx_PyObject_Ord(__pyx_t_2); if (unlikely(__pyx_t_4 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 573, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
           __pyx_v_chr = __pyx_t_4;
 
           /* "RSONParser.pyx":574
  * 
- *                         chr = buf[offset_2]
- *                         if '0' <= chr <= '8':             # <<<<<<<<<<<<<<
+ *                         chr = ord(buf[offset_2])
+ *                         if 48 <= chr <= 56:             # <<<<<<<<<<<<<<
  *                             offset_2 += 1
  *                         else:
  */
@@ -8775,8 +8789,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
           if (__pyx_t_8) {
 
             /* "RSONParser.pyx":575
- *                         chr = buf[offset_2]
- *                         if '0' <= chr <= '8':
+ *                         chr = ord(buf[offset_2])
+ *                         if 48 <= chr <= 56:
  *                             offset_2 += 1             # <<<<<<<<<<<<<<
  *                         else:
  *                             offset_2 = -1
@@ -8788,8 +8802,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
 
             /* "RSONParser.pyx":574
  * 
- *                         chr = buf[offset_2]
- *                         if '0' <= chr <= '8':             # <<<<<<<<<<<<<<
+ *                         chr = ord(buf[offset_2])
+ *                         if 48 <= chr <= 56:             # <<<<<<<<<<<<<<
  *                             offset_2 += 1
  *                         else:
  */
@@ -8885,7 +8899,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                                 offset_3 = -1
  *                                 break             # <<<<<<<<<<<<<<
  * 
- *                             chr = buf[offset_3]
+ *                             chr = ord(buf[offset_3])
  */
               goto __pyx_L34_break;
 
@@ -8901,22 +8915,22 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
             /* "RSONParser.pyx":588
  *                                 break
  * 
- *                             chr = buf[offset_3]             # <<<<<<<<<<<<<<
- *                             if '0' <= chr <= '8':
+ *                             chr = ord(buf[offset_3])             # <<<<<<<<<<<<<<
+ *                             if 48 <= chr <= 56:
  *                                 offset_3 += 1
  */
             __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 588, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
-            __pyx_t_4 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_4 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 588, __pyx_L1_error)
+            __pyx_t_4 = __Pyx_PyObject_Ord(__pyx_t_1); if (unlikely(__pyx_t_4 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 588, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
             __pyx_v_chr = __pyx_t_4;
 
             /* "RSONParser.pyx":589
  * 
- *                             chr = buf[offset_3]
- *                             if '0' <= chr <= '8':             # <<<<<<<<<<<<<<
+ *                             chr = ord(buf[offset_3])
+ *                             if 48 <= chr <= 56:             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
- *                             elif chr == '_':
+ *                             elif chr == 95:
  */
             __pyx_t_8 = (48 <= __pyx_v_chr);
             if (__pyx_t_8) {
@@ -8926,10 +8940,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
             if (__pyx_t_3) {
 
               /* "RSONParser.pyx":590
- *                             chr = buf[offset_3]
- *                             if '0' <= chr <= '8':
+ *                             chr = ord(buf[offset_3])
+ *                             if 48 <= chr <= 56:
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
- *                             elif chr == '_':
+ *                             elif chr == 95:
  *                                 offset_3 += 1
  */
               __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 590, __pyx_L1_error)
@@ -8939,18 +8953,18 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
 
               /* "RSONParser.pyx":589
  * 
- *                             chr = buf[offset_3]
- *                             if '0' <= chr <= '8':             # <<<<<<<<<<<<<<
+ *                             chr = ord(buf[offset_3])
+ *                             if 48 <= chr <= 56:             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
- *                             elif chr == '_':
+ *                             elif chr == 95:
  */
               goto __pyx_L36;
             }
 
             /* "RSONParser.pyx":591
- *                             if '0' <= chr <= '8':
+ *                             if 48 <= chr <= 56:
  *                                 offset_3 += 1
- *                             elif chr == '_':             # <<<<<<<<<<<<<<
+ *                             elif chr == 95:             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
  *                             else:
  */
@@ -8959,7 +8973,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
 
               /* "RSONParser.pyx":592
  *                                 offset_3 += 1
- *                             elif chr == '_':
+ *                             elif chr == 95:
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
  *                             else:
  *                                 offset_3 = -1
@@ -8970,9 +8984,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
               __pyx_t_1 = 0;
 
               /* "RSONParser.pyx":591
- *                             if '0' <= chr <= '8':
+ *                             if 48 <= chr <= 56:
  *                                 offset_3 += 1
- *                             elif chr == '_':             # <<<<<<<<<<<<<<
+ *                             elif chr == 95:             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
  *                             else:
  */
@@ -9222,7 +9236,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                                 offset_3 = -1
  *                                 break             # <<<<<<<<<<<<<<
  * 
- *                             chr = buf[offset_3]
+ *                             chr = ord(buf[offset_3])
  */
               goto __pyx_L42_break;
 
@@ -9238,31 +9252,31 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
             /* "RSONParser.pyx":622
  *                                 break
  * 
- *                             chr = buf[offset_3]             # <<<<<<<<<<<<<<
- *                             if chr == '-':
+ *                             chr = ord(buf[offset_3])             # <<<<<<<<<<<<<<
+ *                             if chr == 45:
  *                                 offset_3 += 1
  */
             __pyx_t_2 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 622, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_2);
-            __pyx_t_4 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_2); if (unlikely((__pyx_t_4 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 622, __pyx_L1_error)
+            __pyx_t_4 = __Pyx_PyObject_Ord(__pyx_t_2); if (unlikely(__pyx_t_4 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 622, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
             __pyx_v_chr = __pyx_t_4;
 
             /* "RSONParser.pyx":623
  * 
- *                             chr = buf[offset_3]
- *                             if chr == '-':             # <<<<<<<<<<<<<<
+ *                             chr = ord(buf[offset_3])
+ *                             if chr == 45:             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
- *                             elif chr == '+':
+ *                             elif chr == 43:
  */
             switch (__pyx_v_chr) {
               case 45:
 
               /* "RSONParser.pyx":624
- *                             chr = buf[offset_3]
- *                             if chr == '-':
+ *                             chr = ord(buf[offset_3])
+ *                             if chr == 45:
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
- *                             elif chr == '+':
+ *                             elif chr == 43:
  *                                 offset_3 += 1
  */
               __pyx_t_2 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 624, __pyx_L1_error)
@@ -9272,17 +9286,17 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
 
               /* "RSONParser.pyx":623
  * 
- *                             chr = buf[offset_3]
- *                             if chr == '-':             # <<<<<<<<<<<<<<
+ *                             chr = ord(buf[offset_3])
+ *                             if chr == 45:             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
- *                             elif chr == '+':
+ *                             elif chr == 43:
  */
               break;
               case 43:
 
               /* "RSONParser.pyx":626
  *                                 offset_3 += 1
- *                             elif chr == '+':
+ *                             elif chr == 43:
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
  *                             else:
  *                                 offset_3 = -1
@@ -9293,9 +9307,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
               __pyx_t_2 = 0;
 
               /* "RSONParser.pyx":625
- *                             if chr == '-':
+ *                             if chr == 45:
  *                                 offset_3 += 1
- *                             elif chr == '+':             # <<<<<<<<<<<<<<
+ *                             elif chr == 43:             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
  *                             else:
  */
@@ -9479,7 +9493,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                             offset_2 = -1
  *                             break             # <<<<<<<<<<<<<<
  * 
- *                         chr = buf[offset_2]
+ *                         chr = ord(buf[offset_2])
  */
             goto __pyx_L40_break;
 
@@ -9495,20 +9509,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
           /* "RSONParser.pyx":646
  *                             break
  * 
- *                         chr = buf[offset_2]             # <<<<<<<<<<<<<<
- *                         if '0' <= chr <= '1':
+ *                         chr = ord(buf[offset_2])             # <<<<<<<<<<<<<<
+ *                         if 48 <= chr <= 49:
  *                             offset_2 += 1
  */
           __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 646, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_4 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_4 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 646, __pyx_L1_error)
+          __pyx_t_4 = __Pyx_PyObject_Ord(__pyx_t_1); if (unlikely(__pyx_t_4 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 646, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
           __pyx_v_chr = __pyx_t_4;
 
           /* "RSONParser.pyx":647
  * 
- *                         chr = buf[offset_2]
- *                         if '0' <= chr <= '1':             # <<<<<<<<<<<<<<
+ *                         chr = ord(buf[offset_2])
+ *                         if 48 <= chr <= 49:             # <<<<<<<<<<<<<<
  *                             offset_2 += 1
  *                         else:
  */
@@ -9520,8 +9534,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
           if (__pyx_t_3) {
 
             /* "RSONParser.pyx":648
- *                         chr = buf[offset_2]
- *                         if '0' <= chr <= '1':
+ *                         chr = ord(buf[offset_2])
+ *                         if 48 <= chr <= 49:
  *                             offset_2 += 1             # <<<<<<<<<<<<<<
  *                         else:
  *                             offset_2 = -1
@@ -9533,8 +9547,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
 
             /* "RSONParser.pyx":647
  * 
- *                         chr = buf[offset_2]
- *                         if '0' <= chr <= '1':             # <<<<<<<<<<<<<<
+ *                         chr = ord(buf[offset_2])
+ *                         if 48 <= chr <= 49:             # <<<<<<<<<<<<<<
  *                             offset_2 += 1
  *                         else:
  */
@@ -9630,7 +9644,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                                 offset_3 = -1
  *                                 break             # <<<<<<<<<<<<<<
  * 
- *                             chr = buf[offset_3]
+ *                             chr = ord(buf[offset_3])
  */
               goto __pyx_L49_break;
 
@@ -9646,22 +9660,22 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
             /* "RSONParser.pyx":661
  *                                 break
  * 
- *                             chr = buf[offset_3]             # <<<<<<<<<<<<<<
- *                             if '0' <= chr <= '1':
+ *                             chr = ord(buf[offset_3])             # <<<<<<<<<<<<<<
+ *                             if 48 <= chr <= 49:
  *                                 offset_3 += 1
  */
             __pyx_t_2 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 661, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_2);
-            __pyx_t_4 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_2); if (unlikely((__pyx_t_4 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 661, __pyx_L1_error)
+            __pyx_t_4 = __Pyx_PyObject_Ord(__pyx_t_2); if (unlikely(__pyx_t_4 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 661, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
             __pyx_v_chr = __pyx_t_4;
 
             /* "RSONParser.pyx":662
  * 
- *                             chr = buf[offset_3]
- *                             if '0' <= chr <= '1':             # <<<<<<<<<<<<<<
+ *                             chr = ord(buf[offset_3])
+ *                             if 48 <= chr <= 49:             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
- *                             elif chr == '_':
+ *                             elif chr == 95:
  */
             __pyx_t_3 = (48 <= __pyx_v_chr);
             if (__pyx_t_3) {
@@ -9671,10 +9685,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
             if (__pyx_t_8) {
 
               /* "RSONParser.pyx":663
- *                             chr = buf[offset_3]
- *                             if '0' <= chr <= '1':
+ *                             chr = ord(buf[offset_3])
+ *                             if 48 <= chr <= 49:
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
- *                             elif chr == '_':
+ *                             elif chr == 95:
  *                                 offset_3 += 1
  */
               __pyx_t_2 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 663, __pyx_L1_error)
@@ -9684,18 +9698,18 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
 
               /* "RSONParser.pyx":662
  * 
- *                             chr = buf[offset_3]
- *                             if '0' <= chr <= '1':             # <<<<<<<<<<<<<<
+ *                             chr = ord(buf[offset_3])
+ *                             if 48 <= chr <= 49:             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
- *                             elif chr == '_':
+ *                             elif chr == 95:
  */
               goto __pyx_L51;
             }
 
             /* "RSONParser.pyx":664
- *                             if '0' <= chr <= '1':
+ *                             if 48 <= chr <= 49:
  *                                 offset_3 += 1
- *                             elif chr == '_':             # <<<<<<<<<<<<<<
+ *                             elif chr == 95:             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
  *                             else:
  */
@@ -9704,7 +9718,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
 
               /* "RSONParser.pyx":665
  *                                 offset_3 += 1
- *                             elif chr == '_':
+ *                             elif chr == 95:
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
  *                             else:
  *                                 offset_3 = -1
@@ -9715,9 +9729,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
               __pyx_t_2 = 0;
 
               /* "RSONParser.pyx":664
- *                             if '0' <= chr <= '1':
+ *                             if 48 <= chr <= 49:
  *                                 offset_3 += 1
- *                             elif chr == '_':             # <<<<<<<<<<<<<<
+ *                             elif chr == 95:             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
  *                             else:
  */
@@ -9967,7 +9981,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                                 offset_3 = -1
  *                                 break             # <<<<<<<<<<<<<<
  * 
- *                             chr = buf[offset_3]
+ *                             chr = ord(buf[offset_3])
  */
               goto __pyx_L57_break;
 
@@ -9983,31 +9997,31 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
             /* "RSONParser.pyx":695
  *                                 break
  * 
- *                             chr = buf[offset_3]             # <<<<<<<<<<<<<<
- *                             if chr == '-':
+ *                             chr = ord(buf[offset_3])             # <<<<<<<<<<<<<<
+ *                             if chr == 45:
  *                                 offset_3 += 1
  */
             __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 695, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
-            __pyx_t_4 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_4 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 695, __pyx_L1_error)
+            __pyx_t_4 = __Pyx_PyObject_Ord(__pyx_t_1); if (unlikely(__pyx_t_4 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 695, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
             __pyx_v_chr = __pyx_t_4;
 
             /* "RSONParser.pyx":696
  * 
- *                             chr = buf[offset_3]
- *                             if chr == '-':             # <<<<<<<<<<<<<<
+ *                             chr = ord(buf[offset_3])
+ *                             if chr == 45:             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
- *                             elif chr == '+':
+ *                             elif chr == 43:
  */
             switch (__pyx_v_chr) {
               case 45:
 
               /* "RSONParser.pyx":697
- *                             chr = buf[offset_3]
- *                             if chr == '-':
+ *                             chr = ord(buf[offset_3])
+ *                             if chr == 45:
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
- *                             elif chr == '+':
+ *                             elif chr == 43:
  *                                 offset_3 += 1
  */
               __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 697, __pyx_L1_error)
@@ -10017,17 +10031,17 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
 
               /* "RSONParser.pyx":696
  * 
- *                             chr = buf[offset_3]
- *                             if chr == '-':             # <<<<<<<<<<<<<<
+ *                             chr = ord(buf[offset_3])
+ *                             if chr == 45:             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
- *                             elif chr == '+':
+ *                             elif chr == 43:
  */
               break;
               case 43:
 
               /* "RSONParser.pyx":699
  *                                 offset_3 += 1
- *                             elif chr == '+':
+ *                             elif chr == 43:
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
  *                             else:
  *                                 offset_3 = -1
@@ -10038,9 +10052,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
               __pyx_t_1 = 0;
 
               /* "RSONParser.pyx":698
- *                             if chr == '-':
+ *                             if chr == 45:
  *                                 offset_3 += 1
- *                             elif chr == '+':             # <<<<<<<<<<<<<<
+ *                             elif chr == 43:             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
  *                             else:
  */
@@ -10383,7 +10397,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                                     offset_3 = -1
  *                                     break             # <<<<<<<<<<<<<<
  * 
- *                                 chr = buf[offset_3]
+ *                                 chr = ord(buf[offset_3])
  */
                 goto __pyx_L67_break;
 
@@ -10399,20 +10413,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
               /* "RSONParser.pyx":736
  *                                     break
  * 
- *                                 chr = buf[offset_3]             # <<<<<<<<<<<<<<
- *                                 if '1' <= chr <= '9':
+ *                                 chr = ord(buf[offset_3])             # <<<<<<<<<<<<<<
+ *                                 if 49 <= chr <= 57:
  *                                     offset_3 += 1
  */
               __pyx_t_2 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 736, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_2);
-              __pyx_t_4 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_2); if (unlikely((__pyx_t_4 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 736, __pyx_L1_error)
+              __pyx_t_4 = __Pyx_PyObject_Ord(__pyx_t_2); if (unlikely(__pyx_t_4 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 736, __pyx_L1_error)
               __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
               __pyx_v_chr = __pyx_t_4;
 
               /* "RSONParser.pyx":737
  * 
- *                                 chr = buf[offset_3]
- *                                 if '1' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                 chr = ord(buf[offset_3])
+ *                                 if 49 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                     offset_3 += 1
  *                                 else:
  */
@@ -10424,8 +10438,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
               if (__pyx_t_8) {
 
                 /* "RSONParser.pyx":738
- *                                 chr = buf[offset_3]
- *                                 if '1' <= chr <= '9':
+ *                                 chr = ord(buf[offset_3])
+ *                                 if 49 <= chr <= 57:
  *                                     offset_3 += 1             # <<<<<<<<<<<<<<
  *                                 else:
  *                                     offset_3 = -1
@@ -10437,8 +10451,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
 
                 /* "RSONParser.pyx":737
  * 
- *                                 chr = buf[offset_3]
- *                                 if '1' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                 chr = ord(buf[offset_3])
+ *                                 if 49 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                     offset_3 += 1
  *                                 else:
  */
@@ -10534,7 +10548,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_4]
+ *                                     chr = ord(buf[offset_4])
  */
                   goto __pyx_L71_break;
 
@@ -10550,20 +10564,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
                 /* "RSONParser.pyx":751
  *                                         break
  * 
- *                                     chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
  */
                 __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 751, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_1);
-                __pyx_t_4 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_4 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 751, __pyx_L1_error)
+                __pyx_t_4 = __Pyx_PyObject_Ord(__pyx_t_1); if (unlikely(__pyx_t_4 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 751, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
                 __pyx_v_chr = __pyx_t_4;
 
                 /* "RSONParser.pyx":752
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -10575,8 +10589,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
                 if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":753
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
  *                                     else:
  *                                         offset_4 = -1
@@ -10588,8 +10602,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
 
                   /* "RSONParser.pyx":752
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -10971,7 +10985,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                                     offset_4 = -1
  *                                     break             # <<<<<<<<<<<<<<
  * 
- *                                 chr = buf[offset_4]
+ *                                 chr = ord(buf[offset_4])
  */
                 goto __pyx_L81_break;
 
@@ -10987,20 +11001,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
               /* "RSONParser.pyx":794
  *                                     break
  * 
- *                                 chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                 if '0' <= chr <= '9':
+ *                                 chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                 if 48 <= chr <= 57:
  *                                     offset_4 += 1
  */
               __pyx_t_2 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 794, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_2);
-              __pyx_t_4 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_2); if (unlikely((__pyx_t_4 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 794, __pyx_L1_error)
+              __pyx_t_4 = __Pyx_PyObject_Ord(__pyx_t_2); if (unlikely(__pyx_t_4 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 794, __pyx_L1_error)
               __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
               __pyx_v_chr = __pyx_t_4;
 
               /* "RSONParser.pyx":795
  * 
- *                                 chr = buf[offset_4]
- *                                 if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                 chr = ord(buf[offset_4])
+ *                                 if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                     offset_4 += 1
  *                                 else:
  */
@@ -11012,8 +11026,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
               if (__pyx_t_3) {
 
                 /* "RSONParser.pyx":796
- *                                 chr = buf[offset_4]
- *                                 if '0' <= chr <= '9':
+ *                                 chr = ord(buf[offset_4])
+ *                                 if 48 <= chr <= 57:
  *                                     offset_4 += 1             # <<<<<<<<<<<<<<
  *                                 else:
  *                                     offset_4 = -1
@@ -11025,8 +11039,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
 
                 /* "RSONParser.pyx":795
  * 
- *                                 chr = buf[offset_4]
- *                                 if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                 chr = ord(buf[offset_4])
+ *                                 if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                     offset_4 += 1
  *                                 else:
  */
@@ -11573,7 +11587,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                                         offset_5 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_5]
+ *                                     chr = ord(buf[offset_5])
  */
                   goto __pyx_L93_break;
 
@@ -11589,20 +11603,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
                 /* "RSONParser.pyx":843
  *                                         break
  * 
- *                                     chr = buf[offset_5]             # <<<<<<<<<<<<<<
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_5])             # <<<<<<<<<<<<<<
+ *                                     if 48 <= chr <= 57:
  *                                         offset_5 += 1
  */
                 __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 843, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_1);
-                __pyx_t_4 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_4 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 843, __pyx_L1_error)
+                __pyx_t_4 = __Pyx_PyObject_Ord(__pyx_t_1); if (unlikely(__pyx_t_4 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 843, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
                 __pyx_v_chr = __pyx_t_4;
 
                 /* "RSONParser.pyx":844
  * 
- *                                     chr = buf[offset_5]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_5])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_5 += 1
  *                                     else:
  */
@@ -11614,8 +11628,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
                 if (__pyx_t_8) {
 
                   /* "RSONParser.pyx":845
- *                                     chr = buf[offset_5]
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_5])
+ *                                     if 48 <= chr <= 57:
  *                                         offset_5 += 1             # <<<<<<<<<<<<<<
  *                                     else:
  *                                         offset_5 = -1
@@ -11627,8 +11641,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
 
                   /* "RSONParser.pyx":844
  * 
- *                                     chr = buf[offset_5]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_5])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_5 += 1
  *                                     else:
  */
@@ -12179,7 +12193,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  * 
  *     cdef (int, int) parse_rson_number(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  */
 
   /* function exit code */
@@ -12212,12 +12226,12 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  * 
  *     cdef (int, int) parse_rson_string(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  */
 
 static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, CYTHON_UNUSED int __pyx_v_indent, int __pyx_v_buf_eof, PyObject *__pyx_v_children) {
   int __pyx_v_count;
-  Py_UNICODE __pyx_v_chr;
+  Py_UCS4 __pyx_v_chr;
   PyObject *__pyx_v_offset_1 = NULL;
   int __pyx_v_line_start_1;
   PyObject *__pyx_v_children_1 = NULL;
@@ -12240,7 +12254,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
   Py_ssize_t __pyx_t_5;
   int __pyx_t_6;
   PyObject *__pyx_t_7 = NULL;
-  Py_UNICODE __pyx_t_8;
+  long __pyx_t_8;
   int __pyx_t_9;
   int __pyx_t_10;
   PyObject *__pyx_t_11 = NULL;
@@ -12251,7 +12265,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
   /* "RSONParser.pyx":894
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop             # <<<<<<<<<<<<<<
  *             while True: # start choice
  *                 offset_1 = offset
@@ -12259,7 +12273,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
   while (1) {
 
     /* "RSONParser.pyx":895
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop
  *             while True: # start choice             # <<<<<<<<<<<<<<
  *                 offset_1 = offset
@@ -12538,7 +12552,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_4]
+ *                                     chr = ord(buf[offset_4])
  */
                   goto __pyx_L17_break;
 
@@ -12554,53 +12568,49 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":922
  *                                         break
  * 
- *                                     chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                     if '\x00' <= chr <= '\x1f':
+ *                                     chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                     if chr <= 31:
  *                                         offset_4 = -1
  */
                 __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 922, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_7);
-                __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_7); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 922, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_7); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 922, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
                 __pyx_v_chr = __pyx_t_8;
 
                 /* "RSONParser.pyx":923
  * 
- *                                     chr = buf[offset_4]
- *                                     if '\x00' <= chr <= '\x1f':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if chr <= 31:             # <<<<<<<<<<<<<<
  *                                         offset_4 = -1
  *                                         break
  */
-                __pyx_t_6 = (0 <= __pyx_v_chr);
+                __pyx_t_6 = ((__pyx_v_chr <= 31) != 0);
                 if (__pyx_t_6) {
-                  __pyx_t_6 = (__pyx_v_chr <= 31);
-                }
-                __pyx_t_3 = (__pyx_t_6 != 0);
-                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":924
- *                                     chr = buf[offset_4]
- *                                     if '\x00' <= chr <= '\x1f':
+ *                                     chr = ord(buf[offset_4])
+ *                                     if chr <= 31:
  *                                         offset_4 = -1             # <<<<<<<<<<<<<<
  *                                         break
- *                                     elif chr == '\\':
+ *                                     elif chr == 92:
  */
                   __Pyx_INCREF(__pyx_int_neg_1);
                   __Pyx_DECREF_SET(__pyx_v_offset_4, __pyx_int_neg_1);
 
                   /* "RSONParser.pyx":925
- *                                     if '\x00' <= chr <= '\x1f':
+ *                                     if chr <= 31:
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
- *                                     elif chr == '\\':
+ *                                     elif chr == 92:
  *                                         offset_4 = -1
  */
                   goto __pyx_L17_break;
 
                   /* "RSONParser.pyx":923
  * 
- *                                     chr = buf[offset_4]
- *                                     if '\x00' <= chr <= '\x1f':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if chr <= 31:             # <<<<<<<<<<<<<<
  *                                         offset_4 = -1
  *                                         break
  */
@@ -12609,28 +12619,28 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":926
  *                                         offset_4 = -1
  *                                         break
- *                                     elif chr == '\\':             # <<<<<<<<<<<<<<
+ *                                     elif chr == 92:             # <<<<<<<<<<<<<<
  *                                         offset_4 = -1
  *                                         break
  */
-                __pyx_t_3 = ((__pyx_v_chr == 92) != 0);
-                if (__pyx_t_3) {
+                __pyx_t_6 = ((__pyx_v_chr == 92) != 0);
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":927
  *                                         break
- *                                     elif chr == '\\':
+ *                                     elif chr == 92:
  *                                         offset_4 = -1             # <<<<<<<<<<<<<<
  *                                         break
- *                                     elif chr == '"':
+ *                                     elif chr == 34:
  */
                   __Pyx_INCREF(__pyx_int_neg_1);
                   __Pyx_DECREF_SET(__pyx_v_offset_4, __pyx_int_neg_1);
 
                   /* "RSONParser.pyx":928
- *                                     elif chr == '\\':
+ *                                     elif chr == 92:
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
- *                                     elif chr == '"':
+ *                                     elif chr == 34:
  *                                         offset_4 = -1
  */
                   goto __pyx_L17_break;
@@ -12638,7 +12648,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   /* "RSONParser.pyx":926
  *                                         offset_4 = -1
  *                                         break
- *                                     elif chr == '\\':             # <<<<<<<<<<<<<<
+ *                                     elif chr == 92:             # <<<<<<<<<<<<<<
  *                                         offset_4 = -1
  *                                         break
  */
@@ -12647,28 +12657,28 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":929
  *                                         offset_4 = -1
  *                                         break
- *                                     elif chr == '"':             # <<<<<<<<<<<<<<
+ *                                     elif chr == 34:             # <<<<<<<<<<<<<<
  *                                         offset_4 = -1
  *                                         break
  */
-                __pyx_t_3 = ((__pyx_v_chr == 34) != 0);
-                if (__pyx_t_3) {
+                __pyx_t_6 = ((__pyx_v_chr == 34) != 0);
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":930
  *                                         break
- *                                     elif chr == '"':
+ *                                     elif chr == 34:
  *                                         offset_4 = -1             # <<<<<<<<<<<<<<
  *                                         break
- *                                     elif '\ud800' <= chr <= '\udfff':
+ *                                     elif 55296 <= chr <= 57343:
  */
                   __Pyx_INCREF(__pyx_int_neg_1);
                   __Pyx_DECREF_SET(__pyx_v_offset_4, __pyx_int_neg_1);
 
                   /* "RSONParser.pyx":931
- *                                     elif chr == '"':
+ *                                     elif chr == 34:
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
- *                                     elif '\ud800' <= chr <= '\udfff':
+ *                                     elif 55296 <= chr <= 57343:
  *                                         offset_4 = -1
  */
                   goto __pyx_L17_break;
@@ -12676,7 +12686,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   /* "RSONParser.pyx":929
  *                                         offset_4 = -1
  *                                         break
- *                                     elif chr == '"':             # <<<<<<<<<<<<<<
+ *                                     elif chr == 34:             # <<<<<<<<<<<<<<
  *                                         offset_4 = -1
  *                                         break
  */
@@ -12685,20 +12695,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":932
  *                                         offset_4 = -1
  *                                         break
- *                                     elif '\ud800' <= chr <= '\udfff':             # <<<<<<<<<<<<<<
+ *                                     elif 55296 <= chr <= 57343:             # <<<<<<<<<<<<<<
  *                                         offset_4 = -1
  *                                         break
  */
-                __pyx_t_3 = (0xD800 <= __pyx_v_chr);
-                if (__pyx_t_3) {
-                  __pyx_t_3 = (__pyx_v_chr <= 0xDFFF);
-                }
-                __pyx_t_6 = (__pyx_t_3 != 0);
+                __pyx_t_6 = (0xD800 <= __pyx_v_chr);
                 if (__pyx_t_6) {
+                  __pyx_t_6 = (__pyx_v_chr <= 0xDFFF);
+                }
+                __pyx_t_3 = (__pyx_t_6 != 0);
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":933
  *                                         break
- *                                     elif '\ud800' <= chr <= '\udfff':
+ *                                     elif 55296 <= chr <= 57343:
  *                                         offset_4 = -1             # <<<<<<<<<<<<<<
  *                                         break
  *                                     else:
@@ -12707,7 +12717,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __Pyx_DECREF_SET(__pyx_v_offset_4, __pyx_int_neg_1);
 
                   /* "RSONParser.pyx":934
- *                                     elif '\ud800' <= chr <= '\udfff':
+ *                                     elif 55296 <= chr <= 57343:
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  *                                     else:
@@ -12718,7 +12728,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   /* "RSONParser.pyx":932
  *                                         offset_4 = -1
  *                                         break
- *                                     elif '\ud800' <= chr <= '\udfff':             # <<<<<<<<<<<<<<
+ *                                     elif 55296 <= chr <= 57343:             # <<<<<<<<<<<<<<
  *                                         offset_4 = -1
  *                                         break
  */
@@ -12758,9 +12768,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  */
               __pyx_t_7 = __Pyx_PyInt_NeObjC(__pyx_v_offset_4, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 940, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_7);
-              __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 940, __pyx_L1_error)
+              __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 940, __pyx_L1_error)
               __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-              if (__pyx_t_6) {
+              if (__pyx_t_3) {
 
                 /* "RSONParser.pyx":941
  *                                     break
@@ -12861,8 +12871,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 }
                 __Pyx_INCREF(__pyx_v_offset_4);
                 __pyx_t_7 = __pyx_v_offset_4;
-                __pyx_t_6 = (__pyx_t_7 == Py_None);
-                if (__pyx_t_6) {
+                __pyx_t_3 = (__pyx_t_7 == Py_None);
+                if (__pyx_t_3) {
                   __pyx_t_4 = 0;
                 } else {
                   __pyx_t_2 = __Pyx_PyIndex_AsSsize_t(__pyx_t_7); if (unlikely((__pyx_t_2 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 950, __pyx_L1_error)
@@ -12871,8 +12881,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
                 __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_2, 2, 0, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 950, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_7);
-                __pyx_t_6 = (__pyx_t_7 == Py_None);
-                if (__pyx_t_6) {
+                __pyx_t_3 = (__pyx_t_7 == Py_None);
+                if (__pyx_t_3) {
                   __pyx_t_2 = PY_SSIZE_T_MAX;
                 } else {
                   __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_7); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 950, __pyx_L1_error)
@@ -12881,10 +12891,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
                 __pyx_t_7 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 950, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_7);
-                __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_kp_u_x, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 950, __pyx_L1_error)
+                __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_kp_u_x, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 950, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-                __pyx_t_3 = (__pyx_t_6 != 0);
-                if (__pyx_t_3) {
+                __pyx_t_6 = (__pyx_t_3 != 0);
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":951
  *                                 while True: # case
@@ -12976,9 +12986,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __Pyx_GOTREF(__pyx_t_7);
                   __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_5, __pyx_t_7, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 959, __pyx_L1_error)
                   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-                  __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 959, __pyx_L1_error)
+                  __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 959, __pyx_L1_error)
                   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-                  if (__pyx_t_3) {
+                  if (__pyx_t_6) {
 
                     /* "RSONParser.pyx":960
  *                                         offset_5, line_start_4 = offset_4, line_start_3
@@ -12995,7 +13005,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                             offset_5 = -1
  *                                             break             # <<<<<<<<<<<<<<
  * 
- *                                         chr = buf[offset_5]
+ *                                         chr = ord(buf[offset_5])
  */
                     goto __pyx_L25_break;
 
@@ -13011,33 +13021,33 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   /* "RSONParser.pyx":963
  *                                             break
  * 
- *                                         chr = buf[offset_5]             # <<<<<<<<<<<<<<
- *                                         if '0' <= chr <= '1':
+ *                                         chr = ord(buf[offset_5])             # <<<<<<<<<<<<<<
+ *                                         if 48 <= chr <= 49:
  *                                             offset_5 += 1
  */
                   __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 963, __pyx_L1_error)
                   __Pyx_GOTREF(__pyx_t_1);
-                  __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 963, __pyx_L1_error)
+                  __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_1); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 963, __pyx_L1_error)
                   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
                   __pyx_v_chr = __pyx_t_8;
 
                   /* "RSONParser.pyx":964
  * 
- *                                         chr = buf[offset_5]
- *                                         if '0' <= chr <= '1':             # <<<<<<<<<<<<<<
+ *                                         chr = ord(buf[offset_5])
+ *                                         if 48 <= chr <= 49:             # <<<<<<<<<<<<<<
  *                                             offset_5 += 1
  *                                         else:
  */
-                  __pyx_t_3 = (48 <= __pyx_v_chr);
-                  if (__pyx_t_3) {
-                    __pyx_t_3 = (__pyx_v_chr <= 49);
-                  }
-                  __pyx_t_6 = (__pyx_t_3 != 0);
+                  __pyx_t_6 = (48 <= __pyx_v_chr);
                   if (__pyx_t_6) {
+                    __pyx_t_6 = (__pyx_v_chr <= 49);
+                  }
+                  __pyx_t_3 = (__pyx_t_6 != 0);
+                  if (__pyx_t_3) {
 
                     /* "RSONParser.pyx":965
- *                                         chr = buf[offset_5]
- *                                         if '0' <= chr <= '1':
+ *                                         chr = ord(buf[offset_5])
+ *                                         if 48 <= chr <= 49:
  *                                             offset_5 += 1             # <<<<<<<<<<<<<<
  *                                         else:
  *                                             offset_5 = -1
@@ -13049,8 +13059,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                     /* "RSONParser.pyx":964
  * 
- *                                         chr = buf[offset_5]
- *                                         if '0' <= chr <= '1':             # <<<<<<<<<<<<<<
+ *                                         chr = ord(buf[offset_5])
+ *                                         if 48 <= chr <= 49:             # <<<<<<<<<<<<<<
  *                                             offset_5 += 1
  *                                         else:
  */
@@ -13100,9 +13110,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 if (unlikely(!__pyx_v_offset_5)) { __Pyx_RaiseUnboundLocalError("offset_5"); __PYX_ERR(0, 971, __pyx_L1_error) }
                 __pyx_t_1 = __Pyx_PyInt_NeObjC(__pyx_v_offset_5, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 971, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_1);
-                __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 971, __pyx_L1_error)
+                __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 971, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-                if (__pyx_t_6) {
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":972
  *                                         break
@@ -13143,9 +13153,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 __Pyx_GOTREF(__pyx_t_1);
                 __pyx_t_7 = PyObject_RichCompare(__pyx_v_offset_4, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 975, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-                __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 975, __pyx_L1_error)
+                __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 975, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-                if (__pyx_t_6) {
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":976
  * 
@@ -13162,7 +13172,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_4]
+ *                                     chr = ord(buf[offset_4])
  */
                   goto __pyx_L22_break;
 
@@ -13178,35 +13188,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":979
  *                                         break
  * 
- *                                     chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
  */
                 __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 979, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_7);
-                __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_7); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 979, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_7); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 979, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
                 __pyx_v_chr = __pyx_t_8;
 
                 /* "RSONParser.pyx":980
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
-                __pyx_t_6 = (48 <= __pyx_v_chr);
-                if (__pyx_t_6) {
-                  __pyx_t_6 = (__pyx_v_chr <= 57);
-                }
-                __pyx_t_3 = (__pyx_t_6 != 0);
+                __pyx_t_3 = (48 <= __pyx_v_chr);
                 if (__pyx_t_3) {
+                  __pyx_t_3 = (__pyx_v_chr <= 57);
+                }
+                __pyx_t_6 = (__pyx_t_3 != 0);
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":981
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 981, __pyx_L1_error)
@@ -13216,33 +13226,33 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":980
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                   goto __pyx_L30;
                 }
 
                 /* "RSONParser.pyx":982
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
-                __pyx_t_3 = (97 <= __pyx_v_chr);
-                if (__pyx_t_3) {
-                  __pyx_t_3 = (__pyx_v_chr <= 0x66);
-                }
-                __pyx_t_6 = (__pyx_t_3 != 0);
+                __pyx_t_6 = (97 <= __pyx_v_chr);
                 if (__pyx_t_6) {
+                  __pyx_t_6 = (__pyx_v_chr <= 0x66);
+                }
+                __pyx_t_3 = (__pyx_t_6 != 0);
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":983
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 983, __pyx_L1_error)
@@ -13251,32 +13261,32 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":982
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                   goto __pyx_L30;
                 }
 
                 /* "RSONParser.pyx":984
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
-                __pyx_t_6 = (65 <= __pyx_v_chr);
-                if (__pyx_t_6) {
-                  __pyx_t_6 = (__pyx_v_chr <= 70);
-                }
-                __pyx_t_3 = (__pyx_t_6 != 0);
+                __pyx_t_3 = (65 <= __pyx_v_chr);
                 if (__pyx_t_3) {
+                  __pyx_t_3 = (__pyx_v_chr <= 70);
+                }
+                __pyx_t_6 = (__pyx_t_3 != 0);
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":985
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
  *                                     else:
  *                                         offset_4 = -1
@@ -13287,9 +13297,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":984
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -13329,9 +13339,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 __Pyx_GOTREF(__pyx_t_7);
                 __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_4, __pyx_t_7, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 990, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-                __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 990, __pyx_L1_error)
+                __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 990, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-                if (__pyx_t_3) {
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":991
  * 
@@ -13348,7 +13358,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_4]
+ *                                     chr = ord(buf[offset_4])
  */
                   goto __pyx_L22_break;
 
@@ -13364,35 +13374,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":994
  *                                         break
  * 
- *                                     chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
  */
                 __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 994, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_1);
-                __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 994, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_1); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 994, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
                 __pyx_v_chr = __pyx_t_8;
 
                 /* "RSONParser.pyx":995
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
-                __pyx_t_3 = (48 <= __pyx_v_chr);
-                if (__pyx_t_3) {
-                  __pyx_t_3 = (__pyx_v_chr <= 57);
-                }
-                __pyx_t_6 = (__pyx_t_3 != 0);
+                __pyx_t_6 = (48 <= __pyx_v_chr);
                 if (__pyx_t_6) {
+                  __pyx_t_6 = (__pyx_v_chr <= 57);
+                }
+                __pyx_t_3 = (__pyx_t_6 != 0);
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":996
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 996, __pyx_L1_error)
@@ -13402,33 +13412,33 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":995
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                   goto __pyx_L32;
                 }
 
                 /* "RSONParser.pyx":997
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
-                __pyx_t_6 = (97 <= __pyx_v_chr);
-                if (__pyx_t_6) {
-                  __pyx_t_6 = (__pyx_v_chr <= 0x66);
-                }
-                __pyx_t_3 = (__pyx_t_6 != 0);
+                __pyx_t_3 = (97 <= __pyx_v_chr);
                 if (__pyx_t_3) {
+                  __pyx_t_3 = (__pyx_v_chr <= 0x66);
+                }
+                __pyx_t_6 = (__pyx_t_3 != 0);
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":998
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 998, __pyx_L1_error)
@@ -13437,32 +13447,32 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":997
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                   goto __pyx_L32;
                 }
 
                 /* "RSONParser.pyx":999
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
-                __pyx_t_3 = (65 <= __pyx_v_chr);
-                if (__pyx_t_3) {
-                  __pyx_t_3 = (__pyx_v_chr <= 70);
-                }
-                __pyx_t_6 = (__pyx_t_3 != 0);
+                __pyx_t_6 = (65 <= __pyx_v_chr);
                 if (__pyx_t_6) {
+                  __pyx_t_6 = (__pyx_v_chr <= 70);
+                }
+                __pyx_t_3 = (__pyx_t_6 != 0);
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1000
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
  *                                     else:
  *                                         offset_4 = -1
@@ -13473,9 +13483,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":999
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -13524,9 +13534,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  */
               __pyx_t_1 = __Pyx_PyInt_NeObjC(__pyx_v_offset_4, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1007, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_1);
-              __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1007, __pyx_L1_error)
+              __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1007, __pyx_L1_error)
               __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-              if (__pyx_t_6) {
+              if (__pyx_t_3) {
 
                 /* "RSONParser.pyx":1008
  *                                     break
@@ -13627,8 +13637,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 }
                 __Pyx_INCREF(__pyx_v_offset_4);
                 __pyx_t_1 = __pyx_v_offset_4;
-                __pyx_t_6 = (__pyx_t_1 == Py_None);
-                if (__pyx_t_6) {
+                __pyx_t_3 = (__pyx_t_1 == Py_None);
+                if (__pyx_t_3) {
                   __pyx_t_2 = 0;
                 } else {
                   __pyx_t_4 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_4 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 1017, __pyx_L1_error)
@@ -13637,8 +13647,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
                 __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_2, 2, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1017, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_1);
-                __pyx_t_6 = (__pyx_t_1 == Py_None);
-                if (__pyx_t_6) {
+                __pyx_t_3 = (__pyx_t_1 == Py_None);
+                if (__pyx_t_3) {
                   __pyx_t_4 = PY_SSIZE_T_MAX;
                 } else {
                   __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 1017, __pyx_L1_error)
@@ -13647,10 +13657,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
                 __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1017, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_1);
-                __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u_u, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1017, __pyx_L1_error)
+                __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u_u, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1017, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-                __pyx_t_3 = (__pyx_t_6 != 0);
-                if (__pyx_t_3) {
+                __pyx_t_6 = (__pyx_t_3 != 0);
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1018
  *                                 while True: # case
@@ -13744,8 +13754,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   }
                   __Pyx_INCREF(__pyx_v_offset_5);
                   __pyx_t_1 = __pyx_v_offset_5;
-                  __pyx_t_3 = (__pyx_t_1 == Py_None);
-                  if (__pyx_t_3) {
+                  __pyx_t_6 = (__pyx_t_1 == Py_None);
+                  if (__pyx_t_6) {
                     __pyx_t_4 = 0;
                   } else {
                     __pyx_t_2 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_2 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 1026, __pyx_L1_error)
@@ -13754,8 +13764,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_5, __pyx_int_3, 3, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1026, __pyx_L1_error)
                   __Pyx_GOTREF(__pyx_t_1);
-                  __pyx_t_3 = (__pyx_t_1 == Py_None);
-                  if (__pyx_t_3) {
+                  __pyx_t_6 = (__pyx_t_1 == Py_None);
+                  if (__pyx_t_6) {
                     __pyx_t_2 = PY_SSIZE_T_MAX;
                   } else {
                     __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 1026, __pyx_L1_error)
@@ -13764,10 +13774,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
                   __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1026, __pyx_L1_error)
                   __Pyx_GOTREF(__pyx_t_1);
-                  __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u_000, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1026, __pyx_L1_error)
+                  __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u_000, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1026, __pyx_L1_error)
                   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-                  __pyx_t_6 = (__pyx_t_3 != 0);
-                  if (__pyx_t_6) {
+                  __pyx_t_3 = (__pyx_t_6 != 0);
+                  if (__pyx_t_3) {
 
                     /* "RSONParser.pyx":1027
  *                                         offset_5, line_start_4 = offset_4, line_start_3
@@ -13824,9 +13834,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __Pyx_GOTREF(__pyx_t_1);
                   __pyx_t_7 = PyObject_RichCompare(__pyx_v_offset_5, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1032, __pyx_L1_error)
                   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-                  __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1032, __pyx_L1_error)
+                  __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1032, __pyx_L1_error)
                   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-                  if (__pyx_t_6) {
+                  if (__pyx_t_3) {
 
                     /* "RSONParser.pyx":1033
  * 
@@ -13843,7 +13853,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                             offset_5 = -1
  *                                             break             # <<<<<<<<<<<<<<
  * 
- *                                         chr = buf[offset_5]
+ *                                         chr = ord(buf[offset_5])
  */
                     goto __pyx_L38_break;
 
@@ -13859,33 +13869,33 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   /* "RSONParser.pyx":1036
  *                                             break
  * 
- *                                         chr = buf[offset_5]             # <<<<<<<<<<<<<<
- *                                         if '0' <= chr <= '1':
+ *                                         chr = ord(buf[offset_5])             # <<<<<<<<<<<<<<
+ *                                         if 48 <= chr <= 49:
  *                                             offset_5 += 1
  */
                   __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_5); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1036, __pyx_L1_error)
                   __Pyx_GOTREF(__pyx_t_7);
-                  __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_7); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1036, __pyx_L1_error)
+                  __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_7); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1036, __pyx_L1_error)
                   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
                   __pyx_v_chr = __pyx_t_8;
 
                   /* "RSONParser.pyx":1037
  * 
- *                                         chr = buf[offset_5]
- *                                         if '0' <= chr <= '1':             # <<<<<<<<<<<<<<
+ *                                         chr = ord(buf[offset_5])
+ *                                         if 48 <= chr <= 49:             # <<<<<<<<<<<<<<
  *                                             offset_5 += 1
  *                                         else:
  */
-                  __pyx_t_6 = (48 <= __pyx_v_chr);
-                  if (__pyx_t_6) {
-                    __pyx_t_6 = (__pyx_v_chr <= 49);
-                  }
-                  __pyx_t_3 = (__pyx_t_6 != 0);
+                  __pyx_t_3 = (48 <= __pyx_v_chr);
                   if (__pyx_t_3) {
+                    __pyx_t_3 = (__pyx_v_chr <= 49);
+                  }
+                  __pyx_t_6 = (__pyx_t_3 != 0);
+                  if (__pyx_t_6) {
 
                     /* "RSONParser.pyx":1038
- *                                         chr = buf[offset_5]
- *                                         if '0' <= chr <= '1':
+ *                                         chr = ord(buf[offset_5])
+ *                                         if 48 <= chr <= 49:
  *                                             offset_5 += 1             # <<<<<<<<<<<<<<
  *                                         else:
  *                                             offset_5 = -1
@@ -13897,8 +13907,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                     /* "RSONParser.pyx":1037
  * 
- *                                         chr = buf[offset_5]
- *                                         if '0' <= chr <= '1':             # <<<<<<<<<<<<<<
+ *                                         chr = ord(buf[offset_5])
+ *                                         if 48 <= chr <= 49:             # <<<<<<<<<<<<<<
  *                                             offset_5 += 1
  *                                         else:
  */
@@ -13948,9 +13958,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 if (unlikely(!__pyx_v_offset_5)) { __Pyx_RaiseUnboundLocalError("offset_5"); __PYX_ERR(0, 1044, __pyx_L1_error) }
                 __pyx_t_7 = __Pyx_PyInt_NeObjC(__pyx_v_offset_5, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1044, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_7);
-                __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1044, __pyx_L1_error)
+                __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1044, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-                if (__pyx_t_3) {
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1045
  *                                         break
@@ -14028,8 +14038,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   }
                   __Pyx_INCREF(__pyx_v_offset_5);
                   __pyx_t_7 = __pyx_v_offset_5;
-                  __pyx_t_3 = (__pyx_t_7 == Py_None);
-                  if (__pyx_t_3) {
+                  __pyx_t_6 = (__pyx_t_7 == Py_None);
+                  if (__pyx_t_6) {
                     __pyx_t_2 = 0;
                   } else {
                     __pyx_t_4 = __Pyx_PyIndex_AsSsize_t(__pyx_t_7); if (unlikely((__pyx_t_4 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 1051, __pyx_L1_error)
@@ -14038,8 +14048,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_5, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1051, __pyx_L1_error)
                   __Pyx_GOTREF(__pyx_t_7);
-                  __pyx_t_3 = (__pyx_t_7 == Py_None);
-                  if (__pyx_t_3) {
+                  __pyx_t_6 = (__pyx_t_7 == Py_None);
+                  if (__pyx_t_6) {
                     __pyx_t_4 = PY_SSIZE_T_MAX;
                   } else {
                     __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_7); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 1051, __pyx_L1_error)
@@ -14048,10 +14058,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
                   __pyx_t_7 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1051, __pyx_L1_error)
                   __Pyx_GOTREF(__pyx_t_7);
-                  __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_n_u_D, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1051, __pyx_L1_error)
+                  __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_n_u_D, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1051, __pyx_L1_error)
                   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-                  __pyx_t_6 = (__pyx_t_3 != 0);
-                  if (__pyx_t_6) {
+                  __pyx_t_3 = (__pyx_t_6 != 0);
+                  if (__pyx_t_3) {
 
                     /* "RSONParser.pyx":1052
  *                                         offset_5, line_start_4 = offset_4, line_start_3
@@ -14088,8 +14098,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   }
                   __Pyx_INCREF(__pyx_v_offset_5);
                   __pyx_t_7 = __pyx_v_offset_5;
-                  __pyx_t_6 = (__pyx_t_7 == Py_None);
-                  if (__pyx_t_6) {
+                  __pyx_t_3 = (__pyx_t_7 == Py_None);
+                  if (__pyx_t_3) {
                     __pyx_t_4 = 0;
                   } else {
                     __pyx_t_2 = __Pyx_PyIndex_AsSsize_t(__pyx_t_7); if (unlikely((__pyx_t_2 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 1053, __pyx_L1_error)
@@ -14098,8 +14108,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_5, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1053, __pyx_L1_error)
                   __Pyx_GOTREF(__pyx_t_7);
-                  __pyx_t_6 = (__pyx_t_7 == Py_None);
-                  if (__pyx_t_6) {
+                  __pyx_t_3 = (__pyx_t_7 == Py_None);
+                  if (__pyx_t_3) {
                     __pyx_t_2 = PY_SSIZE_T_MAX;
                   } else {
                     __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_7); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 1053, __pyx_L1_error)
@@ -14108,10 +14118,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
                   __pyx_t_7 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1053, __pyx_L1_error)
                   __Pyx_GOTREF(__pyx_t_7);
-                  __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_n_u_d, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1053, __pyx_L1_error)
+                  __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_n_u_d, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1053, __pyx_L1_error)
                   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-                  __pyx_t_3 = (__pyx_t_6 != 0);
-                  if (__pyx_t_3) {
+                  __pyx_t_6 = (__pyx_t_3 != 0);
+                  if (__pyx_t_6) {
 
                     /* "RSONParser.pyx":1054
  *                                             offset_5 += 1
@@ -14168,9 +14178,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __Pyx_GOTREF(__pyx_t_7);
                   __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_5, __pyx_t_7, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1059, __pyx_L1_error)
                   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-                  __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1059, __pyx_L1_error)
+                  __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1059, __pyx_L1_error)
                   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-                  if (__pyx_t_3) {
+                  if (__pyx_t_6) {
 
                     /* "RSONParser.pyx":1060
  * 
@@ -14187,7 +14197,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                             offset_5 = -1
  *                                             break             # <<<<<<<<<<<<<<
  * 
- *                                         chr = buf[offset_5]
+ *                                         chr = ord(buf[offset_5])
  */
                     goto __pyx_L44_break;
 
@@ -14203,35 +14213,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   /* "RSONParser.pyx":1063
  *                                             break
  * 
- *                                         chr = buf[offset_5]             # <<<<<<<<<<<<<<
- *                                         if '8' <= chr <= '9':
+ *                                         chr = ord(buf[offset_5])             # <<<<<<<<<<<<<<
+ *                                         if 56 <= chr <= 57:
  *                                             offset_5 += 1
  */
                   __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1063, __pyx_L1_error)
                   __Pyx_GOTREF(__pyx_t_1);
-                  __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1063, __pyx_L1_error)
+                  __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_1); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1063, __pyx_L1_error)
                   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
                   __pyx_v_chr = __pyx_t_8;
 
                   /* "RSONParser.pyx":1064
  * 
- *                                         chr = buf[offset_5]
- *                                         if '8' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                         chr = ord(buf[offset_5])
+ *                                         if 56 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                             offset_5 += 1
- *                                         elif 'A' <= chr <= 'F':
+ *                                         elif 65 <= chr <= 70:
  */
-                  __pyx_t_3 = (56 <= __pyx_v_chr);
-                  if (__pyx_t_3) {
-                    __pyx_t_3 = (__pyx_v_chr <= 57);
-                  }
-                  __pyx_t_6 = (__pyx_t_3 != 0);
+                  __pyx_t_6 = (56 <= __pyx_v_chr);
                   if (__pyx_t_6) {
+                    __pyx_t_6 = (__pyx_v_chr <= 57);
+                  }
+                  __pyx_t_3 = (__pyx_t_6 != 0);
+                  if (__pyx_t_3) {
 
                     /* "RSONParser.pyx":1065
- *                                         chr = buf[offset_5]
- *                                         if '8' <= chr <= '9':
+ *                                         chr = ord(buf[offset_5])
+ *                                         if 56 <= chr <= 57:
  *                                             offset_5 += 1             # <<<<<<<<<<<<<<
- *                                         elif 'A' <= chr <= 'F':
+ *                                         elif 65 <= chr <= 70:
  *                                             offset_5 += 1
  */
                     __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_5, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1065, __pyx_L1_error)
@@ -14241,31 +14251,31 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                     /* "RSONParser.pyx":1064
  * 
- *                                         chr = buf[offset_5]
- *                                         if '8' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                         chr = ord(buf[offset_5])
+ *                                         if 56 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                             offset_5 += 1
- *                                         elif 'A' <= chr <= 'F':
+ *                                         elif 65 <= chr <= 70:
  */
                     goto __pyx_L47;
                   }
 
                   /* "RSONParser.pyx":1066
- *                                         if '8' <= chr <= '9':
+ *                                         if 56 <= chr <= 57:
  *                                             offset_5 += 1
- *                                         elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                         elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                             offset_5 += 1
  *                                         else:
  */
-                  __pyx_t_6 = (65 <= __pyx_v_chr);
-                  if (__pyx_t_6) {
-                    __pyx_t_6 = (__pyx_v_chr <= 70);
-                  }
-                  __pyx_t_3 = (__pyx_t_6 != 0);
+                  __pyx_t_3 = (65 <= __pyx_v_chr);
                   if (__pyx_t_3) {
+                    __pyx_t_3 = (__pyx_v_chr <= 70);
+                  }
+                  __pyx_t_6 = (__pyx_t_3 != 0);
+                  if (__pyx_t_6) {
 
                     /* "RSONParser.pyx":1067
  *                                             offset_5 += 1
- *                                         elif 'A' <= chr <= 'F':
+ *                                         elif 65 <= chr <= 70:
  *                                             offset_5 += 1             # <<<<<<<<<<<<<<
  *                                         else:
  *                                             offset_5 = -1
@@ -14276,9 +14286,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                     __pyx_t_1 = 0;
 
                     /* "RSONParser.pyx":1066
- *                                         if '8' <= chr <= '9':
+ *                                         if 56 <= chr <= 57:
  *                                             offset_5 += 1
- *                                         elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                         elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                             offset_5 += 1
  *                                         else:
  */
@@ -14328,9 +14338,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 if (unlikely(!__pyx_v_offset_5)) { __Pyx_RaiseUnboundLocalError("offset_5"); __PYX_ERR(0, 1073, __pyx_L1_error) }
                 __pyx_t_1 = __Pyx_PyInt_NeObjC(__pyx_v_offset_5, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1073, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_1);
-                __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1073, __pyx_L1_error)
+                __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1073, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-                if (__pyx_t_3) {
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1074
  *                                         break
@@ -14371,9 +14381,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 __Pyx_GOTREF(__pyx_t_1);
                 __pyx_t_7 = PyObject_RichCompare(__pyx_v_offset_4, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1077, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-                __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1077, __pyx_L1_error)
+                __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1077, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-                if (__pyx_t_3) {
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1078
  * 
@@ -14390,7 +14400,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_4]
+ *                                     chr = ord(buf[offset_4])
  */
                   goto __pyx_L35_break;
 
@@ -14406,35 +14416,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":1081
  *                                         break
  * 
- *                                     chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
  */
                 __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1081, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_7);
-                __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_7); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1081, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_7); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1081, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
                 __pyx_v_chr = __pyx_t_8;
 
                 /* "RSONParser.pyx":1082
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
-                __pyx_t_3 = (48 <= __pyx_v_chr);
-                if (__pyx_t_3) {
-                  __pyx_t_3 = (__pyx_v_chr <= 57);
-                }
-                __pyx_t_6 = (__pyx_t_3 != 0);
+                __pyx_t_6 = (48 <= __pyx_v_chr);
                 if (__pyx_t_6) {
+                  __pyx_t_6 = (__pyx_v_chr <= 57);
+                }
+                __pyx_t_3 = (__pyx_t_6 != 0);
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1083
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1083, __pyx_L1_error)
@@ -14444,33 +14454,33 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1082
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                   goto __pyx_L50;
                 }
 
                 /* "RSONParser.pyx":1084
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
-                __pyx_t_6 = (97 <= __pyx_v_chr);
-                if (__pyx_t_6) {
-                  __pyx_t_6 = (__pyx_v_chr <= 0x66);
-                }
-                __pyx_t_3 = (__pyx_t_6 != 0);
+                __pyx_t_3 = (97 <= __pyx_v_chr);
                 if (__pyx_t_3) {
+                  __pyx_t_3 = (__pyx_v_chr <= 0x66);
+                }
+                __pyx_t_6 = (__pyx_t_3 != 0);
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1085
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1085, __pyx_L1_error)
@@ -14479,32 +14489,32 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1084
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                   goto __pyx_L50;
                 }
 
                 /* "RSONParser.pyx":1086
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
-                __pyx_t_3 = (65 <= __pyx_v_chr);
-                if (__pyx_t_3) {
-                  __pyx_t_3 = (__pyx_v_chr <= 70);
-                }
-                __pyx_t_6 = (__pyx_t_3 != 0);
+                __pyx_t_6 = (65 <= __pyx_v_chr);
                 if (__pyx_t_6) {
+                  __pyx_t_6 = (__pyx_v_chr <= 70);
+                }
+                __pyx_t_3 = (__pyx_t_6 != 0);
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1087
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
  *                                     else:
  *                                         offset_4 = -1
@@ -14515,9 +14525,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1086
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -14557,9 +14567,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 __Pyx_GOTREF(__pyx_t_7);
                 __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_4, __pyx_t_7, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1092, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-                __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1092, __pyx_L1_error)
+                __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1092, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-                if (__pyx_t_6) {
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1093
  * 
@@ -14576,7 +14586,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_4]
+ *                                     chr = ord(buf[offset_4])
  */
                   goto __pyx_L35_break;
 
@@ -14592,35 +14602,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":1096
  *                                         break
  * 
- *                                     chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
  */
                 __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1096, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_1);
-                __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1096, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_1); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1096, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
                 __pyx_v_chr = __pyx_t_8;
 
                 /* "RSONParser.pyx":1097
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
-                __pyx_t_6 = (48 <= __pyx_v_chr);
-                if (__pyx_t_6) {
-                  __pyx_t_6 = (__pyx_v_chr <= 57);
-                }
-                __pyx_t_3 = (__pyx_t_6 != 0);
+                __pyx_t_3 = (48 <= __pyx_v_chr);
                 if (__pyx_t_3) {
+                  __pyx_t_3 = (__pyx_v_chr <= 57);
+                }
+                __pyx_t_6 = (__pyx_t_3 != 0);
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1098
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1098, __pyx_L1_error)
@@ -14630,33 +14640,33 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1097
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                   goto __pyx_L52;
                 }
 
                 /* "RSONParser.pyx":1099
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
-                __pyx_t_3 = (97 <= __pyx_v_chr);
-                if (__pyx_t_3) {
-                  __pyx_t_3 = (__pyx_v_chr <= 0x66);
-                }
-                __pyx_t_6 = (__pyx_t_3 != 0);
+                __pyx_t_6 = (97 <= __pyx_v_chr);
                 if (__pyx_t_6) {
+                  __pyx_t_6 = (__pyx_v_chr <= 0x66);
+                }
+                __pyx_t_3 = (__pyx_t_6 != 0);
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1100
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1100, __pyx_L1_error)
@@ -14665,32 +14675,32 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1099
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                   goto __pyx_L52;
                 }
 
                 /* "RSONParser.pyx":1101
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
-                __pyx_t_6 = (65 <= __pyx_v_chr);
-                if (__pyx_t_6) {
-                  __pyx_t_6 = (__pyx_v_chr <= 70);
-                }
-                __pyx_t_3 = (__pyx_t_6 != 0);
+                __pyx_t_3 = (65 <= __pyx_v_chr);
                 if (__pyx_t_3) {
+                  __pyx_t_3 = (__pyx_v_chr <= 70);
+                }
+                __pyx_t_6 = (__pyx_t_3 != 0);
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1102
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
  *                                     else:
  *                                         offset_4 = -1
@@ -14701,9 +14711,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1101
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -14743,9 +14753,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 __Pyx_GOTREF(__pyx_t_1);
                 __pyx_t_7 = PyObject_RichCompare(__pyx_v_offset_4, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1107, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-                __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1107, __pyx_L1_error)
+                __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1107, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-                if (__pyx_t_3) {
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1108
  * 
@@ -14762,7 +14772,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_4]
+ *                                     chr = ord(buf[offset_4])
  */
                   goto __pyx_L35_break;
 
@@ -14778,35 +14788,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":1111
  *                                         break
  * 
- *                                     chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
  */
                 __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1111, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_7);
-                __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_7); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1111, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_7); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1111, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
                 __pyx_v_chr = __pyx_t_8;
 
                 /* "RSONParser.pyx":1112
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
-                __pyx_t_3 = (48 <= __pyx_v_chr);
-                if (__pyx_t_3) {
-                  __pyx_t_3 = (__pyx_v_chr <= 57);
-                }
-                __pyx_t_6 = (__pyx_t_3 != 0);
+                __pyx_t_6 = (48 <= __pyx_v_chr);
                 if (__pyx_t_6) {
+                  __pyx_t_6 = (__pyx_v_chr <= 57);
+                }
+                __pyx_t_3 = (__pyx_t_6 != 0);
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1113
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1113, __pyx_L1_error)
@@ -14816,33 +14826,33 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1112
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                   goto __pyx_L54;
                 }
 
                 /* "RSONParser.pyx":1114
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
-                __pyx_t_6 = (97 <= __pyx_v_chr);
-                if (__pyx_t_6) {
-                  __pyx_t_6 = (__pyx_v_chr <= 0x66);
-                }
-                __pyx_t_3 = (__pyx_t_6 != 0);
+                __pyx_t_3 = (97 <= __pyx_v_chr);
                 if (__pyx_t_3) {
+                  __pyx_t_3 = (__pyx_v_chr <= 0x66);
+                }
+                __pyx_t_6 = (__pyx_t_3 != 0);
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1115
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1115, __pyx_L1_error)
@@ -14851,32 +14861,32 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1114
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                   goto __pyx_L54;
                 }
 
                 /* "RSONParser.pyx":1116
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
-                __pyx_t_3 = (65 <= __pyx_v_chr);
-                if (__pyx_t_3) {
-                  __pyx_t_3 = (__pyx_v_chr <= 70);
-                }
-                __pyx_t_6 = (__pyx_t_3 != 0);
+                __pyx_t_6 = (65 <= __pyx_v_chr);
                 if (__pyx_t_6) {
+                  __pyx_t_6 = (__pyx_v_chr <= 70);
+                }
+                __pyx_t_3 = (__pyx_t_6 != 0);
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1117
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
  *                                     else:
  *                                         offset_4 = -1
@@ -14887,9 +14897,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1116
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -14929,9 +14939,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 __Pyx_GOTREF(__pyx_t_7);
                 __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_4, __pyx_t_7, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1122, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-                __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1122, __pyx_L1_error)
+                __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1122, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-                if (__pyx_t_6) {
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1123
  * 
@@ -14948,7 +14958,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_4]
+ *                                     chr = ord(buf[offset_4])
  */
                   goto __pyx_L35_break;
 
@@ -14964,35 +14974,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":1126
  *                                         break
  * 
- *                                     chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
  */
                 __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1126, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_1);
-                __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1126, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_1); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1126, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
                 __pyx_v_chr = __pyx_t_8;
 
                 /* "RSONParser.pyx":1127
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
-                __pyx_t_6 = (48 <= __pyx_v_chr);
-                if (__pyx_t_6) {
-                  __pyx_t_6 = (__pyx_v_chr <= 57);
-                }
-                __pyx_t_3 = (__pyx_t_6 != 0);
+                __pyx_t_3 = (48 <= __pyx_v_chr);
                 if (__pyx_t_3) {
+                  __pyx_t_3 = (__pyx_v_chr <= 57);
+                }
+                __pyx_t_6 = (__pyx_t_3 != 0);
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1128
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1128, __pyx_L1_error)
@@ -15002,33 +15012,33 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1127
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                   goto __pyx_L56;
                 }
 
                 /* "RSONParser.pyx":1129
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
-                __pyx_t_3 = (97 <= __pyx_v_chr);
-                if (__pyx_t_3) {
-                  __pyx_t_3 = (__pyx_v_chr <= 0x66);
-                }
-                __pyx_t_6 = (__pyx_t_3 != 0);
+                __pyx_t_6 = (97 <= __pyx_v_chr);
                 if (__pyx_t_6) {
+                  __pyx_t_6 = (__pyx_v_chr <= 0x66);
+                }
+                __pyx_t_3 = (__pyx_t_6 != 0);
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1130
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1130, __pyx_L1_error)
@@ -15037,32 +15047,32 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1129
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                   goto __pyx_L56;
                 }
 
                 /* "RSONParser.pyx":1131
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
-                __pyx_t_6 = (65 <= __pyx_v_chr);
-                if (__pyx_t_6) {
-                  __pyx_t_6 = (__pyx_v_chr <= 70);
-                }
-                __pyx_t_3 = (__pyx_t_6 != 0);
+                __pyx_t_3 = (65 <= __pyx_v_chr);
                 if (__pyx_t_3) {
+                  __pyx_t_3 = (__pyx_v_chr <= 70);
+                }
+                __pyx_t_6 = (__pyx_t_3 != 0);
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1132
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
  *                                     else:
  *                                         offset_4 = -1
@@ -15073,9 +15083,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1131
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -15124,9 +15134,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  */
               __pyx_t_1 = __Pyx_PyInt_NeObjC(__pyx_v_offset_4, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1139, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_1);
-              __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1139, __pyx_L1_error)
+              __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1139, __pyx_L1_error)
               __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-              if (__pyx_t_3) {
+              if (__pyx_t_6) {
 
                 /* "RSONParser.pyx":1140
  *                                     break
@@ -15227,8 +15237,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 }
                 __Pyx_INCREF(__pyx_v_offset_4);
                 __pyx_t_1 = __pyx_v_offset_4;
-                __pyx_t_3 = (__pyx_t_1 == Py_None);
-                if (__pyx_t_3) {
+                __pyx_t_6 = (__pyx_t_1 == Py_None);
+                if (__pyx_t_6) {
                   __pyx_t_2 = 0;
                 } else {
                   __pyx_t_4 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_4 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 1149, __pyx_L1_error)
@@ -15237,8 +15247,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
                 __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_2, 2, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1149, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_1);
-                __pyx_t_3 = (__pyx_t_1 == Py_None);
-                if (__pyx_t_3) {
+                __pyx_t_6 = (__pyx_t_1 == Py_None);
+                if (__pyx_t_6) {
                   __pyx_t_4 = PY_SSIZE_T_MAX;
                 } else {
                   __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 1149, __pyx_L1_error)
@@ -15247,10 +15257,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
                 __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1149, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_1);
-                __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u_U, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1149, __pyx_L1_error)
+                __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u_U, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1149, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-                __pyx_t_6 = (__pyx_t_3 != 0);
-                if (__pyx_t_6) {
+                __pyx_t_3 = (__pyx_t_6 != 0);
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1150
  *                                 while True: # case
@@ -15344,8 +15354,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   }
                   __Pyx_INCREF(__pyx_v_offset_5);
                   __pyx_t_1 = __pyx_v_offset_5;
-                  __pyx_t_6 = (__pyx_t_1 == Py_None);
-                  if (__pyx_t_6) {
+                  __pyx_t_3 = (__pyx_t_1 == Py_None);
+                  if (__pyx_t_3) {
                     __pyx_t_4 = 0;
                   } else {
                     __pyx_t_2 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_2 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 1158, __pyx_L1_error)
@@ -15354,8 +15364,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_5, __pyx_int_7, 7, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1158, __pyx_L1_error)
                   __Pyx_GOTREF(__pyx_t_1);
-                  __pyx_t_6 = (__pyx_t_1 == Py_None);
-                  if (__pyx_t_6) {
+                  __pyx_t_3 = (__pyx_t_1 == Py_None);
+                  if (__pyx_t_3) {
                     __pyx_t_2 = PY_SSIZE_T_MAX;
                   } else {
                     __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 1158, __pyx_L1_error)
@@ -15364,10 +15374,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
                   __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1158, __pyx_L1_error)
                   __Pyx_GOTREF(__pyx_t_1);
-                  __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u_0000000, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1158, __pyx_L1_error)
+                  __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u_0000000, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1158, __pyx_L1_error)
                   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-                  __pyx_t_3 = (__pyx_t_6 != 0);
-                  if (__pyx_t_3) {
+                  __pyx_t_6 = (__pyx_t_3 != 0);
+                  if (__pyx_t_6) {
 
                     /* "RSONParser.pyx":1159
  *                                         offset_5, line_start_4 = offset_4, line_start_3
@@ -15424,9 +15434,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __Pyx_GOTREF(__pyx_t_1);
                   __pyx_t_7 = PyObject_RichCompare(__pyx_v_offset_5, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1164, __pyx_L1_error)
                   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-                  __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1164, __pyx_L1_error)
+                  __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1164, __pyx_L1_error)
                   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-                  if (__pyx_t_3) {
+                  if (__pyx_t_6) {
 
                     /* "RSONParser.pyx":1165
  * 
@@ -15443,7 +15453,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                             offset_5 = -1
  *                                             break             # <<<<<<<<<<<<<<
  * 
- *                                         chr = buf[offset_5]
+ *                                         chr = ord(buf[offset_5])
  */
                     goto __pyx_L62_break;
 
@@ -15459,33 +15469,33 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   /* "RSONParser.pyx":1168
  *                                             break
  * 
- *                                         chr = buf[offset_5]             # <<<<<<<<<<<<<<
- *                                         if '0' <= chr <= '1':
+ *                                         chr = ord(buf[offset_5])             # <<<<<<<<<<<<<<
+ *                                         if 48 <= chr <= 49:
  *                                             offset_5 += 1
  */
                   __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_5); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1168, __pyx_L1_error)
                   __Pyx_GOTREF(__pyx_t_7);
-                  __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_7); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1168, __pyx_L1_error)
+                  __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_7); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1168, __pyx_L1_error)
                   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
                   __pyx_v_chr = __pyx_t_8;
 
                   /* "RSONParser.pyx":1169
  * 
- *                                         chr = buf[offset_5]
- *                                         if '0' <= chr <= '1':             # <<<<<<<<<<<<<<
+ *                                         chr = ord(buf[offset_5])
+ *                                         if 48 <= chr <= 49:             # <<<<<<<<<<<<<<
  *                                             offset_5 += 1
  *                                         else:
  */
-                  __pyx_t_3 = (48 <= __pyx_v_chr);
-                  if (__pyx_t_3) {
-                    __pyx_t_3 = (__pyx_v_chr <= 49);
-                  }
-                  __pyx_t_6 = (__pyx_t_3 != 0);
+                  __pyx_t_6 = (48 <= __pyx_v_chr);
                   if (__pyx_t_6) {
+                    __pyx_t_6 = (__pyx_v_chr <= 49);
+                  }
+                  __pyx_t_3 = (__pyx_t_6 != 0);
+                  if (__pyx_t_3) {
 
                     /* "RSONParser.pyx":1170
- *                                         chr = buf[offset_5]
- *                                         if '0' <= chr <= '1':
+ *                                         chr = ord(buf[offset_5])
+ *                                         if 48 <= chr <= 49:
  *                                             offset_5 += 1             # <<<<<<<<<<<<<<
  *                                         else:
  *                                             offset_5 = -1
@@ -15497,8 +15507,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                     /* "RSONParser.pyx":1169
  * 
- *                                         chr = buf[offset_5]
- *                                         if '0' <= chr <= '1':             # <<<<<<<<<<<<<<
+ *                                         chr = ord(buf[offset_5])
+ *                                         if 48 <= chr <= 49:             # <<<<<<<<<<<<<<
  *                                             offset_5 += 1
  *                                         else:
  */
@@ -15548,9 +15558,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 if (unlikely(!__pyx_v_offset_5)) { __Pyx_RaiseUnboundLocalError("offset_5"); __PYX_ERR(0, 1176, __pyx_L1_error) }
                 __pyx_t_7 = __Pyx_PyInt_NeObjC(__pyx_v_offset_5, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1176, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_7);
-                __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1176, __pyx_L1_error)
+                __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1176, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-                if (__pyx_t_6) {
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1177
  *                                         break
@@ -15628,8 +15638,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   }
                   __Pyx_INCREF(__pyx_v_offset_5);
                   __pyx_t_7 = __pyx_v_offset_5;
-                  __pyx_t_6 = (__pyx_t_7 == Py_None);
-                  if (__pyx_t_6) {
+                  __pyx_t_3 = (__pyx_t_7 == Py_None);
+                  if (__pyx_t_3) {
                     __pyx_t_2 = 0;
                   } else {
                     __pyx_t_4 = __Pyx_PyIndex_AsSsize_t(__pyx_t_7); if (unlikely((__pyx_t_4 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 1183, __pyx_L1_error)
@@ -15638,8 +15648,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_5, __pyx_int_4, 4, 0, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1183, __pyx_L1_error)
                   __Pyx_GOTREF(__pyx_t_7);
-                  __pyx_t_6 = (__pyx_t_7 == Py_None);
-                  if (__pyx_t_6) {
+                  __pyx_t_3 = (__pyx_t_7 == Py_None);
+                  if (__pyx_t_3) {
                     __pyx_t_4 = PY_SSIZE_T_MAX;
                   } else {
                     __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_7); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 1183, __pyx_L1_error)
@@ -15648,10 +15658,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
                   __pyx_t_7 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1183, __pyx_L1_error)
                   __Pyx_GOTREF(__pyx_t_7);
-                  __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_kp_u_0000, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1183, __pyx_L1_error)
+                  __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_kp_u_0000, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1183, __pyx_L1_error)
                   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-                  __pyx_t_3 = (__pyx_t_6 != 0);
-                  if (__pyx_t_3) {
+                  __pyx_t_6 = (__pyx_t_3 != 0);
+                  if (__pyx_t_6) {
 
                     /* "RSONParser.pyx":1184
  *                                         offset_5, line_start_4 = offset_4, line_start_3
@@ -15710,8 +15720,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   }
                   __Pyx_INCREF(__pyx_v_offset_5);
                   __pyx_t_7 = __pyx_v_offset_5;
-                  __pyx_t_3 = (__pyx_t_7 == Py_None);
-                  if (__pyx_t_3) {
+                  __pyx_t_6 = (__pyx_t_7 == Py_None);
+                  if (__pyx_t_6) {
                     __pyx_t_4 = 0;
                   } else {
                     __pyx_t_2 = __Pyx_PyIndex_AsSsize_t(__pyx_t_7); if (unlikely((__pyx_t_2 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 1189, __pyx_L1_error)
@@ -15720,8 +15730,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_5, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1189, __pyx_L1_error)
                   __Pyx_GOTREF(__pyx_t_7);
-                  __pyx_t_3 = (__pyx_t_7 == Py_None);
-                  if (__pyx_t_3) {
+                  __pyx_t_6 = (__pyx_t_7 == Py_None);
+                  if (__pyx_t_6) {
                     __pyx_t_2 = PY_SSIZE_T_MAX;
                   } else {
                     __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_7); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 1189, __pyx_L1_error)
@@ -15730,10 +15740,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
                   __pyx_t_7 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1189, __pyx_L1_error)
                   __Pyx_GOTREF(__pyx_t_7);
-                  __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_n_u_D, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1189, __pyx_L1_error)
+                  __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_n_u_D, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1189, __pyx_L1_error)
                   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-                  __pyx_t_6 = (__pyx_t_3 != 0);
-                  if (__pyx_t_6) {
+                  __pyx_t_3 = (__pyx_t_6 != 0);
+                  if (__pyx_t_3) {
 
                     /* "RSONParser.pyx":1190
  * 
@@ -15770,8 +15780,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   }
                   __Pyx_INCREF(__pyx_v_offset_5);
                   __pyx_t_7 = __pyx_v_offset_5;
-                  __pyx_t_6 = (__pyx_t_7 == Py_None);
-                  if (__pyx_t_6) {
+                  __pyx_t_3 = (__pyx_t_7 == Py_None);
+                  if (__pyx_t_3) {
                     __pyx_t_2 = 0;
                   } else {
                     __pyx_t_4 = __Pyx_PyIndex_AsSsize_t(__pyx_t_7); if (unlikely((__pyx_t_4 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 1191, __pyx_L1_error)
@@ -15780,8 +15790,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_5, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1191, __pyx_L1_error)
                   __Pyx_GOTREF(__pyx_t_7);
-                  __pyx_t_6 = (__pyx_t_7 == Py_None);
-                  if (__pyx_t_6) {
+                  __pyx_t_3 = (__pyx_t_7 == Py_None);
+                  if (__pyx_t_3) {
                     __pyx_t_4 = PY_SSIZE_T_MAX;
                   } else {
                     __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_7); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 1191, __pyx_L1_error)
@@ -15790,10 +15800,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
                   __pyx_t_7 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1191, __pyx_L1_error)
                   __Pyx_GOTREF(__pyx_t_7);
-                  __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_n_u_d, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1191, __pyx_L1_error)
+                  __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_n_u_d, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1191, __pyx_L1_error)
                   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-                  __pyx_t_3 = (__pyx_t_6 != 0);
-                  if (__pyx_t_3) {
+                  __pyx_t_6 = (__pyx_t_3 != 0);
+                  if (__pyx_t_6) {
 
                     /* "RSONParser.pyx":1192
  *                                             offset_5 += 1
@@ -15850,9 +15860,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __Pyx_GOTREF(__pyx_t_7);
                   __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_5, __pyx_t_7, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1197, __pyx_L1_error)
                   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-                  __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1197, __pyx_L1_error)
+                  __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1197, __pyx_L1_error)
                   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-                  if (__pyx_t_3) {
+                  if (__pyx_t_6) {
 
                     /* "RSONParser.pyx":1198
  * 
@@ -15869,7 +15879,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                             offset_5 = -1
  *                                             break             # <<<<<<<<<<<<<<
  * 
- *                                         chr = buf[offset_5]
+ *                                         chr = ord(buf[offset_5])
  */
                     goto __pyx_L68_break;
 
@@ -15885,35 +15895,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   /* "RSONParser.pyx":1201
  *                                             break
  * 
- *                                         chr = buf[offset_5]             # <<<<<<<<<<<<<<
- *                                         if '8' <= chr <= '9':
+ *                                         chr = ord(buf[offset_5])             # <<<<<<<<<<<<<<
+ *                                         if 56 <= chr <= 57:
  *                                             offset_5 += 1
  */
                   __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1201, __pyx_L1_error)
                   __Pyx_GOTREF(__pyx_t_1);
-                  __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1201, __pyx_L1_error)
+                  __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_1); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1201, __pyx_L1_error)
                   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
                   __pyx_v_chr = __pyx_t_8;
 
                   /* "RSONParser.pyx":1202
  * 
- *                                         chr = buf[offset_5]
- *                                         if '8' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                         chr = ord(buf[offset_5])
+ *                                         if 56 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                             offset_5 += 1
- *                                         elif 'A' <= chr <= 'F':
+ *                                         elif 65 <= chr <= 70:
  */
-                  __pyx_t_3 = (56 <= __pyx_v_chr);
-                  if (__pyx_t_3) {
-                    __pyx_t_3 = (__pyx_v_chr <= 57);
-                  }
-                  __pyx_t_6 = (__pyx_t_3 != 0);
+                  __pyx_t_6 = (56 <= __pyx_v_chr);
                   if (__pyx_t_6) {
+                    __pyx_t_6 = (__pyx_v_chr <= 57);
+                  }
+                  __pyx_t_3 = (__pyx_t_6 != 0);
+                  if (__pyx_t_3) {
 
                     /* "RSONParser.pyx":1203
- *                                         chr = buf[offset_5]
- *                                         if '8' <= chr <= '9':
+ *                                         chr = ord(buf[offset_5])
+ *                                         if 56 <= chr <= 57:
  *                                             offset_5 += 1             # <<<<<<<<<<<<<<
- *                                         elif 'A' <= chr <= 'F':
+ *                                         elif 65 <= chr <= 70:
  *                                             offset_5 += 1
  */
                     __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_5, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1203, __pyx_L1_error)
@@ -15923,31 +15933,31 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                     /* "RSONParser.pyx":1202
  * 
- *                                         chr = buf[offset_5]
- *                                         if '8' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                         chr = ord(buf[offset_5])
+ *                                         if 56 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                             offset_5 += 1
- *                                         elif 'A' <= chr <= 'F':
+ *                                         elif 65 <= chr <= 70:
  */
                     goto __pyx_L72;
                   }
 
                   /* "RSONParser.pyx":1204
- *                                         if '8' <= chr <= '9':
+ *                                         if 56 <= chr <= 57:
  *                                             offset_5 += 1
- *                                         elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                         elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                             offset_5 += 1
  *                                         else:
  */
-                  __pyx_t_6 = (65 <= __pyx_v_chr);
-                  if (__pyx_t_6) {
-                    __pyx_t_6 = (__pyx_v_chr <= 70);
-                  }
-                  __pyx_t_3 = (__pyx_t_6 != 0);
+                  __pyx_t_3 = (65 <= __pyx_v_chr);
                   if (__pyx_t_3) {
+                    __pyx_t_3 = (__pyx_v_chr <= 70);
+                  }
+                  __pyx_t_6 = (__pyx_t_3 != 0);
+                  if (__pyx_t_6) {
 
                     /* "RSONParser.pyx":1205
  *                                             offset_5 += 1
- *                                         elif 'A' <= chr <= 'F':
+ *                                         elif 65 <= chr <= 70:
  *                                             offset_5 += 1             # <<<<<<<<<<<<<<
  *                                         else:
  *                                             offset_5 = -1
@@ -15958,9 +15968,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                     __pyx_t_1 = 0;
 
                     /* "RSONParser.pyx":1204
- *                                         if '8' <= chr <= '9':
+ *                                         if 56 <= chr <= 57:
  *                                             offset_5 += 1
- *                                         elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                         elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                             offset_5 += 1
  *                                         else:
  */
@@ -16010,9 +16020,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 if (unlikely(!__pyx_v_offset_5)) { __Pyx_RaiseUnboundLocalError("offset_5"); __PYX_ERR(0, 1211, __pyx_L1_error) }
                 __pyx_t_1 = __Pyx_PyInt_NeObjC(__pyx_v_offset_5, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1211, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_1);
-                __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1211, __pyx_L1_error)
+                __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1211, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-                if (__pyx_t_3) {
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1212
  *                                         break
@@ -16053,9 +16063,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 __Pyx_GOTREF(__pyx_t_1);
                 __pyx_t_7 = PyObject_RichCompare(__pyx_v_offset_4, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1215, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-                __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1215, __pyx_L1_error)
+                __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1215, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-                if (__pyx_t_3) {
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1216
  * 
@@ -16072,7 +16082,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_4]
+ *                                     chr = ord(buf[offset_4])
  */
                   goto __pyx_L59_break;
 
@@ -16088,35 +16098,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":1219
  *                                         break
  * 
- *                                     chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
  */
                 __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1219, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_7);
-                __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_7); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1219, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_7); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1219, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
                 __pyx_v_chr = __pyx_t_8;
 
                 /* "RSONParser.pyx":1220
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
-                __pyx_t_3 = (48 <= __pyx_v_chr);
-                if (__pyx_t_3) {
-                  __pyx_t_3 = (__pyx_v_chr <= 57);
-                }
-                __pyx_t_6 = (__pyx_t_3 != 0);
+                __pyx_t_6 = (48 <= __pyx_v_chr);
                 if (__pyx_t_6) {
+                  __pyx_t_6 = (__pyx_v_chr <= 57);
+                }
+                __pyx_t_3 = (__pyx_t_6 != 0);
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1221
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1221, __pyx_L1_error)
@@ -16126,33 +16136,33 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1220
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                   goto __pyx_L75;
                 }
 
                 /* "RSONParser.pyx":1222
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
-                __pyx_t_6 = (97 <= __pyx_v_chr);
-                if (__pyx_t_6) {
-                  __pyx_t_6 = (__pyx_v_chr <= 0x66);
-                }
-                __pyx_t_3 = (__pyx_t_6 != 0);
+                __pyx_t_3 = (97 <= __pyx_v_chr);
                 if (__pyx_t_3) {
+                  __pyx_t_3 = (__pyx_v_chr <= 0x66);
+                }
+                __pyx_t_6 = (__pyx_t_3 != 0);
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1223
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1223, __pyx_L1_error)
@@ -16161,32 +16171,32 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1222
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                   goto __pyx_L75;
                 }
 
                 /* "RSONParser.pyx":1224
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
-                __pyx_t_3 = (65 <= __pyx_v_chr);
-                if (__pyx_t_3) {
-                  __pyx_t_3 = (__pyx_v_chr <= 70);
-                }
-                __pyx_t_6 = (__pyx_t_3 != 0);
+                __pyx_t_6 = (65 <= __pyx_v_chr);
                 if (__pyx_t_6) {
+                  __pyx_t_6 = (__pyx_v_chr <= 70);
+                }
+                __pyx_t_3 = (__pyx_t_6 != 0);
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1225
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
  *                                     else:
  *                                         offset_4 = -1
@@ -16197,9 +16207,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1224
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -16239,9 +16249,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 __Pyx_GOTREF(__pyx_t_7);
                 __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_4, __pyx_t_7, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1230, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-                __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1230, __pyx_L1_error)
+                __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1230, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-                if (__pyx_t_6) {
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1231
  * 
@@ -16258,7 +16268,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_4]
+ *                                     chr = ord(buf[offset_4])
  */
                   goto __pyx_L59_break;
 
@@ -16274,35 +16284,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":1234
  *                                         break
  * 
- *                                     chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
  */
                 __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1234, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_1);
-                __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1234, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_1); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1234, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
                 __pyx_v_chr = __pyx_t_8;
 
                 /* "RSONParser.pyx":1235
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
-                __pyx_t_6 = (48 <= __pyx_v_chr);
-                if (__pyx_t_6) {
-                  __pyx_t_6 = (__pyx_v_chr <= 57);
-                }
-                __pyx_t_3 = (__pyx_t_6 != 0);
+                __pyx_t_3 = (48 <= __pyx_v_chr);
                 if (__pyx_t_3) {
+                  __pyx_t_3 = (__pyx_v_chr <= 57);
+                }
+                __pyx_t_6 = (__pyx_t_3 != 0);
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1236
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1236, __pyx_L1_error)
@@ -16312,33 +16322,33 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1235
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                   goto __pyx_L77;
                 }
 
                 /* "RSONParser.pyx":1237
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
-                __pyx_t_3 = (97 <= __pyx_v_chr);
-                if (__pyx_t_3) {
-                  __pyx_t_3 = (__pyx_v_chr <= 0x66);
-                }
-                __pyx_t_6 = (__pyx_t_3 != 0);
+                __pyx_t_6 = (97 <= __pyx_v_chr);
                 if (__pyx_t_6) {
+                  __pyx_t_6 = (__pyx_v_chr <= 0x66);
+                }
+                __pyx_t_3 = (__pyx_t_6 != 0);
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1238
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1238, __pyx_L1_error)
@@ -16347,32 +16357,32 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1237
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                   goto __pyx_L77;
                 }
 
                 /* "RSONParser.pyx":1239
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
-                __pyx_t_6 = (65 <= __pyx_v_chr);
-                if (__pyx_t_6) {
-                  __pyx_t_6 = (__pyx_v_chr <= 70);
-                }
-                __pyx_t_3 = (__pyx_t_6 != 0);
+                __pyx_t_3 = (65 <= __pyx_v_chr);
                 if (__pyx_t_3) {
+                  __pyx_t_3 = (__pyx_v_chr <= 70);
+                }
+                __pyx_t_6 = (__pyx_t_3 != 0);
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1240
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
  *                                     else:
  *                                         offset_4 = -1
@@ -16383,9 +16393,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1239
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -16425,9 +16435,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 __Pyx_GOTREF(__pyx_t_1);
                 __pyx_t_7 = PyObject_RichCompare(__pyx_v_offset_4, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1245, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-                __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1245, __pyx_L1_error)
+                __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1245, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-                if (__pyx_t_3) {
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1246
  * 
@@ -16444,7 +16454,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_4]
+ *                                     chr = ord(buf[offset_4])
  */
                   goto __pyx_L59_break;
 
@@ -16460,35 +16470,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":1249
  *                                         break
  * 
- *                                     chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
  */
                 __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1249, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_7);
-                __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_7); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1249, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_7); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1249, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
                 __pyx_v_chr = __pyx_t_8;
 
                 /* "RSONParser.pyx":1250
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
-                __pyx_t_3 = (48 <= __pyx_v_chr);
-                if (__pyx_t_3) {
-                  __pyx_t_3 = (__pyx_v_chr <= 57);
-                }
-                __pyx_t_6 = (__pyx_t_3 != 0);
+                __pyx_t_6 = (48 <= __pyx_v_chr);
                 if (__pyx_t_6) {
+                  __pyx_t_6 = (__pyx_v_chr <= 57);
+                }
+                __pyx_t_3 = (__pyx_t_6 != 0);
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1251
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1251, __pyx_L1_error)
@@ -16498,33 +16508,33 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1250
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                   goto __pyx_L79;
                 }
 
                 /* "RSONParser.pyx":1252
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
-                __pyx_t_6 = (97 <= __pyx_v_chr);
-                if (__pyx_t_6) {
-                  __pyx_t_6 = (__pyx_v_chr <= 0x66);
-                }
-                __pyx_t_3 = (__pyx_t_6 != 0);
+                __pyx_t_3 = (97 <= __pyx_v_chr);
                 if (__pyx_t_3) {
+                  __pyx_t_3 = (__pyx_v_chr <= 0x66);
+                }
+                __pyx_t_6 = (__pyx_t_3 != 0);
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1253
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1253, __pyx_L1_error)
@@ -16533,32 +16543,32 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1252
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                   goto __pyx_L79;
                 }
 
                 /* "RSONParser.pyx":1254
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
-                __pyx_t_3 = (65 <= __pyx_v_chr);
-                if (__pyx_t_3) {
-                  __pyx_t_3 = (__pyx_v_chr <= 70);
-                }
-                __pyx_t_6 = (__pyx_t_3 != 0);
+                __pyx_t_6 = (65 <= __pyx_v_chr);
                 if (__pyx_t_6) {
+                  __pyx_t_6 = (__pyx_v_chr <= 70);
+                }
+                __pyx_t_3 = (__pyx_t_6 != 0);
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1255
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
  *                                     else:
  *                                         offset_4 = -1
@@ -16569,9 +16579,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1254
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -16611,9 +16621,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 __Pyx_GOTREF(__pyx_t_7);
                 __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_4, __pyx_t_7, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1260, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-                __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1260, __pyx_L1_error)
+                __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1260, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-                if (__pyx_t_6) {
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1261
  * 
@@ -16630,7 +16640,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_4]
+ *                                     chr = ord(buf[offset_4])
  */
                   goto __pyx_L59_break;
 
@@ -16646,35 +16656,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":1264
  *                                         break
  * 
- *                                     chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
  */
                 __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1264, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_1);
-                __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1264, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_1); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1264, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
                 __pyx_v_chr = __pyx_t_8;
 
                 /* "RSONParser.pyx":1265
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
-                __pyx_t_6 = (48 <= __pyx_v_chr);
-                if (__pyx_t_6) {
-                  __pyx_t_6 = (__pyx_v_chr <= 57);
-                }
-                __pyx_t_3 = (__pyx_t_6 != 0);
+                __pyx_t_3 = (48 <= __pyx_v_chr);
                 if (__pyx_t_3) {
+                  __pyx_t_3 = (__pyx_v_chr <= 57);
+                }
+                __pyx_t_6 = (__pyx_t_3 != 0);
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1266
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1266, __pyx_L1_error)
@@ -16684,33 +16694,33 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1265
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                   goto __pyx_L81;
                 }
 
                 /* "RSONParser.pyx":1267
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
-                __pyx_t_3 = (97 <= __pyx_v_chr);
-                if (__pyx_t_3) {
-                  __pyx_t_3 = (__pyx_v_chr <= 0x66);
-                }
-                __pyx_t_6 = (__pyx_t_3 != 0);
+                __pyx_t_6 = (97 <= __pyx_v_chr);
                 if (__pyx_t_6) {
+                  __pyx_t_6 = (__pyx_v_chr <= 0x66);
+                }
+                __pyx_t_3 = (__pyx_t_6 != 0);
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1268
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1268, __pyx_L1_error)
@@ -16719,32 +16729,32 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1267
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                   goto __pyx_L81;
                 }
 
                 /* "RSONParser.pyx":1269
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
-                __pyx_t_6 = (65 <= __pyx_v_chr);
-                if (__pyx_t_6) {
-                  __pyx_t_6 = (__pyx_v_chr <= 70);
-                }
-                __pyx_t_3 = (__pyx_t_6 != 0);
+                __pyx_t_3 = (65 <= __pyx_v_chr);
                 if (__pyx_t_3) {
+                  __pyx_t_3 = (__pyx_v_chr <= 70);
+                }
+                __pyx_t_6 = (__pyx_t_3 != 0);
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1270
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
  *                                     else:
  *                                         offset_4 = -1
@@ -16755,9 +16765,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1269
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -16797,9 +16807,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 __Pyx_GOTREF(__pyx_t_1);
                 __pyx_t_7 = PyObject_RichCompare(__pyx_v_offset_4, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1275, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-                __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1275, __pyx_L1_error)
+                __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1275, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-                if (__pyx_t_3) {
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1276
  * 
@@ -16816,7 +16826,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_4]
+ *                                     chr = ord(buf[offset_4])
  */
                   goto __pyx_L59_break;
 
@@ -16832,35 +16842,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":1279
  *                                         break
  * 
- *                                     chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
  */
                 __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1279, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_7);
-                __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_7); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1279, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_7); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1279, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
                 __pyx_v_chr = __pyx_t_8;
 
                 /* "RSONParser.pyx":1280
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
-                __pyx_t_3 = (48 <= __pyx_v_chr);
-                if (__pyx_t_3) {
-                  __pyx_t_3 = (__pyx_v_chr <= 57);
-                }
-                __pyx_t_6 = (__pyx_t_3 != 0);
+                __pyx_t_6 = (48 <= __pyx_v_chr);
                 if (__pyx_t_6) {
+                  __pyx_t_6 = (__pyx_v_chr <= 57);
+                }
+                __pyx_t_3 = (__pyx_t_6 != 0);
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1281
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1281, __pyx_L1_error)
@@ -16870,33 +16880,33 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1280
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                   goto __pyx_L83;
                 }
 
                 /* "RSONParser.pyx":1282
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
-                __pyx_t_6 = (97 <= __pyx_v_chr);
-                if (__pyx_t_6) {
-                  __pyx_t_6 = (__pyx_v_chr <= 0x66);
-                }
-                __pyx_t_3 = (__pyx_t_6 != 0);
+                __pyx_t_3 = (97 <= __pyx_v_chr);
                 if (__pyx_t_3) {
+                  __pyx_t_3 = (__pyx_v_chr <= 0x66);
+                }
+                __pyx_t_6 = (__pyx_t_3 != 0);
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1283
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1283, __pyx_L1_error)
@@ -16905,32 +16915,32 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1282
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                   goto __pyx_L83;
                 }
 
                 /* "RSONParser.pyx":1284
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
-                __pyx_t_3 = (65 <= __pyx_v_chr);
-                if (__pyx_t_3) {
-                  __pyx_t_3 = (__pyx_v_chr <= 70);
-                }
-                __pyx_t_6 = (__pyx_t_3 != 0);
+                __pyx_t_6 = (65 <= __pyx_v_chr);
                 if (__pyx_t_6) {
+                  __pyx_t_6 = (__pyx_v_chr <= 70);
+                }
+                __pyx_t_3 = (__pyx_t_6 != 0);
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1285
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
  *                                     else:
  *                                         offset_4 = -1
@@ -16941,9 +16951,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1284
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -16983,9 +16993,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 __Pyx_GOTREF(__pyx_t_7);
                 __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_4, __pyx_t_7, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1290, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-                __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1290, __pyx_L1_error)
+                __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1290, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-                if (__pyx_t_6) {
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1291
  * 
@@ -17002,7 +17012,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_4]
+ *                                     chr = ord(buf[offset_4])
  */
                   goto __pyx_L59_break;
 
@@ -17018,35 +17028,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":1294
  *                                         break
  * 
- *                                     chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
  */
                 __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1294, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_1);
-                __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1294, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_1); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1294, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
                 __pyx_v_chr = __pyx_t_8;
 
                 /* "RSONParser.pyx":1295
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
-                __pyx_t_6 = (48 <= __pyx_v_chr);
-                if (__pyx_t_6) {
-                  __pyx_t_6 = (__pyx_v_chr <= 57);
-                }
-                __pyx_t_3 = (__pyx_t_6 != 0);
+                __pyx_t_3 = (48 <= __pyx_v_chr);
                 if (__pyx_t_3) {
+                  __pyx_t_3 = (__pyx_v_chr <= 57);
+                }
+                __pyx_t_6 = (__pyx_t_3 != 0);
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1296
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1296, __pyx_L1_error)
@@ -17056,33 +17066,33 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1295
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                   goto __pyx_L85;
                 }
 
                 /* "RSONParser.pyx":1297
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
-                __pyx_t_3 = (97 <= __pyx_v_chr);
-                if (__pyx_t_3) {
-                  __pyx_t_3 = (__pyx_v_chr <= 0x66);
-                }
-                __pyx_t_6 = (__pyx_t_3 != 0);
+                __pyx_t_6 = (97 <= __pyx_v_chr);
                 if (__pyx_t_6) {
+                  __pyx_t_6 = (__pyx_v_chr <= 0x66);
+                }
+                __pyx_t_3 = (__pyx_t_6 != 0);
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1298
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1298, __pyx_L1_error)
@@ -17091,32 +17101,32 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1297
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                   goto __pyx_L85;
                 }
 
                 /* "RSONParser.pyx":1299
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
-                __pyx_t_6 = (65 <= __pyx_v_chr);
-                if (__pyx_t_6) {
-                  __pyx_t_6 = (__pyx_v_chr <= 70);
-                }
-                __pyx_t_3 = (__pyx_t_6 != 0);
+                __pyx_t_3 = (65 <= __pyx_v_chr);
                 if (__pyx_t_3) {
+                  __pyx_t_3 = (__pyx_v_chr <= 70);
+                }
+                __pyx_t_6 = (__pyx_t_3 != 0);
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1300
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
  *                                     else:
  *                                         offset_4 = -1
@@ -17127,9 +17137,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1299
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -17169,9 +17179,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 __Pyx_GOTREF(__pyx_t_1);
                 __pyx_t_7 = PyObject_RichCompare(__pyx_v_offset_4, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1305, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-                __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1305, __pyx_L1_error)
+                __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1305, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-                if (__pyx_t_3) {
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1306
  * 
@@ -17188,7 +17198,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_4]
+ *                                     chr = ord(buf[offset_4])
  */
                   goto __pyx_L59_break;
 
@@ -17204,35 +17214,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":1309
  *                                         break
  * 
- *                                     chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
  */
                 __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1309, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_7);
-                __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_7); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1309, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_7); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1309, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
                 __pyx_v_chr = __pyx_t_8;
 
                 /* "RSONParser.pyx":1310
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
-                __pyx_t_3 = (48 <= __pyx_v_chr);
-                if (__pyx_t_3) {
-                  __pyx_t_3 = (__pyx_v_chr <= 57);
-                }
-                __pyx_t_6 = (__pyx_t_3 != 0);
+                __pyx_t_6 = (48 <= __pyx_v_chr);
                 if (__pyx_t_6) {
+                  __pyx_t_6 = (__pyx_v_chr <= 57);
+                }
+                __pyx_t_3 = (__pyx_t_6 != 0);
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1311
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1311, __pyx_L1_error)
@@ -17242,33 +17252,33 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1310
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                   goto __pyx_L87;
                 }
 
                 /* "RSONParser.pyx":1312
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
-                __pyx_t_6 = (97 <= __pyx_v_chr);
-                if (__pyx_t_6) {
-                  __pyx_t_6 = (__pyx_v_chr <= 0x66);
-                }
-                __pyx_t_3 = (__pyx_t_6 != 0);
+                __pyx_t_3 = (97 <= __pyx_v_chr);
                 if (__pyx_t_3) {
+                  __pyx_t_3 = (__pyx_v_chr <= 0x66);
+                }
+                __pyx_t_6 = (__pyx_t_3 != 0);
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1313
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1313, __pyx_L1_error)
@@ -17277,32 +17287,32 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1312
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                   goto __pyx_L87;
                 }
 
                 /* "RSONParser.pyx":1314
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
-                __pyx_t_3 = (65 <= __pyx_v_chr);
-                if (__pyx_t_3) {
-                  __pyx_t_3 = (__pyx_v_chr <= 70);
-                }
-                __pyx_t_6 = (__pyx_t_3 != 0);
+                __pyx_t_6 = (65 <= __pyx_v_chr);
                 if (__pyx_t_6) {
+                  __pyx_t_6 = (__pyx_v_chr <= 70);
+                }
+                __pyx_t_3 = (__pyx_t_6 != 0);
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1315
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
  *                                     else:
  *                                         offset_4 = -1
@@ -17313,9 +17323,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1314
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -17355,9 +17365,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 __Pyx_GOTREF(__pyx_t_7);
                 __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_4, __pyx_t_7, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1320, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-                __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1320, __pyx_L1_error)
+                __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1320, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-                if (__pyx_t_6) {
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1321
  * 
@@ -17374,7 +17384,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_4]
+ *                                     chr = ord(buf[offset_4])
  */
                   goto __pyx_L59_break;
 
@@ -17390,35 +17400,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":1324
  *                                         break
  * 
- *                                     chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
  */
                 __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1324, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_1);
-                __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1324, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_1); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1324, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
                 __pyx_v_chr = __pyx_t_8;
 
                 /* "RSONParser.pyx":1325
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
-                __pyx_t_6 = (48 <= __pyx_v_chr);
-                if (__pyx_t_6) {
-                  __pyx_t_6 = (__pyx_v_chr <= 57);
-                }
-                __pyx_t_3 = (__pyx_t_6 != 0);
+                __pyx_t_3 = (48 <= __pyx_v_chr);
                 if (__pyx_t_3) {
+                  __pyx_t_3 = (__pyx_v_chr <= 57);
+                }
+                __pyx_t_6 = (__pyx_t_3 != 0);
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1326
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1326, __pyx_L1_error)
@@ -17428,33 +17438,33 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1325
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                   goto __pyx_L89;
                 }
 
                 /* "RSONParser.pyx":1327
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
-                __pyx_t_3 = (97 <= __pyx_v_chr);
-                if (__pyx_t_3) {
-                  __pyx_t_3 = (__pyx_v_chr <= 0x66);
-                }
-                __pyx_t_6 = (__pyx_t_3 != 0);
+                __pyx_t_6 = (97 <= __pyx_v_chr);
                 if (__pyx_t_6) {
+                  __pyx_t_6 = (__pyx_v_chr <= 0x66);
+                }
+                __pyx_t_3 = (__pyx_t_6 != 0);
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1328
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1328, __pyx_L1_error)
@@ -17463,32 +17473,32 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1327
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                   goto __pyx_L89;
                 }
 
                 /* "RSONParser.pyx":1329
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
-                __pyx_t_6 = (65 <= __pyx_v_chr);
-                if (__pyx_t_6) {
-                  __pyx_t_6 = (__pyx_v_chr <= 70);
-                }
-                __pyx_t_3 = (__pyx_t_6 != 0);
+                __pyx_t_3 = (65 <= __pyx_v_chr);
                 if (__pyx_t_3) {
+                  __pyx_t_3 = (__pyx_v_chr <= 70);
+                }
+                __pyx_t_6 = (__pyx_t_3 != 0);
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1330
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
  *                                     else:
  *                                         offset_4 = -1
@@ -17499,9 +17509,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1329
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -17550,9 +17560,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  */
               __pyx_t_1 = __Pyx_PyInt_NeObjC(__pyx_v_offset_4, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1337, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_1);
-              __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1337, __pyx_L1_error)
+              __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1337, __pyx_L1_error)
               __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-              if (__pyx_t_3) {
+              if (__pyx_t_6) {
 
                 /* "RSONParser.pyx":1338
  *                                     break
@@ -17653,8 +17663,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 }
                 __Pyx_INCREF(__pyx_v_offset_4);
                 __pyx_t_1 = __pyx_v_offset_4;
-                __pyx_t_3 = (__pyx_t_1 == Py_None);
-                if (__pyx_t_3) {
+                __pyx_t_6 = (__pyx_t_1 == Py_None);
+                if (__pyx_t_6) {
                   __pyx_t_4 = 0;
                 } else {
                   __pyx_t_2 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_2 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 1347, __pyx_L1_error)
@@ -17663,8 +17673,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
                 __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1347, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_1);
-                __pyx_t_3 = (__pyx_t_1 == Py_None);
-                if (__pyx_t_3) {
+                __pyx_t_6 = (__pyx_t_1 == Py_None);
+                if (__pyx_t_6) {
                   __pyx_t_2 = PY_SSIZE_T_MAX;
                 } else {
                   __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 1347, __pyx_L1_error)
@@ -17673,10 +17683,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
                 __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1347, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_1);
-                __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u__9, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1347, __pyx_L1_error)
+                __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u__9, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1347, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-                __pyx_t_6 = (__pyx_t_3 != 0);
-                if (__pyx_t_6) {
+                __pyx_t_3 = (__pyx_t_6 != 0);
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1348
  *                                 while True: # case
@@ -17733,9 +17743,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 __Pyx_GOTREF(__pyx_t_1);
                 __pyx_t_7 = PyObject_RichCompare(__pyx_v_offset_4, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1353, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-                __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1353, __pyx_L1_error)
+                __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1353, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-                if (__pyx_t_6) {
+                if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1354
  * 
@@ -17752,7 +17762,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_4]
+ *                                     chr = ord(buf[offset_4])
  */
                   goto __pyx_L92_break;
 
@@ -17768,31 +17778,31 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":1357
  *                                         break
  * 
- *                                     chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                     if chr == '"':
+ *                                     chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                     if chr == 34:
  *                                         offset_4 += 1
  */
                 __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1357, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_7);
-                __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_7); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1357, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_7); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1357, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
                 __pyx_v_chr = __pyx_t_8;
 
                 /* "RSONParser.pyx":1358
  * 
- *                                     chr = buf[offset_4]
- *                                     if chr == '"':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if chr == 34:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif chr == '\\':
+ *                                     elif chr == 92:
  */
                 switch (__pyx_v_chr) {
                   case 34:
 
                   /* "RSONParser.pyx":1359
- *                                     chr = buf[offset_4]
- *                                     if chr == '"':
+ *                                     chr = ord(buf[offset_4])
+ *                                     if chr == 34:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif chr == '\\':
+ *                                     elif chr == 92:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1359, __pyx_L1_error)
@@ -17802,19 +17812,19 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1358
  * 
- *                                     chr = buf[offset_4]
- *                                     if chr == '"':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if chr == 34:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif chr == '\\':
+ *                                     elif chr == 92:
  */
                   break;
                   case 92:
 
                   /* "RSONParser.pyx":1361
  *                                         offset_4 += 1
- *                                     elif chr == '\\':
+ *                                     elif chr == 92:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif chr == '/':
+ *                                     elif chr == 47:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1361, __pyx_L1_error)
@@ -17823,20 +17833,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1360
- *                                     if chr == '"':
+ *                                     if chr == 34:
  *                                         offset_4 += 1
- *                                     elif chr == '\\':             # <<<<<<<<<<<<<<
+ *                                     elif chr == 92:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif chr == '/':
+ *                                     elif chr == 47:
  */
                   break;
                   case 47:
 
                   /* "RSONParser.pyx":1363
  *                                         offset_4 += 1
- *                                     elif chr == '/':
+ *                                     elif chr == 47:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif chr == 'b':
+ *                                     elif chr == 98:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1363, __pyx_L1_error)
@@ -17845,20 +17855,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1362
- *                                     elif chr == '\\':
+ *                                     elif chr == 92:
  *                                         offset_4 += 1
- *                                     elif chr == '/':             # <<<<<<<<<<<<<<
+ *                                     elif chr == 47:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif chr == 'b':
+ *                                     elif chr == 98:
  */
                   break;
                   case 98:
 
                   /* "RSONParser.pyx":1365
  *                                         offset_4 += 1
- *                                     elif chr == 'b':
+ *                                     elif chr == 98:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif chr == 'f':
+ *                                     elif chr == 102:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1365, __pyx_L1_error)
@@ -17867,20 +17877,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1364
- *                                     elif chr == '/':
+ *                                     elif chr == 47:
  *                                         offset_4 += 1
- *                                     elif chr == 'b':             # <<<<<<<<<<<<<<
+ *                                     elif chr == 98:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif chr == 'f':
+ *                                     elif chr == 102:
  */
                   break;
                   case 0x66:
 
                   /* "RSONParser.pyx":1367
  *                                         offset_4 += 1
- *                                     elif chr == 'f':
+ *                                     elif chr == 102:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif chr == 'n':
+ *                                     elif chr == 110:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1367, __pyx_L1_error)
@@ -17889,20 +17899,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1366
- *                                     elif chr == 'b':
+ *                                     elif chr == 98:
  *                                         offset_4 += 1
- *                                     elif chr == 'f':             # <<<<<<<<<<<<<<
+ *                                     elif chr == 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif chr == 'n':
+ *                                     elif chr == 110:
  */
                   break;
                   case 0x6E:
 
                   /* "RSONParser.pyx":1369
  *                                         offset_4 += 1
- *                                     elif chr == 'n':
+ *                                     elif chr == 110:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif chr == 'r':
+ *                                     elif chr == 114:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1369, __pyx_L1_error)
@@ -17911,20 +17921,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1368
- *                                     elif chr == 'f':
+ *                                     elif chr == 102:
  *                                         offset_4 += 1
- *                                     elif chr == 'n':             # <<<<<<<<<<<<<<
+ *                                     elif chr == 110:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif chr == 'r':
+ *                                     elif chr == 114:
  */
                   break;
                   case 0x72:
 
                   /* "RSONParser.pyx":1371
  *                                         offset_4 += 1
- *                                     elif chr == 'r':
+ *                                     elif chr == 114:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif chr == 't':
+ *                                     elif chr == 116:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1371, __pyx_L1_error)
@@ -17933,20 +17943,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1370
- *                                     elif chr == 'n':
+ *                                     elif chr == 110:
  *                                         offset_4 += 1
- *                                     elif chr == 'r':             # <<<<<<<<<<<<<<
+ *                                     elif chr == 114:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif chr == 't':
+ *                                     elif chr == 116:
  */
                   break;
                   case 0x74:
 
                   /* "RSONParser.pyx":1373
  *                                         offset_4 += 1
- *                                     elif chr == 't':
+ *                                     elif chr == 116:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif chr == "'":
+ *                                     elif chr == 39:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1373, __pyx_L1_error)
@@ -17955,20 +17965,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1372
- *                                     elif chr == 'r':
+ *                                     elif chr == 114:
  *                                         offset_4 += 1
- *                                     elif chr == 't':             # <<<<<<<<<<<<<<
+ *                                     elif chr == 116:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif chr == "'":
+ *                                     elif chr == 39:
  */
                   break;
                   case 39:
 
                   /* "RSONParser.pyx":1375
  *                                         offset_4 += 1
- *                                     elif chr == "'":
+ *                                     elif chr == 39:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif chr == '\n':
+ *                                     elif chr == 10:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1375, __pyx_L1_error)
@@ -17977,18 +17987,18 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1374
- *                                     elif chr == 't':
+ *                                     elif chr == 116:
  *                                         offset_4 += 1
- *                                     elif chr == "'":             # <<<<<<<<<<<<<<
+ *                                     elif chr == 39:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif chr == '\n':
+ *                                     elif chr == 10:
  */
                   break;
                   case 10:
 
                   /* "RSONParser.pyx":1377
  *                                         offset_4 += 1
- *                                     elif chr == '\n':
+ *                                     elif chr == 10:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
  *                                     else:
  *                                         offset_4 = -1
@@ -17999,9 +18009,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1376
- *                                     elif chr == "'":
+ *                                     elif chr == 39:
  *                                         offset_4 += 1
- *                                     elif chr == '\n':             # <<<<<<<<<<<<<<
+ *                                     elif chr == 10:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -18049,9 +18059,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  */
               __pyx_t_7 = __Pyx_PyInt_NeObjC(__pyx_v_offset_4, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1384, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_7);
-              __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1384, __pyx_L1_error)
+              __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1384, __pyx_L1_error)
               __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-              if (__pyx_t_6) {
+              if (__pyx_t_3) {
 
                 /* "RSONParser.pyx":1385
  *                                     break
@@ -18129,9 +18139,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  */
             __pyx_t_7 = __Pyx_PyInt_EqObjC(__pyx_v_offset_3, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1392, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_7);
-            __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1392, __pyx_L1_error)
+            __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1392, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-            if (__pyx_t_6) {
+            if (__pyx_t_3) {
 
               /* "RSONParser.pyx":1393
  *                                 break # end choice
@@ -18159,9 +18169,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                             line_start_1 = line_start_2
  */
             __pyx_t_7 = PyObject_RichCompare(__pyx_v_offset_2, __pyx_v_offset_3, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1395, __pyx_L1_error)
-            __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1395, __pyx_L1_error)
+            __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1395, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-            if (__pyx_t_6) {
+            if (__pyx_t_3) {
               goto __pyx_L13_break;
             }
 
@@ -18215,9 +18225,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  */
         __pyx_t_7 = __Pyx_PyInt_EqObjC(__pyx_v_offset_2, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1401, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
-        __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1401, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1401, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-        if (__pyx_t_6) {
+        if (__pyx_t_3) {
 
           /* "RSONParser.pyx":1402
  *                         break
@@ -18254,9 +18264,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                         children_1.append(self.builder['string'](buf, offset_1, offset_2, children_2))
  *                     else:
  */
-        __pyx_t_6 = (__pyx_v_self->builder != Py_None);
-        __pyx_t_3 = (__pyx_t_6 != 0);
-        if (__pyx_t_3) {
+        __pyx_t_3 = (__pyx_v_self->builder != Py_None);
+        __pyx_t_6 = (__pyx_t_3 != 0);
+        if (__pyx_t_6) {
 
           /* "RSONParser.pyx":1405
  *                         break
@@ -18427,8 +18437,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
         }
         __Pyx_INCREF(__pyx_v_offset_1);
         __pyx_t_7 = __pyx_v_offset_1;
-        __pyx_t_3 = (__pyx_t_7 == Py_None);
-        if (__pyx_t_3) {
+        __pyx_t_6 = (__pyx_t_7 == Py_None);
+        if (__pyx_t_6) {
           __pyx_t_2 = 0;
         } else {
           __pyx_t_4 = __Pyx_PyIndex_AsSsize_t(__pyx_t_7); if (unlikely((__pyx_t_4 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 1410, __pyx_L1_error)
@@ -18437,8 +18447,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
         __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_1, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1410, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
-        __pyx_t_3 = (__pyx_t_7 == Py_None);
-        if (__pyx_t_3) {
+        __pyx_t_6 = (__pyx_t_7 == Py_None);
+        if (__pyx_t_6) {
           __pyx_t_4 = PY_SSIZE_T_MAX;
         } else {
           __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_7); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 1410, __pyx_L1_error)
@@ -18447,10 +18457,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
         __pyx_t_7 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1410, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
-        __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_kp_u__8, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1410, __pyx_L1_error)
+        __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_kp_u__8, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1410, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-        __pyx_t_6 = (__pyx_t_3 != 0);
-        if (__pyx_t_6) {
+        __pyx_t_3 = (__pyx_t_6 != 0);
+        if (__pyx_t_3) {
 
           /* "RSONParser.pyx":1411
  * 
@@ -18516,9 +18526,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  */
       __pyx_t_7 = __Pyx_PyInt_NeObjC(__pyx_v_offset_1, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1418, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1418, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1418, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      if (__pyx_t_6) {
+      if (__pyx_t_3) {
 
         /* "RSONParser.pyx":1419
  *                     break
@@ -18625,8 +18635,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
         }
         __Pyx_INCREF(__pyx_v_offset_1);
         __pyx_t_7 = __pyx_v_offset_1;
-        __pyx_t_6 = (__pyx_t_7 == Py_None);
-        if (__pyx_t_6) {
+        __pyx_t_3 = (__pyx_t_7 == Py_None);
+        if (__pyx_t_3) {
           __pyx_t_4 = 0;
         } else {
           __pyx_t_2 = __Pyx_PyIndex_AsSsize_t(__pyx_t_7); if (unlikely((__pyx_t_2 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 1428, __pyx_L1_error)
@@ -18635,8 +18645,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
         __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_1, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1428, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
-        __pyx_t_6 = (__pyx_t_7 == Py_None);
-        if (__pyx_t_6) {
+        __pyx_t_3 = (__pyx_t_7 == Py_None);
+        if (__pyx_t_3) {
           __pyx_t_2 = PY_SSIZE_T_MAX;
         } else {
           __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_7); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 1428, __pyx_L1_error)
@@ -18645,10 +18655,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
         __pyx_t_7 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1428, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
-        __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_kp_u__10, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1428, __pyx_L1_error)
+        __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_kp_u__10, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1428, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-        __pyx_t_3 = (__pyx_t_6 != 0);
-        if (__pyx_t_3) {
+        __pyx_t_6 = (__pyx_t_3 != 0);
+        if (__pyx_t_6) {
 
           /* "RSONParser.pyx":1429
  *                 while True: # case
@@ -18822,9 +18832,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 __Pyx_GOTREF(__pyx_t_7);
                 __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_4, __pyx_t_7, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1446, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-                __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 1446, __pyx_L1_error)
+                __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 1446, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-                if (__pyx_t_3) {
+                if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1447
  *                                 while True: # case
@@ -18841,7 +18851,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_4]
+ *                                     chr = ord(buf[offset_4])
  */
                   goto __pyx_L112_break;
 
@@ -18857,53 +18867,49 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":1450
  *                                         break
  * 
- *                                     chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                     if '\x00' <= chr <= '\x1f':
+ *                                     chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                     if chr <= 31:
  *                                         offset_4 = -1
  */
                 __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1450, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_1);
-                __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1450, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_1); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1450, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
                 __pyx_v_chr = __pyx_t_8;
 
                 /* "RSONParser.pyx":1451
  * 
- *                                     chr = buf[offset_4]
- *                                     if '\x00' <= chr <= '\x1f':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if chr <= 31:             # <<<<<<<<<<<<<<
  *                                         offset_4 = -1
  *                                         break
  */
-                __pyx_t_3 = (0 <= __pyx_v_chr);
-                if (__pyx_t_3) {
-                  __pyx_t_3 = (__pyx_v_chr <= 31);
-                }
-                __pyx_t_6 = (__pyx_t_3 != 0);
+                __pyx_t_6 = ((__pyx_v_chr <= 31) != 0);
                 if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1452
- *                                     chr = buf[offset_4]
- *                                     if '\x00' <= chr <= '\x1f':
+ *                                     chr = ord(buf[offset_4])
+ *                                     if chr <= 31:
  *                                         offset_4 = -1             # <<<<<<<<<<<<<<
  *                                         break
- *                                     elif chr == '\\':
+ *                                     elif chr == 92:
  */
                   __Pyx_INCREF(__pyx_int_neg_1);
                   __Pyx_DECREF_SET(__pyx_v_offset_4, __pyx_int_neg_1);
 
                   /* "RSONParser.pyx":1453
- *                                     if '\x00' <= chr <= '\x1f':
+ *                                     if chr <= 31:
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
- *                                     elif chr == '\\':
+ *                                     elif chr == 92:
  *                                         offset_4 = -1
  */
                   goto __pyx_L112_break;
 
                   /* "RSONParser.pyx":1451
  * 
- *                                     chr = buf[offset_4]
- *                                     if '\x00' <= chr <= '\x1f':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if chr <= 31:             # <<<<<<<<<<<<<<
  *                                         offset_4 = -1
  *                                         break
  */
@@ -18912,7 +18918,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":1454
  *                                         offset_4 = -1
  *                                         break
- *                                     elif chr == '\\':             # <<<<<<<<<<<<<<
+ *                                     elif chr == 92:             # <<<<<<<<<<<<<<
  *                                         offset_4 = -1
  *                                         break
  */
@@ -18921,19 +18927,19 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1455
  *                                         break
- *                                     elif chr == '\\':
+ *                                     elif chr == 92:
  *                                         offset_4 = -1             # <<<<<<<<<<<<<<
  *                                         break
- *                                     elif chr == "'":
+ *                                     elif chr == 39:
  */
                   __Pyx_INCREF(__pyx_int_neg_1);
                   __Pyx_DECREF_SET(__pyx_v_offset_4, __pyx_int_neg_1);
 
                   /* "RSONParser.pyx":1456
- *                                     elif chr == '\\':
+ *                                     elif chr == 92:
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
- *                                     elif chr == "'":
+ *                                     elif chr == 39:
  *                                         offset_4 = -1
  */
                   goto __pyx_L112_break;
@@ -18941,7 +18947,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   /* "RSONParser.pyx":1454
  *                                         offset_4 = -1
  *                                         break
- *                                     elif chr == '\\':             # <<<<<<<<<<<<<<
+ *                                     elif chr == 92:             # <<<<<<<<<<<<<<
  *                                         offset_4 = -1
  *                                         break
  */
@@ -18950,7 +18956,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":1457
  *                                         offset_4 = -1
  *                                         break
- *                                     elif chr == "'":             # <<<<<<<<<<<<<<
+ *                                     elif chr == 39:             # <<<<<<<<<<<<<<
  *                                         offset_4 = -1
  *                                         break
  */
@@ -18959,19 +18965,19 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1458
  *                                         break
- *                                     elif chr == "'":
+ *                                     elif chr == 39:
  *                                         offset_4 = -1             # <<<<<<<<<<<<<<
  *                                         break
- *                                     elif '\ud800' <= chr <= '\udfff':
+ *                                     elif 55296 <= chr <= 57343:
  */
                   __Pyx_INCREF(__pyx_int_neg_1);
                   __Pyx_DECREF_SET(__pyx_v_offset_4, __pyx_int_neg_1);
 
                   /* "RSONParser.pyx":1459
- *                                     elif chr == "'":
+ *                                     elif chr == 39:
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
- *                                     elif '\ud800' <= chr <= '\udfff':
+ *                                     elif 55296 <= chr <= 57343:
  *                                         offset_4 = -1
  */
                   goto __pyx_L112_break;
@@ -18979,7 +18985,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   /* "RSONParser.pyx":1457
  *                                         offset_4 = -1
  *                                         break
- *                                     elif chr == "'":             # <<<<<<<<<<<<<<
+ *                                     elif chr == 39:             # <<<<<<<<<<<<<<
  *                                         offset_4 = -1
  *                                         break
  */
@@ -18988,7 +18994,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":1460
  *                                         offset_4 = -1
  *                                         break
- *                                     elif '\ud800' <= chr <= '\udfff':             # <<<<<<<<<<<<<<
+ *                                     elif 55296 <= chr <= 57343:             # <<<<<<<<<<<<<<
  *                                         offset_4 = -1
  *                                         break
  */
@@ -19001,7 +19007,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1461
  *                                         break
- *                                     elif '\ud800' <= chr <= '\udfff':
+ *                                     elif 55296 <= chr <= 57343:
  *                                         offset_4 = -1             # <<<<<<<<<<<<<<
  *                                         break
  *                                     else:
@@ -19010,7 +19016,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __Pyx_DECREF_SET(__pyx_v_offset_4, __pyx_int_neg_1);
 
                   /* "RSONParser.pyx":1462
- *                                     elif '\ud800' <= chr <= '\udfff':
+ *                                     elif 55296 <= chr <= 57343:
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  *                                     else:
@@ -19021,7 +19027,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   /* "RSONParser.pyx":1460
  *                                         offset_4 = -1
  *                                         break
- *                                     elif '\ud800' <= chr <= '\udfff':             # <<<<<<<<<<<<<<
+ *                                     elif 55296 <= chr <= 57343:             # <<<<<<<<<<<<<<
  *                                         offset_4 = -1
  *                                         break
  */
@@ -19298,7 +19304,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                             offset_5 = -1
  *                                             break             # <<<<<<<<<<<<<<
  * 
- *                                         chr = buf[offset_5]
+ *                                         chr = ord(buf[offset_5])
  */
                     goto __pyx_L120_break;
 
@@ -19314,20 +19320,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   /* "RSONParser.pyx":1491
  *                                             break
  * 
- *                                         chr = buf[offset_5]             # <<<<<<<<<<<<<<
- *                                         if '0' <= chr <= '1':
+ *                                         chr = ord(buf[offset_5])             # <<<<<<<<<<<<<<
+ *                                         if 48 <= chr <= 49:
  *                                             offset_5 += 1
  */
                   __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_5); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1491, __pyx_L1_error)
                   __Pyx_GOTREF(__pyx_t_7);
-                  __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_7); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1491, __pyx_L1_error)
+                  __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_7); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1491, __pyx_L1_error)
                   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
                   __pyx_v_chr = __pyx_t_8;
 
                   /* "RSONParser.pyx":1492
  * 
- *                                         chr = buf[offset_5]
- *                                         if '0' <= chr <= '1':             # <<<<<<<<<<<<<<
+ *                                         chr = ord(buf[offset_5])
+ *                                         if 48 <= chr <= 49:             # <<<<<<<<<<<<<<
  *                                             offset_5 += 1
  *                                         else:
  */
@@ -19339,8 +19345,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   if (__pyx_t_3) {
 
                     /* "RSONParser.pyx":1493
- *                                         chr = buf[offset_5]
- *                                         if '0' <= chr <= '1':
+ *                                         chr = ord(buf[offset_5])
+ *                                         if 48 <= chr <= 49:
  *                                             offset_5 += 1             # <<<<<<<<<<<<<<
  *                                         else:
  *                                             offset_5 = -1
@@ -19352,8 +19358,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                     /* "RSONParser.pyx":1492
  * 
- *                                         chr = buf[offset_5]
- *                                         if '0' <= chr <= '1':             # <<<<<<<<<<<<<<
+ *                                         chr = ord(buf[offset_5])
+ *                                         if 48 <= chr <= 49:             # <<<<<<<<<<<<<<
  *                                             offset_5 += 1
  *                                         else:
  */
@@ -19465,7 +19471,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_4]
+ *                                     chr = ord(buf[offset_4])
  */
                   goto __pyx_L117_break;
 
@@ -19481,22 +19487,22 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":1507
  *                                         break
  * 
- *                                     chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
  */
                 __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1507, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_1);
-                __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1507, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_1); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1507, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
                 __pyx_v_chr = __pyx_t_8;
 
                 /* "RSONParser.pyx":1508
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                 __pyx_t_3 = (48 <= __pyx_v_chr);
                 if (__pyx_t_3) {
@@ -19506,10 +19512,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1509
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1509, __pyx_L1_error)
@@ -19519,20 +19525,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1508
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                   goto __pyx_L125;
                 }
 
                 /* "RSONParser.pyx":1510
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                 __pyx_t_6 = (97 <= __pyx_v_chr);
                 if (__pyx_t_6) {
@@ -19543,9 +19549,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1511
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1511, __pyx_L1_error)
@@ -19554,19 +19560,19 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1510
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                   goto __pyx_L125;
                 }
 
                 /* "RSONParser.pyx":1512
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -19579,7 +19585,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1513
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
  *                                     else:
  *                                         offset_4 = -1
@@ -19590,9 +19596,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1512
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -19651,7 +19657,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_4]
+ *                                     chr = ord(buf[offset_4])
  */
                   goto __pyx_L117_break;
 
@@ -19667,22 +19673,22 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":1522
  *                                         break
  * 
- *                                     chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
  */
                 __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1522, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_7);
-                __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_7); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1522, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_7); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1522, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
                 __pyx_v_chr = __pyx_t_8;
 
                 /* "RSONParser.pyx":1523
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                 __pyx_t_6 = (48 <= __pyx_v_chr);
                 if (__pyx_t_6) {
@@ -19692,10 +19698,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1524
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1524, __pyx_L1_error)
@@ -19705,20 +19711,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1523
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                   goto __pyx_L127;
                 }
 
                 /* "RSONParser.pyx":1525
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                 __pyx_t_3 = (97 <= __pyx_v_chr);
                 if (__pyx_t_3) {
@@ -19729,9 +19735,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1526
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1526, __pyx_L1_error)
@@ -19740,19 +19746,19 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1525
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                   goto __pyx_L127;
                 }
 
                 /* "RSONParser.pyx":1527
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -19765,7 +19771,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1528
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
  *                                     else:
  *                                         offset_4 = -1
@@ -19776,9 +19782,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1527
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -20146,7 +20152,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                             offset_5 = -1
  *                                             break             # <<<<<<<<<<<<<<
  * 
- *                                         chr = buf[offset_5]
+ *                                         chr = ord(buf[offset_5])
  */
                     goto __pyx_L133_break;
 
@@ -20162,20 +20168,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   /* "RSONParser.pyx":1564
  *                                             break
  * 
- *                                         chr = buf[offset_5]             # <<<<<<<<<<<<<<
- *                                         if '0' <= chr <= '1':
+ *                                         chr = ord(buf[offset_5])             # <<<<<<<<<<<<<<
+ *                                         if 48 <= chr <= 49:
  *                                             offset_5 += 1
  */
                   __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1564, __pyx_L1_error)
                   __Pyx_GOTREF(__pyx_t_1);
-                  __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1564, __pyx_L1_error)
+                  __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_1); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1564, __pyx_L1_error)
                   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
                   __pyx_v_chr = __pyx_t_8;
 
                   /* "RSONParser.pyx":1565
  * 
- *                                         chr = buf[offset_5]
- *                                         if '0' <= chr <= '1':             # <<<<<<<<<<<<<<
+ *                                         chr = ord(buf[offset_5])
+ *                                         if 48 <= chr <= 49:             # <<<<<<<<<<<<<<
  *                                             offset_5 += 1
  *                                         else:
  */
@@ -20187,8 +20193,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   if (__pyx_t_6) {
 
                     /* "RSONParser.pyx":1566
- *                                         chr = buf[offset_5]
- *                                         if '0' <= chr <= '1':
+ *                                         chr = ord(buf[offset_5])
+ *                                         if 48 <= chr <= 49:
  *                                             offset_5 += 1             # <<<<<<<<<<<<<<
  *                                         else:
  *                                             offset_5 = -1
@@ -20200,8 +20206,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                     /* "RSONParser.pyx":1565
  * 
- *                                         chr = buf[offset_5]
- *                                         if '0' <= chr <= '1':             # <<<<<<<<<<<<<<
+ *                                         chr = ord(buf[offset_5])
+ *                                         if 48 <= chr <= 49:             # <<<<<<<<<<<<<<
  *                                             offset_5 += 1
  *                                         else:
  */
@@ -20490,7 +20496,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                             offset_5 = -1
  *                                             break             # <<<<<<<<<<<<<<
  * 
- *                                         chr = buf[offset_5]
+ *                                         chr = ord(buf[offset_5])
  */
                     goto __pyx_L139_break;
 
@@ -20506,22 +20512,22 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   /* "RSONParser.pyx":1591
  *                                             break
  * 
- *                                         chr = buf[offset_5]             # <<<<<<<<<<<<<<
- *                                         if '8' <= chr <= '9':
+ *                                         chr = ord(buf[offset_5])             # <<<<<<<<<<<<<<
+ *                                         if 56 <= chr <= 57:
  *                                             offset_5 += 1
  */
                   __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_5); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1591, __pyx_L1_error)
                   __Pyx_GOTREF(__pyx_t_7);
-                  __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_7); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1591, __pyx_L1_error)
+                  __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_7); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1591, __pyx_L1_error)
                   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
                   __pyx_v_chr = __pyx_t_8;
 
                   /* "RSONParser.pyx":1592
  * 
- *                                         chr = buf[offset_5]
- *                                         if '8' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                         chr = ord(buf[offset_5])
+ *                                         if 56 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                             offset_5 += 1
- *                                         elif 'A' <= chr <= 'F':
+ *                                         elif 65 <= chr <= 70:
  */
                   __pyx_t_6 = (56 <= __pyx_v_chr);
                   if (__pyx_t_6) {
@@ -20531,10 +20537,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   if (__pyx_t_3) {
 
                     /* "RSONParser.pyx":1593
- *                                         chr = buf[offset_5]
- *                                         if '8' <= chr <= '9':
+ *                                         chr = ord(buf[offset_5])
+ *                                         if 56 <= chr <= 57:
  *                                             offset_5 += 1             # <<<<<<<<<<<<<<
- *                                         elif 'A' <= chr <= 'F':
+ *                                         elif 65 <= chr <= 70:
  *                                             offset_5 += 1
  */
                     __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_5, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1593, __pyx_L1_error)
@@ -20544,18 +20550,18 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                     /* "RSONParser.pyx":1592
  * 
- *                                         chr = buf[offset_5]
- *                                         if '8' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                         chr = ord(buf[offset_5])
+ *                                         if 56 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                             offset_5 += 1
- *                                         elif 'A' <= chr <= 'F':
+ *                                         elif 65 <= chr <= 70:
  */
                     goto __pyx_L142;
                   }
 
                   /* "RSONParser.pyx":1594
- *                                         if '8' <= chr <= '9':
+ *                                         if 56 <= chr <= 57:
  *                                             offset_5 += 1
- *                                         elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                         elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                             offset_5 += 1
  *                                         else:
  */
@@ -20568,7 +20574,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                     /* "RSONParser.pyx":1595
  *                                             offset_5 += 1
- *                                         elif 'A' <= chr <= 'F':
+ *                                         elif 65 <= chr <= 70:
  *                                             offset_5 += 1             # <<<<<<<<<<<<<<
  *                                         else:
  *                                             offset_5 = -1
@@ -20579,9 +20585,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                     __pyx_t_7 = 0;
 
                     /* "RSONParser.pyx":1594
- *                                         if '8' <= chr <= '9':
+ *                                         if 56 <= chr <= 57:
  *                                             offset_5 += 1
- *                                         elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                         elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                             offset_5 += 1
  *                                         else:
  */
@@ -20693,7 +20699,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_4]
+ *                                     chr = ord(buf[offset_4])
  */
                   goto __pyx_L130_break;
 
@@ -20709,22 +20715,22 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":1609
  *                                         break
  * 
- *                                     chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
  */
                 __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1609, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_1);
-                __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1609, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_1); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1609, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
                 __pyx_v_chr = __pyx_t_8;
 
                 /* "RSONParser.pyx":1610
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                 __pyx_t_6 = (48 <= __pyx_v_chr);
                 if (__pyx_t_6) {
@@ -20734,10 +20740,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1611
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1611, __pyx_L1_error)
@@ -20747,20 +20753,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1610
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                   goto __pyx_L145;
                 }
 
                 /* "RSONParser.pyx":1612
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                 __pyx_t_3 = (97 <= __pyx_v_chr);
                 if (__pyx_t_3) {
@@ -20771,9 +20777,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1613
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1613, __pyx_L1_error)
@@ -20782,19 +20788,19 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1612
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                   goto __pyx_L145;
                 }
 
                 /* "RSONParser.pyx":1614
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -20807,7 +20813,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1615
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
  *                                     else:
  *                                         offset_4 = -1
@@ -20818,9 +20824,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1614
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -20879,7 +20885,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_4]
+ *                                     chr = ord(buf[offset_4])
  */
                   goto __pyx_L130_break;
 
@@ -20895,22 +20901,22 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":1624
  *                                         break
  * 
- *                                     chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
  */
                 __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1624, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_7);
-                __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_7); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1624, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_7); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1624, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
                 __pyx_v_chr = __pyx_t_8;
 
                 /* "RSONParser.pyx":1625
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                 __pyx_t_3 = (48 <= __pyx_v_chr);
                 if (__pyx_t_3) {
@@ -20920,10 +20926,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1626
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1626, __pyx_L1_error)
@@ -20933,20 +20939,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1625
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                   goto __pyx_L147;
                 }
 
                 /* "RSONParser.pyx":1627
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                 __pyx_t_6 = (97 <= __pyx_v_chr);
                 if (__pyx_t_6) {
@@ -20957,9 +20963,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1628
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1628, __pyx_L1_error)
@@ -20968,19 +20974,19 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1627
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                   goto __pyx_L147;
                 }
 
                 /* "RSONParser.pyx":1629
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -20993,7 +20999,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1630
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
  *                                     else:
  *                                         offset_4 = -1
@@ -21004,9 +21010,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1629
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -21065,7 +21071,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_4]
+ *                                     chr = ord(buf[offset_4])
  */
                   goto __pyx_L130_break;
 
@@ -21081,22 +21087,22 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":1639
  *                                         break
  * 
- *                                     chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
  */
                 __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1639, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_1);
-                __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1639, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_1); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1639, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
                 __pyx_v_chr = __pyx_t_8;
 
                 /* "RSONParser.pyx":1640
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                 __pyx_t_6 = (48 <= __pyx_v_chr);
                 if (__pyx_t_6) {
@@ -21106,10 +21112,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1641
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1641, __pyx_L1_error)
@@ -21119,20 +21125,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1640
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                   goto __pyx_L149;
                 }
 
                 /* "RSONParser.pyx":1642
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                 __pyx_t_3 = (97 <= __pyx_v_chr);
                 if (__pyx_t_3) {
@@ -21143,9 +21149,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1643
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1643, __pyx_L1_error)
@@ -21154,19 +21160,19 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1642
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                   goto __pyx_L149;
                 }
 
                 /* "RSONParser.pyx":1644
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -21179,7 +21185,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1645
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
  *                                     else:
  *                                         offset_4 = -1
@@ -21190,9 +21196,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1644
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -21251,7 +21257,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_4]
+ *                                     chr = ord(buf[offset_4])
  */
                   goto __pyx_L130_break;
 
@@ -21267,22 +21273,22 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":1654
  *                                         break
  * 
- *                                     chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
  */
                 __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1654, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_7);
-                __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_7); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1654, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_7); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1654, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
                 __pyx_v_chr = __pyx_t_8;
 
                 /* "RSONParser.pyx":1655
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                 __pyx_t_3 = (48 <= __pyx_v_chr);
                 if (__pyx_t_3) {
@@ -21292,10 +21298,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1656
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1656, __pyx_L1_error)
@@ -21305,20 +21311,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1655
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                   goto __pyx_L151;
                 }
 
                 /* "RSONParser.pyx":1657
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                 __pyx_t_6 = (97 <= __pyx_v_chr);
                 if (__pyx_t_6) {
@@ -21329,9 +21335,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1658
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1658, __pyx_L1_error)
@@ -21340,19 +21346,19 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1657
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                   goto __pyx_L151;
                 }
 
                 /* "RSONParser.pyx":1659
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -21365,7 +21371,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1660
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
  *                                     else:
  *                                         offset_4 = -1
@@ -21376,9 +21382,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1659
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -21746,7 +21752,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                             offset_5 = -1
  *                                             break             # <<<<<<<<<<<<<<
  * 
- *                                         chr = buf[offset_5]
+ *                                         chr = ord(buf[offset_5])
  */
                     goto __pyx_L157_break;
 
@@ -21762,20 +21768,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   /* "RSONParser.pyx":1696
  *                                             break
  * 
- *                                         chr = buf[offset_5]             # <<<<<<<<<<<<<<
- *                                         if '0' <= chr <= '1':
+ *                                         chr = ord(buf[offset_5])             # <<<<<<<<<<<<<<
+ *                                         if 48 <= chr <= 49:
  *                                             offset_5 += 1
  */
                   __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1696, __pyx_L1_error)
                   __Pyx_GOTREF(__pyx_t_1);
-                  __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1696, __pyx_L1_error)
+                  __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_1); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1696, __pyx_L1_error)
                   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
                   __pyx_v_chr = __pyx_t_8;
 
                   /* "RSONParser.pyx":1697
  * 
- *                                         chr = buf[offset_5]
- *                                         if '0' <= chr <= '1':             # <<<<<<<<<<<<<<
+ *                                         chr = ord(buf[offset_5])
+ *                                         if 48 <= chr <= 49:             # <<<<<<<<<<<<<<
  *                                             offset_5 += 1
  *                                         else:
  */
@@ -21787,8 +21793,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   if (__pyx_t_3) {
 
                     /* "RSONParser.pyx":1698
- *                                         chr = buf[offset_5]
- *                                         if '0' <= chr <= '1':
+ *                                         chr = ord(buf[offset_5])
+ *                                         if 48 <= chr <= 49:
  *                                             offset_5 += 1             # <<<<<<<<<<<<<<
  *                                         else:
  *                                             offset_5 = -1
@@ -21800,8 +21806,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                     /* "RSONParser.pyx":1697
  * 
- *                                         chr = buf[offset_5]
- *                                         if '0' <= chr <= '1':             # <<<<<<<<<<<<<<
+ *                                         chr = ord(buf[offset_5])
+ *                                         if 48 <= chr <= 49:             # <<<<<<<<<<<<<<
  *                                             offset_5 += 1
  *                                         else:
  */
@@ -22172,7 +22178,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                             offset_5 = -1
  *                                             break             # <<<<<<<<<<<<<<
  * 
- *                                         chr = buf[offset_5]
+ *                                         chr = ord(buf[offset_5])
  */
                     goto __pyx_L163_break;
 
@@ -22188,22 +22194,22 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   /* "RSONParser.pyx":1729
  *                                             break
  * 
- *                                         chr = buf[offset_5]             # <<<<<<<<<<<<<<
- *                                         if '8' <= chr <= '9':
+ *                                         chr = ord(buf[offset_5])             # <<<<<<<<<<<<<<
+ *                                         if 56 <= chr <= 57:
  *                                             offset_5 += 1
  */
                   __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_5); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1729, __pyx_L1_error)
                   __Pyx_GOTREF(__pyx_t_7);
-                  __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_7); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1729, __pyx_L1_error)
+                  __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_7); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1729, __pyx_L1_error)
                   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
                   __pyx_v_chr = __pyx_t_8;
 
                   /* "RSONParser.pyx":1730
  * 
- *                                         chr = buf[offset_5]
- *                                         if '8' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                         chr = ord(buf[offset_5])
+ *                                         if 56 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                             offset_5 += 1
- *                                         elif 'A' <= chr <= 'F':
+ *                                         elif 65 <= chr <= 70:
  */
                   __pyx_t_6 = (56 <= __pyx_v_chr);
                   if (__pyx_t_6) {
@@ -22213,10 +22219,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   if (__pyx_t_3) {
 
                     /* "RSONParser.pyx":1731
- *                                         chr = buf[offset_5]
- *                                         if '8' <= chr <= '9':
+ *                                         chr = ord(buf[offset_5])
+ *                                         if 56 <= chr <= 57:
  *                                             offset_5 += 1             # <<<<<<<<<<<<<<
- *                                         elif 'A' <= chr <= 'F':
+ *                                         elif 65 <= chr <= 70:
  *                                             offset_5 += 1
  */
                     __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_5, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1731, __pyx_L1_error)
@@ -22226,18 +22232,18 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                     /* "RSONParser.pyx":1730
  * 
- *                                         chr = buf[offset_5]
- *                                         if '8' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                         chr = ord(buf[offset_5])
+ *                                         if 56 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                             offset_5 += 1
- *                                         elif 'A' <= chr <= 'F':
+ *                                         elif 65 <= chr <= 70:
  */
                     goto __pyx_L167;
                   }
 
                   /* "RSONParser.pyx":1732
- *                                         if '8' <= chr <= '9':
+ *                                         if 56 <= chr <= 57:
  *                                             offset_5 += 1
- *                                         elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                         elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                             offset_5 += 1
  *                                         else:
  */
@@ -22250,7 +22256,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                     /* "RSONParser.pyx":1733
  *                                             offset_5 += 1
- *                                         elif 'A' <= chr <= 'F':
+ *                                         elif 65 <= chr <= 70:
  *                                             offset_5 += 1             # <<<<<<<<<<<<<<
  *                                         else:
  *                                             offset_5 = -1
@@ -22261,9 +22267,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                     __pyx_t_7 = 0;
 
                     /* "RSONParser.pyx":1732
- *                                         if '8' <= chr <= '9':
+ *                                         if 56 <= chr <= 57:
  *                                             offset_5 += 1
- *                                         elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                         elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                             offset_5 += 1
  *                                         else:
  */
@@ -22375,7 +22381,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_4]
+ *                                     chr = ord(buf[offset_4])
  */
                   goto __pyx_L154_break;
 
@@ -22391,22 +22397,22 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":1747
  *                                         break
  * 
- *                                     chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
  */
                 __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1747, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_1);
-                __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1747, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_1); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1747, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
                 __pyx_v_chr = __pyx_t_8;
 
                 /* "RSONParser.pyx":1748
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                 __pyx_t_6 = (48 <= __pyx_v_chr);
                 if (__pyx_t_6) {
@@ -22416,10 +22422,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1749
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1749, __pyx_L1_error)
@@ -22429,20 +22435,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1748
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                   goto __pyx_L170;
                 }
 
                 /* "RSONParser.pyx":1750
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                 __pyx_t_3 = (97 <= __pyx_v_chr);
                 if (__pyx_t_3) {
@@ -22453,9 +22459,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1751
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1751, __pyx_L1_error)
@@ -22464,19 +22470,19 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1750
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                   goto __pyx_L170;
                 }
 
                 /* "RSONParser.pyx":1752
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -22489,7 +22495,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1753
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
  *                                     else:
  *                                         offset_4 = -1
@@ -22500,9 +22506,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1752
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -22561,7 +22567,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_4]
+ *                                     chr = ord(buf[offset_4])
  */
                   goto __pyx_L154_break;
 
@@ -22577,22 +22583,22 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":1762
  *                                         break
  * 
- *                                     chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
  */
                 __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1762, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_7);
-                __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_7); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1762, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_7); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1762, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
                 __pyx_v_chr = __pyx_t_8;
 
                 /* "RSONParser.pyx":1763
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                 __pyx_t_3 = (48 <= __pyx_v_chr);
                 if (__pyx_t_3) {
@@ -22602,10 +22608,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1764
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1764, __pyx_L1_error)
@@ -22615,20 +22621,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1763
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                   goto __pyx_L172;
                 }
 
                 /* "RSONParser.pyx":1765
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                 __pyx_t_6 = (97 <= __pyx_v_chr);
                 if (__pyx_t_6) {
@@ -22639,9 +22645,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1766
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1766, __pyx_L1_error)
@@ -22650,19 +22656,19 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1765
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                   goto __pyx_L172;
                 }
 
                 /* "RSONParser.pyx":1767
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -22675,7 +22681,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1768
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
  *                                     else:
  *                                         offset_4 = -1
@@ -22686,9 +22692,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1767
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -22747,7 +22753,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_4]
+ *                                     chr = ord(buf[offset_4])
  */
                   goto __pyx_L154_break;
 
@@ -22763,22 +22769,22 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":1777
  *                                         break
  * 
- *                                     chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
  */
                 __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1777, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_1);
-                __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1777, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_1); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1777, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
                 __pyx_v_chr = __pyx_t_8;
 
                 /* "RSONParser.pyx":1778
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                 __pyx_t_6 = (48 <= __pyx_v_chr);
                 if (__pyx_t_6) {
@@ -22788,10 +22794,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1779
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1779, __pyx_L1_error)
@@ -22801,20 +22807,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1778
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                   goto __pyx_L174;
                 }
 
                 /* "RSONParser.pyx":1780
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                 __pyx_t_3 = (97 <= __pyx_v_chr);
                 if (__pyx_t_3) {
@@ -22825,9 +22831,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1781
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1781, __pyx_L1_error)
@@ -22836,19 +22842,19 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1780
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                   goto __pyx_L174;
                 }
 
                 /* "RSONParser.pyx":1782
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -22861,7 +22867,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1783
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
  *                                     else:
  *                                         offset_4 = -1
@@ -22872,9 +22878,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1782
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -22933,7 +22939,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_4]
+ *                                     chr = ord(buf[offset_4])
  */
                   goto __pyx_L154_break;
 
@@ -22949,22 +22955,22 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":1792
  *                                         break
  * 
- *                                     chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
  */
                 __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1792, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_7);
-                __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_7); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1792, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_7); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1792, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
                 __pyx_v_chr = __pyx_t_8;
 
                 /* "RSONParser.pyx":1793
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                 __pyx_t_3 = (48 <= __pyx_v_chr);
                 if (__pyx_t_3) {
@@ -22974,10 +22980,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1794
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1794, __pyx_L1_error)
@@ -22987,20 +22993,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1793
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                   goto __pyx_L176;
                 }
 
                 /* "RSONParser.pyx":1795
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                 __pyx_t_6 = (97 <= __pyx_v_chr);
                 if (__pyx_t_6) {
@@ -23011,9 +23017,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1796
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1796, __pyx_L1_error)
@@ -23022,19 +23028,19 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1795
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                   goto __pyx_L176;
                 }
 
                 /* "RSONParser.pyx":1797
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -23047,7 +23053,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1798
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
  *                                     else:
  *                                         offset_4 = -1
@@ -23058,9 +23064,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1797
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -23119,7 +23125,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_4]
+ *                                     chr = ord(buf[offset_4])
  */
                   goto __pyx_L154_break;
 
@@ -23135,22 +23141,22 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":1807
  *                                         break
  * 
- *                                     chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
  */
                 __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1807, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_1);
-                __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1807, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_1); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1807, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
                 __pyx_v_chr = __pyx_t_8;
 
                 /* "RSONParser.pyx":1808
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                 __pyx_t_6 = (48 <= __pyx_v_chr);
                 if (__pyx_t_6) {
@@ -23160,10 +23166,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1809
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1809, __pyx_L1_error)
@@ -23173,20 +23179,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1808
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                   goto __pyx_L178;
                 }
 
                 /* "RSONParser.pyx":1810
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                 __pyx_t_3 = (97 <= __pyx_v_chr);
                 if (__pyx_t_3) {
@@ -23197,9 +23203,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1811
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1811, __pyx_L1_error)
@@ -23208,19 +23214,19 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1810
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                   goto __pyx_L178;
                 }
 
                 /* "RSONParser.pyx":1812
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -23233,7 +23239,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1813
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
  *                                     else:
  *                                         offset_4 = -1
@@ -23244,9 +23250,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1812
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -23305,7 +23311,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_4]
+ *                                     chr = ord(buf[offset_4])
  */
                   goto __pyx_L154_break;
 
@@ -23321,22 +23327,22 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":1822
  *                                         break
  * 
- *                                     chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
  */
                 __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1822, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_7);
-                __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_7); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1822, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_7); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1822, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
                 __pyx_v_chr = __pyx_t_8;
 
                 /* "RSONParser.pyx":1823
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                 __pyx_t_3 = (48 <= __pyx_v_chr);
                 if (__pyx_t_3) {
@@ -23346,10 +23352,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1824
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1824, __pyx_L1_error)
@@ -23359,20 +23365,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1823
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                   goto __pyx_L180;
                 }
 
                 /* "RSONParser.pyx":1825
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                 __pyx_t_6 = (97 <= __pyx_v_chr);
                 if (__pyx_t_6) {
@@ -23383,9 +23389,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1826
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1826, __pyx_L1_error)
@@ -23394,19 +23400,19 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1825
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                   goto __pyx_L180;
                 }
 
                 /* "RSONParser.pyx":1827
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -23419,7 +23425,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1828
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
  *                                     else:
  *                                         offset_4 = -1
@@ -23430,9 +23436,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1827
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -23491,7 +23497,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_4]
+ *                                     chr = ord(buf[offset_4])
  */
                   goto __pyx_L154_break;
 
@@ -23507,22 +23513,22 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":1837
  *                                         break
  * 
- *                                     chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
  */
                 __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1837, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_1);
-                __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1837, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_1); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1837, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
                 __pyx_v_chr = __pyx_t_8;
 
                 /* "RSONParser.pyx":1838
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                 __pyx_t_6 = (48 <= __pyx_v_chr);
                 if (__pyx_t_6) {
@@ -23532,10 +23538,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 if (__pyx_t_3) {
 
                   /* "RSONParser.pyx":1839
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1839, __pyx_L1_error)
@@ -23545,20 +23551,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1838
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                   goto __pyx_L182;
                 }
 
                 /* "RSONParser.pyx":1840
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                 __pyx_t_3 = (97 <= __pyx_v_chr);
                 if (__pyx_t_3) {
@@ -23569,9 +23575,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1841
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1841, __pyx_L1_error)
@@ -23580,19 +23586,19 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1840
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                   goto __pyx_L182;
                 }
 
                 /* "RSONParser.pyx":1842
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -23605,7 +23611,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1843
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
  *                                     else:
  *                                         offset_4 = -1
@@ -23616,9 +23622,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1842
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -23677,7 +23683,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_4]
+ *                                     chr = ord(buf[offset_4])
  */
                   goto __pyx_L154_break;
 
@@ -23693,22 +23699,22 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":1852
  *                                         break
  * 
- *                                     chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
  */
                 __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1852, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_7);
-                __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_7); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1852, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_7); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1852, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
                 __pyx_v_chr = __pyx_t_8;
 
                 /* "RSONParser.pyx":1853
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                 __pyx_t_3 = (48 <= __pyx_v_chr);
                 if (__pyx_t_3) {
@@ -23718,10 +23724,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 if (__pyx_t_6) {
 
                   /* "RSONParser.pyx":1854
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1854, __pyx_L1_error)
@@ -23731,20 +23737,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1853
  * 
- *                                     chr = buf[offset_4]
- *                                     if '0' <= chr <= '9':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if 48 <= chr <= 57:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  */
                   goto __pyx_L184;
                 }
 
                 /* "RSONParser.pyx":1855
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                 __pyx_t_6 = (97 <= __pyx_v_chr);
                 if (__pyx_t_6) {
@@ -23755,9 +23761,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1856
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1
  */
                   __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1856, __pyx_L1_error)
@@ -23766,19 +23772,19 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1855
- *                                     if '0' <= chr <= '9':
+ *                                     if 48 <= chr <= 57:
  *                                         offset_4 += 1
- *                                     elif 'a' <= chr <= 'f':             # <<<<<<<<<<<<<<
+ *                                     elif 97 <= chr <= 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  */
                   goto __pyx_L184;
                 }
 
                 /* "RSONParser.pyx":1857
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -23791,7 +23797,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1858
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':
+ *                                     elif 65 <= chr <= 70:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
  *                                     else:
  *                                         offset_4 = -1
@@ -23802,9 +23808,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_7 = 0;
 
                   /* "RSONParser.pyx":1857
- *                                     elif 'a' <= chr <= 'f':
+ *                                     elif 97 <= chr <= 102:
  *                                         offset_4 += 1
- *                                     elif 'A' <= chr <= 'F':             # <<<<<<<<<<<<<<
+ *                                     elif 65 <= chr <= 70:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -24055,7 +24061,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                                         offset_4 = -1
  *                                         break             # <<<<<<<<<<<<<<
  * 
- *                                     chr = buf[offset_4]
+ *                                     chr = ord(buf[offset_4])
  */
                   goto __pyx_L187_break;
 
@@ -24071,31 +24077,31 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                 /* "RSONParser.pyx":1885
  *                                         break
  * 
- *                                     chr = buf[offset_4]             # <<<<<<<<<<<<<<
- *                                     if chr == '"':
+ *                                     chr = ord(buf[offset_4])             # <<<<<<<<<<<<<<
+ *                                     if chr == 34:
  *                                         offset_4 += 1
  */
                 __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1885, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_1);
-                __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 1885, __pyx_L1_error)
+                __pyx_t_8 = __Pyx_PyObject_Ord(__pyx_t_1); if (unlikely(__pyx_t_8 == ((long)(long)(Py_UCS4)-1))) __PYX_ERR(0, 1885, __pyx_L1_error)
                 __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
                 __pyx_v_chr = __pyx_t_8;
 
                 /* "RSONParser.pyx":1886
  * 
- *                                     chr = buf[offset_4]
- *                                     if chr == '"':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if chr == 34:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif chr == '\\':
+ *                                     elif chr == 92:
  */
                 switch (__pyx_v_chr) {
                   case 34:
 
                   /* "RSONParser.pyx":1887
- *                                     chr = buf[offset_4]
- *                                     if chr == '"':
+ *                                     chr = ord(buf[offset_4])
+ *                                     if chr == 34:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif chr == '\\':
+ *                                     elif chr == 92:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1887, __pyx_L1_error)
@@ -24105,19 +24111,19 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 
                   /* "RSONParser.pyx":1886
  * 
- *                                     chr = buf[offset_4]
- *                                     if chr == '"':             # <<<<<<<<<<<<<<
+ *                                     chr = ord(buf[offset_4])
+ *                                     if chr == 34:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif chr == '\\':
+ *                                     elif chr == 92:
  */
                   break;
                   case 92:
 
                   /* "RSONParser.pyx":1889
  *                                         offset_4 += 1
- *                                     elif chr == '\\':
+ *                                     elif chr == 92:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif chr == '/':
+ *                                     elif chr == 47:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1889, __pyx_L1_error)
@@ -24126,20 +24132,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1888
- *                                     if chr == '"':
+ *                                     if chr == 34:
  *                                         offset_4 += 1
- *                                     elif chr == '\\':             # <<<<<<<<<<<<<<
+ *                                     elif chr == 92:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif chr == '/':
+ *                                     elif chr == 47:
  */
                   break;
                   case 47:
 
                   /* "RSONParser.pyx":1891
  *                                         offset_4 += 1
- *                                     elif chr == '/':
+ *                                     elif chr == 47:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif chr == 'b':
+ *                                     elif chr == 98:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1891, __pyx_L1_error)
@@ -24148,20 +24154,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1890
- *                                     elif chr == '\\':
+ *                                     elif chr == 92:
  *                                         offset_4 += 1
- *                                     elif chr == '/':             # <<<<<<<<<<<<<<
+ *                                     elif chr == 47:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif chr == 'b':
+ *                                     elif chr == 98:
  */
                   break;
                   case 98:
 
                   /* "RSONParser.pyx":1893
  *                                         offset_4 += 1
- *                                     elif chr == 'b':
+ *                                     elif chr == 98:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif chr == 'f':
+ *                                     elif chr == 102:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1893, __pyx_L1_error)
@@ -24170,20 +24176,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1892
- *                                     elif chr == '/':
+ *                                     elif chr == 47:
  *                                         offset_4 += 1
- *                                     elif chr == 'b':             # <<<<<<<<<<<<<<
+ *                                     elif chr == 98:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif chr == 'f':
+ *                                     elif chr == 102:
  */
                   break;
                   case 0x66:
 
                   /* "RSONParser.pyx":1895
  *                                         offset_4 += 1
- *                                     elif chr == 'f':
+ *                                     elif chr == 102:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif chr == 'n':
+ *                                     elif chr == 110:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1895, __pyx_L1_error)
@@ -24192,20 +24198,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1894
- *                                     elif chr == 'b':
+ *                                     elif chr == 98:
  *                                         offset_4 += 1
- *                                     elif chr == 'f':             # <<<<<<<<<<<<<<
+ *                                     elif chr == 102:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif chr == 'n':
+ *                                     elif chr == 110:
  */
                   break;
                   case 0x6E:
 
                   /* "RSONParser.pyx":1897
  *                                         offset_4 += 1
- *                                     elif chr == 'n':
+ *                                     elif chr == 110:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif chr == 'r':
+ *                                     elif chr == 114:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1897, __pyx_L1_error)
@@ -24214,20 +24220,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1896
- *                                     elif chr == 'f':
+ *                                     elif chr == 102:
  *                                         offset_4 += 1
- *                                     elif chr == 'n':             # <<<<<<<<<<<<<<
+ *                                     elif chr == 110:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif chr == 'r':
+ *                                     elif chr == 114:
  */
                   break;
                   case 0x72:
 
                   /* "RSONParser.pyx":1899
  *                                         offset_4 += 1
- *                                     elif chr == 'r':
+ *                                     elif chr == 114:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif chr == 't':
+ *                                     elif chr == 116:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1899, __pyx_L1_error)
@@ -24236,20 +24242,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1898
- *                                     elif chr == 'n':
+ *                                     elif chr == 110:
  *                                         offset_4 += 1
- *                                     elif chr == 'r':             # <<<<<<<<<<<<<<
+ *                                     elif chr == 114:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif chr == 't':
+ *                                     elif chr == 116:
  */
                   break;
                   case 0x74:
 
                   /* "RSONParser.pyx":1901
  *                                         offset_4 += 1
- *                                     elif chr == 't':
+ *                                     elif chr == 116:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif chr == "'":
+ *                                     elif chr == 39:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1901, __pyx_L1_error)
@@ -24258,20 +24264,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1900
- *                                     elif chr == 'r':
+ *                                     elif chr == 114:
  *                                         offset_4 += 1
- *                                     elif chr == 't':             # <<<<<<<<<<<<<<
+ *                                     elif chr == 116:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif chr == "'":
+ *                                     elif chr == 39:
  */
                   break;
                   case 39:
 
                   /* "RSONParser.pyx":1903
  *                                         offset_4 += 1
- *                                     elif chr == "'":
+ *                                     elif chr == 39:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
- *                                     elif chr == '\n':
+ *                                     elif chr == 10:
  *                                         offset_4 += 1
  */
                   __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1903, __pyx_L1_error)
@@ -24280,18 +24286,18 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1902
- *                                     elif chr == 't':
+ *                                     elif chr == 116:
  *                                         offset_4 += 1
- *                                     elif chr == "'":             # <<<<<<<<<<<<<<
+ *                                     elif chr == 39:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
- *                                     elif chr == '\n':
+ *                                     elif chr == 10:
  */
                   break;
                   case 10:
 
                   /* "RSONParser.pyx":1905
  *                                         offset_4 += 1
- *                                     elif chr == '\n':
+ *                                     elif chr == 10:
  *                                         offset_4 += 1             # <<<<<<<<<<<<<<
  *                                     else:
  *                                         offset_4 = -1
@@ -24302,9 +24308,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
                   __pyx_t_1 = 0;
 
                   /* "RSONParser.pyx":1904
- *                                     elif chr == "'":
+ *                                     elif chr == 39:
  *                                         offset_4 += 1
- *                                     elif chr == '\n':             # <<<<<<<<<<<<<<
+ *                                     elif chr == 10:             # <<<<<<<<<<<<<<
  *                                         offset_4 += 1
  *                                     else:
  */
@@ -24949,7 +24955,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  * 
  *     cdef (int, int) parse_rson_string(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  */
 
   /* function exit code */
@@ -24980,7 +24986,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  * 
  *     cdef (int, int) parse_rson_list(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  */
 
 static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, int __pyx_v_indent, int __pyx_v_buf_eof, PyObject *__pyx_v_children) {
@@ -25013,7 +25019,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
 
   /* "RSONParser.pyx":1963
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop             # <<<<<<<<<<<<<<
  *             if buf[offset:offset+1] == '[':
  *                 offset += 1
@@ -25021,7 +25027,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
   while (1) {
 
     /* "RSONParser.pyx":1964
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop
  *             if buf[offset:offset+1] == '[':             # <<<<<<<<<<<<<<
  *                 offset += 1
@@ -25048,7 +25054,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
       __pyx_v_offset = (__pyx_v_offset + 1);
 
       /* "RSONParser.pyx":1964
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop
  *             if buf[offset:offset+1] == '[':             # <<<<<<<<<<<<<<
  *                 offset += 1
@@ -26057,7 +26063,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
  * 
  *     cdef (int, int) parse_rson_list(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  */
 
   /* function exit code */
@@ -26085,7 +26091,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
  * 
  *     cdef (int, int) parse_rson_object(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  */
 
 static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, int __pyx_v_indent, int __pyx_v_buf_eof, PyObject *__pyx_v_children) {
@@ -26120,7 +26126,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
 
   /* "RSONParser.pyx":2063
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop             # <<<<<<<<<<<<<<
  *             if buf[offset:offset+1] == '{':
  *                 offset += 1
@@ -26128,7 +26134,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
   while (1) {
 
     /* "RSONParser.pyx":2064
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop
  *             if buf[offset:offset+1] == '{':             # <<<<<<<<<<<<<<
  *                 offset += 1
@@ -26155,7 +26161,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
       __pyx_v_offset = (__pyx_v_offset + 1);
 
       /* "RSONParser.pyx":2064
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop
  *             if buf[offset:offset+1] == '{':             # <<<<<<<<<<<<<<
  *                 offset += 1
@@ -28013,7 +28019,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
  * 
  *     cdef (int, int) parse_rson_object(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
- *         cpdef Py_UNICODE chr
+ *         cpdef Py_UCS4 chr
  */
 
   /* function exit code */
@@ -28984,7 +28990,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
   /* "RSONParser.pyx":3
- * # cython: language_level=3
+ * # cython: language_level=3, bounds_check=False
  * class ParseNode:
  *     def __init__(self, name, start, end, children, value):             # <<<<<<<<<<<<<<
  *         self.name = name
@@ -29340,7 +29346,7 @@ if (!__Pyx_RefNanny) {
   #endif
 
   /* "RSONParser.pyx":2
- * # cython: language_level=3
+ * # cython: language_level=3, bounds_check=False
  * class ParseNode:             # <<<<<<<<<<<<<<
  *     def __init__(self, name, start, end, children, value):
  *         self.name = name
@@ -29349,7 +29355,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_GOTREF(__pyx_t_1);
 
   /* "RSONParser.pyx":3
- * # cython: language_level=3
+ * # cython: language_level=3, bounds_check=False
  * class ParseNode:
  *     def __init__(self, name, start, end, children, value):             # <<<<<<<<<<<<<<
  *         self.name = name
@@ -29373,7 +29379,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /* "RSONParser.pyx":2
- * # cython: language_level=3
+ * # cython: language_level=3, bounds_check=False
  * class ParseNode:             # <<<<<<<<<<<<<<
  *     def __init__(self, name, start, end, children, value):
  *         self.name = name
@@ -29415,7 +29421,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "RSONParser.pyx":1
- * # cython: language_level=3             # <<<<<<<<<<<<<<
+ * # cython: language_level=3, bounds_check=False             # <<<<<<<<<<<<<<
  * class ParseNode:
  *     def __init__(self, name, start, end, children, value):
  */
@@ -30526,6 +30532,66 @@ return_ne:
     #endif
     return (equals == Py_NE);
 #endif
+}
+
+/* UnicodeAsUCS4 */
+static CYTHON_INLINE Py_UCS4 __Pyx_PyUnicode_AsPy_UCS4(PyObject* x) {
+   Py_ssize_t length;
+   #if CYTHON_PEP393_ENABLED
+   length = PyUnicode_GET_LENGTH(x);
+   if (likely(length == 1)) {
+       return PyUnicode_READ_CHAR(x, 0);
+   }
+   #else
+   length = PyUnicode_GET_SIZE(x);
+   if (likely(length == 1)) {
+       return PyUnicode_AS_UNICODE(x)[0];
+   }
+   #if Py_UNICODE_SIZE == 2
+   else if (PyUnicode_GET_SIZE(x) == 2) {
+       Py_UCS4 high_val = PyUnicode_AS_UNICODE(x)[0];
+       if (high_val >= 0xD800 && high_val <= 0xDBFF) {
+           Py_UCS4 low_val = PyUnicode_AS_UNICODE(x)[1];
+           if (low_val >= 0xDC00 && low_val <= 0xDFFF) {
+               return 0x10000 + (((high_val & ((1<<10)-1)) << 10) | (low_val & ((1<<10)-1)));
+           }
+       }
+   }
+   #endif
+   #endif
+   PyErr_Format(PyExc_ValueError,
+                "only single character unicode strings can be converted to Py_UCS4, "
+                "got length %" CYTHON_FORMAT_SSIZE_T "d", length);
+   return (Py_UCS4)-1;
+}
+
+/* object_ord */
+static long __Pyx__PyObject_Ord(PyObject* c) {
+    Py_ssize_t size;
+    if (PyBytes_Check(c)) {
+        size = PyBytes_GET_SIZE(c);
+        if (likely(size == 1)) {
+            return (unsigned char) PyBytes_AS_STRING(c)[0];
+        }
+#if PY_MAJOR_VERSION < 3
+    } else if (PyUnicode_Check(c)) {
+        return (long)__Pyx_PyUnicode_AsPy_UCS4(c);
+#endif
+#if (!CYTHON_COMPILING_IN_PYPY) || (defined(PyByteArray_AS_STRING) && defined(PyByteArray_GET_SIZE))
+    } else if (PyByteArray_Check(c)) {
+        size = PyByteArray_GET_SIZE(c);
+        if (likely(size == 1)) {
+            return (unsigned char) PyByteArray_AS_STRING(c)[0];
+        }
+#endif
+    } else {
+        PyErr_Format(PyExc_TypeError,
+            "ord() expected string of length 1, but %.200s found", c->ob_type->tp_name);
+        return (long)(Py_UCS4)-1;
+    }
+    PyErr_Format(PyExc_TypeError,
+        "ord() expected a character, but string of length %zd found", size);
+    return (long)(Py_UCS4)-1;
 }
 
 /* ObjectGetItem */
@@ -32114,52 +32180,6 @@ static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value) {
     }
 }
 
-/* ObjectAsPyUnicode */
-static CYTHON_INLINE Py_UNICODE __Pyx_PyObject_AsPy_UNICODE(PyObject* x) {
-    long ival;
-    #if CYTHON_PEP393_ENABLED
-    #if Py_UNICODE_SIZE > 2
-    const long maxval = 1114111;
-    #else
-    const long maxval = 65535;
-    #endif
-    #else
-    static long maxval = 0;
-    #endif
-    if (PyUnicode_Check(x)) {
-        if (unlikely(__Pyx_PyUnicode_GET_LENGTH(x) != 1)) {
-            PyErr_Format(PyExc_ValueError,
-                         "only single character unicode strings can be converted to Py_UNICODE, "
-                         "got length %" CYTHON_FORMAT_SSIZE_T "d", __Pyx_PyUnicode_GET_LENGTH(x));
-            return (Py_UNICODE)-1;
-        }
-        #if CYTHON_PEP393_ENABLED
-        ival = PyUnicode_READ_CHAR(x, 0);
-        #else
-        return PyUnicode_AS_UNICODE(x)[0];
-        #endif
-    } else {
-        #if !CYTHON_PEP393_ENABLED
-        if (unlikely(!maxval))
-            maxval = (long)PyUnicode_GetMax();
-        #endif
-        ival = __Pyx_PyInt_As_long(x);
-    }
-    if (unlikely(!__Pyx_is_valid_index(ival, maxval + 1))) {
-        if (ival < 0) {
-            if (!PyErr_Occurred())
-                PyErr_SetString(PyExc_OverflowError,
-                                "cannot convert negative value to Py_UNICODE");
-            return (Py_UNICODE)-1;
-        } else {
-            PyErr_SetString(PyExc_OverflowError,
-                            "value too large to convert to Py_UNICODE");
-        }
-        return (Py_UNICODE)-1;
-    }
-    return (Py_UNICODE)ival;
-}
-
 /* CIntFromPy */
 static CYTHON_INLINE long __Pyx_PyInt_As_long(PyObject *x) {
     const long neg_one = (long) ((long) 0 - (long) 1), const_zero = (long) 0;
@@ -32536,6 +32556,27 @@ raise_neg_overflow:
     PyErr_SetString(PyExc_OverflowError,
         "can't convert negative value to int");
     return (int) -1;
+}
+
+/* ObjectAsUCS4 */
+static Py_UCS4 __Pyx__PyObject_AsPy_UCS4_raise_error(long ival) {
+   if (ival < 0) {
+       if (!PyErr_Occurred())
+           PyErr_SetString(PyExc_OverflowError,
+                           "cannot convert negative value to Py_UCS4");
+   } else {
+       PyErr_SetString(PyExc_OverflowError,
+                       "value too large to convert to Py_UCS4");
+   }
+   return (Py_UCS4)-1;
+}
+static Py_UCS4 __Pyx__PyObject_AsPy_UCS4(PyObject* x) {
+   long ival;
+   ival = __Pyx_PyInt_As_long(x);
+   if (unlikely(!__Pyx_is_valid_index(ival, 1114111 + 1))) {
+       return __Pyx__PyObject_AsPy_UCS4_raise_error(ival);
+   }
+   return (Py_UCS4)ival;
 }
 
 /* FastTypeChecks */
