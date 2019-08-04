@@ -1282,9 +1282,9 @@ def compile_python(grammar, builder=None, cython=False):
             if cython:
                 steps.extend((
                     f"if self.builder is not None:",
-                    f"    {children}.append(self.ParseNode({name}, {offset}, {offset_0}, {children_0}, None))",
+                    f"    {children}.append(self.builder[{name}](buf, {offset}, {offset_0}, {children_0}))",
                     f"else:",
-                    f"    {children}.append(ParseNode({name}, {offset}, {offset_0}, {children_0}, None))",
+                    f"    {children}.append(ParseNode({name}, {offset}, {offset_0}, list({children_0}), None))",
                 ))
             elif builder:
                 steps.append(f"{children}.append(self.builder[{name}](buf, {offset}, {offset_0}, {children_0}))")
@@ -1507,10 +1507,8 @@ def compile_python(grammar, builder=None, cython=False):
             if _max is not None:
                 cond.append(f"{count} < {repr(_max)}")
             
-            if cython:
-                cond2 = " or ".join(f"chr == {repr(chr)}" for chr in whitespace)
-            else:
-                cond2 =f"chr in self.WHITESPACE"
+            cond2 =f"chr in self.WHITESPACE"
+            if cython: cond2 = " or ".join(f"chr == {repr(chr)}" for chr in grammar.whitespace)
             steps.extend((
                 f"{count} = 0",
                 f"while {' and '.join(cond)}:",
@@ -1529,11 +1527,9 @@ def compile_python(grammar, builder=None, cython=False):
                 ))
 
         elif rule.kind == NEWLINE:
-            if cython:
-                cond = " or ".join(f"chr == {repr(chr)}" for chr in newline)
-            else:
-                cond =f"chr in self.NEWLINE"
+            cond =f"chr in self.NEWLINE"
 
+            if cython: cond = " or ".join(f"chr == {repr(chr)}" for chr in grammar.newline)
             steps.extend((
                 f"if {offset} < buf_eof",
                 f"    chr = buf[{offset}]",
@@ -1554,13 +1550,11 @@ def compile_python(grammar, builder=None, cython=False):
                 f"    break",
             ))
         elif rule.kind == END_OF_LINE:
-            if cython:
-                cond = " or ".join(f"chr == {chr}" for chr in newline)
-            else:
-                cond =f"chr in self.NEWLINE"
+            cond =f"chr in self.NEWLINE"
+            if cython: cond = " or ".join(f"chr == {repr(chr)}" for chr in grammar.newline)
 
             steps.extend((
-                f"if {offset} != buf_eof:",
+                f"if {offset} < buf_eof:",
                 f"    chr = buf[{offset}]",
                 f"    if {cond}:",
                 f"        {offset} +=1",
@@ -1605,12 +1599,15 @@ def compile_python(grammar, builder=None, cython=False):
         f"",
     )
     if cython:
-        output.append('# cython: language_level=3, boundscheck=False')
+        output.append('# cython: language_level=3')
         output.extend(parse_node)
         output.extend((
             f"cdef class Parser:",
-            f"    cdef object builder",
-            "",
+            f"    cpdef object builder",
+            f"",
+            f"    def __init__(self, builder):",
+            f"         self.builder = builder",
+            f"",
             f"    NEWLINE = {newline}",
             f"    WHITESPACE = {whitespace}",
             "",
@@ -1634,9 +1631,9 @@ def compile_python(grammar, builder=None, cython=False):
     start_rule = grammar.start
     output.extend((
         f"def parse(self, buf, offset=0):",
-        f"    line_start, indent, eof, children = offset, len(buf), None, []",
+        f"    line_start, indent, eof, children = offset, 0, len(buf), []",
         f"    new_offset, line_start = self.parse_{start_rule}(buf, offset, line_start, indent, eof, children)",
-        f"    return children[-1] if new_offset else None",
+        f"    return children[-1] if new_offset == eof else None",
         f"",
     ))
 
@@ -1644,10 +1641,10 @@ def compile_python(grammar, builder=None, cython=False):
         if cython:
             output.append(f"cdef (int, int) parse_{name}(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):")
             output.append(f"    cdef int count")
-            output.append(f"    cdef Py_UNICODE chr")
+            output.append(f"    cpdef Py_UNICODE chr")
         else:
             output.append(f"def parse_{name}(self, buf, offset, line_start, indent, buf_eof, children):")
-        #output.append(f"    print('enter {name}')")
+        # output.append(f"    print('enter {name}')")
         output.append(f"    while True: # note: return at end of loop")
 
         build_steps(rule, 

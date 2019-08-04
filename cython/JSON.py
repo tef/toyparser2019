@@ -29,30 +29,33 @@ class JSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n"]):
             with self.case(), self.capture("bool"): self.accept("true")
             with self.case(), self.capture("bool"): self.accept("false")
             with self.case(), self.capture("bool"): self.accept("null")
-            with self.case(), self.capture("number"):
-                with self.optional():
-                    self.accept("-")
-                with self.choice():
-                    with self.case():
-                        self.accept("0")
-                    with self.case():
-                        self.range("1-9")
-                        with self.repeat():
-                            self.range("0-9")
-                with self.optional():
-                    self.accept(".")
-                    with self.repeat():
-                        self.range("0-9")
-                with self.optional():
-                    self.accept("e", "E")
-                    with self.optional():
-                        self.accept("+", "-")
-                        with self.repeat():
-                            self.range("0-9")
+            with self.case(): self.json_number()
             with self.case(): self.json_string()
             with self.case(): self.json_list()
             with self.case(): self.json_object()
 
+    @rule()
+    def json_number(self):
+        with self.capture("number"):
+            with self.optional():
+                self.accept("-")
+            with self.choice():
+                with self.case():
+                    self.accept("0")
+                with self.case():
+                    self.range("1-9")
+                    with self.repeat():
+                        self.range("0-9")
+            with self.optional():
+                self.accept(".")
+                with self.repeat():
+                    self.range("0-9")
+            with self.optional():
+                self.accept("e", "E")
+                with self.optional():
+                    self.accept("+", "-")
+                    with self.repeat():
+                        self.range("0-9")
     @rule()
     def json_string(self):
         self.accept("\"")
@@ -118,7 +121,7 @@ if __name__ == "__main__":
         with open("JSONParser.pyx", "w") as fh:
             fh.write(code)
 
-        subprocess.run(["python3", "setup.py", "build_ext"])
+        subprocess.run(["python3", "setup.py", "build_ext", "--inplace"])
 
     from JSONParser import Parser as JSONParser
     print()
@@ -130,19 +133,20 @@ if __name__ == "__main__":
 
     import time, json
 
-    s = json.dumps(list(range(50000))+list(str(x) for x in range(0,50000)))
+    n= 50_000
+    s = json.dumps(list(range(n))+list(str(x) for x in range(n)))
     print('file is', len(s)/1024, 'k')
 
     def timeit(name,parser, buf):
         t = time.time()
         o = parser(buf)
         t = time.time() - t
-        print(name, t)
+        print(name, t, len(o))
         return t
 
     json_t = timeit("json", json.loads, s)
-    cython_t = timeit("cython", cython_parser.parse, s)
     python_t = timeit("python-compiled", python_parser.parse, s)
+    cython_t = timeit("cython", cython_parser.parse, s)
     print("cython is",cython_t/json_t, "times slower than handrolled C",  python_t/cython_t, "times faster than python")
 
 #    t2 = timeit("python-compiled-old", old_python_parser.parse, s)
