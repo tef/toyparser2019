@@ -18,17 +18,18 @@ cdef class Parser:
     NEWLINE = ()
     WHITESPACE = (' ', '\t', '\r', '\n')
 
-    def parse(self, buf, offset=0):
+    def parse(self, buf, offset=0, err=None):
         line_start, indent, eof, children = offset, 0, len(buf), []
         new_offset, line_start = self.parse_document(buf, offset, line_start, indent, eof, children)
-        return children[-1] if new_offset == eof else None
+        if children and new_offset > offset: return children[-1]
+        if err is not None: raise err(buf, offset, 'no')
     
     cdef (int, int) parse_document(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):
         cdef int count
         cpdef Py_UNICODE chr
         while True: # note: return at end of loop
             count = 0
-            while offset != buf_eof:
+            while offset < buf_eof:
                 chr = buf[offset]
                 if chr == ' ' or chr == '\t' or chr == '\r' or chr == '\n':
                     offset +=1
@@ -636,7 +637,7 @@ cdef class Parser:
                 break
             
             count = 0
-            while offset != buf_eof:
+            while offset < buf_eof:
                 chr = buf[offset]
                 if chr == ' ' or chr == '\t' or chr == '\r' or chr == '\n':
                     offset +=1
@@ -660,7 +661,7 @@ cdef class Parser:
                         offset_3 = offset_2
                         line_start_2 = line_start_1
                         count_2 = 0
-                        while offset_3 != buf_eof:
+                        while offset_3 < buf_eof:
                             chr = buf[offset_3]
                             if chr == ' ' or chr == '\t' or chr == '\r' or chr == '\n':
                                 offset_3 +=1
@@ -675,7 +676,7 @@ cdef class Parser:
                             break
                         
                         count_2 = 0
-                        while offset_3 != buf_eof:
+                        while offset_3 < buf_eof:
                             chr = buf[offset_3]
                             if chr == ' ' or chr == '\t' or chr == '\r' or chr == '\n':
                                 offset_3 +=1
@@ -728,7 +729,7 @@ cdef class Parser:
                 break
             
             count = 0
-            while offset != buf_eof:
+            while offset < buf_eof:
                 chr = buf[offset]
                 if chr == ' ' or chr == '\t' or chr == '\r' or chr == '\n':
                     offset +=1
@@ -751,7 +752,7 @@ cdef class Parser:
                         
                         
                         count_1 = 0
-                        while offset_3 != buf_eof:
+                        while offset_3 < buf_eof:
                             chr = buf[offset_3]
                             if chr == ' ' or chr == '\t' or chr == '\r' or chr == '\n':
                                 offset_3 +=1
@@ -766,7 +767,7 @@ cdef class Parser:
                             break
                         
                         count_1 = 0
-                        while offset_3 != buf_eof:
+                        while offset_3 < buf_eof:
                             chr = buf[offset_3]
                             if chr == ' ' or chr == '\t' or chr == '\r' or chr == '\n':
                                 offset_3 +=1
@@ -789,7 +790,7 @@ cdef class Parser:
                     offset_2 = offset_3
                     
                     count_1 = 0
-                    while offset_2 != buf_eof:
+                    while offset_2 < buf_eof:
                         chr = buf[offset_2]
                         if chr == ' ' or chr == '\t' or chr == '\r' or chr == '\n':
                             offset_2 +=1
@@ -808,7 +809,7 @@ cdef class Parser:
                             break
                         
                         count_2 = 0
-                        while offset_3 != buf_eof:
+                        while offset_3 < buf_eof:
                             chr = buf[offset_3]
                             if chr == ' ' or chr == '\t' or chr == '\r' or chr == '\n':
                                 offset_3 +=1
@@ -824,7 +825,7 @@ cdef class Parser:
                             
                             
                             count_2 = 0
-                            while offset_4 != buf_eof:
+                            while offset_4 < buf_eof:
                                 chr = buf[offset_4]
                                 if chr == ' ' or chr == '\t' or chr == '\r' or chr == '\n':
                                     offset_4 +=1
@@ -839,7 +840,7 @@ cdef class Parser:
                                 break
                             
                             count_2 = 0
-                            while offset_4 != buf_eof:
+                            while offset_4 < buf_eof:
                                 chr = buf[offset_4]
                                 if chr == ' ' or chr == '\t' or chr == '\r' or chr == '\n':
                                     offset_4 +=1
@@ -862,7 +863,7 @@ cdef class Parser:
                         offset_3 = offset_4
                         
                         count_2 = 0
-                        while offset_3 != buf_eof:
+                        while offset_3 < buf_eof:
                             chr = buf[offset_3]
                             if chr == ' ' or chr == '\t' or chr == '\r' or chr == '\n':
                                 offset_3 +=1

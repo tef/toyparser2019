@@ -612,7 +612,7 @@ def run_tests(parse, dump):
         out = parse(buf)
 
         if (obj != obj and out == out) or (obj == obj and obj != out):
-            raise AssertionError('{} != {}'.format(obj, out))
+            raise AssertionError('{!r} != {!r}'.format(obj, out))
 
 
     def test_dump(obj, buf):
@@ -718,7 +718,7 @@ b"
 
         out = parse(buf1)
 
-        if obj != obj:
+        if obj != obj1:
             if buf0 != buf1 or obj1 == obj1 or out == out:
                 raise AssertionError('{} != {}'.format(obj, out))
         else:

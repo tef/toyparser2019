@@ -1,6 +1,7 @@
-from grammar import Grammar, compile_python
+import base64, codecs
+from datetime import datetime, timedelta, timezone
 
-import codecs
+from grammar import Grammar, compile_python
 
 def walk(node, indent="- "):
     print(indent, node)
@@ -8,8 +9,18 @@ def walk(node, indent="- "):
         walk(child, indent+ "  ")
 
 def unescape(string):
-    return codecs.decode(string, 'unicode_escape')
+    return codecs.decode(string.replace('\\/', '/'), 'unicode_escape')
 
+def parse_datetime(v):
+    if v[-1] == 'Z':
+        if '.' in v:
+            return datetime.strptime(v, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=timezone.utc)
+        else:
+            return datetime.strptime(v, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
+    else:
+        raise NotImplementedError()
+
+bools = {'false': False, 'true':True}
 builder = {
     'number': (lambda buf, start, end, children: eval(buf[start:end])),
     'string': (lambda buf, start, end, children: unescape(buf[start:end])),
@@ -17,9 +28,57 @@ builder = {
     'object': (lambda buf, start, end, children: dict(children)),
     'pair': (lambda buf, start, end, children: children),
     'document': (lambda buf, start, end, children: children[0]),
-    'bool': (lambda buf, start, end, children: bool(buf[start:end])),
+    'bool': (lambda buf, start, end, children: bools[buf[start:end]]),
     'null': (lambda buf, start, end, children: None),
+    'identifier': (lambda buf, start, end, children: buf[start:end]),
 }
+
+def untag(buf, start, end, children):
+    identifier, literal = children
+    if identifier == "object":
+       return literal
+    if identifier == "record" or identifier == "dict":
+        if not isinstance(literal, dict): raise Exception('bad')
+        return literal
+    elif identifier == "list":
+        if not isinstance(literal, list): raise Exception('bad')
+        return literal
+    elif identifier == "string":
+        if not isinstance(literal, str): raise Exception('bad')
+        return literal
+    elif identifier == "bool":
+        if not isinstance(literal, bool): raise Exception('bad')
+        return literal
+    elif identifier == "int":
+        if not isinstance(literal, int): raise Exception('bad')
+        return literal
+    elif identifier == "float":
+        if isinstance(literal, float): return literal
+        if not isinstance(literal, str): raise Exception('bad')
+        return float.fromhex(literal)
+    elif identifier == "set":
+        if not isinstance(literal, list): raise Exception('bad')
+        return set(literal)
+    elif identifier == "complex":
+        if not isinstance(literal, list): raise Exception('bad')
+        return complex(*literal)
+    elif identifier == "bytestring":
+        if not isinstance(literal, str): raise Exception('bad')
+        return literal.encode('ascii')
+    elif identifier == "base64":
+        if not isinstance(literal, str): raise Exception('bad')
+        return base64.standard_b64decode(literal)
+    elif identifier == "datetime":
+        if not isinstance(literal, str): raise Exception('bad')
+        return parse_datetime(literal)
+    elif identifier == "duration":
+        if not isinstance(literal, (int, float)): raise Exception('bad')
+        return timedelta(seconds=literal)
+    elif identifier == "unknown":
+        raise Exception('bad')
+    return {identifier: literal}
+
+builder['tagged'] = untag
 
 class RSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n", "\uFEFF"]):
     @rule()
@@ -39,17 +98,30 @@ class RSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n", "\uFEFF
             self.whitespace()
         self.whitespace()
 
-    rson_value = rule( 
+    @rule()
+    def rson_value(self):
+        with self.choice():
+            with self.case(), self.capture('tagged'):
+                self.accept('@')
+                with self.capture('identifier'):
+                    self.range("a-z", "a-Z")
+                    with self.repeat():
+                        self.range("0-9", "a-z","A-Z","_")
+                self.accept(' ')
+                self.rson_literal()
+            with self.case():
+                self.rson_literal()
+
+    rson_literal = rule( 
         rson_list | rson_object |
         rson_string | rson_number |
         rson_true | rson_false | 
         rson_null
     )
-    
+
     rson_true = rule(accept("true"), capture="bool")
     rson_false = rule(accept("false"), capture="bool")
     rson_null = rule(accept("null"), capture="null")
-
 
     @rule()
     def rson_number(self):
@@ -98,37 +170,101 @@ class RSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n", "\uFEFF
 
     @rule()
     def rson_string(self):
-        self.accept("\"")
-        with self.capture("string"), self.repeat(), self.choice():
+        with self.choice():
             with self.case():
-                self.accept("\\x")
-                self.range("0-9", "a-f", "A-F")
-                self.range("0-9", "a-f", "A-F")
+                self.accept("\"")
+                with self.capture("string"), self.repeat(), self.choice():
+                    with self.case():
+                        self.range("\x00-\x1f", "\\", "\"", "\uD800-\uDFFF", invert=True)
+                    with self.case():
+                        self.accept("\\x")
+                        with self.reject():
+                            self.range('0-1')
+                        self.range("0-9", "a-f", "A-F")
+                        self.range("0-9", "a-f", "A-F")
+                    with self.case():
+                        self.accept("\\u")
+                        with self.reject():
+                            self.accept("000")
+                            self.range('0-1')
+                        with self.reject():
+                            self.accept("D", "d")
+                            self.range("8-9", "A-F")
+                        self.range("0-9", "a-f", "A-F")
+                        self.range("0-9", "a-f", "A-F")
+                        self.range("0-9", "a-f", "A-F")
+                        self.range("0-9", "a-f", "A-F")
+                    with self.case():
+                        self.accept("\\U")
+                        with self.reject():
+                            self.accept("0000000")
+                            self.range('0-1')
+                        with self.reject():
+                            self.accept("0000")
+                            self.accept("D", "d")
+                            self.range("8-9", "A-F")
+                        self.range("0-9", "a-f", "A-F")
+                        self.range("0-9", "a-f", "A-F")
+                        self.range("0-9", "a-f", "A-F")
+                        self.range("0-9", "a-f", "A-F")
+                        self.range("0-9", "a-f", "A-F")
+                        self.range("0-9", "a-f", "A-F")
+                        self.range("0-9", "a-f", "A-F")
+                        self.range("0-9", "a-f", "A-F")
+                    with self.case():
+                        self.accept("\\")
+                        self.range(
+                            "\"", "\\", "/", "b", 
+                            "f", "n", "r", "t", "'", "\n",
+                        )
+                self.accept("\"")
             with self.case():
-                self.accept("\\u")
-                self.range("0-9", "a-f", "A-F")
-                self.range("0-9", "a-f", "A-F")
-                self.range("0-9", "a-f", "A-F")
-                self.range("0-9", "a-f", "A-F")
-            with self.case():
-                self.accept("\\U")
-                self.range("0-9", "a-f", "A-F")
-                self.range("0-9", "a-f", "A-F")
-                self.range("0-9", "a-f", "A-F")
-                self.range("0-9", "a-f", "A-F")
-                self.range("0-9", "a-f", "A-F")
-                self.range("0-9", "a-f", "A-F")
-                self.range("0-9", "a-f", "A-F")
-                self.range("0-9", "a-f", "A-F")
-            with self.case():
-                self.accept("\\")
-                self.range(
-                    "\"", "\\", "/", "b", 
-                    "f", "n", "r", "t", "'", "\n",
-                )
-            with self.case():
-                self.range("\\", "\"", invert=True)
-        self.accept("\"")
+                self.accept("\'")
+                with self.capture("string"), self.repeat(), self.choice():
+                    with self.case():
+                        self.range("\x00-\x1f", "\\", "\'", "\uD800-\uDFFF", invert=True)
+                    with self.case():
+                        self.accept("\\x")
+                        with self.reject():
+                            self.range('0-1')
+                        self.range("0-9", "a-f", "A-F")
+                        self.range("0-9", "a-f", "A-F")
+                    with self.case():
+                        self.accept("\\u")
+                        with self.reject():
+                            self.accept("00")
+                            self.range('0-1')
+                        with self.reject():
+                            self.accept("D", "d")
+                            self.range("8-9", "A-F")
+                        self.range("0-9", "a-f", "A-F")
+                        self.range("0-9", "a-f", "A-F")
+                        self.range("0-9", "a-f", "A-F")
+                        self.range("0-9", "a-f", "A-F")
+                    with self.case():
+                        self.accept("\\U")
+                        with self.reject():
+                            self.accept("000000")
+                            self.range('0-1')
+                        with self.reject():
+                            self.accept("0000")
+                            self.accept("D", "d")
+                            self.range("8-9", "A-F")
+                        self.range("0-9", "a-f", "A-F")
+                        self.range("0-9", "a-f", "A-F")
+                        self.range("0-9", "a-f", "A-F")
+                        self.range("0-9", "a-f", "A-F")
+                        self.range("0-9", "a-f", "A-F")
+                        self.range("0-9", "a-f", "A-F")
+                        self.range("0-9", "a-f", "A-F")
+                        self.range("0-9", "a-f", "A-F")
+                    with self.case():
+                        self.accept("\\")
+                        self.range(
+                            "\"", "\\", "/", "b", 
+                            "f", "n", "r", "t", "'", "\n",
+                        )
+                self.accept("\'")
 
     @rule()
     def rson_list(self):
@@ -141,6 +277,10 @@ class RSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n", "\uFEFF
                 self.accept(",")
                 self.comment()
                 self.rson_value()
+            self.comment()
+            with self.optional():
+                self.accept(",")
+                self.comment()
         self.accept("]")
 
     @rule()
@@ -165,6 +305,9 @@ class RSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n", "\uFEFF
                     self.comment()
                     self.rson_value()
                 self.comment()
+            with self.optional():
+                self.accept(",")
+                self.comment()
         self.accept("}")
 
 if __name__ == "__main__":
@@ -184,6 +327,11 @@ if __name__ == "__main__":
     old_python_parser = RSON.compile_old(builder)
     python_parser = RSON.compile(builder)
     cython_parser = RSONParser(builder)
+
+    def p(buf):
+        return cython_parser.parse(buf, err=rsonlib.ParserErr)
+
+    rsonlib.run_tests(p, rsonlib.dump)
 
     import time, json
 
@@ -206,7 +354,6 @@ if __name__ == "__main__":
 #    t3 = timeit("python-interpreted", parser.parse, s)
 #    print("cython is",t2/cython_t, "times sloweer  than cheap codegen", t3/cython_t, "times faster than interpreter")
 
-    rsonlib.run_tests(cython_parser.parse, rsonlib.dump)
 
 
 

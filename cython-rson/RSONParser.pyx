@@ -18,10 +18,11 @@ cdef class Parser:
     NEWLINE = ()
     WHITESPACE = (' ', '\t', '\r', '\n', '\ufeff')
 
-    def parse(self, buf, offset=0):
+    def parse(self, buf, offset=0, err=None):
         line_start, indent, eof, children = offset, 0, len(buf), []
         new_offset, line_start = self.parse_document(buf, offset, line_start, indent, eof, children)
-        return children[-1] if new_offset == eof else None
+        if children and new_offset > offset: return children[-1]
+        if err is not None: raise err(buf, offset, 'no')
     
     cdef (int, int) parse_document(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):
         cdef int count
@@ -61,7 +62,7 @@ cdef class Parser:
         cpdef Py_UNICODE chr
         while True: # note: return at end of loop
             count = 0
-            while offset != buf_eof:
+            while offset < buf_eof:
                 chr = buf[offset]
                 if chr == ' ' or chr == '\t' or chr == '\r' or chr == '\n' or chr == '\ufeff':
                     offset +=1
@@ -98,7 +99,7 @@ cdef class Parser:
                     count_1 += 1
                 
                 count_1 = 0
-                while offset_1 != buf_eof:
+                while offset_1 < buf_eof:
                     chr = buf[offset_1]
                     if chr == ' ' or chr == '\t' or chr == '\r' or chr == '\n' or chr == '\ufeff':
                         offset_1 +=1
@@ -112,7 +113,7 @@ cdef class Parser:
                 count += 1
             
             count = 0
-            while offset != buf_eof:
+            while offset < buf_eof:
                 chr = buf[offset]
                 if chr == ' ' or chr == '\t' or chr == '\r' or chr == '\n' or chr == '\ufeff':
                     offset +=1
@@ -125,6 +126,124 @@ cdef class Parser:
         return offset, line_start
     
     cdef (int, int) parse_rson_value(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):
+        cdef int count
+        cpdef Py_UNICODE chr
+        while True: # note: return at end of loop
+            while True: # start choice
+                offset_1 = offset
+                line_start_1 = line_start
+                children_1 = []
+                while True: # case
+                    offset_2 = offset_1
+                    children_2 = []
+                    while True: # start capture
+                        if buf[offset_2:offset_2+1] == '@':
+                            offset_2 += 1
+                        else:
+                            offset_2 = -1
+                            break
+                        
+                        offset_3 = offset_2
+                        children_3 = []
+                        while True: # start capture
+                            if offset_3 == buf_eof:
+                                offset_3 = -1
+                                break
+                            elif 'a' <= buf[offset_3] <= 'z':
+                                offset_3 += 1
+                            elif 'a' <= buf[offset_3] <= 'Z':
+                                offset_3 += 1
+                            else:
+                                offset_3 = -1
+                                break
+                            
+                            count = 0
+                            while True:
+                                offset_4 = offset_3
+                                line_start_2 = line_start_1
+                                if offset_4 == buf_eof:
+                                    offset_4 = -1
+                                    break
+                                elif '0' <= buf[offset_4] <= '9':
+                                    offset_4 += 1
+                                elif 'a' <= buf[offset_4] <= 'z':
+                                    offset_4 += 1
+                                elif 'A' <= buf[offset_4] <= 'Z':
+                                    offset_4 += 1
+                                elif buf[offset_4] == '_':
+                                    offset_4 += 1
+                                else:
+                                    offset_4 = -1
+                                    break
+                                
+                                if offset_3 == offset_4: break
+                                offset_3 = offset_4
+                                line_start_1 = line_start_2
+                                count += 1
+                            
+                            break
+                        if offset_3 == -1:
+                            offset_2 = -1
+                            break
+                        if self.builder is not None:
+                            children_2.append(self.builder['identifier'](buf, offset_2, offset_3, children_3))
+                        else:
+                            children_2.append(ParseNode('identifier', offset_2, offset_3, list(children_3), None))
+                        offset_2 = offset_3
+                        
+                        if buf[offset_2:offset_2+1] == ' ':
+                            offset_2 += 1
+                        else:
+                            offset_2 = -1
+                            break
+                        
+                        offset_2, line_start_1 = self.parse_rson_literal(buf, offset_2, line_start_1, indent, buf_eof, children_2)
+                        if offset_2 == -1: break
+                        
+                        
+                        break
+                    if offset_2 == -1:
+                        offset_1 = -1
+                        break
+                    if self.builder is not None:
+                        children_1.append(self.builder['tagged'](buf, offset_1, offset_2, children_2))
+                    else:
+                        children_1.append(ParseNode('tagged', offset_1, offset_2, list(children_2), None))
+                    offset_1 = offset_2
+                    
+                    
+                    break
+                if offset_1 != -1:
+                    offset = offset_1
+                    line_start = line_start_1
+                    children.extend(children_1)
+                    break
+                # end case
+                offset_1 = offset
+                line_start_1 = line_start
+                children_1 = []
+                while True: # case
+                    offset_1, line_start_1 = self.parse_rson_literal(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+                    if offset_1 == -1: break
+                    
+                    
+                    
+                    break
+                if offset_1 != -1:
+                    offset = offset_1
+                    line_start = line_start_1
+                    children.extend(children_1)
+                    break
+                # end case
+                offset = -1 # no more choices
+                break # end choice
+            if offset == -1:
+                break
+            
+            break
+        return offset, line_start
+    
+    cdef (int, int) parse_rson_literal(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):
         cdef int count
         cpdef Py_UNICODE chr
         while True: # note: return at end of loop
@@ -739,351 +858,983 @@ cdef class Parser:
         cdef int count
         cpdef Py_UNICODE chr
         while True: # note: return at end of loop
-            if buf[offset:offset+1] == '"':
-                offset += 1
-            else:
-                offset = -1
-                break
-            
-            offset_1 = offset
-            children_1 = []
-            while True: # start capture
-                count = 0
-                while True:
-                    offset_2 = offset_1
-                    line_start_1 = line_start
-                    while True: # start choice
-                        offset_3 = offset_2
-                        line_start_2 = line_start_1
-                        children_2 = []
-                        while True: # case
-                            if buf[offset_3:offset_3+2] == '\\x':
-                                offset_3 += 2
-                            else:
-                                offset_3 = -1
-                                break
-                            
-                            if offset_3 == buf_eof:
-                                offset_3 = -1
-                                break
-                            elif '0' <= buf[offset_3] <= '9':
-                                offset_3 += 1
-                            elif 'a' <= buf[offset_3] <= 'f':
-                                offset_3 += 1
-                            elif 'A' <= buf[offset_3] <= 'F':
-                                offset_3 += 1
-                            else:
-                                offset_3 = -1
-                                break
-                            
-                            if offset_3 == buf_eof:
-                                offset_3 = -1
-                                break
-                            elif '0' <= buf[offset_3] <= '9':
-                                offset_3 += 1
-                            elif 'a' <= buf[offset_3] <= 'f':
-                                offset_3 += 1
-                            elif 'A' <= buf[offset_3] <= 'F':
-                                offset_3 += 1
-                            else:
-                                offset_3 = -1
-                                break
-                            
-                            
-                            break
-                        if offset_3 != -1:
-                            offset_2 = offset_3
-                            line_start_1 = line_start_2
-                            children_1.extend(children_2)
-                            break
-                        # end case
-                        offset_3 = offset_2
-                        line_start_2 = line_start_1
-                        children_2 = []
-                        while True: # case
-                            if buf[offset_3:offset_3+2] == '\\u':
-                                offset_3 += 2
-                            else:
-                                offset_3 = -1
-                                break
-                            
-                            if offset_3 == buf_eof:
-                                offset_3 = -1
-                                break
-                            elif '0' <= buf[offset_3] <= '9':
-                                offset_3 += 1
-                            elif 'a' <= buf[offset_3] <= 'f':
-                                offset_3 += 1
-                            elif 'A' <= buf[offset_3] <= 'F':
-                                offset_3 += 1
-                            else:
-                                offset_3 = -1
-                                break
-                            
-                            if offset_3 == buf_eof:
-                                offset_3 = -1
-                                break
-                            elif '0' <= buf[offset_3] <= '9':
-                                offset_3 += 1
-                            elif 'a' <= buf[offset_3] <= 'f':
-                                offset_3 += 1
-                            elif 'A' <= buf[offset_3] <= 'F':
-                                offset_3 += 1
-                            else:
-                                offset_3 = -1
-                                break
-                            
-                            if offset_3 == buf_eof:
-                                offset_3 = -1
-                                break
-                            elif '0' <= buf[offset_3] <= '9':
-                                offset_3 += 1
-                            elif 'a' <= buf[offset_3] <= 'f':
-                                offset_3 += 1
-                            elif 'A' <= buf[offset_3] <= 'F':
-                                offset_3 += 1
-                            else:
-                                offset_3 = -1
-                                break
-                            
-                            if offset_3 == buf_eof:
-                                offset_3 = -1
-                                break
-                            elif '0' <= buf[offset_3] <= '9':
-                                offset_3 += 1
-                            elif 'a' <= buf[offset_3] <= 'f':
-                                offset_3 += 1
-                            elif 'A' <= buf[offset_3] <= 'F':
-                                offset_3 += 1
-                            else:
-                                offset_3 = -1
-                                break
-                            
-                            
-                            break
-                        if offset_3 != -1:
-                            offset_2 = offset_3
-                            line_start_1 = line_start_2
-                            children_1.extend(children_2)
-                            break
-                        # end case
-                        offset_3 = offset_2
-                        line_start_2 = line_start_1
-                        children_2 = []
-                        while True: # case
-                            if buf[offset_3:offset_3+2] == '\\U':
-                                offset_3 += 2
-                            else:
-                                offset_3 = -1
-                                break
-                            
-                            if offset_3 == buf_eof:
-                                offset_3 = -1
-                                break
-                            elif '0' <= buf[offset_3] <= '9':
-                                offset_3 += 1
-                            elif 'a' <= buf[offset_3] <= 'f':
-                                offset_3 += 1
-                            elif 'A' <= buf[offset_3] <= 'F':
-                                offset_3 += 1
-                            else:
-                                offset_3 = -1
-                                break
-                            
-                            if offset_3 == buf_eof:
-                                offset_3 = -1
-                                break
-                            elif '0' <= buf[offset_3] <= '9':
-                                offset_3 += 1
-                            elif 'a' <= buf[offset_3] <= 'f':
-                                offset_3 += 1
-                            elif 'A' <= buf[offset_3] <= 'F':
-                                offset_3 += 1
-                            else:
-                                offset_3 = -1
-                                break
-                            
-                            if offset_3 == buf_eof:
-                                offset_3 = -1
-                                break
-                            elif '0' <= buf[offset_3] <= '9':
-                                offset_3 += 1
-                            elif 'a' <= buf[offset_3] <= 'f':
-                                offset_3 += 1
-                            elif 'A' <= buf[offset_3] <= 'F':
-                                offset_3 += 1
-                            else:
-                                offset_3 = -1
-                                break
-                            
-                            if offset_3 == buf_eof:
-                                offset_3 = -1
-                                break
-                            elif '0' <= buf[offset_3] <= '9':
-                                offset_3 += 1
-                            elif 'a' <= buf[offset_3] <= 'f':
-                                offset_3 += 1
-                            elif 'A' <= buf[offset_3] <= 'F':
-                                offset_3 += 1
-                            else:
-                                offset_3 = -1
-                                break
-                            
-                            if offset_3 == buf_eof:
-                                offset_3 = -1
-                                break
-                            elif '0' <= buf[offset_3] <= '9':
-                                offset_3 += 1
-                            elif 'a' <= buf[offset_3] <= 'f':
-                                offset_3 += 1
-                            elif 'A' <= buf[offset_3] <= 'F':
-                                offset_3 += 1
-                            else:
-                                offset_3 = -1
-                                break
-                            
-                            if offset_3 == buf_eof:
-                                offset_3 = -1
-                                break
-                            elif '0' <= buf[offset_3] <= '9':
-                                offset_3 += 1
-                            elif 'a' <= buf[offset_3] <= 'f':
-                                offset_3 += 1
-                            elif 'A' <= buf[offset_3] <= 'F':
-                                offset_3 += 1
-                            else:
-                                offset_3 = -1
-                                break
-                            
-                            if offset_3 == buf_eof:
-                                offset_3 = -1
-                                break
-                            elif '0' <= buf[offset_3] <= '9':
-                                offset_3 += 1
-                            elif 'a' <= buf[offset_3] <= 'f':
-                                offset_3 += 1
-                            elif 'A' <= buf[offset_3] <= 'F':
-                                offset_3 += 1
-                            else:
-                                offset_3 = -1
-                                break
-                            
-                            if offset_3 == buf_eof:
-                                offset_3 = -1
-                                break
-                            elif '0' <= buf[offset_3] <= '9':
-                                offset_3 += 1
-                            elif 'a' <= buf[offset_3] <= 'f':
-                                offset_3 += 1
-                            elif 'A' <= buf[offset_3] <= 'F':
-                                offset_3 += 1
-                            else:
-                                offset_3 = -1
-                                break
-                            
-                            
-                            break
-                        if offset_3 != -1:
-                            offset_2 = offset_3
-                            line_start_1 = line_start_2
-                            children_1.extend(children_2)
-                            break
-                        # end case
-                        offset_3 = offset_2
-                        line_start_2 = line_start_1
-                        children_2 = []
-                        while True: # case
-                            if buf[offset_3:offset_3+1] == '\\':
-                                offset_3 += 1
-                            else:
-                                offset_3 = -1
-                                break
-                            
-                            if offset_3 == buf_eof:
-                                offset_3 = -1
-                                break
-                            elif buf[offset_3] == '"':
-                                offset_3 += 1
-                            elif buf[offset_3] == '\\':
-                                offset_3 += 1
-                            elif buf[offset_3] == '/':
-                                offset_3 += 1
-                            elif buf[offset_3] == 'b':
-                                offset_3 += 1
-                            elif buf[offset_3] == 'f':
-                                offset_3 += 1
-                            elif buf[offset_3] == 'n':
-                                offset_3 += 1
-                            elif buf[offset_3] == 'r':
-                                offset_3 += 1
-                            elif buf[offset_3] == 't':
-                                offset_3 += 1
-                            elif buf[offset_3] == "'":
-                                offset_3 += 1
-                            elif buf[offset_3] == '\n':
-                                offset_3 += 1
-                            else:
-                                offset_3 = -1
-                                break
-                            
-                            
-                            break
-                        if offset_3 != -1:
-                            offset_2 = offset_3
-                            line_start_1 = line_start_2
-                            children_1.extend(children_2)
-                            break
-                        # end case
-                        offset_3 = offset_2
-                        line_start_2 = line_start_1
-                        children_2 = []
-                        while True: # case
-                            if offset_3 == buf_eof:
-                                offset_3 = -1
-                                break
-                            elif buf[offset_3] == '\\':
-                                offset_3 = -1
-                                break
-                            elif buf[offset_3] == '"':
-                                offset_3 = -1
-                                break
-                            else:
-                                offset_3 += 1
-                            
-                            
-                            break
-                        if offset_3 != -1:
-                            offset_2 = offset_3
-                            line_start_1 = line_start_2
-                            children_1.extend(children_2)
-                            break
-                        # end case
-                        offset_2 = -1 # no more choices
-                        break # end choice
-                    if offset_2 == -1:
+            while True: # start choice
+                offset_1 = offset
+                line_start_1 = line_start
+                children_1 = []
+                while True: # case
+                    if buf[offset_1:offset_1+1] == '"':
+                        offset_1 += 1
+                    else:
+                        offset_1 = -1
                         break
                     
-                    if offset_1 == offset_2: break
+                    offset_2 = offset_1
+                    children_2 = []
+                    while True: # start capture
+                        count = 0
+                        while True:
+                            offset_3 = offset_2
+                            line_start_2 = line_start_1
+                            while True: # start choice
+                                offset_4 = offset_3
+                                line_start_3 = line_start_2
+                                children_3 = []
+                                while True: # case
+                                    if offset_4 == buf_eof:
+                                        offset_4 = -1
+                                        break
+                                    elif '\x00' <= buf[offset_4] <= '\x1f':
+                                        offset_4 = -1
+                                        break
+                                    elif buf[offset_4] == '\\':
+                                        offset_4 = -1
+                                        break
+                                    elif buf[offset_4] == '"':
+                                        offset_4 = -1
+                                        break
+                                    elif '\ud800' <= buf[offset_4] <= '\udfff':
+                                        offset_4 = -1
+                                        break
+                                    else:
+                                        offset_4 += 1
+                                    
+                                    
+                                    break
+                                if offset_4 != -1:
+                                    offset_3 = offset_4
+                                    line_start_2 = line_start_3
+                                    children_2.extend(children_3)
+                                    break
+                                # end case
+                                offset_4 = offset_3
+                                line_start_3 = line_start_2
+                                children_3 = []
+                                while True: # case
+                                    if buf[offset_4:offset_4+2] == '\\x':
+                                        offset_4 += 2
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    while True: # start reject
+                                        children_4 = []
+                                        offset_5, line_start_4 = offset_4, line_start_3
+                                        if offset_5 == buf_eof:
+                                            offset_5 = -1
+                                            break
+                                        elif '0' <= buf[offset_5] <= '1':
+                                            offset_5 += 1
+                                        else:
+                                            offset_5 = -1
+                                            break
+                                        
+                                        break
+                                    if offset_5 != -1:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    if offset_4 == buf_eof:
+                                        offset_4 = -1
+                                        break
+                                    elif '0' <= buf[offset_4] <= '9':
+                                        offset_4 += 1
+                                    elif 'a' <= buf[offset_4] <= 'f':
+                                        offset_4 += 1
+                                    elif 'A' <= buf[offset_4] <= 'F':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    if offset_4 == buf_eof:
+                                        offset_4 = -1
+                                        break
+                                    elif '0' <= buf[offset_4] <= '9':
+                                        offset_4 += 1
+                                    elif 'a' <= buf[offset_4] <= 'f':
+                                        offset_4 += 1
+                                    elif 'A' <= buf[offset_4] <= 'F':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    
+                                    break
+                                if offset_4 != -1:
+                                    offset_3 = offset_4
+                                    line_start_2 = line_start_3
+                                    children_2.extend(children_3)
+                                    break
+                                # end case
+                                offset_4 = offset_3
+                                line_start_3 = line_start_2
+                                children_3 = []
+                                while True: # case
+                                    if buf[offset_4:offset_4+2] == '\\u':
+                                        offset_4 += 2
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    while True: # start reject
+                                        children_4 = []
+                                        offset_5, line_start_4 = offset_4, line_start_3
+                                        if buf[offset_5:offset_5+3] == '000':
+                                            offset_5 += 3
+                                        else:
+                                            offset_5 = -1
+                                            break
+                                        
+                                        if offset_5 == buf_eof:
+                                            offset_5 = -1
+                                            break
+                                        elif '0' <= buf[offset_5] <= '1':
+                                            offset_5 += 1
+                                        else:
+                                            offset_5 = -1
+                                            break
+                                        
+                                        break
+                                    if offset_5 != -1:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    while True: # start reject
+                                        children_4 = []
+                                        offset_5, line_start_4 = offset_4, line_start_3
+                                        if buf[offset_5:offset_5+1] == 'D':
+                                            offset_5 += 1
+                                        elif buf[offset_5:offset_5+1] == 'd':
+                                            offset_5 += 1
+                                        else:
+                                            offset_5 = -1
+                                            break
+                                        
+                                        if offset_5 == buf_eof:
+                                            offset_5 = -1
+                                            break
+                                        elif '8' <= buf[offset_5] <= '9':
+                                            offset_5 += 1
+                                        elif 'A' <= buf[offset_5] <= 'F':
+                                            offset_5 += 1
+                                        else:
+                                            offset_5 = -1
+                                            break
+                                        
+                                        break
+                                    if offset_5 != -1:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    if offset_4 == buf_eof:
+                                        offset_4 = -1
+                                        break
+                                    elif '0' <= buf[offset_4] <= '9':
+                                        offset_4 += 1
+                                    elif 'a' <= buf[offset_4] <= 'f':
+                                        offset_4 += 1
+                                    elif 'A' <= buf[offset_4] <= 'F':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    if offset_4 == buf_eof:
+                                        offset_4 = -1
+                                        break
+                                    elif '0' <= buf[offset_4] <= '9':
+                                        offset_4 += 1
+                                    elif 'a' <= buf[offset_4] <= 'f':
+                                        offset_4 += 1
+                                    elif 'A' <= buf[offset_4] <= 'F':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    if offset_4 == buf_eof:
+                                        offset_4 = -1
+                                        break
+                                    elif '0' <= buf[offset_4] <= '9':
+                                        offset_4 += 1
+                                    elif 'a' <= buf[offset_4] <= 'f':
+                                        offset_4 += 1
+                                    elif 'A' <= buf[offset_4] <= 'F':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    if offset_4 == buf_eof:
+                                        offset_4 = -1
+                                        break
+                                    elif '0' <= buf[offset_4] <= '9':
+                                        offset_4 += 1
+                                    elif 'a' <= buf[offset_4] <= 'f':
+                                        offset_4 += 1
+                                    elif 'A' <= buf[offset_4] <= 'F':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    
+                                    break
+                                if offset_4 != -1:
+                                    offset_3 = offset_4
+                                    line_start_2 = line_start_3
+                                    children_2.extend(children_3)
+                                    break
+                                # end case
+                                offset_4 = offset_3
+                                line_start_3 = line_start_2
+                                children_3 = []
+                                while True: # case
+                                    if buf[offset_4:offset_4+2] == '\\U':
+                                        offset_4 += 2
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    while True: # start reject
+                                        children_4 = []
+                                        offset_5, line_start_4 = offset_4, line_start_3
+                                        if buf[offset_5:offset_5+7] == '0000000':
+                                            offset_5 += 7
+                                        else:
+                                            offset_5 = -1
+                                            break
+                                        
+                                        if offset_5 == buf_eof:
+                                            offset_5 = -1
+                                            break
+                                        elif '0' <= buf[offset_5] <= '1':
+                                            offset_5 += 1
+                                        else:
+                                            offset_5 = -1
+                                            break
+                                        
+                                        break
+                                    if offset_5 != -1:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    while True: # start reject
+                                        children_4 = []
+                                        offset_5, line_start_4 = offset_4, line_start_3
+                                        if buf[offset_5:offset_5+4] == '0000':
+                                            offset_5 += 4
+                                        else:
+                                            offset_5 = -1
+                                            break
+                                        
+                                        if buf[offset_5:offset_5+1] == 'D':
+                                            offset_5 += 1
+                                        elif buf[offset_5:offset_5+1] == 'd':
+                                            offset_5 += 1
+                                        else:
+                                            offset_5 = -1
+                                            break
+                                        
+                                        if offset_5 == buf_eof:
+                                            offset_5 = -1
+                                            break
+                                        elif '8' <= buf[offset_5] <= '9':
+                                            offset_5 += 1
+                                        elif 'A' <= buf[offset_5] <= 'F':
+                                            offset_5 += 1
+                                        else:
+                                            offset_5 = -1
+                                            break
+                                        
+                                        break
+                                    if offset_5 != -1:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    if offset_4 == buf_eof:
+                                        offset_4 = -1
+                                        break
+                                    elif '0' <= buf[offset_4] <= '9':
+                                        offset_4 += 1
+                                    elif 'a' <= buf[offset_4] <= 'f':
+                                        offset_4 += 1
+                                    elif 'A' <= buf[offset_4] <= 'F':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    if offset_4 == buf_eof:
+                                        offset_4 = -1
+                                        break
+                                    elif '0' <= buf[offset_4] <= '9':
+                                        offset_4 += 1
+                                    elif 'a' <= buf[offset_4] <= 'f':
+                                        offset_4 += 1
+                                    elif 'A' <= buf[offset_4] <= 'F':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    if offset_4 == buf_eof:
+                                        offset_4 = -1
+                                        break
+                                    elif '0' <= buf[offset_4] <= '9':
+                                        offset_4 += 1
+                                    elif 'a' <= buf[offset_4] <= 'f':
+                                        offset_4 += 1
+                                    elif 'A' <= buf[offset_4] <= 'F':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    if offset_4 == buf_eof:
+                                        offset_4 = -1
+                                        break
+                                    elif '0' <= buf[offset_4] <= '9':
+                                        offset_4 += 1
+                                    elif 'a' <= buf[offset_4] <= 'f':
+                                        offset_4 += 1
+                                    elif 'A' <= buf[offset_4] <= 'F':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    if offset_4 == buf_eof:
+                                        offset_4 = -1
+                                        break
+                                    elif '0' <= buf[offset_4] <= '9':
+                                        offset_4 += 1
+                                    elif 'a' <= buf[offset_4] <= 'f':
+                                        offset_4 += 1
+                                    elif 'A' <= buf[offset_4] <= 'F':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    if offset_4 == buf_eof:
+                                        offset_4 = -1
+                                        break
+                                    elif '0' <= buf[offset_4] <= '9':
+                                        offset_4 += 1
+                                    elif 'a' <= buf[offset_4] <= 'f':
+                                        offset_4 += 1
+                                    elif 'A' <= buf[offset_4] <= 'F':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    if offset_4 == buf_eof:
+                                        offset_4 = -1
+                                        break
+                                    elif '0' <= buf[offset_4] <= '9':
+                                        offset_4 += 1
+                                    elif 'a' <= buf[offset_4] <= 'f':
+                                        offset_4 += 1
+                                    elif 'A' <= buf[offset_4] <= 'F':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    if offset_4 == buf_eof:
+                                        offset_4 = -1
+                                        break
+                                    elif '0' <= buf[offset_4] <= '9':
+                                        offset_4 += 1
+                                    elif 'a' <= buf[offset_4] <= 'f':
+                                        offset_4 += 1
+                                    elif 'A' <= buf[offset_4] <= 'F':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    
+                                    break
+                                if offset_4 != -1:
+                                    offset_3 = offset_4
+                                    line_start_2 = line_start_3
+                                    children_2.extend(children_3)
+                                    break
+                                # end case
+                                offset_4 = offset_3
+                                line_start_3 = line_start_2
+                                children_3 = []
+                                while True: # case
+                                    if buf[offset_4:offset_4+1] == '\\':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    if offset_4 == buf_eof:
+                                        offset_4 = -1
+                                        break
+                                    elif buf[offset_4] == '"':
+                                        offset_4 += 1
+                                    elif buf[offset_4] == '\\':
+                                        offset_4 += 1
+                                    elif buf[offset_4] == '/':
+                                        offset_4 += 1
+                                    elif buf[offset_4] == 'b':
+                                        offset_4 += 1
+                                    elif buf[offset_4] == 'f':
+                                        offset_4 += 1
+                                    elif buf[offset_4] == 'n':
+                                        offset_4 += 1
+                                    elif buf[offset_4] == 'r':
+                                        offset_4 += 1
+                                    elif buf[offset_4] == 't':
+                                        offset_4 += 1
+                                    elif buf[offset_4] == "'":
+                                        offset_4 += 1
+                                    elif buf[offset_4] == '\n':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    
+                                    break
+                                if offset_4 != -1:
+                                    offset_3 = offset_4
+                                    line_start_2 = line_start_3
+                                    children_2.extend(children_3)
+                                    break
+                                # end case
+                                offset_3 = -1 # no more choices
+                                break # end choice
+                            if offset_3 == -1:
+                                break
+                            
+                            if offset_2 == offset_3: break
+                            offset_2 = offset_3
+                            line_start_1 = line_start_2
+                            count += 1
+                        
+                        break
+                    if offset_2 == -1:
+                        offset_1 = -1
+                        break
+                    if self.builder is not None:
+                        children_1.append(self.builder['string'](buf, offset_1, offset_2, children_2))
+                    else:
+                        children_1.append(ParseNode('string', offset_1, offset_2, list(children_2), None))
                     offset_1 = offset_2
+                    
+                    if buf[offset_1:offset_1+1] == '"':
+                        offset_1 += 1
+                    else:
+                        offset_1 = -1
+                        break
+                    
+                    
+                    break
+                if offset_1 != -1:
+                    offset = offset_1
                     line_start = line_start_1
-                    count += 1
-                
+                    children.extend(children_1)
+                    break
+                # end case
+                offset_1 = offset
+                line_start_1 = line_start
+                children_1 = []
+                while True: # case
+                    if buf[offset_1:offset_1+1] == "'":
+                        offset_1 += 1
+                    else:
+                        offset_1 = -1
+                        break
+                    
+                    offset_2 = offset_1
+                    children_2 = []
+                    while True: # start capture
+                        count = 0
+                        while True:
+                            offset_3 = offset_2
+                            line_start_2 = line_start_1
+                            while True: # start choice
+                                offset_4 = offset_3
+                                line_start_3 = line_start_2
+                                children_3 = []
+                                while True: # case
+                                    if offset_4 == buf_eof:
+                                        offset_4 = -1
+                                        break
+                                    elif '\x00' <= buf[offset_4] <= '\x1f':
+                                        offset_4 = -1
+                                        break
+                                    elif buf[offset_4] == '\\':
+                                        offset_4 = -1
+                                        break
+                                    elif buf[offset_4] == "'":
+                                        offset_4 = -1
+                                        break
+                                    elif '\ud800' <= buf[offset_4] <= '\udfff':
+                                        offset_4 = -1
+                                        break
+                                    else:
+                                        offset_4 += 1
+                                    
+                                    
+                                    break
+                                if offset_4 != -1:
+                                    offset_3 = offset_4
+                                    line_start_2 = line_start_3
+                                    children_2.extend(children_3)
+                                    break
+                                # end case
+                                offset_4 = offset_3
+                                line_start_3 = line_start_2
+                                children_3 = []
+                                while True: # case
+                                    if buf[offset_4:offset_4+2] == '\\x':
+                                        offset_4 += 2
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    while True: # start reject
+                                        children_4 = []
+                                        offset_5, line_start_4 = offset_4, line_start_3
+                                        if offset_5 == buf_eof:
+                                            offset_5 = -1
+                                            break
+                                        elif '0' <= buf[offset_5] <= '1':
+                                            offset_5 += 1
+                                        else:
+                                            offset_5 = -1
+                                            break
+                                        
+                                        break
+                                    if offset_5 != -1:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    if offset_4 == buf_eof:
+                                        offset_4 = -1
+                                        break
+                                    elif '0' <= buf[offset_4] <= '9':
+                                        offset_4 += 1
+                                    elif 'a' <= buf[offset_4] <= 'f':
+                                        offset_4 += 1
+                                    elif 'A' <= buf[offset_4] <= 'F':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    if offset_4 == buf_eof:
+                                        offset_4 = -1
+                                        break
+                                    elif '0' <= buf[offset_4] <= '9':
+                                        offset_4 += 1
+                                    elif 'a' <= buf[offset_4] <= 'f':
+                                        offset_4 += 1
+                                    elif 'A' <= buf[offset_4] <= 'F':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    
+                                    break
+                                if offset_4 != -1:
+                                    offset_3 = offset_4
+                                    line_start_2 = line_start_3
+                                    children_2.extend(children_3)
+                                    break
+                                # end case
+                                offset_4 = offset_3
+                                line_start_3 = line_start_2
+                                children_3 = []
+                                while True: # case
+                                    if buf[offset_4:offset_4+2] == '\\u':
+                                        offset_4 += 2
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    while True: # start reject
+                                        children_4 = []
+                                        offset_5, line_start_4 = offset_4, line_start_3
+                                        if buf[offset_5:offset_5+2] == '00':
+                                            offset_5 += 2
+                                        else:
+                                            offset_5 = -1
+                                            break
+                                        
+                                        if offset_5 == buf_eof:
+                                            offset_5 = -1
+                                            break
+                                        elif '0' <= buf[offset_5] <= '1':
+                                            offset_5 += 1
+                                        else:
+                                            offset_5 = -1
+                                            break
+                                        
+                                        break
+                                    if offset_5 != -1:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    while True: # start reject
+                                        children_4 = []
+                                        offset_5, line_start_4 = offset_4, line_start_3
+                                        if buf[offset_5:offset_5+1] == 'D':
+                                            offset_5 += 1
+                                        elif buf[offset_5:offset_5+1] == 'd':
+                                            offset_5 += 1
+                                        else:
+                                            offset_5 = -1
+                                            break
+                                        
+                                        if offset_5 == buf_eof:
+                                            offset_5 = -1
+                                            break
+                                        elif '8' <= buf[offset_5] <= '9':
+                                            offset_5 += 1
+                                        elif 'A' <= buf[offset_5] <= 'F':
+                                            offset_5 += 1
+                                        else:
+                                            offset_5 = -1
+                                            break
+                                        
+                                        break
+                                    if offset_5 != -1:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    if offset_4 == buf_eof:
+                                        offset_4 = -1
+                                        break
+                                    elif '0' <= buf[offset_4] <= '9':
+                                        offset_4 += 1
+                                    elif 'a' <= buf[offset_4] <= 'f':
+                                        offset_4 += 1
+                                    elif 'A' <= buf[offset_4] <= 'F':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    if offset_4 == buf_eof:
+                                        offset_4 = -1
+                                        break
+                                    elif '0' <= buf[offset_4] <= '9':
+                                        offset_4 += 1
+                                    elif 'a' <= buf[offset_4] <= 'f':
+                                        offset_4 += 1
+                                    elif 'A' <= buf[offset_4] <= 'F':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    if offset_4 == buf_eof:
+                                        offset_4 = -1
+                                        break
+                                    elif '0' <= buf[offset_4] <= '9':
+                                        offset_4 += 1
+                                    elif 'a' <= buf[offset_4] <= 'f':
+                                        offset_4 += 1
+                                    elif 'A' <= buf[offset_4] <= 'F':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    if offset_4 == buf_eof:
+                                        offset_4 = -1
+                                        break
+                                    elif '0' <= buf[offset_4] <= '9':
+                                        offset_4 += 1
+                                    elif 'a' <= buf[offset_4] <= 'f':
+                                        offset_4 += 1
+                                    elif 'A' <= buf[offset_4] <= 'F':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    
+                                    break
+                                if offset_4 != -1:
+                                    offset_3 = offset_4
+                                    line_start_2 = line_start_3
+                                    children_2.extend(children_3)
+                                    break
+                                # end case
+                                offset_4 = offset_3
+                                line_start_3 = line_start_2
+                                children_3 = []
+                                while True: # case
+                                    if buf[offset_4:offset_4+2] == '\\U':
+                                        offset_4 += 2
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    while True: # start reject
+                                        children_4 = []
+                                        offset_5, line_start_4 = offset_4, line_start_3
+                                        if buf[offset_5:offset_5+6] == '000000':
+                                            offset_5 += 6
+                                        else:
+                                            offset_5 = -1
+                                            break
+                                        
+                                        if offset_5 == buf_eof:
+                                            offset_5 = -1
+                                            break
+                                        elif '0' <= buf[offset_5] <= '1':
+                                            offset_5 += 1
+                                        else:
+                                            offset_5 = -1
+                                            break
+                                        
+                                        break
+                                    if offset_5 != -1:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    while True: # start reject
+                                        children_4 = []
+                                        offset_5, line_start_4 = offset_4, line_start_3
+                                        if buf[offset_5:offset_5+4] == '0000':
+                                            offset_5 += 4
+                                        else:
+                                            offset_5 = -1
+                                            break
+                                        
+                                        if buf[offset_5:offset_5+1] == 'D':
+                                            offset_5 += 1
+                                        elif buf[offset_5:offset_5+1] == 'd':
+                                            offset_5 += 1
+                                        else:
+                                            offset_5 = -1
+                                            break
+                                        
+                                        if offset_5 == buf_eof:
+                                            offset_5 = -1
+                                            break
+                                        elif '8' <= buf[offset_5] <= '9':
+                                            offset_5 += 1
+                                        elif 'A' <= buf[offset_5] <= 'F':
+                                            offset_5 += 1
+                                        else:
+                                            offset_5 = -1
+                                            break
+                                        
+                                        break
+                                    if offset_5 != -1:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    if offset_4 == buf_eof:
+                                        offset_4 = -1
+                                        break
+                                    elif '0' <= buf[offset_4] <= '9':
+                                        offset_4 += 1
+                                    elif 'a' <= buf[offset_4] <= 'f':
+                                        offset_4 += 1
+                                    elif 'A' <= buf[offset_4] <= 'F':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    if offset_4 == buf_eof:
+                                        offset_4 = -1
+                                        break
+                                    elif '0' <= buf[offset_4] <= '9':
+                                        offset_4 += 1
+                                    elif 'a' <= buf[offset_4] <= 'f':
+                                        offset_4 += 1
+                                    elif 'A' <= buf[offset_4] <= 'F':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    if offset_4 == buf_eof:
+                                        offset_4 = -1
+                                        break
+                                    elif '0' <= buf[offset_4] <= '9':
+                                        offset_4 += 1
+                                    elif 'a' <= buf[offset_4] <= 'f':
+                                        offset_4 += 1
+                                    elif 'A' <= buf[offset_4] <= 'F':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    if offset_4 == buf_eof:
+                                        offset_4 = -1
+                                        break
+                                    elif '0' <= buf[offset_4] <= '9':
+                                        offset_4 += 1
+                                    elif 'a' <= buf[offset_4] <= 'f':
+                                        offset_4 += 1
+                                    elif 'A' <= buf[offset_4] <= 'F':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    if offset_4 == buf_eof:
+                                        offset_4 = -1
+                                        break
+                                    elif '0' <= buf[offset_4] <= '9':
+                                        offset_4 += 1
+                                    elif 'a' <= buf[offset_4] <= 'f':
+                                        offset_4 += 1
+                                    elif 'A' <= buf[offset_4] <= 'F':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    if offset_4 == buf_eof:
+                                        offset_4 = -1
+                                        break
+                                    elif '0' <= buf[offset_4] <= '9':
+                                        offset_4 += 1
+                                    elif 'a' <= buf[offset_4] <= 'f':
+                                        offset_4 += 1
+                                    elif 'A' <= buf[offset_4] <= 'F':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    if offset_4 == buf_eof:
+                                        offset_4 = -1
+                                        break
+                                    elif '0' <= buf[offset_4] <= '9':
+                                        offset_4 += 1
+                                    elif 'a' <= buf[offset_4] <= 'f':
+                                        offset_4 += 1
+                                    elif 'A' <= buf[offset_4] <= 'F':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    if offset_4 == buf_eof:
+                                        offset_4 = -1
+                                        break
+                                    elif '0' <= buf[offset_4] <= '9':
+                                        offset_4 += 1
+                                    elif 'a' <= buf[offset_4] <= 'f':
+                                        offset_4 += 1
+                                    elif 'A' <= buf[offset_4] <= 'F':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    
+                                    break
+                                if offset_4 != -1:
+                                    offset_3 = offset_4
+                                    line_start_2 = line_start_3
+                                    children_2.extend(children_3)
+                                    break
+                                # end case
+                                offset_4 = offset_3
+                                line_start_3 = line_start_2
+                                children_3 = []
+                                while True: # case
+                                    if buf[offset_4:offset_4+1] == '\\':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    if offset_4 == buf_eof:
+                                        offset_4 = -1
+                                        break
+                                    elif buf[offset_4] == '"':
+                                        offset_4 += 1
+                                    elif buf[offset_4] == '\\':
+                                        offset_4 += 1
+                                    elif buf[offset_4] == '/':
+                                        offset_4 += 1
+                                    elif buf[offset_4] == 'b':
+                                        offset_4 += 1
+                                    elif buf[offset_4] == 'f':
+                                        offset_4 += 1
+                                    elif buf[offset_4] == 'n':
+                                        offset_4 += 1
+                                    elif buf[offset_4] == 'r':
+                                        offset_4 += 1
+                                    elif buf[offset_4] == 't':
+                                        offset_4 += 1
+                                    elif buf[offset_4] == "'":
+                                        offset_4 += 1
+                                    elif buf[offset_4] == '\n':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    
+                                    break
+                                if offset_4 != -1:
+                                    offset_3 = offset_4
+                                    line_start_2 = line_start_3
+                                    children_2.extend(children_3)
+                                    break
+                                # end case
+                                offset_3 = -1 # no more choices
+                                break # end choice
+                            if offset_3 == -1:
+                                break
+                            
+                            if offset_2 == offset_3: break
+                            offset_2 = offset_3
+                            line_start_1 = line_start_2
+                            count += 1
+                        
+                        break
+                    if offset_2 == -1:
+                        offset_1 = -1
+                        break
+                    if self.builder is not None:
+                        children_1.append(self.builder['string'](buf, offset_1, offset_2, children_2))
+                    else:
+                        children_1.append(ParseNode('string', offset_1, offset_2, list(children_2), None))
+                    offset_1 = offset_2
+                    
+                    if buf[offset_1:offset_1+1] == "'":
+                        offset_1 += 1
+                    else:
+                        offset_1 = -1
+                        break
+                    
+                    
+                    break
+                if offset_1 != -1:
+                    offset = offset_1
+                    line_start = line_start_1
+                    children.extend(children_1)
+                    break
+                # end case
+                offset = -1 # no more choices
+                break # end choice
+            if offset == -1:
                 break
-            if offset_1 == -1:
-                offset = -1
-                break
-            if self.builder is not None:
-                children.append(self.builder['string'](buf, offset, offset_1, children_1))
-            else:
-                children.append(ParseNode('string', offset, offset_1, list(children_1), None))
-            offset = offset_1
-            
-            if buf[offset:offset+1] == '"':
-                offset += 1
-            else:
-                offset = -1
-                break
-            
             
             break
         return offset, line_start
@@ -1132,6 +1883,29 @@ cdef class Parser:
                         
                         
                         offset_3, line_start_2 = self.parse_rson_value(buf, offset_3, line_start_2, indent, buf_eof, children_1)
+                        if offset_3 == -1: break
+                        
+                        
+                        if offset_2 == offset_3: break
+                        offset_2 = offset_3
+                        line_start_1 = line_start_2
+                        count_1 += 1
+                    
+                    offset_2, line_start_1 = self.parse_comment(buf, offset_2, line_start_1, indent, buf_eof, children_1)
+                    if offset_2 == -1: break
+                    
+                    
+                    count_1 = 0
+                    while True:
+                        offset_3 = offset_2
+                        line_start_2 = line_start_1
+                        if buf[offset_3:offset_3+1] == ',':
+                            offset_3 += 1
+                        else:
+                            offset_3 = -1
+                            break
+                        
+                        offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent, buf_eof, children_1)
                         if offset_3 == -1: break
                         
                         
@@ -1273,6 +2047,25 @@ cdef class Parser:
                         else:
                             children_1.append(ParseNode('pair', offset_3, offset_4, list(children_2), None))
                         offset_3 = offset_4
+                        
+                        offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent, buf_eof, children_1)
+                        if offset_3 == -1: break
+                        
+                        
+                        if offset_2 == offset_3: break
+                        offset_2 = offset_3
+                        line_start_1 = line_start_2
+                        count_1 += 1
+                    
+                    count_1 = 0
+                    while True:
+                        offset_3 = offset_2
+                        line_start_2 = line_start_1
+                        if buf[offset_3:offset_3+1] == ',':
+                            offset_3 += 1
+                        else:
+                            offset_3 = -1
+                            break
                         
                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent, buf_eof, children_1)
                         if offset_3 == -1: break

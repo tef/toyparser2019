@@ -635,12 +635,13 @@ class ParserState:
         state = self
         count = 0
         while max is None or count < max:
-            if newline:
+            while newline:
                 new = state.advance_newline(newlines)
                 if new:
                     count += 1
                     state = new
-                    continue
+                else:
+                    break
 
             for ws in literals:
                 new = state.advance(ws)
@@ -648,7 +649,13 @@ class ParserState:
                     count += 1
                     state = new
                     break
-            else:
+            else: # the worst construct in python
+                if newline:
+                    new = state.advance_newline(newlines)
+                    if new:
+                        count += 1
+                        state = new
+                        continue
                 break
             continue
         if count >= min:
@@ -682,6 +689,7 @@ class ParserState:
     def advance_range(self, text):
         if '-' in text[1:2]:
             start, end = ord(text[0]), ord(text[2])
+            # print(start, end, repr(text))
             if start <= ord(self.buf[self.offset]) <= end:
                 return self.clone(offset=self.offset + 1)
         elif self.buf[self.offset:].startswith(text):
@@ -744,7 +752,7 @@ class Parser:
         self.grammar = grammar
         self.builder = builder
 
-    def parse(self, buf, offset=0):
+    def parse(self, buf, offset=0, err=None):
         name = self.grammar.start
         rule = self.grammar.rules[name]
 
@@ -752,7 +760,8 @@ class Parser:
         end = self.parse_rule(rule, start)
 
         if end is None:
-            return
+            if err is None: return
+            raise err(buf, offset, "no")
 
         return start.children[-1]
 
@@ -949,9 +958,10 @@ class Parser:
                 # print(rule, state.buf[state.offset:], rule.args)
                 for text in rule.args['range']:
                     new_state = state.advance_range(text)
-                    # print(new_state, text)
+                    #  print(new_state, repr(text))
                     if new_state:
                         return
+                # print(rule, 'advance')
                 return state.clone(offset=state.offset+1)
             else:
                 for text in rule.args['range']:
@@ -1084,6 +1094,7 @@ def compile_old(grammar, builder=None):
 
         elif rule.kind == REJECT:
             steps_0 = steps.add_indent()
+            state_0 = state.incr()
             steps.append(f"while True: # start reject")
             steps_0.append(f"{state_0} = {state}.capture()")
             build_subrules(rule.rules, steps_0, state_0, count)
@@ -1371,7 +1382,9 @@ def compile_python(grammar, builder=None, cython=False):
             line_start_0 = line_start.incr()
             steps.append(f"while True: # start reject")
             steps_0.append(f"{children_0} = []")
+            steps_0.append(f"{offset_0}, {line_start_0} = {offset}, {line_start}")
             build_subrules(rule.rules, steps_0, offset_0, line_start_0, indent, children_0, count)
+            steps_0.append("break")
 
             steps.append(f'if {offset_0} == -1:')
             steps.append(f'    {offset} = -1')
@@ -1384,8 +1397,12 @@ def compile_python(grammar, builder=None, cython=False):
             line_start_0 = line_start.incr()
             steps.append(f"while True: # start reject")
             steps_0.append(f"{children_0} = []")
+            steps_0.append(f"{offset_0}, {line_start_0} = {offset}, {line_start}")
+            # steps_0.append(f'print("reject", {offset_0})')
             build_subrules(rule.rules, steps_0, offset_0, line_start_0, indent, children_0, count)
+            steps_0.append("break")
 
+            # steps.append(f'print("exit", {offset_0})')
             steps.append(f'if {offset_0} != -1:')
             steps.append(f'    {offset} = -1')
             steps.append(f'    break')
@@ -1660,10 +1677,11 @@ def compile_python(grammar, builder=None, cython=False):
 
     start_rule = grammar.start
     output.extend((
-        f"def parse(self, buf, offset=0):",
+        f"def parse(self, buf, offset=0, err=None):",
         f"    line_start, indent, eof, children = offset, 0, len(buf), []",
         f"    new_offset, line_start = self.parse_{start_rule}(buf, offset, line_start, indent, eof, children)",
-        f"    return children[-1] if new_offset else None",
+        f"    if children and new_offset > offset: return children[-1]",
+        f"    if err is not None: raise err(buf, offset, 'no')",
         f"",
     ))
 
