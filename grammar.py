@@ -1400,9 +1400,9 @@ def compile_python(grammar, builder=None, cython=False):
 
         elif rule.kind == MATCH_INDENT:
             steps.extend((
-                f"{count} = {line_start} + {indent}]",
-                f"if count >= buf_eof:"
-                f"    {offset} == -1; break",
+                f"{count} = {line_start} + {indent}",
+                # f"if {count} >= buf_eof:"
+                # f"    {offset} == -1; break",
                 f"while {offset} < {count}:",
                 f"    if buf[{offset}] in self.WHITESPACE:",
                 f"        {offset} +=1",
@@ -1531,7 +1531,7 @@ def compile_python(grammar, builder=None, cython=False):
 
             if cython: cond = " or ".join(f"chr == {repr(chr)}" for chr in grammar.newline)
             steps.extend((
-                f"if {offset} < buf_eof",
+                f"if {offset} < buf_eof:",
                 f"    chr = buf[{offset}]",
                 f"    if {cond}:",
                 f"        {offset} +=1",
@@ -1633,7 +1633,7 @@ def compile_python(grammar, builder=None, cython=False):
         f"def parse(self, buf, offset=0):",
         f"    line_start, indent, eof, children = offset, 0, len(buf), []",
         f"    new_offset, line_start = self.parse_{start_rule}(buf, offset, line_start, indent, eof, children)",
-        f"    return children[-1] if new_offset == eof else None",
+        f"    return children[-1] if new_offset else None",
         f"",
     ))
 

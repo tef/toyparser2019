@@ -120,12 +120,12 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
         with self.repeat(), self.choice():
             with self.case():
                 self.whitespace()
-                self.accept('#')
-                with self.repeat():
-                    self.range("\n", invert=True)
                 self.newline()
             with self.case():
                 self.whitespace()
+                self.accept('#')
+                with self.repeat():
+                    self.range("\n", invert=True)
                 self.newline()
 
     
@@ -216,6 +216,10 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
                 self.list_literal()
             with self.case():
                 self.object_literal()
+        with self.repeat():
+            self.whitespace()
+            self.end_of_line()
+        self.whitespace()
 
 
 
@@ -227,7 +231,7 @@ parser2 = YAML.compile()
 import time
 
 def yaml(buf):
-    print(buf)
+    print(len(buf))
     t1 = time.time()
     node = parser.parse(buf)
     t1 = time.time() - t1
