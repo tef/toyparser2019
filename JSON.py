@@ -134,19 +134,24 @@ print(parser.parse("[1, 2, 3]"))
 print()
 
 
-parser1 = JSON.compile()
+parser1 = JSON.compile_old(builder)
+parser2 = JSON.compile(builder)
 
 import time, json
 
-s = json.dumps(list(range(20000)))
+s = json.dumps(list(range(2500)))
+print('file is', len(s)/1024, 'k')
 
 def timeit(name,parser, buf):
     t = time.time()
-    o = parser.parse(buf)
+    o = parser(buf)
     t = time.time() - t
     print(name, t)
-    print()
 
-timeit("inter", parser, s)
-timeit("comp", parser1, s)
+
+timeit("json", json.loads, s)
+timeit("inew", parser2.parse, s)
+timeit("comp", parser1.parse, s)
+timeit("inter", parser.parse, s)
+
 

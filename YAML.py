@@ -222,11 +222,21 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
 for name, value in YAML.rules.items():
     print(name, '<--', value,'.')
 
+parser = YAML.parser({})
+parser2 = YAML.compile_old()
+import time
+
 def yaml(buf):
-    parser = YAML.parser({})
+    t1 = time.time()
     node = parser.parse(buf)
+    t1 = time.time() - t1
     walk(node)
-    print(node.build(buf, builder))
+    t2 = time.time()
+    node = parser2.parse(buf)
+    t2 = time.time() - t2
+    walk(node)
+    print(t1, t2, t2/t1)
+    print()
 
 yaml("""\
 - 1
