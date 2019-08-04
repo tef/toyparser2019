@@ -996,7 +996,7 @@ class VarBuilder:
         self.name = name
 
     def __str__(self):
-        return f"{self.name}_{self.n}" if self.n else self.name
+        return f"{self.name}_{self.n}" # if self.n else self.name
 
     def incr(self):
         return VarBuilder(self.name, self.n+1)
@@ -1257,14 +1257,14 @@ def compile_old(grammar, builder=None):
     ))
 
     for name, rule in grammar.rules.items():
-        output.append(f"def parse_{name}(self, state):")
+        output.append(f"def parse_{name}(self, state_0):")
         # output.append(f"    print('{name}')")
         output.append(f"    while True: # note: return at end of loop")
 
         build_steps(rule, output.add_indent(8), VarBuilder("state"), VarBuilder("count"))
         output.append(f"        break")
         # output.append(f"    print('exit {name}', state)")
-        output.append(f"    return state")
+        output.append(f"    return state_0")
         output.append("")
 
     output = output.add_indent(-4)
@@ -1511,16 +1511,22 @@ def compile_python(grammar, builder=None, cython=False):
             
 
         elif rule.kind == LITERAL:
+
+            # steps.append(f"_buf = buf[{offset}:]")
+
             for idx, literal in enumerate(rule.args['literals']):
-                length = len(literal)
                 _if = {0:"if"}.get(idx, "elif")
 
-                # cond = [f"{offset} + {length} <= buf_eof"]
-                #for i, c in enumerate(literal):
-                #    cond.append(f"buf[{offset}+{i}] == {repr(c)}")
+                length = len(literal)
 
-                # cond = " and ".join(cond)
                 cond = f"buf[{offset}:{offset}+{length}] == {repr(literal)}"
+
+                # cond = [f"{offset} + {length} <= buf_eof"]
+                # for i, c in enumerate(literal):
+                #     cond.append(f"buf[{offset}+{i}] == {repr(c)}")
+                # cond = " and ".join(cond)
+
+                # cond = f"_buf.startswith({repr(literal)})"
 
                 steps.extend((
                     f"{_if} {cond}:",
@@ -1696,11 +1702,11 @@ def compile_python(grammar, builder=None, cython=False):
 
     for name, rule in grammar.rules.items():
         if cython:
-            output.append(f"cdef (int, int) parse_{name}(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):")
-            output.append(f"    cdef int count")
+            output.append(f"cdef (int, int) parse_{name}(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):")
+            output.append(f"    cdef int count_0")
             output.append(f"    cpdef Py_UCS4 chr")
         else:
-            output.append(f"def parse_{name}(self, buf, offset, line_start, indent, buf_eof, children):")
+            output.append(f"def parse_{name}(self, buf, offset_0, line_start_0, indent_0, buf_eof, children_0):")
         # output.append(f"    print('enter {name},',offset,line_start,indent, repr(buf[offset:offset+10]))")
         output.append(f"    while True: # note: return at end of loop")
 
@@ -1713,7 +1719,7 @@ def compile_python(grammar, builder=None, cython=False):
                 VarBuilder("count"))
         output.append(f"        break")
         # output.append(f"    print(('exit' if offset != -1 else 'fail'), '{name}', offset, line_start, repr(buf[offset: offset+10]))")
-        output.append(f"    return offset, line_start")
+        output.append(f"    return offset_0, line_start_0")
         output.append("")
     # for lineno, line in enumerate(output.output):
     #     print(lineno, '\t', line)

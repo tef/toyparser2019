@@ -825,8 +825,8 @@ typedef struct __pyx_ctuple_int__and_int __pyx_ctuple_int__and_int;
 /* "RSONParser.pyx":27
  *         if err is not None: raise err(buf, offset, 'no')
  * 
- *     cdef (int, int) parse_document(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
- *         cdef int count
+ *     cdef (int, int) parse_document(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):             # <<<<<<<<<<<<<<
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  */
 struct __pyx_ctuple_int__and_int {
@@ -1400,17 +1400,17 @@ static int __Pyx_check_binary_version(void);
 /* InitStrings.proto */
 static int __Pyx_InitStrings(__Pyx_StringTabEntry *t);
 
-static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_document(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, int __pyx_v_indent, int __pyx_v_buf_eof, PyObject *__pyx_v_children); /* proto*/
-static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTHON_UNUSED struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, CYTHON_UNUSED int __pyx_v_indent, int __pyx_v_buf_eof, CYTHON_UNUSED PyObject *__pyx_v_children); /* proto*/
-static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, int __pyx_v_indent, int __pyx_v_buf_eof, PyObject *__pyx_v_children); /* proto*/
-static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, int __pyx_v_indent, int __pyx_v_buf_eof, PyObject *__pyx_v_children); /* proto*/
-static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_true(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, CYTHON_UNUSED int __pyx_v_indent, CYTHON_UNUSED int __pyx_v_buf_eof, PyObject *__pyx_v_children); /* proto*/
-static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_false(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, CYTHON_UNUSED int __pyx_v_indent, CYTHON_UNUSED int __pyx_v_buf_eof, PyObject *__pyx_v_children); /* proto*/
-static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_null(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, CYTHON_UNUSED int __pyx_v_indent, CYTHON_UNUSED int __pyx_v_buf_eof, PyObject *__pyx_v_children); /* proto*/
-static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, CYTHON_UNUSED int __pyx_v_indent, int __pyx_v_buf_eof, PyObject *__pyx_v_children); /* proto*/
-static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, CYTHON_UNUSED int __pyx_v_indent, int __pyx_v_buf_eof, PyObject *__pyx_v_children); /* proto*/
-static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, int __pyx_v_indent, int __pyx_v_buf_eof, PyObject *__pyx_v_children); /* proto*/
-static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, int __pyx_v_indent, int __pyx_v_buf_eof, PyObject *__pyx_v_children); /* proto*/
+static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_document(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset_0, int __pyx_v_line_start_0, int __pyx_v_indent_0, int __pyx_v_buf_eof, PyObject *__pyx_v_children_0); /* proto*/
+static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTHON_UNUSED struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset_0, int __pyx_v_line_start_0, CYTHON_UNUSED int __pyx_v_indent_0, int __pyx_v_buf_eof, CYTHON_UNUSED PyObject *__pyx_v_children_0); /* proto*/
+static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset_0, int __pyx_v_line_start_0, int __pyx_v_indent_0, int __pyx_v_buf_eof, PyObject *__pyx_v_children_0); /* proto*/
+static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset_0, int __pyx_v_line_start_0, int __pyx_v_indent_0, int __pyx_v_buf_eof, PyObject *__pyx_v_children_0); /* proto*/
+static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_true(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset_0, int __pyx_v_line_start_0, CYTHON_UNUSED int __pyx_v_indent_0, CYTHON_UNUSED int __pyx_v_buf_eof, PyObject *__pyx_v_children_0); /* proto*/
+static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_false(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset_0, int __pyx_v_line_start_0, CYTHON_UNUSED int __pyx_v_indent_0, CYTHON_UNUSED int __pyx_v_buf_eof, PyObject *__pyx_v_children_0); /* proto*/
+static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_null(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset_0, int __pyx_v_line_start_0, CYTHON_UNUSED int __pyx_v_indent_0, CYTHON_UNUSED int __pyx_v_buf_eof, PyObject *__pyx_v_children_0); /* proto*/
+static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset_0, int __pyx_v_line_start_0, CYTHON_UNUSED int __pyx_v_indent_0, int __pyx_v_buf_eof, PyObject *__pyx_v_children_0); /* proto*/
+static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset_0, int __pyx_v_line_start_0, CYTHON_UNUSED int __pyx_v_indent_0, int __pyx_v_buf_eof, PyObject *__pyx_v_children_0); /* proto*/
+static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset_0, int __pyx_v_line_start_0, int __pyx_v_indent_0, int __pyx_v_buf_eof, PyObject *__pyx_v_children_0); /* proto*/
+static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset_0, int __pyx_v_line_start_0, int __pyx_v_indent_0, int __pyx_v_buf_eof, PyObject *__pyx_v_children_0); /* proto*/
 
 /* Module declarations from 'RSONParser' */
 static PyTypeObject *__pyx_ptype_10RSONParser_Parser = 0;
@@ -2235,7 +2235,7 @@ static PyObject *__pyx_pf_10RSONParser_6Parser_2parse(struct __pyx_obj_10RSONPar
  *         if children and new_offset > offset: return children[-1]
  *         if err is not None: raise err(buf, offset, 'no')             # <<<<<<<<<<<<<<
  * 
- *     cdef (int, int) parse_document(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):
+ *     cdef (int, int) parse_document(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):
  */
   __pyx_t_8 = (__pyx_v_err != Py_None);
   __pyx_t_9 = (__pyx_t_8 != 0);
@@ -2323,12 +2323,12 @@ static PyObject *__pyx_pf_10RSONParser_6Parser_2parse(struct __pyx_obj_10RSONPar
 /* "RSONParser.pyx":27
  *         if err is not None: raise err(buf, offset, 'no')
  * 
- *     cdef (int, int) parse_document(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
- *         cdef int count
+ *     cdef (int, int) parse_document(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):             # <<<<<<<<<<<<<<
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  */
 
-static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_document(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, int __pyx_v_indent, int __pyx_v_buf_eof, PyObject *__pyx_v_children) {
+static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_document(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset_0, int __pyx_v_line_start_0, int __pyx_v_indent_0, int __pyx_v_buf_eof, PyObject *__pyx_v_children_0) {
   int __pyx_v_offset_1;
   PyObject *__pyx_v_children_1 = NULL;
   __pyx_ctuple_int__and_int __pyx_r;
@@ -2349,35 +2349,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_document(str
   __Pyx_RefNannySetupContext("parse_document", 0);
 
   /* "RSONParser.pyx":30
- *         cdef int count
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop             # <<<<<<<<<<<<<<
- *             offset, line_start = self.parse_comment(buf, offset, line_start, indent, buf_eof, children)
- *             if offset == -1: break
+ *             offset_0, line_start_0 = self.parse_comment(buf, offset_0, line_start_0, indent_0, buf_eof, children_0)
+ *             if offset_0 == -1: break
  */
   while (1) {
 
     /* "RSONParser.pyx":31
  *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop
- *             offset, line_start = self.parse_comment(buf, offset, line_start, indent, buf_eof, children)             # <<<<<<<<<<<<<<
- *             if offset == -1: break
+ *             offset_0, line_start_0 = self.parse_comment(buf, offset_0, line_start_0, indent_0, buf_eof, children_0)             # <<<<<<<<<<<<<<
+ *             if offset_0 == -1: break
  * 
  */
-    __pyx_t_1 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_comment(__pyx_v_self, __pyx_v_buf, __pyx_v_offset, __pyx_v_line_start, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children);
+    __pyx_t_1 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_comment(__pyx_v_self, __pyx_v_buf, __pyx_v_offset_0, __pyx_v_line_start_0, __pyx_v_indent_0, __pyx_v_buf_eof, __pyx_v_children_0);
     __pyx_t_2 = __pyx_t_1.f0;
     __pyx_t_3 = __pyx_t_1.f1;
-    __pyx_v_offset = __pyx_t_2;
-    __pyx_v_line_start = __pyx_t_3;
+    __pyx_v_offset_0 = __pyx_t_2;
+    __pyx_v_line_start_0 = __pyx_t_3;
 
     /* "RSONParser.pyx":32
  *         while True: # note: return at end of loop
- *             offset, line_start = self.parse_comment(buf, offset, line_start, indent, buf_eof, children)
- *             if offset == -1: break             # <<<<<<<<<<<<<<
+ *             offset_0, line_start_0 = self.parse_comment(buf, offset_0, line_start_0, indent_0, buf_eof, children_0)
+ *             if offset_0 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
  */
-    __pyx_t_4 = ((__pyx_v_offset == -1L) != 0);
+    __pyx_t_4 = ((__pyx_v_offset_0 == -1L) != 0);
     if (__pyx_t_4) {
       goto __pyx_L4_break;
     }
@@ -2385,18 +2385,18 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_document(str
     /* "RSONParser.pyx":35
  * 
  * 
- *             offset_1 = offset             # <<<<<<<<<<<<<<
+ *             offset_1 = offset_0             # <<<<<<<<<<<<<<
  *             children_1 = []
  *             while True: # start capture
  */
-    __pyx_v_offset_1 = __pyx_v_offset;
+    __pyx_v_offset_1 = __pyx_v_offset_0;
 
     /* "RSONParser.pyx":36
  * 
- *             offset_1 = offset
+ *             offset_1 = offset_0
  *             children_1 = []             # <<<<<<<<<<<<<<
  *             while True: # start capture
- *                 offset_1, line_start = self.parse_rson_value(buf, offset_1, line_start, indent, buf_eof, children_1)
+ *                 offset_1, line_start_0 = self.parse_rson_value(buf, offset_1, line_start_0, indent_0, buf_eof, children_1)
  */
     __pyx_t_5 = PyList_New(0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 36, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
@@ -2404,10 +2404,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_document(str
     __pyx_t_5 = 0;
 
     /* "RSONParser.pyx":37
- *             offset_1 = offset
+ *             offset_1 = offset_0
  *             children_1 = []
  *             while True: # start capture             # <<<<<<<<<<<<<<
- *                 offset_1, line_start = self.parse_rson_value(buf, offset_1, line_start, indent, buf_eof, children_1)
+ *                 offset_1, line_start_0 = self.parse_rson_value(buf, offset_1, line_start_0, indent_0, buf_eof, children_1)
  *                 if offset_1 == -1: break
  */
     while (1) {
@@ -2415,19 +2415,19 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_document(str
       /* "RSONParser.pyx":38
  *             children_1 = []
  *             while True: # start capture
- *                 offset_1, line_start = self.parse_rson_value(buf, offset_1, line_start, indent, buf_eof, children_1)             # <<<<<<<<<<<<<<
+ *                 offset_1, line_start_0 = self.parse_rson_value(buf, offset_1, line_start_0, indent_0, buf_eof, children_1)             # <<<<<<<<<<<<<<
  *                 if offset_1 == -1: break
  * 
  */
-      __pyx_t_1 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_rson_value(__pyx_v_self, __pyx_v_buf, __pyx_v_offset_1, __pyx_v_line_start, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_1);
+      __pyx_t_1 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_rson_value(__pyx_v_self, __pyx_v_buf, __pyx_v_offset_1, __pyx_v_line_start_0, __pyx_v_indent_0, __pyx_v_buf_eof, __pyx_v_children_1);
       __pyx_t_3 = __pyx_t_1.f0;
       __pyx_t_2 = __pyx_t_1.f1;
       __pyx_v_offset_1 = __pyx_t_3;
-      __pyx_v_line_start = __pyx_t_2;
+      __pyx_v_line_start_0 = __pyx_t_2;
 
       /* "RSONParser.pyx":39
  *             while True: # start capture
- *                 offset_1, line_start = self.parse_rson_value(buf, offset_1, line_start, indent, buf_eof, children_1)
+ *                 offset_1, line_start_0 = self.parse_rson_value(buf, offset_1, line_start_0, indent_0, buf_eof, children_1)
  *                 if offset_1 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
@@ -2442,7 +2442,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_document(str
  * 
  *                 break             # <<<<<<<<<<<<<<
  *             if offset_1 == -1:
- *                 offset = -1
+ *                 offset_0 = -1
  */
       goto __pyx_L7_break;
     }
@@ -2452,7 +2452,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_document(str
  * 
  *                 break
  *             if offset_1 == -1:             # <<<<<<<<<<<<<<
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break
  */
     __pyx_t_4 = ((__pyx_v_offset_1 == -1L) != 0);
@@ -2461,18 +2461,18 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_document(str
       /* "RSONParser.pyx":44
  *                 break
  *             if offset_1 == -1:
- *                 offset = -1             # <<<<<<<<<<<<<<
+ *                 offset_0 = -1             # <<<<<<<<<<<<<<
  *                 break
  *             if self.builder is not None:
  */
-      __pyx_v_offset = -1;
+      __pyx_v_offset_0 = -1;
 
       /* "RSONParser.pyx":45
  *             if offset_1 == -1:
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break             # <<<<<<<<<<<<<<
  *             if self.builder is not None:
- *                 children.append(self.builder['document'](buf, offset, offset_1, children_1))
+ *                 children_0.append(self.builder['document'](buf, offset_0, offset_1, children_1))
  */
       goto __pyx_L4_break;
 
@@ -2480,16 +2480,16 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_document(str
  * 
  *                 break
  *             if offset_1 == -1:             # <<<<<<<<<<<<<<
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break
  */
     }
 
     /* "RSONParser.pyx":46
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break
  *             if self.builder is not None:             # <<<<<<<<<<<<<<
- *                 children.append(self.builder['document'](buf, offset, offset_1, children_1))
+ *                 children_0.append(self.builder['document'](buf, offset_0, offset_1, children_1))
  *             else:
  */
     __pyx_t_4 = (__pyx_v_self->builder != Py_None);
@@ -2499,17 +2499,17 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_document(str
       /* "RSONParser.pyx":47
  *                 break
  *             if self.builder is not None:
- *                 children.append(self.builder['document'](buf, offset, offset_1, children_1))             # <<<<<<<<<<<<<<
+ *                 children_0.append(self.builder['document'](buf, offset_0, offset_1, children_1))             # <<<<<<<<<<<<<<
  *             else:
- *                 children.append(ParseNode('document', offset, offset_1, list(children_1), None))
+ *                 children_0.append(ParseNode('document', offset_0, offset_1, list(children_1), None))
  */
-      if (unlikely(__pyx_v_children == Py_None)) {
+      if (unlikely(__pyx_v_children_0 == Py_None)) {
         PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
         __PYX_ERR(0, 47, __pyx_L1_error)
       }
       __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_v_self->builder, __pyx_n_u_document); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 47, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 47, __pyx_L1_error)
+      __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_offset_0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 47, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
       __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_v_offset_1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 47, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_9);
@@ -2568,34 +2568,34 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_document(str
         __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       }
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_12 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_5); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 47, __pyx_L1_error)
+      __pyx_t_12 = __Pyx_PyList_Append(__pyx_v_children_0, __pyx_t_5); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 47, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
       /* "RSONParser.pyx":46
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break
  *             if self.builder is not None:             # <<<<<<<<<<<<<<
- *                 children.append(self.builder['document'](buf, offset, offset_1, children_1))
+ *                 children_0.append(self.builder['document'](buf, offset_0, offset_1, children_1))
  *             else:
  */
       goto __pyx_L10;
     }
 
     /* "RSONParser.pyx":49
- *                 children.append(self.builder['document'](buf, offset, offset_1, children_1))
+ *                 children_0.append(self.builder['document'](buf, offset_0, offset_1, children_1))
  *             else:
- *                 children.append(ParseNode('document', offset, offset_1, list(children_1), None))             # <<<<<<<<<<<<<<
- *             offset = offset_1
+ *                 children_0.append(ParseNode('document', offset_0, offset_1, list(children_1), None))             # <<<<<<<<<<<<<<
+ *             offset_0 = offset_1
  * 
  */
     /*else*/ {
-      if (unlikely(__pyx_v_children == Py_None)) {
+      if (unlikely(__pyx_v_children_0 == Py_None)) {
         PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
         __PYX_ERR(0, 49, __pyx_L1_error)
       }
       __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 49, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 49, __pyx_L1_error)
+      __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_v_offset_0); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 49, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
       __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_v_offset_1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 49, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_9);
@@ -2661,41 +2661,41 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_document(str
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
       }
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_12 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_5); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 49, __pyx_L1_error)
+      __pyx_t_12 = __Pyx_PyList_Append(__pyx_v_children_0, __pyx_t_5); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 49, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     }
     __pyx_L10:;
 
     /* "RSONParser.pyx":50
  *             else:
- *                 children.append(ParseNode('document', offset, offset_1, list(children_1), None))
- *             offset = offset_1             # <<<<<<<<<<<<<<
+ *                 children_0.append(ParseNode('document', offset_0, offset_1, list(children_1), None))
+ *             offset_0 = offset_1             # <<<<<<<<<<<<<<
  * 
- *             offset, line_start = self.parse_comment(buf, offset, line_start, indent, buf_eof, children)
+ *             offset_0, line_start_0 = self.parse_comment(buf, offset_0, line_start_0, indent_0, buf_eof, children_0)
  */
-    __pyx_v_offset = __pyx_v_offset_1;
+    __pyx_v_offset_0 = __pyx_v_offset_1;
 
     /* "RSONParser.pyx":52
- *             offset = offset_1
+ *             offset_0 = offset_1
  * 
- *             offset, line_start = self.parse_comment(buf, offset, line_start, indent, buf_eof, children)             # <<<<<<<<<<<<<<
- *             if offset == -1: break
+ *             offset_0, line_start_0 = self.parse_comment(buf, offset_0, line_start_0, indent_0, buf_eof, children_0)             # <<<<<<<<<<<<<<
+ *             if offset_0 == -1: break
  * 
  */
-    __pyx_t_1 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_comment(__pyx_v_self, __pyx_v_buf, __pyx_v_offset, __pyx_v_line_start, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children);
+    __pyx_t_1 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_comment(__pyx_v_self, __pyx_v_buf, __pyx_v_offset_0, __pyx_v_line_start_0, __pyx_v_indent_0, __pyx_v_buf_eof, __pyx_v_children_0);
     __pyx_t_2 = __pyx_t_1.f0;
     __pyx_t_3 = __pyx_t_1.f1;
-    __pyx_v_offset = __pyx_t_2;
-    __pyx_v_line_start = __pyx_t_3;
+    __pyx_v_offset_0 = __pyx_t_2;
+    __pyx_v_line_start_0 = __pyx_t_3;
 
     /* "RSONParser.pyx":53
  * 
- *             offset, line_start = self.parse_comment(buf, offset, line_start, indent, buf_eof, children)
- *             if offset == -1: break             # <<<<<<<<<<<<<<
+ *             offset_0, line_start_0 = self.parse_comment(buf, offset_0, line_start_0, indent_0, buf_eof, children_0)
+ *             if offset_0 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
  */
-    __pyx_t_6 = ((__pyx_v_offset == -1L) != 0);
+    __pyx_t_6 = ((__pyx_v_offset_0 == -1L) != 0);
     if (__pyx_t_6) {
       goto __pyx_L4_break;
     }
@@ -2704,7 +2704,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_document(str
  * 
  * 
  *             break             # <<<<<<<<<<<<<<
- *         return offset, line_start
+ *         return offset_0, line_start_0
  * 
  */
     goto __pyx_L4_break;
@@ -2714,20 +2714,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_document(str
   /* "RSONParser.pyx":58
  * 
  *             break
- *         return offset, line_start             # <<<<<<<<<<<<<<
+ *         return offset_0, line_start_0             # <<<<<<<<<<<<<<
  * 
- *     cdef (int, int) parse_comment(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):
+ *     cdef (int, int) parse_comment(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):
  */
-  __pyx_t_1.f0 = __pyx_v_offset;
-  __pyx_t_1.f1 = __pyx_v_line_start;
+  __pyx_t_1.f0 = __pyx_v_offset_0;
+  __pyx_t_1.f1 = __pyx_v_line_start_0;
   __pyx_r = __pyx_t_1;
   goto __pyx_L0;
 
   /* "RSONParser.pyx":27
  *         if err is not None: raise err(buf, offset, 'no')
  * 
- *     cdef (int, int) parse_document(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
- *         cdef int count
+ *     cdef (int, int) parse_document(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):             # <<<<<<<<<<<<<<
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  */
 
@@ -2749,15 +2749,15 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_document(str
 }
 
 /* "RSONParser.pyx":60
- *         return offset, line_start
+ *         return offset_0, line_start_0
  * 
- *     cdef (int, int) parse_comment(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
- *         cdef int count
+ *     cdef (int, int) parse_comment(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):             # <<<<<<<<<<<<<<
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  */
 
-static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTHON_UNUSED struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, CYTHON_UNUSED int __pyx_v_indent, int __pyx_v_buf_eof, CYTHON_UNUSED PyObject *__pyx_v_children) {
-  int __pyx_v_count;
+static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTHON_UNUSED struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset_0, int __pyx_v_line_start_0, CYTHON_UNUSED int __pyx_v_indent_0, int __pyx_v_buf_eof, CYTHON_UNUSED PyObject *__pyx_v_children_0) {
+  int __pyx_v_count_0;
   Py_UCS4 __pyx_v_chr;
   PyObject *__pyx_v_offset_1 = NULL;
   int __pyx_v_line_start_1;
@@ -2780,50 +2780,50 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
   __Pyx_RefNannySetupContext("parse_comment", 0);
 
   /* "RSONParser.pyx":63
- *         cdef int count
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop             # <<<<<<<<<<<<<<
- *             count = 0
- *             while offset < buf_eof:
+ *             count_0 = 0
+ *             while offset_0 < buf_eof:
  */
   while (1) {
 
     /* "RSONParser.pyx":64
  *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop
- *             count = 0             # <<<<<<<<<<<<<<
- *             while offset < buf_eof:
- *                 chr = buf[offset]
+ *             count_0 = 0             # <<<<<<<<<<<<<<
+ *             while offset_0 < buf_eof:
+ *                 chr = buf[offset_0]
  */
-    __pyx_v_count = 0;
+    __pyx_v_count_0 = 0;
 
     /* "RSONParser.pyx":65
  *         while True: # note: return at end of loop
- *             count = 0
- *             while offset < buf_eof:             # <<<<<<<<<<<<<<
- *                 chr = buf[offset]
+ *             count_0 = 0
+ *             while offset_0 < buf_eof:             # <<<<<<<<<<<<<<
+ *                 chr = buf[offset_0]
  *                 if chr == 32 or chr == 9 or chr == 13 or chr == 10 or chr == 65279:
  */
     while (1) {
-      __pyx_t_1 = ((__pyx_v_offset < __pyx_v_buf_eof) != 0);
+      __pyx_t_1 = ((__pyx_v_offset_0 < __pyx_v_buf_eof) != 0);
       if (!__pyx_t_1) break;
 
       /* "RSONParser.pyx":66
- *             count = 0
- *             while offset < buf_eof:
- *                 chr = buf[offset]             # <<<<<<<<<<<<<<
+ *             count_0 = 0
+ *             while offset_0 < buf_eof:
+ *                 chr = buf[offset_0]             # <<<<<<<<<<<<<<
  *                 if chr == 32 or chr == 9 or chr == 13 or chr == 10 or chr == 65279:
- *                     offset +=1
+ *                     offset_0 +=1
  */
-      __pyx_t_2 = __Pyx_GetItemInt_Unicode(__pyx_v_buf, __pyx_v_offset, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(__pyx_t_2 == (Py_UCS4)-1)) __PYX_ERR(0, 66, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_GetItemInt_Unicode(__pyx_v_buf, __pyx_v_offset_0, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(__pyx_t_2 == (Py_UCS4)-1)) __PYX_ERR(0, 66, __pyx_L1_error)
       __pyx_v_chr = __pyx_t_2;
 
       /* "RSONParser.pyx":67
- *             while offset < buf_eof:
- *                 chr = buf[offset]
+ *             while offset_0 < buf_eof:
+ *                 chr = buf[offset_0]
  *                 if chr == 32 or chr == 9 or chr == 13 or chr == 10 or chr == 65279:             # <<<<<<<<<<<<<<
- *                     offset +=1
- *                     count +=1
+ *                     offset_0 +=1
+ *                     count_0 +=1
  */
       switch (__pyx_v_chr) {
         case 32:
@@ -2833,39 +2833,39 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
         case 0xFEFF:
 
         /* "RSONParser.pyx":68
- *                 chr = buf[offset]
+ *                 chr = buf[offset_0]
  *                 if chr == 32 or chr == 9 or chr == 13 or chr == 10 or chr == 65279:
- *                     offset +=1             # <<<<<<<<<<<<<<
- *                     count +=1
+ *                     offset_0 +=1             # <<<<<<<<<<<<<<
+ *                     count_0 +=1
  *                 else:
  */
-        __pyx_v_offset = (__pyx_v_offset + 1);
+        __pyx_v_offset_0 = (__pyx_v_offset_0 + 1);
 
         /* "RSONParser.pyx":69
  *                 if chr == 32 or chr == 9 or chr == 13 or chr == 10 or chr == 65279:
- *                     offset +=1
- *                     count +=1             # <<<<<<<<<<<<<<
+ *                     offset_0 +=1
+ *                     count_0 +=1             # <<<<<<<<<<<<<<
  *                 else:
  *                     break
  */
-        __pyx_v_count = (__pyx_v_count + 1);
+        __pyx_v_count_0 = (__pyx_v_count_0 + 1);
 
         /* "RSONParser.pyx":67
- *             while offset < buf_eof:
- *                 chr = buf[offset]
+ *             while offset_0 < buf_eof:
+ *                 chr = buf[offset_0]
  *                 if chr == 32 or chr == 9 or chr == 13 or chr == 10 or chr == 65279:             # <<<<<<<<<<<<<<
- *                     offset +=1
- *                     count +=1
+ *                     offset_0 +=1
+ *                     count_0 +=1
  */
         break;
         default:
 
         /* "RSONParser.pyx":71
- *                     count +=1
+ *                     count_0 +=1
  *                 else:
  *                     break             # <<<<<<<<<<<<<<
  * 
- *             count = 0
+ *             count_0 = 0
  */
         goto __pyx_L6_break;
         break;
@@ -2876,45 +2876,45 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
     /* "RSONParser.pyx":73
  *                     break
  * 
- *             count = 0             # <<<<<<<<<<<<<<
+ *             count_0 = 0             # <<<<<<<<<<<<<<
  *             while True:
- *                 offset_1 = offset
+ *                 offset_1 = offset_0
  */
-    __pyx_v_count = 0;
+    __pyx_v_count_0 = 0;
 
     /* "RSONParser.pyx":74
  * 
- *             count = 0
+ *             count_0 = 0
  *             while True:             # <<<<<<<<<<<<<<
- *                 offset_1 = offset
- *                 line_start_1 = line_start
+ *                 offset_1 = offset_0
+ *                 line_start_1 = line_start_0
  */
     while (1) {
 
       /* "RSONParser.pyx":75
- *             count = 0
+ *             count_0 = 0
  *             while True:
- *                 offset_1 = offset             # <<<<<<<<<<<<<<
- *                 line_start_1 = line_start
+ *                 offset_1 = offset_0             # <<<<<<<<<<<<<<
+ *                 line_start_1 = line_start_0
  *                 if buf[offset_1:offset_1+1] == '#':
  */
-      __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 75, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_offset_0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 75, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_XDECREF_SET(__pyx_v_offset_1, __pyx_t_3);
       __pyx_t_3 = 0;
 
       /* "RSONParser.pyx":76
  *             while True:
- *                 offset_1 = offset
- *                 line_start_1 = line_start             # <<<<<<<<<<<<<<
+ *                 offset_1 = offset_0
+ *                 line_start_1 = line_start_0             # <<<<<<<<<<<<<<
  *                 if buf[offset_1:offset_1+1] == '#':
  *                     offset_1 += 1
  */
-      __pyx_v_line_start_1 = __pyx_v_line_start;
+      __pyx_v_line_start_1 = __pyx_v_line_start_0;
 
       /* "RSONParser.pyx":77
- *                 offset_1 = offset
- *                 line_start_1 = line_start
+ *                 offset_1 = offset_0
+ *                 line_start_1 = line_start_0
  *                 if buf[offset_1:offset_1+1] == '#':             # <<<<<<<<<<<<<<
  *                     offset_1 += 1
  *                 else:
@@ -2951,7 +2951,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
       if (__pyx_t_7) {
 
         /* "RSONParser.pyx":78
- *                 line_start_1 = line_start
+ *                 line_start_1 = line_start_0
  *                 if buf[offset_1:offset_1+1] == '#':
  *                     offset_1 += 1             # <<<<<<<<<<<<<<
  *                 else:
@@ -2963,8 +2963,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
         __pyx_t_3 = 0;
 
         /* "RSONParser.pyx":77
- *                 offset_1 = offset
- *                 line_start_1 = line_start
+ *                 offset_1 = offset_0
+ *                 line_start_1 = line_start_0
  *                 if buf[offset_1:offset_1+1] == '#':             # <<<<<<<<<<<<<<
  *                     offset_1 += 1
  *                 else:
@@ -3279,7 +3279,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
  *                     else:
  *                         break             # <<<<<<<<<<<<<<
  * 
- *                 if offset == offset_1: break
+ *                 if offset_0 == offset_1: break
  */
           goto __pyx_L16_break;
           break;
@@ -3290,11 +3290,11 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
       /* "RSONParser.pyx":112
  *                         break
  * 
- *                 if offset == offset_1: break             # <<<<<<<<<<<<<<
- *                 offset = offset_1
- *                 line_start = line_start_1
+ *                 if offset_0 == offset_1: break             # <<<<<<<<<<<<<<
+ *                 offset_0 = offset_1
+ *                 line_start_0 = line_start_1
  */
-      __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 112, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_offset_0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 112, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __pyx_t_8 = PyObject_RichCompare(__pyx_t_3, __pyx_v_offset_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_8); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 112, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -3306,70 +3306,70 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
 
       /* "RSONParser.pyx":113
  * 
- *                 if offset == offset_1: break
- *                 offset = offset_1             # <<<<<<<<<<<<<<
- *                 line_start = line_start_1
- *                 count += 1
+ *                 if offset_0 == offset_1: break
+ *                 offset_0 = offset_1             # <<<<<<<<<<<<<<
+ *                 line_start_0 = line_start_1
+ *                 count_0 += 1
  */
       __pyx_t_10 = __Pyx_PyInt_As_int(__pyx_v_offset_1); if (unlikely((__pyx_t_10 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 113, __pyx_L1_error)
-      __pyx_v_offset = __pyx_t_10;
+      __pyx_v_offset_0 = __pyx_t_10;
 
       /* "RSONParser.pyx":114
- *                 if offset == offset_1: break
- *                 offset = offset_1
- *                 line_start = line_start_1             # <<<<<<<<<<<<<<
- *                 count += 1
+ *                 if offset_0 == offset_1: break
+ *                 offset_0 = offset_1
+ *                 line_start_0 = line_start_1             # <<<<<<<<<<<<<<
+ *                 count_0 += 1
  * 
  */
-      __pyx_v_line_start = __pyx_v_line_start_1;
+      __pyx_v_line_start_0 = __pyx_v_line_start_1;
 
       /* "RSONParser.pyx":115
- *                 offset = offset_1
- *                 line_start = line_start_1
- *                 count += 1             # <<<<<<<<<<<<<<
+ *                 offset_0 = offset_1
+ *                 line_start_0 = line_start_1
+ *                 count_0 += 1             # <<<<<<<<<<<<<<
  * 
- *             count = 0
+ *             count_0 = 0
  */
-      __pyx_v_count = (__pyx_v_count + 1);
+      __pyx_v_count_0 = (__pyx_v_count_0 + 1);
     }
     __pyx_L8_break:;
 
     /* "RSONParser.pyx":117
- *                 count += 1
+ *                 count_0 += 1
  * 
- *             count = 0             # <<<<<<<<<<<<<<
- *             while offset < buf_eof:
- *                 chr = buf[offset]
+ *             count_0 = 0             # <<<<<<<<<<<<<<
+ *             while offset_0 < buf_eof:
+ *                 chr = buf[offset_0]
  */
-    __pyx_v_count = 0;
+    __pyx_v_count_0 = 0;
 
     /* "RSONParser.pyx":118
  * 
- *             count = 0
- *             while offset < buf_eof:             # <<<<<<<<<<<<<<
- *                 chr = buf[offset]
+ *             count_0 = 0
+ *             while offset_0 < buf_eof:             # <<<<<<<<<<<<<<
+ *                 chr = buf[offset_0]
  *                 if chr == 32 or chr == 9 or chr == 13 or chr == 10 or chr == 65279:
  */
     while (1) {
-      __pyx_t_7 = ((__pyx_v_offset < __pyx_v_buf_eof) != 0);
+      __pyx_t_7 = ((__pyx_v_offset_0 < __pyx_v_buf_eof) != 0);
       if (!__pyx_t_7) break;
 
       /* "RSONParser.pyx":119
- *             count = 0
- *             while offset < buf_eof:
- *                 chr = buf[offset]             # <<<<<<<<<<<<<<
+ *             count_0 = 0
+ *             while offset_0 < buf_eof:
+ *                 chr = buf[offset_0]             # <<<<<<<<<<<<<<
  *                 if chr == 32 or chr == 9 or chr == 13 or chr == 10 or chr == 65279:
- *                     offset +=1
+ *                     offset_0 +=1
  */
-      __pyx_t_2 = __Pyx_GetItemInt_Unicode(__pyx_v_buf, __pyx_v_offset, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(__pyx_t_2 == (Py_UCS4)-1)) __PYX_ERR(0, 119, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_GetItemInt_Unicode(__pyx_v_buf, __pyx_v_offset_0, int, 1, __Pyx_PyInt_From_int, 0, 1, 1); if (unlikely(__pyx_t_2 == (Py_UCS4)-1)) __PYX_ERR(0, 119, __pyx_L1_error)
       __pyx_v_chr = __pyx_t_2;
 
       /* "RSONParser.pyx":120
- *             while offset < buf_eof:
- *                 chr = buf[offset]
+ *             while offset_0 < buf_eof:
+ *                 chr = buf[offset_0]
  *                 if chr == 32 or chr == 9 or chr == 13 or chr == 10 or chr == 65279:             # <<<<<<<<<<<<<<
- *                     offset +=1
- *                     count +=1
+ *                     offset_0 +=1
+ *                     count_0 +=1
  */
       switch (__pyx_v_chr) {
         case 32:
@@ -3379,35 +3379,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
         case 0xFEFF:
 
         /* "RSONParser.pyx":121
- *                 chr = buf[offset]
+ *                 chr = buf[offset_0]
  *                 if chr == 32 or chr == 9 or chr == 13 or chr == 10 or chr == 65279:
- *                     offset +=1             # <<<<<<<<<<<<<<
- *                     count +=1
+ *                     offset_0 +=1             # <<<<<<<<<<<<<<
+ *                     count_0 +=1
  *                 else:
  */
-        __pyx_v_offset = (__pyx_v_offset + 1);
+        __pyx_v_offset_0 = (__pyx_v_offset_0 + 1);
 
         /* "RSONParser.pyx":122
  *                 if chr == 32 or chr == 9 or chr == 13 or chr == 10 or chr == 65279:
- *                     offset +=1
- *                     count +=1             # <<<<<<<<<<<<<<
+ *                     offset_0 +=1
+ *                     count_0 +=1             # <<<<<<<<<<<<<<
  *                 else:
  *                     break
  */
-        __pyx_v_count = (__pyx_v_count + 1);
+        __pyx_v_count_0 = (__pyx_v_count_0 + 1);
 
         /* "RSONParser.pyx":120
- *             while offset < buf_eof:
- *                 chr = buf[offset]
+ *             while offset_0 < buf_eof:
+ *                 chr = buf[offset_0]
  *                 if chr == 32 or chr == 9 or chr == 13 or chr == 10 or chr == 65279:             # <<<<<<<<<<<<<<
- *                     offset +=1
- *                     count +=1
+ *                     offset_0 +=1
+ *                     count_0 +=1
  */
         break;
         default:
 
         /* "RSONParser.pyx":124
- *                     count +=1
+ *                     count_0 +=1
  *                 else:
  *                     break             # <<<<<<<<<<<<<<
  * 
@@ -3423,7 +3423,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
  * 
  * 
  *             break             # <<<<<<<<<<<<<<
- *         return offset, line_start
+ *         return offset_0, line_start_0
  * 
  */
     goto __pyx_L4_break;
@@ -3433,20 +3433,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
   /* "RSONParser.pyx":128
  * 
  *             break
- *         return offset, line_start             # <<<<<<<<<<<<<<
+ *         return offset_0, line_start_0             # <<<<<<<<<<<<<<
  * 
- *     cdef (int, int) parse_rson_value(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):
+ *     cdef (int, int) parse_rson_value(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):
  */
-  __pyx_t_11.f0 = __pyx_v_offset;
-  __pyx_t_11.f1 = __pyx_v_line_start;
+  __pyx_t_11.f0 = __pyx_v_offset_0;
+  __pyx_t_11.f1 = __pyx_v_line_start_0;
   __pyx_r = __pyx_t_11;
   goto __pyx_L0;
 
   /* "RSONParser.pyx":60
- *         return offset, line_start
+ *         return offset_0, line_start_0
  * 
- *     cdef (int, int) parse_comment(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
- *         cdef int count
+ *     cdef (int, int) parse_comment(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):             # <<<<<<<<<<<<<<
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  */
 
@@ -3465,15 +3465,15 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_comment(CYTH
 }
 
 /* "RSONParser.pyx":130
- *         return offset, line_start
+ *         return offset_0, line_start_0
  * 
- *     cdef (int, int) parse_rson_value(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
- *         cdef int count
+ *     cdef (int, int) parse_rson_value(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):             # <<<<<<<<<<<<<<
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  */
 
-static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, int __pyx_v_indent, int __pyx_v_buf_eof, PyObject *__pyx_v_children) {
-  int __pyx_v_count;
+static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset_0, int __pyx_v_line_start_0, int __pyx_v_indent_0, int __pyx_v_buf_eof, PyObject *__pyx_v_children_0) {
+  int __pyx_v_count_0;
   Py_UCS4 __pyx_v_chr;
   PyObject *__pyx_v_offset_1 = NULL;
   int __pyx_v_line_start_1;
@@ -3503,11 +3503,11 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
   __Pyx_RefNannySetupContext("parse_rson_value", 0);
 
   /* "RSONParser.pyx":133
- *         cdef int count
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop             # <<<<<<<<<<<<<<
  *             while True: # start choice
- *                 offset_1 = offset
+ *                 offset_1 = offset_0
  */
   while (1) {
 
@@ -3515,35 +3515,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
  *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop
  *             while True: # start choice             # <<<<<<<<<<<<<<
- *                 offset_1 = offset
- *                 line_start_1 = line_start
+ *                 offset_1 = offset_0
+ *                 line_start_1 = line_start_0
  */
     while (1) {
 
       /* "RSONParser.pyx":135
  *         while True: # note: return at end of loop
  *             while True: # start choice
- *                 offset_1 = offset             # <<<<<<<<<<<<<<
- *                 line_start_1 = line_start
+ *                 offset_1 = offset_0             # <<<<<<<<<<<<<<
+ *                 line_start_1 = line_start_0
  *                 children_1 = []
  */
-      __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 135, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset_0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 135, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __pyx_v_offset_1 = __pyx_t_1;
       __pyx_t_1 = 0;
 
       /* "RSONParser.pyx":136
  *             while True: # start choice
- *                 offset_1 = offset
- *                 line_start_1 = line_start             # <<<<<<<<<<<<<<
+ *                 offset_1 = offset_0
+ *                 line_start_1 = line_start_0             # <<<<<<<<<<<<<<
  *                 children_1 = []
  *                 while True: # case
  */
-      __pyx_v_line_start_1 = __pyx_v_line_start;
+      __pyx_v_line_start_1 = __pyx_v_line_start_0;
 
       /* "RSONParser.pyx":137
- *                 offset_1 = offset
- *                 line_start_1 = line_start
+ *                 offset_1 = offset_0
+ *                 line_start_1 = line_start_0
  *                 children_1 = []             # <<<<<<<<<<<<<<
  *                 while True: # case
  *                     offset_2 = offset_1
@@ -3554,7 +3554,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
       __pyx_t_1 = 0;
 
       /* "RSONParser.pyx":138
- *                 line_start_1 = line_start
+ *                 line_start_1 = line_start_0
  *                 children_1 = []
  *                 while True: # case             # <<<<<<<<<<<<<<
  *                     offset_2 = offset_1
@@ -3850,7 +3850,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
  *                                 offset_3 = -1
  *                                 break             # <<<<<<<<<<<<<<
  * 
- *                             count = 0
+ *                             count_0 = 0
  */
               goto __pyx_L13_break;
             }
@@ -3859,15 +3859,15 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
             /* "RSONParser.pyx":164
  *                                 break
  * 
- *                             count = 0             # <<<<<<<<<<<<<<
+ *                             count_0 = 0             # <<<<<<<<<<<<<<
  *                             while True:
  *                                 offset_4 = offset_3
  */
-            __pyx_v_count = 0;
+            __pyx_v_count_0 = 0;
 
             /* "RSONParser.pyx":165
  * 
- *                             count = 0
+ *                             count_0 = 0
  *                             while True:             # <<<<<<<<<<<<<<
  *                                 offset_4 = offset_3
  *                                 line_start_2 = line_start_1
@@ -3875,7 +3875,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
             while (1) {
 
               /* "RSONParser.pyx":166
- *                             count = 0
+ *                             count_0 = 0
  *                             while True:
  *                                 offset_4 = offset_3             # <<<<<<<<<<<<<<
  *                                 line_start_2 = line_start_1
@@ -4130,7 +4130,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
  *                                 if offset_3 == offset_4: break
  *                                 offset_3 = offset_4             # <<<<<<<<<<<<<<
  *                                 line_start_1 = line_start_2
- *                                 count += 1
+ *                                 count_0 += 1
  */
               __Pyx_INCREF(__pyx_v_offset_4);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_v_offset_4);
@@ -4139,7 +4139,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
  *                                 if offset_3 == offset_4: break
  *                                 offset_3 = offset_4
  *                                 line_start_1 = line_start_2             # <<<<<<<<<<<<<<
- *                                 count += 1
+ *                                 count_0 += 1
  * 
  */
               __pyx_v_line_start_1 = __pyx_v_line_start_2;
@@ -4147,16 +4147,16 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
               /* "RSONParser.pyx":188
  *                                 offset_3 = offset_4
  *                                 line_start_1 = line_start_2
- *                                 count += 1             # <<<<<<<<<<<<<<
+ *                                 count_0 += 1             # <<<<<<<<<<<<<<
  * 
  *                             break
  */
-              __pyx_v_count = (__pyx_v_count + 1);
+              __pyx_v_count_0 = (__pyx_v_count_0 + 1);
             }
             __pyx_L17_break:;
 
             /* "RSONParser.pyx":190
- *                                 count += 1
+ *                                 count_0 += 1
  * 
  *                             break             # <<<<<<<<<<<<<<
  *                         if offset_3 == -1:
@@ -4450,7 +4450,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
  *                             offset_2 = -1
  *                             break             # <<<<<<<<<<<<<<
  * 
- *                         offset_2, line_start_1 = self.parse_rson_literal(buf, offset_2, line_start_1, indent, buf_eof, children_2)
+ *                         offset_2, line_start_1 = self.parse_rson_literal(buf, offset_2, line_start_1, indent_0, buf_eof, children_2)
  */
             goto __pyx_L10_break;
           }
@@ -4459,12 +4459,12 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
           /* "RSONParser.pyx":206
  *                             break
  * 
- *                         offset_2, line_start_1 = self.parse_rson_literal(buf, offset_2, line_start_1, indent, buf_eof, children_2)             # <<<<<<<<<<<<<<
+ *                         offset_2, line_start_1 = self.parse_rson_literal(buf, offset_2, line_start_1, indent_0, buf_eof, children_2)             # <<<<<<<<<<<<<<
  *                         if offset_2 == -1: break
  * 
  */
           __pyx_t_10 = __Pyx_PyInt_As_int(__pyx_v_offset_2); if (unlikely((__pyx_t_10 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 206, __pyx_L1_error)
-          __pyx_t_14 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_rson_literal(__pyx_v_self, __pyx_v_buf, __pyx_t_10, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_2);
+          __pyx_t_14 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_rson_literal(__pyx_v_self, __pyx_v_buf, __pyx_t_10, __pyx_v_line_start_1, __pyx_v_indent_0, __pyx_v_buf_eof, __pyx_v_children_2);
           __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_14.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 206, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           __pyx_t_10 = __pyx_t_14.f1;
@@ -4474,7 +4474,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
 
           /* "RSONParser.pyx":207
  * 
- *                         offset_2, line_start_1 = self.parse_rson_literal(buf, offset_2, line_start_1, indent, buf_eof, children_2)
+ *                         offset_2, line_start_1 = self.parse_rson_literal(buf, offset_2, line_start_1, indent_0, buf_eof, children_2)
  *                         if offset_2 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
@@ -4711,7 +4711,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
  * 
  *                     break             # <<<<<<<<<<<<<<
  *                 if offset_1 != -1:
- *                     offset = offset_1
+ *                     offset_0 = offset_1
  */
         goto __pyx_L8_break;
       }
@@ -4721,8 +4721,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
  * 
  *                     break
  *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
- *                     offset = offset_1
- *                     line_start = line_start_1
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1
  */
       __pyx_t_1 = __Pyx_PyInt_NeObjC(__pyx_v_offset_1, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 222, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
@@ -4733,41 +4733,41 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
         /* "RSONParser.pyx":223
  *                     break
  *                 if offset_1 != -1:
- *                     offset = offset_1             # <<<<<<<<<<<<<<
- *                     line_start = line_start_1
- *                     children.extend(children_1)
+ *                     offset_0 = offset_1             # <<<<<<<<<<<<<<
+ *                     line_start_0 = line_start_1
+ *                     children_0.extend(children_1)
  */
         __pyx_t_10 = __Pyx_PyInt_As_int(__pyx_v_offset_1); if (unlikely((__pyx_t_10 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 223, __pyx_L1_error)
-        __pyx_v_offset = __pyx_t_10;
+        __pyx_v_offset_0 = __pyx_t_10;
 
         /* "RSONParser.pyx":224
  *                 if offset_1 != -1:
- *                     offset = offset_1
- *                     line_start = line_start_1             # <<<<<<<<<<<<<<
- *                     children.extend(children_1)
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1             # <<<<<<<<<<<<<<
+ *                     children_0.extend(children_1)
  *                     break
  */
-        __pyx_v_line_start = __pyx_v_line_start_1;
+        __pyx_v_line_start_0 = __pyx_v_line_start_1;
 
         /* "RSONParser.pyx":225
- *                     offset = offset_1
- *                     line_start = line_start_1
- *                     children.extend(children_1)             # <<<<<<<<<<<<<<
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1
+ *                     children_0.extend(children_1)             # <<<<<<<<<<<<<<
  *                     break
  *                 # end case
  */
-        if (unlikely(__pyx_v_children == Py_None)) {
+        if (unlikely(__pyx_v_children_0 == Py_None)) {
           PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "extend");
           __PYX_ERR(0, 225, __pyx_L1_error)
         }
-        __pyx_t_12 = __Pyx_PyList_Extend(__pyx_v_children, __pyx_v_children_1); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 225, __pyx_L1_error)
+        __pyx_t_12 = __Pyx_PyList_Extend(__pyx_v_children_0, __pyx_v_children_1); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 225, __pyx_L1_error)
 
         /* "RSONParser.pyx":226
- *                     line_start = line_start_1
- *                     children.extend(children_1)
+ *                     line_start_0 = line_start_1
+ *                     children_0.extend(children_1)
  *                     break             # <<<<<<<<<<<<<<
  *                 # end case
- *                 offset_1 = offset
+ *                 offset_1 = offset_0
  */
         goto __pyx_L6_break;
 
@@ -4775,38 +4775,38 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
  * 
  *                     break
  *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
- *                     offset = offset_1
- *                     line_start = line_start_1
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1
  */
       }
 
       /* "RSONParser.pyx":228
  *                     break
  *                 # end case
- *                 offset_1 = offset             # <<<<<<<<<<<<<<
- *                 line_start_1 = line_start
+ *                 offset_1 = offset_0             # <<<<<<<<<<<<<<
+ *                 line_start_1 = line_start_0
  *                 children_1 = []
  */
-      __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 228, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset_0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 228, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_t_1);
       __pyx_t_1 = 0;
 
       /* "RSONParser.pyx":229
  *                 # end case
- *                 offset_1 = offset
- *                 line_start_1 = line_start             # <<<<<<<<<<<<<<
+ *                 offset_1 = offset_0
+ *                 line_start_1 = line_start_0             # <<<<<<<<<<<<<<
  *                 children_1 = []
  *                 while True: # case
  */
-      __pyx_v_line_start_1 = __pyx_v_line_start;
+      __pyx_v_line_start_1 = __pyx_v_line_start_0;
 
       /* "RSONParser.pyx":230
- *                 offset_1 = offset
- *                 line_start_1 = line_start
+ *                 offset_1 = offset_0
+ *                 line_start_1 = line_start_0
  *                 children_1 = []             # <<<<<<<<<<<<<<
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_rson_literal(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+ *                     offset_1, line_start_1 = self.parse_rson_literal(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)
  */
       __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 230, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
@@ -4814,10 +4814,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
       __pyx_t_1 = 0;
 
       /* "RSONParser.pyx":231
- *                 line_start_1 = line_start
+ *                 line_start_1 = line_start_0
  *                 children_1 = []
  *                 while True: # case             # <<<<<<<<<<<<<<
- *                     offset_1, line_start_1 = self.parse_rson_literal(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+ *                     offset_1, line_start_1 = self.parse_rson_literal(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)
  *                     if offset_1 == -1: break
  */
       while (1) {
@@ -4825,12 +4825,12 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
         /* "RSONParser.pyx":232
  *                 children_1 = []
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_rson_literal(buf, offset_1, line_start_1, indent, buf_eof, children_1)             # <<<<<<<<<<<<<<
+ *                     offset_1, line_start_1 = self.parse_rson_literal(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)             # <<<<<<<<<<<<<<
  *                     if offset_1 == -1: break
  * 
  */
         __pyx_t_10 = __Pyx_PyInt_As_int(__pyx_v_offset_1); if (unlikely((__pyx_t_10 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 232, __pyx_L1_error)
-        __pyx_t_14 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_rson_literal(__pyx_v_self, __pyx_v_buf, __pyx_t_10, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_1);
+        __pyx_t_14 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_rson_literal(__pyx_v_self, __pyx_v_buf, __pyx_t_10, __pyx_v_line_start_1, __pyx_v_indent_0, __pyx_v_buf_eof, __pyx_v_children_1);
         __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_14.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 232, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         __pyx_t_10 = __pyx_t_14.f1;
@@ -4840,7 +4840,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
 
         /* "RSONParser.pyx":233
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_rson_literal(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+ *                     offset_1, line_start_1 = self.parse_rson_literal(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)
  *                     if offset_1 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
@@ -4858,7 +4858,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
  * 
  *                     break             # <<<<<<<<<<<<<<
  *                 if offset_1 != -1:
- *                     offset = offset_1
+ *                     offset_0 = offset_1
  */
         goto __pyx_L29_break;
       }
@@ -4868,8 +4868,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
  * 
  *                     break
  *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
- *                     offset = offset_1
- *                     line_start = line_start_1
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1
  */
       __pyx_t_1 = __Pyx_PyInt_NeObjC(__pyx_v_offset_1, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 238, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
@@ -4880,41 +4880,41 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
         /* "RSONParser.pyx":239
  *                     break
  *                 if offset_1 != -1:
- *                     offset = offset_1             # <<<<<<<<<<<<<<
- *                     line_start = line_start_1
- *                     children.extend(children_1)
+ *                     offset_0 = offset_1             # <<<<<<<<<<<<<<
+ *                     line_start_0 = line_start_1
+ *                     children_0.extend(children_1)
  */
         __pyx_t_10 = __Pyx_PyInt_As_int(__pyx_v_offset_1); if (unlikely((__pyx_t_10 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 239, __pyx_L1_error)
-        __pyx_v_offset = __pyx_t_10;
+        __pyx_v_offset_0 = __pyx_t_10;
 
         /* "RSONParser.pyx":240
  *                 if offset_1 != -1:
- *                     offset = offset_1
- *                     line_start = line_start_1             # <<<<<<<<<<<<<<
- *                     children.extend(children_1)
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1             # <<<<<<<<<<<<<<
+ *                     children_0.extend(children_1)
  *                     break
  */
-        __pyx_v_line_start = __pyx_v_line_start_1;
+        __pyx_v_line_start_0 = __pyx_v_line_start_1;
 
         /* "RSONParser.pyx":241
- *                     offset = offset_1
- *                     line_start = line_start_1
- *                     children.extend(children_1)             # <<<<<<<<<<<<<<
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1
+ *                     children_0.extend(children_1)             # <<<<<<<<<<<<<<
  *                     break
  *                 # end case
  */
-        if (unlikely(__pyx_v_children == Py_None)) {
+        if (unlikely(__pyx_v_children_0 == Py_None)) {
           PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "extend");
           __PYX_ERR(0, 241, __pyx_L1_error)
         }
-        __pyx_t_12 = __Pyx_PyList_Extend(__pyx_v_children, __pyx_v_children_1); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 241, __pyx_L1_error)
+        __pyx_t_12 = __Pyx_PyList_Extend(__pyx_v_children_0, __pyx_v_children_1); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 241, __pyx_L1_error)
 
         /* "RSONParser.pyx":242
- *                     line_start = line_start_1
- *                     children.extend(children_1)
+ *                     line_start_0 = line_start_1
+ *                     children_0.extend(children_1)
  *                     break             # <<<<<<<<<<<<<<
  *                 # end case
- *                 offset = -1 # no more choices
+ *                 offset_0 = -1 # no more choices
  */
         goto __pyx_L6_break;
 
@@ -4922,25 +4922,25 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
  * 
  *                     break
  *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
- *                     offset = offset_1
- *                     line_start = line_start_1
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1
  */
       }
 
       /* "RSONParser.pyx":244
  *                     break
  *                 # end case
- *                 offset = -1 # no more choices             # <<<<<<<<<<<<<<
+ *                 offset_0 = -1 # no more choices             # <<<<<<<<<<<<<<
  *                 break # end choice
- *             if offset == -1:
+ *             if offset_0 == -1:
  */
-      __pyx_v_offset = -1;
+      __pyx_v_offset_0 = -1;
 
       /* "RSONParser.pyx":245
  *                 # end case
- *                 offset = -1 # no more choices
+ *                 offset_0 = -1 # no more choices
  *                 break # end choice             # <<<<<<<<<<<<<<
- *             if offset == -1:
+ *             if offset_0 == -1:
  *                 break
  */
       goto __pyx_L6_break;
@@ -4948,18 +4948,18 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
     __pyx_L6_break:;
 
     /* "RSONParser.pyx":246
- *                 offset = -1 # no more choices
+ *                 offset_0 = -1 # no more choices
  *                 break # end choice
- *             if offset == -1:             # <<<<<<<<<<<<<<
+ *             if offset_0 == -1:             # <<<<<<<<<<<<<<
  *                 break
  * 
  */
-    __pyx_t_6 = ((__pyx_v_offset == -1L) != 0);
+    __pyx_t_6 = ((__pyx_v_offset_0 == -1L) != 0);
     if (__pyx_t_6) {
 
       /* "RSONParser.pyx":247
  *                 break # end choice
- *             if offset == -1:
+ *             if offset_0 == -1:
  *                 break             # <<<<<<<<<<<<<<
  * 
  *             break
@@ -4967,9 +4967,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
       goto __pyx_L4_break;
 
       /* "RSONParser.pyx":246
- *                 offset = -1 # no more choices
+ *                 offset_0 = -1 # no more choices
  *                 break # end choice
- *             if offset == -1:             # <<<<<<<<<<<<<<
+ *             if offset_0 == -1:             # <<<<<<<<<<<<<<
  *                 break
  * 
  */
@@ -4979,7 +4979,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
  *                 break
  * 
  *             break             # <<<<<<<<<<<<<<
- *         return offset, line_start
+ *         return offset_0, line_start_0
  * 
  */
     goto __pyx_L4_break;
@@ -4989,20 +4989,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
   /* "RSONParser.pyx":250
  * 
  *             break
- *         return offset, line_start             # <<<<<<<<<<<<<<
+ *         return offset_0, line_start_0             # <<<<<<<<<<<<<<
  * 
- *     cdef (int, int) parse_rson_literal(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):
+ *     cdef (int, int) parse_rson_literal(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):
  */
-  __pyx_t_14.f0 = __pyx_v_offset;
-  __pyx_t_14.f1 = __pyx_v_line_start;
+  __pyx_t_14.f0 = __pyx_v_offset_0;
+  __pyx_t_14.f1 = __pyx_v_line_start_0;
   __pyx_r = __pyx_t_14;
   goto __pyx_L0;
 
   /* "RSONParser.pyx":130
- *         return offset, line_start
+ *         return offset_0, line_start_0
  * 
- *     cdef (int, int) parse_rson_value(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
- *         cdef int count
+ *     cdef (int, int) parse_rson_value(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):             # <<<<<<<<<<<<<<
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  */
 
@@ -5028,14 +5028,14 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_value(s
 }
 
 /* "RSONParser.pyx":252
- *         return offset, line_start
+ *         return offset_0, line_start_0
  * 
- *     cdef (int, int) parse_rson_literal(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
- *         cdef int count
+ *     cdef (int, int) parse_rson_literal(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):             # <<<<<<<<<<<<<<
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  */
 
-static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, int __pyx_v_indent, int __pyx_v_buf_eof, PyObject *__pyx_v_children) {
+static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset_0, int __pyx_v_line_start_0, int __pyx_v_indent_0, int __pyx_v_buf_eof, PyObject *__pyx_v_children_0) {
   int __pyx_v_offset_1;
   int __pyx_v_line_start_1;
   PyObject *__pyx_v_children_1 = NULL;
@@ -5050,11 +5050,11 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
   __Pyx_RefNannySetupContext("parse_rson_literal", 0);
 
   /* "RSONParser.pyx":255
- *         cdef int count
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop             # <<<<<<<<<<<<<<
  *             while True: # start choice
- *                 offset_1 = offset
+ *                 offset_1 = offset_0
  */
   while (1) {
 
@@ -5062,35 +5062,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
  *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop
  *             while True: # start choice             # <<<<<<<<<<<<<<
- *                 offset_1 = offset
- *                 line_start_1 = line_start
+ *                 offset_1 = offset_0
+ *                 line_start_1 = line_start_0
  */
     while (1) {
 
       /* "RSONParser.pyx":257
  *         while True: # note: return at end of loop
  *             while True: # start choice
- *                 offset_1 = offset             # <<<<<<<<<<<<<<
- *                 line_start_1 = line_start
+ *                 offset_1 = offset_0             # <<<<<<<<<<<<<<
+ *                 line_start_1 = line_start_0
  *                 children_1 = []
  */
-      __pyx_v_offset_1 = __pyx_v_offset;
+      __pyx_v_offset_1 = __pyx_v_offset_0;
 
       /* "RSONParser.pyx":258
  *             while True: # start choice
- *                 offset_1 = offset
- *                 line_start_1 = line_start             # <<<<<<<<<<<<<<
+ *                 offset_1 = offset_0
+ *                 line_start_1 = line_start_0             # <<<<<<<<<<<<<<
  *                 children_1 = []
  *                 while True: # case
  */
-      __pyx_v_line_start_1 = __pyx_v_line_start;
+      __pyx_v_line_start_1 = __pyx_v_line_start_0;
 
       /* "RSONParser.pyx":259
- *                 offset_1 = offset
- *                 line_start_1 = line_start
+ *                 offset_1 = offset_0
+ *                 line_start_1 = line_start_0
  *                 children_1 = []             # <<<<<<<<<<<<<<
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_rson_list(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+ *                     offset_1, line_start_1 = self.parse_rson_list(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)
  */
       __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 259, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
@@ -5098,10 +5098,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
       __pyx_t_1 = 0;
 
       /* "RSONParser.pyx":260
- *                 line_start_1 = line_start
+ *                 line_start_1 = line_start_0
  *                 children_1 = []
  *                 while True: # case             # <<<<<<<<<<<<<<
- *                     offset_1, line_start_1 = self.parse_rson_list(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+ *                     offset_1, line_start_1 = self.parse_rson_list(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)
  *                     if offset_1 == -1: break
  */
       while (1) {
@@ -5109,11 +5109,11 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
         /* "RSONParser.pyx":261
  *                 children_1 = []
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_rson_list(buf, offset_1, line_start_1, indent, buf_eof, children_1)             # <<<<<<<<<<<<<<
+ *                     offset_1, line_start_1 = self.parse_rson_list(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)             # <<<<<<<<<<<<<<
  *                     if offset_1 == -1: break
  * 
  */
-        __pyx_t_2 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_rson_list(__pyx_v_self, __pyx_v_buf, __pyx_v_offset_1, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_1);
+        __pyx_t_2 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_rson_list(__pyx_v_self, __pyx_v_buf, __pyx_v_offset_1, __pyx_v_line_start_1, __pyx_v_indent_0, __pyx_v_buf_eof, __pyx_v_children_1);
         __pyx_t_3 = __pyx_t_2.f0;
         __pyx_t_4 = __pyx_t_2.f1;
         __pyx_v_offset_1 = __pyx_t_3;
@@ -5121,7 +5121,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
 
         /* "RSONParser.pyx":262
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_rson_list(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+ *                     offset_1, line_start_1 = self.parse_rson_list(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)
  *                     if offset_1 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
@@ -5136,7 +5136,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
  * 
  *                     break             # <<<<<<<<<<<<<<
  *                 if offset_1 != -1:
- *                     offset = offset_1
+ *                     offset_0 = offset_1
  */
         goto __pyx_L8_break;
       }
@@ -5146,8 +5146,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
  * 
  *                     break
  *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
- *                     offset = offset_1
- *                     line_start = line_start_1
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1
  */
       __pyx_t_5 = ((__pyx_v_offset_1 != -1L) != 0);
       if (__pyx_t_5) {
@@ -5155,40 +5155,40 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
         /* "RSONParser.pyx":267
  *                     break
  *                 if offset_1 != -1:
- *                     offset = offset_1             # <<<<<<<<<<<<<<
- *                     line_start = line_start_1
- *                     children.extend(children_1)
+ *                     offset_0 = offset_1             # <<<<<<<<<<<<<<
+ *                     line_start_0 = line_start_1
+ *                     children_0.extend(children_1)
  */
-        __pyx_v_offset = __pyx_v_offset_1;
+        __pyx_v_offset_0 = __pyx_v_offset_1;
 
         /* "RSONParser.pyx":268
  *                 if offset_1 != -1:
- *                     offset = offset_1
- *                     line_start = line_start_1             # <<<<<<<<<<<<<<
- *                     children.extend(children_1)
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1             # <<<<<<<<<<<<<<
+ *                     children_0.extend(children_1)
  *                     break
  */
-        __pyx_v_line_start = __pyx_v_line_start_1;
+        __pyx_v_line_start_0 = __pyx_v_line_start_1;
 
         /* "RSONParser.pyx":269
- *                     offset = offset_1
- *                     line_start = line_start_1
- *                     children.extend(children_1)             # <<<<<<<<<<<<<<
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1
+ *                     children_0.extend(children_1)             # <<<<<<<<<<<<<<
  *                     break
  *                 # end case
  */
-        if (unlikely(__pyx_v_children == Py_None)) {
+        if (unlikely(__pyx_v_children_0 == Py_None)) {
           PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "extend");
           __PYX_ERR(0, 269, __pyx_L1_error)
         }
-        __pyx_t_6 = __Pyx_PyList_Extend(__pyx_v_children, __pyx_v_children_1); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 269, __pyx_L1_error)
+        __pyx_t_6 = __Pyx_PyList_Extend(__pyx_v_children_0, __pyx_v_children_1); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 269, __pyx_L1_error)
 
         /* "RSONParser.pyx":270
- *                     line_start = line_start_1
- *                     children.extend(children_1)
+ *                     line_start_0 = line_start_1
+ *                     children_0.extend(children_1)
  *                     break             # <<<<<<<<<<<<<<
  *                 # end case
- *                 offset_1 = offset
+ *                 offset_1 = offset_0
  */
         goto __pyx_L6_break;
 
@@ -5196,35 +5196,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
  * 
  *                     break
  *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
- *                     offset = offset_1
- *                     line_start = line_start_1
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1
  */
       }
 
       /* "RSONParser.pyx":272
  *                     break
  *                 # end case
- *                 offset_1 = offset             # <<<<<<<<<<<<<<
- *                 line_start_1 = line_start
+ *                 offset_1 = offset_0             # <<<<<<<<<<<<<<
+ *                 line_start_1 = line_start_0
  *                 children_1 = []
  */
-      __pyx_v_offset_1 = __pyx_v_offset;
+      __pyx_v_offset_1 = __pyx_v_offset_0;
 
       /* "RSONParser.pyx":273
  *                 # end case
- *                 offset_1 = offset
- *                 line_start_1 = line_start             # <<<<<<<<<<<<<<
+ *                 offset_1 = offset_0
+ *                 line_start_1 = line_start_0             # <<<<<<<<<<<<<<
  *                 children_1 = []
  *                 while True: # case
  */
-      __pyx_v_line_start_1 = __pyx_v_line_start;
+      __pyx_v_line_start_1 = __pyx_v_line_start_0;
 
       /* "RSONParser.pyx":274
- *                 offset_1 = offset
- *                 line_start_1 = line_start
+ *                 offset_1 = offset_0
+ *                 line_start_1 = line_start_0
  *                 children_1 = []             # <<<<<<<<<<<<<<
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_rson_object(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+ *                     offset_1, line_start_1 = self.parse_rson_object(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)
  */
       __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 274, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
@@ -5232,10 +5232,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
       __pyx_t_1 = 0;
 
       /* "RSONParser.pyx":275
- *                 line_start_1 = line_start
+ *                 line_start_1 = line_start_0
  *                 children_1 = []
  *                 while True: # case             # <<<<<<<<<<<<<<
- *                     offset_1, line_start_1 = self.parse_rson_object(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+ *                     offset_1, line_start_1 = self.parse_rson_object(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)
  *                     if offset_1 == -1: break
  */
       while (1) {
@@ -5243,11 +5243,11 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
         /* "RSONParser.pyx":276
  *                 children_1 = []
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_rson_object(buf, offset_1, line_start_1, indent, buf_eof, children_1)             # <<<<<<<<<<<<<<
+ *                     offset_1, line_start_1 = self.parse_rson_object(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)             # <<<<<<<<<<<<<<
  *                     if offset_1 == -1: break
  * 
  */
-        __pyx_t_2 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_rson_object(__pyx_v_self, __pyx_v_buf, __pyx_v_offset_1, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_1);
+        __pyx_t_2 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_rson_object(__pyx_v_self, __pyx_v_buf, __pyx_v_offset_1, __pyx_v_line_start_1, __pyx_v_indent_0, __pyx_v_buf_eof, __pyx_v_children_1);
         __pyx_t_4 = __pyx_t_2.f0;
         __pyx_t_3 = __pyx_t_2.f1;
         __pyx_v_offset_1 = __pyx_t_4;
@@ -5255,7 +5255,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
 
         /* "RSONParser.pyx":277
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_rson_object(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+ *                     offset_1, line_start_1 = self.parse_rson_object(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)
  *                     if offset_1 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
@@ -5270,7 +5270,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
  * 
  *                     break             # <<<<<<<<<<<<<<
  *                 if offset_1 != -1:
- *                     offset = offset_1
+ *                     offset_0 = offset_1
  */
         goto __pyx_L12_break;
       }
@@ -5280,8 +5280,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
  * 
  *                     break
  *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
- *                     offset = offset_1
- *                     line_start = line_start_1
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1
  */
       __pyx_t_5 = ((__pyx_v_offset_1 != -1L) != 0);
       if (__pyx_t_5) {
@@ -5289,40 +5289,40 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
         /* "RSONParser.pyx":282
  *                     break
  *                 if offset_1 != -1:
- *                     offset = offset_1             # <<<<<<<<<<<<<<
- *                     line_start = line_start_1
- *                     children.extend(children_1)
+ *                     offset_0 = offset_1             # <<<<<<<<<<<<<<
+ *                     line_start_0 = line_start_1
+ *                     children_0.extend(children_1)
  */
-        __pyx_v_offset = __pyx_v_offset_1;
+        __pyx_v_offset_0 = __pyx_v_offset_1;
 
         /* "RSONParser.pyx":283
  *                 if offset_1 != -1:
- *                     offset = offset_1
- *                     line_start = line_start_1             # <<<<<<<<<<<<<<
- *                     children.extend(children_1)
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1             # <<<<<<<<<<<<<<
+ *                     children_0.extend(children_1)
  *                     break
  */
-        __pyx_v_line_start = __pyx_v_line_start_1;
+        __pyx_v_line_start_0 = __pyx_v_line_start_1;
 
         /* "RSONParser.pyx":284
- *                     offset = offset_1
- *                     line_start = line_start_1
- *                     children.extend(children_1)             # <<<<<<<<<<<<<<
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1
+ *                     children_0.extend(children_1)             # <<<<<<<<<<<<<<
  *                     break
  *                 # end case
  */
-        if (unlikely(__pyx_v_children == Py_None)) {
+        if (unlikely(__pyx_v_children_0 == Py_None)) {
           PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "extend");
           __PYX_ERR(0, 284, __pyx_L1_error)
         }
-        __pyx_t_6 = __Pyx_PyList_Extend(__pyx_v_children, __pyx_v_children_1); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 284, __pyx_L1_error)
+        __pyx_t_6 = __Pyx_PyList_Extend(__pyx_v_children_0, __pyx_v_children_1); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 284, __pyx_L1_error)
 
         /* "RSONParser.pyx":285
- *                     line_start = line_start_1
- *                     children.extend(children_1)
+ *                     line_start_0 = line_start_1
+ *                     children_0.extend(children_1)
  *                     break             # <<<<<<<<<<<<<<
  *                 # end case
- *                 offset_1 = offset
+ *                 offset_1 = offset_0
  */
         goto __pyx_L6_break;
 
@@ -5330,35 +5330,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
  * 
  *                     break
  *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
- *                     offset = offset_1
- *                     line_start = line_start_1
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1
  */
       }
 
       /* "RSONParser.pyx":287
  *                     break
  *                 # end case
- *                 offset_1 = offset             # <<<<<<<<<<<<<<
- *                 line_start_1 = line_start
+ *                 offset_1 = offset_0             # <<<<<<<<<<<<<<
+ *                 line_start_1 = line_start_0
  *                 children_1 = []
  */
-      __pyx_v_offset_1 = __pyx_v_offset;
+      __pyx_v_offset_1 = __pyx_v_offset_0;
 
       /* "RSONParser.pyx":288
  *                 # end case
- *                 offset_1 = offset
- *                 line_start_1 = line_start             # <<<<<<<<<<<<<<
+ *                 offset_1 = offset_0
+ *                 line_start_1 = line_start_0             # <<<<<<<<<<<<<<
  *                 children_1 = []
  *                 while True: # case
  */
-      __pyx_v_line_start_1 = __pyx_v_line_start;
+      __pyx_v_line_start_1 = __pyx_v_line_start_0;
 
       /* "RSONParser.pyx":289
- *                 offset_1 = offset
- *                 line_start_1 = line_start
+ *                 offset_1 = offset_0
+ *                 line_start_1 = line_start_0
  *                 children_1 = []             # <<<<<<<<<<<<<<
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_rson_string(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+ *                     offset_1, line_start_1 = self.parse_rson_string(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)
  */
       __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 289, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
@@ -5366,10 +5366,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
       __pyx_t_1 = 0;
 
       /* "RSONParser.pyx":290
- *                 line_start_1 = line_start
+ *                 line_start_1 = line_start_0
  *                 children_1 = []
  *                 while True: # case             # <<<<<<<<<<<<<<
- *                     offset_1, line_start_1 = self.parse_rson_string(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+ *                     offset_1, line_start_1 = self.parse_rson_string(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)
  *                     if offset_1 == -1: break
  */
       while (1) {
@@ -5377,11 +5377,11 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
         /* "RSONParser.pyx":291
  *                 children_1 = []
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_rson_string(buf, offset_1, line_start_1, indent, buf_eof, children_1)             # <<<<<<<<<<<<<<
+ *                     offset_1, line_start_1 = self.parse_rson_string(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)             # <<<<<<<<<<<<<<
  *                     if offset_1 == -1: break
  * 
  */
-        __pyx_t_2 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_rson_string(__pyx_v_self, __pyx_v_buf, __pyx_v_offset_1, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_1);
+        __pyx_t_2 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_rson_string(__pyx_v_self, __pyx_v_buf, __pyx_v_offset_1, __pyx_v_line_start_1, __pyx_v_indent_0, __pyx_v_buf_eof, __pyx_v_children_1);
         __pyx_t_3 = __pyx_t_2.f0;
         __pyx_t_4 = __pyx_t_2.f1;
         __pyx_v_offset_1 = __pyx_t_3;
@@ -5389,7 +5389,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
 
         /* "RSONParser.pyx":292
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_rson_string(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+ *                     offset_1, line_start_1 = self.parse_rson_string(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)
  *                     if offset_1 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
@@ -5404,7 +5404,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
  * 
  *                     break             # <<<<<<<<<<<<<<
  *                 if offset_1 != -1:
- *                     offset = offset_1
+ *                     offset_0 = offset_1
  */
         goto __pyx_L16_break;
       }
@@ -5414,8 +5414,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
  * 
  *                     break
  *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
- *                     offset = offset_1
- *                     line_start = line_start_1
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1
  */
       __pyx_t_5 = ((__pyx_v_offset_1 != -1L) != 0);
       if (__pyx_t_5) {
@@ -5423,40 +5423,40 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
         /* "RSONParser.pyx":297
  *                     break
  *                 if offset_1 != -1:
- *                     offset = offset_1             # <<<<<<<<<<<<<<
- *                     line_start = line_start_1
- *                     children.extend(children_1)
+ *                     offset_0 = offset_1             # <<<<<<<<<<<<<<
+ *                     line_start_0 = line_start_1
+ *                     children_0.extend(children_1)
  */
-        __pyx_v_offset = __pyx_v_offset_1;
+        __pyx_v_offset_0 = __pyx_v_offset_1;
 
         /* "RSONParser.pyx":298
  *                 if offset_1 != -1:
- *                     offset = offset_1
- *                     line_start = line_start_1             # <<<<<<<<<<<<<<
- *                     children.extend(children_1)
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1             # <<<<<<<<<<<<<<
+ *                     children_0.extend(children_1)
  *                     break
  */
-        __pyx_v_line_start = __pyx_v_line_start_1;
+        __pyx_v_line_start_0 = __pyx_v_line_start_1;
 
         /* "RSONParser.pyx":299
- *                     offset = offset_1
- *                     line_start = line_start_1
- *                     children.extend(children_1)             # <<<<<<<<<<<<<<
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1
+ *                     children_0.extend(children_1)             # <<<<<<<<<<<<<<
  *                     break
  *                 # end case
  */
-        if (unlikely(__pyx_v_children == Py_None)) {
+        if (unlikely(__pyx_v_children_0 == Py_None)) {
           PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "extend");
           __PYX_ERR(0, 299, __pyx_L1_error)
         }
-        __pyx_t_6 = __Pyx_PyList_Extend(__pyx_v_children, __pyx_v_children_1); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 299, __pyx_L1_error)
+        __pyx_t_6 = __Pyx_PyList_Extend(__pyx_v_children_0, __pyx_v_children_1); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 299, __pyx_L1_error)
 
         /* "RSONParser.pyx":300
- *                     line_start = line_start_1
- *                     children.extend(children_1)
+ *                     line_start_0 = line_start_1
+ *                     children_0.extend(children_1)
  *                     break             # <<<<<<<<<<<<<<
  *                 # end case
- *                 offset_1 = offset
+ *                 offset_1 = offset_0
  */
         goto __pyx_L6_break;
 
@@ -5464,35 +5464,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
  * 
  *                     break
  *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
- *                     offset = offset_1
- *                     line_start = line_start_1
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1
  */
       }
 
       /* "RSONParser.pyx":302
  *                     break
  *                 # end case
- *                 offset_1 = offset             # <<<<<<<<<<<<<<
- *                 line_start_1 = line_start
+ *                 offset_1 = offset_0             # <<<<<<<<<<<<<<
+ *                 line_start_1 = line_start_0
  *                 children_1 = []
  */
-      __pyx_v_offset_1 = __pyx_v_offset;
+      __pyx_v_offset_1 = __pyx_v_offset_0;
 
       /* "RSONParser.pyx":303
  *                 # end case
- *                 offset_1 = offset
- *                 line_start_1 = line_start             # <<<<<<<<<<<<<<
+ *                 offset_1 = offset_0
+ *                 line_start_1 = line_start_0             # <<<<<<<<<<<<<<
  *                 children_1 = []
  *                 while True: # case
  */
-      __pyx_v_line_start_1 = __pyx_v_line_start;
+      __pyx_v_line_start_1 = __pyx_v_line_start_0;
 
       /* "RSONParser.pyx":304
- *                 offset_1 = offset
- *                 line_start_1 = line_start
+ *                 offset_1 = offset_0
+ *                 line_start_1 = line_start_0
  *                 children_1 = []             # <<<<<<<<<<<<<<
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_rson_number(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+ *                     offset_1, line_start_1 = self.parse_rson_number(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)
  */
       __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 304, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
@@ -5500,10 +5500,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
       __pyx_t_1 = 0;
 
       /* "RSONParser.pyx":305
- *                 line_start_1 = line_start
+ *                 line_start_1 = line_start_0
  *                 children_1 = []
  *                 while True: # case             # <<<<<<<<<<<<<<
- *                     offset_1, line_start_1 = self.parse_rson_number(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+ *                     offset_1, line_start_1 = self.parse_rson_number(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)
  *                     if offset_1 == -1: break
  */
       while (1) {
@@ -5511,11 +5511,11 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
         /* "RSONParser.pyx":306
  *                 children_1 = []
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_rson_number(buf, offset_1, line_start_1, indent, buf_eof, children_1)             # <<<<<<<<<<<<<<
+ *                     offset_1, line_start_1 = self.parse_rson_number(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)             # <<<<<<<<<<<<<<
  *                     if offset_1 == -1: break
  * 
  */
-        __pyx_t_2 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_rson_number(__pyx_v_self, __pyx_v_buf, __pyx_v_offset_1, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_1);
+        __pyx_t_2 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_rson_number(__pyx_v_self, __pyx_v_buf, __pyx_v_offset_1, __pyx_v_line_start_1, __pyx_v_indent_0, __pyx_v_buf_eof, __pyx_v_children_1);
         __pyx_t_4 = __pyx_t_2.f0;
         __pyx_t_3 = __pyx_t_2.f1;
         __pyx_v_offset_1 = __pyx_t_4;
@@ -5523,7 +5523,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
 
         /* "RSONParser.pyx":307
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_rson_number(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+ *                     offset_1, line_start_1 = self.parse_rson_number(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)
  *                     if offset_1 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
@@ -5538,7 +5538,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
  * 
  *                     break             # <<<<<<<<<<<<<<
  *                 if offset_1 != -1:
- *                     offset = offset_1
+ *                     offset_0 = offset_1
  */
         goto __pyx_L20_break;
       }
@@ -5548,8 +5548,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
  * 
  *                     break
  *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
- *                     offset = offset_1
- *                     line_start = line_start_1
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1
  */
       __pyx_t_5 = ((__pyx_v_offset_1 != -1L) != 0);
       if (__pyx_t_5) {
@@ -5557,40 +5557,40 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
         /* "RSONParser.pyx":312
  *                     break
  *                 if offset_1 != -1:
- *                     offset = offset_1             # <<<<<<<<<<<<<<
- *                     line_start = line_start_1
- *                     children.extend(children_1)
+ *                     offset_0 = offset_1             # <<<<<<<<<<<<<<
+ *                     line_start_0 = line_start_1
+ *                     children_0.extend(children_1)
  */
-        __pyx_v_offset = __pyx_v_offset_1;
+        __pyx_v_offset_0 = __pyx_v_offset_1;
 
         /* "RSONParser.pyx":313
  *                 if offset_1 != -1:
- *                     offset = offset_1
- *                     line_start = line_start_1             # <<<<<<<<<<<<<<
- *                     children.extend(children_1)
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1             # <<<<<<<<<<<<<<
+ *                     children_0.extend(children_1)
  *                     break
  */
-        __pyx_v_line_start = __pyx_v_line_start_1;
+        __pyx_v_line_start_0 = __pyx_v_line_start_1;
 
         /* "RSONParser.pyx":314
- *                     offset = offset_1
- *                     line_start = line_start_1
- *                     children.extend(children_1)             # <<<<<<<<<<<<<<
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1
+ *                     children_0.extend(children_1)             # <<<<<<<<<<<<<<
  *                     break
  *                 # end case
  */
-        if (unlikely(__pyx_v_children == Py_None)) {
+        if (unlikely(__pyx_v_children_0 == Py_None)) {
           PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "extend");
           __PYX_ERR(0, 314, __pyx_L1_error)
         }
-        __pyx_t_6 = __Pyx_PyList_Extend(__pyx_v_children, __pyx_v_children_1); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 314, __pyx_L1_error)
+        __pyx_t_6 = __Pyx_PyList_Extend(__pyx_v_children_0, __pyx_v_children_1); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 314, __pyx_L1_error)
 
         /* "RSONParser.pyx":315
- *                     line_start = line_start_1
- *                     children.extend(children_1)
+ *                     line_start_0 = line_start_1
+ *                     children_0.extend(children_1)
  *                     break             # <<<<<<<<<<<<<<
  *                 # end case
- *                 offset_1 = offset
+ *                 offset_1 = offset_0
  */
         goto __pyx_L6_break;
 
@@ -5598,35 +5598,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
  * 
  *                     break
  *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
- *                     offset = offset_1
- *                     line_start = line_start_1
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1
  */
       }
 
       /* "RSONParser.pyx":317
  *                     break
  *                 # end case
- *                 offset_1 = offset             # <<<<<<<<<<<<<<
- *                 line_start_1 = line_start
+ *                 offset_1 = offset_0             # <<<<<<<<<<<<<<
+ *                 line_start_1 = line_start_0
  *                 children_1 = []
  */
-      __pyx_v_offset_1 = __pyx_v_offset;
+      __pyx_v_offset_1 = __pyx_v_offset_0;
 
       /* "RSONParser.pyx":318
  *                 # end case
- *                 offset_1 = offset
- *                 line_start_1 = line_start             # <<<<<<<<<<<<<<
+ *                 offset_1 = offset_0
+ *                 line_start_1 = line_start_0             # <<<<<<<<<<<<<<
  *                 children_1 = []
  *                 while True: # case
  */
-      __pyx_v_line_start_1 = __pyx_v_line_start;
+      __pyx_v_line_start_1 = __pyx_v_line_start_0;
 
       /* "RSONParser.pyx":319
- *                 offset_1 = offset
- *                 line_start_1 = line_start
+ *                 offset_1 = offset_0
+ *                 line_start_1 = line_start_0
  *                 children_1 = []             # <<<<<<<<<<<<<<
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_rson_true(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+ *                     offset_1, line_start_1 = self.parse_rson_true(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)
  */
       __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 319, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
@@ -5634,10 +5634,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
       __pyx_t_1 = 0;
 
       /* "RSONParser.pyx":320
- *                 line_start_1 = line_start
+ *                 line_start_1 = line_start_0
  *                 children_1 = []
  *                 while True: # case             # <<<<<<<<<<<<<<
- *                     offset_1, line_start_1 = self.parse_rson_true(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+ *                     offset_1, line_start_1 = self.parse_rson_true(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)
  *                     if offset_1 == -1: break
  */
       while (1) {
@@ -5645,11 +5645,11 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
         /* "RSONParser.pyx":321
  *                 children_1 = []
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_rson_true(buf, offset_1, line_start_1, indent, buf_eof, children_1)             # <<<<<<<<<<<<<<
+ *                     offset_1, line_start_1 = self.parse_rson_true(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)             # <<<<<<<<<<<<<<
  *                     if offset_1 == -1: break
  * 
  */
-        __pyx_t_2 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_rson_true(__pyx_v_self, __pyx_v_buf, __pyx_v_offset_1, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_1);
+        __pyx_t_2 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_rson_true(__pyx_v_self, __pyx_v_buf, __pyx_v_offset_1, __pyx_v_line_start_1, __pyx_v_indent_0, __pyx_v_buf_eof, __pyx_v_children_1);
         __pyx_t_3 = __pyx_t_2.f0;
         __pyx_t_4 = __pyx_t_2.f1;
         __pyx_v_offset_1 = __pyx_t_3;
@@ -5657,7 +5657,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
 
         /* "RSONParser.pyx":322
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_rson_true(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+ *                     offset_1, line_start_1 = self.parse_rson_true(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)
  *                     if offset_1 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
@@ -5672,7 +5672,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
  * 
  *                     break             # <<<<<<<<<<<<<<
  *                 if offset_1 != -1:
- *                     offset = offset_1
+ *                     offset_0 = offset_1
  */
         goto __pyx_L24_break;
       }
@@ -5682,8 +5682,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
  * 
  *                     break
  *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
- *                     offset = offset_1
- *                     line_start = line_start_1
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1
  */
       __pyx_t_5 = ((__pyx_v_offset_1 != -1L) != 0);
       if (__pyx_t_5) {
@@ -5691,40 +5691,40 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
         /* "RSONParser.pyx":327
  *                     break
  *                 if offset_1 != -1:
- *                     offset = offset_1             # <<<<<<<<<<<<<<
- *                     line_start = line_start_1
- *                     children.extend(children_1)
+ *                     offset_0 = offset_1             # <<<<<<<<<<<<<<
+ *                     line_start_0 = line_start_1
+ *                     children_0.extend(children_1)
  */
-        __pyx_v_offset = __pyx_v_offset_1;
+        __pyx_v_offset_0 = __pyx_v_offset_1;
 
         /* "RSONParser.pyx":328
  *                 if offset_1 != -1:
- *                     offset = offset_1
- *                     line_start = line_start_1             # <<<<<<<<<<<<<<
- *                     children.extend(children_1)
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1             # <<<<<<<<<<<<<<
+ *                     children_0.extend(children_1)
  *                     break
  */
-        __pyx_v_line_start = __pyx_v_line_start_1;
+        __pyx_v_line_start_0 = __pyx_v_line_start_1;
 
         /* "RSONParser.pyx":329
- *                     offset = offset_1
- *                     line_start = line_start_1
- *                     children.extend(children_1)             # <<<<<<<<<<<<<<
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1
+ *                     children_0.extend(children_1)             # <<<<<<<<<<<<<<
  *                     break
  *                 # end case
  */
-        if (unlikely(__pyx_v_children == Py_None)) {
+        if (unlikely(__pyx_v_children_0 == Py_None)) {
           PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "extend");
           __PYX_ERR(0, 329, __pyx_L1_error)
         }
-        __pyx_t_6 = __Pyx_PyList_Extend(__pyx_v_children, __pyx_v_children_1); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 329, __pyx_L1_error)
+        __pyx_t_6 = __Pyx_PyList_Extend(__pyx_v_children_0, __pyx_v_children_1); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 329, __pyx_L1_error)
 
         /* "RSONParser.pyx":330
- *                     line_start = line_start_1
- *                     children.extend(children_1)
+ *                     line_start_0 = line_start_1
+ *                     children_0.extend(children_1)
  *                     break             # <<<<<<<<<<<<<<
  *                 # end case
- *                 offset_1 = offset
+ *                 offset_1 = offset_0
  */
         goto __pyx_L6_break;
 
@@ -5732,35 +5732,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
  * 
  *                     break
  *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
- *                     offset = offset_1
- *                     line_start = line_start_1
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1
  */
       }
 
       /* "RSONParser.pyx":332
  *                     break
  *                 # end case
- *                 offset_1 = offset             # <<<<<<<<<<<<<<
- *                 line_start_1 = line_start
+ *                 offset_1 = offset_0             # <<<<<<<<<<<<<<
+ *                 line_start_1 = line_start_0
  *                 children_1 = []
  */
-      __pyx_v_offset_1 = __pyx_v_offset;
+      __pyx_v_offset_1 = __pyx_v_offset_0;
 
       /* "RSONParser.pyx":333
  *                 # end case
- *                 offset_1 = offset
- *                 line_start_1 = line_start             # <<<<<<<<<<<<<<
+ *                 offset_1 = offset_0
+ *                 line_start_1 = line_start_0             # <<<<<<<<<<<<<<
  *                 children_1 = []
  *                 while True: # case
  */
-      __pyx_v_line_start_1 = __pyx_v_line_start;
+      __pyx_v_line_start_1 = __pyx_v_line_start_0;
 
       /* "RSONParser.pyx":334
- *                 offset_1 = offset
- *                 line_start_1 = line_start
+ *                 offset_1 = offset_0
+ *                 line_start_1 = line_start_0
  *                 children_1 = []             # <<<<<<<<<<<<<<
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_rson_false(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+ *                     offset_1, line_start_1 = self.parse_rson_false(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)
  */
       __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 334, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
@@ -5768,10 +5768,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
       __pyx_t_1 = 0;
 
       /* "RSONParser.pyx":335
- *                 line_start_1 = line_start
+ *                 line_start_1 = line_start_0
  *                 children_1 = []
  *                 while True: # case             # <<<<<<<<<<<<<<
- *                     offset_1, line_start_1 = self.parse_rson_false(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+ *                     offset_1, line_start_1 = self.parse_rson_false(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)
  *                     if offset_1 == -1: break
  */
       while (1) {
@@ -5779,11 +5779,11 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
         /* "RSONParser.pyx":336
  *                 children_1 = []
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_rson_false(buf, offset_1, line_start_1, indent, buf_eof, children_1)             # <<<<<<<<<<<<<<
+ *                     offset_1, line_start_1 = self.parse_rson_false(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)             # <<<<<<<<<<<<<<
  *                     if offset_1 == -1: break
  * 
  */
-        __pyx_t_2 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_rson_false(__pyx_v_self, __pyx_v_buf, __pyx_v_offset_1, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_1);
+        __pyx_t_2 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_rson_false(__pyx_v_self, __pyx_v_buf, __pyx_v_offset_1, __pyx_v_line_start_1, __pyx_v_indent_0, __pyx_v_buf_eof, __pyx_v_children_1);
         __pyx_t_4 = __pyx_t_2.f0;
         __pyx_t_3 = __pyx_t_2.f1;
         __pyx_v_offset_1 = __pyx_t_4;
@@ -5791,7 +5791,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
 
         /* "RSONParser.pyx":337
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_rson_false(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+ *                     offset_1, line_start_1 = self.parse_rson_false(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)
  *                     if offset_1 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
@@ -5806,7 +5806,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
  * 
  *                     break             # <<<<<<<<<<<<<<
  *                 if offset_1 != -1:
- *                     offset = offset_1
+ *                     offset_0 = offset_1
  */
         goto __pyx_L28_break;
       }
@@ -5816,8 +5816,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
  * 
  *                     break
  *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
- *                     offset = offset_1
- *                     line_start = line_start_1
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1
  */
       __pyx_t_5 = ((__pyx_v_offset_1 != -1L) != 0);
       if (__pyx_t_5) {
@@ -5825,40 +5825,40 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
         /* "RSONParser.pyx":342
  *                     break
  *                 if offset_1 != -1:
- *                     offset = offset_1             # <<<<<<<<<<<<<<
- *                     line_start = line_start_1
- *                     children.extend(children_1)
+ *                     offset_0 = offset_1             # <<<<<<<<<<<<<<
+ *                     line_start_0 = line_start_1
+ *                     children_0.extend(children_1)
  */
-        __pyx_v_offset = __pyx_v_offset_1;
+        __pyx_v_offset_0 = __pyx_v_offset_1;
 
         /* "RSONParser.pyx":343
  *                 if offset_1 != -1:
- *                     offset = offset_1
- *                     line_start = line_start_1             # <<<<<<<<<<<<<<
- *                     children.extend(children_1)
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1             # <<<<<<<<<<<<<<
+ *                     children_0.extend(children_1)
  *                     break
  */
-        __pyx_v_line_start = __pyx_v_line_start_1;
+        __pyx_v_line_start_0 = __pyx_v_line_start_1;
 
         /* "RSONParser.pyx":344
- *                     offset = offset_1
- *                     line_start = line_start_1
- *                     children.extend(children_1)             # <<<<<<<<<<<<<<
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1
+ *                     children_0.extend(children_1)             # <<<<<<<<<<<<<<
  *                     break
  *                 # end case
  */
-        if (unlikely(__pyx_v_children == Py_None)) {
+        if (unlikely(__pyx_v_children_0 == Py_None)) {
           PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "extend");
           __PYX_ERR(0, 344, __pyx_L1_error)
         }
-        __pyx_t_6 = __Pyx_PyList_Extend(__pyx_v_children, __pyx_v_children_1); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 344, __pyx_L1_error)
+        __pyx_t_6 = __Pyx_PyList_Extend(__pyx_v_children_0, __pyx_v_children_1); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 344, __pyx_L1_error)
 
         /* "RSONParser.pyx":345
- *                     line_start = line_start_1
- *                     children.extend(children_1)
+ *                     line_start_0 = line_start_1
+ *                     children_0.extend(children_1)
  *                     break             # <<<<<<<<<<<<<<
  *                 # end case
- *                 offset_1 = offset
+ *                 offset_1 = offset_0
  */
         goto __pyx_L6_break;
 
@@ -5866,35 +5866,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
  * 
  *                     break
  *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
- *                     offset = offset_1
- *                     line_start = line_start_1
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1
  */
       }
 
       /* "RSONParser.pyx":347
  *                     break
  *                 # end case
- *                 offset_1 = offset             # <<<<<<<<<<<<<<
- *                 line_start_1 = line_start
+ *                 offset_1 = offset_0             # <<<<<<<<<<<<<<
+ *                 line_start_1 = line_start_0
  *                 children_1 = []
  */
-      __pyx_v_offset_1 = __pyx_v_offset;
+      __pyx_v_offset_1 = __pyx_v_offset_0;
 
       /* "RSONParser.pyx":348
  *                 # end case
- *                 offset_1 = offset
- *                 line_start_1 = line_start             # <<<<<<<<<<<<<<
+ *                 offset_1 = offset_0
+ *                 line_start_1 = line_start_0             # <<<<<<<<<<<<<<
  *                 children_1 = []
  *                 while True: # case
  */
-      __pyx_v_line_start_1 = __pyx_v_line_start;
+      __pyx_v_line_start_1 = __pyx_v_line_start_0;
 
       /* "RSONParser.pyx":349
- *                 offset_1 = offset
- *                 line_start_1 = line_start
+ *                 offset_1 = offset_0
+ *                 line_start_1 = line_start_0
  *                 children_1 = []             # <<<<<<<<<<<<<<
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_rson_null(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+ *                     offset_1, line_start_1 = self.parse_rson_null(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)
  */
       __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 349, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
@@ -5902,10 +5902,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
       __pyx_t_1 = 0;
 
       /* "RSONParser.pyx":350
- *                 line_start_1 = line_start
+ *                 line_start_1 = line_start_0
  *                 children_1 = []
  *                 while True: # case             # <<<<<<<<<<<<<<
- *                     offset_1, line_start_1 = self.parse_rson_null(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+ *                     offset_1, line_start_1 = self.parse_rson_null(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)
  *                     if offset_1 == -1: break
  */
       while (1) {
@@ -5913,11 +5913,11 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
         /* "RSONParser.pyx":351
  *                 children_1 = []
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_rson_null(buf, offset_1, line_start_1, indent, buf_eof, children_1)             # <<<<<<<<<<<<<<
+ *                     offset_1, line_start_1 = self.parse_rson_null(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)             # <<<<<<<<<<<<<<
  *                     if offset_1 == -1: break
  * 
  */
-        __pyx_t_2 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_rson_null(__pyx_v_self, __pyx_v_buf, __pyx_v_offset_1, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_1);
+        __pyx_t_2 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_rson_null(__pyx_v_self, __pyx_v_buf, __pyx_v_offset_1, __pyx_v_line_start_1, __pyx_v_indent_0, __pyx_v_buf_eof, __pyx_v_children_1);
         __pyx_t_3 = __pyx_t_2.f0;
         __pyx_t_4 = __pyx_t_2.f1;
         __pyx_v_offset_1 = __pyx_t_3;
@@ -5925,7 +5925,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
 
         /* "RSONParser.pyx":352
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_rson_null(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+ *                     offset_1, line_start_1 = self.parse_rson_null(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)
  *                     if offset_1 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
@@ -5940,7 +5940,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
  * 
  *                     break             # <<<<<<<<<<<<<<
  *                 if offset_1 != -1:
- *                     offset = offset_1
+ *                     offset_0 = offset_1
  */
         goto __pyx_L32_break;
       }
@@ -5950,8 +5950,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
  * 
  *                     break
  *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
- *                     offset = offset_1
- *                     line_start = line_start_1
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1
  */
       __pyx_t_5 = ((__pyx_v_offset_1 != -1L) != 0);
       if (__pyx_t_5) {
@@ -5959,40 +5959,40 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
         /* "RSONParser.pyx":357
  *                     break
  *                 if offset_1 != -1:
- *                     offset = offset_1             # <<<<<<<<<<<<<<
- *                     line_start = line_start_1
- *                     children.extend(children_1)
+ *                     offset_0 = offset_1             # <<<<<<<<<<<<<<
+ *                     line_start_0 = line_start_1
+ *                     children_0.extend(children_1)
  */
-        __pyx_v_offset = __pyx_v_offset_1;
+        __pyx_v_offset_0 = __pyx_v_offset_1;
 
         /* "RSONParser.pyx":358
  *                 if offset_1 != -1:
- *                     offset = offset_1
- *                     line_start = line_start_1             # <<<<<<<<<<<<<<
- *                     children.extend(children_1)
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1             # <<<<<<<<<<<<<<
+ *                     children_0.extend(children_1)
  *                     break
  */
-        __pyx_v_line_start = __pyx_v_line_start_1;
+        __pyx_v_line_start_0 = __pyx_v_line_start_1;
 
         /* "RSONParser.pyx":359
- *                     offset = offset_1
- *                     line_start = line_start_1
- *                     children.extend(children_1)             # <<<<<<<<<<<<<<
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1
+ *                     children_0.extend(children_1)             # <<<<<<<<<<<<<<
  *                     break
  *                 # end case
  */
-        if (unlikely(__pyx_v_children == Py_None)) {
+        if (unlikely(__pyx_v_children_0 == Py_None)) {
           PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "extend");
           __PYX_ERR(0, 359, __pyx_L1_error)
         }
-        __pyx_t_6 = __Pyx_PyList_Extend(__pyx_v_children, __pyx_v_children_1); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 359, __pyx_L1_error)
+        __pyx_t_6 = __Pyx_PyList_Extend(__pyx_v_children_0, __pyx_v_children_1); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 359, __pyx_L1_error)
 
         /* "RSONParser.pyx":360
- *                     line_start = line_start_1
- *                     children.extend(children_1)
+ *                     line_start_0 = line_start_1
+ *                     children_0.extend(children_1)
  *                     break             # <<<<<<<<<<<<<<
  *                 # end case
- *                 offset = -1 # no more choices
+ *                 offset_0 = -1 # no more choices
  */
         goto __pyx_L6_break;
 
@@ -6000,25 +6000,25 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
  * 
  *                     break
  *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
- *                     offset = offset_1
- *                     line_start = line_start_1
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1
  */
       }
 
       /* "RSONParser.pyx":362
  *                     break
  *                 # end case
- *                 offset = -1 # no more choices             # <<<<<<<<<<<<<<
+ *                 offset_0 = -1 # no more choices             # <<<<<<<<<<<<<<
  *                 break # end choice
- *             if offset == -1:
+ *             if offset_0 == -1:
  */
-      __pyx_v_offset = -1;
+      __pyx_v_offset_0 = -1;
 
       /* "RSONParser.pyx":363
  *                 # end case
- *                 offset = -1 # no more choices
+ *                 offset_0 = -1 # no more choices
  *                 break # end choice             # <<<<<<<<<<<<<<
- *             if offset == -1:
+ *             if offset_0 == -1:
  *                 break
  */
       goto __pyx_L6_break;
@@ -6026,18 +6026,18 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
     __pyx_L6_break:;
 
     /* "RSONParser.pyx":364
- *                 offset = -1 # no more choices
+ *                 offset_0 = -1 # no more choices
  *                 break # end choice
- *             if offset == -1:             # <<<<<<<<<<<<<<
+ *             if offset_0 == -1:             # <<<<<<<<<<<<<<
  *                 break
  * 
  */
-    __pyx_t_5 = ((__pyx_v_offset == -1L) != 0);
+    __pyx_t_5 = ((__pyx_v_offset_0 == -1L) != 0);
     if (__pyx_t_5) {
 
       /* "RSONParser.pyx":365
  *                 break # end choice
- *             if offset == -1:
+ *             if offset_0 == -1:
  *                 break             # <<<<<<<<<<<<<<
  * 
  *             break
@@ -6045,9 +6045,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
       goto __pyx_L4_break;
 
       /* "RSONParser.pyx":364
- *                 offset = -1 # no more choices
+ *                 offset_0 = -1 # no more choices
  *                 break # end choice
- *             if offset == -1:             # <<<<<<<<<<<<<<
+ *             if offset_0 == -1:             # <<<<<<<<<<<<<<
  *                 break
  * 
  */
@@ -6057,7 +6057,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
  *                 break
  * 
  *             break             # <<<<<<<<<<<<<<
- *         return offset, line_start
+ *         return offset_0, line_start_0
  * 
  */
     goto __pyx_L4_break;
@@ -6067,20 +6067,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
   /* "RSONParser.pyx":368
  * 
  *             break
- *         return offset, line_start             # <<<<<<<<<<<<<<
+ *         return offset_0, line_start_0             # <<<<<<<<<<<<<<
  * 
- *     cdef (int, int) parse_rson_true(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):
+ *     cdef (int, int) parse_rson_true(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):
  */
-  __pyx_t_2.f0 = __pyx_v_offset;
-  __pyx_t_2.f1 = __pyx_v_line_start;
+  __pyx_t_2.f0 = __pyx_v_offset_0;
+  __pyx_t_2.f1 = __pyx_v_line_start_0;
   __pyx_r = __pyx_t_2;
   goto __pyx_L0;
 
   /* "RSONParser.pyx":252
- *         return offset, line_start
+ *         return offset_0, line_start_0
  * 
- *     cdef (int, int) parse_rson_literal(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
- *         cdef int count
+ *     cdef (int, int) parse_rson_literal(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):             # <<<<<<<<<<<<<<
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  */
 
@@ -6096,14 +6096,14 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_literal
 }
 
 /* "RSONParser.pyx":370
- *         return offset, line_start
+ *         return offset_0, line_start_0
  * 
- *     cdef (int, int) parse_rson_true(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
- *         cdef int count
+ *     cdef (int, int) parse_rson_true(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):             # <<<<<<<<<<<<<<
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  */
 
-static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_true(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, CYTHON_UNUSED int __pyx_v_indent, CYTHON_UNUSED int __pyx_v_buf_eof, PyObject *__pyx_v_children) {
+static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_true(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset_0, int __pyx_v_line_start_0, CYTHON_UNUSED int __pyx_v_indent_0, CYTHON_UNUSED int __pyx_v_buf_eof, PyObject *__pyx_v_children_0) {
   PyObject *__pyx_v_offset_1 = NULL;
   PyObject *__pyx_v_children_1 = NULL;
   __pyx_ctuple_int__and_int __pyx_r;
@@ -6125,10 +6125,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_true(st
   __Pyx_RefNannySetupContext("parse_rson_true", 0);
 
   /* "RSONParser.pyx":373
- *         cdef int count
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop             # <<<<<<<<<<<<<<
- *             offset_1 = offset
+ *             offset_1 = offset_0
  *             children_1 = []
  */
   while (1) {
@@ -6136,18 +6136,18 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_true(st
     /* "RSONParser.pyx":374
  *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop
- *             offset_1 = offset             # <<<<<<<<<<<<<<
+ *             offset_1 = offset_0             # <<<<<<<<<<<<<<
  *             children_1 = []
  *             while True: # start capture
  */
-    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 374, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset_0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 374, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_v_offset_1 = __pyx_t_1;
     __pyx_t_1 = 0;
 
     /* "RSONParser.pyx":375
  *         while True: # note: return at end of loop
- *             offset_1 = offset
+ *             offset_1 = offset_0
  *             children_1 = []             # <<<<<<<<<<<<<<
  *             while True: # start capture
  *                 if buf[offset_1:offset_1+4] == 'true':
@@ -6158,7 +6158,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_true(st
     __pyx_t_1 = 0;
 
     /* "RSONParser.pyx":376
- *             offset_1 = offset
+ *             offset_1 = offset_0
  *             children_1 = []
  *             while True: # start capture             # <<<<<<<<<<<<<<
  *                 if buf[offset_1:offset_1+4] == 'true':
@@ -6253,7 +6253,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_true(st
  * 
  *                 break             # <<<<<<<<<<<<<<
  *             if offset_1 == -1:
- *                 offset = -1
+ *                 offset_0 = -1
  */
       goto __pyx_L6_break;
     }
@@ -6263,7 +6263,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_true(st
  * 
  *                 break
  *             if offset_1 == -1:             # <<<<<<<<<<<<<<
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break
  */
     __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_1, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 384, __pyx_L1_error)
@@ -6275,18 +6275,18 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_true(st
       /* "RSONParser.pyx":385
  *                 break
  *             if offset_1 == -1:
- *                 offset = -1             # <<<<<<<<<<<<<<
+ *                 offset_0 = -1             # <<<<<<<<<<<<<<
  *                 break
  *             if self.builder is not None:
  */
-      __pyx_v_offset = -1;
+      __pyx_v_offset_0 = -1;
 
       /* "RSONParser.pyx":386
  *             if offset_1 == -1:
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break             # <<<<<<<<<<<<<<
  *             if self.builder is not None:
- *                 children.append(self.builder['bool'](buf, offset, offset_1, children_1))
+ *                 children_0.append(self.builder['bool'](buf, offset_0, offset_1, children_1))
  */
       goto __pyx_L4_break;
 
@@ -6294,16 +6294,16 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_true(st
  * 
  *                 break
  *             if offset_1 == -1:             # <<<<<<<<<<<<<<
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break
  */
     }
 
     /* "RSONParser.pyx":387
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break
  *             if self.builder is not None:             # <<<<<<<<<<<<<<
- *                 children.append(self.builder['bool'](buf, offset, offset_1, children_1))
+ *                 children_0.append(self.builder['bool'](buf, offset_0, offset_1, children_1))
  *             else:
  */
     __pyx_t_6 = (__pyx_v_self->builder != Py_None);
@@ -6313,17 +6313,17 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_true(st
       /* "RSONParser.pyx":388
  *                 break
  *             if self.builder is not None:
- *                 children.append(self.builder['bool'](buf, offset, offset_1, children_1))             # <<<<<<<<<<<<<<
+ *                 children_0.append(self.builder['bool'](buf, offset_0, offset_1, children_1))             # <<<<<<<<<<<<<<
  *             else:
- *                 children.append(ParseNode('bool', offset, offset_1, list(children_1), None))
+ *                 children_0.append(ParseNode('bool', offset_0, offset_1, list(children_1), None))
  */
-      if (unlikely(__pyx_v_children == Py_None)) {
+      if (unlikely(__pyx_v_children_0 == Py_None)) {
         PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
         __PYX_ERR(0, 388, __pyx_L1_error)
       }
       __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_v_self->builder, __pyx_n_u_bool); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 388, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 388, __pyx_L1_error)
+      __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_offset_0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 388, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
       __pyx_t_9 = NULL;
       __pyx_t_10 = 0;
@@ -6378,34 +6378,34 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_true(st
         __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       }
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_12 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 388, __pyx_L1_error)
+      __pyx_t_12 = __Pyx_PyList_Append(__pyx_v_children_0, __pyx_t_1); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 388, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
       /* "RSONParser.pyx":387
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break
  *             if self.builder is not None:             # <<<<<<<<<<<<<<
- *                 children.append(self.builder['bool'](buf, offset, offset_1, children_1))
+ *                 children_0.append(self.builder['bool'](buf, offset_0, offset_1, children_1))
  *             else:
  */
       goto __pyx_L9;
     }
 
     /* "RSONParser.pyx":390
- *                 children.append(self.builder['bool'](buf, offset, offset_1, children_1))
+ *                 children_0.append(self.builder['bool'](buf, offset_0, offset_1, children_1))
  *             else:
- *                 children.append(ParseNode('bool', offset, offset_1, list(children_1), None))             # <<<<<<<<<<<<<<
- *             offset = offset_1
+ *                 children_0.append(ParseNode('bool', offset_0, offset_1, list(children_1), None))             # <<<<<<<<<<<<<<
+ *             offset_0 = offset_1
  * 
  */
     /*else*/ {
-      if (unlikely(__pyx_v_children == Py_None)) {
+      if (unlikely(__pyx_v_children_0 == Py_None)) {
         PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
         __PYX_ERR(0, 390, __pyx_L1_error)
       }
       __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 390, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 390, __pyx_L1_error)
+      __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_v_offset_0); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 390, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
       __pyx_t_8 = PySequence_List(__pyx_v_children_1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 390, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
@@ -6467,26 +6467,26 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_true(st
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
       }
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_12 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 390, __pyx_L1_error)
+      __pyx_t_12 = __Pyx_PyList_Append(__pyx_v_children_0, __pyx_t_1); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 390, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     }
     __pyx_L9:;
 
     /* "RSONParser.pyx":391
  *             else:
- *                 children.append(ParseNode('bool', offset, offset_1, list(children_1), None))
- *             offset = offset_1             # <<<<<<<<<<<<<<
+ *                 children_0.append(ParseNode('bool', offset_0, offset_1, list(children_1), None))
+ *             offset_0 = offset_1             # <<<<<<<<<<<<<<
  * 
  *             break
  */
     __pyx_t_10 = __Pyx_PyInt_As_int(__pyx_v_offset_1); if (unlikely((__pyx_t_10 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 391, __pyx_L1_error)
-    __pyx_v_offset = __pyx_t_10;
+    __pyx_v_offset_0 = __pyx_t_10;
 
     /* "RSONParser.pyx":393
- *             offset = offset_1
+ *             offset_0 = offset_1
  * 
  *             break             # <<<<<<<<<<<<<<
- *         return offset, line_start
+ *         return offset_0, line_start_0
  * 
  */
     goto __pyx_L4_break;
@@ -6496,20 +6496,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_true(st
   /* "RSONParser.pyx":394
  * 
  *             break
- *         return offset, line_start             # <<<<<<<<<<<<<<
+ *         return offset_0, line_start_0             # <<<<<<<<<<<<<<
  * 
- *     cdef (int, int) parse_rson_false(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):
+ *     cdef (int, int) parse_rson_false(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):
  */
-  __pyx_t_14.f0 = __pyx_v_offset;
-  __pyx_t_14.f1 = __pyx_v_line_start;
+  __pyx_t_14.f0 = __pyx_v_offset_0;
+  __pyx_t_14.f1 = __pyx_v_line_start_0;
   __pyx_r = __pyx_t_14;
   goto __pyx_L0;
 
   /* "RSONParser.pyx":370
- *         return offset, line_start
+ *         return offset_0, line_start_0
  * 
- *     cdef (int, int) parse_rson_true(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
- *         cdef int count
+ *     cdef (int, int) parse_rson_true(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):             # <<<<<<<<<<<<<<
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  */
 
@@ -6531,14 +6531,14 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_true(st
 }
 
 /* "RSONParser.pyx":396
- *         return offset, line_start
+ *         return offset_0, line_start_0
  * 
- *     cdef (int, int) parse_rson_false(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
- *         cdef int count
+ *     cdef (int, int) parse_rson_false(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):             # <<<<<<<<<<<<<<
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  */
 
-static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_false(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, CYTHON_UNUSED int __pyx_v_indent, CYTHON_UNUSED int __pyx_v_buf_eof, PyObject *__pyx_v_children) {
+static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_false(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset_0, int __pyx_v_line_start_0, CYTHON_UNUSED int __pyx_v_indent_0, CYTHON_UNUSED int __pyx_v_buf_eof, PyObject *__pyx_v_children_0) {
   PyObject *__pyx_v_offset_1 = NULL;
   PyObject *__pyx_v_children_1 = NULL;
   __pyx_ctuple_int__and_int __pyx_r;
@@ -6560,10 +6560,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_false(s
   __Pyx_RefNannySetupContext("parse_rson_false", 0);
 
   /* "RSONParser.pyx":399
- *         cdef int count
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop             # <<<<<<<<<<<<<<
- *             offset_1 = offset
+ *             offset_1 = offset_0
  *             children_1 = []
  */
   while (1) {
@@ -6571,18 +6571,18 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_false(s
     /* "RSONParser.pyx":400
  *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop
- *             offset_1 = offset             # <<<<<<<<<<<<<<
+ *             offset_1 = offset_0             # <<<<<<<<<<<<<<
  *             children_1 = []
  *             while True: # start capture
  */
-    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 400, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset_0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 400, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_v_offset_1 = __pyx_t_1;
     __pyx_t_1 = 0;
 
     /* "RSONParser.pyx":401
  *         while True: # note: return at end of loop
- *             offset_1 = offset
+ *             offset_1 = offset_0
  *             children_1 = []             # <<<<<<<<<<<<<<
  *             while True: # start capture
  *                 if buf[offset_1:offset_1+5] == 'false':
@@ -6593,7 +6593,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_false(s
     __pyx_t_1 = 0;
 
     /* "RSONParser.pyx":402
- *             offset_1 = offset
+ *             offset_1 = offset_0
  *             children_1 = []
  *             while True: # start capture             # <<<<<<<<<<<<<<
  *                 if buf[offset_1:offset_1+5] == 'false':
@@ -6688,7 +6688,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_false(s
  * 
  *                 break             # <<<<<<<<<<<<<<
  *             if offset_1 == -1:
- *                 offset = -1
+ *                 offset_0 = -1
  */
       goto __pyx_L6_break;
     }
@@ -6698,7 +6698,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_false(s
  * 
  *                 break
  *             if offset_1 == -1:             # <<<<<<<<<<<<<<
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break
  */
     __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_1, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 410, __pyx_L1_error)
@@ -6710,18 +6710,18 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_false(s
       /* "RSONParser.pyx":411
  *                 break
  *             if offset_1 == -1:
- *                 offset = -1             # <<<<<<<<<<<<<<
+ *                 offset_0 = -1             # <<<<<<<<<<<<<<
  *                 break
  *             if self.builder is not None:
  */
-      __pyx_v_offset = -1;
+      __pyx_v_offset_0 = -1;
 
       /* "RSONParser.pyx":412
  *             if offset_1 == -1:
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break             # <<<<<<<<<<<<<<
  *             if self.builder is not None:
- *                 children.append(self.builder['bool'](buf, offset, offset_1, children_1))
+ *                 children_0.append(self.builder['bool'](buf, offset_0, offset_1, children_1))
  */
       goto __pyx_L4_break;
 
@@ -6729,16 +6729,16 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_false(s
  * 
  *                 break
  *             if offset_1 == -1:             # <<<<<<<<<<<<<<
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break
  */
     }
 
     /* "RSONParser.pyx":413
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break
  *             if self.builder is not None:             # <<<<<<<<<<<<<<
- *                 children.append(self.builder['bool'](buf, offset, offset_1, children_1))
+ *                 children_0.append(self.builder['bool'](buf, offset_0, offset_1, children_1))
  *             else:
  */
     __pyx_t_6 = (__pyx_v_self->builder != Py_None);
@@ -6748,17 +6748,17 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_false(s
       /* "RSONParser.pyx":414
  *                 break
  *             if self.builder is not None:
- *                 children.append(self.builder['bool'](buf, offset, offset_1, children_1))             # <<<<<<<<<<<<<<
+ *                 children_0.append(self.builder['bool'](buf, offset_0, offset_1, children_1))             # <<<<<<<<<<<<<<
  *             else:
- *                 children.append(ParseNode('bool', offset, offset_1, list(children_1), None))
+ *                 children_0.append(ParseNode('bool', offset_0, offset_1, list(children_1), None))
  */
-      if (unlikely(__pyx_v_children == Py_None)) {
+      if (unlikely(__pyx_v_children_0 == Py_None)) {
         PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
         __PYX_ERR(0, 414, __pyx_L1_error)
       }
       __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_v_self->builder, __pyx_n_u_bool); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 414, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 414, __pyx_L1_error)
+      __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_offset_0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 414, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
       __pyx_t_9 = NULL;
       __pyx_t_10 = 0;
@@ -6813,34 +6813,34 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_false(s
         __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       }
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_12 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 414, __pyx_L1_error)
+      __pyx_t_12 = __Pyx_PyList_Append(__pyx_v_children_0, __pyx_t_1); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 414, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
       /* "RSONParser.pyx":413
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break
  *             if self.builder is not None:             # <<<<<<<<<<<<<<
- *                 children.append(self.builder['bool'](buf, offset, offset_1, children_1))
+ *                 children_0.append(self.builder['bool'](buf, offset_0, offset_1, children_1))
  *             else:
  */
       goto __pyx_L9;
     }
 
     /* "RSONParser.pyx":416
- *                 children.append(self.builder['bool'](buf, offset, offset_1, children_1))
+ *                 children_0.append(self.builder['bool'](buf, offset_0, offset_1, children_1))
  *             else:
- *                 children.append(ParseNode('bool', offset, offset_1, list(children_1), None))             # <<<<<<<<<<<<<<
- *             offset = offset_1
+ *                 children_0.append(ParseNode('bool', offset_0, offset_1, list(children_1), None))             # <<<<<<<<<<<<<<
+ *             offset_0 = offset_1
  * 
  */
     /*else*/ {
-      if (unlikely(__pyx_v_children == Py_None)) {
+      if (unlikely(__pyx_v_children_0 == Py_None)) {
         PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
         __PYX_ERR(0, 416, __pyx_L1_error)
       }
       __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 416, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 416, __pyx_L1_error)
+      __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_v_offset_0); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 416, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
       __pyx_t_8 = PySequence_List(__pyx_v_children_1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 416, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
@@ -6902,26 +6902,26 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_false(s
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
       }
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_12 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 416, __pyx_L1_error)
+      __pyx_t_12 = __Pyx_PyList_Append(__pyx_v_children_0, __pyx_t_1); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 416, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     }
     __pyx_L9:;
 
     /* "RSONParser.pyx":417
  *             else:
- *                 children.append(ParseNode('bool', offset, offset_1, list(children_1), None))
- *             offset = offset_1             # <<<<<<<<<<<<<<
+ *                 children_0.append(ParseNode('bool', offset_0, offset_1, list(children_1), None))
+ *             offset_0 = offset_1             # <<<<<<<<<<<<<<
  * 
  *             break
  */
     __pyx_t_10 = __Pyx_PyInt_As_int(__pyx_v_offset_1); if (unlikely((__pyx_t_10 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 417, __pyx_L1_error)
-    __pyx_v_offset = __pyx_t_10;
+    __pyx_v_offset_0 = __pyx_t_10;
 
     /* "RSONParser.pyx":419
- *             offset = offset_1
+ *             offset_0 = offset_1
  * 
  *             break             # <<<<<<<<<<<<<<
- *         return offset, line_start
+ *         return offset_0, line_start_0
  * 
  */
     goto __pyx_L4_break;
@@ -6931,20 +6931,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_false(s
   /* "RSONParser.pyx":420
  * 
  *             break
- *         return offset, line_start             # <<<<<<<<<<<<<<
+ *         return offset_0, line_start_0             # <<<<<<<<<<<<<<
  * 
- *     cdef (int, int) parse_rson_null(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):
+ *     cdef (int, int) parse_rson_null(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):
  */
-  __pyx_t_14.f0 = __pyx_v_offset;
-  __pyx_t_14.f1 = __pyx_v_line_start;
+  __pyx_t_14.f0 = __pyx_v_offset_0;
+  __pyx_t_14.f1 = __pyx_v_line_start_0;
   __pyx_r = __pyx_t_14;
   goto __pyx_L0;
 
   /* "RSONParser.pyx":396
- *         return offset, line_start
+ *         return offset_0, line_start_0
  * 
- *     cdef (int, int) parse_rson_false(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
- *         cdef int count
+ *     cdef (int, int) parse_rson_false(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):             # <<<<<<<<<<<<<<
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  */
 
@@ -6966,14 +6966,14 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_false(s
 }
 
 /* "RSONParser.pyx":422
- *         return offset, line_start
+ *         return offset_0, line_start_0
  * 
- *     cdef (int, int) parse_rson_null(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
- *         cdef int count
+ *     cdef (int, int) parse_rson_null(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):             # <<<<<<<<<<<<<<
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  */
 
-static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_null(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, CYTHON_UNUSED int __pyx_v_indent, CYTHON_UNUSED int __pyx_v_buf_eof, PyObject *__pyx_v_children) {
+static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_null(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset_0, int __pyx_v_line_start_0, CYTHON_UNUSED int __pyx_v_indent_0, CYTHON_UNUSED int __pyx_v_buf_eof, PyObject *__pyx_v_children_0) {
   PyObject *__pyx_v_offset_1 = NULL;
   PyObject *__pyx_v_children_1 = NULL;
   __pyx_ctuple_int__and_int __pyx_r;
@@ -6995,10 +6995,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_null(st
   __Pyx_RefNannySetupContext("parse_rson_null", 0);
 
   /* "RSONParser.pyx":425
- *         cdef int count
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop             # <<<<<<<<<<<<<<
- *             offset_1 = offset
+ *             offset_1 = offset_0
  *             children_1 = []
  */
   while (1) {
@@ -7006,18 +7006,18 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_null(st
     /* "RSONParser.pyx":426
  *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop
- *             offset_1 = offset             # <<<<<<<<<<<<<<
+ *             offset_1 = offset_0             # <<<<<<<<<<<<<<
  *             children_1 = []
  *             while True: # start capture
  */
-    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 426, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset_0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 426, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_v_offset_1 = __pyx_t_1;
     __pyx_t_1 = 0;
 
     /* "RSONParser.pyx":427
  *         while True: # note: return at end of loop
- *             offset_1 = offset
+ *             offset_1 = offset_0
  *             children_1 = []             # <<<<<<<<<<<<<<
  *             while True: # start capture
  *                 if buf[offset_1:offset_1+4] == 'null':
@@ -7028,7 +7028,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_null(st
     __pyx_t_1 = 0;
 
     /* "RSONParser.pyx":428
- *             offset_1 = offset
+ *             offset_1 = offset_0
  *             children_1 = []
  *             while True: # start capture             # <<<<<<<<<<<<<<
  *                 if buf[offset_1:offset_1+4] == 'null':
@@ -7123,7 +7123,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_null(st
  * 
  *                 break             # <<<<<<<<<<<<<<
  *             if offset_1 == -1:
- *                 offset = -1
+ *                 offset_0 = -1
  */
       goto __pyx_L6_break;
     }
@@ -7133,7 +7133,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_null(st
  * 
  *                 break
  *             if offset_1 == -1:             # <<<<<<<<<<<<<<
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break
  */
     __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_1, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 436, __pyx_L1_error)
@@ -7145,18 +7145,18 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_null(st
       /* "RSONParser.pyx":437
  *                 break
  *             if offset_1 == -1:
- *                 offset = -1             # <<<<<<<<<<<<<<
+ *                 offset_0 = -1             # <<<<<<<<<<<<<<
  *                 break
  *             if self.builder is not None:
  */
-      __pyx_v_offset = -1;
+      __pyx_v_offset_0 = -1;
 
       /* "RSONParser.pyx":438
  *             if offset_1 == -1:
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break             # <<<<<<<<<<<<<<
  *             if self.builder is not None:
- *                 children.append(self.builder['null'](buf, offset, offset_1, children_1))
+ *                 children_0.append(self.builder['null'](buf, offset_0, offset_1, children_1))
  */
       goto __pyx_L4_break;
 
@@ -7164,16 +7164,16 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_null(st
  * 
  *                 break
  *             if offset_1 == -1:             # <<<<<<<<<<<<<<
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break
  */
     }
 
     /* "RSONParser.pyx":439
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break
  *             if self.builder is not None:             # <<<<<<<<<<<<<<
- *                 children.append(self.builder['null'](buf, offset, offset_1, children_1))
+ *                 children_0.append(self.builder['null'](buf, offset_0, offset_1, children_1))
  *             else:
  */
     __pyx_t_6 = (__pyx_v_self->builder != Py_None);
@@ -7183,17 +7183,17 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_null(st
       /* "RSONParser.pyx":440
  *                 break
  *             if self.builder is not None:
- *                 children.append(self.builder['null'](buf, offset, offset_1, children_1))             # <<<<<<<<<<<<<<
+ *                 children_0.append(self.builder['null'](buf, offset_0, offset_1, children_1))             # <<<<<<<<<<<<<<
  *             else:
- *                 children.append(ParseNode('null', offset, offset_1, list(children_1), None))
+ *                 children_0.append(ParseNode('null', offset_0, offset_1, list(children_1), None))
  */
-      if (unlikely(__pyx_v_children == Py_None)) {
+      if (unlikely(__pyx_v_children_0 == Py_None)) {
         PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
         __PYX_ERR(0, 440, __pyx_L1_error)
       }
       __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_v_self->builder, __pyx_n_u_null); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 440, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 440, __pyx_L1_error)
+      __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_offset_0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 440, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
       __pyx_t_9 = NULL;
       __pyx_t_10 = 0;
@@ -7248,34 +7248,34 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_null(st
         __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       }
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_12 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 440, __pyx_L1_error)
+      __pyx_t_12 = __Pyx_PyList_Append(__pyx_v_children_0, __pyx_t_1); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 440, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
       /* "RSONParser.pyx":439
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break
  *             if self.builder is not None:             # <<<<<<<<<<<<<<
- *                 children.append(self.builder['null'](buf, offset, offset_1, children_1))
+ *                 children_0.append(self.builder['null'](buf, offset_0, offset_1, children_1))
  *             else:
  */
       goto __pyx_L9;
     }
 
     /* "RSONParser.pyx":442
- *                 children.append(self.builder['null'](buf, offset, offset_1, children_1))
+ *                 children_0.append(self.builder['null'](buf, offset_0, offset_1, children_1))
  *             else:
- *                 children.append(ParseNode('null', offset, offset_1, list(children_1), None))             # <<<<<<<<<<<<<<
- *             offset = offset_1
+ *                 children_0.append(ParseNode('null', offset_0, offset_1, list(children_1), None))             # <<<<<<<<<<<<<<
+ *             offset_0 = offset_1
  * 
  */
     /*else*/ {
-      if (unlikely(__pyx_v_children == Py_None)) {
+      if (unlikely(__pyx_v_children_0 == Py_None)) {
         PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
         __PYX_ERR(0, 442, __pyx_L1_error)
       }
       __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 442, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 442, __pyx_L1_error)
+      __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_v_offset_0); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 442, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
       __pyx_t_8 = PySequence_List(__pyx_v_children_1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 442, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
@@ -7337,26 +7337,26 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_null(st
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
       }
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_12 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 442, __pyx_L1_error)
+      __pyx_t_12 = __Pyx_PyList_Append(__pyx_v_children_0, __pyx_t_1); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 442, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     }
     __pyx_L9:;
 
     /* "RSONParser.pyx":443
  *             else:
- *                 children.append(ParseNode('null', offset, offset_1, list(children_1), None))
- *             offset = offset_1             # <<<<<<<<<<<<<<
+ *                 children_0.append(ParseNode('null', offset_0, offset_1, list(children_1), None))
+ *             offset_0 = offset_1             # <<<<<<<<<<<<<<
  * 
  *             break
  */
     __pyx_t_10 = __Pyx_PyInt_As_int(__pyx_v_offset_1); if (unlikely((__pyx_t_10 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 443, __pyx_L1_error)
-    __pyx_v_offset = __pyx_t_10;
+    __pyx_v_offset_0 = __pyx_t_10;
 
     /* "RSONParser.pyx":445
- *             offset = offset_1
+ *             offset_0 = offset_1
  * 
  *             break             # <<<<<<<<<<<<<<
- *         return offset, line_start
+ *         return offset_0, line_start_0
  * 
  */
     goto __pyx_L4_break;
@@ -7366,20 +7366,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_null(st
   /* "RSONParser.pyx":446
  * 
  *             break
- *         return offset, line_start             # <<<<<<<<<<<<<<
+ *         return offset_0, line_start_0             # <<<<<<<<<<<<<<
  * 
- *     cdef (int, int) parse_rson_number(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):
+ *     cdef (int, int) parse_rson_number(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):
  */
-  __pyx_t_14.f0 = __pyx_v_offset;
-  __pyx_t_14.f1 = __pyx_v_line_start;
+  __pyx_t_14.f0 = __pyx_v_offset_0;
+  __pyx_t_14.f1 = __pyx_v_line_start_0;
   __pyx_r = __pyx_t_14;
   goto __pyx_L0;
 
   /* "RSONParser.pyx":422
- *         return offset, line_start
+ *         return offset_0, line_start_0
  * 
- *     cdef (int, int) parse_rson_null(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
- *         cdef int count
+ *     cdef (int, int) parse_rson_null(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):             # <<<<<<<<<<<<<<
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  */
 
@@ -7401,15 +7401,15 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_null(st
 }
 
 /* "RSONParser.pyx":448
- *         return offset, line_start
+ *         return offset_0, line_start_0
  * 
- *     cdef (int, int) parse_rson_number(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
- *         cdef int count
+ *     cdef (int, int) parse_rson_number(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):             # <<<<<<<<<<<<<<
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  */
 
-static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, CYTHON_UNUSED int __pyx_v_indent, int __pyx_v_buf_eof, PyObject *__pyx_v_children) {
-  int __pyx_v_count;
+static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset_0, int __pyx_v_line_start_0, CYTHON_UNUSED int __pyx_v_indent_0, int __pyx_v_buf_eof, PyObject *__pyx_v_children_0) {
+  int __pyx_v_count_0;
   Py_UCS4 __pyx_v_chr;
   PyObject *__pyx_v_offset_1 = NULL;
   PyObject *__pyx_v_children_1 = NULL;
@@ -7445,10 +7445,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
   __Pyx_RefNannySetupContext("parse_rson_number", 0);
 
   /* "RSONParser.pyx":451
- *         cdef int count
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop             # <<<<<<<<<<<<<<
- *             offset_1 = offset
+ *             offset_1 = offset_0
  *             children_1 = []
  */
   while (1) {
@@ -7456,18 +7456,18 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
     /* "RSONParser.pyx":452
  *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop
- *             offset_1 = offset             # <<<<<<<<<<<<<<
+ *             offset_1 = offset_0             # <<<<<<<<<<<<<<
  *             children_1 = []
  *             while True: # start capture
  */
-    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 452, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset_0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 452, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_v_offset_1 = __pyx_t_1;
     __pyx_t_1 = 0;
 
     /* "RSONParser.pyx":453
  *         while True: # note: return at end of loop
- *             offset_1 = offset
+ *             offset_1 = offset_0
  *             children_1 = []             # <<<<<<<<<<<<<<
  *             while True: # start capture
  *                 while True: # start choice
@@ -7478,7 +7478,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
     __pyx_t_1 = 0;
 
     /* "RSONParser.pyx":454
- *             offset_1 = offset
+ *             offset_1 = offset_0
  *             children_1 = []
  *             while True: # start capture             # <<<<<<<<<<<<<<
  *                 while True: # start choice
@@ -7491,7 +7491,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *             while True: # start capture
  *                 while True: # start choice             # <<<<<<<<<<<<<<
  *                     offset_2 = offset_1
- *                     line_start_1 = line_start
+ *                     line_start_1 = line_start_0
  */
       while (1) {
 
@@ -7499,7 +7499,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *             while True: # start capture
  *                 while True: # start choice
  *                     offset_2 = offset_1             # <<<<<<<<<<<<<<
- *                     line_start_1 = line_start
+ *                     line_start_1 = line_start_0
  *                     children_2 = []
  */
         __Pyx_INCREF(__pyx_v_offset_1);
@@ -7508,18 +7508,18 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
         /* "RSONParser.pyx":457
  *                 while True: # start choice
  *                     offset_2 = offset_1
- *                     line_start_1 = line_start             # <<<<<<<<<<<<<<
+ *                     line_start_1 = line_start_0             # <<<<<<<<<<<<<<
  *                     children_2 = []
  *                     while True: # case
  */
-        __pyx_v_line_start_1 = __pyx_v_line_start;
+        __pyx_v_line_start_1 = __pyx_v_line_start_0;
 
         /* "RSONParser.pyx":458
  *                     offset_2 = offset_1
- *                     line_start_1 = line_start
+ *                     line_start_1 = line_start_0
  *                     children_2 = []             # <<<<<<<<<<<<<<
  *                     while True: # case
- *                         count = 0
+ *                         count_0 = 0
  */
         __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 458, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
@@ -7527,10 +7527,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
         __pyx_t_1 = 0;
 
         /* "RSONParser.pyx":459
- *                     line_start_1 = line_start
+ *                     line_start_1 = line_start_0
  *                     children_2 = []
  *                     while True: # case             # <<<<<<<<<<<<<<
- *                         count = 0
+ *                         count_0 = 0
  *                         while True:
  */
         while (1) {
@@ -7538,15 +7538,15 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
           /* "RSONParser.pyx":460
  *                     children_2 = []
  *                     while True: # case
- *                         count = 0             # <<<<<<<<<<<<<<
+ *                         count_0 = 0             # <<<<<<<<<<<<<<
  *                         while True:
  *                             offset_3 = offset_2
  */
-          __pyx_v_count = 0;
+          __pyx_v_count_0 = 0;
 
           /* "RSONParser.pyx":461
  *                     while True: # case
- *                         count = 0
+ *                         count_0 = 0
  *                         while True:             # <<<<<<<<<<<<<<
  *                             offset_3 = offset_2
  *                             line_start_2 = line_start_1
@@ -7554,7 +7554,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
           while (1) {
 
             /* "RSONParser.pyx":462
- *                         count = 0
+ *                         count_0 = 0
  *                         while True:
  *                             offset_3 = offset_2             # <<<<<<<<<<<<<<
  *                             line_start_2 = line_start_1
@@ -7722,7 +7722,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                             if offset_2 == offset_3: break
  *                             offset_2 = offset_3             # <<<<<<<<<<<<<<
  *                             line_start_1 = line_start_2
- *                             count += 1
+ *                             count_0 += 1
  */
             __Pyx_INCREF(__pyx_v_offset_3);
             __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_v_offset_3);
@@ -7731,7 +7731,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                             if offset_2 == offset_3: break
  *                             offset_2 = offset_3
  *                             line_start_1 = line_start_2             # <<<<<<<<<<<<<<
- *                             count += 1
+ *                             count_0 += 1
  * 
  */
             __pyx_v_line_start_1 = __pyx_v_line_start_2;
@@ -7739,16 +7739,16 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
             /* "RSONParser.pyx":480
  *                             offset_2 = offset_3
  *                             line_start_1 = line_start_2
- *                             count += 1             # <<<<<<<<<<<<<<
+ *                             count_0 += 1             # <<<<<<<<<<<<<<
  * 
  *                         if buf[offset_2:offset_2+2] == '0x':
  */
-            __pyx_v_count = (__pyx_v_count + 1);
+            __pyx_v_count_0 = (__pyx_v_count_0 + 1);
           }
           __pyx_L12_break:;
 
           /* "RSONParser.pyx":482
- *                             count += 1
+ *                             count_0 += 1
  * 
  *                         if buf[offset_2:offset_2+2] == '0x':             # <<<<<<<<<<<<<<
  *                             offset_2 += 2
@@ -7798,7 +7798,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
             __pyx_t_2 = 0;
 
             /* "RSONParser.pyx":482
- *                             count += 1
+ *                             count_0 += 1
  * 
  *                         if buf[offset_2:offset_2+2] == '0x':             # <<<<<<<<<<<<<<
  *                             offset_2 += 2
@@ -8009,7 +8009,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                             offset_2 = -1
  *                             break             # <<<<<<<<<<<<<<
  * 
- *                         count = 0
+ *                         count_0 = 0
  */
             goto __pyx_L10_break;
           }
@@ -8018,15 +8018,15 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
           /* "RSONParser.pyx":503
  *                             break
  * 
- *                         count = 0             # <<<<<<<<<<<<<<
+ *                         count_0 = 0             # <<<<<<<<<<<<<<
  *                         while True:
  *                             offset_3 = offset_2
  */
-          __pyx_v_count = 0;
+          __pyx_v_count_0 = 0;
 
           /* "RSONParser.pyx":504
  * 
- *                         count = 0
+ *                         count_0 = 0
  *                         while True:             # <<<<<<<<<<<<<<
  *                             offset_3 = offset_2
  *                             line_start_2 = line_start_1
@@ -8034,7 +8034,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
           while (1) {
 
             /* "RSONParser.pyx":505
- *                         count = 0
+ *                         count_0 = 0
  *                         while True:
  *                             offset_3 = offset_2             # <<<<<<<<<<<<<<
  *                             line_start_2 = line_start_1
@@ -8289,7 +8289,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                             if offset_2 == offset_3: break
  *                             offset_2 = offset_3             # <<<<<<<<<<<<<<
  *                             line_start_1 = line_start_2
- *                             count += 1
+ *                             count_0 += 1
  */
             __Pyx_INCREF(__pyx_v_offset_3);
             __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_v_offset_3);
@@ -8298,7 +8298,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                             if offset_2 == offset_3: break
  *                             offset_2 = offset_3
  *                             line_start_1 = line_start_2             # <<<<<<<<<<<<<<
- *                             count += 1
+ *                             count_0 += 1
  * 
  */
             __pyx_v_line_start_1 = __pyx_v_line_start_2;
@@ -8306,11 +8306,11 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
             /* "RSONParser.pyx":527
  *                             offset_2 = offset_3
  *                             line_start_1 = line_start_2
- *                             count += 1             # <<<<<<<<<<<<<<
+ *                             count_0 += 1             # <<<<<<<<<<<<<<
  * 
  * 
  */
-            __pyx_v_count = (__pyx_v_count + 1);
+            __pyx_v_count_0 = (__pyx_v_count_0 + 1);
           }
           __pyx_L19_break:;
 
@@ -8330,7 +8330,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                         break
  *                     if offset_2 != -1:             # <<<<<<<<<<<<<<
  *                         offset_1 = offset_2
- *                         line_start = line_start_1
+ *                         line_start_0 = line_start_1
  */
         __pyx_t_2 = __Pyx_PyInt_NeObjC(__pyx_v_offset_2, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 531, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
@@ -8342,7 +8342,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                         break
  *                     if offset_2 != -1:
  *                         offset_1 = offset_2             # <<<<<<<<<<<<<<
- *                         line_start = line_start_1
+ *                         line_start_0 = line_start_1
  *                         children_1.extend(children_2)
  */
           __Pyx_INCREF(__pyx_v_offset_2);
@@ -8351,15 +8351,15 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
           /* "RSONParser.pyx":533
  *                     if offset_2 != -1:
  *                         offset_1 = offset_2
- *                         line_start = line_start_1             # <<<<<<<<<<<<<<
+ *                         line_start_0 = line_start_1             # <<<<<<<<<<<<<<
  *                         children_1.extend(children_2)
  *                         break
  */
-          __pyx_v_line_start = __pyx_v_line_start_1;
+          __pyx_v_line_start_0 = __pyx_v_line_start_1;
 
           /* "RSONParser.pyx":534
  *                         offset_1 = offset_2
- *                         line_start = line_start_1
+ *                         line_start_0 = line_start_1
  *                         children_1.extend(children_2)             # <<<<<<<<<<<<<<
  *                         break
  *                     # end case
@@ -8367,7 +8367,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
           __pyx_t_9 = __Pyx_PyList_Extend(__pyx_v_children_1, __pyx_v_children_2); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(0, 534, __pyx_L1_error)
 
           /* "RSONParser.pyx":535
- *                         line_start = line_start_1
+ *                         line_start_0 = line_start_1
  *                         children_1.extend(children_2)
  *                         break             # <<<<<<<<<<<<<<
  *                     # end case
@@ -8380,7 +8380,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                         break
  *                     if offset_2 != -1:             # <<<<<<<<<<<<<<
  *                         offset_1 = offset_2
- *                         line_start = line_start_1
+ *                         line_start_0 = line_start_1
  */
         }
 
@@ -8388,7 +8388,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                         break
  *                     # end case
  *                     offset_2 = offset_1             # <<<<<<<<<<<<<<
- *                     line_start_1 = line_start
+ *                     line_start_1 = line_start_0
  *                     children_2 = []
  */
         __Pyx_INCREF(__pyx_v_offset_1);
@@ -8397,18 +8397,18 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
         /* "RSONParser.pyx":538
  *                     # end case
  *                     offset_2 = offset_1
- *                     line_start_1 = line_start             # <<<<<<<<<<<<<<
+ *                     line_start_1 = line_start_0             # <<<<<<<<<<<<<<
  *                     children_2 = []
  *                     while True: # case
  */
-        __pyx_v_line_start_1 = __pyx_v_line_start;
+        __pyx_v_line_start_1 = __pyx_v_line_start_0;
 
         /* "RSONParser.pyx":539
  *                     offset_2 = offset_1
- *                     line_start_1 = line_start
+ *                     line_start_1 = line_start_0
  *                     children_2 = []             # <<<<<<<<<<<<<<
  *                     while True: # case
- *                         count = 0
+ *                         count_0 = 0
  */
         __pyx_t_2 = PyList_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 539, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
@@ -8416,10 +8416,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
         __pyx_t_2 = 0;
 
         /* "RSONParser.pyx":540
- *                     line_start_1 = line_start
+ *                     line_start_1 = line_start_0
  *                     children_2 = []
  *                     while True: # case             # <<<<<<<<<<<<<<
- *                         count = 0
+ *                         count_0 = 0
  *                         while True:
  */
         while (1) {
@@ -8427,15 +8427,15 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
           /* "RSONParser.pyx":541
  *                     children_2 = []
  *                     while True: # case
- *                         count = 0             # <<<<<<<<<<<<<<
+ *                         count_0 = 0             # <<<<<<<<<<<<<<
  *                         while True:
  *                             offset_3 = offset_2
  */
-          __pyx_v_count = 0;
+          __pyx_v_count_0 = 0;
 
           /* "RSONParser.pyx":542
  *                     while True: # case
- *                         count = 0
+ *                         count_0 = 0
  *                         while True:             # <<<<<<<<<<<<<<
  *                             offset_3 = offset_2
  *                             line_start_2 = line_start_1
@@ -8443,7 +8443,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
           while (1) {
 
             /* "RSONParser.pyx":543
- *                         count = 0
+ *                         count_0 = 0
  *                         while True:
  *                             offset_3 = offset_2             # <<<<<<<<<<<<<<
  *                             line_start_2 = line_start_1
@@ -8611,7 +8611,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                             if offset_2 == offset_3: break
  *                             offset_2 = offset_3             # <<<<<<<<<<<<<<
  *                             line_start_1 = line_start_2
- *                             count += 1
+ *                             count_0 += 1
  */
             __Pyx_INCREF(__pyx_v_offset_3);
             __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_v_offset_3);
@@ -8620,7 +8620,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                             if offset_2 == offset_3: break
  *                             offset_2 = offset_3
  *                             line_start_1 = line_start_2             # <<<<<<<<<<<<<<
- *                             count += 1
+ *                             count_0 += 1
  * 
  */
             __pyx_v_line_start_1 = __pyx_v_line_start_2;
@@ -8628,16 +8628,16 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
             /* "RSONParser.pyx":561
  *                             offset_2 = offset_3
  *                             line_start_1 = line_start_2
- *                             count += 1             # <<<<<<<<<<<<<<
+ *                             count_0 += 1             # <<<<<<<<<<<<<<
  * 
  *                         if buf[offset_2:offset_2+2] == '0o':
  */
-            __pyx_v_count = (__pyx_v_count + 1);
+            __pyx_v_count_0 = (__pyx_v_count_0 + 1);
           }
           __pyx_L27_break:;
 
           /* "RSONParser.pyx":563
- *                             count += 1
+ *                             count_0 += 1
  * 
  *                         if buf[offset_2:offset_2+2] == '0o':             # <<<<<<<<<<<<<<
  *                             offset_2 += 2
@@ -8687,7 +8687,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
             __pyx_t_1 = 0;
 
             /* "RSONParser.pyx":563
- *                             count += 1
+ *                             count_0 += 1
  * 
  *                         if buf[offset_2:offset_2+2] == '0o':             # <<<<<<<<<<<<<<
  *                             offset_2 += 2
@@ -8826,7 +8826,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                             offset_2 = -1
  *                             break             # <<<<<<<<<<<<<<
  * 
- *                         count = 0
+ *                         count_0 = 0
  */
             goto __pyx_L25_break;
           }
@@ -8835,15 +8835,15 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
           /* "RSONParser.pyx":580
  *                             break
  * 
- *                         count = 0             # <<<<<<<<<<<<<<
+ *                         count_0 = 0             # <<<<<<<<<<<<<<
  *                         while True:
  *                             offset_3 = offset_2
  */
-          __pyx_v_count = 0;
+          __pyx_v_count_0 = 0;
 
           /* "RSONParser.pyx":581
  * 
- *                         count = 0
+ *                         count_0 = 0
  *                         while True:             # <<<<<<<<<<<<<<
  *                             offset_3 = offset_2
  *                             line_start_2 = line_start_1
@@ -8851,7 +8851,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
           while (1) {
 
             /* "RSONParser.pyx":582
- *                         count = 0
+ *                         count_0 = 0
  *                         while True:
  *                             offset_3 = offset_2             # <<<<<<<<<<<<<<
  *                             line_start_2 = line_start_1
@@ -9034,7 +9034,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                             if offset_2 == offset_3: break
  *                             offset_2 = offset_3             # <<<<<<<<<<<<<<
  *                             line_start_1 = line_start_2
- *                             count += 1
+ *                             count_0 += 1
  */
             __Pyx_INCREF(__pyx_v_offset_3);
             __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_v_offset_3);
@@ -9043,7 +9043,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                             if offset_2 == offset_3: break
  *                             offset_2 = offset_3
  *                             line_start_1 = line_start_2             # <<<<<<<<<<<<<<
- *                             count += 1
+ *                             count_0 += 1
  * 
  */
             __pyx_v_line_start_1 = __pyx_v_line_start_2;
@@ -9051,11 +9051,11 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
             /* "RSONParser.pyx":600
  *                             offset_2 = offset_3
  *                             line_start_1 = line_start_2
- *                             count += 1             # <<<<<<<<<<<<<<
+ *                             count_0 += 1             # <<<<<<<<<<<<<<
  * 
  * 
  */
-            __pyx_v_count = (__pyx_v_count + 1);
+            __pyx_v_count_0 = (__pyx_v_count_0 + 1);
           }
           __pyx_L34_break:;
 
@@ -9075,7 +9075,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                         break
  *                     if offset_2 != -1:             # <<<<<<<<<<<<<<
  *                         offset_1 = offset_2
- *                         line_start = line_start_1
+ *                         line_start_0 = line_start_1
  */
         __pyx_t_1 = __Pyx_PyInt_NeObjC(__pyx_v_offset_2, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 604, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
@@ -9087,7 +9087,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                         break
  *                     if offset_2 != -1:
  *                         offset_1 = offset_2             # <<<<<<<<<<<<<<
- *                         line_start = line_start_1
+ *                         line_start_0 = line_start_1
  *                         children_1.extend(children_2)
  */
           __Pyx_INCREF(__pyx_v_offset_2);
@@ -9096,15 +9096,15 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
           /* "RSONParser.pyx":606
  *                     if offset_2 != -1:
  *                         offset_1 = offset_2
- *                         line_start = line_start_1             # <<<<<<<<<<<<<<
+ *                         line_start_0 = line_start_1             # <<<<<<<<<<<<<<
  *                         children_1.extend(children_2)
  *                         break
  */
-          __pyx_v_line_start = __pyx_v_line_start_1;
+          __pyx_v_line_start_0 = __pyx_v_line_start_1;
 
           /* "RSONParser.pyx":607
  *                         offset_1 = offset_2
- *                         line_start = line_start_1
+ *                         line_start_0 = line_start_1
  *                         children_1.extend(children_2)             # <<<<<<<<<<<<<<
  *                         break
  *                     # end case
@@ -9112,7 +9112,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
           __pyx_t_9 = __Pyx_PyList_Extend(__pyx_v_children_1, __pyx_v_children_2); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(0, 607, __pyx_L1_error)
 
           /* "RSONParser.pyx":608
- *                         line_start = line_start_1
+ *                         line_start_0 = line_start_1
  *                         children_1.extend(children_2)
  *                         break             # <<<<<<<<<<<<<<
  *                     # end case
@@ -9125,7 +9125,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                         break
  *                     if offset_2 != -1:             # <<<<<<<<<<<<<<
  *                         offset_1 = offset_2
- *                         line_start = line_start_1
+ *                         line_start_0 = line_start_1
  */
         }
 
@@ -9133,7 +9133,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                         break
  *                     # end case
  *                     offset_2 = offset_1             # <<<<<<<<<<<<<<
- *                     line_start_1 = line_start
+ *                     line_start_1 = line_start_0
  *                     children_2 = []
  */
         __Pyx_INCREF(__pyx_v_offset_1);
@@ -9142,18 +9142,18 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
         /* "RSONParser.pyx":611
  *                     # end case
  *                     offset_2 = offset_1
- *                     line_start_1 = line_start             # <<<<<<<<<<<<<<
+ *                     line_start_1 = line_start_0             # <<<<<<<<<<<<<<
  *                     children_2 = []
  *                     while True: # case
  */
-        __pyx_v_line_start_1 = __pyx_v_line_start;
+        __pyx_v_line_start_1 = __pyx_v_line_start_0;
 
         /* "RSONParser.pyx":612
  *                     offset_2 = offset_1
- *                     line_start_1 = line_start
+ *                     line_start_1 = line_start_0
  *                     children_2 = []             # <<<<<<<<<<<<<<
  *                     while True: # case
- *                         count = 0
+ *                         count_0 = 0
  */
         __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 612, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
@@ -9161,10 +9161,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
         __pyx_t_1 = 0;
 
         /* "RSONParser.pyx":613
- *                     line_start_1 = line_start
+ *                     line_start_1 = line_start_0
  *                     children_2 = []
  *                     while True: # case             # <<<<<<<<<<<<<<
- *                         count = 0
+ *                         count_0 = 0
  *                         while True:
  */
         while (1) {
@@ -9172,15 +9172,15 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
           /* "RSONParser.pyx":614
  *                     children_2 = []
  *                     while True: # case
- *                         count = 0             # <<<<<<<<<<<<<<
+ *                         count_0 = 0             # <<<<<<<<<<<<<<
  *                         while True:
  *                             offset_3 = offset_2
  */
-          __pyx_v_count = 0;
+          __pyx_v_count_0 = 0;
 
           /* "RSONParser.pyx":615
  *                     while True: # case
- *                         count = 0
+ *                         count_0 = 0
  *                         while True:             # <<<<<<<<<<<<<<
  *                             offset_3 = offset_2
  *                             line_start_2 = line_start_1
@@ -9188,7 +9188,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
           while (1) {
 
             /* "RSONParser.pyx":616
- *                         count = 0
+ *                         count_0 = 0
  *                         while True:
  *                             offset_3 = offset_2             # <<<<<<<<<<<<<<
  *                             line_start_2 = line_start_1
@@ -9356,7 +9356,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                             if offset_2 == offset_3: break
  *                             offset_2 = offset_3             # <<<<<<<<<<<<<<
  *                             line_start_1 = line_start_2
- *                             count += 1
+ *                             count_0 += 1
  */
             __Pyx_INCREF(__pyx_v_offset_3);
             __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_v_offset_3);
@@ -9365,7 +9365,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                             if offset_2 == offset_3: break
  *                             offset_2 = offset_3
  *                             line_start_1 = line_start_2             # <<<<<<<<<<<<<<
- *                             count += 1
+ *                             count_0 += 1
  * 
  */
             __pyx_v_line_start_1 = __pyx_v_line_start_2;
@@ -9373,16 +9373,16 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
             /* "RSONParser.pyx":634
  *                             offset_2 = offset_3
  *                             line_start_1 = line_start_2
- *                             count += 1             # <<<<<<<<<<<<<<
+ *                             count_0 += 1             # <<<<<<<<<<<<<<
  * 
  *                         if buf[offset_2:offset_2+2] == '0b':
  */
-            __pyx_v_count = (__pyx_v_count + 1);
+            __pyx_v_count_0 = (__pyx_v_count_0 + 1);
           }
           __pyx_L42_break:;
 
           /* "RSONParser.pyx":636
- *                             count += 1
+ *                             count_0 += 1
  * 
  *                         if buf[offset_2:offset_2+2] == '0b':             # <<<<<<<<<<<<<<
  *                             offset_2 += 2
@@ -9432,7 +9432,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
             __pyx_t_2 = 0;
 
             /* "RSONParser.pyx":636
- *                             count += 1
+ *                             count_0 += 1
  * 
  *                         if buf[offset_2:offset_2+2] == '0b':             # <<<<<<<<<<<<<<
  *                             offset_2 += 2
@@ -9571,7 +9571,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                             offset_2 = -1
  *                             break             # <<<<<<<<<<<<<<
  * 
- *                         count = 0
+ *                         count_0 = 0
  */
             goto __pyx_L40_break;
           }
@@ -9580,15 +9580,15 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
           /* "RSONParser.pyx":653
  *                             break
  * 
- *                         count = 0             # <<<<<<<<<<<<<<
+ *                         count_0 = 0             # <<<<<<<<<<<<<<
  *                         while True:
  *                             offset_3 = offset_2
  */
-          __pyx_v_count = 0;
+          __pyx_v_count_0 = 0;
 
           /* "RSONParser.pyx":654
  * 
- *                         count = 0
+ *                         count_0 = 0
  *                         while True:             # <<<<<<<<<<<<<<
  *                             offset_3 = offset_2
  *                             line_start_2 = line_start_1
@@ -9596,7 +9596,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
           while (1) {
 
             /* "RSONParser.pyx":655
- *                         count = 0
+ *                         count_0 = 0
  *                         while True:
  *                             offset_3 = offset_2             # <<<<<<<<<<<<<<
  *                             line_start_2 = line_start_1
@@ -9779,7 +9779,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                             if offset_2 == offset_3: break
  *                             offset_2 = offset_3             # <<<<<<<<<<<<<<
  *                             line_start_1 = line_start_2
- *                             count += 1
+ *                             count_0 += 1
  */
             __Pyx_INCREF(__pyx_v_offset_3);
             __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_v_offset_3);
@@ -9788,7 +9788,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                             if offset_2 == offset_3: break
  *                             offset_2 = offset_3
  *                             line_start_1 = line_start_2             # <<<<<<<<<<<<<<
- *                             count += 1
+ *                             count_0 += 1
  * 
  */
             __pyx_v_line_start_1 = __pyx_v_line_start_2;
@@ -9796,11 +9796,11 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
             /* "RSONParser.pyx":673
  *                             offset_2 = offset_3
  *                             line_start_1 = line_start_2
- *                             count += 1             # <<<<<<<<<<<<<<
+ *                             count_0 += 1             # <<<<<<<<<<<<<<
  * 
  * 
  */
-            __pyx_v_count = (__pyx_v_count + 1);
+            __pyx_v_count_0 = (__pyx_v_count_0 + 1);
           }
           __pyx_L49_break:;
 
@@ -9820,7 +9820,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                         break
  *                     if offset_2 != -1:             # <<<<<<<<<<<<<<
  *                         offset_1 = offset_2
- *                         line_start = line_start_1
+ *                         line_start_0 = line_start_1
  */
         __pyx_t_2 = __Pyx_PyInt_NeObjC(__pyx_v_offset_2, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 677, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
@@ -9832,7 +9832,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                         break
  *                     if offset_2 != -1:
  *                         offset_1 = offset_2             # <<<<<<<<<<<<<<
- *                         line_start = line_start_1
+ *                         line_start_0 = line_start_1
  *                         children_1.extend(children_2)
  */
           __Pyx_INCREF(__pyx_v_offset_2);
@@ -9841,15 +9841,15 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
           /* "RSONParser.pyx":679
  *                     if offset_2 != -1:
  *                         offset_1 = offset_2
- *                         line_start = line_start_1             # <<<<<<<<<<<<<<
+ *                         line_start_0 = line_start_1             # <<<<<<<<<<<<<<
  *                         children_1.extend(children_2)
  *                         break
  */
-          __pyx_v_line_start = __pyx_v_line_start_1;
+          __pyx_v_line_start_0 = __pyx_v_line_start_1;
 
           /* "RSONParser.pyx":680
  *                         offset_1 = offset_2
- *                         line_start = line_start_1
+ *                         line_start_0 = line_start_1
  *                         children_1.extend(children_2)             # <<<<<<<<<<<<<<
  *                         break
  *                     # end case
@@ -9857,7 +9857,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
           __pyx_t_9 = __Pyx_PyList_Extend(__pyx_v_children_1, __pyx_v_children_2); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(0, 680, __pyx_L1_error)
 
           /* "RSONParser.pyx":681
- *                         line_start = line_start_1
+ *                         line_start_0 = line_start_1
  *                         children_1.extend(children_2)
  *                         break             # <<<<<<<<<<<<<<
  *                     # end case
@@ -9870,7 +9870,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                         break
  *                     if offset_2 != -1:             # <<<<<<<<<<<<<<
  *                         offset_1 = offset_2
- *                         line_start = line_start_1
+ *                         line_start_0 = line_start_1
  */
         }
 
@@ -9878,7 +9878,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                         break
  *                     # end case
  *                     offset_2 = offset_1             # <<<<<<<<<<<<<<
- *                     line_start_1 = line_start
+ *                     line_start_1 = line_start_0
  *                     children_2 = []
  */
         __Pyx_INCREF(__pyx_v_offset_1);
@@ -9887,18 +9887,18 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
         /* "RSONParser.pyx":684
  *                     # end case
  *                     offset_2 = offset_1
- *                     line_start_1 = line_start             # <<<<<<<<<<<<<<
+ *                     line_start_1 = line_start_0             # <<<<<<<<<<<<<<
  *                     children_2 = []
  *                     while True: # case
  */
-        __pyx_v_line_start_1 = __pyx_v_line_start;
+        __pyx_v_line_start_1 = __pyx_v_line_start_0;
 
         /* "RSONParser.pyx":685
  *                     offset_2 = offset_1
- *                     line_start_1 = line_start
+ *                     line_start_1 = line_start_0
  *                     children_2 = []             # <<<<<<<<<<<<<<
  *                     while True: # case
- *                         count = 0
+ *                         count_0 = 0
  */
         __pyx_t_2 = PyList_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 685, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
@@ -9906,10 +9906,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
         __pyx_t_2 = 0;
 
         /* "RSONParser.pyx":686
- *                     line_start_1 = line_start
+ *                     line_start_1 = line_start_0
  *                     children_2 = []
  *                     while True: # case             # <<<<<<<<<<<<<<
- *                         count = 0
+ *                         count_0 = 0
  *                         while True:
  */
         while (1) {
@@ -9917,15 +9917,15 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
           /* "RSONParser.pyx":687
  *                     children_2 = []
  *                     while True: # case
- *                         count = 0             # <<<<<<<<<<<<<<
+ *                         count_0 = 0             # <<<<<<<<<<<<<<
  *                         while True:
  *                             offset_3 = offset_2
  */
-          __pyx_v_count = 0;
+          __pyx_v_count_0 = 0;
 
           /* "RSONParser.pyx":688
  *                     while True: # case
- *                         count = 0
+ *                         count_0 = 0
  *                         while True:             # <<<<<<<<<<<<<<
  *                             offset_3 = offset_2
  *                             line_start_2 = line_start_1
@@ -9933,7 +9933,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
           while (1) {
 
             /* "RSONParser.pyx":689
- *                         count = 0
+ *                         count_0 = 0
  *                         while True:
  *                             offset_3 = offset_2             # <<<<<<<<<<<<<<
  *                             line_start_2 = line_start_1
@@ -10101,7 +10101,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                             if offset_2 == offset_3: break
  *                             offset_2 = offset_3             # <<<<<<<<<<<<<<
  *                             line_start_1 = line_start_2
- *                             count += 1
+ *                             count_0 += 1
  */
             __Pyx_INCREF(__pyx_v_offset_3);
             __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_v_offset_3);
@@ -10110,7 +10110,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                             if offset_2 == offset_3: break
  *                             offset_2 = offset_3
  *                             line_start_1 = line_start_2             # <<<<<<<<<<<<<<
- *                             count += 1
+ *                             count_0 += 1
  * 
  */
             __pyx_v_line_start_1 = __pyx_v_line_start_2;
@@ -10118,16 +10118,16 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
             /* "RSONParser.pyx":707
  *                             offset_2 = offset_3
  *                             line_start_1 = line_start_2
- *                             count += 1             # <<<<<<<<<<<<<<
+ *                             count_0 += 1             # <<<<<<<<<<<<<<
  * 
  *                         while True: # start choice
  */
-            __pyx_v_count = (__pyx_v_count + 1);
+            __pyx_v_count_0 = (__pyx_v_count_0 + 1);
           }
           __pyx_L57_break:;
 
           /* "RSONParser.pyx":709
- *                             count += 1
+ *                             count_0 += 1
  * 
  *                         while True: # start choice             # <<<<<<<<<<<<<<
  *                             offset_3 = offset_2
@@ -10475,7 +10475,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                                     offset_3 = -1
  *                                     break             # <<<<<<<<<<<<<<
  * 
- *                                 count = 0
+ *                                 count_0 = 0
  */
                 goto __pyx_L67_break;
               }
@@ -10484,15 +10484,15 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
               /* "RSONParser.pyx":743
  *                                     break
  * 
- *                                 count = 0             # <<<<<<<<<<<<<<
+ *                                 count_0 = 0             # <<<<<<<<<<<<<<
  *                                 while True:
  *                                     offset_4 = offset_3
  */
-              __pyx_v_count = 0;
+              __pyx_v_count_0 = 0;
 
               /* "RSONParser.pyx":744
  * 
- *                                 count = 0
+ *                                 count_0 = 0
  *                                 while True:             # <<<<<<<<<<<<<<
  *                                     offset_4 = offset_3
  *                                     line_start_3 = line_start_2
@@ -10500,7 +10500,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
               while (1) {
 
                 /* "RSONParser.pyx":745
- *                                 count = 0
+ *                                 count_0 = 0
  *                                 while True:
  *                                     offset_4 = offset_3             # <<<<<<<<<<<<<<
  *                                     line_start_3 = line_start_2
@@ -10651,7 +10651,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                                     if offset_3 == offset_4: break
  *                                     offset_3 = offset_4             # <<<<<<<<<<<<<<
  *                                     line_start_2 = line_start_3
- *                                     count += 1
+ *                                     count_0 += 1
  */
                 __Pyx_INCREF(__pyx_v_offset_4);
                 __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_v_offset_4);
@@ -10660,7 +10660,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                                     if offset_3 == offset_4: break
  *                                     offset_3 = offset_4
  *                                     line_start_2 = line_start_3             # <<<<<<<<<<<<<<
- *                                     count += 1
+ *                                     count_0 += 1
  * 
  */
                 __pyx_v_line_start_2 = __pyx_v_line_start_3;
@@ -10668,11 +10668,11 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
                 /* "RSONParser.pyx":761
  *                                     offset_3 = offset_4
  *                                     line_start_2 = line_start_3
- *                                     count += 1             # <<<<<<<<<<<<<<
+ *                                     count_0 += 1             # <<<<<<<<<<<<<<
  * 
  * 
  */
-                __pyx_v_count = (__pyx_v_count + 1);
+                __pyx_v_count_0 = (__pyx_v_count_0 + 1);
               }
               __pyx_L71_break:;
 
@@ -10785,7 +10785,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                         if offset_2 == -1:
  *                             break             # <<<<<<<<<<<<<<
  * 
- *                         count = 0
+ *                         count_0 = 0
  */
             goto __pyx_L55_break;
 
@@ -10801,15 +10801,15 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
           /* "RSONParser.pyx":776
  *                             break
  * 
- *                         count = 0             # <<<<<<<<<<<<<<
+ *                         count_0 = 0             # <<<<<<<<<<<<<<
  *                         while True:
  *                             offset_3 = offset_2
  */
-          __pyx_v_count = 0;
+          __pyx_v_count_0 = 0;
 
           /* "RSONParser.pyx":777
  * 
- *                         count = 0
+ *                         count_0 = 0
  *                         while True:             # <<<<<<<<<<<<<<
  *                             offset_3 = offset_2
  *                             line_start_2 = line_start_1
@@ -10817,7 +10817,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
           while (1) {
 
             /* "RSONParser.pyx":778
- *                         count = 0
+ *                         count_0 = 0
  *                         while True:
  *                             offset_3 = offset_2             # <<<<<<<<<<<<<<
  *                             line_start_2 = line_start_1
@@ -11135,7 +11135,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                             if offset_2 == offset_3: break
  *                             offset_2 = offset_3             # <<<<<<<<<<<<<<
  *                             line_start_1 = line_start_2
- *                             count += 1
+ *                             count_0 += 1
  */
             __Pyx_INCREF(__pyx_v_offset_3);
             __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_v_offset_3);
@@ -11144,7 +11144,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                             if offset_2 == offset_3: break
  *                             offset_2 = offset_3
  *                             line_start_1 = line_start_2             # <<<<<<<<<<<<<<
- *                             count += 1
+ *                             count_0 += 1
  * 
  */
             __pyx_v_line_start_1 = __pyx_v_line_start_2;
@@ -11152,26 +11152,26 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
             /* "RSONParser.pyx":809
  *                             offset_2 = offset_3
  *                             line_start_1 = line_start_2
- *                             count += 1             # <<<<<<<<<<<<<<
+ *                             count_0 += 1             # <<<<<<<<<<<<<<
  * 
- *                         count = 0
+ *                         count_0 = 0
  */
-            __pyx_v_count = (__pyx_v_count + 1);
+            __pyx_v_count_0 = (__pyx_v_count_0 + 1);
           }
           __pyx_L78_break:;
 
           /* "RSONParser.pyx":811
- *                             count += 1
+ *                             count_0 += 1
  * 
- *                         count = 0             # <<<<<<<<<<<<<<
+ *                         count_0 = 0             # <<<<<<<<<<<<<<
  *                         while True:
  *                             offset_3 = offset_2
  */
-          __pyx_v_count = 0;
+          __pyx_v_count_0 = 0;
 
           /* "RSONParser.pyx":812
  * 
- *                         count = 0
+ *                         count_0 = 0
  *                         while True:             # <<<<<<<<<<<<<<
  *                             offset_3 = offset_2
  *                             line_start_2 = line_start_1
@@ -11179,7 +11179,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
           while (1) {
 
             /* "RSONParser.pyx":813
- *                         count = 0
+ *                         count_0 = 0
  *                         while True:
  *                             offset_3 = offset_2             # <<<<<<<<<<<<<<
  *                             line_start_2 = line_start_1
@@ -11784,7 +11784,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                             if offset_2 == offset_3: break
  *                             offset_2 = offset_3             # <<<<<<<<<<<<<<
  *                             line_start_1 = line_start_2
- *                             count += 1
+ *                             count_0 += 1
  */
             __Pyx_INCREF(__pyx_v_offset_3);
             __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_v_offset_3);
@@ -11793,7 +11793,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                             if offset_2 == offset_3: break
  *                             offset_2 = offset_3
  *                             line_start_1 = line_start_2             # <<<<<<<<<<<<<<
- *                             count += 1
+ *                             count_0 += 1
  * 
  */
             __pyx_v_line_start_1 = __pyx_v_line_start_2;
@@ -11801,11 +11801,11 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
             /* "RSONParser.pyx":863
  *                             offset_2 = offset_3
  *                             line_start_1 = line_start_2
- *                             count += 1             # <<<<<<<<<<<<<<
+ *                             count_0 += 1             # <<<<<<<<<<<<<<
  * 
  * 
  */
-            __pyx_v_count = (__pyx_v_count + 1);
+            __pyx_v_count_0 = (__pyx_v_count_0 + 1);
           }
           __pyx_L87_break:;
 
@@ -11825,7 +11825,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                         break
  *                     if offset_2 != -1:             # <<<<<<<<<<<<<<
  *                         offset_1 = offset_2
- *                         line_start = line_start_1
+ *                         line_start_0 = line_start_1
  */
         __pyx_t_1 = __Pyx_PyInt_NeObjC(__pyx_v_offset_2, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 867, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
@@ -11837,7 +11837,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                         break
  *                     if offset_2 != -1:
  *                         offset_1 = offset_2             # <<<<<<<<<<<<<<
- *                         line_start = line_start_1
+ *                         line_start_0 = line_start_1
  *                         children_1.extend(children_2)
  */
           __Pyx_INCREF(__pyx_v_offset_2);
@@ -11846,15 +11846,15 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
           /* "RSONParser.pyx":869
  *                     if offset_2 != -1:
  *                         offset_1 = offset_2
- *                         line_start = line_start_1             # <<<<<<<<<<<<<<
+ *                         line_start_0 = line_start_1             # <<<<<<<<<<<<<<
  *                         children_1.extend(children_2)
  *                         break
  */
-          __pyx_v_line_start = __pyx_v_line_start_1;
+          __pyx_v_line_start_0 = __pyx_v_line_start_1;
 
           /* "RSONParser.pyx":870
  *                         offset_1 = offset_2
- *                         line_start = line_start_1
+ *                         line_start_0 = line_start_1
  *                         children_1.extend(children_2)             # <<<<<<<<<<<<<<
  *                         break
  *                     # end case
@@ -11862,7 +11862,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
           __pyx_t_9 = __Pyx_PyList_Extend(__pyx_v_children_1, __pyx_v_children_2); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(0, 870, __pyx_L1_error)
 
           /* "RSONParser.pyx":871
- *                         line_start = line_start_1
+ *                         line_start_0 = line_start_1
  *                         children_1.extend(children_2)
  *                         break             # <<<<<<<<<<<<<<
  *                     # end case
@@ -11875,7 +11875,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  *                         break
  *                     if offset_2 != -1:             # <<<<<<<<<<<<<<
  *                         offset_1 = offset_2
- *                         line_start = line_start_1
+ *                         line_start_0 = line_start_1
  */
         }
 
@@ -11936,7 +11936,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  * 
  *                 break             # <<<<<<<<<<<<<<
  *             if offset_1 == -1:
- *                 offset = -1
+ *                 offset_0 = -1
  */
       goto __pyx_L6_break;
     }
@@ -11946,7 +11946,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  * 
  *                 break
  *             if offset_1 == -1:             # <<<<<<<<<<<<<<
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break
  */
     __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_1, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 879, __pyx_L1_error)
@@ -11958,18 +11958,18 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
       /* "RSONParser.pyx":880
  *                 break
  *             if offset_1 == -1:
- *                 offset = -1             # <<<<<<<<<<<<<<
+ *                 offset_0 = -1             # <<<<<<<<<<<<<<
  *                 break
  *             if self.builder is not None:
  */
-      __pyx_v_offset = -1;
+      __pyx_v_offset_0 = -1;
 
       /* "RSONParser.pyx":881
  *             if offset_1 == -1:
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break             # <<<<<<<<<<<<<<
  *             if self.builder is not None:
- *                 children.append(self.builder['number'](buf, offset, offset_1, children_1))
+ *                 children_0.append(self.builder['number'](buf, offset_0, offset_1, children_1))
  */
       goto __pyx_L4_break;
 
@@ -11977,16 +11977,16 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
  * 
  *                 break
  *             if offset_1 == -1:             # <<<<<<<<<<<<<<
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break
  */
     }
 
     /* "RSONParser.pyx":882
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break
  *             if self.builder is not None:             # <<<<<<<<<<<<<<
- *                 children.append(self.builder['number'](buf, offset, offset_1, children_1))
+ *                 children_0.append(self.builder['number'](buf, offset_0, offset_1, children_1))
  *             else:
  */
     __pyx_t_8 = (__pyx_v_self->builder != Py_None);
@@ -11996,17 +11996,17 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
       /* "RSONParser.pyx":883
  *                 break
  *             if self.builder is not None:
- *                 children.append(self.builder['number'](buf, offset, offset_1, children_1))             # <<<<<<<<<<<<<<
+ *                 children_0.append(self.builder['number'](buf, offset_0, offset_1, children_1))             # <<<<<<<<<<<<<<
  *             else:
- *                 children.append(ParseNode('number', offset, offset_1, list(children_1), None))
+ *                 children_0.append(ParseNode('number', offset_0, offset_1, list(children_1), None))
  */
-      if (unlikely(__pyx_v_children == Py_None)) {
+      if (unlikely(__pyx_v_children_0 == Py_None)) {
         PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
         __PYX_ERR(0, 883, __pyx_L1_error)
       }
       __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_v_self->builder, __pyx_n_u_number); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 883, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_10 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 883, __pyx_L1_error)
+      __pyx_t_10 = __Pyx_PyInt_From_int(__pyx_v_offset_0); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 883, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_10);
       __pyx_t_11 = NULL;
       __pyx_t_12 = 0;
@@ -12061,34 +12061,34 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
       }
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_t_9 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(0, 883, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyList_Append(__pyx_v_children_0, __pyx_t_1); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(0, 883, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
       /* "RSONParser.pyx":882
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break
  *             if self.builder is not None:             # <<<<<<<<<<<<<<
- *                 children.append(self.builder['number'](buf, offset, offset_1, children_1))
+ *                 children_0.append(self.builder['number'](buf, offset_0, offset_1, children_1))
  *             else:
  */
       goto __pyx_L102;
     }
 
     /* "RSONParser.pyx":885
- *                 children.append(self.builder['number'](buf, offset, offset_1, children_1))
+ *                 children_0.append(self.builder['number'](buf, offset_0, offset_1, children_1))
  *             else:
- *                 children.append(ParseNode('number', offset, offset_1, list(children_1), None))             # <<<<<<<<<<<<<<
- *             offset = offset_1
+ *                 children_0.append(ParseNode('number', offset_0, offset_1, list(children_1), None))             # <<<<<<<<<<<<<<
+ *             offset_0 = offset_1
  * 
  */
     /*else*/ {
-      if (unlikely(__pyx_v_children == Py_None)) {
+      if (unlikely(__pyx_v_children_0 == Py_None)) {
         PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
         __PYX_ERR(0, 885, __pyx_L1_error)
       }
       __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 885, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_13 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 885, __pyx_L1_error)
+      __pyx_t_13 = __Pyx_PyInt_From_int(__pyx_v_offset_0); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 885, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_13);
       __pyx_t_10 = PySequence_List(__pyx_v_children_1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 885, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_10);
@@ -12150,26 +12150,26 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
         __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
       }
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_t_9 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(0, 885, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyList_Append(__pyx_v_children_0, __pyx_t_1); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(0, 885, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     }
     __pyx_L102:;
 
     /* "RSONParser.pyx":886
  *             else:
- *                 children.append(ParseNode('number', offset, offset_1, list(children_1), None))
- *             offset = offset_1             # <<<<<<<<<<<<<<
+ *                 children_0.append(ParseNode('number', offset_0, offset_1, list(children_1), None))
+ *             offset_0 = offset_1             # <<<<<<<<<<<<<<
  * 
  *             break
  */
     __pyx_t_12 = __Pyx_PyInt_As_int(__pyx_v_offset_1); if (unlikely((__pyx_t_12 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 886, __pyx_L1_error)
-    __pyx_v_offset = __pyx_t_12;
+    __pyx_v_offset_0 = __pyx_t_12;
 
     /* "RSONParser.pyx":888
- *             offset = offset_1
+ *             offset_0 = offset_1
  * 
  *             break             # <<<<<<<<<<<<<<
- *         return offset, line_start
+ *         return offset_0, line_start_0
  * 
  */
     goto __pyx_L4_break;
@@ -12179,20 +12179,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
   /* "RSONParser.pyx":889
  * 
  *             break
- *         return offset, line_start             # <<<<<<<<<<<<<<
+ *         return offset_0, line_start_0             # <<<<<<<<<<<<<<
  * 
- *     cdef (int, int) parse_rson_string(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):
+ *     cdef (int, int) parse_rson_string(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):
  */
-  __pyx_t_15.f0 = __pyx_v_offset;
-  __pyx_t_15.f1 = __pyx_v_line_start;
+  __pyx_t_15.f0 = __pyx_v_offset_0;
+  __pyx_t_15.f1 = __pyx_v_line_start_0;
   __pyx_r = __pyx_t_15;
   goto __pyx_L0;
 
   /* "RSONParser.pyx":448
- *         return offset, line_start
+ *         return offset_0, line_start_0
  * 
- *     cdef (int, int) parse_rson_number(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
- *         cdef int count
+ *     cdef (int, int) parse_rson_number(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):             # <<<<<<<<<<<<<<
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  */
 
@@ -12222,15 +12222,15 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_number(
 }
 
 /* "RSONParser.pyx":891
- *         return offset, line_start
+ *         return offset_0, line_start_0
  * 
- *     cdef (int, int) parse_rson_string(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
- *         cdef int count
+ *     cdef (int, int) parse_rson_string(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):             # <<<<<<<<<<<<<<
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  */
 
-static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, CYTHON_UNUSED int __pyx_v_indent, int __pyx_v_buf_eof, PyObject *__pyx_v_children) {
-  int __pyx_v_count;
+static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset_0, int __pyx_v_line_start_0, CYTHON_UNUSED int __pyx_v_indent_0, int __pyx_v_buf_eof, PyObject *__pyx_v_children_0) {
+  int __pyx_v_count_0;
   Py_UCS4 __pyx_v_chr;
   PyObject *__pyx_v_offset_1 = NULL;
   int __pyx_v_line_start_1;
@@ -12264,11 +12264,11 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
   __Pyx_RefNannySetupContext("parse_rson_string", 0);
 
   /* "RSONParser.pyx":894
- *         cdef int count
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop             # <<<<<<<<<<<<<<
  *             while True: # start choice
- *                 offset_1 = offset
+ *                 offset_1 = offset_0
  */
   while (1) {
 
@@ -12276,35 +12276,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop
  *             while True: # start choice             # <<<<<<<<<<<<<<
- *                 offset_1 = offset
- *                 line_start_1 = line_start
+ *                 offset_1 = offset_0
+ *                 line_start_1 = line_start_0
  */
     while (1) {
 
       /* "RSONParser.pyx":896
  *         while True: # note: return at end of loop
  *             while True: # start choice
- *                 offset_1 = offset             # <<<<<<<<<<<<<<
- *                 line_start_1 = line_start
+ *                 offset_1 = offset_0             # <<<<<<<<<<<<<<
+ *                 line_start_1 = line_start_0
  *                 children_1 = []
  */
-      __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 896, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset_0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 896, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __pyx_v_offset_1 = __pyx_t_1;
       __pyx_t_1 = 0;
 
       /* "RSONParser.pyx":897
  *             while True: # start choice
- *                 offset_1 = offset
- *                 line_start_1 = line_start             # <<<<<<<<<<<<<<
+ *                 offset_1 = offset_0
+ *                 line_start_1 = line_start_0             # <<<<<<<<<<<<<<
  *                 children_1 = []
  *                 while True: # case
  */
-      __pyx_v_line_start_1 = __pyx_v_line_start;
+      __pyx_v_line_start_1 = __pyx_v_line_start_0;
 
       /* "RSONParser.pyx":898
- *                 offset_1 = offset
- *                 line_start_1 = line_start
+ *                 offset_1 = offset_0
+ *                 line_start_1 = line_start_0
  *                 children_1 = []             # <<<<<<<<<<<<<<
  *                 while True: # case
  *                     if buf[offset_1:offset_1+1] == '"':
@@ -12315,7 +12315,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
       __pyx_t_1 = 0;
 
       /* "RSONParser.pyx":899
- *                 line_start_1 = line_start
+ *                 line_start_1 = line_start_0
  *                 children_1 = []
  *                 while True: # case             # <<<<<<<<<<<<<<
  *                     if buf[offset_1:offset_1+1] == '"':
@@ -12420,7 +12420,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                     offset_2 = offset_1
  *                     children_2 = []             # <<<<<<<<<<<<<<
  *                     while True: # start capture
- *                         count = 0
+ *                         count_0 = 0
  */
         __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 907, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
@@ -12431,7 +12431,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                     offset_2 = offset_1
  *                     children_2 = []
  *                     while True: # start capture             # <<<<<<<<<<<<<<
- *                         count = 0
+ *                         count_0 = 0
  *                         while True:
  */
         while (1) {
@@ -12439,15 +12439,15 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
           /* "RSONParser.pyx":909
  *                     children_2 = []
  *                     while True: # start capture
- *                         count = 0             # <<<<<<<<<<<<<<
+ *                         count_0 = 0             # <<<<<<<<<<<<<<
  *                         while True:
  *                             offset_3 = offset_2
  */
-          __pyx_v_count = 0;
+          __pyx_v_count_0 = 0;
 
           /* "RSONParser.pyx":910
  *                     while True: # start capture
- *                         count = 0
+ *                         count_0 = 0
  *                         while True:             # <<<<<<<<<<<<<<
  *                             offset_3 = offset_2
  *                             line_start_2 = line_start_1
@@ -12455,7 +12455,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
           while (1) {
 
             /* "RSONParser.pyx":911
- *                         count = 0
+ *                         count_0 = 0
  *                         while True:
  *                             offset_3 = offset_2             # <<<<<<<<<<<<<<
  *                             line_start_2 = line_start_1
@@ -18180,7 +18180,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                             if offset_2 == offset_3: break
  *                             offset_2 = offset_3             # <<<<<<<<<<<<<<
  *                             line_start_1 = line_start_2
- *                             count += 1
+ *                             count_0 += 1
  */
             __Pyx_INCREF(__pyx_v_offset_3);
             __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_v_offset_3);
@@ -18189,7 +18189,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                             if offset_2 == offset_3: break
  *                             offset_2 = offset_3
  *                             line_start_1 = line_start_2             # <<<<<<<<<<<<<<
- *                             count += 1
+ *                             count_0 += 1
  * 
  */
             __pyx_v_line_start_1 = __pyx_v_line_start_2;
@@ -18197,16 +18197,16 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
             /* "RSONParser.pyx":1398
  *                             offset_2 = offset_3
  *                             line_start_1 = line_start_2
- *                             count += 1             # <<<<<<<<<<<<<<
+ *                             count_0 += 1             # <<<<<<<<<<<<<<
  * 
  *                         break
  */
-            __pyx_v_count = (__pyx_v_count + 1);
+            __pyx_v_count_0 = (__pyx_v_count_0 + 1);
           }
           __pyx_L13_break:;
 
           /* "RSONParser.pyx":1400
- *                             count += 1
+ *                             count_0 += 1
  * 
  *                         break             # <<<<<<<<<<<<<<
  *                     if offset_2 == -1:
@@ -18511,7 +18511,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  * 
  *                     break             # <<<<<<<<<<<<<<
  *                 if offset_1 != -1:
- *                     offset = offset_1
+ *                     offset_0 = offset_1
  */
         goto __pyx_L8_break;
       }
@@ -18521,8 +18521,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  * 
  *                     break
  *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
- *                     offset = offset_1
- *                     line_start = line_start_1
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1
  */
       __pyx_t_7 = __Pyx_PyInt_NeObjC(__pyx_v_offset_1, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1418, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
@@ -18533,41 +18533,41 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
         /* "RSONParser.pyx":1419
  *                     break
  *                 if offset_1 != -1:
- *                     offset = offset_1             # <<<<<<<<<<<<<<
- *                     line_start = line_start_1
- *                     children.extend(children_1)
+ *                     offset_0 = offset_1             # <<<<<<<<<<<<<<
+ *                     line_start_0 = line_start_1
+ *                     children_0.extend(children_1)
  */
         __pyx_t_10 = __Pyx_PyInt_As_int(__pyx_v_offset_1); if (unlikely((__pyx_t_10 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 1419, __pyx_L1_error)
-        __pyx_v_offset = __pyx_t_10;
+        __pyx_v_offset_0 = __pyx_t_10;
 
         /* "RSONParser.pyx":1420
  *                 if offset_1 != -1:
- *                     offset = offset_1
- *                     line_start = line_start_1             # <<<<<<<<<<<<<<
- *                     children.extend(children_1)
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1             # <<<<<<<<<<<<<<
+ *                     children_0.extend(children_1)
  *                     break
  */
-        __pyx_v_line_start = __pyx_v_line_start_1;
+        __pyx_v_line_start_0 = __pyx_v_line_start_1;
 
         /* "RSONParser.pyx":1421
- *                     offset = offset_1
- *                     line_start = line_start_1
- *                     children.extend(children_1)             # <<<<<<<<<<<<<<
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1
+ *                     children_0.extend(children_1)             # <<<<<<<<<<<<<<
  *                     break
  *                 # end case
  */
-        if (unlikely(__pyx_v_children == Py_None)) {
+        if (unlikely(__pyx_v_children_0 == Py_None)) {
           PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "extend");
           __PYX_ERR(0, 1421, __pyx_L1_error)
         }
-        __pyx_t_9 = __Pyx_PyList_Extend(__pyx_v_children, __pyx_v_children_1); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(0, 1421, __pyx_L1_error)
+        __pyx_t_9 = __Pyx_PyList_Extend(__pyx_v_children_0, __pyx_v_children_1); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(0, 1421, __pyx_L1_error)
 
         /* "RSONParser.pyx":1422
- *                     line_start = line_start_1
- *                     children.extend(children_1)
+ *                     line_start_0 = line_start_1
+ *                     children_0.extend(children_1)
  *                     break             # <<<<<<<<<<<<<<
  *                 # end case
- *                 offset_1 = offset
+ *                 offset_1 = offset_0
  */
         goto __pyx_L6_break;
 
@@ -18575,35 +18575,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  * 
  *                     break
  *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
- *                     offset = offset_1
- *                     line_start = line_start_1
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1
  */
       }
 
       /* "RSONParser.pyx":1424
  *                     break
  *                 # end case
- *                 offset_1 = offset             # <<<<<<<<<<<<<<
- *                 line_start_1 = line_start
+ *                 offset_1 = offset_0             # <<<<<<<<<<<<<<
+ *                 line_start_1 = line_start_0
  *                 children_1 = []
  */
-      __pyx_t_7 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1424, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyInt_From_int(__pyx_v_offset_0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1424, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_t_7);
       __pyx_t_7 = 0;
 
       /* "RSONParser.pyx":1425
  *                 # end case
- *                 offset_1 = offset
- *                 line_start_1 = line_start             # <<<<<<<<<<<<<<
+ *                 offset_1 = offset_0
+ *                 line_start_1 = line_start_0             # <<<<<<<<<<<<<<
  *                 children_1 = []
  *                 while True: # case
  */
-      __pyx_v_line_start_1 = __pyx_v_line_start;
+      __pyx_v_line_start_1 = __pyx_v_line_start_0;
 
       /* "RSONParser.pyx":1426
- *                 offset_1 = offset
- *                 line_start_1 = line_start
+ *                 offset_1 = offset_0
+ *                 line_start_1 = line_start_0
  *                 children_1 = []             # <<<<<<<<<<<<<<
  *                 while True: # case
  *                     if buf[offset_1:offset_1+1] == "'":
@@ -18614,7 +18614,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
       __pyx_t_7 = 0;
 
       /* "RSONParser.pyx":1427
- *                 line_start_1 = line_start
+ *                 line_start_1 = line_start_0
  *                 children_1 = []
  *                 while True: # case             # <<<<<<<<<<<<<<
  *                     if buf[offset_1:offset_1+1] == "'":
@@ -18719,7 +18719,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                     offset_2 = offset_1
  *                     children_2 = []             # <<<<<<<<<<<<<<
  *                     while True: # start capture
- *                         count = 0
+ *                         count_0 = 0
  */
         __pyx_t_7 = PyList_New(0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1435, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
@@ -18730,7 +18730,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                     offset_2 = offset_1
  *                     children_2 = []
  *                     while True: # start capture             # <<<<<<<<<<<<<<
- *                         count = 0
+ *                         count_0 = 0
  *                         while True:
  */
         while (1) {
@@ -18738,15 +18738,15 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
           /* "RSONParser.pyx":1437
  *                     children_2 = []
  *                     while True: # start capture
- *                         count = 0             # <<<<<<<<<<<<<<
+ *                         count_0 = 0             # <<<<<<<<<<<<<<
  *                         while True:
  *                             offset_3 = offset_2
  */
-          __pyx_v_count = 0;
+          __pyx_v_count_0 = 0;
 
           /* "RSONParser.pyx":1438
  *                     while True: # start capture
- *                         count = 0
+ *                         count_0 = 0
  *                         while True:             # <<<<<<<<<<<<<<
  *                             offset_3 = offset_2
  *                             line_start_2 = line_start_1
@@ -18754,7 +18754,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
           while (1) {
 
             /* "RSONParser.pyx":1439
- *                         count = 0
+ *                         count_0 = 0
  *                         while True:
  *                             offset_3 = offset_2             # <<<<<<<<<<<<<<
  *                             line_start_2 = line_start_1
@@ -24479,7 +24479,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                             if offset_2 == offset_3: break
  *                             offset_2 = offset_3             # <<<<<<<<<<<<<<
  *                             line_start_1 = line_start_2
- *                             count += 1
+ *                             count_0 += 1
  */
             __Pyx_INCREF(__pyx_v_offset_3);
             __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_v_offset_3);
@@ -24488,7 +24488,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                             if offset_2 == offset_3: break
  *                             offset_2 = offset_3
  *                             line_start_1 = line_start_2             # <<<<<<<<<<<<<<
- *                             count += 1
+ *                             count_0 += 1
  * 
  */
             __pyx_v_line_start_1 = __pyx_v_line_start_2;
@@ -24496,16 +24496,16 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
             /* "RSONParser.pyx":1926
  *                             offset_2 = offset_3
  *                             line_start_1 = line_start_2
- *                             count += 1             # <<<<<<<<<<<<<<
+ *                             count_0 += 1             # <<<<<<<<<<<<<<
  * 
  *                         break
  */
-            __pyx_v_count = (__pyx_v_count + 1);
+            __pyx_v_count_0 = (__pyx_v_count_0 + 1);
           }
           __pyx_L108_break:;
 
           /* "RSONParser.pyx":1928
- *                             count += 1
+ *                             count_0 += 1
  * 
  *                         break             # <<<<<<<<<<<<<<
  *                     if offset_2 == -1:
@@ -24810,7 +24810,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  * 
  *                     break             # <<<<<<<<<<<<<<
  *                 if offset_1 != -1:
- *                     offset = offset_1
+ *                     offset_0 = offset_1
  */
         goto __pyx_L103_break;
       }
@@ -24820,8 +24820,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  * 
  *                     break
  *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
- *                     offset = offset_1
- *                     line_start = line_start_1
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1
  */
       __pyx_t_1 = __Pyx_PyInt_NeObjC(__pyx_v_offset_1, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1946, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
@@ -24832,41 +24832,41 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
         /* "RSONParser.pyx":1947
  *                     break
  *                 if offset_1 != -1:
- *                     offset = offset_1             # <<<<<<<<<<<<<<
- *                     line_start = line_start_1
- *                     children.extend(children_1)
+ *                     offset_0 = offset_1             # <<<<<<<<<<<<<<
+ *                     line_start_0 = line_start_1
+ *                     children_0.extend(children_1)
  */
         __pyx_t_10 = __Pyx_PyInt_As_int(__pyx_v_offset_1); if (unlikely((__pyx_t_10 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 1947, __pyx_L1_error)
-        __pyx_v_offset = __pyx_t_10;
+        __pyx_v_offset_0 = __pyx_t_10;
 
         /* "RSONParser.pyx":1948
  *                 if offset_1 != -1:
- *                     offset = offset_1
- *                     line_start = line_start_1             # <<<<<<<<<<<<<<
- *                     children.extend(children_1)
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1             # <<<<<<<<<<<<<<
+ *                     children_0.extend(children_1)
  *                     break
  */
-        __pyx_v_line_start = __pyx_v_line_start_1;
+        __pyx_v_line_start_0 = __pyx_v_line_start_1;
 
         /* "RSONParser.pyx":1949
- *                     offset = offset_1
- *                     line_start = line_start_1
- *                     children.extend(children_1)             # <<<<<<<<<<<<<<
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1
+ *                     children_0.extend(children_1)             # <<<<<<<<<<<<<<
  *                     break
  *                 # end case
  */
-        if (unlikely(__pyx_v_children == Py_None)) {
+        if (unlikely(__pyx_v_children_0 == Py_None)) {
           PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "extend");
           __PYX_ERR(0, 1949, __pyx_L1_error)
         }
-        __pyx_t_9 = __Pyx_PyList_Extend(__pyx_v_children, __pyx_v_children_1); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(0, 1949, __pyx_L1_error)
+        __pyx_t_9 = __Pyx_PyList_Extend(__pyx_v_children_0, __pyx_v_children_1); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(0, 1949, __pyx_L1_error)
 
         /* "RSONParser.pyx":1950
- *                     line_start = line_start_1
- *                     children.extend(children_1)
+ *                     line_start_0 = line_start_1
+ *                     children_0.extend(children_1)
  *                     break             # <<<<<<<<<<<<<<
  *                 # end case
- *                 offset = -1 # no more choices
+ *                 offset_0 = -1 # no more choices
  */
         goto __pyx_L6_break;
 
@@ -24874,25 +24874,25 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  * 
  *                     break
  *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
- *                     offset = offset_1
- *                     line_start = line_start_1
+ *                     offset_0 = offset_1
+ *                     line_start_0 = line_start_1
  */
       }
 
       /* "RSONParser.pyx":1952
  *                     break
  *                 # end case
- *                 offset = -1 # no more choices             # <<<<<<<<<<<<<<
+ *                 offset_0 = -1 # no more choices             # <<<<<<<<<<<<<<
  *                 break # end choice
- *             if offset == -1:
+ *             if offset_0 == -1:
  */
-      __pyx_v_offset = -1;
+      __pyx_v_offset_0 = -1;
 
       /* "RSONParser.pyx":1953
  *                 # end case
- *                 offset = -1 # no more choices
+ *                 offset_0 = -1 # no more choices
  *                 break # end choice             # <<<<<<<<<<<<<<
- *             if offset == -1:
+ *             if offset_0 == -1:
  *                 break
  */
       goto __pyx_L6_break;
@@ -24900,18 +24900,18 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
     __pyx_L6_break:;
 
     /* "RSONParser.pyx":1954
- *                 offset = -1 # no more choices
+ *                 offset_0 = -1 # no more choices
  *                 break # end choice
- *             if offset == -1:             # <<<<<<<<<<<<<<
+ *             if offset_0 == -1:             # <<<<<<<<<<<<<<
  *                 break
  * 
  */
-    __pyx_t_3 = ((__pyx_v_offset == -1L) != 0);
+    __pyx_t_3 = ((__pyx_v_offset_0 == -1L) != 0);
     if (__pyx_t_3) {
 
       /* "RSONParser.pyx":1955
  *                 break # end choice
- *             if offset == -1:
+ *             if offset_0 == -1:
  *                 break             # <<<<<<<<<<<<<<
  * 
  *             break
@@ -24919,9 +24919,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
       goto __pyx_L4_break;
 
       /* "RSONParser.pyx":1954
- *                 offset = -1 # no more choices
+ *                 offset_0 = -1 # no more choices
  *                 break # end choice
- *             if offset == -1:             # <<<<<<<<<<<<<<
+ *             if offset_0 == -1:             # <<<<<<<<<<<<<<
  *                 break
  * 
  */
@@ -24931,7 +24931,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
  *                 break
  * 
  *             break             # <<<<<<<<<<<<<<
- *         return offset, line_start
+ *         return offset_0, line_start_0
  * 
  */
     goto __pyx_L4_break;
@@ -24941,20 +24941,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
   /* "RSONParser.pyx":1958
  * 
  *             break
- *         return offset, line_start             # <<<<<<<<<<<<<<
+ *         return offset_0, line_start_0             # <<<<<<<<<<<<<<
  * 
- *     cdef (int, int) parse_rson_list(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):
+ *     cdef (int, int) parse_rson_list(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):
  */
-  __pyx_t_14.f0 = __pyx_v_offset;
-  __pyx_t_14.f1 = __pyx_v_line_start;
+  __pyx_t_14.f0 = __pyx_v_offset_0;
+  __pyx_t_14.f1 = __pyx_v_line_start_0;
   __pyx_r = __pyx_t_14;
   goto __pyx_L0;
 
   /* "RSONParser.pyx":891
- *         return offset, line_start
+ *         return offset_0, line_start_0
  * 
- *     cdef (int, int) parse_rson_string(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
- *         cdef int count
+ *     cdef (int, int) parse_rson_string(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):             # <<<<<<<<<<<<<<
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  */
 
@@ -24982,15 +24982,15 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_string(
 }
 
 /* "RSONParser.pyx":1960
- *         return offset, line_start
+ *         return offset_0, line_start_0
  * 
- *     cdef (int, int) parse_rson_list(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
- *         cdef int count
+ *     cdef (int, int) parse_rson_list(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):             # <<<<<<<<<<<<<<
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  */
 
-static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, int __pyx_v_indent, int __pyx_v_buf_eof, PyObject *__pyx_v_children) {
-  int __pyx_v_count;
+static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset_0, int __pyx_v_line_start_0, int __pyx_v_indent_0, int __pyx_v_buf_eof, PyObject *__pyx_v_children_0) {
+  int __pyx_v_count_0;
   PyObject *__pyx_v_offset_1 = NULL;
   PyObject *__pyx_v_children_1 = NULL;
   PyObject *__pyx_v_offset_2 = NULL;
@@ -25018,26 +25018,26 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
   __Pyx_RefNannySetupContext("parse_rson_list", 0);
 
   /* "RSONParser.pyx":1963
- *         cdef int count
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop             # <<<<<<<<<<<<<<
- *             if buf[offset:offset+1] == '[':
- *                 offset += 1
+ *             if buf[offset_0:offset_0+1] == '[':
+ *                 offset_0 += 1
  */
   while (1) {
 
     /* "RSONParser.pyx":1964
  *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop
- *             if buf[offset:offset+1] == '[':             # <<<<<<<<<<<<<<
- *                 offset += 1
+ *             if buf[offset_0:offset_0+1] == '[':             # <<<<<<<<<<<<<<
+ *                 offset_0 += 1
  *             else:
  */
     if (unlikely(__pyx_v_buf == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
       __PYX_ERR(0, 1964, __pyx_L1_error)
     }
-    __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_v_offset, (__pyx_v_offset + 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1964, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_v_offset_0, (__pyx_v_offset_0 + 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1964, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u__11, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 1964, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -25046,39 +25046,39 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
 
       /* "RSONParser.pyx":1965
  *         while True: # note: return at end of loop
- *             if buf[offset:offset+1] == '[':
- *                 offset += 1             # <<<<<<<<<<<<<<
+ *             if buf[offset_0:offset_0+1] == '[':
+ *                 offset_0 += 1             # <<<<<<<<<<<<<<
  *             else:
- *                 offset = -1
+ *                 offset_0 = -1
  */
-      __pyx_v_offset = (__pyx_v_offset + 1);
+      __pyx_v_offset_0 = (__pyx_v_offset_0 + 1);
 
       /* "RSONParser.pyx":1964
  *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop
- *             if buf[offset:offset+1] == '[':             # <<<<<<<<<<<<<<
- *                 offset += 1
+ *             if buf[offset_0:offset_0+1] == '[':             # <<<<<<<<<<<<<<
+ *                 offset_0 += 1
  *             else:
  */
       goto __pyx_L5;
     }
 
     /* "RSONParser.pyx":1967
- *                 offset += 1
+ *                 offset_0 += 1
  *             else:
- *                 offset = -1             # <<<<<<<<<<<<<<
+ *                 offset_0 = -1             # <<<<<<<<<<<<<<
  *                 break
  * 
  */
     /*else*/ {
-      __pyx_v_offset = -1;
+      __pyx_v_offset_0 = -1;
 
       /* "RSONParser.pyx":1968
  *             else:
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break             # <<<<<<<<<<<<<<
  * 
- *             offset, line_start = self.parse_comment(buf, offset, line_start, indent, buf_eof, children)
+ *             offset_0, line_start_0 = self.parse_comment(buf, offset_0, line_start_0, indent_0, buf_eof, children_0)
  */
       goto __pyx_L4_break;
     }
@@ -25087,24 +25087,24 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
     /* "RSONParser.pyx":1970
  *                 break
  * 
- *             offset, line_start = self.parse_comment(buf, offset, line_start, indent, buf_eof, children)             # <<<<<<<<<<<<<<
- *             if offset == -1: break
+ *             offset_0, line_start_0 = self.parse_comment(buf, offset_0, line_start_0, indent_0, buf_eof, children_0)             # <<<<<<<<<<<<<<
+ *             if offset_0 == -1: break
  * 
  */
-    __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_comment(__pyx_v_self, __pyx_v_buf, __pyx_v_offset, __pyx_v_line_start, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children);
+    __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_comment(__pyx_v_self, __pyx_v_buf, __pyx_v_offset_0, __pyx_v_line_start_0, __pyx_v_indent_0, __pyx_v_buf_eof, __pyx_v_children_0);
     __pyx_t_5 = __pyx_t_4.f0;
     __pyx_t_6 = __pyx_t_4.f1;
-    __pyx_v_offset = __pyx_t_5;
-    __pyx_v_line_start = __pyx_t_6;
+    __pyx_v_offset_0 = __pyx_t_5;
+    __pyx_v_line_start_0 = __pyx_t_6;
 
     /* "RSONParser.pyx":1971
  * 
- *             offset, line_start = self.parse_comment(buf, offset, line_start, indent, buf_eof, children)
- *             if offset == -1: break             # <<<<<<<<<<<<<<
+ *             offset_0, line_start_0 = self.parse_comment(buf, offset_0, line_start_0, indent_0, buf_eof, children_0)
+ *             if offset_0 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
  */
-    __pyx_t_3 = ((__pyx_v_offset == -1L) != 0);
+    __pyx_t_3 = ((__pyx_v_offset_0 == -1L) != 0);
     if (__pyx_t_3) {
       goto __pyx_L4_break;
     }
@@ -25112,21 +25112,21 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
     /* "RSONParser.pyx":1974
  * 
  * 
- *             offset_1 = offset             # <<<<<<<<<<<<<<
+ *             offset_1 = offset_0             # <<<<<<<<<<<<<<
  *             children_1 = []
  *             while True: # start capture
  */
-    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1974, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset_0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1974, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_v_offset_1 = __pyx_t_1;
     __pyx_t_1 = 0;
 
     /* "RSONParser.pyx":1975
  * 
- *             offset_1 = offset
+ *             offset_1 = offset_0
  *             children_1 = []             # <<<<<<<<<<<<<<
  *             while True: # start capture
- *                 count = 0
+ *                 count_0 = 0
  */
     __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1975, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
@@ -25134,10 +25134,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
     __pyx_t_1 = 0;
 
     /* "RSONParser.pyx":1976
- *             offset_1 = offset
+ *             offset_1 = offset_0
  *             children_1 = []
  *             while True: # start capture             # <<<<<<<<<<<<<<
- *                 count = 0
+ *                 count_0 = 0
  *                 while True:
  */
     while (1) {
@@ -25145,27 +25145,27 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
       /* "RSONParser.pyx":1977
  *             children_1 = []
  *             while True: # start capture
- *                 count = 0             # <<<<<<<<<<<<<<
+ *                 count_0 = 0             # <<<<<<<<<<<<<<
  *                 while True:
  *                     offset_2 = offset_1
  */
-      __pyx_v_count = 0;
+      __pyx_v_count_0 = 0;
 
       /* "RSONParser.pyx":1978
  *             while True: # start capture
- *                 count = 0
+ *                 count_0 = 0
  *                 while True:             # <<<<<<<<<<<<<<
  *                     offset_2 = offset_1
- *                     line_start_1 = line_start
+ *                     line_start_1 = line_start_0
  */
       while (1) {
 
         /* "RSONParser.pyx":1979
- *                 count = 0
+ *                 count_0 = 0
  *                 while True:
  *                     offset_2 = offset_1             # <<<<<<<<<<<<<<
- *                     line_start_1 = line_start
- *                     offset_2, line_start_1 = self.parse_rson_value(buf, offset_2, line_start_1, indent, buf_eof, children_1)
+ *                     line_start_1 = line_start_0
+ *                     offset_2, line_start_1 = self.parse_rson_value(buf, offset_2, line_start_1, indent_0, buf_eof, children_1)
  */
         __Pyx_INCREF(__pyx_v_offset_1);
         __Pyx_XDECREF_SET(__pyx_v_offset_2, __pyx_v_offset_1);
@@ -25173,21 +25173,21 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
         /* "RSONParser.pyx":1980
  *                 while True:
  *                     offset_2 = offset_1
- *                     line_start_1 = line_start             # <<<<<<<<<<<<<<
- *                     offset_2, line_start_1 = self.parse_rson_value(buf, offset_2, line_start_1, indent, buf_eof, children_1)
+ *                     line_start_1 = line_start_0             # <<<<<<<<<<<<<<
+ *                     offset_2, line_start_1 = self.parse_rson_value(buf, offset_2, line_start_1, indent_0, buf_eof, children_1)
  *                     if offset_2 == -1: break
  */
-        __pyx_v_line_start_1 = __pyx_v_line_start;
+        __pyx_v_line_start_1 = __pyx_v_line_start_0;
 
         /* "RSONParser.pyx":1981
  *                     offset_2 = offset_1
- *                     line_start_1 = line_start
- *                     offset_2, line_start_1 = self.parse_rson_value(buf, offset_2, line_start_1, indent, buf_eof, children_1)             # <<<<<<<<<<<<<<
+ *                     line_start_1 = line_start_0
+ *                     offset_2, line_start_1 = self.parse_rson_value(buf, offset_2, line_start_1, indent_0, buf_eof, children_1)             # <<<<<<<<<<<<<<
  *                     if offset_2 == -1: break
  * 
  */
         __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_offset_2); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 1981, __pyx_L1_error)
-        __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_rson_value(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_1);
+        __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_rson_value(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_1, __pyx_v_indent_0, __pyx_v_buf_eof, __pyx_v_children_1);
         __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_4.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1981, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         __pyx_t_6 = __pyx_t_4.f1;
@@ -25196,8 +25196,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
         __pyx_v_line_start_1 = __pyx_t_6;
 
         /* "RSONParser.pyx":1982
- *                     line_start_1 = line_start
- *                     offset_2, line_start_1 = self.parse_rson_value(buf, offset_2, line_start_1, indent, buf_eof, children_1)
+ *                     line_start_1 = line_start_0
+ *                     offset_2, line_start_1 = self.parse_rson_value(buf, offset_2, line_start_1, indent_0, buf_eof, children_1)
  *                     if offset_2 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
@@ -25234,7 +25234,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
  *                     while True:
  *                         offset_3 = offset_2             # <<<<<<<<<<<<<<
  *                         line_start_2 = line_start_1
- *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent, buf_eof, children_1)
+ *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent_0, buf_eof, children_1)
  */
           __Pyx_INCREF(__pyx_v_offset_2);
           __Pyx_XDECREF_SET(__pyx_v_offset_3, __pyx_v_offset_2);
@@ -25243,7 +25243,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
  *                     while True:
  *                         offset_3 = offset_2
  *                         line_start_2 = line_start_1             # <<<<<<<<<<<<<<
- *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent, buf_eof, children_1)
+ *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent_0, buf_eof, children_1)
  *                         if offset_3 == -1: break
  */
           __pyx_v_line_start_2 = __pyx_v_line_start_1;
@@ -25251,12 +25251,12 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
           /* "RSONParser.pyx":1989
  *                         offset_3 = offset_2
  *                         line_start_2 = line_start_1
- *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent, buf_eof, children_1)             # <<<<<<<<<<<<<<
+ *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent_0, buf_eof, children_1)             # <<<<<<<<<<<<<<
  *                         if offset_3 == -1: break
  * 
  */
           __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_offset_3); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 1989, __pyx_L1_error)
-          __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_comment(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_2, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_1);
+          __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_comment(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_2, __pyx_v_indent_0, __pyx_v_buf_eof, __pyx_v_children_1);
           __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_4.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1989, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           __pyx_t_6 = __pyx_t_4.f1;
@@ -25266,7 +25266,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
 
           /* "RSONParser.pyx":1990
  *                         line_start_2 = line_start_1
- *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent, buf_eof, children_1)
+ *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent_0, buf_eof, children_1)
  *                         if offset_3 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
@@ -25355,7 +25355,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
  *                             offset_3 = -1
  *                             break             # <<<<<<<<<<<<<<
  * 
- *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent, buf_eof, children_1)
+ *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent_0, buf_eof, children_1)
  */
             goto __pyx_L13_break;
           }
@@ -25364,12 +25364,12 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
           /* "RSONParser.pyx":1999
  *                             break
  * 
- *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent, buf_eof, children_1)             # <<<<<<<<<<<<<<
+ *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent_0, buf_eof, children_1)             # <<<<<<<<<<<<<<
  *                         if offset_3 == -1: break
  * 
  */
           __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_offset_3); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 1999, __pyx_L1_error)
-          __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_comment(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_2, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_1);
+          __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_comment(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_2, __pyx_v_indent_0, __pyx_v_buf_eof, __pyx_v_children_1);
           __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_4.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1999, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           __pyx_t_6 = __pyx_t_4.f1;
@@ -25379,7 +25379,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
 
           /* "RSONParser.pyx":2000
  * 
- *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent, buf_eof, children_1)
+ *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent_0, buf_eof, children_1)
  *                         if offset_3 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
@@ -25395,12 +25395,12 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
           /* "RSONParser.pyx":2003
  * 
  * 
- *                         offset_3, line_start_2 = self.parse_rson_value(buf, offset_3, line_start_2, indent, buf_eof, children_1)             # <<<<<<<<<<<<<<
+ *                         offset_3, line_start_2 = self.parse_rson_value(buf, offset_3, line_start_2, indent_0, buf_eof, children_1)             # <<<<<<<<<<<<<<
  *                         if offset_3 == -1: break
  * 
  */
           __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_offset_3); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 2003, __pyx_L1_error)
-          __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_rson_value(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_2, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_1);
+          __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_rson_value(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_2, __pyx_v_indent_0, __pyx_v_buf_eof, __pyx_v_children_1);
           __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_4.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2003, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           __pyx_t_6 = __pyx_t_4.f1;
@@ -25410,7 +25410,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
 
           /* "RSONParser.pyx":2004
  * 
- *                         offset_3, line_start_2 = self.parse_rson_value(buf, offset_3, line_start_2, indent, buf_eof, children_1)
+ *                         offset_3, line_start_2 = self.parse_rson_value(buf, offset_3, line_start_2, indent_0, buf_eof, children_1)
  *                         if offset_3 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
@@ -25461,7 +25461,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
  *                         line_start_1 = line_start_2
  *                         count_1 += 1             # <<<<<<<<<<<<<<
  * 
- *                     offset_2, line_start_1 = self.parse_comment(buf, offset_2, line_start_1, indent, buf_eof, children_1)
+ *                     offset_2, line_start_1 = self.parse_comment(buf, offset_2, line_start_1, indent_0, buf_eof, children_1)
  */
           __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_count_1, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2010, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
@@ -25473,12 +25473,12 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
         /* "RSONParser.pyx":2012
  *                         count_1 += 1
  * 
- *                     offset_2, line_start_1 = self.parse_comment(buf, offset_2, line_start_1, indent, buf_eof, children_1)             # <<<<<<<<<<<<<<
+ *                     offset_2, line_start_1 = self.parse_comment(buf, offset_2, line_start_1, indent_0, buf_eof, children_1)             # <<<<<<<<<<<<<<
  *                     if offset_2 == -1: break
  * 
  */
         __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_offset_2); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 2012, __pyx_L1_error)
-        __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_comment(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_1);
+        __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_comment(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_1, __pyx_v_indent_0, __pyx_v_buf_eof, __pyx_v_children_1);
         __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_4.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2012, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         __pyx_t_6 = __pyx_t_4.f1;
@@ -25488,7 +25488,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
 
         /* "RSONParser.pyx":2013
  * 
- *                     offset_2, line_start_1 = self.parse_comment(buf, offset_2, line_start_1, indent, buf_eof, children_1)
+ *                     offset_2, line_start_1 = self.parse_comment(buf, offset_2, line_start_1, indent_0, buf_eof, children_1)
  *                     if offset_2 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
@@ -25615,7 +25615,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
  *                             offset_3 = -1
  *                             break             # <<<<<<<<<<<<<<
  * 
- *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent, buf_eof, children_1)
+ *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent_0, buf_eof, children_1)
  */
             goto __pyx_L21_break;
           }
@@ -25624,12 +25624,12 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
           /* "RSONParser.pyx":2026
  *                             break
  * 
- *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent, buf_eof, children_1)             # <<<<<<<<<<<<<<
+ *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent_0, buf_eof, children_1)             # <<<<<<<<<<<<<<
  *                         if offset_3 == -1: break
  * 
  */
           __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_offset_3); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 2026, __pyx_L1_error)
-          __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_comment(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_2, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_1);
+          __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_comment(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_2, __pyx_v_indent_0, __pyx_v_buf_eof, __pyx_v_children_1);
           __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_4.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2026, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           __pyx_t_6 = __pyx_t_4.f1;
@@ -25639,7 +25639,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
 
           /* "RSONParser.pyx":2027
  * 
- *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent, buf_eof, children_1)
+ *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent_0, buf_eof, children_1)
  *                         if offset_3 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
@@ -25704,7 +25704,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
  * 
  *                     if offset_1 == offset_2: break             # <<<<<<<<<<<<<<
  *                     offset_1 = offset_2
- *                     line_start = line_start_1
+ *                     line_start_0 = line_start_1
  */
         __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_1, __pyx_v_offset_2, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2035, __pyx_L1_error)
         __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 2035, __pyx_L1_error)
@@ -25717,8 +25717,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
  * 
  *                     if offset_1 == offset_2: break
  *                     offset_1 = offset_2             # <<<<<<<<<<<<<<
- *                     line_start = line_start_1
- *                     count += 1
+ *                     line_start_0 = line_start_1
+ *                     count_0 += 1
  */
         __Pyx_INCREF(__pyx_v_offset_2);
         __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_v_offset_2);
@@ -25726,29 +25726,29 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
         /* "RSONParser.pyx":2037
  *                     if offset_1 == offset_2: break
  *                     offset_1 = offset_2
- *                     line_start = line_start_1             # <<<<<<<<<<<<<<
- *                     count += 1
+ *                     line_start_0 = line_start_1             # <<<<<<<<<<<<<<
+ *                     count_0 += 1
  * 
  */
-        __pyx_v_line_start = __pyx_v_line_start_1;
+        __pyx_v_line_start_0 = __pyx_v_line_start_1;
 
         /* "RSONParser.pyx":2038
  *                     offset_1 = offset_2
- *                     line_start = line_start_1
- *                     count += 1             # <<<<<<<<<<<<<<
+ *                     line_start_0 = line_start_1
+ *                     count_0 += 1             # <<<<<<<<<<<<<<
  * 
  *                 break
  */
-        __pyx_v_count = (__pyx_v_count + 1);
+        __pyx_v_count_0 = (__pyx_v_count_0 + 1);
       }
       __pyx_L10_break:;
 
       /* "RSONParser.pyx":2040
- *                     count += 1
+ *                     count_0 += 1
  * 
  *                 break             # <<<<<<<<<<<<<<
  *             if offset_1 == -1:
- *                 offset = -1
+ *                 offset_0 = -1
  */
       goto __pyx_L8_break;
     }
@@ -25758,7 +25758,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
  * 
  *                 break
  *             if offset_1 == -1:             # <<<<<<<<<<<<<<
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break
  */
     __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_1, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2041, __pyx_L1_error)
@@ -25770,18 +25770,18 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
       /* "RSONParser.pyx":2042
  *                 break
  *             if offset_1 == -1:
- *                 offset = -1             # <<<<<<<<<<<<<<
+ *                 offset_0 = -1             # <<<<<<<<<<<<<<
  *                 break
  *             if self.builder is not None:
  */
-      __pyx_v_offset = -1;
+      __pyx_v_offset_0 = -1;
 
       /* "RSONParser.pyx":2043
  *             if offset_1 == -1:
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break             # <<<<<<<<<<<<<<
  *             if self.builder is not None:
- *                 children.append(self.builder['list'](buf, offset, offset_1, children_1))
+ *                 children_0.append(self.builder['list'](buf, offset_0, offset_1, children_1))
  */
       goto __pyx_L4_break;
 
@@ -25789,16 +25789,16 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
  * 
  *                 break
  *             if offset_1 == -1:             # <<<<<<<<<<<<<<
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break
  */
     }
 
     /* "RSONParser.pyx":2044
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break
  *             if self.builder is not None:             # <<<<<<<<<<<<<<
- *                 children.append(self.builder['list'](buf, offset, offset_1, children_1))
+ *                 children_0.append(self.builder['list'](buf, offset_0, offset_1, children_1))
  *             else:
  */
     __pyx_t_3 = (__pyx_v_self->builder != Py_None);
@@ -25808,17 +25808,17 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
       /* "RSONParser.pyx":2045
  *                 break
  *             if self.builder is not None:
- *                 children.append(self.builder['list'](buf, offset, offset_1, children_1))             # <<<<<<<<<<<<<<
+ *                 children_0.append(self.builder['list'](buf, offset_0, offset_1, children_1))             # <<<<<<<<<<<<<<
  *             else:
- *                 children.append(ParseNode('list', offset, offset_1, list(children_1), None))
+ *                 children_0.append(ParseNode('list', offset_0, offset_1, list(children_1), None))
  */
-      if (unlikely(__pyx_v_children == Py_None)) {
+      if (unlikely(__pyx_v_children_0 == Py_None)) {
         PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
         __PYX_ERR(0, 2045, __pyx_L1_error)
       }
       __pyx_t_10 = __Pyx_PyObject_Dict_GetItem(__pyx_v_self->builder, __pyx_n_u_list); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 2045, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_10);
-      __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 2045, __pyx_L1_error)
+      __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_v_offset_0); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 2045, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
       __pyx_t_12 = NULL;
       __pyx_t_6 = 0;
@@ -25873,34 +25873,34 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
       }
       __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-      __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 2045, __pyx_L1_error)
+      __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_children_0, __pyx_t_1); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 2045, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
       /* "RSONParser.pyx":2044
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break
  *             if self.builder is not None:             # <<<<<<<<<<<<<<
- *                 children.append(self.builder['list'](buf, offset, offset_1, children_1))
+ *                 children_0.append(self.builder['list'](buf, offset_0, offset_1, children_1))
  *             else:
  */
       goto __pyx_L27;
     }
 
     /* "RSONParser.pyx":2047
- *                 children.append(self.builder['list'](buf, offset, offset_1, children_1))
+ *                 children_0.append(self.builder['list'](buf, offset_0, offset_1, children_1))
  *             else:
- *                 children.append(ParseNode('list', offset, offset_1, list(children_1), None))             # <<<<<<<<<<<<<<
- *             offset = offset_1
+ *                 children_0.append(ParseNode('list', offset_0, offset_1, list(children_1), None))             # <<<<<<<<<<<<<<
+ *             offset_0 = offset_1
  * 
  */
     /*else*/ {
-      if (unlikely(__pyx_v_children == Py_None)) {
+      if (unlikely(__pyx_v_children_0 == Py_None)) {
         PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
         __PYX_ERR(0, 2047, __pyx_L1_error)
       }
       __Pyx_GetModuleGlobalName(__pyx_t_10, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 2047, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_10);
-      __pyx_t_13 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 2047, __pyx_L1_error)
+      __pyx_t_13 = __Pyx_PyInt_From_int(__pyx_v_offset_0); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 2047, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_13);
       __pyx_t_11 = PySequence_List(__pyx_v_children_1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 2047, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
@@ -25962,33 +25962,33 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
         __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
       }
       __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-      __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 2047, __pyx_L1_error)
+      __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_children_0, __pyx_t_1); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 2047, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     }
     __pyx_L27:;
 
     /* "RSONParser.pyx":2048
  *             else:
- *                 children.append(ParseNode('list', offset, offset_1, list(children_1), None))
- *             offset = offset_1             # <<<<<<<<<<<<<<
+ *                 children_0.append(ParseNode('list', offset_0, offset_1, list(children_1), None))
+ *             offset_0 = offset_1             # <<<<<<<<<<<<<<
  * 
- *             if buf[offset:offset+1] == ']':
+ *             if buf[offset_0:offset_0+1] == ']':
  */
     __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_offset_1); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 2048, __pyx_L1_error)
-    __pyx_v_offset = __pyx_t_6;
+    __pyx_v_offset_0 = __pyx_t_6;
 
     /* "RSONParser.pyx":2050
- *             offset = offset_1
+ *             offset_0 = offset_1
  * 
- *             if buf[offset:offset+1] == ']':             # <<<<<<<<<<<<<<
- *                 offset += 1
+ *             if buf[offset_0:offset_0+1] == ']':             # <<<<<<<<<<<<<<
+ *                 offset_0 += 1
  *             else:
  */
     if (unlikely(__pyx_v_buf == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
       __PYX_ERR(0, 2050, __pyx_L1_error)
     }
-    __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_v_offset, (__pyx_v_offset + 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2050, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_v_offset_0, (__pyx_v_offset_0 + 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2050, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u__13, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 2050, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -25997,36 +25997,36 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
 
       /* "RSONParser.pyx":2051
  * 
- *             if buf[offset:offset+1] == ']':
- *                 offset += 1             # <<<<<<<<<<<<<<
+ *             if buf[offset_0:offset_0+1] == ']':
+ *                 offset_0 += 1             # <<<<<<<<<<<<<<
  *             else:
- *                 offset = -1
+ *                 offset_0 = -1
  */
-      __pyx_v_offset = (__pyx_v_offset + 1);
+      __pyx_v_offset_0 = (__pyx_v_offset_0 + 1);
 
       /* "RSONParser.pyx":2050
- *             offset = offset_1
+ *             offset_0 = offset_1
  * 
- *             if buf[offset:offset+1] == ']':             # <<<<<<<<<<<<<<
- *                 offset += 1
+ *             if buf[offset_0:offset_0+1] == ']':             # <<<<<<<<<<<<<<
+ *                 offset_0 += 1
  *             else:
  */
       goto __pyx_L28;
     }
 
     /* "RSONParser.pyx":2053
- *                 offset += 1
+ *                 offset_0 += 1
  *             else:
- *                 offset = -1             # <<<<<<<<<<<<<<
+ *                 offset_0 = -1             # <<<<<<<<<<<<<<
  *                 break
  * 
  */
     /*else*/ {
-      __pyx_v_offset = -1;
+      __pyx_v_offset_0 = -1;
 
       /* "RSONParser.pyx":2054
  *             else:
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break             # <<<<<<<<<<<<<<
  * 
  * 
@@ -26039,7 +26039,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
  * 
  * 
  *             break             # <<<<<<<<<<<<<<
- *         return offset, line_start
+ *         return offset_0, line_start_0
  * 
  */
     goto __pyx_L4_break;
@@ -26049,20 +26049,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
   /* "RSONParser.pyx":2058
  * 
  *             break
- *         return offset, line_start             # <<<<<<<<<<<<<<
+ *         return offset_0, line_start_0             # <<<<<<<<<<<<<<
  * 
- *     cdef (int, int) parse_rson_object(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):
+ *     cdef (int, int) parse_rson_object(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):
  */
-  __pyx_t_4.f0 = __pyx_v_offset;
-  __pyx_t_4.f1 = __pyx_v_line_start;
+  __pyx_t_4.f0 = __pyx_v_offset_0;
+  __pyx_t_4.f1 = __pyx_v_line_start_0;
   __pyx_r = __pyx_t_4;
   goto __pyx_L0;
 
   /* "RSONParser.pyx":1960
- *         return offset, line_start
+ *         return offset_0, line_start_0
  * 
- *     cdef (int, int) parse_rson_list(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
- *         cdef int count
+ *     cdef (int, int) parse_rson_list(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):             # <<<<<<<<<<<<<<
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  */
 
@@ -26087,15 +26087,15 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_list(st
 }
 
 /* "RSONParser.pyx":2060
- *         return offset, line_start
+ *         return offset_0, line_start_0
  * 
- *     cdef (int, int) parse_rson_object(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
- *         cdef int count
+ *     cdef (int, int) parse_rson_object(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):             # <<<<<<<<<<<<<<
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  */
 
-static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, int __pyx_v_indent, int __pyx_v_buf_eof, PyObject *__pyx_v_children) {
-  int __pyx_v_count;
+static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(struct __pyx_obj_10RSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset_0, int __pyx_v_line_start_0, int __pyx_v_indent_0, int __pyx_v_buf_eof, PyObject *__pyx_v_children_0) {
+  int __pyx_v_count_0;
   PyObject *__pyx_v_offset_1 = NULL;
   PyObject *__pyx_v_children_1 = NULL;
   PyObject *__pyx_v_offset_2 = NULL;
@@ -26125,26 +26125,26 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
   __Pyx_RefNannySetupContext("parse_rson_object", 0);
 
   /* "RSONParser.pyx":2063
- *         cdef int count
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop             # <<<<<<<<<<<<<<
- *             if buf[offset:offset+1] == '{':
- *                 offset += 1
+ *             if buf[offset_0:offset_0+1] == '{':
+ *                 offset_0 += 1
  */
   while (1) {
 
     /* "RSONParser.pyx":2064
  *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop
- *             if buf[offset:offset+1] == '{':             # <<<<<<<<<<<<<<
- *                 offset += 1
+ *             if buf[offset_0:offset_0+1] == '{':             # <<<<<<<<<<<<<<
+ *                 offset_0 += 1
  *             else:
  */
     if (unlikely(__pyx_v_buf == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
       __PYX_ERR(0, 2064, __pyx_L1_error)
     }
-    __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_v_offset, (__pyx_v_offset + 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2064, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_v_offset_0, (__pyx_v_offset_0 + 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2064, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u__14, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 2064, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -26153,39 +26153,39 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
 
       /* "RSONParser.pyx":2065
  *         while True: # note: return at end of loop
- *             if buf[offset:offset+1] == '{':
- *                 offset += 1             # <<<<<<<<<<<<<<
+ *             if buf[offset_0:offset_0+1] == '{':
+ *                 offset_0 += 1             # <<<<<<<<<<<<<<
  *             else:
- *                 offset = -1
+ *                 offset_0 = -1
  */
-      __pyx_v_offset = (__pyx_v_offset + 1);
+      __pyx_v_offset_0 = (__pyx_v_offset_0 + 1);
 
       /* "RSONParser.pyx":2064
  *         cpdef Py_UCS4 chr
  *         while True: # note: return at end of loop
- *             if buf[offset:offset+1] == '{':             # <<<<<<<<<<<<<<
- *                 offset += 1
+ *             if buf[offset_0:offset_0+1] == '{':             # <<<<<<<<<<<<<<
+ *                 offset_0 += 1
  *             else:
  */
       goto __pyx_L5;
     }
 
     /* "RSONParser.pyx":2067
- *                 offset += 1
+ *                 offset_0 += 1
  *             else:
- *                 offset = -1             # <<<<<<<<<<<<<<
+ *                 offset_0 = -1             # <<<<<<<<<<<<<<
  *                 break
  * 
  */
     /*else*/ {
-      __pyx_v_offset = -1;
+      __pyx_v_offset_0 = -1;
 
       /* "RSONParser.pyx":2068
  *             else:
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break             # <<<<<<<<<<<<<<
  * 
- *             offset, line_start = self.parse_comment(buf, offset, line_start, indent, buf_eof, children)
+ *             offset_0, line_start_0 = self.parse_comment(buf, offset_0, line_start_0, indent_0, buf_eof, children_0)
  */
       goto __pyx_L4_break;
     }
@@ -26194,24 +26194,24 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
     /* "RSONParser.pyx":2070
  *                 break
  * 
- *             offset, line_start = self.parse_comment(buf, offset, line_start, indent, buf_eof, children)             # <<<<<<<<<<<<<<
- *             if offset == -1: break
+ *             offset_0, line_start_0 = self.parse_comment(buf, offset_0, line_start_0, indent_0, buf_eof, children_0)             # <<<<<<<<<<<<<<
+ *             if offset_0 == -1: break
  * 
  */
-    __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_comment(__pyx_v_self, __pyx_v_buf, __pyx_v_offset, __pyx_v_line_start, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children);
+    __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_comment(__pyx_v_self, __pyx_v_buf, __pyx_v_offset_0, __pyx_v_line_start_0, __pyx_v_indent_0, __pyx_v_buf_eof, __pyx_v_children_0);
     __pyx_t_5 = __pyx_t_4.f0;
     __pyx_t_6 = __pyx_t_4.f1;
-    __pyx_v_offset = __pyx_t_5;
-    __pyx_v_line_start = __pyx_t_6;
+    __pyx_v_offset_0 = __pyx_t_5;
+    __pyx_v_line_start_0 = __pyx_t_6;
 
     /* "RSONParser.pyx":2071
  * 
- *             offset, line_start = self.parse_comment(buf, offset, line_start, indent, buf_eof, children)
- *             if offset == -1: break             # <<<<<<<<<<<<<<
+ *             offset_0, line_start_0 = self.parse_comment(buf, offset_0, line_start_0, indent_0, buf_eof, children_0)
+ *             if offset_0 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
  */
-    __pyx_t_3 = ((__pyx_v_offset == -1L) != 0);
+    __pyx_t_3 = ((__pyx_v_offset_0 == -1L) != 0);
     if (__pyx_t_3) {
       goto __pyx_L4_break;
     }
@@ -26219,21 +26219,21 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
     /* "RSONParser.pyx":2074
  * 
  * 
- *             offset_1 = offset             # <<<<<<<<<<<<<<
+ *             offset_1 = offset_0             # <<<<<<<<<<<<<<
  *             children_1 = []
  *             while True: # start capture
  */
-    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2074, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset_0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2074, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_v_offset_1 = __pyx_t_1;
     __pyx_t_1 = 0;
 
     /* "RSONParser.pyx":2075
  * 
- *             offset_1 = offset
+ *             offset_1 = offset_0
  *             children_1 = []             # <<<<<<<<<<<<<<
  *             while True: # start capture
- *                 count = 0
+ *                 count_0 = 0
  */
     __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2075, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
@@ -26241,10 +26241,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
     __pyx_t_1 = 0;
 
     /* "RSONParser.pyx":2076
- *             offset_1 = offset
+ *             offset_1 = offset_0
  *             children_1 = []
  *             while True: # start capture             # <<<<<<<<<<<<<<
- *                 count = 0
+ *                 count_0 = 0
  *                 while True:
  */
     while (1) {
@@ -26252,26 +26252,26 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
       /* "RSONParser.pyx":2077
  *             children_1 = []
  *             while True: # start capture
- *                 count = 0             # <<<<<<<<<<<<<<
+ *                 count_0 = 0             # <<<<<<<<<<<<<<
  *                 while True:
  *                     offset_2 = offset_1
  */
-      __pyx_v_count = 0;
+      __pyx_v_count_0 = 0;
 
       /* "RSONParser.pyx":2078
  *             while True: # start capture
- *                 count = 0
+ *                 count_0 = 0
  *                 while True:             # <<<<<<<<<<<<<<
  *                     offset_2 = offset_1
- *                     line_start_1 = line_start
+ *                     line_start_1 = line_start_0
  */
       while (1) {
 
         /* "RSONParser.pyx":2079
- *                 count = 0
+ *                 count_0 = 0
  *                 while True:
  *                     offset_2 = offset_1             # <<<<<<<<<<<<<<
- *                     line_start_1 = line_start
+ *                     line_start_1 = line_start_0
  *                     offset_3 = offset_2
  */
         __Pyx_INCREF(__pyx_v_offset_1);
@@ -26280,15 +26280,15 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
         /* "RSONParser.pyx":2080
  *                 while True:
  *                     offset_2 = offset_1
- *                     line_start_1 = line_start             # <<<<<<<<<<<<<<
+ *                     line_start_1 = line_start_0             # <<<<<<<<<<<<<<
  *                     offset_3 = offset_2
  *                     children_2 = []
  */
-        __pyx_v_line_start_1 = __pyx_v_line_start;
+        __pyx_v_line_start_1 = __pyx_v_line_start_0;
 
         /* "RSONParser.pyx":2081
  *                     offset_2 = offset_1
- *                     line_start_1 = line_start
+ *                     line_start_1 = line_start_0
  *                     offset_3 = offset_2             # <<<<<<<<<<<<<<
  *                     children_2 = []
  *                     while True: # start capture
@@ -26297,11 +26297,11 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
         __Pyx_XDECREF_SET(__pyx_v_offset_3, __pyx_v_offset_2);
 
         /* "RSONParser.pyx":2082
- *                     line_start_1 = line_start
+ *                     line_start_1 = line_start_0
  *                     offset_3 = offset_2
  *                     children_2 = []             # <<<<<<<<<<<<<<
  *                     while True: # start capture
- *                         offset_3, line_start_1 = self.parse_rson_string(buf, offset_3, line_start_1, indent, buf_eof, children_2)
+ *                         offset_3, line_start_1 = self.parse_rson_string(buf, offset_3, line_start_1, indent_0, buf_eof, children_2)
  */
         __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2082, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
@@ -26312,7 +26312,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
  *                     offset_3 = offset_2
  *                     children_2 = []
  *                     while True: # start capture             # <<<<<<<<<<<<<<
- *                         offset_3, line_start_1 = self.parse_rson_string(buf, offset_3, line_start_1, indent, buf_eof, children_2)
+ *                         offset_3, line_start_1 = self.parse_rson_string(buf, offset_3, line_start_1, indent_0, buf_eof, children_2)
  *                         if offset_3 == -1: break
  */
         while (1) {
@@ -26320,12 +26320,12 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
           /* "RSONParser.pyx":2084
  *                     children_2 = []
  *                     while True: # start capture
- *                         offset_3, line_start_1 = self.parse_rson_string(buf, offset_3, line_start_1, indent, buf_eof, children_2)             # <<<<<<<<<<<<<<
+ *                         offset_3, line_start_1 = self.parse_rson_string(buf, offset_3, line_start_1, indent_0, buf_eof, children_2)             # <<<<<<<<<<<<<<
  *                         if offset_3 == -1: break
  * 
  */
           __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_offset_3); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 2084, __pyx_L1_error)
-          __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_rson_string(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_2);
+          __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_rson_string(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_1, __pyx_v_indent_0, __pyx_v_buf_eof, __pyx_v_children_2);
           __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_4.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2084, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           __pyx_t_6 = __pyx_t_4.f1;
@@ -26335,7 +26335,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
 
           /* "RSONParser.pyx":2085
  *                     while True: # start capture
- *                         offset_3, line_start_1 = self.parse_rson_string(buf, offset_3, line_start_1, indent, buf_eof, children_2)
+ *                         offset_3, line_start_1 = self.parse_rson_string(buf, offset_3, line_start_1, indent_0, buf_eof, children_2)
  *                         if offset_3 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
@@ -26351,12 +26351,12 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
           /* "RSONParser.pyx":2088
  * 
  * 
- *                         offset_3, line_start_1 = self.parse_comment(buf, offset_3, line_start_1, indent, buf_eof, children_2)             # <<<<<<<<<<<<<<
+ *                         offset_3, line_start_1 = self.parse_comment(buf, offset_3, line_start_1, indent_0, buf_eof, children_2)             # <<<<<<<<<<<<<<
  *                         if offset_3 == -1: break
  * 
  */
           __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_offset_3); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 2088, __pyx_L1_error)
-          __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_comment(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_2);
+          __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_comment(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_1, __pyx_v_indent_0, __pyx_v_buf_eof, __pyx_v_children_2);
           __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_4.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2088, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           __pyx_t_6 = __pyx_t_4.f1;
@@ -26366,7 +26366,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
 
           /* "RSONParser.pyx":2089
  * 
- *                         offset_3, line_start_1 = self.parse_comment(buf, offset_3, line_start_1, indent, buf_eof, children_2)
+ *                         offset_3, line_start_1 = self.parse_comment(buf, offset_3, line_start_1, indent_0, buf_eof, children_2)
  *                         if offset_3 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
@@ -26455,7 +26455,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
  *                             offset_3 = -1
  *                             break             # <<<<<<<<<<<<<<
  * 
- *                         offset_3, line_start_1 = self.parse_comment(buf, offset_3, line_start_1, indent, buf_eof, children_2)
+ *                         offset_3, line_start_1 = self.parse_comment(buf, offset_3, line_start_1, indent_0, buf_eof, children_2)
  */
             goto __pyx_L12_break;
           }
@@ -26464,12 +26464,12 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
           /* "RSONParser.pyx":2098
  *                             break
  * 
- *                         offset_3, line_start_1 = self.parse_comment(buf, offset_3, line_start_1, indent, buf_eof, children_2)             # <<<<<<<<<<<<<<
+ *                         offset_3, line_start_1 = self.parse_comment(buf, offset_3, line_start_1, indent_0, buf_eof, children_2)             # <<<<<<<<<<<<<<
  *                         if offset_3 == -1: break
  * 
  */
           __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_offset_3); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 2098, __pyx_L1_error)
-          __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_comment(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_2);
+          __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_comment(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_1, __pyx_v_indent_0, __pyx_v_buf_eof, __pyx_v_children_2);
           __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_4.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2098, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           __pyx_t_6 = __pyx_t_4.f1;
@@ -26479,7 +26479,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
 
           /* "RSONParser.pyx":2099
  * 
- *                         offset_3, line_start_1 = self.parse_comment(buf, offset_3, line_start_1, indent, buf_eof, children_2)
+ *                         offset_3, line_start_1 = self.parse_comment(buf, offset_3, line_start_1, indent_0, buf_eof, children_2)
  *                         if offset_3 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
@@ -26495,12 +26495,12 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
           /* "RSONParser.pyx":2102
  * 
  * 
- *                         offset_3, line_start_1 = self.parse_rson_value(buf, offset_3, line_start_1, indent, buf_eof, children_2)             # <<<<<<<<<<<<<<
+ *                         offset_3, line_start_1 = self.parse_rson_value(buf, offset_3, line_start_1, indent_0, buf_eof, children_2)             # <<<<<<<<<<<<<<
  *                         if offset_3 == -1: break
  * 
  */
           __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_offset_3); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 2102, __pyx_L1_error)
-          __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_rson_value(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_2);
+          __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_rson_value(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_1, __pyx_v_indent_0, __pyx_v_buf_eof, __pyx_v_children_2);
           __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_4.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2102, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           __pyx_t_6 = __pyx_t_4.f1;
@@ -26510,7 +26510,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
 
           /* "RSONParser.pyx":2103
  * 
- *                         offset_3, line_start_1 = self.parse_rson_value(buf, offset_3, line_start_1, indent, buf_eof, children_2)
+ *                         offset_3, line_start_1 = self.parse_rson_value(buf, offset_3, line_start_1, indent_0, buf_eof, children_2)
  *                         if offset_3 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
@@ -26737,7 +26737,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
  *                         children_1.append(ParseNode('pair', offset_2, offset_3, list(children_2), None))
  *                     offset_2 = offset_3             # <<<<<<<<<<<<<<
  * 
- *                     offset_2, line_start_1 = self.parse_comment(buf, offset_2, line_start_1, indent, buf_eof, children_1)
+ *                     offset_2, line_start_1 = self.parse_comment(buf, offset_2, line_start_1, indent_0, buf_eof, children_1)
  */
         __Pyx_INCREF(__pyx_v_offset_3);
         __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_v_offset_3);
@@ -26745,12 +26745,12 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
         /* "RSONParser.pyx":2116
  *                     offset_2 = offset_3
  * 
- *                     offset_2, line_start_1 = self.parse_comment(buf, offset_2, line_start_1, indent, buf_eof, children_1)             # <<<<<<<<<<<<<<
+ *                     offset_2, line_start_1 = self.parse_comment(buf, offset_2, line_start_1, indent_0, buf_eof, children_1)             # <<<<<<<<<<<<<<
  *                     if offset_2 == -1: break
  * 
  */
         __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_offset_2); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 2116, __pyx_L1_error)
-        __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_comment(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_1);
+        __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_comment(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_1, __pyx_v_indent_0, __pyx_v_buf_eof, __pyx_v_children_1);
         __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_4.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2116, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         __pyx_t_6 = __pyx_t_4.f1;
@@ -26760,7 +26760,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
 
         /* "RSONParser.pyx":2117
  * 
- *                     offset_2, line_start_1 = self.parse_comment(buf, offset_2, line_start_1, indent, buf_eof, children_1)
+ *                     offset_2, line_start_1 = self.parse_comment(buf, offset_2, line_start_1, indent_0, buf_eof, children_1)
  *                     if offset_2 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
@@ -26887,7 +26887,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
  *                             offset_3 = -1
  *                             break             # <<<<<<<<<<<<<<
  * 
- *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent, buf_eof, children_1)
+ *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent_0, buf_eof, children_1)
  */
             goto __pyx_L22_break;
           }
@@ -26896,12 +26896,12 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
           /* "RSONParser.pyx":2130
  *                             break
  * 
- *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent, buf_eof, children_1)             # <<<<<<<<<<<<<<
+ *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent_0, buf_eof, children_1)             # <<<<<<<<<<<<<<
  *                         if offset_3 == -1: break
  * 
  */
           __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_offset_3); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 2130, __pyx_L1_error)
-          __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_comment(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_2, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_1);
+          __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_comment(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_2, __pyx_v_indent_0, __pyx_v_buf_eof, __pyx_v_children_1);
           __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_4.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2130, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           __pyx_t_6 = __pyx_t_4.f1;
@@ -26911,7 +26911,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
 
           /* "RSONParser.pyx":2131
  * 
- *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent, buf_eof, children_1)
+ *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent_0, buf_eof, children_1)
  *                         if offset_3 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
@@ -26939,7 +26939,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
  *                         offset_4 = offset_3
  *                         children_2 = []             # <<<<<<<<<<<<<<
  *                         while True: # start capture
- *                             offset_4, line_start_2 = self.parse_rson_string(buf, offset_4, line_start_2, indent, buf_eof, children_2)
+ *                             offset_4, line_start_2 = self.parse_rson_string(buf, offset_4, line_start_2, indent_0, buf_eof, children_2)
  */
           __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2135, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
@@ -26950,7 +26950,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
  *                         offset_4 = offset_3
  *                         children_2 = []
  *                         while True: # start capture             # <<<<<<<<<<<<<<
- *                             offset_4, line_start_2 = self.parse_rson_string(buf, offset_4, line_start_2, indent, buf_eof, children_2)
+ *                             offset_4, line_start_2 = self.parse_rson_string(buf, offset_4, line_start_2, indent_0, buf_eof, children_2)
  *                             if offset_4 == -1: break
  */
           while (1) {
@@ -26958,12 +26958,12 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
             /* "RSONParser.pyx":2137
  *                         children_2 = []
  *                         while True: # start capture
- *                             offset_4, line_start_2 = self.parse_rson_string(buf, offset_4, line_start_2, indent, buf_eof, children_2)             # <<<<<<<<<<<<<<
+ *                             offset_4, line_start_2 = self.parse_rson_string(buf, offset_4, line_start_2, indent_0, buf_eof, children_2)             # <<<<<<<<<<<<<<
  *                             if offset_4 == -1: break
  * 
  */
             __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_offset_4); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 2137, __pyx_L1_error)
-            __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_rson_string(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_2, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_2);
+            __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_rson_string(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_2, __pyx_v_indent_0, __pyx_v_buf_eof, __pyx_v_children_2);
             __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_4.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2137, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
             __pyx_t_6 = __pyx_t_4.f1;
@@ -26973,7 +26973,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
 
             /* "RSONParser.pyx":2138
  *                         while True: # start capture
- *                             offset_4, line_start_2 = self.parse_rson_string(buf, offset_4, line_start_2, indent, buf_eof, children_2)
+ *                             offset_4, line_start_2 = self.parse_rson_string(buf, offset_4, line_start_2, indent_0, buf_eof, children_2)
  *                             if offset_4 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
@@ -26989,12 +26989,12 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
             /* "RSONParser.pyx":2141
  * 
  * 
- *                             offset_4, line_start_2 = self.parse_comment(buf, offset_4, line_start_2, indent, buf_eof, children_2)             # <<<<<<<<<<<<<<
+ *                             offset_4, line_start_2 = self.parse_comment(buf, offset_4, line_start_2, indent_0, buf_eof, children_2)             # <<<<<<<<<<<<<<
  *                             if offset_4 == -1: break
  * 
  */
             __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_offset_4); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 2141, __pyx_L1_error)
-            __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_comment(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_2, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_2);
+            __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_comment(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_2, __pyx_v_indent_0, __pyx_v_buf_eof, __pyx_v_children_2);
             __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_4.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2141, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
             __pyx_t_6 = __pyx_t_4.f1;
@@ -27004,7 +27004,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
 
             /* "RSONParser.pyx":2142
  * 
- *                             offset_4, line_start_2 = self.parse_comment(buf, offset_4, line_start_2, indent, buf_eof, children_2)
+ *                             offset_4, line_start_2 = self.parse_comment(buf, offset_4, line_start_2, indent_0, buf_eof, children_2)
  *                             if offset_4 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
@@ -27093,7 +27093,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
  *                                 offset_4 = -1
  *                                 break             # <<<<<<<<<<<<<<
  * 
- *                             offset_4, line_start_2 = self.parse_comment(buf, offset_4, line_start_2, indent, buf_eof, children_2)
+ *                             offset_4, line_start_2 = self.parse_comment(buf, offset_4, line_start_2, indent_0, buf_eof, children_2)
  */
               goto __pyx_L26_break;
             }
@@ -27102,12 +27102,12 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
             /* "RSONParser.pyx":2151
  *                                 break
  * 
- *                             offset_4, line_start_2 = self.parse_comment(buf, offset_4, line_start_2, indent, buf_eof, children_2)             # <<<<<<<<<<<<<<
+ *                             offset_4, line_start_2 = self.parse_comment(buf, offset_4, line_start_2, indent_0, buf_eof, children_2)             # <<<<<<<<<<<<<<
  *                             if offset_4 == -1: break
  * 
  */
             __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_offset_4); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 2151, __pyx_L1_error)
-            __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_comment(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_2, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_2);
+            __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_comment(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_2, __pyx_v_indent_0, __pyx_v_buf_eof, __pyx_v_children_2);
             __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_4.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2151, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
             __pyx_t_6 = __pyx_t_4.f1;
@@ -27117,7 +27117,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
 
             /* "RSONParser.pyx":2152
  * 
- *                             offset_4, line_start_2 = self.parse_comment(buf, offset_4, line_start_2, indent, buf_eof, children_2)
+ *                             offset_4, line_start_2 = self.parse_comment(buf, offset_4, line_start_2, indent_0, buf_eof, children_2)
  *                             if offset_4 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
@@ -27133,12 +27133,12 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
             /* "RSONParser.pyx":2155
  * 
  * 
- *                             offset_4, line_start_2 = self.parse_rson_value(buf, offset_4, line_start_2, indent, buf_eof, children_2)             # <<<<<<<<<<<<<<
+ *                             offset_4, line_start_2 = self.parse_rson_value(buf, offset_4, line_start_2, indent_0, buf_eof, children_2)             # <<<<<<<<<<<<<<
  *                             if offset_4 == -1: break
  * 
  */
             __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_offset_4); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 2155, __pyx_L1_error)
-            __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_rson_value(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_2, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_2);
+            __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_rson_value(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_2, __pyx_v_indent_0, __pyx_v_buf_eof, __pyx_v_children_2);
             __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_4.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2155, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
             __pyx_t_6 = __pyx_t_4.f1;
@@ -27148,7 +27148,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
 
             /* "RSONParser.pyx":2156
  * 
- *                             offset_4, line_start_2 = self.parse_rson_value(buf, offset_4, line_start_2, indent, buf_eof, children_2)
+ *                             offset_4, line_start_2 = self.parse_rson_value(buf, offset_4, line_start_2, indent_0, buf_eof, children_2)
  *                             if offset_4 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
@@ -27375,7 +27375,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
  *                             children_1.append(ParseNode('pair', offset_3, offset_4, list(children_2), None))
  *                         offset_3 = offset_4             # <<<<<<<<<<<<<<
  * 
- *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent, buf_eof, children_1)
+ *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent_0, buf_eof, children_1)
  */
           __Pyx_INCREF(__pyx_v_offset_4);
           __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_v_offset_4);
@@ -27383,12 +27383,12 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
           /* "RSONParser.pyx":2169
  *                         offset_3 = offset_4
  * 
- *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent, buf_eof, children_1)             # <<<<<<<<<<<<<<
+ *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent_0, buf_eof, children_1)             # <<<<<<<<<<<<<<
  *                         if offset_3 == -1: break
  * 
  */
           __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_offset_3); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 2169, __pyx_L1_error)
-          __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_comment(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_2, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_1);
+          __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_comment(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_2, __pyx_v_indent_0, __pyx_v_buf_eof, __pyx_v_children_1);
           __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_4.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2169, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           __pyx_t_6 = __pyx_t_4.f1;
@@ -27398,7 +27398,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
 
           /* "RSONParser.pyx":2170
  * 
- *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent, buf_eof, children_1)
+ *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent_0, buf_eof, children_1)
  *                         if offset_3 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
@@ -27572,7 +27572,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
  *                             offset_3 = -1
  *                             break             # <<<<<<<<<<<<<<
  * 
- *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent, buf_eof, children_1)
+ *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent_0, buf_eof, children_1)
  */
             goto __pyx_L37_break;
           }
@@ -27581,12 +27581,12 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
           /* "RSONParser.pyx":2188
  *                             break
  * 
- *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent, buf_eof, children_1)             # <<<<<<<<<<<<<<
+ *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent_0, buf_eof, children_1)             # <<<<<<<<<<<<<<
  *                         if offset_3 == -1: break
  * 
  */
           __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_offset_3); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 2188, __pyx_L1_error)
-          __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_comment(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_2, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_1);
+          __pyx_t_4 = ((struct __pyx_vtabstruct_10RSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_comment(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_2, __pyx_v_indent_0, __pyx_v_buf_eof, __pyx_v_children_1);
           __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_4.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2188, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           __pyx_t_6 = __pyx_t_4.f1;
@@ -27596,7 +27596,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
 
           /* "RSONParser.pyx":2189
  * 
- *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent, buf_eof, children_1)
+ *                         offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, indent_0, buf_eof, children_1)
  *                         if offset_3 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
@@ -27661,7 +27661,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
  * 
  *                     if offset_1 == offset_2: break             # <<<<<<<<<<<<<<
  *                     offset_1 = offset_2
- *                     line_start = line_start_1
+ *                     line_start_0 = line_start_1
  */
         __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_1, __pyx_v_offset_2, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2197, __pyx_L1_error)
         __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 2197, __pyx_L1_error)
@@ -27674,8 +27674,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
  * 
  *                     if offset_1 == offset_2: break
  *                     offset_1 = offset_2             # <<<<<<<<<<<<<<
- *                     line_start = line_start_1
- *                     count += 1
+ *                     line_start_0 = line_start_1
+ *                     count_0 += 1
  */
         __Pyx_INCREF(__pyx_v_offset_2);
         __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_v_offset_2);
@@ -27683,29 +27683,29 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
         /* "RSONParser.pyx":2199
  *                     if offset_1 == offset_2: break
  *                     offset_1 = offset_2
- *                     line_start = line_start_1             # <<<<<<<<<<<<<<
- *                     count += 1
+ *                     line_start_0 = line_start_1             # <<<<<<<<<<<<<<
+ *                     count_0 += 1
  * 
  */
-        __pyx_v_line_start = __pyx_v_line_start_1;
+        __pyx_v_line_start_0 = __pyx_v_line_start_1;
 
         /* "RSONParser.pyx":2200
  *                     offset_1 = offset_2
- *                     line_start = line_start_1
- *                     count += 1             # <<<<<<<<<<<<<<
+ *                     line_start_0 = line_start_1
+ *                     count_0 += 1             # <<<<<<<<<<<<<<
  * 
  *                 break
  */
-        __pyx_v_count = (__pyx_v_count + 1);
+        __pyx_v_count_0 = (__pyx_v_count_0 + 1);
       }
       __pyx_L10_break:;
 
       /* "RSONParser.pyx":2202
- *                     count += 1
+ *                     count_0 += 1
  * 
  *                 break             # <<<<<<<<<<<<<<
  *             if offset_1 == -1:
- *                 offset = -1
+ *                 offset_0 = -1
  */
       goto __pyx_L8_break;
     }
@@ -27715,7 +27715,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
  * 
  *                 break
  *             if offset_1 == -1:             # <<<<<<<<<<<<<<
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break
  */
     __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_1, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2203, __pyx_L1_error)
@@ -27727,18 +27727,18 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
       /* "RSONParser.pyx":2204
  *                 break
  *             if offset_1 == -1:
- *                 offset = -1             # <<<<<<<<<<<<<<
+ *                 offset_0 = -1             # <<<<<<<<<<<<<<
  *                 break
  *             if self.builder is not None:
  */
-      __pyx_v_offset = -1;
+      __pyx_v_offset_0 = -1;
 
       /* "RSONParser.pyx":2205
  *             if offset_1 == -1:
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break             # <<<<<<<<<<<<<<
  *             if self.builder is not None:
- *                 children.append(self.builder['object'](buf, offset, offset_1, children_1))
+ *                 children_0.append(self.builder['object'](buf, offset_0, offset_1, children_1))
  */
       goto __pyx_L4_break;
 
@@ -27746,16 +27746,16 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
  * 
  *                 break
  *             if offset_1 == -1:             # <<<<<<<<<<<<<<
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break
  */
     }
 
     /* "RSONParser.pyx":2206
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break
  *             if self.builder is not None:             # <<<<<<<<<<<<<<
- *                 children.append(self.builder['object'](buf, offset, offset_1, children_1))
+ *                 children_0.append(self.builder['object'](buf, offset_0, offset_1, children_1))
  *             else:
  */
     __pyx_t_3 = (__pyx_v_self->builder != Py_None);
@@ -27765,17 +27765,17 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
       /* "RSONParser.pyx":2207
  *                 break
  *             if self.builder is not None:
- *                 children.append(self.builder['object'](buf, offset, offset_1, children_1))             # <<<<<<<<<<<<<<
+ *                 children_0.append(self.builder['object'](buf, offset_0, offset_1, children_1))             # <<<<<<<<<<<<<<
  *             else:
- *                 children.append(ParseNode('object', offset, offset_1, list(children_1), None))
+ *                 children_0.append(ParseNode('object', offset_0, offset_1, list(children_1), None))
  */
-      if (unlikely(__pyx_v_children == Py_None)) {
+      if (unlikely(__pyx_v_children_0 == Py_None)) {
         PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
         __PYX_ERR(0, 2207, __pyx_L1_error)
       }
       __pyx_t_10 = __Pyx_PyObject_Dict_GetItem(__pyx_v_self->builder, __pyx_n_u_object); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 2207, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_10);
-      __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 2207, __pyx_L1_error)
+      __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_v_offset_0); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 2207, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
       __pyx_t_12 = NULL;
       __pyx_t_6 = 0;
@@ -27830,34 +27830,34 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
         __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
       }
       __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-      __pyx_t_13 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_13 == ((int)-1))) __PYX_ERR(0, 2207, __pyx_L1_error)
+      __pyx_t_13 = __Pyx_PyList_Append(__pyx_v_children_0, __pyx_t_1); if (unlikely(__pyx_t_13 == ((int)-1))) __PYX_ERR(0, 2207, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
       /* "RSONParser.pyx":2206
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break
  *             if self.builder is not None:             # <<<<<<<<<<<<<<
- *                 children.append(self.builder['object'](buf, offset, offset_1, children_1))
+ *                 children_0.append(self.builder['object'](buf, offset_0, offset_1, children_1))
  *             else:
  */
       goto __pyx_L43;
     }
 
     /* "RSONParser.pyx":2209
- *                 children.append(self.builder['object'](buf, offset, offset_1, children_1))
+ *                 children_0.append(self.builder['object'](buf, offset_0, offset_1, children_1))
  *             else:
- *                 children.append(ParseNode('object', offset, offset_1, list(children_1), None))             # <<<<<<<<<<<<<<
- *             offset = offset_1
+ *                 children_0.append(ParseNode('object', offset_0, offset_1, list(children_1), None))             # <<<<<<<<<<<<<<
+ *             offset_0 = offset_1
  * 
  */
     /*else*/ {
-      if (unlikely(__pyx_v_children == Py_None)) {
+      if (unlikely(__pyx_v_children_0 == Py_None)) {
         PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
         __PYX_ERR(0, 2209, __pyx_L1_error)
       }
       __Pyx_GetModuleGlobalName(__pyx_t_10, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 2209, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_10);
-      __pyx_t_14 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 2209, __pyx_L1_error)
+      __pyx_t_14 = __Pyx_PyInt_From_int(__pyx_v_offset_0); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 2209, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_14);
       __pyx_t_11 = PySequence_List(__pyx_v_children_1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 2209, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
@@ -27919,33 +27919,33 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
         __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
       }
       __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-      __pyx_t_13 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_13 == ((int)-1))) __PYX_ERR(0, 2209, __pyx_L1_error)
+      __pyx_t_13 = __Pyx_PyList_Append(__pyx_v_children_0, __pyx_t_1); if (unlikely(__pyx_t_13 == ((int)-1))) __PYX_ERR(0, 2209, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     }
     __pyx_L43:;
 
     /* "RSONParser.pyx":2210
  *             else:
- *                 children.append(ParseNode('object', offset, offset_1, list(children_1), None))
- *             offset = offset_1             # <<<<<<<<<<<<<<
+ *                 children_0.append(ParseNode('object', offset_0, offset_1, list(children_1), None))
+ *             offset_0 = offset_1             # <<<<<<<<<<<<<<
  * 
- *             if buf[offset:offset+1] == '}':
+ *             if buf[offset_0:offset_0+1] == '}':
  */
     __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_offset_1); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 2210, __pyx_L1_error)
-    __pyx_v_offset = __pyx_t_6;
+    __pyx_v_offset_0 = __pyx_t_6;
 
     /* "RSONParser.pyx":2212
- *             offset = offset_1
+ *             offset_0 = offset_1
  * 
- *             if buf[offset:offset+1] == '}':             # <<<<<<<<<<<<<<
- *                 offset += 1
+ *             if buf[offset_0:offset_0+1] == '}':             # <<<<<<<<<<<<<<
+ *                 offset_0 += 1
  *             else:
  */
     if (unlikely(__pyx_v_buf == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
       __PYX_ERR(0, 2212, __pyx_L1_error)
     }
-    __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_v_offset, (__pyx_v_offset + 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2212, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_v_offset_0, (__pyx_v_offset_0 + 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 2212, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u__16, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 2212, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -27954,36 +27954,36 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
 
       /* "RSONParser.pyx":2213
  * 
- *             if buf[offset:offset+1] == '}':
- *                 offset += 1             # <<<<<<<<<<<<<<
+ *             if buf[offset_0:offset_0+1] == '}':
+ *                 offset_0 += 1             # <<<<<<<<<<<<<<
  *             else:
- *                 offset = -1
+ *                 offset_0 = -1
  */
-      __pyx_v_offset = (__pyx_v_offset + 1);
+      __pyx_v_offset_0 = (__pyx_v_offset_0 + 1);
 
       /* "RSONParser.pyx":2212
- *             offset = offset_1
+ *             offset_0 = offset_1
  * 
- *             if buf[offset:offset+1] == '}':             # <<<<<<<<<<<<<<
- *                 offset += 1
+ *             if buf[offset_0:offset_0+1] == '}':             # <<<<<<<<<<<<<<
+ *                 offset_0 += 1
  *             else:
  */
       goto __pyx_L44;
     }
 
     /* "RSONParser.pyx":2215
- *                 offset += 1
+ *                 offset_0 += 1
  *             else:
- *                 offset = -1             # <<<<<<<<<<<<<<
+ *                 offset_0 = -1             # <<<<<<<<<<<<<<
  *                 break
  * 
  */
     /*else*/ {
-      __pyx_v_offset = -1;
+      __pyx_v_offset_0 = -1;
 
       /* "RSONParser.pyx":2216
  *             else:
- *                 offset = -1
+ *                 offset_0 = -1
  *                 break             # <<<<<<<<<<<<<<
  * 
  * 
@@ -27996,7 +27996,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
  * 
  * 
  *             break             # <<<<<<<<<<<<<<
- *         return offset, line_start
+ *         return offset_0, line_start_0
  * 
  */
     goto __pyx_L4_break;
@@ -28006,19 +28006,19 @@ static __pyx_ctuple_int__and_int __pyx_f_10RSONParser_6Parser_parse_rson_object(
   /* "RSONParser.pyx":2220
  * 
  *             break
- *         return offset, line_start             # <<<<<<<<<<<<<<
+ *         return offset_0, line_start_0             # <<<<<<<<<<<<<<
  * 
  */
-  __pyx_t_4.f0 = __pyx_v_offset;
-  __pyx_t_4.f1 = __pyx_v_line_start;
+  __pyx_t_4.f0 = __pyx_v_offset_0;
+  __pyx_t_4.f1 = __pyx_v_line_start_0;
   __pyx_r = __pyx_t_4;
   goto __pyx_L0;
 
   /* "RSONParser.pyx":2060
- *         return offset, line_start
+ *         return offset_0, line_start_0
  * 
- *     cdef (int, int) parse_rson_object(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
- *         cdef int count
+ *     cdef (int, int) parse_rson_object(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):             # <<<<<<<<<<<<<<
+ *         cdef int count_0
  *         cpdef Py_UCS4 chr
  */
 
