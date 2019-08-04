@@ -825,7 +825,7 @@ typedef struct __pyx_ctuple_int__and_int __pyx_ctuple_int__and_int;
 /* "JSONParser.pyx":23
  *         return children[-1] if new_offset else None
  * 
- *     cdef (int, int) parse_document(self, str buf, int offset, int line_start, int indent, list children):             # <<<<<<<<<<<<<<
+ *     cdef (int, int) parse_document(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
  *         cdef Py_UNICODE chr
  */
@@ -850,15 +850,11 @@ struct __pyx_obj_10JSONParser_Parser {
 
 
 struct __pyx_vtabstruct_10JSONParser_Parser {
-  __pyx_ctuple_int__and_int (*parse_document)(struct __pyx_obj_10JSONParser_Parser *, PyObject *, int, int, int, PyObject *);
-  __pyx_ctuple_int__and_int (*parse_json_value)(struct __pyx_obj_10JSONParser_Parser *, PyObject *, int, int, int, PyObject *);
-  __pyx_ctuple_int__and_int (*parse_json_true)(struct __pyx_obj_10JSONParser_Parser *, PyObject *, int, int, int, PyObject *);
-  __pyx_ctuple_int__and_int (*parse_json_false)(struct __pyx_obj_10JSONParser_Parser *, PyObject *, int, int, int, PyObject *);
-  __pyx_ctuple_int__and_int (*parse_json_null)(struct __pyx_obj_10JSONParser_Parser *, PyObject *, int, int, int, PyObject *);
-  __pyx_ctuple_int__and_int (*parse_json_number)(struct __pyx_obj_10JSONParser_Parser *, PyObject *, int, int, int, PyObject *);
-  __pyx_ctuple_int__and_int (*parse_json_string)(struct __pyx_obj_10JSONParser_Parser *, PyObject *, int, int, int, PyObject *);
-  __pyx_ctuple_int__and_int (*parse_json_list)(struct __pyx_obj_10JSONParser_Parser *, PyObject *, int, int, int, PyObject *);
-  __pyx_ctuple_int__and_int (*parse_json_object)(struct __pyx_obj_10JSONParser_Parser *, PyObject *, int, int, int, PyObject *);
+  __pyx_ctuple_int__and_int (*parse_document)(struct __pyx_obj_10JSONParser_Parser *, PyObject *, int, int, int, int, PyObject *);
+  __pyx_ctuple_int__and_int (*parse_json_value)(struct __pyx_obj_10JSONParser_Parser *, PyObject *, int, int, int, int, PyObject *);
+  __pyx_ctuple_int__and_int (*parse_json_string)(struct __pyx_obj_10JSONParser_Parser *, PyObject *, int, int, int, int, PyObject *);
+  __pyx_ctuple_int__and_int (*parse_json_list)(struct __pyx_obj_10JSONParser_Parser *, PyObject *, int, int, int, int, PyObject *);
+  __pyx_ctuple_int__and_int (*parse_json_object)(struct __pyx_obj_10JSONParser_Parser *, PyObject *, int, int, int, int, PyObject *);
 };
 static struct __pyx_vtabstruct_10JSONParser_Parser *__pyx_vtabptr_10JSONParser_Parser;
 
@@ -1370,15 +1366,11 @@ static int __Pyx_check_binary_version(void);
 /* InitStrings.proto */
 static int __Pyx_InitStrings(__Pyx_StringTabEntry *t);
 
-static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_document(struct __pyx_obj_10JSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, int __pyx_v_indent, PyObject *__pyx_v_children); /* proto*/
-static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_value(struct __pyx_obj_10JSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, int __pyx_v_indent, PyObject *__pyx_v_children); /* proto*/
-static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_true(struct __pyx_obj_10JSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, CYTHON_UNUSED int __pyx_v_indent, PyObject *__pyx_v_children); /* proto*/
-static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_false(struct __pyx_obj_10JSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, CYTHON_UNUSED int __pyx_v_indent, PyObject *__pyx_v_children); /* proto*/
-static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_null(struct __pyx_obj_10JSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, CYTHON_UNUSED int __pyx_v_indent, PyObject *__pyx_v_children); /* proto*/
-static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_number(struct __pyx_obj_10JSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, CYTHON_UNUSED int __pyx_v_indent, PyObject *__pyx_v_children); /* proto*/
-static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(struct __pyx_obj_10JSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, CYTHON_UNUSED int __pyx_v_indent, PyObject *__pyx_v_children); /* proto*/
-static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(struct __pyx_obj_10JSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, int __pyx_v_indent, PyObject *__pyx_v_children); /* proto*/
-static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(struct __pyx_obj_10JSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, int __pyx_v_indent, PyObject *__pyx_v_children); /* proto*/
+static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_document(struct __pyx_obj_10JSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, int __pyx_v_indent, int __pyx_v_buf_eof, PyObject *__pyx_v_children); /* proto*/
+static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_value(struct __pyx_obj_10JSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, int __pyx_v_indent, int __pyx_v_buf_eof, PyObject *__pyx_v_children); /* proto*/
+static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(struct __pyx_obj_10JSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, CYTHON_UNUSED int __pyx_v_indent, int __pyx_v_buf_eof, PyObject *__pyx_v_children); /* proto*/
+static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(struct __pyx_obj_10JSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, int __pyx_v_indent, int __pyx_v_buf_eof, PyObject *__pyx_v_children); /* proto*/
+static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(struct __pyx_obj_10JSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, int __pyx_v_indent, int __pyx_v_buf_eof, PyObject *__pyx_v_children); /* proto*/
 
 /* Module declarations from 'JSONParser' */
 static PyTypeObject *__pyx_ptype_10JSONParser_Parser = 0;
@@ -1913,8 +1905,8 @@ static PyObject *__pyx_pf_10JSONParser_9ParseNode_2__str__(CYTHON_UNUSED PyObjec
  *     WHITESPACE = (' ', '\t', '\r', '\n')
  * 
  *     def parse(self, buf, offset=0):             # <<<<<<<<<<<<<<
- *         line_start, indent, children = offset, None, []
- *         new_offset, line_start = self.parse_document(buf, offset, line_start, indent, children)
+ *         line_start, indent, eof, children = offset, len(buf), None, []
+ *         new_offset, line_start = self.parse_document(buf, offset, line_start, indent, eof, children)
  */
 
 /* Python wrapper */
@@ -1984,98 +1976,102 @@ static PyObject *__pyx_pw_10JSONParser_6Parser_1parse(PyObject *__pyx_v_self, Py
 
 static PyObject *__pyx_pf_10JSONParser_6Parser_parse(struct __pyx_obj_10JSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, PyObject *__pyx_v_offset) {
   PyObject *__pyx_v_line_start = NULL;
-  PyObject *__pyx_v_indent = NULL;
+  Py_ssize_t __pyx_v_indent;
+  PyObject *__pyx_v_eof = NULL;
   PyObject *__pyx_v_children = NULL;
   int __pyx_v_new_offset;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
+  Py_ssize_t __pyx_t_2;
   PyObject *__pyx_t_3 = NULL;
-  int __pyx_t_4;
+  PyObject *__pyx_t_4 = NULL;
   int __pyx_t_5;
   int __pyx_t_6;
-  __pyx_ctuple_int__and_int __pyx_t_7;
+  int __pyx_t_7;
+  __pyx_ctuple_int__and_int __pyx_t_8;
   __Pyx_RefNannySetupContext("parse", 0);
 
   /* "JSONParser.pyx":19
  * 
  *     def parse(self, buf, offset=0):
- *         line_start, indent, children = offset, None, []             # <<<<<<<<<<<<<<
- *         new_offset, line_start = self.parse_document(buf, offset, line_start, indent, children)
+ *         line_start, indent, eof, children = offset, len(buf), None, []             # <<<<<<<<<<<<<<
+ *         new_offset, line_start = self.parse_document(buf, offset, line_start, indent, eof, children)
  *         return children[-1] if new_offset else None
  */
   __pyx_t_1 = __pyx_v_offset;
   __Pyx_INCREF(__pyx_t_1);
-  __pyx_t_2 = Py_None;
-  __Pyx_INCREF(__pyx_t_2);
-  __pyx_t_3 = PyList_New(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 19, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_2 = PyObject_Length(__pyx_v_buf); if (unlikely(__pyx_t_2 == ((Py_ssize_t)-1))) __PYX_ERR(0, 19, __pyx_L1_error)
+  __pyx_t_3 = Py_None;
+  __Pyx_INCREF(__pyx_t_3);
+  __pyx_t_4 = PyList_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 19, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
   __pyx_v_line_start = __pyx_t_1;
   __pyx_t_1 = 0;
   __pyx_v_indent = __pyx_t_2;
-  __pyx_t_2 = 0;
-  __pyx_v_children = ((PyObject*)__pyx_t_3);
+  __pyx_v_eof = __pyx_t_3;
   __pyx_t_3 = 0;
+  __pyx_v_children = ((PyObject*)__pyx_t_4);
+  __pyx_t_4 = 0;
 
   /* "JSONParser.pyx":20
  *     def parse(self, buf, offset=0):
- *         line_start, indent, children = offset, None, []
- *         new_offset, line_start = self.parse_document(buf, offset, line_start, indent, children)             # <<<<<<<<<<<<<<
+ *         line_start, indent, eof, children = offset, len(buf), None, []
+ *         new_offset, line_start = self.parse_document(buf, offset, line_start, indent, eof, children)             # <<<<<<<<<<<<<<
  *         return children[-1] if new_offset else None
  * 
  */
   if (!(likely(PyUnicode_CheckExact(__pyx_v_buf))||((__pyx_v_buf) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "unicode", Py_TYPE(__pyx_v_buf)->tp_name), 0))) __PYX_ERR(0, 20, __pyx_L1_error)
-  __pyx_t_4 = __Pyx_PyInt_As_int(__pyx_v_offset); if (unlikely((__pyx_t_4 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 20, __pyx_L1_error)
-  __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_v_line_start); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 20, __pyx_L1_error)
-  __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_indent); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 20, __pyx_L1_error)
-  __pyx_t_7 = ((struct __pyx_vtabstruct_10JSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_document(__pyx_v_self, ((PyObject*)__pyx_v_buf), __pyx_t_4, __pyx_t_5, __pyx_t_6, __pyx_v_children);
-  __pyx_t_6 = __pyx_t_7.f0;
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_t_7.f1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 20, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_v_new_offset = __pyx_t_6;
-  __Pyx_DECREF_SET(__pyx_v_line_start, __pyx_t_3);
-  __pyx_t_3 = 0;
+  __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_v_offset); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 20, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_line_start); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 20, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyInt_As_int(__pyx_v_eof); if (unlikely((__pyx_t_7 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 20, __pyx_L1_error)
+  __pyx_t_8 = ((struct __pyx_vtabstruct_10JSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_document(__pyx_v_self, ((PyObject*)__pyx_v_buf), __pyx_t_5, __pyx_t_6, __pyx_v_indent, __pyx_t_7, __pyx_v_children);
+  __pyx_t_7 = __pyx_t_8.f0;
+  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_t_8.f1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 20, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_v_new_offset = __pyx_t_7;
+  __Pyx_DECREF_SET(__pyx_v_line_start, __pyx_t_4);
+  __pyx_t_4 = 0;
 
   /* "JSONParser.pyx":21
- *         line_start, indent, children = offset, None, []
- *         new_offset, line_start = self.parse_document(buf, offset, line_start, indent, children)
+ *         line_start, indent, eof, children = offset, len(buf), None, []
+ *         new_offset, line_start = self.parse_document(buf, offset, line_start, indent, eof, children)
  *         return children[-1] if new_offset else None             # <<<<<<<<<<<<<<
  * 
- *     cdef (int, int) parse_document(self, str buf, int offset, int line_start, int indent, list children):
+ *     cdef (int, int) parse_document(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):
  */
   __Pyx_XDECREF(__pyx_r);
   if ((__pyx_v_new_offset != 0)) {
-    __pyx_t_2 = __Pyx_GetItemInt_List(__pyx_v_children, -1L, long, 1, __Pyx_PyInt_From_long, 1, 1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 21, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = __pyx_t_2;
-    __pyx_t_2 = 0;
+    __pyx_t_3 = __Pyx_GetItemInt_List(__pyx_v_children, -1L, long, 1, __Pyx_PyInt_From_long, 1, 1, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 21, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_4 = __pyx_t_3;
+    __pyx_t_3 = 0;
   } else {
     __Pyx_INCREF(Py_None);
-    __pyx_t_3 = Py_None;
+    __pyx_t_4 = Py_None;
   }
-  __pyx_r = __pyx_t_3;
-  __pyx_t_3 = 0;
+  __pyx_r = __pyx_t_4;
+  __pyx_t_4 = 0;
   goto __pyx_L0;
 
   /* "JSONParser.pyx":18
  *     WHITESPACE = (' ', '\t', '\r', '\n')
  * 
  *     def parse(self, buf, offset=0):             # <<<<<<<<<<<<<<
- *         line_start, indent, children = offset, None, []
- *         new_offset, line_start = self.parse_document(buf, offset, line_start, indent, children)
+ *         line_start, indent, eof, children = offset, len(buf), None, []
+ *         new_offset, line_start = self.parse_document(buf, offset, line_start, indent, eof, children)
  */
 
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
   __Pyx_AddTraceback("JSONParser.Parser.parse", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_line_start);
-  __Pyx_XDECREF(__pyx_v_indent);
+  __Pyx_XDECREF(__pyx_v_eof);
   __Pyx_XDECREF(__pyx_v_children);
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
@@ -2085,12 +2081,12 @@ static PyObject *__pyx_pf_10JSONParser_6Parser_parse(struct __pyx_obj_10JSONPars
 /* "JSONParser.pyx":23
  *         return children[-1] if new_offset else None
  * 
- *     cdef (int, int) parse_document(self, str buf, int offset, int line_start, int indent, list children):             # <<<<<<<<<<<<<<
+ *     cdef (int, int) parse_document(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
  *         cdef Py_UNICODE chr
  */
 
-static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_document(struct __pyx_obj_10JSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, int __pyx_v_indent, PyObject *__pyx_v_children) {
+static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_document(struct __pyx_obj_10JSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, int __pyx_v_indent, int __pyx_v_buf_eof, PyObject *__pyx_v_children) {
   int __pyx_v_count;
   Py_UNICODE __pyx_v_chr;
   long __pyx_v_offset_1;
@@ -2100,20 +2096,19 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_document(str
   PyObject *__pyx_v_children_2 = NULL;
   __pyx_ctuple_int__and_int __pyx_r;
   __Pyx_RefNannyDeclarations
-  Py_ssize_t __pyx_t_1;
-  int __pyx_t_2;
-  Py_UCS4 __pyx_t_3;
-  int __pyx_t_4;
-  PyObject *__pyx_t_5 = NULL;
-  __pyx_ctuple_int__and_int __pyx_t_6;
+  int __pyx_t_1;
+  Py_UCS4 __pyx_t_2;
+  int __pyx_t_3;
+  PyObject *__pyx_t_4 = NULL;
+  __pyx_ctuple_int__and_int __pyx_t_5;
+  int __pyx_t_6;
   int __pyx_t_7;
   int __pyx_t_8;
-  int __pyx_t_9;
+  PyObject *__pyx_t_9 = NULL;
   PyObject *__pyx_t_10 = NULL;
   PyObject *__pyx_t_11 = NULL;
   PyObject *__pyx_t_12 = NULL;
   PyObject *__pyx_t_13 = NULL;
-  PyObject *__pyx_t_14 = NULL;
   __Pyx_RefNannySetupContext("parse_document", 0);
 
   /* "JSONParser.pyx":26
@@ -2121,7 +2116,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_document(str
  *         cdef Py_UNICODE chr
  *         while True: # note: return at end of loop             # <<<<<<<<<<<<<<
  *             count = 0
- *             while offset != len(buf):
+ *             while offset != buf_eof:
  */
   while (1) {
 
@@ -2129,7 +2124,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_document(str
  *         cdef Py_UNICODE chr
  *         while True: # note: return at end of loop
  *             count = 0             # <<<<<<<<<<<<<<
- *             while offset != len(buf):
+ *             while offset != buf_eof:
  *                 chr = buf[offset]
  */
     __pyx_v_count = 0;
@@ -2137,148 +2132,143 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_document(str
     /* "JSONParser.pyx":28
  *         while True: # note: return at end of loop
  *             count = 0
- *             while offset != len(buf):             # <<<<<<<<<<<<<<
+ *             while offset != buf_eof:             # <<<<<<<<<<<<<<
  *                 chr = buf[offset]
  *                 if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  */
     while (1) {
-      if (unlikely(__pyx_v_buf == Py_None)) {
-        PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
-        __PYX_ERR(0, 28, __pyx_L1_error)
-      }
-      __pyx_t_1 = __Pyx_PyUnicode_GET_LENGTH(__pyx_v_buf); if (unlikely(__pyx_t_1 == ((Py_ssize_t)-1))) __PYX_ERR(0, 28, __pyx_L1_error)
-      __pyx_t_2 = ((__pyx_v_offset != __pyx_t_1) != 0);
-      if (!__pyx_t_2) break;
+      __pyx_t_1 = ((__pyx_v_offset != __pyx_v_buf_eof) != 0);
+      if (!__pyx_t_1) break;
 
       /* "JSONParser.pyx":29
  *             count = 0
- *             while offset != len(buf):
+ *             while offset != buf_eof:
  *                 chr = buf[offset]             # <<<<<<<<<<<<<<
  *                 if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                     offset +=1
  */
-      __pyx_t_3 = __Pyx_GetItemInt_Unicode(__pyx_v_buf, __pyx_v_offset, int, 1, __Pyx_PyInt_From_int, 0, 1, 0); if (unlikely(__pyx_t_3 == (Py_UCS4)-1)) __PYX_ERR(0, 29, __pyx_L1_error)
-      __pyx_v_chr = __pyx_t_3;
+      __pyx_t_2 = __Pyx_GetItemInt_Unicode(__pyx_v_buf, __pyx_v_offset, int, 1, __Pyx_PyInt_From_int, 0, 1, 0); if (unlikely(__pyx_t_2 == (Py_UCS4)-1)) __PYX_ERR(0, 29, __pyx_L1_error)
+      __pyx_v_chr = __pyx_t_2;
 
       /* "JSONParser.pyx":30
- *             while offset != len(buf):
+ *             while offset != buf_eof:
  *                 chr = buf[offset]
  *                 if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':             # <<<<<<<<<<<<<<
  *                     offset +=1
  *                     count +=1
  */
-      __pyx_t_4 = ((__pyx_v_chr == 40) != 0);
-      if (!__pyx_t_4) {
+      __pyx_t_3 = ((__pyx_v_chr == 40) != 0);
+      if (!__pyx_t_3) {
       } else {
-        __pyx_t_2 = __pyx_t_4;
+        __pyx_t_1 = __pyx_t_3;
         goto __pyx_L8_bool_binop_done;
       }
-      __pyx_t_4 = ((__pyx_v_chr == 39) != 0);
-      if (!__pyx_t_4) {
+      __pyx_t_3 = ((__pyx_v_chr == 39) != 0);
+      if (!__pyx_t_3) {
       } else {
-        __pyx_t_2 = __pyx_t_4;
+        __pyx_t_1 = __pyx_t_3;
         goto __pyx_L8_bool_binop_done;
       }
-      __pyx_t_4 = ((__pyx_v_chr == 32) != 0);
-      if (!__pyx_t_4) {
+      __pyx_t_3 = ((__pyx_v_chr == 32) != 0);
+      if (!__pyx_t_3) {
       } else {
-        __pyx_t_2 = __pyx_t_4;
+        __pyx_t_1 = __pyx_t_3;
         goto __pyx_L8_bool_binop_done;
       }
-      __pyx_t_4 = ((__pyx_v_chr == 39) != 0);
-      if (!__pyx_t_4) {
+      __pyx_t_3 = ((__pyx_v_chr == 39) != 0);
+      if (!__pyx_t_3) {
       } else {
-        __pyx_t_2 = __pyx_t_4;
+        __pyx_t_1 = __pyx_t_3;
         goto __pyx_L8_bool_binop_done;
       }
-      __pyx_t_4 = ((__pyx_v_chr == 44) != 0);
-      if (!__pyx_t_4) {
+      __pyx_t_3 = ((__pyx_v_chr == 44) != 0);
+      if (!__pyx_t_3) {
       } else {
-        __pyx_t_2 = __pyx_t_4;
+        __pyx_t_1 = __pyx_t_3;
         goto __pyx_L8_bool_binop_done;
       }
-      __pyx_t_4 = ((__pyx_v_chr == 32) != 0);
-      if (!__pyx_t_4) {
+      __pyx_t_3 = ((__pyx_v_chr == 32) != 0);
+      if (!__pyx_t_3) {
       } else {
-        __pyx_t_2 = __pyx_t_4;
+        __pyx_t_1 = __pyx_t_3;
         goto __pyx_L8_bool_binop_done;
       }
-      __pyx_t_4 = ((__pyx_v_chr == 39) != 0);
-      if (!__pyx_t_4) {
+      __pyx_t_3 = ((__pyx_v_chr == 39) != 0);
+      if (!__pyx_t_3) {
       } else {
-        __pyx_t_2 = __pyx_t_4;
+        __pyx_t_1 = __pyx_t_3;
         goto __pyx_L8_bool_binop_done;
       }
-      __pyx_t_4 = ((__pyx_v_chr == 92) != 0);
-      if (!__pyx_t_4) {
+      __pyx_t_3 = ((__pyx_v_chr == 92) != 0);
+      if (!__pyx_t_3) {
       } else {
-        __pyx_t_2 = __pyx_t_4;
+        __pyx_t_1 = __pyx_t_3;
         goto __pyx_L8_bool_binop_done;
       }
-      __pyx_t_4 = ((__pyx_v_chr == 0x74) != 0);
-      if (!__pyx_t_4) {
+      __pyx_t_3 = ((__pyx_v_chr == 0x74) != 0);
+      if (!__pyx_t_3) {
       } else {
-        __pyx_t_2 = __pyx_t_4;
+        __pyx_t_1 = __pyx_t_3;
         goto __pyx_L8_bool_binop_done;
       }
-      __pyx_t_4 = ((__pyx_v_chr == 39) != 0);
-      if (!__pyx_t_4) {
+      __pyx_t_3 = ((__pyx_v_chr == 39) != 0);
+      if (!__pyx_t_3) {
       } else {
-        __pyx_t_2 = __pyx_t_4;
+        __pyx_t_1 = __pyx_t_3;
         goto __pyx_L8_bool_binop_done;
       }
-      __pyx_t_4 = ((__pyx_v_chr == 44) != 0);
-      if (!__pyx_t_4) {
+      __pyx_t_3 = ((__pyx_v_chr == 44) != 0);
+      if (!__pyx_t_3) {
       } else {
-        __pyx_t_2 = __pyx_t_4;
+        __pyx_t_1 = __pyx_t_3;
         goto __pyx_L8_bool_binop_done;
       }
-      __pyx_t_4 = ((__pyx_v_chr == 32) != 0);
-      if (!__pyx_t_4) {
+      __pyx_t_3 = ((__pyx_v_chr == 32) != 0);
+      if (!__pyx_t_3) {
       } else {
-        __pyx_t_2 = __pyx_t_4;
+        __pyx_t_1 = __pyx_t_3;
         goto __pyx_L8_bool_binop_done;
       }
-      __pyx_t_4 = ((__pyx_v_chr == 39) != 0);
-      if (!__pyx_t_4) {
+      __pyx_t_3 = ((__pyx_v_chr == 39) != 0);
+      if (!__pyx_t_3) {
       } else {
-        __pyx_t_2 = __pyx_t_4;
+        __pyx_t_1 = __pyx_t_3;
         goto __pyx_L8_bool_binop_done;
       }
-      __pyx_t_4 = ((__pyx_v_chr == 92) != 0);
-      if (!__pyx_t_4) {
+      __pyx_t_3 = ((__pyx_v_chr == 92) != 0);
+      if (!__pyx_t_3) {
       } else {
-        __pyx_t_2 = __pyx_t_4;
+        __pyx_t_1 = __pyx_t_3;
         goto __pyx_L8_bool_binop_done;
       }
-      __pyx_t_4 = ((__pyx_v_chr == 0x72) != 0);
-      if (!__pyx_t_4) {
+      __pyx_t_3 = ((__pyx_v_chr == 0x72) != 0);
+      if (!__pyx_t_3) {
       } else {
-        __pyx_t_2 = __pyx_t_4;
+        __pyx_t_1 = __pyx_t_3;
         goto __pyx_L8_bool_binop_done;
       }
-      __pyx_t_4 = ((__pyx_v_chr == 39) != 0);
-      if (!__pyx_t_4) {
+      __pyx_t_3 = ((__pyx_v_chr == 39) != 0);
+      if (!__pyx_t_3) {
       } else {
-        __pyx_t_2 = __pyx_t_4;
+        __pyx_t_1 = __pyx_t_3;
         goto __pyx_L8_bool_binop_done;
       }
-      __pyx_t_4 = ((__pyx_v_chr == 44) != 0);
-      if (!__pyx_t_4) {
+      __pyx_t_3 = ((__pyx_v_chr == 44) != 0);
+      if (!__pyx_t_3) {
       } else {
-        __pyx_t_2 = __pyx_t_4;
+        __pyx_t_1 = __pyx_t_3;
         goto __pyx_L8_bool_binop_done;
       }
-      __pyx_t_4 = ((__pyx_v_chr == 32) != 0);
-      if (!__pyx_t_4) {
+      __pyx_t_3 = ((__pyx_v_chr == 32) != 0);
+      if (!__pyx_t_3) {
       } else {
-        __pyx_t_2 = __pyx_t_4;
+        __pyx_t_1 = __pyx_t_3;
         goto __pyx_L8_bool_binop_done;
       }
-      __pyx_t_4 = ((__pyx_v_chr == 39) != 0);
-      if (!__pyx_t_4) {
+      __pyx_t_3 = ((__pyx_v_chr == 39) != 0);
+      if (!__pyx_t_3) {
       } else {
-        __pyx_t_2 = __pyx_t_4;
+        __pyx_t_1 = __pyx_t_3;
         goto __pyx_L8_bool_binop_done;
       }
       switch (__pyx_v_chr) {
@@ -2286,15 +2276,15 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_document(str
         case 0x6E:
         case 39:
         case 41:
-        __pyx_t_4 = 1;
+        __pyx_t_3 = 1;
         break;
         default:
-        __pyx_t_4 = 0;
+        __pyx_t_3 = 0;
         break;
       }
-      __pyx_t_2 = __pyx_t_4;
+      __pyx_t_1 = __pyx_t_3;
       __pyx_L8_bool_binop_done:;
-      if (__pyx_t_2) {
+      if (__pyx_t_1) {
 
         /* "JSONParser.pyx":31
  *                 chr = buf[offset]
@@ -2315,7 +2305,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_document(str
         __pyx_v_count = (__pyx_v_count + 1);
 
         /* "JSONParser.pyx":30
- *             while offset != len(buf):
+ *             while offset != buf_eof:
  *                 chr = buf[offset]
  *                 if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':             # <<<<<<<<<<<<<<
  *                     offset +=1
@@ -2354,10 +2344,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_document(str
  *             while True: # start capture
  *                 while True: # start choice
  */
-    __pyx_t_5 = PyList_New(0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 37, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
-    __pyx_v_children_1 = ((PyObject*)__pyx_t_5);
-    __pyx_t_5 = 0;
+    __pyx_t_4 = PyList_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 37, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_v_children_1 = ((PyObject*)__pyx_t_4);
+    __pyx_t_4 = 0;
 
     /* "JSONParser.pyx":38
  *             offset_1 = offset
@@ -2400,18 +2390,18 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_document(str
  *                     line_start_1 = line_start
  *                     children_2 = []             # <<<<<<<<<<<<<<
  *                     while True: # case
- *                         offset_2, line_start_1 = self.parse_json_list(buf, offset_2, line_start_1, indent,children_2)
+ *                         offset_2, line_start_1 = self.parse_json_list(buf, offset_2, line_start_1, indent, buf_eof, children_2)
  */
-        __pyx_t_5 = PyList_New(0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 42, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_5);
-        __pyx_v_children_2 = ((PyObject*)__pyx_t_5);
-        __pyx_t_5 = 0;
+        __pyx_t_4 = PyList_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 42, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_4);
+        __pyx_v_children_2 = ((PyObject*)__pyx_t_4);
+        __pyx_t_4 = 0;
 
         /* "JSONParser.pyx":43
  *                     line_start_1 = line_start
  *                     children_2 = []
  *                     while True: # case             # <<<<<<<<<<<<<<
- *                         offset_2, line_start_1 = self.parse_json_list(buf, offset_2, line_start_1, indent,children_2)
+ *                         offset_2, line_start_1 = self.parse_json_list(buf, offset_2, line_start_1, indent, buf_eof, children_2)
  *                         if offset_2 == -1: break
  */
         while (1) {
@@ -2419,25 +2409,25 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_document(str
           /* "JSONParser.pyx":44
  *                     children_2 = []
  *                     while True: # case
- *                         offset_2, line_start_1 = self.parse_json_list(buf, offset_2, line_start_1, indent,children_2)             # <<<<<<<<<<<<<<
+ *                         offset_2, line_start_1 = self.parse_json_list(buf, offset_2, line_start_1, indent, buf_eof, children_2)             # <<<<<<<<<<<<<<
  *                         if offset_2 == -1: break
  * 
  */
-          __pyx_t_6 = ((struct __pyx_vtabstruct_10JSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_json_list(__pyx_v_self, __pyx_v_buf, __pyx_v_offset_2, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_children_2);
-          __pyx_t_7 = __pyx_t_6.f0;
-          __pyx_t_8 = __pyx_t_6.f1;
-          __pyx_v_offset_2 = __pyx_t_7;
-          __pyx_v_line_start_1 = __pyx_t_8;
+          __pyx_t_5 = ((struct __pyx_vtabstruct_10JSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_json_list(__pyx_v_self, __pyx_v_buf, __pyx_v_offset_2, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_2);
+          __pyx_t_6 = __pyx_t_5.f0;
+          __pyx_t_7 = __pyx_t_5.f1;
+          __pyx_v_offset_2 = __pyx_t_6;
+          __pyx_v_line_start_1 = __pyx_t_7;
 
           /* "JSONParser.pyx":45
  *                     while True: # case
- *                         offset_2, line_start_1 = self.parse_json_list(buf, offset_2, line_start_1, indent,children_2)
+ *                         offset_2, line_start_1 = self.parse_json_list(buf, offset_2, line_start_1, indent, buf_eof, children_2)
  *                         if offset_2 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
  */
-          __pyx_t_2 = ((__pyx_v_offset_2 == -1L) != 0);
-          if (__pyx_t_2) {
+          __pyx_t_1 = ((__pyx_v_offset_2 == -1L) != 0);
+          if (__pyx_t_1) {
             goto __pyx_L33_break;
           }
 
@@ -2459,8 +2449,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_document(str
  *                         offset_1 = offset_2
  *                         line_start = line_start_1
  */
-        __pyx_t_2 = ((__pyx_v_offset_2 != -1L) != 0);
-        if (__pyx_t_2) {
+        __pyx_t_1 = ((__pyx_v_offset_2 != -1L) != 0);
+        if (__pyx_t_1) {
 
           /* "JSONParser.pyx":50
  *                         break
@@ -2487,7 +2477,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_document(str
  *                         break
  *                     # end case
  */
-          __pyx_t_9 = __Pyx_PyList_Extend(__pyx_v_children_1, __pyx_v_children_2); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(0, 52, __pyx_L1_error)
+          __pyx_t_8 = __Pyx_PyList_Extend(__pyx_v_children_1, __pyx_v_children_2); if (unlikely(__pyx_t_8 == ((int)-1))) __PYX_ERR(0, 52, __pyx_L1_error)
 
           /* "JSONParser.pyx":53
  *                         line_start = line_start_1
@@ -2530,18 +2520,18 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_document(str
  *                     line_start_1 = line_start
  *                     children_2 = []             # <<<<<<<<<<<<<<
  *                     while True: # case
- *                         offset_2, line_start_1 = self.parse_json_object(buf, offset_2, line_start_1, indent,children_2)
+ *                         offset_2, line_start_1 = self.parse_json_object(buf, offset_2, line_start_1, indent, buf_eof, children_2)
  */
-        __pyx_t_5 = PyList_New(0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 57, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_5);
-        __Pyx_DECREF_SET(__pyx_v_children_2, ((PyObject*)__pyx_t_5));
-        __pyx_t_5 = 0;
+        __pyx_t_4 = PyList_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 57, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_4);
+        __Pyx_DECREF_SET(__pyx_v_children_2, ((PyObject*)__pyx_t_4));
+        __pyx_t_4 = 0;
 
         /* "JSONParser.pyx":58
  *                     line_start_1 = line_start
  *                     children_2 = []
  *                     while True: # case             # <<<<<<<<<<<<<<
- *                         offset_2, line_start_1 = self.parse_json_object(buf, offset_2, line_start_1, indent,children_2)
+ *                         offset_2, line_start_1 = self.parse_json_object(buf, offset_2, line_start_1, indent, buf_eof, children_2)
  *                         if offset_2 == -1: break
  */
         while (1) {
@@ -2549,25 +2539,25 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_document(str
           /* "JSONParser.pyx":59
  *                     children_2 = []
  *                     while True: # case
- *                         offset_2, line_start_1 = self.parse_json_object(buf, offset_2, line_start_1, indent,children_2)             # <<<<<<<<<<<<<<
+ *                         offset_2, line_start_1 = self.parse_json_object(buf, offset_2, line_start_1, indent, buf_eof, children_2)             # <<<<<<<<<<<<<<
  *                         if offset_2 == -1: break
  * 
  */
-          __pyx_t_6 = ((struct __pyx_vtabstruct_10JSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_json_object(__pyx_v_self, __pyx_v_buf, __pyx_v_offset_2, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_children_2);
-          __pyx_t_8 = __pyx_t_6.f0;
-          __pyx_t_7 = __pyx_t_6.f1;
-          __pyx_v_offset_2 = __pyx_t_8;
-          __pyx_v_line_start_1 = __pyx_t_7;
+          __pyx_t_5 = ((struct __pyx_vtabstruct_10JSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_json_object(__pyx_v_self, __pyx_v_buf, __pyx_v_offset_2, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_2);
+          __pyx_t_7 = __pyx_t_5.f0;
+          __pyx_t_6 = __pyx_t_5.f1;
+          __pyx_v_offset_2 = __pyx_t_7;
+          __pyx_v_line_start_1 = __pyx_t_6;
 
           /* "JSONParser.pyx":60
  *                     while True: # case
- *                         offset_2, line_start_1 = self.parse_json_object(buf, offset_2, line_start_1, indent,children_2)
+ *                         offset_2, line_start_1 = self.parse_json_object(buf, offset_2, line_start_1, indent, buf_eof, children_2)
  *                         if offset_2 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
  */
-          __pyx_t_2 = ((__pyx_v_offset_2 == -1L) != 0);
-          if (__pyx_t_2) {
+          __pyx_t_1 = ((__pyx_v_offset_2 == -1L) != 0);
+          if (__pyx_t_1) {
             goto __pyx_L37_break;
           }
 
@@ -2589,8 +2579,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_document(str
  *                         offset_1 = offset_2
  *                         line_start = line_start_1
  */
-        __pyx_t_2 = ((__pyx_v_offset_2 != -1L) != 0);
-        if (__pyx_t_2) {
+        __pyx_t_1 = ((__pyx_v_offset_2 != -1L) != 0);
+        if (__pyx_t_1) {
 
           /* "JSONParser.pyx":65
  *                         break
@@ -2617,7 +2607,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_document(str
  *                         break
  *                     # end case
  */
-          __pyx_t_9 = __Pyx_PyList_Extend(__pyx_v_children_1, __pyx_v_children_2); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(0, 67, __pyx_L1_error)
+          __pyx_t_8 = __Pyx_PyList_Extend(__pyx_v_children_1, __pyx_v_children_2); if (unlikely(__pyx_t_8 == ((int)-1))) __PYX_ERR(0, 67, __pyx_L1_error)
 
           /* "JSONParser.pyx":68
  *                         line_start = line_start_1
@@ -2664,8 +2654,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_document(str
  *                     break
  * 
  */
-      __pyx_t_2 = ((__pyx_v_offset_1 == -1L) != 0);
-      if (__pyx_t_2) {
+      __pyx_t_1 = ((__pyx_v_offset_1 == -1L) != 0);
+      if (__pyx_t_1) {
 
         /* "JSONParser.pyx":73
  *                     break # end choice
@@ -2703,8 +2693,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_document(str
  *                 offset = -1
  *                 break
  */
-    __pyx_t_2 = ((__pyx_v_offset_1 == -1L) != 0);
-    if (__pyx_t_2) {
+    __pyx_t_1 = ((__pyx_v_offset_1 == -1L) != 0);
+    if (__pyx_t_1) {
 
       /* "JSONParser.pyx":77
  *                 break
@@ -2740,9 +2730,9 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_document(str
  *                 children.append(self.ParseNode('document', offset, offset_1, children_1, None))
  *             else:
  */
-    __pyx_t_2 = (__pyx_v_self->builder != Py_None);
-    __pyx_t_4 = (__pyx_t_2 != 0);
-    if (__pyx_t_4) {
+    __pyx_t_1 = (__pyx_v_self->builder != Py_None);
+    __pyx_t_3 = (__pyx_t_1 != 0);
+    if (__pyx_t_3) {
 
       /* "JSONParser.pyx":80
  *                 break
@@ -2755,72 +2745,72 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_document(str
         PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
         __PYX_ERR(0, 80, __pyx_L1_error)
       }
-      __pyx_t_10 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 80, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 80, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_9);
+      __pyx_t_10 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 80, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_10);
-      __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 80, __pyx_L1_error)
+      __pyx_t_11 = __Pyx_PyInt_From_long(__pyx_v_offset_1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 80, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_11);
-      __pyx_t_12 = __Pyx_PyInt_From_long(__pyx_v_offset_1); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 80, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_12);
-      __pyx_t_13 = NULL;
-      __pyx_t_7 = 0;
-      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_10))) {
-        __pyx_t_13 = PyMethod_GET_SELF(__pyx_t_10);
-        if (likely(__pyx_t_13)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_10);
-          __Pyx_INCREF(__pyx_t_13);
+      __pyx_t_12 = NULL;
+      __pyx_t_6 = 0;
+      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_9))) {
+        __pyx_t_12 = PyMethod_GET_SELF(__pyx_t_9);
+        if (likely(__pyx_t_12)) {
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_9);
+          __Pyx_INCREF(__pyx_t_12);
           __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_10, function);
-          __pyx_t_7 = 1;
+          __Pyx_DECREF_SET(__pyx_t_9, function);
+          __pyx_t_6 = 1;
         }
       }
       #if CYTHON_FAST_PYCALL
-      if (PyFunction_Check(__pyx_t_10)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_13, __pyx_n_u_document, __pyx_t_11, __pyx_t_12, __pyx_v_children_1, Py_None};
-        __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_10, __pyx_temp+1-__pyx_t_7, 5+__pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 80, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
-        __Pyx_GOTREF(__pyx_t_5);
+      if (PyFunction_Check(__pyx_t_9)) {
+        PyObject *__pyx_temp[6] = {__pyx_t_12, __pyx_n_u_document, __pyx_t_10, __pyx_t_11, __pyx_v_children_1, Py_None};
+        __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_9, __pyx_temp+1-__pyx_t_6, 5+__pyx_t_6); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 80, __pyx_L1_error)
+        __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
+        __Pyx_GOTREF(__pyx_t_4);
+        __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
         __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-        __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
       } else
       #endif
       #if CYTHON_FAST_PYCCALL
-      if (__Pyx_PyFastCFunction_Check(__pyx_t_10)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_13, __pyx_n_u_document, __pyx_t_11, __pyx_t_12, __pyx_v_children_1, Py_None};
-        __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_10, __pyx_temp+1-__pyx_t_7, 5+__pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 80, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
-        __Pyx_GOTREF(__pyx_t_5);
+      if (__Pyx_PyFastCFunction_Check(__pyx_t_9)) {
+        PyObject *__pyx_temp[6] = {__pyx_t_12, __pyx_n_u_document, __pyx_t_10, __pyx_t_11, __pyx_v_children_1, Py_None};
+        __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_9, __pyx_temp+1-__pyx_t_6, 5+__pyx_t_6); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 80, __pyx_L1_error)
+        __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
+        __Pyx_GOTREF(__pyx_t_4);
+        __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
         __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-        __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
       } else
       #endif
       {
-        __pyx_t_14 = PyTuple_New(5+__pyx_t_7); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 80, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_14);
-        if (__pyx_t_13) {
-          __Pyx_GIVEREF(__pyx_t_13); PyTuple_SET_ITEM(__pyx_t_14, 0, __pyx_t_13); __pyx_t_13 = NULL;
+        __pyx_t_13 = PyTuple_New(5+__pyx_t_6); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 80, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_13);
+        if (__pyx_t_12) {
+          __Pyx_GIVEREF(__pyx_t_12); PyTuple_SET_ITEM(__pyx_t_13, 0, __pyx_t_12); __pyx_t_12 = NULL;
         }
         __Pyx_INCREF(__pyx_n_u_document);
         __Pyx_GIVEREF(__pyx_n_u_document);
-        PyTuple_SET_ITEM(__pyx_t_14, 0+__pyx_t_7, __pyx_n_u_document);
+        PyTuple_SET_ITEM(__pyx_t_13, 0+__pyx_t_6, __pyx_n_u_document);
+        __Pyx_GIVEREF(__pyx_t_10);
+        PyTuple_SET_ITEM(__pyx_t_13, 1+__pyx_t_6, __pyx_t_10);
         __Pyx_GIVEREF(__pyx_t_11);
-        PyTuple_SET_ITEM(__pyx_t_14, 1+__pyx_t_7, __pyx_t_11);
-        __Pyx_GIVEREF(__pyx_t_12);
-        PyTuple_SET_ITEM(__pyx_t_14, 2+__pyx_t_7, __pyx_t_12);
+        PyTuple_SET_ITEM(__pyx_t_13, 2+__pyx_t_6, __pyx_t_11);
         __Pyx_INCREF(__pyx_v_children_1);
         __Pyx_GIVEREF(__pyx_v_children_1);
-        PyTuple_SET_ITEM(__pyx_t_14, 3+__pyx_t_7, __pyx_v_children_1);
+        PyTuple_SET_ITEM(__pyx_t_13, 3+__pyx_t_6, __pyx_v_children_1);
         __Pyx_INCREF(Py_None);
         __Pyx_GIVEREF(Py_None);
-        PyTuple_SET_ITEM(__pyx_t_14, 4+__pyx_t_7, Py_None);
+        PyTuple_SET_ITEM(__pyx_t_13, 4+__pyx_t_6, Py_None);
+        __pyx_t_10 = 0;
         __pyx_t_11 = 0;
-        __pyx_t_12 = 0;
-        __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_10, __pyx_t_14, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 80, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_5);
-        __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
+        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_9, __pyx_t_13, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 80, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_4);
+        __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
       }
-      __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-      __pyx_t_9 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_5); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(0, 80, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+      __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+      __pyx_t_8 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_4); if (unlikely(__pyx_t_8 == ((int)-1))) __PYX_ERR(0, 80, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
       /* "JSONParser.pyx":79
  *                 offset = -1
@@ -2836,163 +2826,85 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_document(str
  *                 children.append(self.ParseNode('document', offset, offset_1, children_1, None))
  *             else:
  *                 children.append(ParseNode('document', offset, offset_1, children_1, None))             # <<<<<<<<<<<<<<
- *                 children.append(ParseNode('document', offset, offset_1, children_1, None))
  *             offset = offset_1
+ * 
  */
     /*else*/ {
       if (unlikely(__pyx_v_children == Py_None)) {
         PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
         __PYX_ERR(0, 82, __pyx_L1_error)
       }
-      __Pyx_GetModuleGlobalName(__pyx_t_10, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 82, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_10);
-      __pyx_t_14 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 82, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_14);
-      __pyx_t_12 = __Pyx_PyInt_From_long(__pyx_v_offset_1); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 82, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_12);
-      __pyx_t_11 = NULL;
-      __pyx_t_7 = 0;
-      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_10))) {
-        __pyx_t_11 = PyMethod_GET_SELF(__pyx_t_10);
-        if (likely(__pyx_t_11)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_10);
-          __Pyx_INCREF(__pyx_t_11);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_10, function);
-          __pyx_t_7 = 1;
-        }
-      }
-      #if CYTHON_FAST_PYCALL
-      if (PyFunction_Check(__pyx_t_10)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_11, __pyx_n_u_document, __pyx_t_14, __pyx_t_12, __pyx_v_children_1, Py_None};
-        __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_10, __pyx_temp+1-__pyx_t_7, 5+__pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 82, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
-        __Pyx_GOTREF(__pyx_t_5);
-        __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-        __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
-      } else
-      #endif
-      #if CYTHON_FAST_PYCCALL
-      if (__Pyx_PyFastCFunction_Check(__pyx_t_10)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_11, __pyx_n_u_document, __pyx_t_14, __pyx_t_12, __pyx_v_children_1, Py_None};
-        __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_10, __pyx_temp+1-__pyx_t_7, 5+__pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 82, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
-        __Pyx_GOTREF(__pyx_t_5);
-        __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-        __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
-      } else
-      #endif
-      {
-        __pyx_t_13 = PyTuple_New(5+__pyx_t_7); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 82, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_13);
-        if (__pyx_t_11) {
-          __Pyx_GIVEREF(__pyx_t_11); PyTuple_SET_ITEM(__pyx_t_13, 0, __pyx_t_11); __pyx_t_11 = NULL;
-        }
-        __Pyx_INCREF(__pyx_n_u_document);
-        __Pyx_GIVEREF(__pyx_n_u_document);
-        PyTuple_SET_ITEM(__pyx_t_13, 0+__pyx_t_7, __pyx_n_u_document);
-        __Pyx_GIVEREF(__pyx_t_14);
-        PyTuple_SET_ITEM(__pyx_t_13, 1+__pyx_t_7, __pyx_t_14);
-        __Pyx_GIVEREF(__pyx_t_12);
-        PyTuple_SET_ITEM(__pyx_t_13, 2+__pyx_t_7, __pyx_t_12);
-        __Pyx_INCREF(__pyx_v_children_1);
-        __Pyx_GIVEREF(__pyx_v_children_1);
-        PyTuple_SET_ITEM(__pyx_t_13, 3+__pyx_t_7, __pyx_v_children_1);
-        __Pyx_INCREF(Py_None);
-        __Pyx_GIVEREF(Py_None);
-        PyTuple_SET_ITEM(__pyx_t_13, 4+__pyx_t_7, Py_None);
-        __pyx_t_14 = 0;
-        __pyx_t_12 = 0;
-        __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_10, __pyx_t_13, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 82, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_5);
-        __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-      }
-      __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-      __pyx_t_9 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_5); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(0, 82, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-
-      /* "JSONParser.pyx":83
- *             else:
- *                 children.append(ParseNode('document', offset, offset_1, children_1, None))
- *                 children.append(ParseNode('document', offset, offset_1, children_1, None))             # <<<<<<<<<<<<<<
- *             offset = offset_1
- * 
- */
-      if (unlikely(__pyx_v_children == Py_None)) {
-        PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
-        __PYX_ERR(0, 83, __pyx_L1_error)
-      }
-      __Pyx_GetModuleGlobalName(__pyx_t_10, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 83, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_10);
-      __pyx_t_13 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 83, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_9, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 82, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_9);
+      __pyx_t_13 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 82, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_13);
-      __pyx_t_12 = __Pyx_PyInt_From_long(__pyx_v_offset_1); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 83, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_12);
-      __pyx_t_14 = NULL;
-      __pyx_t_7 = 0;
-      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_10))) {
-        __pyx_t_14 = PyMethod_GET_SELF(__pyx_t_10);
-        if (likely(__pyx_t_14)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_10);
-          __Pyx_INCREF(__pyx_t_14);
+      __pyx_t_11 = __Pyx_PyInt_From_long(__pyx_v_offset_1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 82, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_11);
+      __pyx_t_10 = NULL;
+      __pyx_t_6 = 0;
+      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_9))) {
+        __pyx_t_10 = PyMethod_GET_SELF(__pyx_t_9);
+        if (likely(__pyx_t_10)) {
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_9);
+          __Pyx_INCREF(__pyx_t_10);
           __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_10, function);
-          __pyx_t_7 = 1;
+          __Pyx_DECREF_SET(__pyx_t_9, function);
+          __pyx_t_6 = 1;
         }
       }
       #if CYTHON_FAST_PYCALL
-      if (PyFunction_Check(__pyx_t_10)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_14, __pyx_n_u_document, __pyx_t_13, __pyx_t_12, __pyx_v_children_1, Py_None};
-        __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_10, __pyx_temp+1-__pyx_t_7, 5+__pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 83, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
-        __Pyx_GOTREF(__pyx_t_5);
+      if (PyFunction_Check(__pyx_t_9)) {
+        PyObject *__pyx_temp[6] = {__pyx_t_10, __pyx_n_u_document, __pyx_t_13, __pyx_t_11, __pyx_v_children_1, Py_None};
+        __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_9, __pyx_temp+1-__pyx_t_6, 5+__pyx_t_6); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 82, __pyx_L1_error)
+        __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
+        __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-        __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
+        __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       } else
       #endif
       #if CYTHON_FAST_PYCCALL
-      if (__Pyx_PyFastCFunction_Check(__pyx_t_10)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_14, __pyx_n_u_document, __pyx_t_13, __pyx_t_12, __pyx_v_children_1, Py_None};
-        __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_10, __pyx_temp+1-__pyx_t_7, 5+__pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 83, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
-        __Pyx_GOTREF(__pyx_t_5);
+      if (__Pyx_PyFastCFunction_Check(__pyx_t_9)) {
+        PyObject *__pyx_temp[6] = {__pyx_t_10, __pyx_n_u_document, __pyx_t_13, __pyx_t_11, __pyx_v_children_1, Py_None};
+        __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_9, __pyx_temp+1-__pyx_t_6, 5+__pyx_t_6); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 82, __pyx_L1_error)
+        __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
+        __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-        __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
+        __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       } else
       #endif
       {
-        __pyx_t_11 = PyTuple_New(5+__pyx_t_7); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 83, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_11);
-        if (__pyx_t_14) {
-          __Pyx_GIVEREF(__pyx_t_14); PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_14); __pyx_t_14 = NULL;
+        __pyx_t_12 = PyTuple_New(5+__pyx_t_6); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 82, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_12);
+        if (__pyx_t_10) {
+          __Pyx_GIVEREF(__pyx_t_10); PyTuple_SET_ITEM(__pyx_t_12, 0, __pyx_t_10); __pyx_t_10 = NULL;
         }
         __Pyx_INCREF(__pyx_n_u_document);
         __Pyx_GIVEREF(__pyx_n_u_document);
-        PyTuple_SET_ITEM(__pyx_t_11, 0+__pyx_t_7, __pyx_n_u_document);
+        PyTuple_SET_ITEM(__pyx_t_12, 0+__pyx_t_6, __pyx_n_u_document);
         __Pyx_GIVEREF(__pyx_t_13);
-        PyTuple_SET_ITEM(__pyx_t_11, 1+__pyx_t_7, __pyx_t_13);
-        __Pyx_GIVEREF(__pyx_t_12);
-        PyTuple_SET_ITEM(__pyx_t_11, 2+__pyx_t_7, __pyx_t_12);
+        PyTuple_SET_ITEM(__pyx_t_12, 1+__pyx_t_6, __pyx_t_13);
+        __Pyx_GIVEREF(__pyx_t_11);
+        PyTuple_SET_ITEM(__pyx_t_12, 2+__pyx_t_6, __pyx_t_11);
         __Pyx_INCREF(__pyx_v_children_1);
         __Pyx_GIVEREF(__pyx_v_children_1);
-        PyTuple_SET_ITEM(__pyx_t_11, 3+__pyx_t_7, __pyx_v_children_1);
+        PyTuple_SET_ITEM(__pyx_t_12, 3+__pyx_t_6, __pyx_v_children_1);
         __Pyx_INCREF(Py_None);
         __Pyx_GIVEREF(Py_None);
-        PyTuple_SET_ITEM(__pyx_t_11, 4+__pyx_t_7, Py_None);
+        PyTuple_SET_ITEM(__pyx_t_12, 4+__pyx_t_6, Py_None);
         __pyx_t_13 = 0;
-        __pyx_t_12 = 0;
-        __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_10, __pyx_t_11, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 83, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_5);
-        __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
+        __pyx_t_11 = 0;
+        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_9, __pyx_t_12, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 82, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_4);
+        __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
       }
-      __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-      __pyx_t_9 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_5); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(0, 83, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+      __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+      __pyx_t_8 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_4); if (unlikely(__pyx_t_8 == ((int)-1))) __PYX_ERR(0, 82, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     }
     __pyx_L42:;
 
-    /* "JSONParser.pyx":84
- *                 children.append(ParseNode('document', offset, offset_1, children_1, None))
+    /* "JSONParser.pyx":83
+ *             else:
  *                 children.append(ParseNode('document', offset, offset_1, children_1, None))
  *             offset = offset_1             # <<<<<<<<<<<<<<
  * 
@@ -3000,7 +2912,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_document(str
  */
     __pyx_v_offset = __pyx_v_offset_1;
 
-    /* "JSONParser.pyx":87
+    /* "JSONParser.pyx":86
  * 
  * 
  *             break             # <<<<<<<<<<<<<<
@@ -3011,34 +2923,34 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_document(str
   }
   __pyx_L4_break:;
 
-  /* "JSONParser.pyx":88
+  /* "JSONParser.pyx":87
  * 
  *             break
  *         return offset, line_start             # <<<<<<<<<<<<<<
  * 
- *     cdef (int, int) parse_json_value(self, str buf, int offset, int line_start, int indent, list children):
+ *     cdef (int, int) parse_json_value(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):
  */
-  __pyx_t_6.f0 = __pyx_v_offset;
-  __pyx_t_6.f1 = __pyx_v_line_start;
-  __pyx_r = __pyx_t_6;
+  __pyx_t_5.f0 = __pyx_v_offset;
+  __pyx_t_5.f1 = __pyx_v_line_start;
+  __pyx_r = __pyx_t_5;
   goto __pyx_L0;
 
   /* "JSONParser.pyx":23
  *         return children[-1] if new_offset else None
  * 
- *     cdef (int, int) parse_document(self, str buf, int offset, int line_start, int indent, list children):             # <<<<<<<<<<<<<<
+ *     cdef (int, int) parse_document(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
  *         cdef Py_UNICODE chr
  */
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_5);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_9);
   __Pyx_XDECREF(__pyx_t_10);
   __Pyx_XDECREF(__pyx_t_11);
   __Pyx_XDECREF(__pyx_t_12);
   __Pyx_XDECREF(__pyx_t_13);
-  __Pyx_XDECREF(__pyx_t_14);
   __Pyx_WriteUnraisable("JSONParser.Parser.parse_document", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
   __Pyx_pretend_to_initialize(&__pyx_r);
   __pyx_L0:;
@@ -3048,29 +2960,47 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_document(str
   return __pyx_r;
 }
 
-/* "JSONParser.pyx":90
+/* "JSONParser.pyx":89
  *         return offset, line_start
  * 
- *     cdef (int, int) parse_json_value(self, str buf, int offset, int line_start, int indent, list children):             # <<<<<<<<<<<<<<
+ *     cdef (int, int) parse_json_value(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
  *         cdef Py_UNICODE chr
  */
 
-static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_value(struct __pyx_obj_10JSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, int __pyx_v_indent, PyObject *__pyx_v_children) {
-  int __pyx_v_offset_1;
+static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_value(struct __pyx_obj_10JSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, int __pyx_v_indent, int __pyx_v_buf_eof, PyObject *__pyx_v_children) {
+  int __pyx_v_count;
+  PyObject *__pyx_v_offset_1 = NULL;
   int __pyx_v_line_start_1;
   PyObject *__pyx_v_children_1 = NULL;
+  PyObject *__pyx_v_offset_2 = NULL;
+  PyObject *__pyx_v_children_2 = NULL;
+  PyObject *__pyx_v_offset_3 = NULL;
+  int __pyx_v_line_start_2;
+  PyObject *__pyx_v_children_3 = NULL;
+  PyObject *__pyx_v_offset_4 = NULL;
+  int __pyx_v_line_start_3;
+  PyObject *__pyx_v_count_1 = NULL;
+  PyObject *__pyx_v_count_2 = NULL;
+  PyObject *__pyx_v_offset_5 = NULL;
+  int __pyx_v_line_start_4;
   __pyx_ctuple_int__and_int __pyx_r;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
-  __pyx_ctuple_int__and_int __pyx_t_2;
+  Py_ssize_t __pyx_t_2;
   int __pyx_t_3;
-  int __pyx_t_4;
-  int __pyx_t_5;
+  Py_ssize_t __pyx_t_4;
+  Py_ssize_t __pyx_t_5;
   int __pyx_t_6;
+  PyObject *__pyx_t_7 = NULL;
+  PyObject *__pyx_t_8 = NULL;
+  int __pyx_t_9;
+  PyObject *__pyx_t_10 = NULL;
+  int __pyx_t_11;
+  __pyx_ctuple_int__and_int __pyx_t_12;
   __Pyx_RefNannySetupContext("parse_json_value", 0);
 
-  /* "JSONParser.pyx":93
+  /* "JSONParser.pyx":92
  *         cdef int count
  *         cdef Py_UNICODE chr
  *         while True: # note: return at end of loop             # <<<<<<<<<<<<<<
@@ -3079,7 +3009,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_value(s
  */
   while (1) {
 
-    /* "JSONParser.pyx":94
+    /* "JSONParser.pyx":93
  *         cdef Py_UNICODE chr
  *         while True: # note: return at end of loop
  *             while True: # start choice             # <<<<<<<<<<<<<<
@@ -3088,16 +3018,19 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_value(s
  */
     while (1) {
 
-      /* "JSONParser.pyx":95
+      /* "JSONParser.pyx":94
  *         while True: # note: return at end of loop
  *             while True: # start choice
  *                 offset_1 = offset             # <<<<<<<<<<<<<<
  *                 line_start_1 = line_start
  *                 children_1 = []
  */
-      __pyx_v_offset_1 = __pyx_v_offset;
+      __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 94, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __pyx_v_offset_1 = __pyx_t_1;
+      __pyx_t_1 = 0;
 
-      /* "JSONParser.pyx":96
+      /* "JSONParser.pyx":95
  *             while True: # start choice
  *                 offset_1 = offset
  *                 line_start_1 = line_start             # <<<<<<<<<<<<<<
@@ -3106,53 +3039,359 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_value(s
  */
       __pyx_v_line_start_1 = __pyx_v_line_start;
 
-      /* "JSONParser.pyx":97
+      /* "JSONParser.pyx":96
  *                 offset_1 = offset
  *                 line_start_1 = line_start
  *                 children_1 = []             # <<<<<<<<<<<<<<
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_json_list(buf, offset_1, line_start_1, indent,children_1)
+ *                     offset_2 = offset_1
  */
-      __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 97, __pyx_L1_error)
+      __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 96, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __pyx_v_children_1 = ((PyObject*)__pyx_t_1);
       __pyx_t_1 = 0;
 
-      /* "JSONParser.pyx":98
+      /* "JSONParser.pyx":97
  *                 line_start_1 = line_start
  *                 children_1 = []
  *                 while True: # case             # <<<<<<<<<<<<<<
- *                     offset_1, line_start_1 = self.parse_json_list(buf, offset_1, line_start_1, indent,children_1)
- *                     if offset_1 == -1: break
+ *                     offset_2 = offset_1
+ *                     children_2 = []
  */
       while (1) {
 
-        /* "JSONParser.pyx":99
+        /* "JSONParser.pyx":98
  *                 children_1 = []
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_json_list(buf, offset_1, line_start_1, indent,children_1)             # <<<<<<<<<<<<<<
- *                     if offset_1 == -1: break
- * 
+ *                     offset_2 = offset_1             # <<<<<<<<<<<<<<
+ *                     children_2 = []
+ *                     while True: # start capture
  */
-        __pyx_t_2 = ((struct __pyx_vtabstruct_10JSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_json_list(__pyx_v_self, __pyx_v_buf, __pyx_v_offset_1, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_children_1);
-        __pyx_t_3 = __pyx_t_2.f0;
-        __pyx_t_4 = __pyx_t_2.f1;
-        __pyx_v_offset_1 = __pyx_t_3;
-        __pyx_v_line_start_1 = __pyx_t_4;
+        __Pyx_INCREF(__pyx_v_offset_1);
+        __pyx_v_offset_2 = __pyx_v_offset_1;
+
+        /* "JSONParser.pyx":99
+ *                 while True: # case
+ *                     offset_2 = offset_1
+ *                     children_2 = []             # <<<<<<<<<<<<<<
+ *                     while True: # start capture
+ *                         if buf[offset_2:offset_2+4] == 'true':
+ */
+        __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 99, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_1);
+        __pyx_v_children_2 = ((PyObject*)__pyx_t_1);
+        __pyx_t_1 = 0;
 
         /* "JSONParser.pyx":100
- *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_json_list(buf, offset_1, line_start_1, indent,children_1)
- *                     if offset_1 == -1: break             # <<<<<<<<<<<<<<
+ *                     offset_2 = offset_1
+ *                     children_2 = []
+ *                     while True: # start capture             # <<<<<<<<<<<<<<
+ *                         if buf[offset_2:offset_2+4] == 'true':
+ *                             offset_2 += 4
+ */
+        while (1) {
+
+          /* "JSONParser.pyx":101
+ *                     children_2 = []
+ *                     while True: # start capture
+ *                         if buf[offset_2:offset_2+4] == 'true':             # <<<<<<<<<<<<<<
+ *                             offset_2 += 4
+ *                         else:
+ */
+          if (unlikely(__pyx_v_buf == Py_None)) {
+            PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+            __PYX_ERR(0, 101, __pyx_L1_error)
+          }
+          __Pyx_INCREF(__pyx_v_offset_2);
+          __pyx_t_1 = __pyx_v_offset_2;
+          __pyx_t_3 = (__pyx_t_1 == Py_None);
+          if (__pyx_t_3) {
+            __pyx_t_2 = 0;
+          } else {
+            __pyx_t_4 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_4 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 101, __pyx_L1_error)
+            __pyx_t_2 = __pyx_t_4;
+          }
+          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+          __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_2, __pyx_int_4, 4, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 101, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_1);
+          __pyx_t_3 = (__pyx_t_1 == Py_None);
+          if (__pyx_t_3) {
+            __pyx_t_4 = PY_SSIZE_T_MAX;
+          } else {
+            __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 101, __pyx_L1_error)
+            __pyx_t_4 = __pyx_t_5;
+          }
+          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+          __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 101, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_1);
+          __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_n_u_true, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 101, __pyx_L1_error)
+          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+          __pyx_t_6 = (__pyx_t_3 != 0);
+          if (__pyx_t_6) {
+
+            /* "JSONParser.pyx":102
+ *                     while True: # start capture
+ *                         if buf[offset_2:offset_2+4] == 'true':
+ *                             offset_2 += 4             # <<<<<<<<<<<<<<
+ *                         else:
+ *                             offset_2 = -1
+ */
+            __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_2, __pyx_int_4, 4, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 102, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_1);
+            __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_t_1);
+            __pyx_t_1 = 0;
+
+            /* "JSONParser.pyx":101
+ *                     children_2 = []
+ *                     while True: # start capture
+ *                         if buf[offset_2:offset_2+4] == 'true':             # <<<<<<<<<<<<<<
+ *                             offset_2 += 4
+ *                         else:
+ */
+            goto __pyx_L11;
+          }
+
+          /* "JSONParser.pyx":104
+ *                             offset_2 += 4
+ *                         else:
+ *                             offset_2 = -1             # <<<<<<<<<<<<<<
+ *                             break
+ * 
+ */
+          /*else*/ {
+            __Pyx_INCREF(__pyx_int_neg_1);
+            __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_int_neg_1);
+
+            /* "JSONParser.pyx":105
+ *                         else:
+ *                             offset_2 = -1
+ *                             break             # <<<<<<<<<<<<<<
+ * 
+ *                         break
+ */
+            goto __pyx_L10_break;
+          }
+          __pyx_L11:;
+
+          /* "JSONParser.pyx":107
+ *                             break
+ * 
+ *                         break             # <<<<<<<<<<<<<<
+ *                     if offset_2 == -1:
+ *                         offset_1 = -1
+ */
+          goto __pyx_L10_break;
+        }
+        __pyx_L10_break:;
+
+        /* "JSONParser.pyx":108
+ * 
+ *                         break
+ *                     if offset_2 == -1:             # <<<<<<<<<<<<<<
+ *                         offset_1 = -1
+ *                         break
+ */
+        __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_2, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 108, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_1);
+        __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 108, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+        if (__pyx_t_6) {
+
+          /* "JSONParser.pyx":109
+ *                         break
+ *                     if offset_2 == -1:
+ *                         offset_1 = -1             # <<<<<<<<<<<<<<
+ *                         break
+ *                     if self.builder is not None:
+ */
+          __Pyx_INCREF(__pyx_int_neg_1);
+          __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_int_neg_1);
+
+          /* "JSONParser.pyx":110
+ *                     if offset_2 == -1:
+ *                         offset_1 = -1
+ *                         break             # <<<<<<<<<<<<<<
+ *                     if self.builder is not None:
+ *                         children_1.append(self.ParseNode('bool', offset_1, offset_2, children_2, None))
+ */
+          goto __pyx_L8_break;
+
+          /* "JSONParser.pyx":108
+ * 
+ *                         break
+ *                     if offset_2 == -1:             # <<<<<<<<<<<<<<
+ *                         offset_1 = -1
+ *                         break
+ */
+        }
+
+        /* "JSONParser.pyx":111
+ *                         offset_1 = -1
+ *                         break
+ *                     if self.builder is not None:             # <<<<<<<<<<<<<<
+ *                         children_1.append(self.ParseNode('bool', offset_1, offset_2, children_2, None))
+ *                     else:
+ */
+        __pyx_t_6 = (__pyx_v_self->builder != Py_None);
+        __pyx_t_3 = (__pyx_t_6 != 0);
+        if (__pyx_t_3) {
+
+          /* "JSONParser.pyx":112
+ *                         break
+ *                     if self.builder is not None:
+ *                         children_1.append(self.ParseNode('bool', offset_1, offset_2, children_2, None))             # <<<<<<<<<<<<<<
+ *                     else:
+ *                         children_1.append(ParseNode('bool', offset_1, offset_2, children_2, None))
+ */
+          __pyx_t_7 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 112, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_7);
+          __pyx_t_8 = NULL;
+          __pyx_t_9 = 0;
+          if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_7))) {
+            __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_7);
+            if (likely(__pyx_t_8)) {
+              PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
+              __Pyx_INCREF(__pyx_t_8);
+              __Pyx_INCREF(function);
+              __Pyx_DECREF_SET(__pyx_t_7, function);
+              __pyx_t_9 = 1;
+            }
+          }
+          #if CYTHON_FAST_PYCALL
+          if (PyFunction_Check(__pyx_t_7)) {
+            PyObject *__pyx_temp[6] = {__pyx_t_8, __pyx_n_u_bool, __pyx_v_offset_1, __pyx_v_offset_2, __pyx_v_children_2, Py_None};
+            __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_9, 5+__pyx_t_9); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 112, __pyx_L1_error)
+            __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
+            __Pyx_GOTREF(__pyx_t_1);
+          } else
+          #endif
+          #if CYTHON_FAST_PYCCALL
+          if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
+            PyObject *__pyx_temp[6] = {__pyx_t_8, __pyx_n_u_bool, __pyx_v_offset_1, __pyx_v_offset_2, __pyx_v_children_2, Py_None};
+            __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_9, 5+__pyx_t_9); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 112, __pyx_L1_error)
+            __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
+            __Pyx_GOTREF(__pyx_t_1);
+          } else
+          #endif
+          {
+            __pyx_t_10 = PyTuple_New(5+__pyx_t_9); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 112, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_10);
+            if (__pyx_t_8) {
+              __Pyx_GIVEREF(__pyx_t_8); PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_8); __pyx_t_8 = NULL;
+            }
+            __Pyx_INCREF(__pyx_n_u_bool);
+            __Pyx_GIVEREF(__pyx_n_u_bool);
+            PyTuple_SET_ITEM(__pyx_t_10, 0+__pyx_t_9, __pyx_n_u_bool);
+            __Pyx_INCREF(__pyx_v_offset_1);
+            __Pyx_GIVEREF(__pyx_v_offset_1);
+            PyTuple_SET_ITEM(__pyx_t_10, 1+__pyx_t_9, __pyx_v_offset_1);
+            __Pyx_INCREF(__pyx_v_offset_2);
+            __Pyx_GIVEREF(__pyx_v_offset_2);
+            PyTuple_SET_ITEM(__pyx_t_10, 2+__pyx_t_9, __pyx_v_offset_2);
+            __Pyx_INCREF(__pyx_v_children_2);
+            __Pyx_GIVEREF(__pyx_v_children_2);
+            PyTuple_SET_ITEM(__pyx_t_10, 3+__pyx_t_9, __pyx_v_children_2);
+            __Pyx_INCREF(Py_None);
+            __Pyx_GIVEREF(Py_None);
+            PyTuple_SET_ITEM(__pyx_t_10, 4+__pyx_t_9, Py_None);
+            __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_10, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 112, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_1);
+            __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+          }
+          __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+          __pyx_t_11 = __Pyx_PyList_Append(__pyx_v_children_1, __pyx_t_1); if (unlikely(__pyx_t_11 == ((int)-1))) __PYX_ERR(0, 112, __pyx_L1_error)
+          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+          /* "JSONParser.pyx":111
+ *                         offset_1 = -1
+ *                         break
+ *                     if self.builder is not None:             # <<<<<<<<<<<<<<
+ *                         children_1.append(self.ParseNode('bool', offset_1, offset_2, children_2, None))
+ *                     else:
+ */
+          goto __pyx_L13;
+        }
+
+        /* "JSONParser.pyx":114
+ *                         children_1.append(self.ParseNode('bool', offset_1, offset_2, children_2, None))
+ *                     else:
+ *                         children_1.append(ParseNode('bool', offset_1, offset_2, children_2, None))             # <<<<<<<<<<<<<<
+ *                     offset_1 = offset_2
+ * 
+ */
+        /*else*/ {
+          __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 114, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_7);
+          __pyx_t_10 = NULL;
+          __pyx_t_9 = 0;
+          if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_7))) {
+            __pyx_t_10 = PyMethod_GET_SELF(__pyx_t_7);
+            if (likely(__pyx_t_10)) {
+              PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
+              __Pyx_INCREF(__pyx_t_10);
+              __Pyx_INCREF(function);
+              __Pyx_DECREF_SET(__pyx_t_7, function);
+              __pyx_t_9 = 1;
+            }
+          }
+          #if CYTHON_FAST_PYCALL
+          if (PyFunction_Check(__pyx_t_7)) {
+            PyObject *__pyx_temp[6] = {__pyx_t_10, __pyx_n_u_bool, __pyx_v_offset_1, __pyx_v_offset_2, __pyx_v_children_2, Py_None};
+            __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_9, 5+__pyx_t_9); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 114, __pyx_L1_error)
+            __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
+            __Pyx_GOTREF(__pyx_t_1);
+          } else
+          #endif
+          #if CYTHON_FAST_PYCCALL
+          if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
+            PyObject *__pyx_temp[6] = {__pyx_t_10, __pyx_n_u_bool, __pyx_v_offset_1, __pyx_v_offset_2, __pyx_v_children_2, Py_None};
+            __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_9, 5+__pyx_t_9); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 114, __pyx_L1_error)
+            __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
+            __Pyx_GOTREF(__pyx_t_1);
+          } else
+          #endif
+          {
+            __pyx_t_8 = PyTuple_New(5+__pyx_t_9); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 114, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_8);
+            if (__pyx_t_10) {
+              __Pyx_GIVEREF(__pyx_t_10); PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_10); __pyx_t_10 = NULL;
+            }
+            __Pyx_INCREF(__pyx_n_u_bool);
+            __Pyx_GIVEREF(__pyx_n_u_bool);
+            PyTuple_SET_ITEM(__pyx_t_8, 0+__pyx_t_9, __pyx_n_u_bool);
+            __Pyx_INCREF(__pyx_v_offset_1);
+            __Pyx_GIVEREF(__pyx_v_offset_1);
+            PyTuple_SET_ITEM(__pyx_t_8, 1+__pyx_t_9, __pyx_v_offset_1);
+            __Pyx_INCREF(__pyx_v_offset_2);
+            __Pyx_GIVEREF(__pyx_v_offset_2);
+            PyTuple_SET_ITEM(__pyx_t_8, 2+__pyx_t_9, __pyx_v_offset_2);
+            __Pyx_INCREF(__pyx_v_children_2);
+            __Pyx_GIVEREF(__pyx_v_children_2);
+            PyTuple_SET_ITEM(__pyx_t_8, 3+__pyx_t_9, __pyx_v_children_2);
+            __Pyx_INCREF(Py_None);
+            __Pyx_GIVEREF(Py_None);
+            PyTuple_SET_ITEM(__pyx_t_8, 4+__pyx_t_9, Py_None);
+            __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_8, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 114, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_1);
+            __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+          }
+          __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+          __pyx_t_11 = __Pyx_PyList_Append(__pyx_v_children_1, __pyx_t_1); if (unlikely(__pyx_t_11 == ((int)-1))) __PYX_ERR(0, 114, __pyx_L1_error)
+          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+        }
+        __pyx_L13:;
+
+        /* "JSONParser.pyx":115
+ *                     else:
+ *                         children_1.append(ParseNode('bool', offset_1, offset_2, children_2, None))
+ *                     offset_1 = offset_2             # <<<<<<<<<<<<<<
  * 
  * 
  */
-        __pyx_t_5 = ((__pyx_v_offset_1 == -1L) != 0);
-        if (__pyx_t_5) {
-          goto __pyx_L8_break;
-        }
+        __Pyx_INCREF(__pyx_v_offset_2);
+        __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_v_offset_2);
 
-        /* "JSONParser.pyx":103
+        /* "JSONParser.pyx":118
  * 
  * 
  *                     break             # <<<<<<<<<<<<<<
@@ -3163,140 +3402,6 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_value(s
       }
       __pyx_L8_break:;
 
-      /* "JSONParser.pyx":104
- * 
- *                     break
- *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
- *                     offset = offset_1
- *                     line_start = line_start_1
- */
-      __pyx_t_5 = ((__pyx_v_offset_1 != -1L) != 0);
-      if (__pyx_t_5) {
-
-        /* "JSONParser.pyx":105
- *                     break
- *                 if offset_1 != -1:
- *                     offset = offset_1             # <<<<<<<<<<<<<<
- *                     line_start = line_start_1
- *                     children.extend(children_1)
- */
-        __pyx_v_offset = __pyx_v_offset_1;
-
-        /* "JSONParser.pyx":106
- *                 if offset_1 != -1:
- *                     offset = offset_1
- *                     line_start = line_start_1             # <<<<<<<<<<<<<<
- *                     children.extend(children_1)
- *                     break
- */
-        __pyx_v_line_start = __pyx_v_line_start_1;
-
-        /* "JSONParser.pyx":107
- *                     offset = offset_1
- *                     line_start = line_start_1
- *                     children.extend(children_1)             # <<<<<<<<<<<<<<
- *                     break
- *                 # end case
- */
-        if (unlikely(__pyx_v_children == Py_None)) {
-          PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "extend");
-          __PYX_ERR(0, 107, __pyx_L1_error)
-        }
-        __pyx_t_6 = __Pyx_PyList_Extend(__pyx_v_children, __pyx_v_children_1); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 107, __pyx_L1_error)
-
-        /* "JSONParser.pyx":108
- *                     line_start = line_start_1
- *                     children.extend(children_1)
- *                     break             # <<<<<<<<<<<<<<
- *                 # end case
- *                 offset_1 = offset
- */
-        goto __pyx_L6_break;
-
-        /* "JSONParser.pyx":104
- * 
- *                     break
- *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
- *                     offset = offset_1
- *                     line_start = line_start_1
- */
-      }
-
-      /* "JSONParser.pyx":110
- *                     break
- *                 # end case
- *                 offset_1 = offset             # <<<<<<<<<<<<<<
- *                 line_start_1 = line_start
- *                 children_1 = []
- */
-      __pyx_v_offset_1 = __pyx_v_offset;
-
-      /* "JSONParser.pyx":111
- *                 # end case
- *                 offset_1 = offset
- *                 line_start_1 = line_start             # <<<<<<<<<<<<<<
- *                 children_1 = []
- *                 while True: # case
- */
-      __pyx_v_line_start_1 = __pyx_v_line_start;
-
-      /* "JSONParser.pyx":112
- *                 offset_1 = offset
- *                 line_start_1 = line_start
- *                 children_1 = []             # <<<<<<<<<<<<<<
- *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_json_object(buf, offset_1, line_start_1, indent,children_1)
- */
-      __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 112, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_DECREF_SET(__pyx_v_children_1, ((PyObject*)__pyx_t_1));
-      __pyx_t_1 = 0;
-
-      /* "JSONParser.pyx":113
- *                 line_start_1 = line_start
- *                 children_1 = []
- *                 while True: # case             # <<<<<<<<<<<<<<
- *                     offset_1, line_start_1 = self.parse_json_object(buf, offset_1, line_start_1, indent,children_1)
- *                     if offset_1 == -1: break
- */
-      while (1) {
-
-        /* "JSONParser.pyx":114
- *                 children_1 = []
- *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_json_object(buf, offset_1, line_start_1, indent,children_1)             # <<<<<<<<<<<<<<
- *                     if offset_1 == -1: break
- * 
- */
-        __pyx_t_2 = ((struct __pyx_vtabstruct_10JSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_json_object(__pyx_v_self, __pyx_v_buf, __pyx_v_offset_1, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_children_1);
-        __pyx_t_4 = __pyx_t_2.f0;
-        __pyx_t_3 = __pyx_t_2.f1;
-        __pyx_v_offset_1 = __pyx_t_4;
-        __pyx_v_line_start_1 = __pyx_t_3;
-
-        /* "JSONParser.pyx":115
- *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_json_object(buf, offset_1, line_start_1, indent,children_1)
- *                     if offset_1 == -1: break             # <<<<<<<<<<<<<<
- * 
- * 
- */
-        __pyx_t_5 = ((__pyx_v_offset_1 == -1L) != 0);
-        if (__pyx_t_5) {
-          goto __pyx_L12_break;
-        }
-
-        /* "JSONParser.pyx":118
- * 
- * 
- *                     break             # <<<<<<<<<<<<<<
- *                 if offset_1 != -1:
- *                     offset = offset_1
- */
-        goto __pyx_L12_break;
-      }
-      __pyx_L12_break:;
-
       /* "JSONParser.pyx":119
  * 
  *                     break
@@ -3304,8 +3409,11 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_value(s
  *                     offset = offset_1
  *                     line_start = line_start_1
  */
-      __pyx_t_5 = ((__pyx_v_offset_1 != -1L) != 0);
-      if (__pyx_t_5) {
+      __pyx_t_1 = __Pyx_PyInt_NeObjC(__pyx_v_offset_1, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 119, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 119, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      if (__pyx_t_3) {
 
         /* "JSONParser.pyx":120
  *                     break
@@ -3314,7 +3422,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_value(s
  *                     line_start = line_start_1
  *                     children.extend(children_1)
  */
-        __pyx_v_offset = __pyx_v_offset_1;
+        __pyx_t_9 = __Pyx_PyInt_As_int(__pyx_v_offset_1); if (unlikely((__pyx_t_9 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 120, __pyx_L1_error)
+        __pyx_v_offset = __pyx_t_9;
 
         /* "JSONParser.pyx":121
  *                 if offset_1 != -1:
@@ -3336,7 +3445,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_value(s
           PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "extend");
           __PYX_ERR(0, 122, __pyx_L1_error)
         }
-        __pyx_t_6 = __Pyx_PyList_Extend(__pyx_v_children, __pyx_v_children_1); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 122, __pyx_L1_error)
+        __pyx_t_11 = __Pyx_PyList_Extend(__pyx_v_children, __pyx_v_children_1); if (unlikely(__pyx_t_11 == ((int)-1))) __PYX_ERR(0, 122, __pyx_L1_error)
 
         /* "JSONParser.pyx":123
  *                     line_start = line_start_1
@@ -3363,7 +3472,10 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_value(s
  *                 line_start_1 = line_start
  *                 children_1 = []
  */
-      __pyx_v_offset_1 = __pyx_v_offset;
+      __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 125, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_t_1);
+      __pyx_t_1 = 0;
 
       /* "JSONParser.pyx":126
  *                 # end case
@@ -3379,7 +3491,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_value(s
  *                 line_start_1 = line_start
  *                 children_1 = []             # <<<<<<<<<<<<<<
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_json_string(buf, offset_1, line_start_1, indent,children_1)
+ *                     offset_2 = offset_1
  */
       __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 127, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
@@ -3390,37 +3502,343 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_value(s
  *                 line_start_1 = line_start
  *                 children_1 = []
  *                 while True: # case             # <<<<<<<<<<<<<<
- *                     offset_1, line_start_1 = self.parse_json_string(buf, offset_1, line_start_1, indent,children_1)
- *                     if offset_1 == -1: break
+ *                     offset_2 = offset_1
+ *                     children_2 = []
  */
       while (1) {
 
         /* "JSONParser.pyx":129
  *                 children_1 = []
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_json_string(buf, offset_1, line_start_1, indent,children_1)             # <<<<<<<<<<<<<<
- *                     if offset_1 == -1: break
- * 
+ *                     offset_2 = offset_1             # <<<<<<<<<<<<<<
+ *                     children_2 = []
+ *                     while True: # start capture
  */
-        __pyx_t_2 = ((struct __pyx_vtabstruct_10JSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_json_string(__pyx_v_self, __pyx_v_buf, __pyx_v_offset_1, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_children_1);
-        __pyx_t_3 = __pyx_t_2.f0;
-        __pyx_t_4 = __pyx_t_2.f1;
-        __pyx_v_offset_1 = __pyx_t_3;
-        __pyx_v_line_start_1 = __pyx_t_4;
+        __Pyx_INCREF(__pyx_v_offset_1);
+        __Pyx_XDECREF_SET(__pyx_v_offset_2, __pyx_v_offset_1);
 
         /* "JSONParser.pyx":130
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_json_string(buf, offset_1, line_start_1, indent,children_1)
- *                     if offset_1 == -1: break             # <<<<<<<<<<<<<<
+ *                     offset_2 = offset_1
+ *                     children_2 = []             # <<<<<<<<<<<<<<
+ *                     while True: # start capture
+ *                         if buf[offset_2:offset_2+5] == 'false':
+ */
+        __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 130, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_1);
+        __Pyx_XDECREF_SET(__pyx_v_children_2, ((PyObject*)__pyx_t_1));
+        __pyx_t_1 = 0;
+
+        /* "JSONParser.pyx":131
+ *                     offset_2 = offset_1
+ *                     children_2 = []
+ *                     while True: # start capture             # <<<<<<<<<<<<<<
+ *                         if buf[offset_2:offset_2+5] == 'false':
+ *                             offset_2 += 5
+ */
+        while (1) {
+
+          /* "JSONParser.pyx":132
+ *                     children_2 = []
+ *                     while True: # start capture
+ *                         if buf[offset_2:offset_2+5] == 'false':             # <<<<<<<<<<<<<<
+ *                             offset_2 += 5
+ *                         else:
+ */
+          if (unlikely(__pyx_v_buf == Py_None)) {
+            PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+            __PYX_ERR(0, 132, __pyx_L1_error)
+          }
+          __Pyx_INCREF(__pyx_v_offset_2);
+          __pyx_t_1 = __pyx_v_offset_2;
+          __pyx_t_3 = (__pyx_t_1 == Py_None);
+          if (__pyx_t_3) {
+            __pyx_t_4 = 0;
+          } else {
+            __pyx_t_2 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_2 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 132, __pyx_L1_error)
+            __pyx_t_4 = __pyx_t_2;
+          }
+          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+          __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_2, __pyx_int_5, 5, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 132, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_1);
+          __pyx_t_3 = (__pyx_t_1 == Py_None);
+          if (__pyx_t_3) {
+            __pyx_t_2 = PY_SSIZE_T_MAX;
+          } else {
+            __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 132, __pyx_L1_error)
+            __pyx_t_2 = __pyx_t_5;
+          }
+          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+          __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 132, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_1);
+          __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_n_u_false, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 132, __pyx_L1_error)
+          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+          __pyx_t_6 = (__pyx_t_3 != 0);
+          if (__pyx_t_6) {
+
+            /* "JSONParser.pyx":133
+ *                     while True: # start capture
+ *                         if buf[offset_2:offset_2+5] == 'false':
+ *                             offset_2 += 5             # <<<<<<<<<<<<<<
+ *                         else:
+ *                             offset_2 = -1
+ */
+            __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_2, __pyx_int_5, 5, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 133, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_1);
+            __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_t_1);
+            __pyx_t_1 = 0;
+
+            /* "JSONParser.pyx":132
+ *                     children_2 = []
+ *                     while True: # start capture
+ *                         if buf[offset_2:offset_2+5] == 'false':             # <<<<<<<<<<<<<<
+ *                             offset_2 += 5
+ *                         else:
+ */
+            goto __pyx_L19;
+          }
+
+          /* "JSONParser.pyx":135
+ *                             offset_2 += 5
+ *                         else:
+ *                             offset_2 = -1             # <<<<<<<<<<<<<<
+ *                             break
+ * 
+ */
+          /*else*/ {
+            __Pyx_INCREF(__pyx_int_neg_1);
+            __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_int_neg_1);
+
+            /* "JSONParser.pyx":136
+ *                         else:
+ *                             offset_2 = -1
+ *                             break             # <<<<<<<<<<<<<<
+ * 
+ *                         break
+ */
+            goto __pyx_L18_break;
+          }
+          __pyx_L19:;
+
+          /* "JSONParser.pyx":138
+ *                             break
+ * 
+ *                         break             # <<<<<<<<<<<<<<
+ *                     if offset_2 == -1:
+ *                         offset_1 = -1
+ */
+          goto __pyx_L18_break;
+        }
+        __pyx_L18_break:;
+
+        /* "JSONParser.pyx":139
+ * 
+ *                         break
+ *                     if offset_2 == -1:             # <<<<<<<<<<<<<<
+ *                         offset_1 = -1
+ *                         break
+ */
+        __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_2, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 139, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_1);
+        __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 139, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+        if (__pyx_t_6) {
+
+          /* "JSONParser.pyx":140
+ *                         break
+ *                     if offset_2 == -1:
+ *                         offset_1 = -1             # <<<<<<<<<<<<<<
+ *                         break
+ *                     if self.builder is not None:
+ */
+          __Pyx_INCREF(__pyx_int_neg_1);
+          __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_int_neg_1);
+
+          /* "JSONParser.pyx":141
+ *                     if offset_2 == -1:
+ *                         offset_1 = -1
+ *                         break             # <<<<<<<<<<<<<<
+ *                     if self.builder is not None:
+ *                         children_1.append(self.ParseNode('bool', offset_1, offset_2, children_2, None))
+ */
+          goto __pyx_L16_break;
+
+          /* "JSONParser.pyx":139
+ * 
+ *                         break
+ *                     if offset_2 == -1:             # <<<<<<<<<<<<<<
+ *                         offset_1 = -1
+ *                         break
+ */
+        }
+
+        /* "JSONParser.pyx":142
+ *                         offset_1 = -1
+ *                         break
+ *                     if self.builder is not None:             # <<<<<<<<<<<<<<
+ *                         children_1.append(self.ParseNode('bool', offset_1, offset_2, children_2, None))
+ *                     else:
+ */
+        __pyx_t_6 = (__pyx_v_self->builder != Py_None);
+        __pyx_t_3 = (__pyx_t_6 != 0);
+        if (__pyx_t_3) {
+
+          /* "JSONParser.pyx":143
+ *                         break
+ *                     if self.builder is not None:
+ *                         children_1.append(self.ParseNode('bool', offset_1, offset_2, children_2, None))             # <<<<<<<<<<<<<<
+ *                     else:
+ *                         children_1.append(ParseNode('bool', offset_1, offset_2, children_2, None))
+ */
+          __pyx_t_7 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 143, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_7);
+          __pyx_t_8 = NULL;
+          __pyx_t_9 = 0;
+          if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_7))) {
+            __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_7);
+            if (likely(__pyx_t_8)) {
+              PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
+              __Pyx_INCREF(__pyx_t_8);
+              __Pyx_INCREF(function);
+              __Pyx_DECREF_SET(__pyx_t_7, function);
+              __pyx_t_9 = 1;
+            }
+          }
+          #if CYTHON_FAST_PYCALL
+          if (PyFunction_Check(__pyx_t_7)) {
+            PyObject *__pyx_temp[6] = {__pyx_t_8, __pyx_n_u_bool, __pyx_v_offset_1, __pyx_v_offset_2, __pyx_v_children_2, Py_None};
+            __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_9, 5+__pyx_t_9); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 143, __pyx_L1_error)
+            __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
+            __Pyx_GOTREF(__pyx_t_1);
+          } else
+          #endif
+          #if CYTHON_FAST_PYCCALL
+          if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
+            PyObject *__pyx_temp[6] = {__pyx_t_8, __pyx_n_u_bool, __pyx_v_offset_1, __pyx_v_offset_2, __pyx_v_children_2, Py_None};
+            __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_9, 5+__pyx_t_9); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 143, __pyx_L1_error)
+            __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
+            __Pyx_GOTREF(__pyx_t_1);
+          } else
+          #endif
+          {
+            __pyx_t_10 = PyTuple_New(5+__pyx_t_9); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 143, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_10);
+            if (__pyx_t_8) {
+              __Pyx_GIVEREF(__pyx_t_8); PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_8); __pyx_t_8 = NULL;
+            }
+            __Pyx_INCREF(__pyx_n_u_bool);
+            __Pyx_GIVEREF(__pyx_n_u_bool);
+            PyTuple_SET_ITEM(__pyx_t_10, 0+__pyx_t_9, __pyx_n_u_bool);
+            __Pyx_INCREF(__pyx_v_offset_1);
+            __Pyx_GIVEREF(__pyx_v_offset_1);
+            PyTuple_SET_ITEM(__pyx_t_10, 1+__pyx_t_9, __pyx_v_offset_1);
+            __Pyx_INCREF(__pyx_v_offset_2);
+            __Pyx_GIVEREF(__pyx_v_offset_2);
+            PyTuple_SET_ITEM(__pyx_t_10, 2+__pyx_t_9, __pyx_v_offset_2);
+            __Pyx_INCREF(__pyx_v_children_2);
+            __Pyx_GIVEREF(__pyx_v_children_2);
+            PyTuple_SET_ITEM(__pyx_t_10, 3+__pyx_t_9, __pyx_v_children_2);
+            __Pyx_INCREF(Py_None);
+            __Pyx_GIVEREF(Py_None);
+            PyTuple_SET_ITEM(__pyx_t_10, 4+__pyx_t_9, Py_None);
+            __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_10, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 143, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_1);
+            __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+          }
+          __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+          __pyx_t_11 = __Pyx_PyList_Append(__pyx_v_children_1, __pyx_t_1); if (unlikely(__pyx_t_11 == ((int)-1))) __PYX_ERR(0, 143, __pyx_L1_error)
+          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+          /* "JSONParser.pyx":142
+ *                         offset_1 = -1
+ *                         break
+ *                     if self.builder is not None:             # <<<<<<<<<<<<<<
+ *                         children_1.append(self.ParseNode('bool', offset_1, offset_2, children_2, None))
+ *                     else:
+ */
+          goto __pyx_L21;
+        }
+
+        /* "JSONParser.pyx":145
+ *                         children_1.append(self.ParseNode('bool', offset_1, offset_2, children_2, None))
+ *                     else:
+ *                         children_1.append(ParseNode('bool', offset_1, offset_2, children_2, None))             # <<<<<<<<<<<<<<
+ *                     offset_1 = offset_2
+ * 
+ */
+        /*else*/ {
+          __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 145, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_7);
+          __pyx_t_10 = NULL;
+          __pyx_t_9 = 0;
+          if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_7))) {
+            __pyx_t_10 = PyMethod_GET_SELF(__pyx_t_7);
+            if (likely(__pyx_t_10)) {
+              PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
+              __Pyx_INCREF(__pyx_t_10);
+              __Pyx_INCREF(function);
+              __Pyx_DECREF_SET(__pyx_t_7, function);
+              __pyx_t_9 = 1;
+            }
+          }
+          #if CYTHON_FAST_PYCALL
+          if (PyFunction_Check(__pyx_t_7)) {
+            PyObject *__pyx_temp[6] = {__pyx_t_10, __pyx_n_u_bool, __pyx_v_offset_1, __pyx_v_offset_2, __pyx_v_children_2, Py_None};
+            __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_9, 5+__pyx_t_9); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 145, __pyx_L1_error)
+            __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
+            __Pyx_GOTREF(__pyx_t_1);
+          } else
+          #endif
+          #if CYTHON_FAST_PYCCALL
+          if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
+            PyObject *__pyx_temp[6] = {__pyx_t_10, __pyx_n_u_bool, __pyx_v_offset_1, __pyx_v_offset_2, __pyx_v_children_2, Py_None};
+            __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_9, 5+__pyx_t_9); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 145, __pyx_L1_error)
+            __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
+            __Pyx_GOTREF(__pyx_t_1);
+          } else
+          #endif
+          {
+            __pyx_t_8 = PyTuple_New(5+__pyx_t_9); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 145, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_8);
+            if (__pyx_t_10) {
+              __Pyx_GIVEREF(__pyx_t_10); PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_10); __pyx_t_10 = NULL;
+            }
+            __Pyx_INCREF(__pyx_n_u_bool);
+            __Pyx_GIVEREF(__pyx_n_u_bool);
+            PyTuple_SET_ITEM(__pyx_t_8, 0+__pyx_t_9, __pyx_n_u_bool);
+            __Pyx_INCREF(__pyx_v_offset_1);
+            __Pyx_GIVEREF(__pyx_v_offset_1);
+            PyTuple_SET_ITEM(__pyx_t_8, 1+__pyx_t_9, __pyx_v_offset_1);
+            __Pyx_INCREF(__pyx_v_offset_2);
+            __Pyx_GIVEREF(__pyx_v_offset_2);
+            PyTuple_SET_ITEM(__pyx_t_8, 2+__pyx_t_9, __pyx_v_offset_2);
+            __Pyx_INCREF(__pyx_v_children_2);
+            __Pyx_GIVEREF(__pyx_v_children_2);
+            PyTuple_SET_ITEM(__pyx_t_8, 3+__pyx_t_9, __pyx_v_children_2);
+            __Pyx_INCREF(Py_None);
+            __Pyx_GIVEREF(Py_None);
+            PyTuple_SET_ITEM(__pyx_t_8, 4+__pyx_t_9, Py_None);
+            __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_8, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 145, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_1);
+            __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+          }
+          __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+          __pyx_t_11 = __Pyx_PyList_Append(__pyx_v_children_1, __pyx_t_1); if (unlikely(__pyx_t_11 == ((int)-1))) __PYX_ERR(0, 145, __pyx_L1_error)
+          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+        }
+        __pyx_L21:;
+
+        /* "JSONParser.pyx":146
+ *                     else:
+ *                         children_1.append(ParseNode('bool', offset_1, offset_2, children_2, None))
+ *                     offset_1 = offset_2             # <<<<<<<<<<<<<<
  * 
  * 
  */
-        __pyx_t_5 = ((__pyx_v_offset_1 == -1L) != 0);
-        if (__pyx_t_5) {
-          goto __pyx_L16_break;
-        }
+        __Pyx_INCREF(__pyx_v_offset_2);
+        __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_v_offset_2);
 
-        /* "JSONParser.pyx":133
+        /* "JSONParser.pyx":149
  * 
  * 
  *                     break             # <<<<<<<<<<<<<<
@@ -3431,160 +3849,30 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_value(s
       }
       __pyx_L16_break:;
 
-      /* "JSONParser.pyx":134
+      /* "JSONParser.pyx":150
  * 
  *                     break
  *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
  *                     offset = offset_1
  *                     line_start = line_start_1
  */
-      __pyx_t_5 = ((__pyx_v_offset_1 != -1L) != 0);
-      if (__pyx_t_5) {
-
-        /* "JSONParser.pyx":135
- *                     break
- *                 if offset_1 != -1:
- *                     offset = offset_1             # <<<<<<<<<<<<<<
- *                     line_start = line_start_1
- *                     children.extend(children_1)
- */
-        __pyx_v_offset = __pyx_v_offset_1;
-
-        /* "JSONParser.pyx":136
- *                 if offset_1 != -1:
- *                     offset = offset_1
- *                     line_start = line_start_1             # <<<<<<<<<<<<<<
- *                     children.extend(children_1)
- *                     break
- */
-        __pyx_v_line_start = __pyx_v_line_start_1;
-
-        /* "JSONParser.pyx":137
- *                     offset = offset_1
- *                     line_start = line_start_1
- *                     children.extend(children_1)             # <<<<<<<<<<<<<<
- *                     break
- *                 # end case
- */
-        if (unlikely(__pyx_v_children == Py_None)) {
-          PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "extend");
-          __PYX_ERR(0, 137, __pyx_L1_error)
-        }
-        __pyx_t_6 = __Pyx_PyList_Extend(__pyx_v_children, __pyx_v_children_1); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 137, __pyx_L1_error)
-
-        /* "JSONParser.pyx":138
- *                     line_start = line_start_1
- *                     children.extend(children_1)
- *                     break             # <<<<<<<<<<<<<<
- *                 # end case
- *                 offset_1 = offset
- */
-        goto __pyx_L6_break;
-
-        /* "JSONParser.pyx":134
- * 
- *                     break
- *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
- *                     offset = offset_1
- *                     line_start = line_start_1
- */
-      }
-
-      /* "JSONParser.pyx":140
- *                     break
- *                 # end case
- *                 offset_1 = offset             # <<<<<<<<<<<<<<
- *                 line_start_1 = line_start
- *                 children_1 = []
- */
-      __pyx_v_offset_1 = __pyx_v_offset;
-
-      /* "JSONParser.pyx":141
- *                 # end case
- *                 offset_1 = offset
- *                 line_start_1 = line_start             # <<<<<<<<<<<<<<
- *                 children_1 = []
- *                 while True: # case
- */
-      __pyx_v_line_start_1 = __pyx_v_line_start;
-
-      /* "JSONParser.pyx":142
- *                 offset_1 = offset
- *                 line_start_1 = line_start
- *                 children_1 = []             # <<<<<<<<<<<<<<
- *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_json_number(buf, offset_1, line_start_1, indent,children_1)
- */
-      __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 142, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyInt_NeObjC(__pyx_v_offset_1, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 150, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_DECREF_SET(__pyx_v_children_1, ((PyObject*)__pyx_t_1));
-      __pyx_t_1 = 0;
-
-      /* "JSONParser.pyx":143
- *                 line_start_1 = line_start
- *                 children_1 = []
- *                 while True: # case             # <<<<<<<<<<<<<<
- *                     offset_1, line_start_1 = self.parse_json_number(buf, offset_1, line_start_1, indent,children_1)
- *                     if offset_1 == -1: break
- */
-      while (1) {
-
-        /* "JSONParser.pyx":144
- *                 children_1 = []
- *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_json_number(buf, offset_1, line_start_1, indent,children_1)             # <<<<<<<<<<<<<<
- *                     if offset_1 == -1: break
- * 
- */
-        __pyx_t_2 = ((struct __pyx_vtabstruct_10JSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_json_number(__pyx_v_self, __pyx_v_buf, __pyx_v_offset_1, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_children_1);
-        __pyx_t_4 = __pyx_t_2.f0;
-        __pyx_t_3 = __pyx_t_2.f1;
-        __pyx_v_offset_1 = __pyx_t_4;
-        __pyx_v_line_start_1 = __pyx_t_3;
-
-        /* "JSONParser.pyx":145
- *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_json_number(buf, offset_1, line_start_1, indent,children_1)
- *                     if offset_1 == -1: break             # <<<<<<<<<<<<<<
- * 
- * 
- */
-        __pyx_t_5 = ((__pyx_v_offset_1 == -1L) != 0);
-        if (__pyx_t_5) {
-          goto __pyx_L20_break;
-        }
-
-        /* "JSONParser.pyx":148
- * 
- * 
- *                     break             # <<<<<<<<<<<<<<
- *                 if offset_1 != -1:
- *                     offset = offset_1
- */
-        goto __pyx_L20_break;
-      }
-      __pyx_L20_break:;
-
-      /* "JSONParser.pyx":149
- * 
- *                     break
- *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
- *                     offset = offset_1
- *                     line_start = line_start_1
- */
-      __pyx_t_5 = ((__pyx_v_offset_1 != -1L) != 0);
-      if (__pyx_t_5) {
-
-        /* "JSONParser.pyx":150
- *                     break
- *                 if offset_1 != -1:
- *                     offset = offset_1             # <<<<<<<<<<<<<<
- *                     line_start = line_start_1
- *                     children.extend(children_1)
- */
-        __pyx_v_offset = __pyx_v_offset_1;
+      __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 150, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      if (__pyx_t_3) {
 
         /* "JSONParser.pyx":151
+ *                     break
+ *                 if offset_1 != -1:
+ *                     offset = offset_1             # <<<<<<<<<<<<<<
+ *                     line_start = line_start_1
+ *                     children.extend(children_1)
+ */
+        __pyx_t_9 = __Pyx_PyInt_As_int(__pyx_v_offset_1); if (unlikely((__pyx_t_9 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 151, __pyx_L1_error)
+        __pyx_v_offset = __pyx_t_9;
+
+        /* "JSONParser.pyx":152
  *                 if offset_1 != -1:
  *                     offset = offset_1
  *                     line_start = line_start_1             # <<<<<<<<<<<<<<
@@ -3593,7 +3881,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_value(s
  */
         __pyx_v_line_start = __pyx_v_line_start_1;
 
-        /* "JSONParser.pyx":152
+        /* "JSONParser.pyx":153
  *                     offset = offset_1
  *                     line_start = line_start_1
  *                     children.extend(children_1)             # <<<<<<<<<<<<<<
@@ -3602,11 +3890,11 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_value(s
  */
         if (unlikely(__pyx_v_children == Py_None)) {
           PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "extend");
-          __PYX_ERR(0, 152, __pyx_L1_error)
+          __PYX_ERR(0, 153, __pyx_L1_error)
         }
-        __pyx_t_6 = __Pyx_PyList_Extend(__pyx_v_children, __pyx_v_children_1); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 152, __pyx_L1_error)
+        __pyx_t_11 = __Pyx_PyList_Extend(__pyx_v_children, __pyx_v_children_1); if (unlikely(__pyx_t_11 == ((int)-1))) __PYX_ERR(0, 153, __pyx_L1_error)
 
-        /* "JSONParser.pyx":153
+        /* "JSONParser.pyx":154
  *                     line_start = line_start_1
  *                     children.extend(children_1)
  *                     break             # <<<<<<<<<<<<<<
@@ -3615,7 +3903,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_value(s
  */
         goto __pyx_L6_break;
 
-        /* "JSONParser.pyx":149
+        /* "JSONParser.pyx":150
  * 
  *                     break
  *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
@@ -3624,16 +3912,19 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_value(s
  */
       }
 
-      /* "JSONParser.pyx":155
+      /* "JSONParser.pyx":156
  *                     break
  *                 # end case
  *                 offset_1 = offset             # <<<<<<<<<<<<<<
  *                 line_start_1 = line_start
  *                 children_1 = []
  */
-      __pyx_v_offset_1 = __pyx_v_offset;
+      __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 156, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_t_1);
+      __pyx_t_1 = 0;
 
-      /* "JSONParser.pyx":156
+      /* "JSONParser.pyx":157
  *                 # end case
  *                 offset_1 = offset
  *                 line_start_1 = line_start             # <<<<<<<<<<<<<<
@@ -3642,53 +3933,359 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_value(s
  */
       __pyx_v_line_start_1 = __pyx_v_line_start;
 
-      /* "JSONParser.pyx":157
+      /* "JSONParser.pyx":158
  *                 offset_1 = offset
  *                 line_start_1 = line_start
  *                 children_1 = []             # <<<<<<<<<<<<<<
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_json_true(buf, offset_1, line_start_1, indent,children_1)
+ *                     offset_2 = offset_1
  */
-      __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 157, __pyx_L1_error)
+      __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 158, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF_SET(__pyx_v_children_1, ((PyObject*)__pyx_t_1));
       __pyx_t_1 = 0;
 
-      /* "JSONParser.pyx":158
+      /* "JSONParser.pyx":159
  *                 line_start_1 = line_start
  *                 children_1 = []
  *                 while True: # case             # <<<<<<<<<<<<<<
- *                     offset_1, line_start_1 = self.parse_json_true(buf, offset_1, line_start_1, indent,children_1)
- *                     if offset_1 == -1: break
+ *                     offset_2 = offset_1
+ *                     children_2 = []
  */
       while (1) {
 
-        /* "JSONParser.pyx":159
+        /* "JSONParser.pyx":160
  *                 children_1 = []
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_json_true(buf, offset_1, line_start_1, indent,children_1)             # <<<<<<<<<<<<<<
- *                     if offset_1 == -1: break
- * 
+ *                     offset_2 = offset_1             # <<<<<<<<<<<<<<
+ *                     children_2 = []
+ *                     while True: # start capture
  */
-        __pyx_t_2 = ((struct __pyx_vtabstruct_10JSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_json_true(__pyx_v_self, __pyx_v_buf, __pyx_v_offset_1, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_children_1);
-        __pyx_t_3 = __pyx_t_2.f0;
-        __pyx_t_4 = __pyx_t_2.f1;
-        __pyx_v_offset_1 = __pyx_t_3;
-        __pyx_v_line_start_1 = __pyx_t_4;
+        __Pyx_INCREF(__pyx_v_offset_1);
+        __Pyx_XDECREF_SET(__pyx_v_offset_2, __pyx_v_offset_1);
 
-        /* "JSONParser.pyx":160
+        /* "JSONParser.pyx":161
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_json_true(buf, offset_1, line_start_1, indent,children_1)
- *                     if offset_1 == -1: break             # <<<<<<<<<<<<<<
- * 
+ *                     offset_2 = offset_1
+ *                     children_2 = []             # <<<<<<<<<<<<<<
+ *                     while True: # start capture
+ *                         if buf[offset_2:offset_2+4] == 'null':
+ */
+        __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 161, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_1);
+        __Pyx_XDECREF_SET(__pyx_v_children_2, ((PyObject*)__pyx_t_1));
+        __pyx_t_1 = 0;
+
+        /* "JSONParser.pyx":162
+ *                     offset_2 = offset_1
+ *                     children_2 = []
+ *                     while True: # start capture             # <<<<<<<<<<<<<<
+ *                         if buf[offset_2:offset_2+4] == 'null':
+ *                             offset_2 += 4
+ */
+        while (1) {
+
+          /* "JSONParser.pyx":163
+ *                     children_2 = []
+ *                     while True: # start capture
+ *                         if buf[offset_2:offset_2+4] == 'null':             # <<<<<<<<<<<<<<
+ *                             offset_2 += 4
+ *                         else:
+ */
+          if (unlikely(__pyx_v_buf == Py_None)) {
+            PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+            __PYX_ERR(0, 163, __pyx_L1_error)
+          }
+          __Pyx_INCREF(__pyx_v_offset_2);
+          __pyx_t_1 = __pyx_v_offset_2;
+          __pyx_t_3 = (__pyx_t_1 == Py_None);
+          if (__pyx_t_3) {
+            __pyx_t_2 = 0;
+          } else {
+            __pyx_t_4 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_4 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 163, __pyx_L1_error)
+            __pyx_t_2 = __pyx_t_4;
+          }
+          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+          __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_2, __pyx_int_4, 4, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 163, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_1);
+          __pyx_t_3 = (__pyx_t_1 == Py_None);
+          if (__pyx_t_3) {
+            __pyx_t_4 = PY_SSIZE_T_MAX;
+          } else {
+            __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 163, __pyx_L1_error)
+            __pyx_t_4 = __pyx_t_5;
+          }
+          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+          __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 163, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_1);
+          __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_n_u_null, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 163, __pyx_L1_error)
+          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+          __pyx_t_6 = (__pyx_t_3 != 0);
+          if (__pyx_t_6) {
+
+            /* "JSONParser.pyx":164
+ *                     while True: # start capture
+ *                         if buf[offset_2:offset_2+4] == 'null':
+ *                             offset_2 += 4             # <<<<<<<<<<<<<<
+ *                         else:
+ *                             offset_2 = -1
+ */
+            __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_2, __pyx_int_4, 4, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 164, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_1);
+            __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_t_1);
+            __pyx_t_1 = 0;
+
+            /* "JSONParser.pyx":163
+ *                     children_2 = []
+ *                     while True: # start capture
+ *                         if buf[offset_2:offset_2+4] == 'null':             # <<<<<<<<<<<<<<
+ *                             offset_2 += 4
+ *                         else:
+ */
+            goto __pyx_L27;
+          }
+
+          /* "JSONParser.pyx":166
+ *                             offset_2 += 4
+ *                         else:
+ *                             offset_2 = -1             # <<<<<<<<<<<<<<
+ *                             break
  * 
  */
-        __pyx_t_5 = ((__pyx_v_offset_1 == -1L) != 0);
-        if (__pyx_t_5) {
+          /*else*/ {
+            __Pyx_INCREF(__pyx_int_neg_1);
+            __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_int_neg_1);
+
+            /* "JSONParser.pyx":167
+ *                         else:
+ *                             offset_2 = -1
+ *                             break             # <<<<<<<<<<<<<<
+ * 
+ *                         break
+ */
+            goto __pyx_L26_break;
+          }
+          __pyx_L27:;
+
+          /* "JSONParser.pyx":169
+ *                             break
+ * 
+ *                         break             # <<<<<<<<<<<<<<
+ *                     if offset_2 == -1:
+ *                         offset_1 = -1
+ */
+          goto __pyx_L26_break;
+        }
+        __pyx_L26_break:;
+
+        /* "JSONParser.pyx":170
+ * 
+ *                         break
+ *                     if offset_2 == -1:             # <<<<<<<<<<<<<<
+ *                         offset_1 = -1
+ *                         break
+ */
+        __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_2, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 170, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_1);
+        __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 170, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+        if (__pyx_t_6) {
+
+          /* "JSONParser.pyx":171
+ *                         break
+ *                     if offset_2 == -1:
+ *                         offset_1 = -1             # <<<<<<<<<<<<<<
+ *                         break
+ *                     if self.builder is not None:
+ */
+          __Pyx_INCREF(__pyx_int_neg_1);
+          __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_int_neg_1);
+
+          /* "JSONParser.pyx":172
+ *                     if offset_2 == -1:
+ *                         offset_1 = -1
+ *                         break             # <<<<<<<<<<<<<<
+ *                     if self.builder is not None:
+ *                         children_1.append(self.ParseNode('bool', offset_1, offset_2, children_2, None))
+ */
           goto __pyx_L24_break;
+
+          /* "JSONParser.pyx":170
+ * 
+ *                         break
+ *                     if offset_2 == -1:             # <<<<<<<<<<<<<<
+ *                         offset_1 = -1
+ *                         break
+ */
         }
 
-        /* "JSONParser.pyx":163
+        /* "JSONParser.pyx":173
+ *                         offset_1 = -1
+ *                         break
+ *                     if self.builder is not None:             # <<<<<<<<<<<<<<
+ *                         children_1.append(self.ParseNode('bool', offset_1, offset_2, children_2, None))
+ *                     else:
+ */
+        __pyx_t_6 = (__pyx_v_self->builder != Py_None);
+        __pyx_t_3 = (__pyx_t_6 != 0);
+        if (__pyx_t_3) {
+
+          /* "JSONParser.pyx":174
+ *                         break
+ *                     if self.builder is not None:
+ *                         children_1.append(self.ParseNode('bool', offset_1, offset_2, children_2, None))             # <<<<<<<<<<<<<<
+ *                     else:
+ *                         children_1.append(ParseNode('bool', offset_1, offset_2, children_2, None))
+ */
+          __pyx_t_7 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 174, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_7);
+          __pyx_t_8 = NULL;
+          __pyx_t_9 = 0;
+          if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_7))) {
+            __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_7);
+            if (likely(__pyx_t_8)) {
+              PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
+              __Pyx_INCREF(__pyx_t_8);
+              __Pyx_INCREF(function);
+              __Pyx_DECREF_SET(__pyx_t_7, function);
+              __pyx_t_9 = 1;
+            }
+          }
+          #if CYTHON_FAST_PYCALL
+          if (PyFunction_Check(__pyx_t_7)) {
+            PyObject *__pyx_temp[6] = {__pyx_t_8, __pyx_n_u_bool, __pyx_v_offset_1, __pyx_v_offset_2, __pyx_v_children_2, Py_None};
+            __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_9, 5+__pyx_t_9); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 174, __pyx_L1_error)
+            __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
+            __Pyx_GOTREF(__pyx_t_1);
+          } else
+          #endif
+          #if CYTHON_FAST_PYCCALL
+          if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
+            PyObject *__pyx_temp[6] = {__pyx_t_8, __pyx_n_u_bool, __pyx_v_offset_1, __pyx_v_offset_2, __pyx_v_children_2, Py_None};
+            __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_9, 5+__pyx_t_9); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 174, __pyx_L1_error)
+            __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
+            __Pyx_GOTREF(__pyx_t_1);
+          } else
+          #endif
+          {
+            __pyx_t_10 = PyTuple_New(5+__pyx_t_9); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 174, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_10);
+            if (__pyx_t_8) {
+              __Pyx_GIVEREF(__pyx_t_8); PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_8); __pyx_t_8 = NULL;
+            }
+            __Pyx_INCREF(__pyx_n_u_bool);
+            __Pyx_GIVEREF(__pyx_n_u_bool);
+            PyTuple_SET_ITEM(__pyx_t_10, 0+__pyx_t_9, __pyx_n_u_bool);
+            __Pyx_INCREF(__pyx_v_offset_1);
+            __Pyx_GIVEREF(__pyx_v_offset_1);
+            PyTuple_SET_ITEM(__pyx_t_10, 1+__pyx_t_9, __pyx_v_offset_1);
+            __Pyx_INCREF(__pyx_v_offset_2);
+            __Pyx_GIVEREF(__pyx_v_offset_2);
+            PyTuple_SET_ITEM(__pyx_t_10, 2+__pyx_t_9, __pyx_v_offset_2);
+            __Pyx_INCREF(__pyx_v_children_2);
+            __Pyx_GIVEREF(__pyx_v_children_2);
+            PyTuple_SET_ITEM(__pyx_t_10, 3+__pyx_t_9, __pyx_v_children_2);
+            __Pyx_INCREF(Py_None);
+            __Pyx_GIVEREF(Py_None);
+            PyTuple_SET_ITEM(__pyx_t_10, 4+__pyx_t_9, Py_None);
+            __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_10, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 174, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_1);
+            __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+          }
+          __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+          __pyx_t_11 = __Pyx_PyList_Append(__pyx_v_children_1, __pyx_t_1); if (unlikely(__pyx_t_11 == ((int)-1))) __PYX_ERR(0, 174, __pyx_L1_error)
+          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+          /* "JSONParser.pyx":173
+ *                         offset_1 = -1
+ *                         break
+ *                     if self.builder is not None:             # <<<<<<<<<<<<<<
+ *                         children_1.append(self.ParseNode('bool', offset_1, offset_2, children_2, None))
+ *                     else:
+ */
+          goto __pyx_L29;
+        }
+
+        /* "JSONParser.pyx":176
+ *                         children_1.append(self.ParseNode('bool', offset_1, offset_2, children_2, None))
+ *                     else:
+ *                         children_1.append(ParseNode('bool', offset_1, offset_2, children_2, None))             # <<<<<<<<<<<<<<
+ *                     offset_1 = offset_2
+ * 
+ */
+        /*else*/ {
+          __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 176, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_7);
+          __pyx_t_10 = NULL;
+          __pyx_t_9 = 0;
+          if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_7))) {
+            __pyx_t_10 = PyMethod_GET_SELF(__pyx_t_7);
+            if (likely(__pyx_t_10)) {
+              PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
+              __Pyx_INCREF(__pyx_t_10);
+              __Pyx_INCREF(function);
+              __Pyx_DECREF_SET(__pyx_t_7, function);
+              __pyx_t_9 = 1;
+            }
+          }
+          #if CYTHON_FAST_PYCALL
+          if (PyFunction_Check(__pyx_t_7)) {
+            PyObject *__pyx_temp[6] = {__pyx_t_10, __pyx_n_u_bool, __pyx_v_offset_1, __pyx_v_offset_2, __pyx_v_children_2, Py_None};
+            __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_9, 5+__pyx_t_9); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 176, __pyx_L1_error)
+            __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
+            __Pyx_GOTREF(__pyx_t_1);
+          } else
+          #endif
+          #if CYTHON_FAST_PYCCALL
+          if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
+            PyObject *__pyx_temp[6] = {__pyx_t_10, __pyx_n_u_bool, __pyx_v_offset_1, __pyx_v_offset_2, __pyx_v_children_2, Py_None};
+            __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_9, 5+__pyx_t_9); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 176, __pyx_L1_error)
+            __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
+            __Pyx_GOTREF(__pyx_t_1);
+          } else
+          #endif
+          {
+            __pyx_t_8 = PyTuple_New(5+__pyx_t_9); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 176, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_8);
+            if (__pyx_t_10) {
+              __Pyx_GIVEREF(__pyx_t_10); PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_10); __pyx_t_10 = NULL;
+            }
+            __Pyx_INCREF(__pyx_n_u_bool);
+            __Pyx_GIVEREF(__pyx_n_u_bool);
+            PyTuple_SET_ITEM(__pyx_t_8, 0+__pyx_t_9, __pyx_n_u_bool);
+            __Pyx_INCREF(__pyx_v_offset_1);
+            __Pyx_GIVEREF(__pyx_v_offset_1);
+            PyTuple_SET_ITEM(__pyx_t_8, 1+__pyx_t_9, __pyx_v_offset_1);
+            __Pyx_INCREF(__pyx_v_offset_2);
+            __Pyx_GIVEREF(__pyx_v_offset_2);
+            PyTuple_SET_ITEM(__pyx_t_8, 2+__pyx_t_9, __pyx_v_offset_2);
+            __Pyx_INCREF(__pyx_v_children_2);
+            __Pyx_GIVEREF(__pyx_v_children_2);
+            PyTuple_SET_ITEM(__pyx_t_8, 3+__pyx_t_9, __pyx_v_children_2);
+            __Pyx_INCREF(Py_None);
+            __Pyx_GIVEREF(Py_None);
+            PyTuple_SET_ITEM(__pyx_t_8, 4+__pyx_t_9, Py_None);
+            __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_8, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 176, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_1);
+            __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+          }
+          __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+          __pyx_t_11 = __Pyx_PyList_Append(__pyx_v_children_1, __pyx_t_1); if (unlikely(__pyx_t_11 == ((int)-1))) __PYX_ERR(0, 176, __pyx_L1_error)
+          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+        }
+        __pyx_L29:;
+
+        /* "JSONParser.pyx":177
+ *                     else:
+ *                         children_1.append(ParseNode('bool', offset_1, offset_2, children_2, None))
+ *                     offset_1 = offset_2             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+        __Pyx_INCREF(__pyx_v_offset_2);
+        __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_v_offset_2);
+
+        /* "JSONParser.pyx":180
  * 
  * 
  *                     break             # <<<<<<<<<<<<<<
@@ -3699,169 +4296,39 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_value(s
       }
       __pyx_L24_break:;
 
-      /* "JSONParser.pyx":164
+      /* "JSONParser.pyx":181
  * 
  *                     break
  *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
  *                     offset = offset_1
  *                     line_start = line_start_1
  */
-      __pyx_t_5 = ((__pyx_v_offset_1 != -1L) != 0);
-      if (__pyx_t_5) {
-
-        /* "JSONParser.pyx":165
- *                     break
- *                 if offset_1 != -1:
- *                     offset = offset_1             # <<<<<<<<<<<<<<
- *                     line_start = line_start_1
- *                     children.extend(children_1)
- */
-        __pyx_v_offset = __pyx_v_offset_1;
-
-        /* "JSONParser.pyx":166
- *                 if offset_1 != -1:
- *                     offset = offset_1
- *                     line_start = line_start_1             # <<<<<<<<<<<<<<
- *                     children.extend(children_1)
- *                     break
- */
-        __pyx_v_line_start = __pyx_v_line_start_1;
-
-        /* "JSONParser.pyx":167
- *                     offset = offset_1
- *                     line_start = line_start_1
- *                     children.extend(children_1)             # <<<<<<<<<<<<<<
- *                     break
- *                 # end case
- */
-        if (unlikely(__pyx_v_children == Py_None)) {
-          PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "extend");
-          __PYX_ERR(0, 167, __pyx_L1_error)
-        }
-        __pyx_t_6 = __Pyx_PyList_Extend(__pyx_v_children, __pyx_v_children_1); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 167, __pyx_L1_error)
-
-        /* "JSONParser.pyx":168
- *                     line_start = line_start_1
- *                     children.extend(children_1)
- *                     break             # <<<<<<<<<<<<<<
- *                 # end case
- *                 offset_1 = offset
- */
-        goto __pyx_L6_break;
-
-        /* "JSONParser.pyx":164
- * 
- *                     break
- *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
- *                     offset = offset_1
- *                     line_start = line_start_1
- */
-      }
-
-      /* "JSONParser.pyx":170
- *                     break
- *                 # end case
- *                 offset_1 = offset             # <<<<<<<<<<<<<<
- *                 line_start_1 = line_start
- *                 children_1 = []
- */
-      __pyx_v_offset_1 = __pyx_v_offset;
-
-      /* "JSONParser.pyx":171
- *                 # end case
- *                 offset_1 = offset
- *                 line_start_1 = line_start             # <<<<<<<<<<<<<<
- *                 children_1 = []
- *                 while True: # case
- */
-      __pyx_v_line_start_1 = __pyx_v_line_start;
-
-      /* "JSONParser.pyx":172
- *                 offset_1 = offset
- *                 line_start_1 = line_start
- *                 children_1 = []             # <<<<<<<<<<<<<<
- *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_json_false(buf, offset_1, line_start_1, indent,children_1)
- */
-      __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 172, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyInt_NeObjC(__pyx_v_offset_1, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 181, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_DECREF_SET(__pyx_v_children_1, ((PyObject*)__pyx_t_1));
-      __pyx_t_1 = 0;
-
-      /* "JSONParser.pyx":173
- *                 line_start_1 = line_start
- *                 children_1 = []
- *                 while True: # case             # <<<<<<<<<<<<<<
- *                     offset_1, line_start_1 = self.parse_json_false(buf, offset_1, line_start_1, indent,children_1)
- *                     if offset_1 == -1: break
- */
-      while (1) {
-
-        /* "JSONParser.pyx":174
- *                 children_1 = []
- *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_json_false(buf, offset_1, line_start_1, indent,children_1)             # <<<<<<<<<<<<<<
- *                     if offset_1 == -1: break
- * 
- */
-        __pyx_t_2 = ((struct __pyx_vtabstruct_10JSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_json_false(__pyx_v_self, __pyx_v_buf, __pyx_v_offset_1, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_children_1);
-        __pyx_t_4 = __pyx_t_2.f0;
-        __pyx_t_3 = __pyx_t_2.f1;
-        __pyx_v_offset_1 = __pyx_t_4;
-        __pyx_v_line_start_1 = __pyx_t_3;
-
-        /* "JSONParser.pyx":175
- *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_json_false(buf, offset_1, line_start_1, indent,children_1)
- *                     if offset_1 == -1: break             # <<<<<<<<<<<<<<
- * 
- * 
- */
-        __pyx_t_5 = ((__pyx_v_offset_1 == -1L) != 0);
-        if (__pyx_t_5) {
-          goto __pyx_L28_break;
-        }
-
-        /* "JSONParser.pyx":178
- * 
- * 
- *                     break             # <<<<<<<<<<<<<<
- *                 if offset_1 != -1:
- *                     offset = offset_1
- */
-        goto __pyx_L28_break;
-      }
-      __pyx_L28_break:;
-
-      /* "JSONParser.pyx":179
- * 
- *                     break
- *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
- *                     offset = offset_1
- *                     line_start = line_start_1
- */
-      __pyx_t_5 = ((__pyx_v_offset_1 != -1L) != 0);
-      if (__pyx_t_5) {
-
-        /* "JSONParser.pyx":180
- *                     break
- *                 if offset_1 != -1:
- *                     offset = offset_1             # <<<<<<<<<<<<<<
- *                     line_start = line_start_1
- *                     children.extend(children_1)
- */
-        __pyx_v_offset = __pyx_v_offset_1;
-
-        /* "JSONParser.pyx":181
- *                 if offset_1 != -1:
- *                     offset = offset_1
- *                     line_start = line_start_1             # <<<<<<<<<<<<<<
- *                     children.extend(children_1)
- *                     break
- */
-        __pyx_v_line_start = __pyx_v_line_start_1;
+      __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 181, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      if (__pyx_t_3) {
 
         /* "JSONParser.pyx":182
+ *                     break
+ *                 if offset_1 != -1:
+ *                     offset = offset_1             # <<<<<<<<<<<<<<
+ *                     line_start = line_start_1
+ *                     children.extend(children_1)
+ */
+        __pyx_t_9 = __Pyx_PyInt_As_int(__pyx_v_offset_1); if (unlikely((__pyx_t_9 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 182, __pyx_L1_error)
+        __pyx_v_offset = __pyx_t_9;
+
+        /* "JSONParser.pyx":183
+ *                 if offset_1 != -1:
+ *                     offset = offset_1
+ *                     line_start = line_start_1             # <<<<<<<<<<<<<<
+ *                     children.extend(children_1)
+ *                     break
+ */
+        __pyx_v_line_start = __pyx_v_line_start_1;
+
+        /* "JSONParser.pyx":184
  *                     offset = offset_1
  *                     line_start = line_start_1
  *                     children.extend(children_1)             # <<<<<<<<<<<<<<
@@ -3870,11 +4337,11 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_value(s
  */
         if (unlikely(__pyx_v_children == Py_None)) {
           PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "extend");
-          __PYX_ERR(0, 182, __pyx_L1_error)
+          __PYX_ERR(0, 184, __pyx_L1_error)
         }
-        __pyx_t_6 = __Pyx_PyList_Extend(__pyx_v_children, __pyx_v_children_1); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 182, __pyx_L1_error)
+        __pyx_t_11 = __Pyx_PyList_Extend(__pyx_v_children, __pyx_v_children_1); if (unlikely(__pyx_t_11 == ((int)-1))) __PYX_ERR(0, 184, __pyx_L1_error)
 
-        /* "JSONParser.pyx":183
+        /* "JSONParser.pyx":185
  *                     line_start = line_start_1
  *                     children.extend(children_1)
  *                     break             # <<<<<<<<<<<<<<
@@ -3883,7 +4350,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_value(s
  */
         goto __pyx_L6_break;
 
-        /* "JSONParser.pyx":179
+        /* "JSONParser.pyx":181
  * 
  *                     break
  *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
@@ -3892,71 +4359,2112 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_value(s
  */
       }
 
-      /* "JSONParser.pyx":185
+      /* "JSONParser.pyx":187
  *                     break
  *                 # end case
  *                 offset_1 = offset             # <<<<<<<<<<<<<<
  *                 line_start_1 = line_start
  *                 children_1 = []
  */
-      __pyx_v_offset_1 = __pyx_v_offset;
-
-      /* "JSONParser.pyx":186
- *                 # end case
- *                 offset_1 = offset
- *                 line_start_1 = line_start             # <<<<<<<<<<<<<<
- *                 children_1 = []
- *                 while True: # case
- */
-      __pyx_v_line_start_1 = __pyx_v_line_start;
-
-      /* "JSONParser.pyx":187
- *                 offset_1 = offset
- *                 line_start_1 = line_start
- *                 children_1 = []             # <<<<<<<<<<<<<<
- *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_json_null(buf, offset_1, line_start_1, indent,children_1)
- */
-      __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 187, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 187, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_DECREF_SET(__pyx_v_children_1, ((PyObject*)__pyx_t_1));
+      __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_t_1);
       __pyx_t_1 = 0;
 
       /* "JSONParser.pyx":188
+ *                 # end case
+ *                 offset_1 = offset
+ *                 line_start_1 = line_start             # <<<<<<<<<<<<<<
+ *                 children_1 = []
+ *                 while True: # case
+ */
+      __pyx_v_line_start_1 = __pyx_v_line_start;
+
+      /* "JSONParser.pyx":189
+ *                 offset_1 = offset
+ *                 line_start_1 = line_start
+ *                 children_1 = []             # <<<<<<<<<<<<<<
+ *                 while True: # case
+ *                     offset_2 = offset_1
+ */
+      __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 189, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF_SET(__pyx_v_children_1, ((PyObject*)__pyx_t_1));
+      __pyx_t_1 = 0;
+
+      /* "JSONParser.pyx":190
  *                 line_start_1 = line_start
  *                 children_1 = []
  *                 while True: # case             # <<<<<<<<<<<<<<
- *                     offset_1, line_start_1 = self.parse_json_null(buf, offset_1, line_start_1, indent,children_1)
- *                     if offset_1 == -1: break
+ *                     offset_2 = offset_1
+ *                     children_2 = []
  */
       while (1) {
 
-        /* "JSONParser.pyx":189
+        /* "JSONParser.pyx":191
  *                 children_1 = []
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_json_null(buf, offset_1, line_start_1, indent,children_1)             # <<<<<<<<<<<<<<
- *                     if offset_1 == -1: break
- * 
+ *                     offset_2 = offset_1             # <<<<<<<<<<<<<<
+ *                     children_2 = []
+ *                     while True: # start capture
  */
-        __pyx_t_2 = ((struct __pyx_vtabstruct_10JSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_json_null(__pyx_v_self, __pyx_v_buf, __pyx_v_offset_1, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_children_1);
-        __pyx_t_3 = __pyx_t_2.f0;
-        __pyx_t_4 = __pyx_t_2.f1;
-        __pyx_v_offset_1 = __pyx_t_3;
-        __pyx_v_line_start_1 = __pyx_t_4;
+        __Pyx_INCREF(__pyx_v_offset_1);
+        __Pyx_XDECREF_SET(__pyx_v_offset_2, __pyx_v_offset_1);
 
-        /* "JSONParser.pyx":190
+        /* "JSONParser.pyx":192
  *                 while True: # case
- *                     offset_1, line_start_1 = self.parse_json_null(buf, offset_1, line_start_1, indent,children_1)
- *                     if offset_1 == -1: break             # <<<<<<<<<<<<<<
- * 
- * 
+ *                     offset_2 = offset_1
+ *                     children_2 = []             # <<<<<<<<<<<<<<
+ *                     while True: # start capture
+ *                         count = 0
  */
-        __pyx_t_5 = ((__pyx_v_offset_1 == -1L) != 0);
-        if (__pyx_t_5) {
-          goto __pyx_L32_break;
-        }
+        __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 192, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_1);
+        __Pyx_XDECREF_SET(__pyx_v_children_2, ((PyObject*)__pyx_t_1));
+        __pyx_t_1 = 0;
 
         /* "JSONParser.pyx":193
+ *                     offset_2 = offset_1
+ *                     children_2 = []
+ *                     while True: # start capture             # <<<<<<<<<<<<<<
+ *                         count = 0
+ *                         while True:
+ */
+        while (1) {
+
+          /* "JSONParser.pyx":194
+ *                     children_2 = []
+ *                     while True: # start capture
+ *                         count = 0             # <<<<<<<<<<<<<<
+ *                         while True:
+ *                             offset_3 = offset_2
+ */
+          __pyx_v_count = 0;
+
+          /* "JSONParser.pyx":195
+ *                     while True: # start capture
+ *                         count = 0
+ *                         while True:             # <<<<<<<<<<<<<<
+ *                             offset_3 = offset_2
+ *                             line_start_2 = line_start_1
+ */
+          while (1) {
+
+            /* "JSONParser.pyx":196
+ *                         count = 0
+ *                         while True:
+ *                             offset_3 = offset_2             # <<<<<<<<<<<<<<
+ *                             line_start_2 = line_start_1
+ *                             if buf[offset_3:offset_3+1] == '-':
+ */
+            __Pyx_INCREF(__pyx_v_offset_2);
+            __Pyx_XDECREF_SET(__pyx_v_offset_3, __pyx_v_offset_2);
+
+            /* "JSONParser.pyx":197
+ *                         while True:
+ *                             offset_3 = offset_2
+ *                             line_start_2 = line_start_1             # <<<<<<<<<<<<<<
+ *                             if buf[offset_3:offset_3+1] == '-':
+ *                                 offset_3 += 1
+ */
+            __pyx_v_line_start_2 = __pyx_v_line_start_1;
+
+            /* "JSONParser.pyx":198
+ *                             offset_3 = offset_2
+ *                             line_start_2 = line_start_1
+ *                             if buf[offset_3:offset_3+1] == '-':             # <<<<<<<<<<<<<<
+ *                                 offset_3 += 1
+ *                             else:
+ */
+            if (unlikely(__pyx_v_buf == Py_None)) {
+              PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+              __PYX_ERR(0, 198, __pyx_L1_error)
+            }
+            __Pyx_INCREF(__pyx_v_offset_3);
+            __pyx_t_1 = __pyx_v_offset_3;
+            __pyx_t_3 = (__pyx_t_1 == Py_None);
+            if (__pyx_t_3) {
+              __pyx_t_4 = 0;
+            } else {
+              __pyx_t_2 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_2 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 198, __pyx_L1_error)
+              __pyx_t_4 = __pyx_t_2;
+            }
+            __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+            __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 198, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_1);
+            __pyx_t_3 = (__pyx_t_1 == Py_None);
+            if (__pyx_t_3) {
+              __pyx_t_2 = PY_SSIZE_T_MAX;
+            } else {
+              __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 198, __pyx_L1_error)
+              __pyx_t_2 = __pyx_t_5;
+            }
+            __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+            __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 198, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_1);
+            __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u__2, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 198, __pyx_L1_error)
+            __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+            __pyx_t_6 = (__pyx_t_3 != 0);
+            if (__pyx_t_6) {
+
+              /* "JSONParser.pyx":199
+ *                             line_start_2 = line_start_1
+ *                             if buf[offset_3:offset_3+1] == '-':
+ *                                 offset_3 += 1             # <<<<<<<<<<<<<<
+ *                             else:
+ *                                 offset_3 = -1
+ */
+              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 199, __pyx_L1_error)
+              __Pyx_GOTREF(__pyx_t_1);
+              __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_1);
+              __pyx_t_1 = 0;
+
+              /* "JSONParser.pyx":198
+ *                             offset_3 = offset_2
+ *                             line_start_2 = line_start_1
+ *                             if buf[offset_3:offset_3+1] == '-':             # <<<<<<<<<<<<<<
+ *                                 offset_3 += 1
+ *                             else:
+ */
+              goto __pyx_L37;
+            }
+
+            /* "JSONParser.pyx":201
+ *                                 offset_3 += 1
+ *                             else:
+ *                                 offset_3 = -1             # <<<<<<<<<<<<<<
+ *                                 break
+ * 
+ */
+            /*else*/ {
+              __Pyx_INCREF(__pyx_int_neg_1);
+              __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_int_neg_1);
+
+              /* "JSONParser.pyx":202
+ *                             else:
+ *                                 offset_3 = -1
+ *                                 break             # <<<<<<<<<<<<<<
+ * 
+ *                             if offset_2 == offset_3: break
+ */
+              goto __pyx_L36_break;
+            }
+            __pyx_L37:;
+
+            /* "JSONParser.pyx":204
+ *                                 break
+ * 
+ *                             if offset_2 == offset_3: break             # <<<<<<<<<<<<<<
+ *                             offset_2 = offset_3
+ *                             line_start_1 = line_start_2
+ */
+            __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_2, __pyx_v_offset_3, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 204, __pyx_L1_error)
+            __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 204, __pyx_L1_error)
+            __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+            if (__pyx_t_6) {
+              goto __pyx_L36_break;
+            }
+
+            /* "JSONParser.pyx":205
+ * 
+ *                             if offset_2 == offset_3: break
+ *                             offset_2 = offset_3             # <<<<<<<<<<<<<<
+ *                             line_start_1 = line_start_2
+ *                             count += 1
+ */
+            __Pyx_INCREF(__pyx_v_offset_3);
+            __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_v_offset_3);
+
+            /* "JSONParser.pyx":206
+ *                             if offset_2 == offset_3: break
+ *                             offset_2 = offset_3
+ *                             line_start_1 = line_start_2             # <<<<<<<<<<<<<<
+ *                             count += 1
+ * 
+ */
+            __pyx_v_line_start_1 = __pyx_v_line_start_2;
+
+            /* "JSONParser.pyx":207
+ *                             offset_2 = offset_3
+ *                             line_start_1 = line_start_2
+ *                             count += 1             # <<<<<<<<<<<<<<
+ * 
+ *                         while True: # start choice
+ */
+            __pyx_v_count = (__pyx_v_count + 1);
+          }
+          __pyx_L36_break:;
+
+          /* "JSONParser.pyx":209
+ *                             count += 1
+ * 
+ *                         while True: # start choice             # <<<<<<<<<<<<<<
+ *                             offset_3 = offset_2
+ *                             line_start_2 = line_start_1
+ */
+          while (1) {
+
+            /* "JSONParser.pyx":210
+ * 
+ *                         while True: # start choice
+ *                             offset_3 = offset_2             # <<<<<<<<<<<<<<
+ *                             line_start_2 = line_start_1
+ *                             children_3 = []
+ */
+            __Pyx_INCREF(__pyx_v_offset_2);
+            __Pyx_XDECREF_SET(__pyx_v_offset_3, __pyx_v_offset_2);
+
+            /* "JSONParser.pyx":211
+ *                         while True: # start choice
+ *                             offset_3 = offset_2
+ *                             line_start_2 = line_start_1             # <<<<<<<<<<<<<<
+ *                             children_3 = []
+ *                             while True: # case
+ */
+            __pyx_v_line_start_2 = __pyx_v_line_start_1;
+
+            /* "JSONParser.pyx":212
+ *                             offset_3 = offset_2
+ *                             line_start_2 = line_start_1
+ *                             children_3 = []             # <<<<<<<<<<<<<<
+ *                             while True: # case
+ *                                 if buf[offset_3:offset_3+1] == '0':
+ */
+            __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 212, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_1);
+            __pyx_v_children_3 = ((PyObject*)__pyx_t_1);
+            __pyx_t_1 = 0;
+
+            /* "JSONParser.pyx":213
+ *                             line_start_2 = line_start_1
+ *                             children_3 = []
+ *                             while True: # case             # <<<<<<<<<<<<<<
+ *                                 if buf[offset_3:offset_3+1] == '0':
+ *                                     offset_3 += 1
+ */
+            while (1) {
+
+              /* "JSONParser.pyx":214
+ *                             children_3 = []
+ *                             while True: # case
+ *                                 if buf[offset_3:offset_3+1] == '0':             # <<<<<<<<<<<<<<
+ *                                     offset_3 += 1
+ *                                 else:
+ */
+              if (unlikely(__pyx_v_buf == Py_None)) {
+                PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+                __PYX_ERR(0, 214, __pyx_L1_error)
+              }
+              __Pyx_INCREF(__pyx_v_offset_3);
+              __pyx_t_1 = __pyx_v_offset_3;
+              __pyx_t_6 = (__pyx_t_1 == Py_None);
+              if (__pyx_t_6) {
+                __pyx_t_2 = 0;
+              } else {
+                __pyx_t_4 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_4 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 214, __pyx_L1_error)
+                __pyx_t_2 = __pyx_t_4;
+              }
+              __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 214, __pyx_L1_error)
+              __Pyx_GOTREF(__pyx_t_1);
+              __pyx_t_6 = (__pyx_t_1 == Py_None);
+              if (__pyx_t_6) {
+                __pyx_t_4 = PY_SSIZE_T_MAX;
+              } else {
+                __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 214, __pyx_L1_error)
+                __pyx_t_4 = __pyx_t_5;
+              }
+              __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+              __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 214, __pyx_L1_error)
+              __Pyx_GOTREF(__pyx_t_1);
+              __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u_0, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 214, __pyx_L1_error)
+              __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+              __pyx_t_3 = (__pyx_t_6 != 0);
+              if (__pyx_t_3) {
+
+                /* "JSONParser.pyx":215
+ *                             while True: # case
+ *                                 if buf[offset_3:offset_3+1] == '0':
+ *                                     offset_3 += 1             # <<<<<<<<<<<<<<
+ *                                 else:
+ *                                     offset_3 = -1
+ */
+                __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 215, __pyx_L1_error)
+                __Pyx_GOTREF(__pyx_t_1);
+                __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_1);
+                __pyx_t_1 = 0;
+
+                /* "JSONParser.pyx":214
+ *                             children_3 = []
+ *                             while True: # case
+ *                                 if buf[offset_3:offset_3+1] == '0':             # <<<<<<<<<<<<<<
+ *                                     offset_3 += 1
+ *                                 else:
+ */
+                goto __pyx_L43;
+              }
+
+              /* "JSONParser.pyx":217
+ *                                     offset_3 += 1
+ *                                 else:
+ *                                     offset_3 = -1             # <<<<<<<<<<<<<<
+ *                                     break
+ * 
+ */
+              /*else*/ {
+                __Pyx_INCREF(__pyx_int_neg_1);
+                __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_int_neg_1);
+
+                /* "JSONParser.pyx":218
+ *                                 else:
+ *                                     offset_3 = -1
+ *                                     break             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+                goto __pyx_L42_break;
+              }
+              __pyx_L43:;
+
+              /* "JSONParser.pyx":221
+ * 
+ * 
+ *                                 break             # <<<<<<<<<<<<<<
+ *                             if offset_3 != -1:
+ *                                 offset_2 = offset_3
+ */
+              goto __pyx_L42_break;
+            }
+            __pyx_L42_break:;
+
+            /* "JSONParser.pyx":222
+ * 
+ *                                 break
+ *                             if offset_3 != -1:             # <<<<<<<<<<<<<<
+ *                                 offset_2 = offset_3
+ *                                 line_start_1 = line_start_2
+ */
+            __pyx_t_1 = __Pyx_PyInt_NeObjC(__pyx_v_offset_3, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 222, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_1);
+            __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 222, __pyx_L1_error)
+            __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+            if (__pyx_t_3) {
+
+              /* "JSONParser.pyx":223
+ *                                 break
+ *                             if offset_3 != -1:
+ *                                 offset_2 = offset_3             # <<<<<<<<<<<<<<
+ *                                 line_start_1 = line_start_2
+ *                                 children_2.extend(children_3)
+ */
+              __Pyx_INCREF(__pyx_v_offset_3);
+              __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_v_offset_3);
+
+              /* "JSONParser.pyx":224
+ *                             if offset_3 != -1:
+ *                                 offset_2 = offset_3
+ *                                 line_start_1 = line_start_2             # <<<<<<<<<<<<<<
+ *                                 children_2.extend(children_3)
+ *                                 break
+ */
+              __pyx_v_line_start_1 = __pyx_v_line_start_2;
+
+              /* "JSONParser.pyx":225
+ *                                 offset_2 = offset_3
+ *                                 line_start_1 = line_start_2
+ *                                 children_2.extend(children_3)             # <<<<<<<<<<<<<<
+ *                                 break
+ *                             # end case
+ */
+              __pyx_t_11 = __Pyx_PyList_Extend(__pyx_v_children_2, __pyx_v_children_3); if (unlikely(__pyx_t_11 == ((int)-1))) __PYX_ERR(0, 225, __pyx_L1_error)
+
+              /* "JSONParser.pyx":226
+ *                                 line_start_1 = line_start_2
+ *                                 children_2.extend(children_3)
+ *                                 break             # <<<<<<<<<<<<<<
+ *                             # end case
+ *                             offset_3 = offset_2
+ */
+              goto __pyx_L40_break;
+
+              /* "JSONParser.pyx":222
+ * 
+ *                                 break
+ *                             if offset_3 != -1:             # <<<<<<<<<<<<<<
+ *                                 offset_2 = offset_3
+ *                                 line_start_1 = line_start_2
+ */
+            }
+
+            /* "JSONParser.pyx":228
+ *                                 break
+ *                             # end case
+ *                             offset_3 = offset_2             # <<<<<<<<<<<<<<
+ *                             line_start_2 = line_start_1
+ *                             children_3 = []
+ */
+            __Pyx_INCREF(__pyx_v_offset_2);
+            __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_v_offset_2);
+
+            /* "JSONParser.pyx":229
+ *                             # end case
+ *                             offset_3 = offset_2
+ *                             line_start_2 = line_start_1             # <<<<<<<<<<<<<<
+ *                             children_3 = []
+ *                             while True: # case
+ */
+            __pyx_v_line_start_2 = __pyx_v_line_start_1;
+
+            /* "JSONParser.pyx":230
+ *                             offset_3 = offset_2
+ *                             line_start_2 = line_start_1
+ *                             children_3 = []             # <<<<<<<<<<<<<<
+ *                             while True: # case
+ *                                 if offset_3 == buf_eof:
+ */
+            __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 230, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_1);
+            __Pyx_DECREF_SET(__pyx_v_children_3, ((PyObject*)__pyx_t_1));
+            __pyx_t_1 = 0;
+
+            /* "JSONParser.pyx":231
+ *                             line_start_2 = line_start_1
+ *                             children_3 = []
+ *                             while True: # case             # <<<<<<<<<<<<<<
+ *                                 if offset_3 == buf_eof:
+ *                                     offset_3 = -1
+ */
+            while (1) {
+
+              /* "JSONParser.pyx":232
+ *                             children_3 = []
+ *                             while True: # case
+ *                                 if offset_3 == buf_eof:             # <<<<<<<<<<<<<<
+ *                                     offset_3 = -1
+ *                                     break
+ */
+              __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_buf_eof); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 232, __pyx_L1_error)
+              __Pyx_GOTREF(__pyx_t_1);
+              __pyx_t_7 = PyObject_RichCompare(__pyx_v_offset_3, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 232, __pyx_L1_error)
+              __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+              __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 232, __pyx_L1_error)
+              __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+              if (__pyx_t_3) {
+
+                /* "JSONParser.pyx":233
+ *                             while True: # case
+ *                                 if offset_3 == buf_eof:
+ *                                     offset_3 = -1             # <<<<<<<<<<<<<<
+ *                                     break
+ *                                 elif '1' <= buf[offset_3] <= '9':
+ */
+                __Pyx_INCREF(__pyx_int_neg_1);
+                __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_int_neg_1);
+
+                /* "JSONParser.pyx":234
+ *                                 if offset_3 == buf_eof:
+ *                                     offset_3 = -1
+ *                                     break             # <<<<<<<<<<<<<<
+ *                                 elif '1' <= buf[offset_3] <= '9':
+ *                                     offset_3 += 1
+ */
+                goto __pyx_L46_break;
+
+                /* "JSONParser.pyx":232
+ *                             children_3 = []
+ *                             while True: # case
+ *                                 if offset_3 == buf_eof:             # <<<<<<<<<<<<<<
+ *                                     offset_3 = -1
+ *                                     break
+ */
+              }
+
+              /* "JSONParser.pyx":235
+ *                                     offset_3 = -1
+ *                                     break
+ *                                 elif '1' <= buf[offset_3] <= '9':             # <<<<<<<<<<<<<<
+ *                                     offset_3 += 1
+ *                                 else:
+ */
+              __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 235, __pyx_L1_error)
+              __Pyx_GOTREF(__pyx_t_7);
+              __pyx_t_1 = PyObject_RichCompare(__pyx_kp_u_1, __pyx_t_7, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 235, __pyx_L1_error)
+              if (__Pyx_PyObject_IsTrue(__pyx_t_1)) {
+                __Pyx_DECREF(__pyx_t_1);
+                __pyx_t_1 = PyObject_RichCompare(__pyx_t_7, __pyx_kp_u_9, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 235, __pyx_L1_error)
+              }
+              __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+              __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 235, __pyx_L1_error)
+              __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+              if (__pyx_t_3) {
+
+                /* "JSONParser.pyx":236
+ *                                     break
+ *                                 elif '1' <= buf[offset_3] <= '9':
+ *                                     offset_3 += 1             # <<<<<<<<<<<<<<
+ *                                 else:
+ *                                     offset_3 = -1
+ */
+                __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 236, __pyx_L1_error)
+                __Pyx_GOTREF(__pyx_t_1);
+                __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_1);
+                __pyx_t_1 = 0;
+
+                /* "JSONParser.pyx":235
+ *                                     offset_3 = -1
+ *                                     break
+ *                                 elif '1' <= buf[offset_3] <= '9':             # <<<<<<<<<<<<<<
+ *                                     offset_3 += 1
+ *                                 else:
+ */
+                goto __pyx_L47;
+              }
+
+              /* "JSONParser.pyx":238
+ *                                     offset_3 += 1
+ *                                 else:
+ *                                     offset_3 = -1             # <<<<<<<<<<<<<<
+ *                                     break
+ * 
+ */
+              /*else*/ {
+                __Pyx_INCREF(__pyx_int_neg_1);
+                __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_int_neg_1);
+
+                /* "JSONParser.pyx":239
+ *                                 else:
+ *                                     offset_3 = -1
+ *                                     break             # <<<<<<<<<<<<<<
+ * 
+ *                                 count = 0
+ */
+                goto __pyx_L46_break;
+              }
+              __pyx_L47:;
+
+              /* "JSONParser.pyx":241
+ *                                     break
+ * 
+ *                                 count = 0             # <<<<<<<<<<<<<<
+ *                                 while True:
+ *                                     offset_4 = offset_3
+ */
+              __pyx_v_count = 0;
+
+              /* "JSONParser.pyx":242
+ * 
+ *                                 count = 0
+ *                                 while True:             # <<<<<<<<<<<<<<
+ *                                     offset_4 = offset_3
+ *                                     line_start_3 = line_start_2
+ */
+              while (1) {
+
+                /* "JSONParser.pyx":243
+ *                                 count = 0
+ *                                 while True:
+ *                                     offset_4 = offset_3             # <<<<<<<<<<<<<<
+ *                                     line_start_3 = line_start_2
+ *                                     if offset_4 == buf_eof:
+ */
+                __Pyx_INCREF(__pyx_v_offset_3);
+                __Pyx_XDECREF_SET(__pyx_v_offset_4, __pyx_v_offset_3);
+
+                /* "JSONParser.pyx":244
+ *                                 while True:
+ *                                     offset_4 = offset_3
+ *                                     line_start_3 = line_start_2             # <<<<<<<<<<<<<<
+ *                                     if offset_4 == buf_eof:
+ *                                         offset_4 = -1
+ */
+                __pyx_v_line_start_3 = __pyx_v_line_start_2;
+
+                /* "JSONParser.pyx":245
+ *                                     offset_4 = offset_3
+ *                                     line_start_3 = line_start_2
+ *                                     if offset_4 == buf_eof:             # <<<<<<<<<<<<<<
+ *                                         offset_4 = -1
+ *                                         break
+ */
+                __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_buf_eof); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 245, __pyx_L1_error)
+                __Pyx_GOTREF(__pyx_t_1);
+                __pyx_t_7 = PyObject_RichCompare(__pyx_v_offset_4, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 245, __pyx_L1_error)
+                __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+                __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 245, __pyx_L1_error)
+                __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+                if (__pyx_t_3) {
+
+                  /* "JSONParser.pyx":246
+ *                                     line_start_3 = line_start_2
+ *                                     if offset_4 == buf_eof:
+ *                                         offset_4 = -1             # <<<<<<<<<<<<<<
+ *                                         break
+ *                                     elif '0' <= buf[offset_4] <= '9':
+ */
+                  __Pyx_INCREF(__pyx_int_neg_1);
+                  __Pyx_DECREF_SET(__pyx_v_offset_4, __pyx_int_neg_1);
+
+                  /* "JSONParser.pyx":247
+ *                                     if offset_4 == buf_eof:
+ *                                         offset_4 = -1
+ *                                         break             # <<<<<<<<<<<<<<
+ *                                     elif '0' <= buf[offset_4] <= '9':
+ *                                         offset_4 += 1
+ */
+                  goto __pyx_L49_break;
+
+                  /* "JSONParser.pyx":245
+ *                                     offset_4 = offset_3
+ *                                     line_start_3 = line_start_2
+ *                                     if offset_4 == buf_eof:             # <<<<<<<<<<<<<<
+ *                                         offset_4 = -1
+ *                                         break
+ */
+                }
+
+                /* "JSONParser.pyx":248
+ *                                         offset_4 = -1
+ *                                         break
+ *                                     elif '0' <= buf[offset_4] <= '9':             # <<<<<<<<<<<<<<
+ *                                         offset_4 += 1
+ *                                     else:
+ */
+                __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 248, __pyx_L1_error)
+                __Pyx_GOTREF(__pyx_t_7);
+                __pyx_t_1 = PyObject_RichCompare(__pyx_kp_u_0, __pyx_t_7, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 248, __pyx_L1_error)
+                if (__Pyx_PyObject_IsTrue(__pyx_t_1)) {
+                  __Pyx_DECREF(__pyx_t_1);
+                  __pyx_t_1 = PyObject_RichCompare(__pyx_t_7, __pyx_kp_u_9, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 248, __pyx_L1_error)
+                }
+                __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+                __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 248, __pyx_L1_error)
+                __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+                if (__pyx_t_3) {
+
+                  /* "JSONParser.pyx":249
+ *                                         break
+ *                                     elif '0' <= buf[offset_4] <= '9':
+ *                                         offset_4 += 1             # <<<<<<<<<<<<<<
+ *                                     else:
+ *                                         offset_4 = -1
+ */
+                  __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 249, __pyx_L1_error)
+                  __Pyx_GOTREF(__pyx_t_1);
+                  __Pyx_DECREF_SET(__pyx_v_offset_4, __pyx_t_1);
+                  __pyx_t_1 = 0;
+
+                  /* "JSONParser.pyx":248
+ *                                         offset_4 = -1
+ *                                         break
+ *                                     elif '0' <= buf[offset_4] <= '9':             # <<<<<<<<<<<<<<
+ *                                         offset_4 += 1
+ *                                     else:
+ */
+                  goto __pyx_L50;
+                }
+
+                /* "JSONParser.pyx":251
+ *                                         offset_4 += 1
+ *                                     else:
+ *                                         offset_4 = -1             # <<<<<<<<<<<<<<
+ *                                         break
+ * 
+ */
+                /*else*/ {
+                  __Pyx_INCREF(__pyx_int_neg_1);
+                  __Pyx_DECREF_SET(__pyx_v_offset_4, __pyx_int_neg_1);
+
+                  /* "JSONParser.pyx":252
+ *                                     else:
+ *                                         offset_4 = -1
+ *                                         break             # <<<<<<<<<<<<<<
+ * 
+ *                                     if offset_3 == offset_4: break
+ */
+                  goto __pyx_L49_break;
+                }
+                __pyx_L50:;
+
+                /* "JSONParser.pyx":254
+ *                                         break
+ * 
+ *                                     if offset_3 == offset_4: break             # <<<<<<<<<<<<<<
+ *                                     offset_3 = offset_4
+ *                                     line_start_2 = line_start_3
+ */
+                __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_3, __pyx_v_offset_4, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 254, __pyx_L1_error)
+                __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 254, __pyx_L1_error)
+                __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+                if (__pyx_t_3) {
+                  goto __pyx_L49_break;
+                }
+
+                /* "JSONParser.pyx":255
+ * 
+ *                                     if offset_3 == offset_4: break
+ *                                     offset_3 = offset_4             # <<<<<<<<<<<<<<
+ *                                     line_start_2 = line_start_3
+ *                                     count += 1
+ */
+                __Pyx_INCREF(__pyx_v_offset_4);
+                __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_v_offset_4);
+
+                /* "JSONParser.pyx":256
+ *                                     if offset_3 == offset_4: break
+ *                                     offset_3 = offset_4
+ *                                     line_start_2 = line_start_3             # <<<<<<<<<<<<<<
+ *                                     count += 1
+ * 
+ */
+                __pyx_v_line_start_2 = __pyx_v_line_start_3;
+
+                /* "JSONParser.pyx":257
+ *                                     offset_3 = offset_4
+ *                                     line_start_2 = line_start_3
+ *                                     count += 1             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+                __pyx_v_count = (__pyx_v_count + 1);
+              }
+              __pyx_L49_break:;
+
+              /* "JSONParser.pyx":260
+ * 
+ * 
+ *                                 break             # <<<<<<<<<<<<<<
+ *                             if offset_3 != -1:
+ *                                 offset_2 = offset_3
+ */
+              goto __pyx_L46_break;
+            }
+            __pyx_L46_break:;
+
+            /* "JSONParser.pyx":261
+ * 
+ *                                 break
+ *                             if offset_3 != -1:             # <<<<<<<<<<<<<<
+ *                                 offset_2 = offset_3
+ *                                 line_start_1 = line_start_2
+ */
+            __pyx_t_1 = __Pyx_PyInt_NeObjC(__pyx_v_offset_3, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 261, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_1);
+            __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 261, __pyx_L1_error)
+            __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+            if (__pyx_t_3) {
+
+              /* "JSONParser.pyx":262
+ *                                 break
+ *                             if offset_3 != -1:
+ *                                 offset_2 = offset_3             # <<<<<<<<<<<<<<
+ *                                 line_start_1 = line_start_2
+ *                                 children_2.extend(children_3)
+ */
+              __Pyx_INCREF(__pyx_v_offset_3);
+              __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_v_offset_3);
+
+              /* "JSONParser.pyx":263
+ *                             if offset_3 != -1:
+ *                                 offset_2 = offset_3
+ *                                 line_start_1 = line_start_2             # <<<<<<<<<<<<<<
+ *                                 children_2.extend(children_3)
+ *                                 break
+ */
+              __pyx_v_line_start_1 = __pyx_v_line_start_2;
+
+              /* "JSONParser.pyx":264
+ *                                 offset_2 = offset_3
+ *                                 line_start_1 = line_start_2
+ *                                 children_2.extend(children_3)             # <<<<<<<<<<<<<<
+ *                                 break
+ *                             # end case
+ */
+              __pyx_t_11 = __Pyx_PyList_Extend(__pyx_v_children_2, __pyx_v_children_3); if (unlikely(__pyx_t_11 == ((int)-1))) __PYX_ERR(0, 264, __pyx_L1_error)
+
+              /* "JSONParser.pyx":265
+ *                                 line_start_1 = line_start_2
+ *                                 children_2.extend(children_3)
+ *                                 break             # <<<<<<<<<<<<<<
+ *                             # end case
+ *                             offset_2 = -1 # no more choices
+ */
+              goto __pyx_L40_break;
+
+              /* "JSONParser.pyx":261
+ * 
+ *                                 break
+ *                             if offset_3 != -1:             # <<<<<<<<<<<<<<
+ *                                 offset_2 = offset_3
+ *                                 line_start_1 = line_start_2
+ */
+            }
+
+            /* "JSONParser.pyx":267
+ *                                 break
+ *                             # end case
+ *                             offset_2 = -1 # no more choices             # <<<<<<<<<<<<<<
+ *                             break # end choice
+ *                         if offset_2 == -1:
+ */
+            __Pyx_INCREF(__pyx_int_neg_1);
+            __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_int_neg_1);
+
+            /* "JSONParser.pyx":268
+ *                             # end case
+ *                             offset_2 = -1 # no more choices
+ *                             break # end choice             # <<<<<<<<<<<<<<
+ *                         if offset_2 == -1:
+ *                             break
+ */
+            goto __pyx_L40_break;
+          }
+          __pyx_L40_break:;
+
+          /* "JSONParser.pyx":269
+ *                             offset_2 = -1 # no more choices
+ *                             break # end choice
+ *                         if offset_2 == -1:             # <<<<<<<<<<<<<<
+ *                             break
+ * 
+ */
+          __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_2, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 269, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_1);
+          __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 269, __pyx_L1_error)
+          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+          if (__pyx_t_3) {
+
+            /* "JSONParser.pyx":270
+ *                             break # end choice
+ *                         if offset_2 == -1:
+ *                             break             # <<<<<<<<<<<<<<
+ * 
+ *                         count = 0
+ */
+            goto __pyx_L34_break;
+
+            /* "JSONParser.pyx":269
+ *                             offset_2 = -1 # no more choices
+ *                             break # end choice
+ *                         if offset_2 == -1:             # <<<<<<<<<<<<<<
+ *                             break
+ * 
+ */
+          }
+
+          /* "JSONParser.pyx":272
+ *                             break
+ * 
+ *                         count = 0             # <<<<<<<<<<<<<<
+ *                         while True:
+ *                             offset_3 = offset_2
+ */
+          __pyx_v_count = 0;
+
+          /* "JSONParser.pyx":273
+ * 
+ *                         count = 0
+ *                         while True:             # <<<<<<<<<<<<<<
+ *                             offset_3 = offset_2
+ *                             line_start_2 = line_start_1
+ */
+          while (1) {
+
+            /* "JSONParser.pyx":274
+ *                         count = 0
+ *                         while True:
+ *                             offset_3 = offset_2             # <<<<<<<<<<<<<<
+ *                             line_start_2 = line_start_1
+ *                             if buf[offset_3:offset_3+1] == '.':
+ */
+            __Pyx_INCREF(__pyx_v_offset_2);
+            __Pyx_XDECREF_SET(__pyx_v_offset_3, __pyx_v_offset_2);
+
+            /* "JSONParser.pyx":275
+ *                         while True:
+ *                             offset_3 = offset_2
+ *                             line_start_2 = line_start_1             # <<<<<<<<<<<<<<
+ *                             if buf[offset_3:offset_3+1] == '.':
+ *                                 offset_3 += 1
+ */
+            __pyx_v_line_start_2 = __pyx_v_line_start_1;
+
+            /* "JSONParser.pyx":276
+ *                             offset_3 = offset_2
+ *                             line_start_2 = line_start_1
+ *                             if buf[offset_3:offset_3+1] == '.':             # <<<<<<<<<<<<<<
+ *                                 offset_3 += 1
+ *                             else:
+ */
+            if (unlikely(__pyx_v_buf == Py_None)) {
+              PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+              __PYX_ERR(0, 276, __pyx_L1_error)
+            }
+            __Pyx_INCREF(__pyx_v_offset_3);
+            __pyx_t_1 = __pyx_v_offset_3;
+            __pyx_t_3 = (__pyx_t_1 == Py_None);
+            if (__pyx_t_3) {
+              __pyx_t_4 = 0;
+            } else {
+              __pyx_t_2 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_2 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 276, __pyx_L1_error)
+              __pyx_t_4 = __pyx_t_2;
+            }
+            __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+            __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 276, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_1);
+            __pyx_t_3 = (__pyx_t_1 == Py_None);
+            if (__pyx_t_3) {
+              __pyx_t_2 = PY_SSIZE_T_MAX;
+            } else {
+              __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 276, __pyx_L1_error)
+              __pyx_t_2 = __pyx_t_5;
+            }
+            __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+            __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 276, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_1);
+            __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u__3, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 276, __pyx_L1_error)
+            __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+            __pyx_t_6 = (__pyx_t_3 != 0);
+            if (__pyx_t_6) {
+
+              /* "JSONParser.pyx":277
+ *                             line_start_2 = line_start_1
+ *                             if buf[offset_3:offset_3+1] == '.':
+ *                                 offset_3 += 1             # <<<<<<<<<<<<<<
+ *                             else:
+ *                                 offset_3 = -1
+ */
+              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 277, __pyx_L1_error)
+              __Pyx_GOTREF(__pyx_t_1);
+              __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_1);
+              __pyx_t_1 = 0;
+
+              /* "JSONParser.pyx":276
+ *                             offset_3 = offset_2
+ *                             line_start_2 = line_start_1
+ *                             if buf[offset_3:offset_3+1] == '.':             # <<<<<<<<<<<<<<
+ *                                 offset_3 += 1
+ *                             else:
+ */
+              goto __pyx_L56;
+            }
+
+            /* "JSONParser.pyx":279
+ *                                 offset_3 += 1
+ *                             else:
+ *                                 offset_3 = -1             # <<<<<<<<<<<<<<
+ *                                 break
+ * 
+ */
+            /*else*/ {
+              __Pyx_INCREF(__pyx_int_neg_1);
+              __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_int_neg_1);
+
+              /* "JSONParser.pyx":280
+ *                             else:
+ *                                 offset_3 = -1
+ *                                 break             # <<<<<<<<<<<<<<
+ * 
+ *                             count_1 = 0
+ */
+              goto __pyx_L55_break;
+            }
+            __pyx_L56:;
+
+            /* "JSONParser.pyx":282
+ *                                 break
+ * 
+ *                             count_1 = 0             # <<<<<<<<<<<<<<
+ *                             while True:
+ *                                 offset_4 = offset_3
+ */
+            __Pyx_INCREF(__pyx_int_0);
+            __Pyx_XDECREF_SET(__pyx_v_count_1, __pyx_int_0);
+
+            /* "JSONParser.pyx":283
+ * 
+ *                             count_1 = 0
+ *                             while True:             # <<<<<<<<<<<<<<
+ *                                 offset_4 = offset_3
+ *                                 line_start_3 = line_start_2
+ */
+            while (1) {
+
+              /* "JSONParser.pyx":284
+ *                             count_1 = 0
+ *                             while True:
+ *                                 offset_4 = offset_3             # <<<<<<<<<<<<<<
+ *                                 line_start_3 = line_start_2
+ *                                 if offset_4 == buf_eof:
+ */
+              __Pyx_INCREF(__pyx_v_offset_3);
+              __Pyx_XDECREF_SET(__pyx_v_offset_4, __pyx_v_offset_3);
+
+              /* "JSONParser.pyx":285
+ *                             while True:
+ *                                 offset_4 = offset_3
+ *                                 line_start_3 = line_start_2             # <<<<<<<<<<<<<<
+ *                                 if offset_4 == buf_eof:
+ *                                     offset_4 = -1
+ */
+              __pyx_v_line_start_3 = __pyx_v_line_start_2;
+
+              /* "JSONParser.pyx":286
+ *                                 offset_4 = offset_3
+ *                                 line_start_3 = line_start_2
+ *                                 if offset_4 == buf_eof:             # <<<<<<<<<<<<<<
+ *                                     offset_4 = -1
+ *                                     break
+ */
+              __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_buf_eof); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 286, __pyx_L1_error)
+              __Pyx_GOTREF(__pyx_t_1);
+              __pyx_t_7 = PyObject_RichCompare(__pyx_v_offset_4, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 286, __pyx_L1_error)
+              __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+              __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 286, __pyx_L1_error)
+              __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+              if (__pyx_t_6) {
+
+                /* "JSONParser.pyx":287
+ *                                 line_start_3 = line_start_2
+ *                                 if offset_4 == buf_eof:
+ *                                     offset_4 = -1             # <<<<<<<<<<<<<<
+ *                                     break
+ *                                 elif '0' <= buf[offset_4] <= '9':
+ */
+                __Pyx_INCREF(__pyx_int_neg_1);
+                __Pyx_DECREF_SET(__pyx_v_offset_4, __pyx_int_neg_1);
+
+                /* "JSONParser.pyx":288
+ *                                 if offset_4 == buf_eof:
+ *                                     offset_4 = -1
+ *                                     break             # <<<<<<<<<<<<<<
+ *                                 elif '0' <= buf[offset_4] <= '9':
+ *                                     offset_4 += 1
+ */
+                goto __pyx_L58_break;
+
+                /* "JSONParser.pyx":286
+ *                                 offset_4 = offset_3
+ *                                 line_start_3 = line_start_2
+ *                                 if offset_4 == buf_eof:             # <<<<<<<<<<<<<<
+ *                                     offset_4 = -1
+ *                                     break
+ */
+              }
+
+              /* "JSONParser.pyx":289
+ *                                     offset_4 = -1
+ *                                     break
+ *                                 elif '0' <= buf[offset_4] <= '9':             # <<<<<<<<<<<<<<
+ *                                     offset_4 += 1
+ *                                 else:
+ */
+              __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 289, __pyx_L1_error)
+              __Pyx_GOTREF(__pyx_t_7);
+              __pyx_t_1 = PyObject_RichCompare(__pyx_kp_u_0, __pyx_t_7, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 289, __pyx_L1_error)
+              if (__Pyx_PyObject_IsTrue(__pyx_t_1)) {
+                __Pyx_DECREF(__pyx_t_1);
+                __pyx_t_1 = PyObject_RichCompare(__pyx_t_7, __pyx_kp_u_9, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 289, __pyx_L1_error)
+              }
+              __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+              __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 289, __pyx_L1_error)
+              __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+              if (__pyx_t_6) {
+
+                /* "JSONParser.pyx":290
+ *                                     break
+ *                                 elif '0' <= buf[offset_4] <= '9':
+ *                                     offset_4 += 1             # <<<<<<<<<<<<<<
+ *                                 else:
+ *                                     offset_4 = -1
+ */
+                __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 290, __pyx_L1_error)
+                __Pyx_GOTREF(__pyx_t_1);
+                __Pyx_DECREF_SET(__pyx_v_offset_4, __pyx_t_1);
+                __pyx_t_1 = 0;
+
+                /* "JSONParser.pyx":289
+ *                                     offset_4 = -1
+ *                                     break
+ *                                 elif '0' <= buf[offset_4] <= '9':             # <<<<<<<<<<<<<<
+ *                                     offset_4 += 1
+ *                                 else:
+ */
+                goto __pyx_L59;
+              }
+
+              /* "JSONParser.pyx":292
+ *                                     offset_4 += 1
+ *                                 else:
+ *                                     offset_4 = -1             # <<<<<<<<<<<<<<
+ *                                     break
+ * 
+ */
+              /*else*/ {
+                __Pyx_INCREF(__pyx_int_neg_1);
+                __Pyx_DECREF_SET(__pyx_v_offset_4, __pyx_int_neg_1);
+
+                /* "JSONParser.pyx":293
+ *                                 else:
+ *                                     offset_4 = -1
+ *                                     break             # <<<<<<<<<<<<<<
+ * 
+ *                                 if offset_3 == offset_4: break
+ */
+                goto __pyx_L58_break;
+              }
+              __pyx_L59:;
+
+              /* "JSONParser.pyx":295
+ *                                     break
+ * 
+ *                                 if offset_3 == offset_4: break             # <<<<<<<<<<<<<<
+ *                                 offset_3 = offset_4
+ *                                 line_start_2 = line_start_3
+ */
+              __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_3, __pyx_v_offset_4, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 295, __pyx_L1_error)
+              __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 295, __pyx_L1_error)
+              __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+              if (__pyx_t_6) {
+                goto __pyx_L58_break;
+              }
+
+              /* "JSONParser.pyx":296
+ * 
+ *                                 if offset_3 == offset_4: break
+ *                                 offset_3 = offset_4             # <<<<<<<<<<<<<<
+ *                                 line_start_2 = line_start_3
+ *                                 count_1 += 1
+ */
+              __Pyx_INCREF(__pyx_v_offset_4);
+              __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_v_offset_4);
+
+              /* "JSONParser.pyx":297
+ *                                 if offset_3 == offset_4: break
+ *                                 offset_3 = offset_4
+ *                                 line_start_2 = line_start_3             # <<<<<<<<<<<<<<
+ *                                 count_1 += 1
+ * 
+ */
+              __pyx_v_line_start_2 = __pyx_v_line_start_3;
+
+              /* "JSONParser.pyx":298
+ *                                 offset_3 = offset_4
+ *                                 line_start_2 = line_start_3
+ *                                 count_1 += 1             # <<<<<<<<<<<<<<
+ * 
+ *                             if offset_2 == offset_3: break
+ */
+              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_count_1, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 298, __pyx_L1_error)
+              __Pyx_GOTREF(__pyx_t_1);
+              __Pyx_DECREF_SET(__pyx_v_count_1, __pyx_t_1);
+              __pyx_t_1 = 0;
+            }
+            __pyx_L58_break:;
+
+            /* "JSONParser.pyx":300
+ *                                 count_1 += 1
+ * 
+ *                             if offset_2 == offset_3: break             # <<<<<<<<<<<<<<
+ *                             offset_2 = offset_3
+ *                             line_start_1 = line_start_2
+ */
+            __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_2, __pyx_v_offset_3, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 300, __pyx_L1_error)
+            __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 300, __pyx_L1_error)
+            __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+            if (__pyx_t_6) {
+              goto __pyx_L55_break;
+            }
+
+            /* "JSONParser.pyx":301
+ * 
+ *                             if offset_2 == offset_3: break
+ *                             offset_2 = offset_3             # <<<<<<<<<<<<<<
+ *                             line_start_1 = line_start_2
+ *                             count += 1
+ */
+            __Pyx_INCREF(__pyx_v_offset_3);
+            __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_v_offset_3);
+
+            /* "JSONParser.pyx":302
+ *                             if offset_2 == offset_3: break
+ *                             offset_2 = offset_3
+ *                             line_start_1 = line_start_2             # <<<<<<<<<<<<<<
+ *                             count += 1
+ * 
+ */
+            __pyx_v_line_start_1 = __pyx_v_line_start_2;
+
+            /* "JSONParser.pyx":303
+ *                             offset_2 = offset_3
+ *                             line_start_1 = line_start_2
+ *                             count += 1             # <<<<<<<<<<<<<<
+ * 
+ *                         count = 0
+ */
+            __pyx_v_count = (__pyx_v_count + 1);
+          }
+          __pyx_L55_break:;
+
+          /* "JSONParser.pyx":305
+ *                             count += 1
+ * 
+ *                         count = 0             # <<<<<<<<<<<<<<
+ *                         while True:
+ *                             offset_3 = offset_2
+ */
+          __pyx_v_count = 0;
+
+          /* "JSONParser.pyx":306
+ * 
+ *                         count = 0
+ *                         while True:             # <<<<<<<<<<<<<<
+ *                             offset_3 = offset_2
+ *                             line_start_2 = line_start_1
+ */
+          while (1) {
+
+            /* "JSONParser.pyx":307
+ *                         count = 0
+ *                         while True:
+ *                             offset_3 = offset_2             # <<<<<<<<<<<<<<
+ *                             line_start_2 = line_start_1
+ *                             if buf[offset_3:offset_3+1] == 'e':
+ */
+            __Pyx_INCREF(__pyx_v_offset_2);
+            __Pyx_XDECREF_SET(__pyx_v_offset_3, __pyx_v_offset_2);
+
+            /* "JSONParser.pyx":308
+ *                         while True:
+ *                             offset_3 = offset_2
+ *                             line_start_2 = line_start_1             # <<<<<<<<<<<<<<
+ *                             if buf[offset_3:offset_3+1] == 'e':
+ *                                 offset_3 += 1
+ */
+            __pyx_v_line_start_2 = __pyx_v_line_start_1;
+
+            /* "JSONParser.pyx":309
+ *                             offset_3 = offset_2
+ *                             line_start_2 = line_start_1
+ *                             if buf[offset_3:offset_3+1] == 'e':             # <<<<<<<<<<<<<<
+ *                                 offset_3 += 1
+ *                             elif buf[offset_3:offset_3+1] == 'E':
+ */
+            if (unlikely(__pyx_v_buf == Py_None)) {
+              PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+              __PYX_ERR(0, 309, __pyx_L1_error)
+            }
+            __Pyx_INCREF(__pyx_v_offset_3);
+            __pyx_t_1 = __pyx_v_offset_3;
+            __pyx_t_6 = (__pyx_t_1 == Py_None);
+            if (__pyx_t_6) {
+              __pyx_t_2 = 0;
+            } else {
+              __pyx_t_4 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_4 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 309, __pyx_L1_error)
+              __pyx_t_2 = __pyx_t_4;
+            }
+            __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+            __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 309, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_1);
+            __pyx_t_6 = (__pyx_t_1 == Py_None);
+            if (__pyx_t_6) {
+              __pyx_t_4 = PY_SSIZE_T_MAX;
+            } else {
+              __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 309, __pyx_L1_error)
+              __pyx_t_4 = __pyx_t_5;
+            }
+            __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+            __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 309, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_1);
+            __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_n_u_e, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 309, __pyx_L1_error)
+            __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+            __pyx_t_3 = (__pyx_t_6 != 0);
+            if (__pyx_t_3) {
+
+              /* "JSONParser.pyx":310
+ *                             line_start_2 = line_start_1
+ *                             if buf[offset_3:offset_3+1] == 'e':
+ *                                 offset_3 += 1             # <<<<<<<<<<<<<<
+ *                             elif buf[offset_3:offset_3+1] == 'E':
+ *                                 offset_3 += 1
+ */
+              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 310, __pyx_L1_error)
+              __Pyx_GOTREF(__pyx_t_1);
+              __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_1);
+              __pyx_t_1 = 0;
+
+              /* "JSONParser.pyx":309
+ *                             offset_3 = offset_2
+ *                             line_start_2 = line_start_1
+ *                             if buf[offset_3:offset_3+1] == 'e':             # <<<<<<<<<<<<<<
+ *                                 offset_3 += 1
+ *                             elif buf[offset_3:offset_3+1] == 'E':
+ */
+              goto __pyx_L64;
+            }
+
+            /* "JSONParser.pyx":311
+ *                             if buf[offset_3:offset_3+1] == 'e':
+ *                                 offset_3 += 1
+ *                             elif buf[offset_3:offset_3+1] == 'E':             # <<<<<<<<<<<<<<
+ *                                 offset_3 += 1
+ *                             else:
+ */
+            if (unlikely(__pyx_v_buf == Py_None)) {
+              PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+              __PYX_ERR(0, 311, __pyx_L1_error)
+            }
+            __Pyx_INCREF(__pyx_v_offset_3);
+            __pyx_t_1 = __pyx_v_offset_3;
+            __pyx_t_3 = (__pyx_t_1 == Py_None);
+            if (__pyx_t_3) {
+              __pyx_t_4 = 0;
+            } else {
+              __pyx_t_2 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_2 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 311, __pyx_L1_error)
+              __pyx_t_4 = __pyx_t_2;
+            }
+            __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+            __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 311, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_1);
+            __pyx_t_3 = (__pyx_t_1 == Py_None);
+            if (__pyx_t_3) {
+              __pyx_t_2 = PY_SSIZE_T_MAX;
+            } else {
+              __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 311, __pyx_L1_error)
+              __pyx_t_2 = __pyx_t_5;
+            }
+            __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+            __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 311, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_1);
+            __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_n_u_E, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 311, __pyx_L1_error)
+            __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+            __pyx_t_6 = (__pyx_t_3 != 0);
+            if (__pyx_t_6) {
+
+              /* "JSONParser.pyx":312
+ *                                 offset_3 += 1
+ *                             elif buf[offset_3:offset_3+1] == 'E':
+ *                                 offset_3 += 1             # <<<<<<<<<<<<<<
+ *                             else:
+ *                                 offset_3 = -1
+ */
+              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 312, __pyx_L1_error)
+              __Pyx_GOTREF(__pyx_t_1);
+              __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_1);
+              __pyx_t_1 = 0;
+
+              /* "JSONParser.pyx":311
+ *                             if buf[offset_3:offset_3+1] == 'e':
+ *                                 offset_3 += 1
+ *                             elif buf[offset_3:offset_3+1] == 'E':             # <<<<<<<<<<<<<<
+ *                                 offset_3 += 1
+ *                             else:
+ */
+              goto __pyx_L64;
+            }
+
+            /* "JSONParser.pyx":314
+ *                                 offset_3 += 1
+ *                             else:
+ *                                 offset_3 = -1             # <<<<<<<<<<<<<<
+ *                                 break
+ * 
+ */
+            /*else*/ {
+              __Pyx_INCREF(__pyx_int_neg_1);
+              __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_int_neg_1);
+
+              /* "JSONParser.pyx":315
+ *                             else:
+ *                                 offset_3 = -1
+ *                                 break             # <<<<<<<<<<<<<<
+ * 
+ *                             count_1 = 0
+ */
+              goto __pyx_L63_break;
+            }
+            __pyx_L64:;
+
+            /* "JSONParser.pyx":317
+ *                                 break
+ * 
+ *                             count_1 = 0             # <<<<<<<<<<<<<<
+ *                             while True:
+ *                                 offset_4 = offset_3
+ */
+            __Pyx_INCREF(__pyx_int_0);
+            __Pyx_XDECREF_SET(__pyx_v_count_1, __pyx_int_0);
+
+            /* "JSONParser.pyx":318
+ * 
+ *                             count_1 = 0
+ *                             while True:             # <<<<<<<<<<<<<<
+ *                                 offset_4 = offset_3
+ *                                 line_start_3 = line_start_2
+ */
+            while (1) {
+
+              /* "JSONParser.pyx":319
+ *                             count_1 = 0
+ *                             while True:
+ *                                 offset_4 = offset_3             # <<<<<<<<<<<<<<
+ *                                 line_start_3 = line_start_2
+ *                                 if buf[offset_4:offset_4+1] == '+':
+ */
+              __Pyx_INCREF(__pyx_v_offset_3);
+              __Pyx_XDECREF_SET(__pyx_v_offset_4, __pyx_v_offset_3);
+
+              /* "JSONParser.pyx":320
+ *                             while True:
+ *                                 offset_4 = offset_3
+ *                                 line_start_3 = line_start_2             # <<<<<<<<<<<<<<
+ *                                 if buf[offset_4:offset_4+1] == '+':
+ *                                     offset_4 += 1
+ */
+              __pyx_v_line_start_3 = __pyx_v_line_start_2;
+
+              /* "JSONParser.pyx":321
+ *                                 offset_4 = offset_3
+ *                                 line_start_3 = line_start_2
+ *                                 if buf[offset_4:offset_4+1] == '+':             # <<<<<<<<<<<<<<
+ *                                     offset_4 += 1
+ *                                 elif buf[offset_4:offset_4+1] == '-':
+ */
+              if (unlikely(__pyx_v_buf == Py_None)) {
+                PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+                __PYX_ERR(0, 321, __pyx_L1_error)
+              }
+              __Pyx_INCREF(__pyx_v_offset_4);
+              __pyx_t_1 = __pyx_v_offset_4;
+              __pyx_t_6 = (__pyx_t_1 == Py_None);
+              if (__pyx_t_6) {
+                __pyx_t_2 = 0;
+              } else {
+                __pyx_t_4 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_4 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 321, __pyx_L1_error)
+                __pyx_t_2 = __pyx_t_4;
+              }
+              __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 321, __pyx_L1_error)
+              __Pyx_GOTREF(__pyx_t_1);
+              __pyx_t_6 = (__pyx_t_1 == Py_None);
+              if (__pyx_t_6) {
+                __pyx_t_4 = PY_SSIZE_T_MAX;
+              } else {
+                __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 321, __pyx_L1_error)
+                __pyx_t_4 = __pyx_t_5;
+              }
+              __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+              __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 321, __pyx_L1_error)
+              __Pyx_GOTREF(__pyx_t_1);
+              __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u__4, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 321, __pyx_L1_error)
+              __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+              __pyx_t_3 = (__pyx_t_6 != 0);
+              if (__pyx_t_3) {
+
+                /* "JSONParser.pyx":322
+ *                                 line_start_3 = line_start_2
+ *                                 if buf[offset_4:offset_4+1] == '+':
+ *                                     offset_4 += 1             # <<<<<<<<<<<<<<
+ *                                 elif buf[offset_4:offset_4+1] == '-':
+ *                                     offset_4 += 1
+ */
+                __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 322, __pyx_L1_error)
+                __Pyx_GOTREF(__pyx_t_1);
+                __Pyx_DECREF_SET(__pyx_v_offset_4, __pyx_t_1);
+                __pyx_t_1 = 0;
+
+                /* "JSONParser.pyx":321
+ *                                 offset_4 = offset_3
+ *                                 line_start_3 = line_start_2
+ *                                 if buf[offset_4:offset_4+1] == '+':             # <<<<<<<<<<<<<<
+ *                                     offset_4 += 1
+ *                                 elif buf[offset_4:offset_4+1] == '-':
+ */
+                goto __pyx_L67;
+              }
+
+              /* "JSONParser.pyx":323
+ *                                 if buf[offset_4:offset_4+1] == '+':
+ *                                     offset_4 += 1
+ *                                 elif buf[offset_4:offset_4+1] == '-':             # <<<<<<<<<<<<<<
+ *                                     offset_4 += 1
+ *                                 else:
+ */
+              if (unlikely(__pyx_v_buf == Py_None)) {
+                PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+                __PYX_ERR(0, 323, __pyx_L1_error)
+              }
+              __Pyx_INCREF(__pyx_v_offset_4);
+              __pyx_t_1 = __pyx_v_offset_4;
+              __pyx_t_3 = (__pyx_t_1 == Py_None);
+              if (__pyx_t_3) {
+                __pyx_t_4 = 0;
+              } else {
+                __pyx_t_2 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_2 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 323, __pyx_L1_error)
+                __pyx_t_4 = __pyx_t_2;
+              }
+              __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 323, __pyx_L1_error)
+              __Pyx_GOTREF(__pyx_t_1);
+              __pyx_t_3 = (__pyx_t_1 == Py_None);
+              if (__pyx_t_3) {
+                __pyx_t_2 = PY_SSIZE_T_MAX;
+              } else {
+                __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 323, __pyx_L1_error)
+                __pyx_t_2 = __pyx_t_5;
+              }
+              __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+              __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 323, __pyx_L1_error)
+              __Pyx_GOTREF(__pyx_t_1);
+              __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u__2, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 323, __pyx_L1_error)
+              __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+              __pyx_t_6 = (__pyx_t_3 != 0);
+              if (__pyx_t_6) {
+
+                /* "JSONParser.pyx":324
+ *                                     offset_4 += 1
+ *                                 elif buf[offset_4:offset_4+1] == '-':
+ *                                     offset_4 += 1             # <<<<<<<<<<<<<<
+ *                                 else:
+ *                                     offset_4 = -1
+ */
+                __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 324, __pyx_L1_error)
+                __Pyx_GOTREF(__pyx_t_1);
+                __Pyx_DECREF_SET(__pyx_v_offset_4, __pyx_t_1);
+                __pyx_t_1 = 0;
+
+                /* "JSONParser.pyx":323
+ *                                 if buf[offset_4:offset_4+1] == '+':
+ *                                     offset_4 += 1
+ *                                 elif buf[offset_4:offset_4+1] == '-':             # <<<<<<<<<<<<<<
+ *                                     offset_4 += 1
+ *                                 else:
+ */
+                goto __pyx_L67;
+              }
+
+              /* "JSONParser.pyx":326
+ *                                     offset_4 += 1
+ *                                 else:
+ *                                     offset_4 = -1             # <<<<<<<<<<<<<<
+ *                                     break
+ * 
+ */
+              /*else*/ {
+                __Pyx_INCREF(__pyx_int_neg_1);
+                __Pyx_DECREF_SET(__pyx_v_offset_4, __pyx_int_neg_1);
+
+                /* "JSONParser.pyx":327
+ *                                 else:
+ *                                     offset_4 = -1
+ *                                     break             # <<<<<<<<<<<<<<
+ * 
+ *                                 count_2 = 0
+ */
+                goto __pyx_L66_break;
+              }
+              __pyx_L67:;
+
+              /* "JSONParser.pyx":329
+ *                                     break
+ * 
+ *                                 count_2 = 0             # <<<<<<<<<<<<<<
+ *                                 while True:
+ *                                     offset_5 = offset_4
+ */
+              __Pyx_INCREF(__pyx_int_0);
+              __Pyx_XDECREF_SET(__pyx_v_count_2, __pyx_int_0);
+
+              /* "JSONParser.pyx":330
+ * 
+ *                                 count_2 = 0
+ *                                 while True:             # <<<<<<<<<<<<<<
+ *                                     offset_5 = offset_4
+ *                                     line_start_4 = line_start_3
+ */
+              while (1) {
+
+                /* "JSONParser.pyx":331
+ *                                 count_2 = 0
+ *                                 while True:
+ *                                     offset_5 = offset_4             # <<<<<<<<<<<<<<
+ *                                     line_start_4 = line_start_3
+ *                                     if offset_5 == buf_eof:
+ */
+                __Pyx_INCREF(__pyx_v_offset_4);
+                __Pyx_XDECREF_SET(__pyx_v_offset_5, __pyx_v_offset_4);
+
+                /* "JSONParser.pyx":332
+ *                                 while True:
+ *                                     offset_5 = offset_4
+ *                                     line_start_4 = line_start_3             # <<<<<<<<<<<<<<
+ *                                     if offset_5 == buf_eof:
+ *                                         offset_5 = -1
+ */
+                __pyx_v_line_start_4 = __pyx_v_line_start_3;
+
+                /* "JSONParser.pyx":333
+ *                                     offset_5 = offset_4
+ *                                     line_start_4 = line_start_3
+ *                                     if offset_5 == buf_eof:             # <<<<<<<<<<<<<<
+ *                                         offset_5 = -1
+ *                                         break
+ */
+                __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_buf_eof); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 333, __pyx_L1_error)
+                __Pyx_GOTREF(__pyx_t_1);
+                __pyx_t_7 = PyObject_RichCompare(__pyx_v_offset_5, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 333, __pyx_L1_error)
+                __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+                __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 333, __pyx_L1_error)
+                __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+                if (__pyx_t_6) {
+
+                  /* "JSONParser.pyx":334
+ *                                     line_start_4 = line_start_3
+ *                                     if offset_5 == buf_eof:
+ *                                         offset_5 = -1             # <<<<<<<<<<<<<<
+ *                                         break
+ *                                     elif '0' <= buf[offset_5] <= '9':
+ */
+                  __Pyx_INCREF(__pyx_int_neg_1);
+                  __Pyx_DECREF_SET(__pyx_v_offset_5, __pyx_int_neg_1);
+
+                  /* "JSONParser.pyx":335
+ *                                     if offset_5 == buf_eof:
+ *                                         offset_5 = -1
+ *                                         break             # <<<<<<<<<<<<<<
+ *                                     elif '0' <= buf[offset_5] <= '9':
+ *                                         offset_5 += 1
+ */
+                  goto __pyx_L69_break;
+
+                  /* "JSONParser.pyx":333
+ *                                     offset_5 = offset_4
+ *                                     line_start_4 = line_start_3
+ *                                     if offset_5 == buf_eof:             # <<<<<<<<<<<<<<
+ *                                         offset_5 = -1
+ *                                         break
+ */
+                }
+
+                /* "JSONParser.pyx":336
+ *                                         offset_5 = -1
+ *                                         break
+ *                                     elif '0' <= buf[offset_5] <= '9':             # <<<<<<<<<<<<<<
+ *                                         offset_5 += 1
+ *                                     else:
+ */
+                __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_5); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 336, __pyx_L1_error)
+                __Pyx_GOTREF(__pyx_t_7);
+                __pyx_t_1 = PyObject_RichCompare(__pyx_kp_u_0, __pyx_t_7, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 336, __pyx_L1_error)
+                if (__Pyx_PyObject_IsTrue(__pyx_t_1)) {
+                  __Pyx_DECREF(__pyx_t_1);
+                  __pyx_t_1 = PyObject_RichCompare(__pyx_t_7, __pyx_kp_u_9, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 336, __pyx_L1_error)
+                }
+                __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+                __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 336, __pyx_L1_error)
+                __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+                if (__pyx_t_6) {
+
+                  /* "JSONParser.pyx":337
+ *                                         break
+ *                                     elif '0' <= buf[offset_5] <= '9':
+ *                                         offset_5 += 1             # <<<<<<<<<<<<<<
+ *                                     else:
+ *                                         offset_5 = -1
+ */
+                  __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_5, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 337, __pyx_L1_error)
+                  __Pyx_GOTREF(__pyx_t_1);
+                  __Pyx_DECREF_SET(__pyx_v_offset_5, __pyx_t_1);
+                  __pyx_t_1 = 0;
+
+                  /* "JSONParser.pyx":336
+ *                                         offset_5 = -1
+ *                                         break
+ *                                     elif '0' <= buf[offset_5] <= '9':             # <<<<<<<<<<<<<<
+ *                                         offset_5 += 1
+ *                                     else:
+ */
+                  goto __pyx_L70;
+                }
+
+                /* "JSONParser.pyx":339
+ *                                         offset_5 += 1
+ *                                     else:
+ *                                         offset_5 = -1             # <<<<<<<<<<<<<<
+ *                                         break
+ * 
+ */
+                /*else*/ {
+                  __Pyx_INCREF(__pyx_int_neg_1);
+                  __Pyx_DECREF_SET(__pyx_v_offset_5, __pyx_int_neg_1);
+
+                  /* "JSONParser.pyx":340
+ *                                     else:
+ *                                         offset_5 = -1
+ *                                         break             # <<<<<<<<<<<<<<
+ * 
+ *                                     if offset_4 == offset_5: break
+ */
+                  goto __pyx_L69_break;
+                }
+                __pyx_L70:;
+
+                /* "JSONParser.pyx":342
+ *                                         break
+ * 
+ *                                     if offset_4 == offset_5: break             # <<<<<<<<<<<<<<
+ *                                     offset_4 = offset_5
+ *                                     line_start_3 = line_start_4
+ */
+                __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_4, __pyx_v_offset_5, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 342, __pyx_L1_error)
+                __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 342, __pyx_L1_error)
+                __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+                if (__pyx_t_6) {
+                  goto __pyx_L69_break;
+                }
+
+                /* "JSONParser.pyx":343
+ * 
+ *                                     if offset_4 == offset_5: break
+ *                                     offset_4 = offset_5             # <<<<<<<<<<<<<<
+ *                                     line_start_3 = line_start_4
+ *                                     count_2 += 1
+ */
+                __Pyx_INCREF(__pyx_v_offset_5);
+                __Pyx_DECREF_SET(__pyx_v_offset_4, __pyx_v_offset_5);
+
+                /* "JSONParser.pyx":344
+ *                                     if offset_4 == offset_5: break
+ *                                     offset_4 = offset_5
+ *                                     line_start_3 = line_start_4             # <<<<<<<<<<<<<<
+ *                                     count_2 += 1
+ * 
+ */
+                __pyx_v_line_start_3 = __pyx_v_line_start_4;
+
+                /* "JSONParser.pyx":345
+ *                                     offset_4 = offset_5
+ *                                     line_start_3 = line_start_4
+ *                                     count_2 += 1             # <<<<<<<<<<<<<<
+ * 
+ *                                 if offset_3 == offset_4: break
+ */
+                __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_count_2, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 345, __pyx_L1_error)
+                __Pyx_GOTREF(__pyx_t_1);
+                __Pyx_DECREF_SET(__pyx_v_count_2, __pyx_t_1);
+                __pyx_t_1 = 0;
+              }
+              __pyx_L69_break:;
+
+              /* "JSONParser.pyx":347
+ *                                     count_2 += 1
+ * 
+ *                                 if offset_3 == offset_4: break             # <<<<<<<<<<<<<<
+ *                                 offset_3 = offset_4
+ *                                 line_start_2 = line_start_3
+ */
+              __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_3, __pyx_v_offset_4, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 347, __pyx_L1_error)
+              __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 347, __pyx_L1_error)
+              __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+              if (__pyx_t_6) {
+                goto __pyx_L66_break;
+              }
+
+              /* "JSONParser.pyx":348
+ * 
+ *                                 if offset_3 == offset_4: break
+ *                                 offset_3 = offset_4             # <<<<<<<<<<<<<<
+ *                                 line_start_2 = line_start_3
+ *                                 count_1 += 1
+ */
+              __Pyx_INCREF(__pyx_v_offset_4);
+              __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_v_offset_4);
+
+              /* "JSONParser.pyx":349
+ *                                 if offset_3 == offset_4: break
+ *                                 offset_3 = offset_4
+ *                                 line_start_2 = line_start_3             # <<<<<<<<<<<<<<
+ *                                 count_1 += 1
+ * 
+ */
+              __pyx_v_line_start_2 = __pyx_v_line_start_3;
+
+              /* "JSONParser.pyx":350
+ *                                 offset_3 = offset_4
+ *                                 line_start_2 = line_start_3
+ *                                 count_1 += 1             # <<<<<<<<<<<<<<
+ * 
+ *                             if offset_2 == offset_3: break
+ */
+              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_count_1, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 350, __pyx_L1_error)
+              __Pyx_GOTREF(__pyx_t_1);
+              __Pyx_DECREF_SET(__pyx_v_count_1, __pyx_t_1);
+              __pyx_t_1 = 0;
+            }
+            __pyx_L66_break:;
+
+            /* "JSONParser.pyx":352
+ *                                 count_1 += 1
+ * 
+ *                             if offset_2 == offset_3: break             # <<<<<<<<<<<<<<
+ *                             offset_2 = offset_3
+ *                             line_start_1 = line_start_2
+ */
+            __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_2, __pyx_v_offset_3, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 352, __pyx_L1_error)
+            __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 352, __pyx_L1_error)
+            __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+            if (__pyx_t_6) {
+              goto __pyx_L63_break;
+            }
+
+            /* "JSONParser.pyx":353
+ * 
+ *                             if offset_2 == offset_3: break
+ *                             offset_2 = offset_3             # <<<<<<<<<<<<<<
+ *                             line_start_1 = line_start_2
+ *                             count += 1
+ */
+            __Pyx_INCREF(__pyx_v_offset_3);
+            __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_v_offset_3);
+
+            /* "JSONParser.pyx":354
+ *                             if offset_2 == offset_3: break
+ *                             offset_2 = offset_3
+ *                             line_start_1 = line_start_2             # <<<<<<<<<<<<<<
+ *                             count += 1
+ * 
+ */
+            __pyx_v_line_start_1 = __pyx_v_line_start_2;
+
+            /* "JSONParser.pyx":355
+ *                             offset_2 = offset_3
+ *                             line_start_1 = line_start_2
+ *                             count += 1             # <<<<<<<<<<<<<<
+ * 
+ *                         break
+ */
+            __pyx_v_count = (__pyx_v_count + 1);
+          }
+          __pyx_L63_break:;
+
+          /* "JSONParser.pyx":357
+ *                             count += 1
+ * 
+ *                         break             # <<<<<<<<<<<<<<
+ *                     if offset_2 == -1:
+ *                         offset_1 = -1
+ */
+          goto __pyx_L34_break;
+        }
+        __pyx_L34_break:;
+
+        /* "JSONParser.pyx":358
+ * 
+ *                         break
+ *                     if offset_2 == -1:             # <<<<<<<<<<<<<<
+ *                         offset_1 = -1
+ *                         break
+ */
+        __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_2, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 358, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_1);
+        __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 358, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+        if (__pyx_t_6) {
+
+          /* "JSONParser.pyx":359
+ *                         break
+ *                     if offset_2 == -1:
+ *                         offset_1 = -1             # <<<<<<<<<<<<<<
+ *                         break
+ *                     if self.builder is not None:
+ */
+          __Pyx_INCREF(__pyx_int_neg_1);
+          __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_int_neg_1);
+
+          /* "JSONParser.pyx":360
+ *                     if offset_2 == -1:
+ *                         offset_1 = -1
+ *                         break             # <<<<<<<<<<<<<<
+ *                     if self.builder is not None:
+ *                         children_1.append(self.ParseNode('number', offset_1, offset_2, children_2, None))
+ */
+          goto __pyx_L32_break;
+
+          /* "JSONParser.pyx":358
+ * 
+ *                         break
+ *                     if offset_2 == -1:             # <<<<<<<<<<<<<<
+ *                         offset_1 = -1
+ *                         break
+ */
+        }
+
+        /* "JSONParser.pyx":361
+ *                         offset_1 = -1
+ *                         break
+ *                     if self.builder is not None:             # <<<<<<<<<<<<<<
+ *                         children_1.append(self.ParseNode('number', offset_1, offset_2, children_2, None))
+ *                     else:
+ */
+        __pyx_t_6 = (__pyx_v_self->builder != Py_None);
+        __pyx_t_3 = (__pyx_t_6 != 0);
+        if (__pyx_t_3) {
+
+          /* "JSONParser.pyx":362
+ *                         break
+ *                     if self.builder is not None:
+ *                         children_1.append(self.ParseNode('number', offset_1, offset_2, children_2, None))             # <<<<<<<<<<<<<<
+ *                     else:
+ *                         children_1.append(ParseNode('number', offset_1, offset_2, children_2, None))
+ */
+          __pyx_t_7 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 362, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_7);
+          __pyx_t_8 = NULL;
+          __pyx_t_9 = 0;
+          if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_7))) {
+            __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_7);
+            if (likely(__pyx_t_8)) {
+              PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
+              __Pyx_INCREF(__pyx_t_8);
+              __Pyx_INCREF(function);
+              __Pyx_DECREF_SET(__pyx_t_7, function);
+              __pyx_t_9 = 1;
+            }
+          }
+          #if CYTHON_FAST_PYCALL
+          if (PyFunction_Check(__pyx_t_7)) {
+            PyObject *__pyx_temp[6] = {__pyx_t_8, __pyx_n_u_number, __pyx_v_offset_1, __pyx_v_offset_2, __pyx_v_children_2, Py_None};
+            __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_9, 5+__pyx_t_9); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 362, __pyx_L1_error)
+            __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
+            __Pyx_GOTREF(__pyx_t_1);
+          } else
+          #endif
+          #if CYTHON_FAST_PYCCALL
+          if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
+            PyObject *__pyx_temp[6] = {__pyx_t_8, __pyx_n_u_number, __pyx_v_offset_1, __pyx_v_offset_2, __pyx_v_children_2, Py_None};
+            __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_9, 5+__pyx_t_9); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 362, __pyx_L1_error)
+            __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
+            __Pyx_GOTREF(__pyx_t_1);
+          } else
+          #endif
+          {
+            __pyx_t_10 = PyTuple_New(5+__pyx_t_9); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 362, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_10);
+            if (__pyx_t_8) {
+              __Pyx_GIVEREF(__pyx_t_8); PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_8); __pyx_t_8 = NULL;
+            }
+            __Pyx_INCREF(__pyx_n_u_number);
+            __Pyx_GIVEREF(__pyx_n_u_number);
+            PyTuple_SET_ITEM(__pyx_t_10, 0+__pyx_t_9, __pyx_n_u_number);
+            __Pyx_INCREF(__pyx_v_offset_1);
+            __Pyx_GIVEREF(__pyx_v_offset_1);
+            PyTuple_SET_ITEM(__pyx_t_10, 1+__pyx_t_9, __pyx_v_offset_1);
+            __Pyx_INCREF(__pyx_v_offset_2);
+            __Pyx_GIVEREF(__pyx_v_offset_2);
+            PyTuple_SET_ITEM(__pyx_t_10, 2+__pyx_t_9, __pyx_v_offset_2);
+            __Pyx_INCREF(__pyx_v_children_2);
+            __Pyx_GIVEREF(__pyx_v_children_2);
+            PyTuple_SET_ITEM(__pyx_t_10, 3+__pyx_t_9, __pyx_v_children_2);
+            __Pyx_INCREF(Py_None);
+            __Pyx_GIVEREF(Py_None);
+            PyTuple_SET_ITEM(__pyx_t_10, 4+__pyx_t_9, Py_None);
+            __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_10, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 362, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_1);
+            __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+          }
+          __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+          __pyx_t_11 = __Pyx_PyList_Append(__pyx_v_children_1, __pyx_t_1); if (unlikely(__pyx_t_11 == ((int)-1))) __PYX_ERR(0, 362, __pyx_L1_error)
+          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+          /* "JSONParser.pyx":361
+ *                         offset_1 = -1
+ *                         break
+ *                     if self.builder is not None:             # <<<<<<<<<<<<<<
+ *                         children_1.append(self.ParseNode('number', offset_1, offset_2, children_2, None))
+ *                     else:
+ */
+          goto __pyx_L75;
+        }
+
+        /* "JSONParser.pyx":364
+ *                         children_1.append(self.ParseNode('number', offset_1, offset_2, children_2, None))
+ *                     else:
+ *                         children_1.append(ParseNode('number', offset_1, offset_2, children_2, None))             # <<<<<<<<<<<<<<
+ *                     offset_1 = offset_2
+ * 
+ */
+        /*else*/ {
+          __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 364, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_7);
+          __pyx_t_10 = NULL;
+          __pyx_t_9 = 0;
+          if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_7))) {
+            __pyx_t_10 = PyMethod_GET_SELF(__pyx_t_7);
+            if (likely(__pyx_t_10)) {
+              PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
+              __Pyx_INCREF(__pyx_t_10);
+              __Pyx_INCREF(function);
+              __Pyx_DECREF_SET(__pyx_t_7, function);
+              __pyx_t_9 = 1;
+            }
+          }
+          #if CYTHON_FAST_PYCALL
+          if (PyFunction_Check(__pyx_t_7)) {
+            PyObject *__pyx_temp[6] = {__pyx_t_10, __pyx_n_u_number, __pyx_v_offset_1, __pyx_v_offset_2, __pyx_v_children_2, Py_None};
+            __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_9, 5+__pyx_t_9); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 364, __pyx_L1_error)
+            __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
+            __Pyx_GOTREF(__pyx_t_1);
+          } else
+          #endif
+          #if CYTHON_FAST_PYCCALL
+          if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
+            PyObject *__pyx_temp[6] = {__pyx_t_10, __pyx_n_u_number, __pyx_v_offset_1, __pyx_v_offset_2, __pyx_v_children_2, Py_None};
+            __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_9, 5+__pyx_t_9); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 364, __pyx_L1_error)
+            __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
+            __Pyx_GOTREF(__pyx_t_1);
+          } else
+          #endif
+          {
+            __pyx_t_8 = PyTuple_New(5+__pyx_t_9); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 364, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_8);
+            if (__pyx_t_10) {
+              __Pyx_GIVEREF(__pyx_t_10); PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_10); __pyx_t_10 = NULL;
+            }
+            __Pyx_INCREF(__pyx_n_u_number);
+            __Pyx_GIVEREF(__pyx_n_u_number);
+            PyTuple_SET_ITEM(__pyx_t_8, 0+__pyx_t_9, __pyx_n_u_number);
+            __Pyx_INCREF(__pyx_v_offset_1);
+            __Pyx_GIVEREF(__pyx_v_offset_1);
+            PyTuple_SET_ITEM(__pyx_t_8, 1+__pyx_t_9, __pyx_v_offset_1);
+            __Pyx_INCREF(__pyx_v_offset_2);
+            __Pyx_GIVEREF(__pyx_v_offset_2);
+            PyTuple_SET_ITEM(__pyx_t_8, 2+__pyx_t_9, __pyx_v_offset_2);
+            __Pyx_INCREF(__pyx_v_children_2);
+            __Pyx_GIVEREF(__pyx_v_children_2);
+            PyTuple_SET_ITEM(__pyx_t_8, 3+__pyx_t_9, __pyx_v_children_2);
+            __Pyx_INCREF(Py_None);
+            __Pyx_GIVEREF(Py_None);
+            PyTuple_SET_ITEM(__pyx_t_8, 4+__pyx_t_9, Py_None);
+            __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_8, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 364, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_1);
+            __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+          }
+          __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+          __pyx_t_11 = __Pyx_PyList_Append(__pyx_v_children_1, __pyx_t_1); if (unlikely(__pyx_t_11 == ((int)-1))) __PYX_ERR(0, 364, __pyx_L1_error)
+          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+        }
+        __pyx_L75:;
+
+        /* "JSONParser.pyx":365
+ *                     else:
+ *                         children_1.append(ParseNode('number', offset_1, offset_2, children_2, None))
+ *                     offset_1 = offset_2             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+        __Pyx_INCREF(__pyx_v_offset_2);
+        __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_v_offset_2);
+
+        /* "JSONParser.pyx":368
  * 
  * 
  *                     break             # <<<<<<<<<<<<<<
@@ -3967,26 +6475,30 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_value(s
       }
       __pyx_L32_break:;
 
-      /* "JSONParser.pyx":194
+      /* "JSONParser.pyx":369
  * 
  *                     break
  *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
  *                     offset = offset_1
  *                     line_start = line_start_1
  */
-      __pyx_t_5 = ((__pyx_v_offset_1 != -1L) != 0);
-      if (__pyx_t_5) {
+      __pyx_t_1 = __Pyx_PyInt_NeObjC(__pyx_v_offset_1, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 369, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 369, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      if (__pyx_t_3) {
 
-        /* "JSONParser.pyx":195
+        /* "JSONParser.pyx":370
  *                     break
  *                 if offset_1 != -1:
  *                     offset = offset_1             # <<<<<<<<<<<<<<
  *                     line_start = line_start_1
  *                     children.extend(children_1)
  */
-        __pyx_v_offset = __pyx_v_offset_1;
+        __pyx_t_9 = __Pyx_PyInt_As_int(__pyx_v_offset_1); if (unlikely((__pyx_t_9 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 370, __pyx_L1_error)
+        __pyx_v_offset = __pyx_t_9;
 
-        /* "JSONParser.pyx":196
+        /* "JSONParser.pyx":371
  *                 if offset_1 != -1:
  *                     offset = offset_1
  *                     line_start = line_start_1             # <<<<<<<<<<<<<<
@@ -3995,7 +6507,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_value(s
  */
         __pyx_v_line_start = __pyx_v_line_start_1;
 
-        /* "JSONParser.pyx":197
+        /* "JSONParser.pyx":372
  *                     offset = offset_1
  *                     line_start = line_start_1
  *                     children.extend(children_1)             # <<<<<<<<<<<<<<
@@ -4004,20 +6516,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_value(s
  */
         if (unlikely(__pyx_v_children == Py_None)) {
           PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "extend");
-          __PYX_ERR(0, 197, __pyx_L1_error)
+          __PYX_ERR(0, 372, __pyx_L1_error)
         }
-        __pyx_t_6 = __Pyx_PyList_Extend(__pyx_v_children, __pyx_v_children_1); if (unlikely(__pyx_t_6 == ((int)-1))) __PYX_ERR(0, 197, __pyx_L1_error)
+        __pyx_t_11 = __Pyx_PyList_Extend(__pyx_v_children, __pyx_v_children_1); if (unlikely(__pyx_t_11 == ((int)-1))) __PYX_ERR(0, 372, __pyx_L1_error)
 
-        /* "JSONParser.pyx":198
+        /* "JSONParser.pyx":373
  *                     line_start = line_start_1
  *                     children.extend(children_1)
  *                     break             # <<<<<<<<<<<<<<
  *                 # end case
- *                 offset = -1 # no more choices
+ *                 offset_1 = offset
  */
         goto __pyx_L6_break;
 
-        /* "JSONParser.pyx":194
+        /* "JSONParser.pyx":369
  * 
  *                     break
  *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
@@ -4026,7 +6538,448 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_value(s
  */
       }
 
-      /* "JSONParser.pyx":200
+      /* "JSONParser.pyx":375
+ *                     break
+ *                 # end case
+ *                 offset_1 = offset             # <<<<<<<<<<<<<<
+ *                 line_start_1 = line_start
+ *                 children_1 = []
+ */
+      __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 375, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_t_1);
+      __pyx_t_1 = 0;
+
+      /* "JSONParser.pyx":376
+ *                 # end case
+ *                 offset_1 = offset
+ *                 line_start_1 = line_start             # <<<<<<<<<<<<<<
+ *                 children_1 = []
+ *                 while True: # case
+ */
+      __pyx_v_line_start_1 = __pyx_v_line_start;
+
+      /* "JSONParser.pyx":377
+ *                 offset_1 = offset
+ *                 line_start_1 = line_start
+ *                 children_1 = []             # <<<<<<<<<<<<<<
+ *                 while True: # case
+ *                     offset_1, line_start_1 = self.parse_json_string(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+ */
+      __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 377, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF_SET(__pyx_v_children_1, ((PyObject*)__pyx_t_1));
+      __pyx_t_1 = 0;
+
+      /* "JSONParser.pyx":378
+ *                 line_start_1 = line_start
+ *                 children_1 = []
+ *                 while True: # case             # <<<<<<<<<<<<<<
+ *                     offset_1, line_start_1 = self.parse_json_string(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+ *                     if offset_1 == -1: break
+ */
+      while (1) {
+
+        /* "JSONParser.pyx":379
+ *                 children_1 = []
+ *                 while True: # case
+ *                     offset_1, line_start_1 = self.parse_json_string(buf, offset_1, line_start_1, indent, buf_eof, children_1)             # <<<<<<<<<<<<<<
+ *                     if offset_1 == -1: break
+ * 
+ */
+        __pyx_t_9 = __Pyx_PyInt_As_int(__pyx_v_offset_1); if (unlikely((__pyx_t_9 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 379, __pyx_L1_error)
+        __pyx_t_12 = ((struct __pyx_vtabstruct_10JSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_json_string(__pyx_v_self, __pyx_v_buf, __pyx_t_9, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_1);
+        __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_12.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 379, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_1);
+        __pyx_t_9 = __pyx_t_12.f1;
+        __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_t_1);
+        __pyx_t_1 = 0;
+        __pyx_v_line_start_1 = __pyx_t_9;
+
+        /* "JSONParser.pyx":380
+ *                 while True: # case
+ *                     offset_1, line_start_1 = self.parse_json_string(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+ *                     if offset_1 == -1: break             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+        __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_1, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 380, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_1);
+        __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 380, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+        if (__pyx_t_3) {
+          goto __pyx_L78_break;
+        }
+
+        /* "JSONParser.pyx":384
+ * 
+ * 
+ *                     break             # <<<<<<<<<<<<<<
+ *                 if offset_1 != -1:
+ *                     offset = offset_1
+ */
+        goto __pyx_L78_break;
+      }
+      __pyx_L78_break:;
+
+      /* "JSONParser.pyx":385
+ * 
+ *                     break
+ *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
+ *                     offset = offset_1
+ *                     line_start = line_start_1
+ */
+      __pyx_t_1 = __Pyx_PyInt_NeObjC(__pyx_v_offset_1, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 385, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 385, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      if (__pyx_t_3) {
+
+        /* "JSONParser.pyx":386
+ *                     break
+ *                 if offset_1 != -1:
+ *                     offset = offset_1             # <<<<<<<<<<<<<<
+ *                     line_start = line_start_1
+ *                     children.extend(children_1)
+ */
+        __pyx_t_9 = __Pyx_PyInt_As_int(__pyx_v_offset_1); if (unlikely((__pyx_t_9 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 386, __pyx_L1_error)
+        __pyx_v_offset = __pyx_t_9;
+
+        /* "JSONParser.pyx":387
+ *                 if offset_1 != -1:
+ *                     offset = offset_1
+ *                     line_start = line_start_1             # <<<<<<<<<<<<<<
+ *                     children.extend(children_1)
+ *                     break
+ */
+        __pyx_v_line_start = __pyx_v_line_start_1;
+
+        /* "JSONParser.pyx":388
+ *                     offset = offset_1
+ *                     line_start = line_start_1
+ *                     children.extend(children_1)             # <<<<<<<<<<<<<<
+ *                     break
+ *                 # end case
+ */
+        if (unlikely(__pyx_v_children == Py_None)) {
+          PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "extend");
+          __PYX_ERR(0, 388, __pyx_L1_error)
+        }
+        __pyx_t_11 = __Pyx_PyList_Extend(__pyx_v_children, __pyx_v_children_1); if (unlikely(__pyx_t_11 == ((int)-1))) __PYX_ERR(0, 388, __pyx_L1_error)
+
+        /* "JSONParser.pyx":389
+ *                     line_start = line_start_1
+ *                     children.extend(children_1)
+ *                     break             # <<<<<<<<<<<<<<
+ *                 # end case
+ *                 offset_1 = offset
+ */
+        goto __pyx_L6_break;
+
+        /* "JSONParser.pyx":385
+ * 
+ *                     break
+ *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
+ *                     offset = offset_1
+ *                     line_start = line_start_1
+ */
+      }
+
+      /* "JSONParser.pyx":391
+ *                     break
+ *                 # end case
+ *                 offset_1 = offset             # <<<<<<<<<<<<<<
+ *                 line_start_1 = line_start
+ *                 children_1 = []
+ */
+      __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 391, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_t_1);
+      __pyx_t_1 = 0;
+
+      /* "JSONParser.pyx":392
+ *                 # end case
+ *                 offset_1 = offset
+ *                 line_start_1 = line_start             # <<<<<<<<<<<<<<
+ *                 children_1 = []
+ *                 while True: # case
+ */
+      __pyx_v_line_start_1 = __pyx_v_line_start;
+
+      /* "JSONParser.pyx":393
+ *                 offset_1 = offset
+ *                 line_start_1 = line_start
+ *                 children_1 = []             # <<<<<<<<<<<<<<
+ *                 while True: # case
+ *                     offset_1, line_start_1 = self.parse_json_list(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+ */
+      __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 393, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF_SET(__pyx_v_children_1, ((PyObject*)__pyx_t_1));
+      __pyx_t_1 = 0;
+
+      /* "JSONParser.pyx":394
+ *                 line_start_1 = line_start
+ *                 children_1 = []
+ *                 while True: # case             # <<<<<<<<<<<<<<
+ *                     offset_1, line_start_1 = self.parse_json_list(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+ *                     if offset_1 == -1: break
+ */
+      while (1) {
+
+        /* "JSONParser.pyx":395
+ *                 children_1 = []
+ *                 while True: # case
+ *                     offset_1, line_start_1 = self.parse_json_list(buf, offset_1, line_start_1, indent, buf_eof, children_1)             # <<<<<<<<<<<<<<
+ *                     if offset_1 == -1: break
+ * 
+ */
+        __pyx_t_9 = __Pyx_PyInt_As_int(__pyx_v_offset_1); if (unlikely((__pyx_t_9 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 395, __pyx_L1_error)
+        __pyx_t_12 = ((struct __pyx_vtabstruct_10JSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_json_list(__pyx_v_self, __pyx_v_buf, __pyx_t_9, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_1);
+        __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_12.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 395, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_1);
+        __pyx_t_9 = __pyx_t_12.f1;
+        __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_t_1);
+        __pyx_t_1 = 0;
+        __pyx_v_line_start_1 = __pyx_t_9;
+
+        /* "JSONParser.pyx":396
+ *                 while True: # case
+ *                     offset_1, line_start_1 = self.parse_json_list(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+ *                     if offset_1 == -1: break             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+        __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_1, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 396, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_1);
+        __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 396, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+        if (__pyx_t_3) {
+          goto __pyx_L82_break;
+        }
+
+        /* "JSONParser.pyx":400
+ * 
+ * 
+ *                     break             # <<<<<<<<<<<<<<
+ *                 if offset_1 != -1:
+ *                     offset = offset_1
+ */
+        goto __pyx_L82_break;
+      }
+      __pyx_L82_break:;
+
+      /* "JSONParser.pyx":401
+ * 
+ *                     break
+ *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
+ *                     offset = offset_1
+ *                     line_start = line_start_1
+ */
+      __pyx_t_1 = __Pyx_PyInt_NeObjC(__pyx_v_offset_1, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 401, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 401, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      if (__pyx_t_3) {
+
+        /* "JSONParser.pyx":402
+ *                     break
+ *                 if offset_1 != -1:
+ *                     offset = offset_1             # <<<<<<<<<<<<<<
+ *                     line_start = line_start_1
+ *                     children.extend(children_1)
+ */
+        __pyx_t_9 = __Pyx_PyInt_As_int(__pyx_v_offset_1); if (unlikely((__pyx_t_9 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 402, __pyx_L1_error)
+        __pyx_v_offset = __pyx_t_9;
+
+        /* "JSONParser.pyx":403
+ *                 if offset_1 != -1:
+ *                     offset = offset_1
+ *                     line_start = line_start_1             # <<<<<<<<<<<<<<
+ *                     children.extend(children_1)
+ *                     break
+ */
+        __pyx_v_line_start = __pyx_v_line_start_1;
+
+        /* "JSONParser.pyx":404
+ *                     offset = offset_1
+ *                     line_start = line_start_1
+ *                     children.extend(children_1)             # <<<<<<<<<<<<<<
+ *                     break
+ *                 # end case
+ */
+        if (unlikely(__pyx_v_children == Py_None)) {
+          PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "extend");
+          __PYX_ERR(0, 404, __pyx_L1_error)
+        }
+        __pyx_t_11 = __Pyx_PyList_Extend(__pyx_v_children, __pyx_v_children_1); if (unlikely(__pyx_t_11 == ((int)-1))) __PYX_ERR(0, 404, __pyx_L1_error)
+
+        /* "JSONParser.pyx":405
+ *                     line_start = line_start_1
+ *                     children.extend(children_1)
+ *                     break             # <<<<<<<<<<<<<<
+ *                 # end case
+ *                 offset_1 = offset
+ */
+        goto __pyx_L6_break;
+
+        /* "JSONParser.pyx":401
+ * 
+ *                     break
+ *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
+ *                     offset = offset_1
+ *                     line_start = line_start_1
+ */
+      }
+
+      /* "JSONParser.pyx":407
+ *                     break
+ *                 # end case
+ *                 offset_1 = offset             # <<<<<<<<<<<<<<
+ *                 line_start_1 = line_start
+ *                 children_1 = []
+ */
+      __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 407, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_t_1);
+      __pyx_t_1 = 0;
+
+      /* "JSONParser.pyx":408
+ *                 # end case
+ *                 offset_1 = offset
+ *                 line_start_1 = line_start             # <<<<<<<<<<<<<<
+ *                 children_1 = []
+ *                 while True: # case
+ */
+      __pyx_v_line_start_1 = __pyx_v_line_start;
+
+      /* "JSONParser.pyx":409
+ *                 offset_1 = offset
+ *                 line_start_1 = line_start
+ *                 children_1 = []             # <<<<<<<<<<<<<<
+ *                 while True: # case
+ *                     offset_1, line_start_1 = self.parse_json_object(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+ */
+      __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 409, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF_SET(__pyx_v_children_1, ((PyObject*)__pyx_t_1));
+      __pyx_t_1 = 0;
+
+      /* "JSONParser.pyx":410
+ *                 line_start_1 = line_start
+ *                 children_1 = []
+ *                 while True: # case             # <<<<<<<<<<<<<<
+ *                     offset_1, line_start_1 = self.parse_json_object(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+ *                     if offset_1 == -1: break
+ */
+      while (1) {
+
+        /* "JSONParser.pyx":411
+ *                 children_1 = []
+ *                 while True: # case
+ *                     offset_1, line_start_1 = self.parse_json_object(buf, offset_1, line_start_1, indent, buf_eof, children_1)             # <<<<<<<<<<<<<<
+ *                     if offset_1 == -1: break
+ * 
+ */
+        __pyx_t_9 = __Pyx_PyInt_As_int(__pyx_v_offset_1); if (unlikely((__pyx_t_9 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 411, __pyx_L1_error)
+        __pyx_t_12 = ((struct __pyx_vtabstruct_10JSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_json_object(__pyx_v_self, __pyx_v_buf, __pyx_t_9, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_1);
+        __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_12.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 411, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_1);
+        __pyx_t_9 = __pyx_t_12.f1;
+        __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_t_1);
+        __pyx_t_1 = 0;
+        __pyx_v_line_start_1 = __pyx_t_9;
+
+        /* "JSONParser.pyx":412
+ *                 while True: # case
+ *                     offset_1, line_start_1 = self.parse_json_object(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+ *                     if offset_1 == -1: break             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+        __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_1, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 412, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_1);
+        __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 412, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+        if (__pyx_t_3) {
+          goto __pyx_L86_break;
+        }
+
+        /* "JSONParser.pyx":416
+ * 
+ * 
+ *                     break             # <<<<<<<<<<<<<<
+ *                 if offset_1 != -1:
+ *                     offset = offset_1
+ */
+        goto __pyx_L86_break;
+      }
+      __pyx_L86_break:;
+
+      /* "JSONParser.pyx":417
+ * 
+ *                     break
+ *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
+ *                     offset = offset_1
+ *                     line_start = line_start_1
+ */
+      __pyx_t_1 = __Pyx_PyInt_NeObjC(__pyx_v_offset_1, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 417, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 417, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      if (__pyx_t_3) {
+
+        /* "JSONParser.pyx":418
+ *                     break
+ *                 if offset_1 != -1:
+ *                     offset = offset_1             # <<<<<<<<<<<<<<
+ *                     line_start = line_start_1
+ *                     children.extend(children_1)
+ */
+        __pyx_t_9 = __Pyx_PyInt_As_int(__pyx_v_offset_1); if (unlikely((__pyx_t_9 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 418, __pyx_L1_error)
+        __pyx_v_offset = __pyx_t_9;
+
+        /* "JSONParser.pyx":419
+ *                 if offset_1 != -1:
+ *                     offset = offset_1
+ *                     line_start = line_start_1             # <<<<<<<<<<<<<<
+ *                     children.extend(children_1)
+ *                     break
+ */
+        __pyx_v_line_start = __pyx_v_line_start_1;
+
+        /* "JSONParser.pyx":420
+ *                     offset = offset_1
+ *                     line_start = line_start_1
+ *                     children.extend(children_1)             # <<<<<<<<<<<<<<
+ *                     break
+ *                 # end case
+ */
+        if (unlikely(__pyx_v_children == Py_None)) {
+          PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "extend");
+          __PYX_ERR(0, 420, __pyx_L1_error)
+        }
+        __pyx_t_11 = __Pyx_PyList_Extend(__pyx_v_children, __pyx_v_children_1); if (unlikely(__pyx_t_11 == ((int)-1))) __PYX_ERR(0, 420, __pyx_L1_error)
+
+        /* "JSONParser.pyx":421
+ *                     line_start = line_start_1
+ *                     children.extend(children_1)
+ *                     break             # <<<<<<<<<<<<<<
+ *                 # end case
+ *                 offset = -1 # no more choices
+ */
+        goto __pyx_L6_break;
+
+        /* "JSONParser.pyx":417
+ * 
+ *                     break
+ *                 if offset_1 != -1:             # <<<<<<<<<<<<<<
+ *                     offset = offset_1
+ *                     line_start = line_start_1
+ */
+      }
+
+      /* "JSONParser.pyx":423
  *                     break
  *                 # end case
  *                 offset = -1 # no more choices             # <<<<<<<<<<<<<<
@@ -4035,7 +6988,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_value(s
  */
       __pyx_v_offset = -1;
 
-      /* "JSONParser.pyx":201
+      /* "JSONParser.pyx":424
  *                 # end case
  *                 offset = -1 # no more choices
  *                 break # end choice             # <<<<<<<<<<<<<<
@@ -4046,17 +6999,17 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_value(s
     }
     __pyx_L6_break:;
 
-    /* "JSONParser.pyx":202
+    /* "JSONParser.pyx":425
  *                 offset = -1 # no more choices
  *                 break # end choice
  *             if offset == -1:             # <<<<<<<<<<<<<<
  *                 break
  * 
  */
-    __pyx_t_5 = ((__pyx_v_offset == -1L) != 0);
-    if (__pyx_t_5) {
+    __pyx_t_3 = ((__pyx_v_offset == -1L) != 0);
+    if (__pyx_t_3) {
 
-      /* "JSONParser.pyx":203
+      /* "JSONParser.pyx":426
  *                 break # end choice
  *             if offset == -1:
  *                 break             # <<<<<<<<<<<<<<
@@ -4065,7 +7018,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_value(s
  */
       goto __pyx_L4_break;
 
-      /* "JSONParser.pyx":202
+      /* "JSONParser.pyx":425
  *                 offset = -1 # no more choices
  *                 break # end choice
  *             if offset == -1:             # <<<<<<<<<<<<<<
@@ -4074,7 +7027,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_value(s
  */
     }
 
-    /* "JSONParser.pyx":205
+    /* "JSONParser.pyx":428
  *                 break
  * 
  *             break             # <<<<<<<<<<<<<<
@@ -4085,523 +7038,22 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_value(s
   }
   __pyx_L4_break:;
 
-  /* "JSONParser.pyx":206
+  /* "JSONParser.pyx":429
  * 
  *             break
  *         return offset, line_start             # <<<<<<<<<<<<<<
  * 
- *     cdef (int, int) parse_json_true(self, str buf, int offset, int line_start, int indent, list children):
+ *     cdef (int, int) parse_json_string(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):
  */
-  __pyx_t_2.f0 = __pyx_v_offset;
-  __pyx_t_2.f1 = __pyx_v_line_start;
-  __pyx_r = __pyx_t_2;
+  __pyx_t_12.f0 = __pyx_v_offset;
+  __pyx_t_12.f1 = __pyx_v_line_start;
+  __pyx_r = __pyx_t_12;
   goto __pyx_L0;
 
-  /* "JSONParser.pyx":90
+  /* "JSONParser.pyx":89
  *         return offset, line_start
  * 
- *     cdef (int, int) parse_json_value(self, str buf, int offset, int line_start, int indent, list children):             # <<<<<<<<<<<<<<
- *         cdef int count
- *         cdef Py_UNICODE chr
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_WriteUnraisable("JSONParser.Parser.parse_json_value", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
-  __Pyx_pretend_to_initialize(&__pyx_r);
-  __pyx_L0:;
-  __Pyx_XDECREF(__pyx_v_children_1);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "JSONParser.pyx":208
- *         return offset, line_start
- * 
- *     cdef (int, int) parse_json_true(self, str buf, int offset, int line_start, int indent, list children):             # <<<<<<<<<<<<<<
- *         cdef int count
- *         cdef Py_UNICODE chr
- */
-
-static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_true(struct __pyx_obj_10JSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, CYTHON_UNUSED int __pyx_v_indent, PyObject *__pyx_v_children) {
-  PyObject *__pyx_v_offset_1 = NULL;
-  PyObject *__pyx_v_children_1 = NULL;
-  __pyx_ctuple_int__and_int __pyx_r;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  Py_ssize_t __pyx_t_2;
-  int __pyx_t_3;
-  Py_ssize_t __pyx_t_4;
-  Py_ssize_t __pyx_t_5;
-  int __pyx_t_6;
-  PyObject *__pyx_t_7 = NULL;
-  PyObject *__pyx_t_8 = NULL;
-  PyObject *__pyx_t_9 = NULL;
-  int __pyx_t_10;
-  PyObject *__pyx_t_11 = NULL;
-  int __pyx_t_12;
-  __pyx_ctuple_int__and_int __pyx_t_13;
-  __Pyx_RefNannySetupContext("parse_json_true", 0);
-
-  /* "JSONParser.pyx":211
- *         cdef int count
- *         cdef Py_UNICODE chr
- *         while True: # note: return at end of loop             # <<<<<<<<<<<<<<
- *             offset_1 = offset
- *             children_1 = []
- */
-  while (1) {
-
-    /* "JSONParser.pyx":212
- *         cdef Py_UNICODE chr
- *         while True: # note: return at end of loop
- *             offset_1 = offset             # <<<<<<<<<<<<<<
- *             children_1 = []
- *             while True: # start capture
- */
-    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 212, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_v_offset_1 = __pyx_t_1;
-    __pyx_t_1 = 0;
-
-    /* "JSONParser.pyx":213
- *         while True: # note: return at end of loop
- *             offset_1 = offset
- *             children_1 = []             # <<<<<<<<<<<<<<
- *             while True: # start capture
- *                 if buf[offset_1:offset_1+4] == 'true':
- */
-    __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 213, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_v_children_1 = ((PyObject*)__pyx_t_1);
-    __pyx_t_1 = 0;
-
-    /* "JSONParser.pyx":214
- *             offset_1 = offset
- *             children_1 = []
- *             while True: # start capture             # <<<<<<<<<<<<<<
- *                 if buf[offset_1:offset_1+4] == 'true':
- *                     offset_1 += 4
- */
-    while (1) {
-
-      /* "JSONParser.pyx":215
- *             children_1 = []
- *             while True: # start capture
- *                 if buf[offset_1:offset_1+4] == 'true':             # <<<<<<<<<<<<<<
- *                     offset_1 += 4
- *                 else:
- */
-      if (unlikely(__pyx_v_buf == Py_None)) {
-        PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-        __PYX_ERR(0, 215, __pyx_L1_error)
-      }
-      __Pyx_INCREF(__pyx_v_offset_1);
-      __pyx_t_1 = __pyx_v_offset_1;
-      __pyx_t_3 = (__pyx_t_1 == Py_None);
-      if (__pyx_t_3) {
-        __pyx_t_2 = 0;
-      } else {
-        __pyx_t_4 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_4 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 215, __pyx_L1_error)
-        __pyx_t_2 = __pyx_t_4;
-      }
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_1, __pyx_int_4, 4, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 215, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_3 = (__pyx_t_1 == Py_None);
-      if (__pyx_t_3) {
-        __pyx_t_4 = PY_SSIZE_T_MAX;
-      } else {
-        __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 215, __pyx_L1_error)
-        __pyx_t_4 = __pyx_t_5;
-      }
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 215, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_n_u_true, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 215, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_6 = (__pyx_t_3 != 0);
-      if (__pyx_t_6) {
-
-        /* "JSONParser.pyx":216
- *             while True: # start capture
- *                 if buf[offset_1:offset_1+4] == 'true':
- *                     offset_1 += 4             # <<<<<<<<<<<<<<
- *                 else:
- *                     offset_1 = -1
- */
-        __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_1, __pyx_int_4, 4, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 216, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_t_1);
-        __pyx_t_1 = 0;
-
-        /* "JSONParser.pyx":215
- *             children_1 = []
- *             while True: # start capture
- *                 if buf[offset_1:offset_1+4] == 'true':             # <<<<<<<<<<<<<<
- *                     offset_1 += 4
- *                 else:
- */
-        goto __pyx_L7;
-      }
-
-      /* "JSONParser.pyx":218
- *                     offset_1 += 4
- *                 else:
- *                     offset_1 = -1             # <<<<<<<<<<<<<<
- *                     break
- * 
- */
-      /*else*/ {
-        __Pyx_INCREF(__pyx_int_neg_1);
-        __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_int_neg_1);
-
-        /* "JSONParser.pyx":219
- *                 else:
- *                     offset_1 = -1
- *                     break             # <<<<<<<<<<<<<<
- * 
- *                 break
- */
-        goto __pyx_L6_break;
-      }
-      __pyx_L7:;
-
-      /* "JSONParser.pyx":221
- *                     break
- * 
- *                 break             # <<<<<<<<<<<<<<
- *             if offset_1 == -1:
- *                 offset = -1
- */
-      goto __pyx_L6_break;
-    }
-    __pyx_L6_break:;
-
-    /* "JSONParser.pyx":222
- * 
- *                 break
- *             if offset_1 == -1:             # <<<<<<<<<<<<<<
- *                 offset = -1
- *                 break
- */
-    __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_1, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 222, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 222, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    if (__pyx_t_6) {
-
-      /* "JSONParser.pyx":223
- *                 break
- *             if offset_1 == -1:
- *                 offset = -1             # <<<<<<<<<<<<<<
- *                 break
- *             if self.builder is not None:
- */
-      __pyx_v_offset = -1;
-
-      /* "JSONParser.pyx":224
- *             if offset_1 == -1:
- *                 offset = -1
- *                 break             # <<<<<<<<<<<<<<
- *             if self.builder is not None:
- *                 children.append(self.ParseNode('bool', offset, offset_1, children_1, None))
- */
-      goto __pyx_L4_break;
-
-      /* "JSONParser.pyx":222
- * 
- *                 break
- *             if offset_1 == -1:             # <<<<<<<<<<<<<<
- *                 offset = -1
- *                 break
- */
-    }
-
-    /* "JSONParser.pyx":225
- *                 offset = -1
- *                 break
- *             if self.builder is not None:             # <<<<<<<<<<<<<<
- *                 children.append(self.ParseNode('bool', offset, offset_1, children_1, None))
- *             else:
- */
-    __pyx_t_6 = (__pyx_v_self->builder != Py_None);
-    __pyx_t_3 = (__pyx_t_6 != 0);
-    if (__pyx_t_3) {
-
-      /* "JSONParser.pyx":226
- *                 break
- *             if self.builder is not None:
- *                 children.append(self.ParseNode('bool', offset, offset_1, children_1, None))             # <<<<<<<<<<<<<<
- *             else:
- *                 children.append(ParseNode('bool', offset, offset_1, children_1, None))
- */
-      if (unlikely(__pyx_v_children == Py_None)) {
-        PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
-        __PYX_ERR(0, 226, __pyx_L1_error)
-      }
-      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 226, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 226, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_8);
-      __pyx_t_9 = NULL;
-      __pyx_t_10 = 0;
-      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_7))) {
-        __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_7);
-        if (likely(__pyx_t_9)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
-          __Pyx_INCREF(__pyx_t_9);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_7, function);
-          __pyx_t_10 = 1;
-        }
-      }
-      #if CYTHON_FAST_PYCALL
-      if (PyFunction_Check(__pyx_t_7)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_9, __pyx_n_u_bool, __pyx_t_8, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_10, 5+__pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 226, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      } else
-      #endif
-      #if CYTHON_FAST_PYCCALL
-      if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_9, __pyx_n_u_bool, __pyx_t_8, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_10, 5+__pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 226, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      } else
-      #endif
-      {
-        __pyx_t_11 = PyTuple_New(5+__pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 226, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_11);
-        if (__pyx_t_9) {
-          __Pyx_GIVEREF(__pyx_t_9); PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_9); __pyx_t_9 = NULL;
-        }
-        __Pyx_INCREF(__pyx_n_u_bool);
-        __Pyx_GIVEREF(__pyx_n_u_bool);
-        PyTuple_SET_ITEM(__pyx_t_11, 0+__pyx_t_10, __pyx_n_u_bool);
-        __Pyx_GIVEREF(__pyx_t_8);
-        PyTuple_SET_ITEM(__pyx_t_11, 1+__pyx_t_10, __pyx_t_8);
-        __Pyx_INCREF(__pyx_v_offset_1);
-        __Pyx_GIVEREF(__pyx_v_offset_1);
-        PyTuple_SET_ITEM(__pyx_t_11, 2+__pyx_t_10, __pyx_v_offset_1);
-        __Pyx_INCREF(__pyx_v_children_1);
-        __Pyx_GIVEREF(__pyx_v_children_1);
-        PyTuple_SET_ITEM(__pyx_t_11, 3+__pyx_t_10, __pyx_v_children_1);
-        __Pyx_INCREF(Py_None);
-        __Pyx_GIVEREF(Py_None);
-        PyTuple_SET_ITEM(__pyx_t_11, 4+__pyx_t_10, Py_None);
-        __pyx_t_8 = 0;
-        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_11, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 226, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-      }
-      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_12 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 226, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-      /* "JSONParser.pyx":225
- *                 offset = -1
- *                 break
- *             if self.builder is not None:             # <<<<<<<<<<<<<<
- *                 children.append(self.ParseNode('bool', offset, offset_1, children_1, None))
- *             else:
- */
-      goto __pyx_L9;
-    }
-
-    /* "JSONParser.pyx":228
- *                 children.append(self.ParseNode('bool', offset, offset_1, children_1, None))
- *             else:
- *                 children.append(ParseNode('bool', offset, offset_1, children_1, None))             # <<<<<<<<<<<<<<
- *                 children.append(ParseNode('bool', offset, offset_1, children_1, None))
- *             offset = offset_1
- */
-    /*else*/ {
-      if (unlikely(__pyx_v_children == Py_None)) {
-        PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
-        __PYX_ERR(0, 228, __pyx_L1_error)
-      }
-      __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 228, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 228, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_11);
-      __pyx_t_8 = NULL;
-      __pyx_t_10 = 0;
-      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_7))) {
-        __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_7);
-        if (likely(__pyx_t_8)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
-          __Pyx_INCREF(__pyx_t_8);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_7, function);
-          __pyx_t_10 = 1;
-        }
-      }
-      #if CYTHON_FAST_PYCALL
-      if (PyFunction_Check(__pyx_t_7)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_8, __pyx_n_u_bool, __pyx_t_11, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_10, 5+__pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 228, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-      } else
-      #endif
-      #if CYTHON_FAST_PYCCALL
-      if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_8, __pyx_n_u_bool, __pyx_t_11, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_10, 5+__pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 228, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-      } else
-      #endif
-      {
-        __pyx_t_9 = PyTuple_New(5+__pyx_t_10); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 228, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_9);
-        if (__pyx_t_8) {
-          __Pyx_GIVEREF(__pyx_t_8); PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_8); __pyx_t_8 = NULL;
-        }
-        __Pyx_INCREF(__pyx_n_u_bool);
-        __Pyx_GIVEREF(__pyx_n_u_bool);
-        PyTuple_SET_ITEM(__pyx_t_9, 0+__pyx_t_10, __pyx_n_u_bool);
-        __Pyx_GIVEREF(__pyx_t_11);
-        PyTuple_SET_ITEM(__pyx_t_9, 1+__pyx_t_10, __pyx_t_11);
-        __Pyx_INCREF(__pyx_v_offset_1);
-        __Pyx_GIVEREF(__pyx_v_offset_1);
-        PyTuple_SET_ITEM(__pyx_t_9, 2+__pyx_t_10, __pyx_v_offset_1);
-        __Pyx_INCREF(__pyx_v_children_1);
-        __Pyx_GIVEREF(__pyx_v_children_1);
-        PyTuple_SET_ITEM(__pyx_t_9, 3+__pyx_t_10, __pyx_v_children_1);
-        __Pyx_INCREF(Py_None);
-        __Pyx_GIVEREF(Py_None);
-        PyTuple_SET_ITEM(__pyx_t_9, 4+__pyx_t_10, Py_None);
-        __pyx_t_11 = 0;
-        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_9, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 228, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-      }
-      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_12 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 228, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-      /* "JSONParser.pyx":229
- *             else:
- *                 children.append(ParseNode('bool', offset, offset_1, children_1, None))
- *                 children.append(ParseNode('bool', offset, offset_1, children_1, None))             # <<<<<<<<<<<<<<
- *             offset = offset_1
- * 
- */
-      if (unlikely(__pyx_v_children == Py_None)) {
-        PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
-        __PYX_ERR(0, 229, __pyx_L1_error)
-      }
-      __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 229, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 229, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_9);
-      __pyx_t_11 = NULL;
-      __pyx_t_10 = 0;
-      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_7))) {
-        __pyx_t_11 = PyMethod_GET_SELF(__pyx_t_7);
-        if (likely(__pyx_t_11)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
-          __Pyx_INCREF(__pyx_t_11);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_7, function);
-          __pyx_t_10 = 1;
-        }
-      }
-      #if CYTHON_FAST_PYCALL
-      if (PyFunction_Check(__pyx_t_7)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_11, __pyx_n_u_bool, __pyx_t_9, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_10, 5+__pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 229, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-      } else
-      #endif
-      #if CYTHON_FAST_PYCCALL
-      if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_11, __pyx_n_u_bool, __pyx_t_9, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_10, 5+__pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 229, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-      } else
-      #endif
-      {
-        __pyx_t_8 = PyTuple_New(5+__pyx_t_10); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 229, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_8);
-        if (__pyx_t_11) {
-          __Pyx_GIVEREF(__pyx_t_11); PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_11); __pyx_t_11 = NULL;
-        }
-        __Pyx_INCREF(__pyx_n_u_bool);
-        __Pyx_GIVEREF(__pyx_n_u_bool);
-        PyTuple_SET_ITEM(__pyx_t_8, 0+__pyx_t_10, __pyx_n_u_bool);
-        __Pyx_GIVEREF(__pyx_t_9);
-        PyTuple_SET_ITEM(__pyx_t_8, 1+__pyx_t_10, __pyx_t_9);
-        __Pyx_INCREF(__pyx_v_offset_1);
-        __Pyx_GIVEREF(__pyx_v_offset_1);
-        PyTuple_SET_ITEM(__pyx_t_8, 2+__pyx_t_10, __pyx_v_offset_1);
-        __Pyx_INCREF(__pyx_v_children_1);
-        __Pyx_GIVEREF(__pyx_v_children_1);
-        PyTuple_SET_ITEM(__pyx_t_8, 3+__pyx_t_10, __pyx_v_children_1);
-        __Pyx_INCREF(Py_None);
-        __Pyx_GIVEREF(Py_None);
-        PyTuple_SET_ITEM(__pyx_t_8, 4+__pyx_t_10, Py_None);
-        __pyx_t_9 = 0;
-        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_8, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 229, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      }
-      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_12 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 229, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    }
-    __pyx_L9:;
-
-    /* "JSONParser.pyx":230
- *                 children.append(ParseNode('bool', offset, offset_1, children_1, None))
- *                 children.append(ParseNode('bool', offset, offset_1, children_1, None))
- *             offset = offset_1             # <<<<<<<<<<<<<<
- * 
- *             break
- */
-    __pyx_t_10 = __Pyx_PyInt_As_int(__pyx_v_offset_1); if (unlikely((__pyx_t_10 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 230, __pyx_L1_error)
-    __pyx_v_offset = __pyx_t_10;
-
-    /* "JSONParser.pyx":232
- *             offset = offset_1
- * 
- *             break             # <<<<<<<<<<<<<<
- *         return offset, line_start
- * 
- */
-    goto __pyx_L4_break;
-  }
-  __pyx_L4_break:;
-
-  /* "JSONParser.pyx":233
- * 
- *             break
- *         return offset, line_start             # <<<<<<<<<<<<<<
- * 
- *     cdef (int, int) parse_json_false(self, str buf, int offset, int line_start, int indent, list children):
- */
-  __pyx_t_13.f0 = __pyx_v_offset;
-  __pyx_t_13.f1 = __pyx_v_line_start;
-  __pyx_r = __pyx_t_13;
-  goto __pyx_L0;
-
-  /* "JSONParser.pyx":208
- *         return offset, line_start
- * 
- *     cdef (int, int) parse_json_true(self, str buf, int offset, int line_start, int indent, list children):             # <<<<<<<<<<<<<<
+ *     cdef (int, int) parse_json_value(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
  *         cdef Py_UNICODE chr
  */
@@ -4611,3289 +7063,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_true(st
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_7);
   __Pyx_XDECREF(__pyx_t_8);
-  __Pyx_XDECREF(__pyx_t_9);
-  __Pyx_XDECREF(__pyx_t_11);
-  __Pyx_WriteUnraisable("JSONParser.Parser.parse_json_true", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
-  __Pyx_pretend_to_initialize(&__pyx_r);
-  __pyx_L0:;
-  __Pyx_XDECREF(__pyx_v_offset_1);
-  __Pyx_XDECREF(__pyx_v_children_1);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "JSONParser.pyx":235
- *         return offset, line_start
- * 
- *     cdef (int, int) parse_json_false(self, str buf, int offset, int line_start, int indent, list children):             # <<<<<<<<<<<<<<
- *         cdef int count
- *         cdef Py_UNICODE chr
- */
-
-static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_false(struct __pyx_obj_10JSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, CYTHON_UNUSED int __pyx_v_indent, PyObject *__pyx_v_children) {
-  PyObject *__pyx_v_offset_1 = NULL;
-  PyObject *__pyx_v_children_1 = NULL;
-  __pyx_ctuple_int__and_int __pyx_r;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  Py_ssize_t __pyx_t_2;
-  int __pyx_t_3;
-  Py_ssize_t __pyx_t_4;
-  Py_ssize_t __pyx_t_5;
-  int __pyx_t_6;
-  PyObject *__pyx_t_7 = NULL;
-  PyObject *__pyx_t_8 = NULL;
-  PyObject *__pyx_t_9 = NULL;
-  int __pyx_t_10;
-  PyObject *__pyx_t_11 = NULL;
-  int __pyx_t_12;
-  __pyx_ctuple_int__and_int __pyx_t_13;
-  __Pyx_RefNannySetupContext("parse_json_false", 0);
-
-  /* "JSONParser.pyx":238
- *         cdef int count
- *         cdef Py_UNICODE chr
- *         while True: # note: return at end of loop             # <<<<<<<<<<<<<<
- *             offset_1 = offset
- *             children_1 = []
- */
-  while (1) {
-
-    /* "JSONParser.pyx":239
- *         cdef Py_UNICODE chr
- *         while True: # note: return at end of loop
- *             offset_1 = offset             # <<<<<<<<<<<<<<
- *             children_1 = []
- *             while True: # start capture
- */
-    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 239, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_v_offset_1 = __pyx_t_1;
-    __pyx_t_1 = 0;
-
-    /* "JSONParser.pyx":240
- *         while True: # note: return at end of loop
- *             offset_1 = offset
- *             children_1 = []             # <<<<<<<<<<<<<<
- *             while True: # start capture
- *                 if buf[offset_1:offset_1+5] == 'false':
- */
-    __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 240, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_v_children_1 = ((PyObject*)__pyx_t_1);
-    __pyx_t_1 = 0;
-
-    /* "JSONParser.pyx":241
- *             offset_1 = offset
- *             children_1 = []
- *             while True: # start capture             # <<<<<<<<<<<<<<
- *                 if buf[offset_1:offset_1+5] == 'false':
- *                     offset_1 += 5
- */
-    while (1) {
-
-      /* "JSONParser.pyx":242
- *             children_1 = []
- *             while True: # start capture
- *                 if buf[offset_1:offset_1+5] == 'false':             # <<<<<<<<<<<<<<
- *                     offset_1 += 5
- *                 else:
- */
-      if (unlikely(__pyx_v_buf == Py_None)) {
-        PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-        __PYX_ERR(0, 242, __pyx_L1_error)
-      }
-      __Pyx_INCREF(__pyx_v_offset_1);
-      __pyx_t_1 = __pyx_v_offset_1;
-      __pyx_t_3 = (__pyx_t_1 == Py_None);
-      if (__pyx_t_3) {
-        __pyx_t_2 = 0;
-      } else {
-        __pyx_t_4 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_4 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 242, __pyx_L1_error)
-        __pyx_t_2 = __pyx_t_4;
-      }
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_1, __pyx_int_5, 5, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 242, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_3 = (__pyx_t_1 == Py_None);
-      if (__pyx_t_3) {
-        __pyx_t_4 = PY_SSIZE_T_MAX;
-      } else {
-        __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 242, __pyx_L1_error)
-        __pyx_t_4 = __pyx_t_5;
-      }
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 242, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_n_u_false, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 242, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_6 = (__pyx_t_3 != 0);
-      if (__pyx_t_6) {
-
-        /* "JSONParser.pyx":243
- *             while True: # start capture
- *                 if buf[offset_1:offset_1+5] == 'false':
- *                     offset_1 += 5             # <<<<<<<<<<<<<<
- *                 else:
- *                     offset_1 = -1
- */
-        __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_1, __pyx_int_5, 5, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 243, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_t_1);
-        __pyx_t_1 = 0;
-
-        /* "JSONParser.pyx":242
- *             children_1 = []
- *             while True: # start capture
- *                 if buf[offset_1:offset_1+5] == 'false':             # <<<<<<<<<<<<<<
- *                     offset_1 += 5
- *                 else:
- */
-        goto __pyx_L7;
-      }
-
-      /* "JSONParser.pyx":245
- *                     offset_1 += 5
- *                 else:
- *                     offset_1 = -1             # <<<<<<<<<<<<<<
- *                     break
- * 
- */
-      /*else*/ {
-        __Pyx_INCREF(__pyx_int_neg_1);
-        __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_int_neg_1);
-
-        /* "JSONParser.pyx":246
- *                 else:
- *                     offset_1 = -1
- *                     break             # <<<<<<<<<<<<<<
- * 
- *                 break
- */
-        goto __pyx_L6_break;
-      }
-      __pyx_L7:;
-
-      /* "JSONParser.pyx":248
- *                     break
- * 
- *                 break             # <<<<<<<<<<<<<<
- *             if offset_1 == -1:
- *                 offset = -1
- */
-      goto __pyx_L6_break;
-    }
-    __pyx_L6_break:;
-
-    /* "JSONParser.pyx":249
- * 
- *                 break
- *             if offset_1 == -1:             # <<<<<<<<<<<<<<
- *                 offset = -1
- *                 break
- */
-    __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_1, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 249, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 249, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    if (__pyx_t_6) {
-
-      /* "JSONParser.pyx":250
- *                 break
- *             if offset_1 == -1:
- *                 offset = -1             # <<<<<<<<<<<<<<
- *                 break
- *             if self.builder is not None:
- */
-      __pyx_v_offset = -1;
-
-      /* "JSONParser.pyx":251
- *             if offset_1 == -1:
- *                 offset = -1
- *                 break             # <<<<<<<<<<<<<<
- *             if self.builder is not None:
- *                 children.append(self.ParseNode('bool', offset, offset_1, children_1, None))
- */
-      goto __pyx_L4_break;
-
-      /* "JSONParser.pyx":249
- * 
- *                 break
- *             if offset_1 == -1:             # <<<<<<<<<<<<<<
- *                 offset = -1
- *                 break
- */
-    }
-
-    /* "JSONParser.pyx":252
- *                 offset = -1
- *                 break
- *             if self.builder is not None:             # <<<<<<<<<<<<<<
- *                 children.append(self.ParseNode('bool', offset, offset_1, children_1, None))
- *             else:
- */
-    __pyx_t_6 = (__pyx_v_self->builder != Py_None);
-    __pyx_t_3 = (__pyx_t_6 != 0);
-    if (__pyx_t_3) {
-
-      /* "JSONParser.pyx":253
- *                 break
- *             if self.builder is not None:
- *                 children.append(self.ParseNode('bool', offset, offset_1, children_1, None))             # <<<<<<<<<<<<<<
- *             else:
- *                 children.append(ParseNode('bool', offset, offset_1, children_1, None))
- */
-      if (unlikely(__pyx_v_children == Py_None)) {
-        PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
-        __PYX_ERR(0, 253, __pyx_L1_error)
-      }
-      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 253, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 253, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_8);
-      __pyx_t_9 = NULL;
-      __pyx_t_10 = 0;
-      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_7))) {
-        __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_7);
-        if (likely(__pyx_t_9)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
-          __Pyx_INCREF(__pyx_t_9);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_7, function);
-          __pyx_t_10 = 1;
-        }
-      }
-      #if CYTHON_FAST_PYCALL
-      if (PyFunction_Check(__pyx_t_7)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_9, __pyx_n_u_bool, __pyx_t_8, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_10, 5+__pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 253, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      } else
-      #endif
-      #if CYTHON_FAST_PYCCALL
-      if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_9, __pyx_n_u_bool, __pyx_t_8, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_10, 5+__pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 253, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      } else
-      #endif
-      {
-        __pyx_t_11 = PyTuple_New(5+__pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 253, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_11);
-        if (__pyx_t_9) {
-          __Pyx_GIVEREF(__pyx_t_9); PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_9); __pyx_t_9 = NULL;
-        }
-        __Pyx_INCREF(__pyx_n_u_bool);
-        __Pyx_GIVEREF(__pyx_n_u_bool);
-        PyTuple_SET_ITEM(__pyx_t_11, 0+__pyx_t_10, __pyx_n_u_bool);
-        __Pyx_GIVEREF(__pyx_t_8);
-        PyTuple_SET_ITEM(__pyx_t_11, 1+__pyx_t_10, __pyx_t_8);
-        __Pyx_INCREF(__pyx_v_offset_1);
-        __Pyx_GIVEREF(__pyx_v_offset_1);
-        PyTuple_SET_ITEM(__pyx_t_11, 2+__pyx_t_10, __pyx_v_offset_1);
-        __Pyx_INCREF(__pyx_v_children_1);
-        __Pyx_GIVEREF(__pyx_v_children_1);
-        PyTuple_SET_ITEM(__pyx_t_11, 3+__pyx_t_10, __pyx_v_children_1);
-        __Pyx_INCREF(Py_None);
-        __Pyx_GIVEREF(Py_None);
-        PyTuple_SET_ITEM(__pyx_t_11, 4+__pyx_t_10, Py_None);
-        __pyx_t_8 = 0;
-        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_11, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 253, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-      }
-      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_12 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 253, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-      /* "JSONParser.pyx":252
- *                 offset = -1
- *                 break
- *             if self.builder is not None:             # <<<<<<<<<<<<<<
- *                 children.append(self.ParseNode('bool', offset, offset_1, children_1, None))
- *             else:
- */
-      goto __pyx_L9;
-    }
-
-    /* "JSONParser.pyx":255
- *                 children.append(self.ParseNode('bool', offset, offset_1, children_1, None))
- *             else:
- *                 children.append(ParseNode('bool', offset, offset_1, children_1, None))             # <<<<<<<<<<<<<<
- *                 children.append(ParseNode('bool', offset, offset_1, children_1, None))
- *             offset = offset_1
- */
-    /*else*/ {
-      if (unlikely(__pyx_v_children == Py_None)) {
-        PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
-        __PYX_ERR(0, 255, __pyx_L1_error)
-      }
-      __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 255, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 255, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_11);
-      __pyx_t_8 = NULL;
-      __pyx_t_10 = 0;
-      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_7))) {
-        __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_7);
-        if (likely(__pyx_t_8)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
-          __Pyx_INCREF(__pyx_t_8);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_7, function);
-          __pyx_t_10 = 1;
-        }
-      }
-      #if CYTHON_FAST_PYCALL
-      if (PyFunction_Check(__pyx_t_7)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_8, __pyx_n_u_bool, __pyx_t_11, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_10, 5+__pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 255, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-      } else
-      #endif
-      #if CYTHON_FAST_PYCCALL
-      if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_8, __pyx_n_u_bool, __pyx_t_11, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_10, 5+__pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 255, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-      } else
-      #endif
-      {
-        __pyx_t_9 = PyTuple_New(5+__pyx_t_10); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 255, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_9);
-        if (__pyx_t_8) {
-          __Pyx_GIVEREF(__pyx_t_8); PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_8); __pyx_t_8 = NULL;
-        }
-        __Pyx_INCREF(__pyx_n_u_bool);
-        __Pyx_GIVEREF(__pyx_n_u_bool);
-        PyTuple_SET_ITEM(__pyx_t_9, 0+__pyx_t_10, __pyx_n_u_bool);
-        __Pyx_GIVEREF(__pyx_t_11);
-        PyTuple_SET_ITEM(__pyx_t_9, 1+__pyx_t_10, __pyx_t_11);
-        __Pyx_INCREF(__pyx_v_offset_1);
-        __Pyx_GIVEREF(__pyx_v_offset_1);
-        PyTuple_SET_ITEM(__pyx_t_9, 2+__pyx_t_10, __pyx_v_offset_1);
-        __Pyx_INCREF(__pyx_v_children_1);
-        __Pyx_GIVEREF(__pyx_v_children_1);
-        PyTuple_SET_ITEM(__pyx_t_9, 3+__pyx_t_10, __pyx_v_children_1);
-        __Pyx_INCREF(Py_None);
-        __Pyx_GIVEREF(Py_None);
-        PyTuple_SET_ITEM(__pyx_t_9, 4+__pyx_t_10, Py_None);
-        __pyx_t_11 = 0;
-        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_9, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 255, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-      }
-      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_12 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 255, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-      /* "JSONParser.pyx":256
- *             else:
- *                 children.append(ParseNode('bool', offset, offset_1, children_1, None))
- *                 children.append(ParseNode('bool', offset, offset_1, children_1, None))             # <<<<<<<<<<<<<<
- *             offset = offset_1
- * 
- */
-      if (unlikely(__pyx_v_children == Py_None)) {
-        PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
-        __PYX_ERR(0, 256, __pyx_L1_error)
-      }
-      __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 256, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 256, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_9);
-      __pyx_t_11 = NULL;
-      __pyx_t_10 = 0;
-      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_7))) {
-        __pyx_t_11 = PyMethod_GET_SELF(__pyx_t_7);
-        if (likely(__pyx_t_11)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
-          __Pyx_INCREF(__pyx_t_11);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_7, function);
-          __pyx_t_10 = 1;
-        }
-      }
-      #if CYTHON_FAST_PYCALL
-      if (PyFunction_Check(__pyx_t_7)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_11, __pyx_n_u_bool, __pyx_t_9, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_10, 5+__pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 256, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-      } else
-      #endif
-      #if CYTHON_FAST_PYCCALL
-      if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_11, __pyx_n_u_bool, __pyx_t_9, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_10, 5+__pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 256, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-      } else
-      #endif
-      {
-        __pyx_t_8 = PyTuple_New(5+__pyx_t_10); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 256, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_8);
-        if (__pyx_t_11) {
-          __Pyx_GIVEREF(__pyx_t_11); PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_11); __pyx_t_11 = NULL;
-        }
-        __Pyx_INCREF(__pyx_n_u_bool);
-        __Pyx_GIVEREF(__pyx_n_u_bool);
-        PyTuple_SET_ITEM(__pyx_t_8, 0+__pyx_t_10, __pyx_n_u_bool);
-        __Pyx_GIVEREF(__pyx_t_9);
-        PyTuple_SET_ITEM(__pyx_t_8, 1+__pyx_t_10, __pyx_t_9);
-        __Pyx_INCREF(__pyx_v_offset_1);
-        __Pyx_GIVEREF(__pyx_v_offset_1);
-        PyTuple_SET_ITEM(__pyx_t_8, 2+__pyx_t_10, __pyx_v_offset_1);
-        __Pyx_INCREF(__pyx_v_children_1);
-        __Pyx_GIVEREF(__pyx_v_children_1);
-        PyTuple_SET_ITEM(__pyx_t_8, 3+__pyx_t_10, __pyx_v_children_1);
-        __Pyx_INCREF(Py_None);
-        __Pyx_GIVEREF(Py_None);
-        PyTuple_SET_ITEM(__pyx_t_8, 4+__pyx_t_10, Py_None);
-        __pyx_t_9 = 0;
-        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_8, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 256, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      }
-      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_12 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 256, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    }
-    __pyx_L9:;
-
-    /* "JSONParser.pyx":257
- *                 children.append(ParseNode('bool', offset, offset_1, children_1, None))
- *                 children.append(ParseNode('bool', offset, offset_1, children_1, None))
- *             offset = offset_1             # <<<<<<<<<<<<<<
- * 
- *             break
- */
-    __pyx_t_10 = __Pyx_PyInt_As_int(__pyx_v_offset_1); if (unlikely((__pyx_t_10 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 257, __pyx_L1_error)
-    __pyx_v_offset = __pyx_t_10;
-
-    /* "JSONParser.pyx":259
- *             offset = offset_1
- * 
- *             break             # <<<<<<<<<<<<<<
- *         return offset, line_start
- * 
- */
-    goto __pyx_L4_break;
-  }
-  __pyx_L4_break:;
-
-  /* "JSONParser.pyx":260
- * 
- *             break
- *         return offset, line_start             # <<<<<<<<<<<<<<
- * 
- *     cdef (int, int) parse_json_null(self, str buf, int offset, int line_start, int indent, list children):
- */
-  __pyx_t_13.f0 = __pyx_v_offset;
-  __pyx_t_13.f1 = __pyx_v_line_start;
-  __pyx_r = __pyx_t_13;
-  goto __pyx_L0;
-
-  /* "JSONParser.pyx":235
- *         return offset, line_start
- * 
- *     cdef (int, int) parse_json_false(self, str buf, int offset, int line_start, int indent, list children):             # <<<<<<<<<<<<<<
- *         cdef int count
- *         cdef Py_UNICODE chr
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_7);
-  __Pyx_XDECREF(__pyx_t_8);
-  __Pyx_XDECREF(__pyx_t_9);
-  __Pyx_XDECREF(__pyx_t_11);
-  __Pyx_WriteUnraisable("JSONParser.Parser.parse_json_false", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
-  __Pyx_pretend_to_initialize(&__pyx_r);
-  __pyx_L0:;
-  __Pyx_XDECREF(__pyx_v_offset_1);
-  __Pyx_XDECREF(__pyx_v_children_1);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "JSONParser.pyx":262
- *         return offset, line_start
- * 
- *     cdef (int, int) parse_json_null(self, str buf, int offset, int line_start, int indent, list children):             # <<<<<<<<<<<<<<
- *         cdef int count
- *         cdef Py_UNICODE chr
- */
-
-static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_null(struct __pyx_obj_10JSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, CYTHON_UNUSED int __pyx_v_indent, PyObject *__pyx_v_children) {
-  PyObject *__pyx_v_offset_1 = NULL;
-  PyObject *__pyx_v_children_1 = NULL;
-  __pyx_ctuple_int__and_int __pyx_r;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  Py_ssize_t __pyx_t_2;
-  int __pyx_t_3;
-  Py_ssize_t __pyx_t_4;
-  Py_ssize_t __pyx_t_5;
-  int __pyx_t_6;
-  PyObject *__pyx_t_7 = NULL;
-  PyObject *__pyx_t_8 = NULL;
-  PyObject *__pyx_t_9 = NULL;
-  int __pyx_t_10;
-  PyObject *__pyx_t_11 = NULL;
-  int __pyx_t_12;
-  __pyx_ctuple_int__and_int __pyx_t_13;
-  __Pyx_RefNannySetupContext("parse_json_null", 0);
-
-  /* "JSONParser.pyx":265
- *         cdef int count
- *         cdef Py_UNICODE chr
- *         while True: # note: return at end of loop             # <<<<<<<<<<<<<<
- *             offset_1 = offset
- *             children_1 = []
- */
-  while (1) {
-
-    /* "JSONParser.pyx":266
- *         cdef Py_UNICODE chr
- *         while True: # note: return at end of loop
- *             offset_1 = offset             # <<<<<<<<<<<<<<
- *             children_1 = []
- *             while True: # start capture
- */
-    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 266, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_v_offset_1 = __pyx_t_1;
-    __pyx_t_1 = 0;
-
-    /* "JSONParser.pyx":267
- *         while True: # note: return at end of loop
- *             offset_1 = offset
- *             children_1 = []             # <<<<<<<<<<<<<<
- *             while True: # start capture
- *                 if buf[offset_1:offset_1+4] == 'null':
- */
-    __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 267, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_v_children_1 = ((PyObject*)__pyx_t_1);
-    __pyx_t_1 = 0;
-
-    /* "JSONParser.pyx":268
- *             offset_1 = offset
- *             children_1 = []
- *             while True: # start capture             # <<<<<<<<<<<<<<
- *                 if buf[offset_1:offset_1+4] == 'null':
- *                     offset_1 += 4
- */
-    while (1) {
-
-      /* "JSONParser.pyx":269
- *             children_1 = []
- *             while True: # start capture
- *                 if buf[offset_1:offset_1+4] == 'null':             # <<<<<<<<<<<<<<
- *                     offset_1 += 4
- *                 else:
- */
-      if (unlikely(__pyx_v_buf == Py_None)) {
-        PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-        __PYX_ERR(0, 269, __pyx_L1_error)
-      }
-      __Pyx_INCREF(__pyx_v_offset_1);
-      __pyx_t_1 = __pyx_v_offset_1;
-      __pyx_t_3 = (__pyx_t_1 == Py_None);
-      if (__pyx_t_3) {
-        __pyx_t_2 = 0;
-      } else {
-        __pyx_t_4 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_4 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 269, __pyx_L1_error)
-        __pyx_t_2 = __pyx_t_4;
-      }
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_1, __pyx_int_4, 4, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 269, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_3 = (__pyx_t_1 == Py_None);
-      if (__pyx_t_3) {
-        __pyx_t_4 = PY_SSIZE_T_MAX;
-      } else {
-        __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 269, __pyx_L1_error)
-        __pyx_t_4 = __pyx_t_5;
-      }
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 269, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_n_u_null, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 269, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_6 = (__pyx_t_3 != 0);
-      if (__pyx_t_6) {
-
-        /* "JSONParser.pyx":270
- *             while True: # start capture
- *                 if buf[offset_1:offset_1+4] == 'null':
- *                     offset_1 += 4             # <<<<<<<<<<<<<<
- *                 else:
- *                     offset_1 = -1
- */
-        __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_1, __pyx_int_4, 4, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 270, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_t_1);
-        __pyx_t_1 = 0;
-
-        /* "JSONParser.pyx":269
- *             children_1 = []
- *             while True: # start capture
- *                 if buf[offset_1:offset_1+4] == 'null':             # <<<<<<<<<<<<<<
- *                     offset_1 += 4
- *                 else:
- */
-        goto __pyx_L7;
-      }
-
-      /* "JSONParser.pyx":272
- *                     offset_1 += 4
- *                 else:
- *                     offset_1 = -1             # <<<<<<<<<<<<<<
- *                     break
- * 
- */
-      /*else*/ {
-        __Pyx_INCREF(__pyx_int_neg_1);
-        __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_int_neg_1);
-
-        /* "JSONParser.pyx":273
- *                 else:
- *                     offset_1 = -1
- *                     break             # <<<<<<<<<<<<<<
- * 
- *                 break
- */
-        goto __pyx_L6_break;
-      }
-      __pyx_L7:;
-
-      /* "JSONParser.pyx":275
- *                     break
- * 
- *                 break             # <<<<<<<<<<<<<<
- *             if offset_1 == -1:
- *                 offset = -1
- */
-      goto __pyx_L6_break;
-    }
-    __pyx_L6_break:;
-
-    /* "JSONParser.pyx":276
- * 
- *                 break
- *             if offset_1 == -1:             # <<<<<<<<<<<<<<
- *                 offset = -1
- *                 break
- */
-    __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_1, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 276, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 276, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    if (__pyx_t_6) {
-
-      /* "JSONParser.pyx":277
- *                 break
- *             if offset_1 == -1:
- *                 offset = -1             # <<<<<<<<<<<<<<
- *                 break
- *             if self.builder is not None:
- */
-      __pyx_v_offset = -1;
-
-      /* "JSONParser.pyx":278
- *             if offset_1 == -1:
- *                 offset = -1
- *                 break             # <<<<<<<<<<<<<<
- *             if self.builder is not None:
- *                 children.append(self.ParseNode('null', offset, offset_1, children_1, None))
- */
-      goto __pyx_L4_break;
-
-      /* "JSONParser.pyx":276
- * 
- *                 break
- *             if offset_1 == -1:             # <<<<<<<<<<<<<<
- *                 offset = -1
- *                 break
- */
-    }
-
-    /* "JSONParser.pyx":279
- *                 offset = -1
- *                 break
- *             if self.builder is not None:             # <<<<<<<<<<<<<<
- *                 children.append(self.ParseNode('null', offset, offset_1, children_1, None))
- *             else:
- */
-    __pyx_t_6 = (__pyx_v_self->builder != Py_None);
-    __pyx_t_3 = (__pyx_t_6 != 0);
-    if (__pyx_t_3) {
-
-      /* "JSONParser.pyx":280
- *                 break
- *             if self.builder is not None:
- *                 children.append(self.ParseNode('null', offset, offset_1, children_1, None))             # <<<<<<<<<<<<<<
- *             else:
- *                 children.append(ParseNode('null', offset, offset_1, children_1, None))
- */
-      if (unlikely(__pyx_v_children == Py_None)) {
-        PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
-        __PYX_ERR(0, 280, __pyx_L1_error)
-      }
-      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 280, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 280, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_8);
-      __pyx_t_9 = NULL;
-      __pyx_t_10 = 0;
-      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_7))) {
-        __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_7);
-        if (likely(__pyx_t_9)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
-          __Pyx_INCREF(__pyx_t_9);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_7, function);
-          __pyx_t_10 = 1;
-        }
-      }
-      #if CYTHON_FAST_PYCALL
-      if (PyFunction_Check(__pyx_t_7)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_9, __pyx_n_u_null, __pyx_t_8, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_10, 5+__pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 280, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      } else
-      #endif
-      #if CYTHON_FAST_PYCCALL
-      if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_9, __pyx_n_u_null, __pyx_t_8, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_10, 5+__pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 280, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      } else
-      #endif
-      {
-        __pyx_t_11 = PyTuple_New(5+__pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 280, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_11);
-        if (__pyx_t_9) {
-          __Pyx_GIVEREF(__pyx_t_9); PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_9); __pyx_t_9 = NULL;
-        }
-        __Pyx_INCREF(__pyx_n_u_null);
-        __Pyx_GIVEREF(__pyx_n_u_null);
-        PyTuple_SET_ITEM(__pyx_t_11, 0+__pyx_t_10, __pyx_n_u_null);
-        __Pyx_GIVEREF(__pyx_t_8);
-        PyTuple_SET_ITEM(__pyx_t_11, 1+__pyx_t_10, __pyx_t_8);
-        __Pyx_INCREF(__pyx_v_offset_1);
-        __Pyx_GIVEREF(__pyx_v_offset_1);
-        PyTuple_SET_ITEM(__pyx_t_11, 2+__pyx_t_10, __pyx_v_offset_1);
-        __Pyx_INCREF(__pyx_v_children_1);
-        __Pyx_GIVEREF(__pyx_v_children_1);
-        PyTuple_SET_ITEM(__pyx_t_11, 3+__pyx_t_10, __pyx_v_children_1);
-        __Pyx_INCREF(Py_None);
-        __Pyx_GIVEREF(Py_None);
-        PyTuple_SET_ITEM(__pyx_t_11, 4+__pyx_t_10, Py_None);
-        __pyx_t_8 = 0;
-        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_11, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 280, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-      }
-      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_12 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 280, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-      /* "JSONParser.pyx":279
- *                 offset = -1
- *                 break
- *             if self.builder is not None:             # <<<<<<<<<<<<<<
- *                 children.append(self.ParseNode('null', offset, offset_1, children_1, None))
- *             else:
- */
-      goto __pyx_L9;
-    }
-
-    /* "JSONParser.pyx":282
- *                 children.append(self.ParseNode('null', offset, offset_1, children_1, None))
- *             else:
- *                 children.append(ParseNode('null', offset, offset_1, children_1, None))             # <<<<<<<<<<<<<<
- *                 children.append(ParseNode('null', offset, offset_1, children_1, None))
- *             offset = offset_1
- */
-    /*else*/ {
-      if (unlikely(__pyx_v_children == Py_None)) {
-        PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
-        __PYX_ERR(0, 282, __pyx_L1_error)
-      }
-      __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 282, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_11 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 282, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_11);
-      __pyx_t_8 = NULL;
-      __pyx_t_10 = 0;
-      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_7))) {
-        __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_7);
-        if (likely(__pyx_t_8)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
-          __Pyx_INCREF(__pyx_t_8);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_7, function);
-          __pyx_t_10 = 1;
-        }
-      }
-      #if CYTHON_FAST_PYCALL
-      if (PyFunction_Check(__pyx_t_7)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_8, __pyx_n_u_null, __pyx_t_11, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_10, 5+__pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 282, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-      } else
-      #endif
-      #if CYTHON_FAST_PYCCALL
-      if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_8, __pyx_n_u_null, __pyx_t_11, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_10, 5+__pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 282, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-      } else
-      #endif
-      {
-        __pyx_t_9 = PyTuple_New(5+__pyx_t_10); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 282, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_9);
-        if (__pyx_t_8) {
-          __Pyx_GIVEREF(__pyx_t_8); PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_8); __pyx_t_8 = NULL;
-        }
-        __Pyx_INCREF(__pyx_n_u_null);
-        __Pyx_GIVEREF(__pyx_n_u_null);
-        PyTuple_SET_ITEM(__pyx_t_9, 0+__pyx_t_10, __pyx_n_u_null);
-        __Pyx_GIVEREF(__pyx_t_11);
-        PyTuple_SET_ITEM(__pyx_t_9, 1+__pyx_t_10, __pyx_t_11);
-        __Pyx_INCREF(__pyx_v_offset_1);
-        __Pyx_GIVEREF(__pyx_v_offset_1);
-        PyTuple_SET_ITEM(__pyx_t_9, 2+__pyx_t_10, __pyx_v_offset_1);
-        __Pyx_INCREF(__pyx_v_children_1);
-        __Pyx_GIVEREF(__pyx_v_children_1);
-        PyTuple_SET_ITEM(__pyx_t_9, 3+__pyx_t_10, __pyx_v_children_1);
-        __Pyx_INCREF(Py_None);
-        __Pyx_GIVEREF(Py_None);
-        PyTuple_SET_ITEM(__pyx_t_9, 4+__pyx_t_10, Py_None);
-        __pyx_t_11 = 0;
-        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_9, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 282, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-      }
-      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_12 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 282, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-      /* "JSONParser.pyx":283
- *             else:
- *                 children.append(ParseNode('null', offset, offset_1, children_1, None))
- *                 children.append(ParseNode('null', offset, offset_1, children_1, None))             # <<<<<<<<<<<<<<
- *             offset = offset_1
- * 
- */
-      if (unlikely(__pyx_v_children == Py_None)) {
-        PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
-        __PYX_ERR(0, 283, __pyx_L1_error)
-      }
-      __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 283, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 283, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_9);
-      __pyx_t_11 = NULL;
-      __pyx_t_10 = 0;
-      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_7))) {
-        __pyx_t_11 = PyMethod_GET_SELF(__pyx_t_7);
-        if (likely(__pyx_t_11)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
-          __Pyx_INCREF(__pyx_t_11);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_7, function);
-          __pyx_t_10 = 1;
-        }
-      }
-      #if CYTHON_FAST_PYCALL
-      if (PyFunction_Check(__pyx_t_7)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_11, __pyx_n_u_null, __pyx_t_9, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_10, 5+__pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 283, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-      } else
-      #endif
-      #if CYTHON_FAST_PYCCALL
-      if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_11, __pyx_n_u_null, __pyx_t_9, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_10, 5+__pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 283, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-      } else
-      #endif
-      {
-        __pyx_t_8 = PyTuple_New(5+__pyx_t_10); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 283, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_8);
-        if (__pyx_t_11) {
-          __Pyx_GIVEREF(__pyx_t_11); PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_11); __pyx_t_11 = NULL;
-        }
-        __Pyx_INCREF(__pyx_n_u_null);
-        __Pyx_GIVEREF(__pyx_n_u_null);
-        PyTuple_SET_ITEM(__pyx_t_8, 0+__pyx_t_10, __pyx_n_u_null);
-        __Pyx_GIVEREF(__pyx_t_9);
-        PyTuple_SET_ITEM(__pyx_t_8, 1+__pyx_t_10, __pyx_t_9);
-        __Pyx_INCREF(__pyx_v_offset_1);
-        __Pyx_GIVEREF(__pyx_v_offset_1);
-        PyTuple_SET_ITEM(__pyx_t_8, 2+__pyx_t_10, __pyx_v_offset_1);
-        __Pyx_INCREF(__pyx_v_children_1);
-        __Pyx_GIVEREF(__pyx_v_children_1);
-        PyTuple_SET_ITEM(__pyx_t_8, 3+__pyx_t_10, __pyx_v_children_1);
-        __Pyx_INCREF(Py_None);
-        __Pyx_GIVEREF(Py_None);
-        PyTuple_SET_ITEM(__pyx_t_8, 4+__pyx_t_10, Py_None);
-        __pyx_t_9 = 0;
-        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_8, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 283, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      }
-      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_12 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_12 == ((int)-1))) __PYX_ERR(0, 283, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    }
-    __pyx_L9:;
-
-    /* "JSONParser.pyx":284
- *                 children.append(ParseNode('null', offset, offset_1, children_1, None))
- *                 children.append(ParseNode('null', offset, offset_1, children_1, None))
- *             offset = offset_1             # <<<<<<<<<<<<<<
- * 
- *             break
- */
-    __pyx_t_10 = __Pyx_PyInt_As_int(__pyx_v_offset_1); if (unlikely((__pyx_t_10 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 284, __pyx_L1_error)
-    __pyx_v_offset = __pyx_t_10;
-
-    /* "JSONParser.pyx":286
- *             offset = offset_1
- * 
- *             break             # <<<<<<<<<<<<<<
- *         return offset, line_start
- * 
- */
-    goto __pyx_L4_break;
-  }
-  __pyx_L4_break:;
-
-  /* "JSONParser.pyx":287
- * 
- *             break
- *         return offset, line_start             # <<<<<<<<<<<<<<
- * 
- *     cdef (int, int) parse_json_number(self, str buf, int offset, int line_start, int indent, list children):
- */
-  __pyx_t_13.f0 = __pyx_v_offset;
-  __pyx_t_13.f1 = __pyx_v_line_start;
-  __pyx_r = __pyx_t_13;
-  goto __pyx_L0;
-
-  /* "JSONParser.pyx":262
- *         return offset, line_start
- * 
- *     cdef (int, int) parse_json_null(self, str buf, int offset, int line_start, int indent, list children):             # <<<<<<<<<<<<<<
- *         cdef int count
- *         cdef Py_UNICODE chr
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_7);
-  __Pyx_XDECREF(__pyx_t_8);
-  __Pyx_XDECREF(__pyx_t_9);
-  __Pyx_XDECREF(__pyx_t_11);
-  __Pyx_WriteUnraisable("JSONParser.Parser.parse_json_null", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
-  __Pyx_pretend_to_initialize(&__pyx_r);
-  __pyx_L0:;
-  __Pyx_XDECREF(__pyx_v_offset_1);
-  __Pyx_XDECREF(__pyx_v_children_1);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "JSONParser.pyx":289
- *         return offset, line_start
- * 
- *     cdef (int, int) parse_json_number(self, str buf, int offset, int line_start, int indent, list children):             # <<<<<<<<<<<<<<
- *         cdef int count
- *         cdef Py_UNICODE chr
- */
-
-static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_number(struct __pyx_obj_10JSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, CYTHON_UNUSED int __pyx_v_indent, PyObject *__pyx_v_children) {
-  int __pyx_v_count;
-  PyObject *__pyx_v_offset_1 = NULL;
-  PyObject *__pyx_v_children_1 = NULL;
-  PyObject *__pyx_v_offset_2 = NULL;
-  int __pyx_v_line_start_1;
-  PyObject *__pyx_v_children_2 = NULL;
-  PyObject *__pyx_v_offset_3 = NULL;
-  int __pyx_v_line_start_2;
-  PyObject *__pyx_v_count_1 = NULL;
-  PyObject *__pyx_v_count_2 = NULL;
-  PyObject *__pyx_v_offset_4 = NULL;
-  int __pyx_v_line_start_3;
-  __pyx_ctuple_int__and_int __pyx_r;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  Py_ssize_t __pyx_t_2;
-  int __pyx_t_3;
-  Py_ssize_t __pyx_t_4;
-  Py_ssize_t __pyx_t_5;
-  int __pyx_t_6;
-  int __pyx_t_7;
-  PyObject *__pyx_t_8 = NULL;
-  PyObject *__pyx_t_9 = NULL;
-  PyObject *__pyx_t_10 = NULL;
-  int __pyx_t_11;
-  PyObject *__pyx_t_12 = NULL;
-  __pyx_ctuple_int__and_int __pyx_t_13;
-  __Pyx_RefNannySetupContext("parse_json_number", 0);
-
-  /* "JSONParser.pyx":292
- *         cdef int count
- *         cdef Py_UNICODE chr
- *         while True: # note: return at end of loop             # <<<<<<<<<<<<<<
- *             offset_1 = offset
- *             children_1 = []
- */
-  while (1) {
-
-    /* "JSONParser.pyx":293
- *         cdef Py_UNICODE chr
- *         while True: # note: return at end of loop
- *             offset_1 = offset             # <<<<<<<<<<<<<<
- *             children_1 = []
- *             while True: # start capture
- */
-    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 293, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_v_offset_1 = __pyx_t_1;
-    __pyx_t_1 = 0;
-
-    /* "JSONParser.pyx":294
- *         while True: # note: return at end of loop
- *             offset_1 = offset
- *             children_1 = []             # <<<<<<<<<<<<<<
- *             while True: # start capture
- *                 count = 0
- */
-    __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 294, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_v_children_1 = ((PyObject*)__pyx_t_1);
-    __pyx_t_1 = 0;
-
-    /* "JSONParser.pyx":295
- *             offset_1 = offset
- *             children_1 = []
- *             while True: # start capture             # <<<<<<<<<<<<<<
- *                 count = 0
- *                 while True:
- */
-    while (1) {
-
-      /* "JSONParser.pyx":296
- *             children_1 = []
- *             while True: # start capture
- *                 count = 0             # <<<<<<<<<<<<<<
- *                 while True:
- *                     offset_2 = offset_1
- */
-      __pyx_v_count = 0;
-
-      /* "JSONParser.pyx":297
- *             while True: # start capture
- *                 count = 0
- *                 while True:             # <<<<<<<<<<<<<<
- *                     offset_2 = offset_1
- *                     line_start_1 = line_start
- */
-      while (1) {
-
-        /* "JSONParser.pyx":298
- *                 count = 0
- *                 while True:
- *                     offset_2 = offset_1             # <<<<<<<<<<<<<<
- *                     line_start_1 = line_start
- *                     if buf[offset_2:offset_2+1] == '-':
- */
-        __Pyx_INCREF(__pyx_v_offset_1);
-        __Pyx_XDECREF_SET(__pyx_v_offset_2, __pyx_v_offset_1);
-
-        /* "JSONParser.pyx":299
- *                 while True:
- *                     offset_2 = offset_1
- *                     line_start_1 = line_start             # <<<<<<<<<<<<<<
- *                     if buf[offset_2:offset_2+1] == '-':
- *                         offset_2 += 1
- */
-        __pyx_v_line_start_1 = __pyx_v_line_start;
-
-        /* "JSONParser.pyx":300
- *                     offset_2 = offset_1
- *                     line_start_1 = line_start
- *                     if buf[offset_2:offset_2+1] == '-':             # <<<<<<<<<<<<<<
- *                         offset_2 += 1
- *                     else:
- */
-        if (unlikely(__pyx_v_buf == Py_None)) {
-          PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-          __PYX_ERR(0, 300, __pyx_L1_error)
-        }
-        __Pyx_INCREF(__pyx_v_offset_2);
-        __pyx_t_1 = __pyx_v_offset_2;
-        __pyx_t_3 = (__pyx_t_1 == Py_None);
-        if (__pyx_t_3) {
-          __pyx_t_2 = 0;
-        } else {
-          __pyx_t_4 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_4 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 300, __pyx_L1_error)
-          __pyx_t_2 = __pyx_t_4;
-        }
-        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_2, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 300, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_3 = (__pyx_t_1 == Py_None);
-        if (__pyx_t_3) {
-          __pyx_t_4 = PY_SSIZE_T_MAX;
-        } else {
-          __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 300, __pyx_L1_error)
-          __pyx_t_4 = __pyx_t_5;
-        }
-        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 300, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u__2, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 300, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __pyx_t_6 = (__pyx_t_3 != 0);
-        if (__pyx_t_6) {
-
-          /* "JSONParser.pyx":301
- *                     line_start_1 = line_start
- *                     if buf[offset_2:offset_2+1] == '-':
- *                         offset_2 += 1             # <<<<<<<<<<<<<<
- *                     else:
- *                         offset_2 = -1
- */
-          __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_2, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 301, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_1);
-          __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_t_1);
-          __pyx_t_1 = 0;
-
-          /* "JSONParser.pyx":300
- *                     offset_2 = offset_1
- *                     line_start_1 = line_start
- *                     if buf[offset_2:offset_2+1] == '-':             # <<<<<<<<<<<<<<
- *                         offset_2 += 1
- *                     else:
- */
-          goto __pyx_L9;
-        }
-
-        /* "JSONParser.pyx":303
- *                         offset_2 += 1
- *                     else:
- *                         offset_2 = -1             # <<<<<<<<<<<<<<
- *                         break
- * 
- */
-        /*else*/ {
-          __Pyx_INCREF(__pyx_int_neg_1);
-          __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_int_neg_1);
-
-          /* "JSONParser.pyx":304
- *                     else:
- *                         offset_2 = -1
- *                         break             # <<<<<<<<<<<<<<
- * 
- *                     if offset_1 == offset_2: break
- */
-          goto __pyx_L8_break;
-        }
-        __pyx_L9:;
-
-        /* "JSONParser.pyx":306
- *                         break
- * 
- *                     if offset_1 == offset_2: break             # <<<<<<<<<<<<<<
- *                     offset_1 = offset_2
- *                     line_start = line_start_1
- */
-        __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_1, __pyx_v_offset_2, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 306, __pyx_L1_error)
-        __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 306, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        if (__pyx_t_6) {
-          goto __pyx_L8_break;
-        }
-
-        /* "JSONParser.pyx":307
- * 
- *                     if offset_1 == offset_2: break
- *                     offset_1 = offset_2             # <<<<<<<<<<<<<<
- *                     line_start = line_start_1
- *                     count += 1
- */
-        __Pyx_INCREF(__pyx_v_offset_2);
-        __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_v_offset_2);
-
-        /* "JSONParser.pyx":308
- *                     if offset_1 == offset_2: break
- *                     offset_1 = offset_2
- *                     line_start = line_start_1             # <<<<<<<<<<<<<<
- *                     count += 1
- * 
- */
-        __pyx_v_line_start = __pyx_v_line_start_1;
-
-        /* "JSONParser.pyx":309
- *                     offset_1 = offset_2
- *                     line_start = line_start_1
- *                     count += 1             # <<<<<<<<<<<<<<
- * 
- *                 while True: # start choice
- */
-        __pyx_v_count = (__pyx_v_count + 1);
-      }
-      __pyx_L8_break:;
-
-      /* "JSONParser.pyx":311
- *                     count += 1
- * 
- *                 while True: # start choice             # <<<<<<<<<<<<<<
- *                     offset_2 = offset_1
- *                     line_start_1 = line_start
- */
-      while (1) {
-
-        /* "JSONParser.pyx":312
- * 
- *                 while True: # start choice
- *                     offset_2 = offset_1             # <<<<<<<<<<<<<<
- *                     line_start_1 = line_start
- *                     children_2 = []
- */
-        __Pyx_INCREF(__pyx_v_offset_1);
-        __Pyx_XDECREF_SET(__pyx_v_offset_2, __pyx_v_offset_1);
-
-        /* "JSONParser.pyx":313
- *                 while True: # start choice
- *                     offset_2 = offset_1
- *                     line_start_1 = line_start             # <<<<<<<<<<<<<<
- *                     children_2 = []
- *                     while True: # case
- */
-        __pyx_v_line_start_1 = __pyx_v_line_start;
-
-        /* "JSONParser.pyx":314
- *                     offset_2 = offset_1
- *                     line_start_1 = line_start
- *                     children_2 = []             # <<<<<<<<<<<<<<
- *                     while True: # case
- *                         if buf[offset_2:offset_2+1] == '0':
- */
-        __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 314, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __pyx_v_children_2 = ((PyObject*)__pyx_t_1);
-        __pyx_t_1 = 0;
-
-        /* "JSONParser.pyx":315
- *                     line_start_1 = line_start
- *                     children_2 = []
- *                     while True: # case             # <<<<<<<<<<<<<<
- *                         if buf[offset_2:offset_2+1] == '0':
- *                             offset_2 += 1
- */
-        while (1) {
-
-          /* "JSONParser.pyx":316
- *                     children_2 = []
- *                     while True: # case
- *                         if buf[offset_2:offset_2+1] == '0':             # <<<<<<<<<<<<<<
- *                             offset_2 += 1
- *                         else:
- */
-          if (unlikely(__pyx_v_buf == Py_None)) {
-            PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-            __PYX_ERR(0, 316, __pyx_L1_error)
-          }
-          __Pyx_INCREF(__pyx_v_offset_2);
-          __pyx_t_1 = __pyx_v_offset_2;
-          __pyx_t_6 = (__pyx_t_1 == Py_None);
-          if (__pyx_t_6) {
-            __pyx_t_4 = 0;
-          } else {
-            __pyx_t_2 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_2 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 316, __pyx_L1_error)
-            __pyx_t_4 = __pyx_t_2;
-          }
-          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-          __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_2, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 316, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_6 = (__pyx_t_1 == Py_None);
-          if (__pyx_t_6) {
-            __pyx_t_2 = PY_SSIZE_T_MAX;
-          } else {
-            __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 316, __pyx_L1_error)
-            __pyx_t_2 = __pyx_t_5;
-          }
-          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-          __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 316, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u_0, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 316, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-          __pyx_t_3 = (__pyx_t_6 != 0);
-          if (__pyx_t_3) {
-
-            /* "JSONParser.pyx":317
- *                     while True: # case
- *                         if buf[offset_2:offset_2+1] == '0':
- *                             offset_2 += 1             # <<<<<<<<<<<<<<
- *                         else:
- *                             offset_2 = -1
- */
-            __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_2, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 317, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_1);
-            __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_t_1);
-            __pyx_t_1 = 0;
-
-            /* "JSONParser.pyx":316
- *                     children_2 = []
- *                     while True: # case
- *                         if buf[offset_2:offset_2+1] == '0':             # <<<<<<<<<<<<<<
- *                             offset_2 += 1
- *                         else:
- */
-            goto __pyx_L15;
-          }
-
-          /* "JSONParser.pyx":319
- *                             offset_2 += 1
- *                         else:
- *                             offset_2 = -1             # <<<<<<<<<<<<<<
- *                             break
- * 
- */
-          /*else*/ {
-            __Pyx_INCREF(__pyx_int_neg_1);
-            __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_int_neg_1);
-
-            /* "JSONParser.pyx":320
- *                         else:
- *                             offset_2 = -1
- *                             break             # <<<<<<<<<<<<<<
- * 
- * 
- */
-            goto __pyx_L14_break;
-          }
-          __pyx_L15:;
-
-          /* "JSONParser.pyx":323
- * 
- * 
- *                         break             # <<<<<<<<<<<<<<
- *                     if offset_2 != -1:
- *                         offset_1 = offset_2
- */
-          goto __pyx_L14_break;
-        }
-        __pyx_L14_break:;
-
-        /* "JSONParser.pyx":324
- * 
- *                         break
- *                     if offset_2 != -1:             # <<<<<<<<<<<<<<
- *                         offset_1 = offset_2
- *                         line_start = line_start_1
- */
-        __pyx_t_1 = __Pyx_PyInt_NeObjC(__pyx_v_offset_2, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 324, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 324, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        if (__pyx_t_3) {
-
-          /* "JSONParser.pyx":325
- *                         break
- *                     if offset_2 != -1:
- *                         offset_1 = offset_2             # <<<<<<<<<<<<<<
- *                         line_start = line_start_1
- *                         children_1.extend(children_2)
- */
-          __Pyx_INCREF(__pyx_v_offset_2);
-          __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_v_offset_2);
-
-          /* "JSONParser.pyx":326
- *                     if offset_2 != -1:
- *                         offset_1 = offset_2
- *                         line_start = line_start_1             # <<<<<<<<<<<<<<
- *                         children_1.extend(children_2)
- *                         break
- */
-          __pyx_v_line_start = __pyx_v_line_start_1;
-
-          /* "JSONParser.pyx":327
- *                         offset_1 = offset_2
- *                         line_start = line_start_1
- *                         children_1.extend(children_2)             # <<<<<<<<<<<<<<
- *                         break
- *                     # end case
- */
-          __pyx_t_7 = __Pyx_PyList_Extend(__pyx_v_children_1, __pyx_v_children_2); if (unlikely(__pyx_t_7 == ((int)-1))) __PYX_ERR(0, 327, __pyx_L1_error)
-
-          /* "JSONParser.pyx":328
- *                         line_start = line_start_1
- *                         children_1.extend(children_2)
- *                         break             # <<<<<<<<<<<<<<
- *                     # end case
- *                     offset_2 = offset_1
- */
-          goto __pyx_L12_break;
-
-          /* "JSONParser.pyx":324
- * 
- *                         break
- *                     if offset_2 != -1:             # <<<<<<<<<<<<<<
- *                         offset_1 = offset_2
- *                         line_start = line_start_1
- */
-        }
-
-        /* "JSONParser.pyx":330
- *                         break
- *                     # end case
- *                     offset_2 = offset_1             # <<<<<<<<<<<<<<
- *                     line_start_1 = line_start
- *                     children_2 = []
- */
-        __Pyx_INCREF(__pyx_v_offset_1);
-        __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_v_offset_1);
-
-        /* "JSONParser.pyx":331
- *                     # end case
- *                     offset_2 = offset_1
- *                     line_start_1 = line_start             # <<<<<<<<<<<<<<
- *                     children_2 = []
- *                     while True: # case
- */
-        __pyx_v_line_start_1 = __pyx_v_line_start;
-
-        /* "JSONParser.pyx":332
- *                     offset_2 = offset_1
- *                     line_start_1 = line_start
- *                     children_2 = []             # <<<<<<<<<<<<<<
- *                     while True: # case
- *                         if offset_2 == len(buf):
- */
-        __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 332, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF_SET(__pyx_v_children_2, ((PyObject*)__pyx_t_1));
-        __pyx_t_1 = 0;
-
-        /* "JSONParser.pyx":333
- *                     line_start_1 = line_start
- *                     children_2 = []
- *                     while True: # case             # <<<<<<<<<<<<<<
- *                         if offset_2 == len(buf):
- *                             offset_2 = -1
- */
-        while (1) {
-
-          /* "JSONParser.pyx":334
- *                     children_2 = []
- *                     while True: # case
- *                         if offset_2 == len(buf):             # <<<<<<<<<<<<<<
- *                             offset_2 = -1
- *                             break
- */
-          if (unlikely(__pyx_v_buf == Py_None)) {
-            PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
-            __PYX_ERR(0, 334, __pyx_L1_error)
-          }
-          __pyx_t_2 = __Pyx_PyUnicode_GET_LENGTH(__pyx_v_buf); if (unlikely(__pyx_t_2 == ((Py_ssize_t)-1))) __PYX_ERR(0, 334, __pyx_L1_error)
-          __pyx_t_1 = PyInt_FromSsize_t(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 334, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_8 = PyObject_RichCompare(__pyx_v_offset_2, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_8); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 334, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-          __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 334, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-          if (__pyx_t_3) {
-
-            /* "JSONParser.pyx":335
- *                     while True: # case
- *                         if offset_2 == len(buf):
- *                             offset_2 = -1             # <<<<<<<<<<<<<<
- *                             break
- *                         elif '1' <= buf[offset_2] <= '9':
- */
-            __Pyx_INCREF(__pyx_int_neg_1);
-            __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_int_neg_1);
-
-            /* "JSONParser.pyx":336
- *                         if offset_2 == len(buf):
- *                             offset_2 = -1
- *                             break             # <<<<<<<<<<<<<<
- *                         elif '1' <= buf[offset_2] <= '9':
- *                             offset_2 += 1
- */
-            goto __pyx_L18_break;
-
-            /* "JSONParser.pyx":334
- *                     children_2 = []
- *                     while True: # case
- *                         if offset_2 == len(buf):             # <<<<<<<<<<<<<<
- *                             offset_2 = -1
- *                             break
- */
-          }
-
-          /* "JSONParser.pyx":337
- *                             offset_2 = -1
- *                             break
- *                         elif '1' <= buf[offset_2] <= '9':             # <<<<<<<<<<<<<<
- *                             offset_2 += 1
- *                         else:
- */
-          __pyx_t_8 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 337, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_8);
-          __pyx_t_1 = PyObject_RichCompare(__pyx_kp_u_1, __pyx_t_8, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 337, __pyx_L1_error)
-          if (__Pyx_PyObject_IsTrue(__pyx_t_1)) {
-            __Pyx_DECREF(__pyx_t_1);
-            __pyx_t_1 = PyObject_RichCompare(__pyx_t_8, __pyx_kp_u_9, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 337, __pyx_L1_error)
-          }
-          __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-          __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 337, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-          if (__pyx_t_3) {
-
-            /* "JSONParser.pyx":338
- *                             break
- *                         elif '1' <= buf[offset_2] <= '9':
- *                             offset_2 += 1             # <<<<<<<<<<<<<<
- *                         else:
- *                             offset_2 = -1
- */
-            __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_2, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 338, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_1);
-            __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_t_1);
-            __pyx_t_1 = 0;
-
-            /* "JSONParser.pyx":337
- *                             offset_2 = -1
- *                             break
- *                         elif '1' <= buf[offset_2] <= '9':             # <<<<<<<<<<<<<<
- *                             offset_2 += 1
- *                         else:
- */
-            goto __pyx_L19;
-          }
-
-          /* "JSONParser.pyx":340
- *                             offset_2 += 1
- *                         else:
- *                             offset_2 = -1             # <<<<<<<<<<<<<<
- *                             break
- * 
- */
-          /*else*/ {
-            __Pyx_INCREF(__pyx_int_neg_1);
-            __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_int_neg_1);
-
-            /* "JSONParser.pyx":341
- *                         else:
- *                             offset_2 = -1
- *                             break             # <<<<<<<<<<<<<<
- * 
- *                         count = 0
- */
-            goto __pyx_L18_break;
-          }
-          __pyx_L19:;
-
-          /* "JSONParser.pyx":343
- *                             break
- * 
- *                         count = 0             # <<<<<<<<<<<<<<
- *                         while True:
- *                             offset_3 = offset_2
- */
-          __pyx_v_count = 0;
-
-          /* "JSONParser.pyx":344
- * 
- *                         count = 0
- *                         while True:             # <<<<<<<<<<<<<<
- *                             offset_3 = offset_2
- *                             line_start_2 = line_start_1
- */
-          while (1) {
-
-            /* "JSONParser.pyx":345
- *                         count = 0
- *                         while True:
- *                             offset_3 = offset_2             # <<<<<<<<<<<<<<
- *                             line_start_2 = line_start_1
- *                             if offset_3 == len(buf):
- */
-            __Pyx_INCREF(__pyx_v_offset_2);
-            __Pyx_XDECREF_SET(__pyx_v_offset_3, __pyx_v_offset_2);
-
-            /* "JSONParser.pyx":346
- *                         while True:
- *                             offset_3 = offset_2
- *                             line_start_2 = line_start_1             # <<<<<<<<<<<<<<
- *                             if offset_3 == len(buf):
- *                                 offset_3 = -1
- */
-            __pyx_v_line_start_2 = __pyx_v_line_start_1;
-
-            /* "JSONParser.pyx":347
- *                             offset_3 = offset_2
- *                             line_start_2 = line_start_1
- *                             if offset_3 == len(buf):             # <<<<<<<<<<<<<<
- *                                 offset_3 = -1
- *                                 break
- */
-            if (unlikely(__pyx_v_buf == Py_None)) {
-              PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
-              __PYX_ERR(0, 347, __pyx_L1_error)
-            }
-            __pyx_t_2 = __Pyx_PyUnicode_GET_LENGTH(__pyx_v_buf); if (unlikely(__pyx_t_2 == ((Py_ssize_t)-1))) __PYX_ERR(0, 347, __pyx_L1_error)
-            __pyx_t_1 = PyInt_FromSsize_t(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 347, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_1);
-            __pyx_t_8 = PyObject_RichCompare(__pyx_v_offset_3, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_8); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 347, __pyx_L1_error)
-            __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 347, __pyx_L1_error)
-            __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-            if (__pyx_t_3) {
-
-              /* "JSONParser.pyx":348
- *                             line_start_2 = line_start_1
- *                             if offset_3 == len(buf):
- *                                 offset_3 = -1             # <<<<<<<<<<<<<<
- *                                 break
- *                             elif '0' <= buf[offset_3] <= '9':
- */
-              __Pyx_INCREF(__pyx_int_neg_1);
-              __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_int_neg_1);
-
-              /* "JSONParser.pyx":349
- *                             if offset_3 == len(buf):
- *                                 offset_3 = -1
- *                                 break             # <<<<<<<<<<<<<<
- *                             elif '0' <= buf[offset_3] <= '9':
- *                                 offset_3 += 1
- */
-              goto __pyx_L21_break;
-
-              /* "JSONParser.pyx":347
- *                             offset_3 = offset_2
- *                             line_start_2 = line_start_1
- *                             if offset_3 == len(buf):             # <<<<<<<<<<<<<<
- *                                 offset_3 = -1
- *                                 break
- */
-            }
-
-            /* "JSONParser.pyx":350
- *                                 offset_3 = -1
- *                                 break
- *                             elif '0' <= buf[offset_3] <= '9':             # <<<<<<<<<<<<<<
- *                                 offset_3 += 1
- *                             else:
- */
-            __pyx_t_8 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 350, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_8);
-            __pyx_t_1 = PyObject_RichCompare(__pyx_kp_u_0, __pyx_t_8, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 350, __pyx_L1_error)
-            if (__Pyx_PyObject_IsTrue(__pyx_t_1)) {
-              __Pyx_DECREF(__pyx_t_1);
-              __pyx_t_1 = PyObject_RichCompare(__pyx_t_8, __pyx_kp_u_9, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 350, __pyx_L1_error)
-            }
-            __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-            __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 350, __pyx_L1_error)
-            __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            if (__pyx_t_3) {
-
-              /* "JSONParser.pyx":351
- *                                 break
- *                             elif '0' <= buf[offset_3] <= '9':
- *                                 offset_3 += 1             # <<<<<<<<<<<<<<
- *                             else:
- *                                 offset_3 = -1
- */
-              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 351, __pyx_L1_error)
-              __Pyx_GOTREF(__pyx_t_1);
-              __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_1);
-              __pyx_t_1 = 0;
-
-              /* "JSONParser.pyx":350
- *                                 offset_3 = -1
- *                                 break
- *                             elif '0' <= buf[offset_3] <= '9':             # <<<<<<<<<<<<<<
- *                                 offset_3 += 1
- *                             else:
- */
-              goto __pyx_L22;
-            }
-
-            /* "JSONParser.pyx":353
- *                                 offset_3 += 1
- *                             else:
- *                                 offset_3 = -1             # <<<<<<<<<<<<<<
- *                                 break
- * 
- */
-            /*else*/ {
-              __Pyx_INCREF(__pyx_int_neg_1);
-              __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_int_neg_1);
-
-              /* "JSONParser.pyx":354
- *                             else:
- *                                 offset_3 = -1
- *                                 break             # <<<<<<<<<<<<<<
- * 
- *                             if offset_2 == offset_3: break
- */
-              goto __pyx_L21_break;
-            }
-            __pyx_L22:;
-
-            /* "JSONParser.pyx":356
- *                                 break
- * 
- *                             if offset_2 == offset_3: break             # <<<<<<<<<<<<<<
- *                             offset_2 = offset_3
- *                             line_start_1 = line_start_2
- */
-            __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_2, __pyx_v_offset_3, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 356, __pyx_L1_error)
-            __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 356, __pyx_L1_error)
-            __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            if (__pyx_t_3) {
-              goto __pyx_L21_break;
-            }
-
-            /* "JSONParser.pyx":357
- * 
- *                             if offset_2 == offset_3: break
- *                             offset_2 = offset_3             # <<<<<<<<<<<<<<
- *                             line_start_1 = line_start_2
- *                             count += 1
- */
-            __Pyx_INCREF(__pyx_v_offset_3);
-            __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_v_offset_3);
-
-            /* "JSONParser.pyx":358
- *                             if offset_2 == offset_3: break
- *                             offset_2 = offset_3
- *                             line_start_1 = line_start_2             # <<<<<<<<<<<<<<
- *                             count += 1
- * 
- */
-            __pyx_v_line_start_1 = __pyx_v_line_start_2;
-
-            /* "JSONParser.pyx":359
- *                             offset_2 = offset_3
- *                             line_start_1 = line_start_2
- *                             count += 1             # <<<<<<<<<<<<<<
- * 
- * 
- */
-            __pyx_v_count = (__pyx_v_count + 1);
-          }
-          __pyx_L21_break:;
-
-          /* "JSONParser.pyx":362
- * 
- * 
- *                         break             # <<<<<<<<<<<<<<
- *                     if offset_2 != -1:
- *                         offset_1 = offset_2
- */
-          goto __pyx_L18_break;
-        }
-        __pyx_L18_break:;
-
-        /* "JSONParser.pyx":363
- * 
- *                         break
- *                     if offset_2 != -1:             # <<<<<<<<<<<<<<
- *                         offset_1 = offset_2
- *                         line_start = line_start_1
- */
-        __pyx_t_1 = __Pyx_PyInt_NeObjC(__pyx_v_offset_2, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 363, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 363, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        if (__pyx_t_3) {
-
-          /* "JSONParser.pyx":364
- *                         break
- *                     if offset_2 != -1:
- *                         offset_1 = offset_2             # <<<<<<<<<<<<<<
- *                         line_start = line_start_1
- *                         children_1.extend(children_2)
- */
-          __Pyx_INCREF(__pyx_v_offset_2);
-          __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_v_offset_2);
-
-          /* "JSONParser.pyx":365
- *                     if offset_2 != -1:
- *                         offset_1 = offset_2
- *                         line_start = line_start_1             # <<<<<<<<<<<<<<
- *                         children_1.extend(children_2)
- *                         break
- */
-          __pyx_v_line_start = __pyx_v_line_start_1;
-
-          /* "JSONParser.pyx":366
- *                         offset_1 = offset_2
- *                         line_start = line_start_1
- *                         children_1.extend(children_2)             # <<<<<<<<<<<<<<
- *                         break
- *                     # end case
- */
-          __pyx_t_7 = __Pyx_PyList_Extend(__pyx_v_children_1, __pyx_v_children_2); if (unlikely(__pyx_t_7 == ((int)-1))) __PYX_ERR(0, 366, __pyx_L1_error)
-
-          /* "JSONParser.pyx":367
- *                         line_start = line_start_1
- *                         children_1.extend(children_2)
- *                         break             # <<<<<<<<<<<<<<
- *                     # end case
- *                     offset_1 = -1 # no more choices
- */
-          goto __pyx_L12_break;
-
-          /* "JSONParser.pyx":363
- * 
- *                         break
- *                     if offset_2 != -1:             # <<<<<<<<<<<<<<
- *                         offset_1 = offset_2
- *                         line_start = line_start_1
- */
-        }
-
-        /* "JSONParser.pyx":369
- *                         break
- *                     # end case
- *                     offset_1 = -1 # no more choices             # <<<<<<<<<<<<<<
- *                     break # end choice
- *                 if offset_1 == -1:
- */
-        __Pyx_INCREF(__pyx_int_neg_1);
-        __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_int_neg_1);
-
-        /* "JSONParser.pyx":370
- *                     # end case
- *                     offset_1 = -1 # no more choices
- *                     break # end choice             # <<<<<<<<<<<<<<
- *                 if offset_1 == -1:
- *                     break
- */
-        goto __pyx_L12_break;
-      }
-      __pyx_L12_break:;
-
-      /* "JSONParser.pyx":371
- *                     offset_1 = -1 # no more choices
- *                     break # end choice
- *                 if offset_1 == -1:             # <<<<<<<<<<<<<<
- *                     break
- * 
- */
-      __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_1, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 371, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 371, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      if (__pyx_t_3) {
-
-        /* "JSONParser.pyx":372
- *                     break # end choice
- *                 if offset_1 == -1:
- *                     break             # <<<<<<<<<<<<<<
- * 
- *                 count = 0
- */
-        goto __pyx_L6_break;
-
-        /* "JSONParser.pyx":371
- *                     offset_1 = -1 # no more choices
- *                     break # end choice
- *                 if offset_1 == -1:             # <<<<<<<<<<<<<<
- *                     break
- * 
- */
-      }
-
-      /* "JSONParser.pyx":374
- *                     break
- * 
- *                 count = 0             # <<<<<<<<<<<<<<
- *                 while True:
- *                     offset_2 = offset_1
- */
-      __pyx_v_count = 0;
-
-      /* "JSONParser.pyx":375
- * 
- *                 count = 0
- *                 while True:             # <<<<<<<<<<<<<<
- *                     offset_2 = offset_1
- *                     line_start_1 = line_start
- */
-      while (1) {
-
-        /* "JSONParser.pyx":376
- *                 count = 0
- *                 while True:
- *                     offset_2 = offset_1             # <<<<<<<<<<<<<<
- *                     line_start_1 = line_start
- *                     if buf[offset_2:offset_2+1] == '.':
- */
-        __Pyx_INCREF(__pyx_v_offset_1);
-        __Pyx_XDECREF_SET(__pyx_v_offset_2, __pyx_v_offset_1);
-
-        /* "JSONParser.pyx":377
- *                 while True:
- *                     offset_2 = offset_1
- *                     line_start_1 = line_start             # <<<<<<<<<<<<<<
- *                     if buf[offset_2:offset_2+1] == '.':
- *                         offset_2 += 1
- */
-        __pyx_v_line_start_1 = __pyx_v_line_start;
-
-        /* "JSONParser.pyx":378
- *                     offset_2 = offset_1
- *                     line_start_1 = line_start
- *                     if buf[offset_2:offset_2+1] == '.':             # <<<<<<<<<<<<<<
- *                         offset_2 += 1
- *                     else:
- */
-        if (unlikely(__pyx_v_buf == Py_None)) {
-          PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-          __PYX_ERR(0, 378, __pyx_L1_error)
-        }
-        __Pyx_INCREF(__pyx_v_offset_2);
-        __pyx_t_1 = __pyx_v_offset_2;
-        __pyx_t_3 = (__pyx_t_1 == Py_None);
-        if (__pyx_t_3) {
-          __pyx_t_2 = 0;
-        } else {
-          __pyx_t_4 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_4 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 378, __pyx_L1_error)
-          __pyx_t_2 = __pyx_t_4;
-        }
-        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_2, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 378, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_3 = (__pyx_t_1 == Py_None);
-        if (__pyx_t_3) {
-          __pyx_t_4 = PY_SSIZE_T_MAX;
-        } else {
-          __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 378, __pyx_L1_error)
-          __pyx_t_4 = __pyx_t_5;
-        }
-        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 378, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u__3, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 378, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __pyx_t_6 = (__pyx_t_3 != 0);
-        if (__pyx_t_6) {
-
-          /* "JSONParser.pyx":379
- *                     line_start_1 = line_start
- *                     if buf[offset_2:offset_2+1] == '.':
- *                         offset_2 += 1             # <<<<<<<<<<<<<<
- *                     else:
- *                         offset_2 = -1
- */
-          __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_2, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 379, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_1);
-          __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_t_1);
-          __pyx_t_1 = 0;
-
-          /* "JSONParser.pyx":378
- *                     offset_2 = offset_1
- *                     line_start_1 = line_start
- *                     if buf[offset_2:offset_2+1] == '.':             # <<<<<<<<<<<<<<
- *                         offset_2 += 1
- *                     else:
- */
-          goto __pyx_L28;
-        }
-
-        /* "JSONParser.pyx":381
- *                         offset_2 += 1
- *                     else:
- *                         offset_2 = -1             # <<<<<<<<<<<<<<
- *                         break
- * 
- */
-        /*else*/ {
-          __Pyx_INCREF(__pyx_int_neg_1);
-          __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_int_neg_1);
-
-          /* "JSONParser.pyx":382
- *                     else:
- *                         offset_2 = -1
- *                         break             # <<<<<<<<<<<<<<
- * 
- *                     count_1 = 0
- */
-          goto __pyx_L27_break;
-        }
-        __pyx_L28:;
-
-        /* "JSONParser.pyx":384
- *                         break
- * 
- *                     count_1 = 0             # <<<<<<<<<<<<<<
- *                     while True:
- *                         offset_3 = offset_2
- */
-        __Pyx_INCREF(__pyx_int_0);
-        __Pyx_XDECREF_SET(__pyx_v_count_1, __pyx_int_0);
-
-        /* "JSONParser.pyx":385
- * 
- *                     count_1 = 0
- *                     while True:             # <<<<<<<<<<<<<<
- *                         offset_3 = offset_2
- *                         line_start_2 = line_start_1
- */
-        while (1) {
-
-          /* "JSONParser.pyx":386
- *                     count_1 = 0
- *                     while True:
- *                         offset_3 = offset_2             # <<<<<<<<<<<<<<
- *                         line_start_2 = line_start_1
- *                         if offset_3 == len(buf):
- */
-          __Pyx_INCREF(__pyx_v_offset_2);
-          __Pyx_XDECREF_SET(__pyx_v_offset_3, __pyx_v_offset_2);
-
-          /* "JSONParser.pyx":387
- *                     while True:
- *                         offset_3 = offset_2
- *                         line_start_2 = line_start_1             # <<<<<<<<<<<<<<
- *                         if offset_3 == len(buf):
- *                             offset_3 = -1
- */
-          __pyx_v_line_start_2 = __pyx_v_line_start_1;
-
-          /* "JSONParser.pyx":388
- *                         offset_3 = offset_2
- *                         line_start_2 = line_start_1
- *                         if offset_3 == len(buf):             # <<<<<<<<<<<<<<
- *                             offset_3 = -1
- *                             break
- */
-          if (unlikely(__pyx_v_buf == Py_None)) {
-            PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
-            __PYX_ERR(0, 388, __pyx_L1_error)
-          }
-          __pyx_t_4 = __Pyx_PyUnicode_GET_LENGTH(__pyx_v_buf); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(0, 388, __pyx_L1_error)
-          __pyx_t_1 = PyInt_FromSsize_t(__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 388, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_8 = PyObject_RichCompare(__pyx_v_offset_3, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_8); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 388, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-          __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 388, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-          if (__pyx_t_6) {
-
-            /* "JSONParser.pyx":389
- *                         line_start_2 = line_start_1
- *                         if offset_3 == len(buf):
- *                             offset_3 = -1             # <<<<<<<<<<<<<<
- *                             break
- *                         elif '0' <= buf[offset_3] <= '9':
- */
-            __Pyx_INCREF(__pyx_int_neg_1);
-            __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_int_neg_1);
-
-            /* "JSONParser.pyx":390
- *                         if offset_3 == len(buf):
- *                             offset_3 = -1
- *                             break             # <<<<<<<<<<<<<<
- *                         elif '0' <= buf[offset_3] <= '9':
- *                             offset_3 += 1
- */
-            goto __pyx_L30_break;
-
-            /* "JSONParser.pyx":388
- *                         offset_3 = offset_2
- *                         line_start_2 = line_start_1
- *                         if offset_3 == len(buf):             # <<<<<<<<<<<<<<
- *                             offset_3 = -1
- *                             break
- */
-          }
-
-          /* "JSONParser.pyx":391
- *                             offset_3 = -1
- *                             break
- *                         elif '0' <= buf[offset_3] <= '9':             # <<<<<<<<<<<<<<
- *                             offset_3 += 1
- *                         else:
- */
-          __pyx_t_8 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 391, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_8);
-          __pyx_t_1 = PyObject_RichCompare(__pyx_kp_u_0, __pyx_t_8, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 391, __pyx_L1_error)
-          if (__Pyx_PyObject_IsTrue(__pyx_t_1)) {
-            __Pyx_DECREF(__pyx_t_1);
-            __pyx_t_1 = PyObject_RichCompare(__pyx_t_8, __pyx_kp_u_9, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 391, __pyx_L1_error)
-          }
-          __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-          __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 391, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-          if (__pyx_t_6) {
-
-            /* "JSONParser.pyx":392
- *                             break
- *                         elif '0' <= buf[offset_3] <= '9':
- *                             offset_3 += 1             # <<<<<<<<<<<<<<
- *                         else:
- *                             offset_3 = -1
- */
-            __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 392, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_1);
-            __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_1);
-            __pyx_t_1 = 0;
-
-            /* "JSONParser.pyx":391
- *                             offset_3 = -1
- *                             break
- *                         elif '0' <= buf[offset_3] <= '9':             # <<<<<<<<<<<<<<
- *                             offset_3 += 1
- *                         else:
- */
-            goto __pyx_L31;
-          }
-
-          /* "JSONParser.pyx":394
- *                             offset_3 += 1
- *                         else:
- *                             offset_3 = -1             # <<<<<<<<<<<<<<
- *                             break
- * 
- */
-          /*else*/ {
-            __Pyx_INCREF(__pyx_int_neg_1);
-            __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_int_neg_1);
-
-            /* "JSONParser.pyx":395
- *                         else:
- *                             offset_3 = -1
- *                             break             # <<<<<<<<<<<<<<
- * 
- *                         if offset_2 == offset_3: break
- */
-            goto __pyx_L30_break;
-          }
-          __pyx_L31:;
-
-          /* "JSONParser.pyx":397
- *                             break
- * 
- *                         if offset_2 == offset_3: break             # <<<<<<<<<<<<<<
- *                         offset_2 = offset_3
- *                         line_start_1 = line_start_2
- */
-          __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_2, __pyx_v_offset_3, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 397, __pyx_L1_error)
-          __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 397, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-          if (__pyx_t_6) {
-            goto __pyx_L30_break;
-          }
-
-          /* "JSONParser.pyx":398
- * 
- *                         if offset_2 == offset_3: break
- *                         offset_2 = offset_3             # <<<<<<<<<<<<<<
- *                         line_start_1 = line_start_2
- *                         count_1 += 1
- */
-          __Pyx_INCREF(__pyx_v_offset_3);
-          __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_v_offset_3);
-
-          /* "JSONParser.pyx":399
- *                         if offset_2 == offset_3: break
- *                         offset_2 = offset_3
- *                         line_start_1 = line_start_2             # <<<<<<<<<<<<<<
- *                         count_1 += 1
- * 
- */
-          __pyx_v_line_start_1 = __pyx_v_line_start_2;
-
-          /* "JSONParser.pyx":400
- *                         offset_2 = offset_3
- *                         line_start_1 = line_start_2
- *                         count_1 += 1             # <<<<<<<<<<<<<<
- * 
- *                     if offset_1 == offset_2: break
- */
-          __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_count_1, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 400, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_1);
-          __Pyx_DECREF_SET(__pyx_v_count_1, __pyx_t_1);
-          __pyx_t_1 = 0;
-        }
-        __pyx_L30_break:;
-
-        /* "JSONParser.pyx":402
- *                         count_1 += 1
- * 
- *                     if offset_1 == offset_2: break             # <<<<<<<<<<<<<<
- *                     offset_1 = offset_2
- *                     line_start = line_start_1
- */
-        __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_1, __pyx_v_offset_2, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 402, __pyx_L1_error)
-        __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 402, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        if (__pyx_t_6) {
-          goto __pyx_L27_break;
-        }
-
-        /* "JSONParser.pyx":403
- * 
- *                     if offset_1 == offset_2: break
- *                     offset_1 = offset_2             # <<<<<<<<<<<<<<
- *                     line_start = line_start_1
- *                     count += 1
- */
-        __Pyx_INCREF(__pyx_v_offset_2);
-        __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_v_offset_2);
-
-        /* "JSONParser.pyx":404
- *                     if offset_1 == offset_2: break
- *                     offset_1 = offset_2
- *                     line_start = line_start_1             # <<<<<<<<<<<<<<
- *                     count += 1
- * 
- */
-        __pyx_v_line_start = __pyx_v_line_start_1;
-
-        /* "JSONParser.pyx":405
- *                     offset_1 = offset_2
- *                     line_start = line_start_1
- *                     count += 1             # <<<<<<<<<<<<<<
- * 
- *                 count = 0
- */
-        __pyx_v_count = (__pyx_v_count + 1);
-      }
-      __pyx_L27_break:;
-
-      /* "JSONParser.pyx":407
- *                     count += 1
- * 
- *                 count = 0             # <<<<<<<<<<<<<<
- *                 while True:
- *                     offset_2 = offset_1
- */
-      __pyx_v_count = 0;
-
-      /* "JSONParser.pyx":408
- * 
- *                 count = 0
- *                 while True:             # <<<<<<<<<<<<<<
- *                     offset_2 = offset_1
- *                     line_start_1 = line_start
- */
-      while (1) {
-
-        /* "JSONParser.pyx":409
- *                 count = 0
- *                 while True:
- *                     offset_2 = offset_1             # <<<<<<<<<<<<<<
- *                     line_start_1 = line_start
- *                     if buf[offset_2:offset_2+1] == 'e':
- */
-        __Pyx_INCREF(__pyx_v_offset_1);
-        __Pyx_XDECREF_SET(__pyx_v_offset_2, __pyx_v_offset_1);
-
-        /* "JSONParser.pyx":410
- *                 while True:
- *                     offset_2 = offset_1
- *                     line_start_1 = line_start             # <<<<<<<<<<<<<<
- *                     if buf[offset_2:offset_2+1] == 'e':
- *                         offset_2 += 1
- */
-        __pyx_v_line_start_1 = __pyx_v_line_start;
-
-        /* "JSONParser.pyx":411
- *                     offset_2 = offset_1
- *                     line_start_1 = line_start
- *                     if buf[offset_2:offset_2+1] == 'e':             # <<<<<<<<<<<<<<
- *                         offset_2 += 1
- *                     elif buf[offset_2:offset_2+1] == 'E':
- */
-        if (unlikely(__pyx_v_buf == Py_None)) {
-          PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-          __PYX_ERR(0, 411, __pyx_L1_error)
-        }
-        __Pyx_INCREF(__pyx_v_offset_2);
-        __pyx_t_1 = __pyx_v_offset_2;
-        __pyx_t_6 = (__pyx_t_1 == Py_None);
-        if (__pyx_t_6) {
-          __pyx_t_4 = 0;
-        } else {
-          __pyx_t_2 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_2 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 411, __pyx_L1_error)
-          __pyx_t_4 = __pyx_t_2;
-        }
-        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_2, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 411, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_6 = (__pyx_t_1 == Py_None);
-        if (__pyx_t_6) {
-          __pyx_t_2 = PY_SSIZE_T_MAX;
-        } else {
-          __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 411, __pyx_L1_error)
-          __pyx_t_2 = __pyx_t_5;
-        }
-        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 411, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_n_u_e, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 411, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __pyx_t_3 = (__pyx_t_6 != 0);
-        if (__pyx_t_3) {
-
-          /* "JSONParser.pyx":412
- *                     line_start_1 = line_start
- *                     if buf[offset_2:offset_2+1] == 'e':
- *                         offset_2 += 1             # <<<<<<<<<<<<<<
- *                     elif buf[offset_2:offset_2+1] == 'E':
- *                         offset_2 += 1
- */
-          __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_2, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 412, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_1);
-          __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_t_1);
-          __pyx_t_1 = 0;
-
-          /* "JSONParser.pyx":411
- *                     offset_2 = offset_1
- *                     line_start_1 = line_start
- *                     if buf[offset_2:offset_2+1] == 'e':             # <<<<<<<<<<<<<<
- *                         offset_2 += 1
- *                     elif buf[offset_2:offset_2+1] == 'E':
- */
-          goto __pyx_L36;
-        }
-
-        /* "JSONParser.pyx":413
- *                     if buf[offset_2:offset_2+1] == 'e':
- *                         offset_2 += 1
- *                     elif buf[offset_2:offset_2+1] == 'E':             # <<<<<<<<<<<<<<
- *                         offset_2 += 1
- *                     else:
- */
-        if (unlikely(__pyx_v_buf == Py_None)) {
-          PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-          __PYX_ERR(0, 413, __pyx_L1_error)
-        }
-        __Pyx_INCREF(__pyx_v_offset_2);
-        __pyx_t_1 = __pyx_v_offset_2;
-        __pyx_t_3 = (__pyx_t_1 == Py_None);
-        if (__pyx_t_3) {
-          __pyx_t_2 = 0;
-        } else {
-          __pyx_t_4 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_4 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 413, __pyx_L1_error)
-          __pyx_t_2 = __pyx_t_4;
-        }
-        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_2, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 413, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_3 = (__pyx_t_1 == Py_None);
-        if (__pyx_t_3) {
-          __pyx_t_4 = PY_SSIZE_T_MAX;
-        } else {
-          __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 413, __pyx_L1_error)
-          __pyx_t_4 = __pyx_t_5;
-        }
-        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 413, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_n_u_E, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 413, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __pyx_t_6 = (__pyx_t_3 != 0);
-        if (__pyx_t_6) {
-
-          /* "JSONParser.pyx":414
- *                         offset_2 += 1
- *                     elif buf[offset_2:offset_2+1] == 'E':
- *                         offset_2 += 1             # <<<<<<<<<<<<<<
- *                     else:
- *                         offset_2 = -1
- */
-          __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_2, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 414, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_1);
-          __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_t_1);
-          __pyx_t_1 = 0;
-
-          /* "JSONParser.pyx":413
- *                     if buf[offset_2:offset_2+1] == 'e':
- *                         offset_2 += 1
- *                     elif buf[offset_2:offset_2+1] == 'E':             # <<<<<<<<<<<<<<
- *                         offset_2 += 1
- *                     else:
- */
-          goto __pyx_L36;
-        }
-
-        /* "JSONParser.pyx":416
- *                         offset_2 += 1
- *                     else:
- *                         offset_2 = -1             # <<<<<<<<<<<<<<
- *                         break
- * 
- */
-        /*else*/ {
-          __Pyx_INCREF(__pyx_int_neg_1);
-          __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_int_neg_1);
-
-          /* "JSONParser.pyx":417
- *                     else:
- *                         offset_2 = -1
- *                         break             # <<<<<<<<<<<<<<
- * 
- *                     count_1 = 0
- */
-          goto __pyx_L35_break;
-        }
-        __pyx_L36:;
-
-        /* "JSONParser.pyx":419
- *                         break
- * 
- *                     count_1 = 0             # <<<<<<<<<<<<<<
- *                     while True:
- *                         offset_3 = offset_2
- */
-        __Pyx_INCREF(__pyx_int_0);
-        __Pyx_XDECREF_SET(__pyx_v_count_1, __pyx_int_0);
-
-        /* "JSONParser.pyx":420
- * 
- *                     count_1 = 0
- *                     while True:             # <<<<<<<<<<<<<<
- *                         offset_3 = offset_2
- *                         line_start_2 = line_start_1
- */
-        while (1) {
-
-          /* "JSONParser.pyx":421
- *                     count_1 = 0
- *                     while True:
- *                         offset_3 = offset_2             # <<<<<<<<<<<<<<
- *                         line_start_2 = line_start_1
- *                         if buf[offset_3:offset_3+1] == '+':
- */
-          __Pyx_INCREF(__pyx_v_offset_2);
-          __Pyx_XDECREF_SET(__pyx_v_offset_3, __pyx_v_offset_2);
-
-          /* "JSONParser.pyx":422
- *                     while True:
- *                         offset_3 = offset_2
- *                         line_start_2 = line_start_1             # <<<<<<<<<<<<<<
- *                         if buf[offset_3:offset_3+1] == '+':
- *                             offset_3 += 1
- */
-          __pyx_v_line_start_2 = __pyx_v_line_start_1;
-
-          /* "JSONParser.pyx":423
- *                         offset_3 = offset_2
- *                         line_start_2 = line_start_1
- *                         if buf[offset_3:offset_3+1] == '+':             # <<<<<<<<<<<<<<
- *                             offset_3 += 1
- *                         elif buf[offset_3:offset_3+1] == '-':
- */
-          if (unlikely(__pyx_v_buf == Py_None)) {
-            PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-            __PYX_ERR(0, 423, __pyx_L1_error)
-          }
-          __Pyx_INCREF(__pyx_v_offset_3);
-          __pyx_t_1 = __pyx_v_offset_3;
-          __pyx_t_6 = (__pyx_t_1 == Py_None);
-          if (__pyx_t_6) {
-            __pyx_t_4 = 0;
-          } else {
-            __pyx_t_2 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_2 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 423, __pyx_L1_error)
-            __pyx_t_4 = __pyx_t_2;
-          }
-          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-          __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 423, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_6 = (__pyx_t_1 == Py_None);
-          if (__pyx_t_6) {
-            __pyx_t_2 = PY_SSIZE_T_MAX;
-          } else {
-            __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 423, __pyx_L1_error)
-            __pyx_t_2 = __pyx_t_5;
-          }
-          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-          __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 423, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u__4, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 423, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-          __pyx_t_3 = (__pyx_t_6 != 0);
-          if (__pyx_t_3) {
-
-            /* "JSONParser.pyx":424
- *                         line_start_2 = line_start_1
- *                         if buf[offset_3:offset_3+1] == '+':
- *                             offset_3 += 1             # <<<<<<<<<<<<<<
- *                         elif buf[offset_3:offset_3+1] == '-':
- *                             offset_3 += 1
- */
-            __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 424, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_1);
-            __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_1);
-            __pyx_t_1 = 0;
-
-            /* "JSONParser.pyx":423
- *                         offset_3 = offset_2
- *                         line_start_2 = line_start_1
- *                         if buf[offset_3:offset_3+1] == '+':             # <<<<<<<<<<<<<<
- *                             offset_3 += 1
- *                         elif buf[offset_3:offset_3+1] == '-':
- */
-            goto __pyx_L39;
-          }
-
-          /* "JSONParser.pyx":425
- *                         if buf[offset_3:offset_3+1] == '+':
- *                             offset_3 += 1
- *                         elif buf[offset_3:offset_3+1] == '-':             # <<<<<<<<<<<<<<
- *                             offset_3 += 1
- *                         else:
- */
-          if (unlikely(__pyx_v_buf == Py_None)) {
-            PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-            __PYX_ERR(0, 425, __pyx_L1_error)
-          }
-          __Pyx_INCREF(__pyx_v_offset_3);
-          __pyx_t_1 = __pyx_v_offset_3;
-          __pyx_t_3 = (__pyx_t_1 == Py_None);
-          if (__pyx_t_3) {
-            __pyx_t_2 = 0;
-          } else {
-            __pyx_t_4 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_4 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 425, __pyx_L1_error)
-            __pyx_t_2 = __pyx_t_4;
-          }
-          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-          __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 425, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_3 = (__pyx_t_1 == Py_None);
-          if (__pyx_t_3) {
-            __pyx_t_4 = PY_SSIZE_T_MAX;
-          } else {
-            __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 425, __pyx_L1_error)
-            __pyx_t_4 = __pyx_t_5;
-          }
-          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-          __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 425, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u__2, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 425, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-          __pyx_t_6 = (__pyx_t_3 != 0);
-          if (__pyx_t_6) {
-
-            /* "JSONParser.pyx":426
- *                             offset_3 += 1
- *                         elif buf[offset_3:offset_3+1] == '-':
- *                             offset_3 += 1             # <<<<<<<<<<<<<<
- *                         else:
- *                             offset_3 = -1
- */
-            __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 426, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_1);
-            __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_1);
-            __pyx_t_1 = 0;
-
-            /* "JSONParser.pyx":425
- *                         if buf[offset_3:offset_3+1] == '+':
- *                             offset_3 += 1
- *                         elif buf[offset_3:offset_3+1] == '-':             # <<<<<<<<<<<<<<
- *                             offset_3 += 1
- *                         else:
- */
-            goto __pyx_L39;
-          }
-
-          /* "JSONParser.pyx":428
- *                             offset_3 += 1
- *                         else:
- *                             offset_3 = -1             # <<<<<<<<<<<<<<
- *                             break
- * 
- */
-          /*else*/ {
-            __Pyx_INCREF(__pyx_int_neg_1);
-            __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_int_neg_1);
-
-            /* "JSONParser.pyx":429
- *                         else:
- *                             offset_3 = -1
- *                             break             # <<<<<<<<<<<<<<
- * 
- *                         count_2 = 0
- */
-            goto __pyx_L38_break;
-          }
-          __pyx_L39:;
-
-          /* "JSONParser.pyx":431
- *                             break
- * 
- *                         count_2 = 0             # <<<<<<<<<<<<<<
- *                         while True:
- *                             offset_4 = offset_3
- */
-          __Pyx_INCREF(__pyx_int_0);
-          __Pyx_XDECREF_SET(__pyx_v_count_2, __pyx_int_0);
-
-          /* "JSONParser.pyx":432
- * 
- *                         count_2 = 0
- *                         while True:             # <<<<<<<<<<<<<<
- *                             offset_4 = offset_3
- *                             line_start_3 = line_start_2
- */
-          while (1) {
-
-            /* "JSONParser.pyx":433
- *                         count_2 = 0
- *                         while True:
- *                             offset_4 = offset_3             # <<<<<<<<<<<<<<
- *                             line_start_3 = line_start_2
- *                             if offset_4 == len(buf):
- */
-            __Pyx_INCREF(__pyx_v_offset_3);
-            __Pyx_XDECREF_SET(__pyx_v_offset_4, __pyx_v_offset_3);
-
-            /* "JSONParser.pyx":434
- *                         while True:
- *                             offset_4 = offset_3
- *                             line_start_3 = line_start_2             # <<<<<<<<<<<<<<
- *                             if offset_4 == len(buf):
- *                                 offset_4 = -1
- */
-            __pyx_v_line_start_3 = __pyx_v_line_start_2;
-
-            /* "JSONParser.pyx":435
- *                             offset_4 = offset_3
- *                             line_start_3 = line_start_2
- *                             if offset_4 == len(buf):             # <<<<<<<<<<<<<<
- *                                 offset_4 = -1
- *                                 break
- */
-            if (unlikely(__pyx_v_buf == Py_None)) {
-              PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
-              __PYX_ERR(0, 435, __pyx_L1_error)
-            }
-            __pyx_t_4 = __Pyx_PyUnicode_GET_LENGTH(__pyx_v_buf); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(0, 435, __pyx_L1_error)
-            __pyx_t_1 = PyInt_FromSsize_t(__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 435, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_1);
-            __pyx_t_8 = PyObject_RichCompare(__pyx_v_offset_4, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_8); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 435, __pyx_L1_error)
-            __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 435, __pyx_L1_error)
-            __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-            if (__pyx_t_6) {
-
-              /* "JSONParser.pyx":436
- *                             line_start_3 = line_start_2
- *                             if offset_4 == len(buf):
- *                                 offset_4 = -1             # <<<<<<<<<<<<<<
- *                                 break
- *                             elif '0' <= buf[offset_4] <= '9':
- */
-              __Pyx_INCREF(__pyx_int_neg_1);
-              __Pyx_DECREF_SET(__pyx_v_offset_4, __pyx_int_neg_1);
-
-              /* "JSONParser.pyx":437
- *                             if offset_4 == len(buf):
- *                                 offset_4 = -1
- *                                 break             # <<<<<<<<<<<<<<
- *                             elif '0' <= buf[offset_4] <= '9':
- *                                 offset_4 += 1
- */
-              goto __pyx_L41_break;
-
-              /* "JSONParser.pyx":435
- *                             offset_4 = offset_3
- *                             line_start_3 = line_start_2
- *                             if offset_4 == len(buf):             # <<<<<<<<<<<<<<
- *                                 offset_4 = -1
- *                                 break
- */
-            }
-
-            /* "JSONParser.pyx":438
- *                                 offset_4 = -1
- *                                 break
- *                             elif '0' <= buf[offset_4] <= '9':             # <<<<<<<<<<<<<<
- *                                 offset_4 += 1
- *                             else:
- */
-            __pyx_t_8 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 438, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_8);
-            __pyx_t_1 = PyObject_RichCompare(__pyx_kp_u_0, __pyx_t_8, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 438, __pyx_L1_error)
-            if (__Pyx_PyObject_IsTrue(__pyx_t_1)) {
-              __Pyx_DECREF(__pyx_t_1);
-              __pyx_t_1 = PyObject_RichCompare(__pyx_t_8, __pyx_kp_u_9, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 438, __pyx_L1_error)
-            }
-            __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-            __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 438, __pyx_L1_error)
-            __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            if (__pyx_t_6) {
-
-              /* "JSONParser.pyx":439
- *                                 break
- *                             elif '0' <= buf[offset_4] <= '9':
- *                                 offset_4 += 1             # <<<<<<<<<<<<<<
- *                             else:
- *                                 offset_4 = -1
- */
-              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 439, __pyx_L1_error)
-              __Pyx_GOTREF(__pyx_t_1);
-              __Pyx_DECREF_SET(__pyx_v_offset_4, __pyx_t_1);
-              __pyx_t_1 = 0;
-
-              /* "JSONParser.pyx":438
- *                                 offset_4 = -1
- *                                 break
- *                             elif '0' <= buf[offset_4] <= '9':             # <<<<<<<<<<<<<<
- *                                 offset_4 += 1
- *                             else:
- */
-              goto __pyx_L42;
-            }
-
-            /* "JSONParser.pyx":441
- *                                 offset_4 += 1
- *                             else:
- *                                 offset_4 = -1             # <<<<<<<<<<<<<<
- *                                 break
- * 
- */
-            /*else*/ {
-              __Pyx_INCREF(__pyx_int_neg_1);
-              __Pyx_DECREF_SET(__pyx_v_offset_4, __pyx_int_neg_1);
-
-              /* "JSONParser.pyx":442
- *                             else:
- *                                 offset_4 = -1
- *                                 break             # <<<<<<<<<<<<<<
- * 
- *                             if offset_3 == offset_4: break
- */
-              goto __pyx_L41_break;
-            }
-            __pyx_L42:;
-
-            /* "JSONParser.pyx":444
- *                                 break
- * 
- *                             if offset_3 == offset_4: break             # <<<<<<<<<<<<<<
- *                             offset_3 = offset_4
- *                             line_start_2 = line_start_3
- */
-            __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_3, __pyx_v_offset_4, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 444, __pyx_L1_error)
-            __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 444, __pyx_L1_error)
-            __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            if (__pyx_t_6) {
-              goto __pyx_L41_break;
-            }
-
-            /* "JSONParser.pyx":445
- * 
- *                             if offset_3 == offset_4: break
- *                             offset_3 = offset_4             # <<<<<<<<<<<<<<
- *                             line_start_2 = line_start_3
- *                             count_2 += 1
- */
-            __Pyx_INCREF(__pyx_v_offset_4);
-            __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_v_offset_4);
-
-            /* "JSONParser.pyx":446
- *                             if offset_3 == offset_4: break
- *                             offset_3 = offset_4
- *                             line_start_2 = line_start_3             # <<<<<<<<<<<<<<
- *                             count_2 += 1
- * 
- */
-            __pyx_v_line_start_2 = __pyx_v_line_start_3;
-
-            /* "JSONParser.pyx":447
- *                             offset_3 = offset_4
- *                             line_start_2 = line_start_3
- *                             count_2 += 1             # <<<<<<<<<<<<<<
- * 
- *                         if offset_2 == offset_3: break
- */
-            __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_count_2, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 447, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_1);
-            __Pyx_DECREF_SET(__pyx_v_count_2, __pyx_t_1);
-            __pyx_t_1 = 0;
-          }
-          __pyx_L41_break:;
-
-          /* "JSONParser.pyx":449
- *                             count_2 += 1
- * 
- *                         if offset_2 == offset_3: break             # <<<<<<<<<<<<<<
- *                         offset_2 = offset_3
- *                         line_start_1 = line_start_2
- */
-          __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_2, __pyx_v_offset_3, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 449, __pyx_L1_error)
-          __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 449, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-          if (__pyx_t_6) {
-            goto __pyx_L38_break;
-          }
-
-          /* "JSONParser.pyx":450
- * 
- *                         if offset_2 == offset_3: break
- *                         offset_2 = offset_3             # <<<<<<<<<<<<<<
- *                         line_start_1 = line_start_2
- *                         count_1 += 1
- */
-          __Pyx_INCREF(__pyx_v_offset_3);
-          __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_v_offset_3);
-
-          /* "JSONParser.pyx":451
- *                         if offset_2 == offset_3: break
- *                         offset_2 = offset_3
- *                         line_start_1 = line_start_2             # <<<<<<<<<<<<<<
- *                         count_1 += 1
- * 
- */
-          __pyx_v_line_start_1 = __pyx_v_line_start_2;
-
-          /* "JSONParser.pyx":452
- *                         offset_2 = offset_3
- *                         line_start_1 = line_start_2
- *                         count_1 += 1             # <<<<<<<<<<<<<<
- * 
- *                     if offset_1 == offset_2: break
- */
-          __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_count_1, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 452, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_1);
-          __Pyx_DECREF_SET(__pyx_v_count_1, __pyx_t_1);
-          __pyx_t_1 = 0;
-        }
-        __pyx_L38_break:;
-
-        /* "JSONParser.pyx":454
- *                         count_1 += 1
- * 
- *                     if offset_1 == offset_2: break             # <<<<<<<<<<<<<<
- *                     offset_1 = offset_2
- *                     line_start = line_start_1
- */
-        __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_1, __pyx_v_offset_2, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 454, __pyx_L1_error)
-        __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 454, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        if (__pyx_t_6) {
-          goto __pyx_L35_break;
-        }
-
-        /* "JSONParser.pyx":455
- * 
- *                     if offset_1 == offset_2: break
- *                     offset_1 = offset_2             # <<<<<<<<<<<<<<
- *                     line_start = line_start_1
- *                     count += 1
- */
-        __Pyx_INCREF(__pyx_v_offset_2);
-        __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_v_offset_2);
-
-        /* "JSONParser.pyx":456
- *                     if offset_1 == offset_2: break
- *                     offset_1 = offset_2
- *                     line_start = line_start_1             # <<<<<<<<<<<<<<
- *                     count += 1
- * 
- */
-        __pyx_v_line_start = __pyx_v_line_start_1;
-
-        /* "JSONParser.pyx":457
- *                     offset_1 = offset_2
- *                     line_start = line_start_1
- *                     count += 1             # <<<<<<<<<<<<<<
- * 
- *                 break
- */
-        __pyx_v_count = (__pyx_v_count + 1);
-      }
-      __pyx_L35_break:;
-
-      /* "JSONParser.pyx":459
- *                     count += 1
- * 
- *                 break             # <<<<<<<<<<<<<<
- *             if offset_1 == -1:
- *                 offset = -1
- */
-      goto __pyx_L6_break;
-    }
-    __pyx_L6_break:;
-
-    /* "JSONParser.pyx":460
- * 
- *                 break
- *             if offset_1 == -1:             # <<<<<<<<<<<<<<
- *                 offset = -1
- *                 break
- */
-    __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_1, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 460, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 460, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    if (__pyx_t_6) {
-
-      /* "JSONParser.pyx":461
- *                 break
- *             if offset_1 == -1:
- *                 offset = -1             # <<<<<<<<<<<<<<
- *                 break
- *             if self.builder is not None:
- */
-      __pyx_v_offset = -1;
-
-      /* "JSONParser.pyx":462
- *             if offset_1 == -1:
- *                 offset = -1
- *                 break             # <<<<<<<<<<<<<<
- *             if self.builder is not None:
- *                 children.append(self.ParseNode('number', offset, offset_1, children_1, None))
- */
-      goto __pyx_L4_break;
-
-      /* "JSONParser.pyx":460
- * 
- *                 break
- *             if offset_1 == -1:             # <<<<<<<<<<<<<<
- *                 offset = -1
- *                 break
- */
-    }
-
-    /* "JSONParser.pyx":463
- *                 offset = -1
- *                 break
- *             if self.builder is not None:             # <<<<<<<<<<<<<<
- *                 children.append(self.ParseNode('number', offset, offset_1, children_1, None))
- *             else:
- */
-    __pyx_t_6 = (__pyx_v_self->builder != Py_None);
-    __pyx_t_3 = (__pyx_t_6 != 0);
-    if (__pyx_t_3) {
-
-      /* "JSONParser.pyx":464
- *                 break
- *             if self.builder is not None:
- *                 children.append(self.ParseNode('number', offset, offset_1, children_1, None))             # <<<<<<<<<<<<<<
- *             else:
- *                 children.append(ParseNode('number', offset, offset_1, children_1, None))
- */
-      if (unlikely(__pyx_v_children == Py_None)) {
-        PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
-        __PYX_ERR(0, 464, __pyx_L1_error)
-      }
-      __pyx_t_8 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 464, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_8);
-      __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 464, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_9);
-      __pyx_t_10 = NULL;
-      __pyx_t_11 = 0;
-      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_8))) {
-        __pyx_t_10 = PyMethod_GET_SELF(__pyx_t_8);
-        if (likely(__pyx_t_10)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_8);
-          __Pyx_INCREF(__pyx_t_10);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_8, function);
-          __pyx_t_11 = 1;
-        }
-      }
-      #if CYTHON_FAST_PYCALL
-      if (PyFunction_Check(__pyx_t_8)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_10, __pyx_n_u_number, __pyx_t_9, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_11, 5+__pyx_t_11); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 464, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-      } else
-      #endif
-      #if CYTHON_FAST_PYCCALL
-      if (__Pyx_PyFastCFunction_Check(__pyx_t_8)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_10, __pyx_n_u_number, __pyx_t_9, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_11, 5+__pyx_t_11); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 464, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-      } else
-      #endif
-      {
-        __pyx_t_12 = PyTuple_New(5+__pyx_t_11); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 464, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_12);
-        if (__pyx_t_10) {
-          __Pyx_GIVEREF(__pyx_t_10); PyTuple_SET_ITEM(__pyx_t_12, 0, __pyx_t_10); __pyx_t_10 = NULL;
-        }
-        __Pyx_INCREF(__pyx_n_u_number);
-        __Pyx_GIVEREF(__pyx_n_u_number);
-        PyTuple_SET_ITEM(__pyx_t_12, 0+__pyx_t_11, __pyx_n_u_number);
-        __Pyx_GIVEREF(__pyx_t_9);
-        PyTuple_SET_ITEM(__pyx_t_12, 1+__pyx_t_11, __pyx_t_9);
-        __Pyx_INCREF(__pyx_v_offset_1);
-        __Pyx_GIVEREF(__pyx_v_offset_1);
-        PyTuple_SET_ITEM(__pyx_t_12, 2+__pyx_t_11, __pyx_v_offset_1);
-        __Pyx_INCREF(__pyx_v_children_1);
-        __Pyx_GIVEREF(__pyx_v_children_1);
-        PyTuple_SET_ITEM(__pyx_t_12, 3+__pyx_t_11, __pyx_v_children_1);
-        __Pyx_INCREF(Py_None);
-        __Pyx_GIVEREF(Py_None);
-        PyTuple_SET_ITEM(__pyx_t_12, 4+__pyx_t_11, Py_None);
-        __pyx_t_9 = 0;
-        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_12, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 464, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
-      }
-      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      __pyx_t_7 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_7 == ((int)-1))) __PYX_ERR(0, 464, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-      /* "JSONParser.pyx":463
- *                 offset = -1
- *                 break
- *             if self.builder is not None:             # <<<<<<<<<<<<<<
- *                 children.append(self.ParseNode('number', offset, offset_1, children_1, None))
- *             else:
- */
-      goto __pyx_L47;
-    }
-
-    /* "JSONParser.pyx":466
- *                 children.append(self.ParseNode('number', offset, offset_1, children_1, None))
- *             else:
- *                 children.append(ParseNode('number', offset, offset_1, children_1, None))             # <<<<<<<<<<<<<<
- *                 children.append(ParseNode('number', offset, offset_1, children_1, None))
- *             offset = offset_1
- */
-    /*else*/ {
-      if (unlikely(__pyx_v_children == Py_None)) {
-        PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
-        __PYX_ERR(0, 466, __pyx_L1_error)
-      }
-      __Pyx_GetModuleGlobalName(__pyx_t_8, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 466, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_8);
-      __pyx_t_12 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 466, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_12);
-      __pyx_t_9 = NULL;
-      __pyx_t_11 = 0;
-      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_8))) {
-        __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_8);
-        if (likely(__pyx_t_9)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_8);
-          __Pyx_INCREF(__pyx_t_9);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_8, function);
-          __pyx_t_11 = 1;
-        }
-      }
-      #if CYTHON_FAST_PYCALL
-      if (PyFunction_Check(__pyx_t_8)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_9, __pyx_n_u_number, __pyx_t_12, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_11, 5+__pyx_t_11); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 466, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
-      } else
-      #endif
-      #if CYTHON_FAST_PYCCALL
-      if (__Pyx_PyFastCFunction_Check(__pyx_t_8)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_9, __pyx_n_u_number, __pyx_t_12, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_11, 5+__pyx_t_11); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 466, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
-      } else
-      #endif
-      {
-        __pyx_t_10 = PyTuple_New(5+__pyx_t_11); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 466, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_10);
-        if (__pyx_t_9) {
-          __Pyx_GIVEREF(__pyx_t_9); PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_9); __pyx_t_9 = NULL;
-        }
-        __Pyx_INCREF(__pyx_n_u_number);
-        __Pyx_GIVEREF(__pyx_n_u_number);
-        PyTuple_SET_ITEM(__pyx_t_10, 0+__pyx_t_11, __pyx_n_u_number);
-        __Pyx_GIVEREF(__pyx_t_12);
-        PyTuple_SET_ITEM(__pyx_t_10, 1+__pyx_t_11, __pyx_t_12);
-        __Pyx_INCREF(__pyx_v_offset_1);
-        __Pyx_GIVEREF(__pyx_v_offset_1);
-        PyTuple_SET_ITEM(__pyx_t_10, 2+__pyx_t_11, __pyx_v_offset_1);
-        __Pyx_INCREF(__pyx_v_children_1);
-        __Pyx_GIVEREF(__pyx_v_children_1);
-        PyTuple_SET_ITEM(__pyx_t_10, 3+__pyx_t_11, __pyx_v_children_1);
-        __Pyx_INCREF(Py_None);
-        __Pyx_GIVEREF(Py_None);
-        PyTuple_SET_ITEM(__pyx_t_10, 4+__pyx_t_11, Py_None);
-        __pyx_t_12 = 0;
-        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_10, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 466, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-      }
-      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      __pyx_t_7 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_7 == ((int)-1))) __PYX_ERR(0, 466, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-      /* "JSONParser.pyx":467
- *             else:
- *                 children.append(ParseNode('number', offset, offset_1, children_1, None))
- *                 children.append(ParseNode('number', offset, offset_1, children_1, None))             # <<<<<<<<<<<<<<
- *             offset = offset_1
- * 
- */
-      if (unlikely(__pyx_v_children == Py_None)) {
-        PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
-        __PYX_ERR(0, 467, __pyx_L1_error)
-      }
-      __Pyx_GetModuleGlobalName(__pyx_t_8, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 467, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_8);
-      __pyx_t_10 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 467, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_10);
-      __pyx_t_12 = NULL;
-      __pyx_t_11 = 0;
-      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_8))) {
-        __pyx_t_12 = PyMethod_GET_SELF(__pyx_t_8);
-        if (likely(__pyx_t_12)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_8);
-          __Pyx_INCREF(__pyx_t_12);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_8, function);
-          __pyx_t_11 = 1;
-        }
-      }
-      #if CYTHON_FAST_PYCALL
-      if (PyFunction_Check(__pyx_t_8)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_12, __pyx_n_u_number, __pyx_t_10, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_11, 5+__pyx_t_11); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 467, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-      } else
-      #endif
-      #if CYTHON_FAST_PYCCALL
-      if (__Pyx_PyFastCFunction_Check(__pyx_t_8)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_12, __pyx_n_u_number, __pyx_t_10, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_11, 5+__pyx_t_11); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 467, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-      } else
-      #endif
-      {
-        __pyx_t_9 = PyTuple_New(5+__pyx_t_11); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 467, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_9);
-        if (__pyx_t_12) {
-          __Pyx_GIVEREF(__pyx_t_12); PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_12); __pyx_t_12 = NULL;
-        }
-        __Pyx_INCREF(__pyx_n_u_number);
-        __Pyx_GIVEREF(__pyx_n_u_number);
-        PyTuple_SET_ITEM(__pyx_t_9, 0+__pyx_t_11, __pyx_n_u_number);
-        __Pyx_GIVEREF(__pyx_t_10);
-        PyTuple_SET_ITEM(__pyx_t_9, 1+__pyx_t_11, __pyx_t_10);
-        __Pyx_INCREF(__pyx_v_offset_1);
-        __Pyx_GIVEREF(__pyx_v_offset_1);
-        PyTuple_SET_ITEM(__pyx_t_9, 2+__pyx_t_11, __pyx_v_offset_1);
-        __Pyx_INCREF(__pyx_v_children_1);
-        __Pyx_GIVEREF(__pyx_v_children_1);
-        PyTuple_SET_ITEM(__pyx_t_9, 3+__pyx_t_11, __pyx_v_children_1);
-        __Pyx_INCREF(Py_None);
-        __Pyx_GIVEREF(Py_None);
-        PyTuple_SET_ITEM(__pyx_t_9, 4+__pyx_t_11, Py_None);
-        __pyx_t_10 = 0;
-        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_9, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 467, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-      }
-      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      __pyx_t_7 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_7 == ((int)-1))) __PYX_ERR(0, 467, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    }
-    __pyx_L47:;
-
-    /* "JSONParser.pyx":468
- *                 children.append(ParseNode('number', offset, offset_1, children_1, None))
- *                 children.append(ParseNode('number', offset, offset_1, children_1, None))
- *             offset = offset_1             # <<<<<<<<<<<<<<
- * 
- *             break
- */
-    __pyx_t_11 = __Pyx_PyInt_As_int(__pyx_v_offset_1); if (unlikely((__pyx_t_11 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 468, __pyx_L1_error)
-    __pyx_v_offset = __pyx_t_11;
-
-    /* "JSONParser.pyx":470
- *             offset = offset_1
- * 
- *             break             # <<<<<<<<<<<<<<
- *         return offset, line_start
- * 
- */
-    goto __pyx_L4_break;
-  }
-  __pyx_L4_break:;
-
-  /* "JSONParser.pyx":471
- * 
- *             break
- *         return offset, line_start             # <<<<<<<<<<<<<<
- * 
- *     cdef (int, int) parse_json_string(self, str buf, int offset, int line_start, int indent, list children):
- */
-  __pyx_t_13.f0 = __pyx_v_offset;
-  __pyx_t_13.f1 = __pyx_v_line_start;
-  __pyx_r = __pyx_t_13;
-  goto __pyx_L0;
-
-  /* "JSONParser.pyx":289
- *         return offset, line_start
- * 
- *     cdef (int, int) parse_json_number(self, str buf, int offset, int line_start, int indent, list children):             # <<<<<<<<<<<<<<
- *         cdef int count
- *         cdef Py_UNICODE chr
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_8);
-  __Pyx_XDECREF(__pyx_t_9);
   __Pyx_XDECREF(__pyx_t_10);
-  __Pyx_XDECREF(__pyx_t_12);
-  __Pyx_WriteUnraisable("JSONParser.Parser.parse_json_number", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
+  __Pyx_WriteUnraisable("JSONParser.Parser.parse_json_value", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
   __Pyx_pretend_to_initialize(&__pyx_r);
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_offset_1);
@@ -7901,22 +7072,24 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_number(
   __Pyx_XDECREF(__pyx_v_offset_2);
   __Pyx_XDECREF(__pyx_v_children_2);
   __Pyx_XDECREF(__pyx_v_offset_3);
+  __Pyx_XDECREF(__pyx_v_children_3);
+  __Pyx_XDECREF(__pyx_v_offset_4);
   __Pyx_XDECREF(__pyx_v_count_1);
   __Pyx_XDECREF(__pyx_v_count_2);
-  __Pyx_XDECREF(__pyx_v_offset_4);
+  __Pyx_XDECREF(__pyx_v_offset_5);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "JSONParser.pyx":473
+/* "JSONParser.pyx":431
  *         return offset, line_start
  * 
- *     cdef (int, int) parse_json_string(self, str buf, int offset, int line_start, int indent, list children):             # <<<<<<<<<<<<<<
+ *     cdef (int, int) parse_json_string(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
  *         cdef Py_UNICODE chr
  */
 
-static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(struct __pyx_obj_10JSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, CYTHON_UNUSED int __pyx_v_indent, PyObject *__pyx_v_children) {
+static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(struct __pyx_obj_10JSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, CYTHON_UNUSED int __pyx_v_indent, int __pyx_v_buf_eof, PyObject *__pyx_v_children) {
   int __pyx_v_count;
   PyObject *__pyx_v_offset_1 = NULL;
   PyObject *__pyx_v_children_1 = NULL;
@@ -7942,7 +7115,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
   __pyx_ctuple_int__and_int __pyx_t_13;
   __Pyx_RefNannySetupContext("parse_json_string", 0);
 
-  /* "JSONParser.pyx":476
+  /* "JSONParser.pyx":434
  *         cdef int count
  *         cdef Py_UNICODE chr
  *         while True: # note: return at end of loop             # <<<<<<<<<<<<<<
@@ -7951,7 +7124,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
   while (1) {
 
-    /* "JSONParser.pyx":477
+    /* "JSONParser.pyx":435
  *         cdef Py_UNICODE chr
  *         while True: # note: return at end of loop
  *             if buf[offset:offset+1] == '"':             # <<<<<<<<<<<<<<
@@ -7960,16 +7133,16 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
     if (unlikely(__pyx_v_buf == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 477, __pyx_L1_error)
+      __PYX_ERR(0, 435, __pyx_L1_error)
     }
-    __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_v_offset, (__pyx_v_offset + 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 477, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_v_offset, (__pyx_v_offset + 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 435, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u__5, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 477, __pyx_L1_error)
+    __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u__5, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 435, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_3 = (__pyx_t_2 != 0);
     if (__pyx_t_3) {
 
-      /* "JSONParser.pyx":478
+      /* "JSONParser.pyx":436
  *         while True: # note: return at end of loop
  *             if buf[offset:offset+1] == '"':
  *                 offset += 1             # <<<<<<<<<<<<<<
@@ -7978,7 +7151,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
       __pyx_v_offset = (__pyx_v_offset + 1);
 
-      /* "JSONParser.pyx":477
+      /* "JSONParser.pyx":435
  *         cdef Py_UNICODE chr
  *         while True: # note: return at end of loop
  *             if buf[offset:offset+1] == '"':             # <<<<<<<<<<<<<<
@@ -7988,7 +7161,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
       goto __pyx_L5;
     }
 
-    /* "JSONParser.pyx":480
+    /* "JSONParser.pyx":438
  *                 offset += 1
  *             else:
  *                 offset = -1             # <<<<<<<<<<<<<<
@@ -7998,7 +7171,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
     /*else*/ {
       __pyx_v_offset = -1;
 
-      /* "JSONParser.pyx":481
+      /* "JSONParser.pyx":439
  *             else:
  *                 offset = -1
  *                 break             # <<<<<<<<<<<<<<
@@ -8009,31 +7182,31 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
     }
     __pyx_L5:;
 
-    /* "JSONParser.pyx":483
+    /* "JSONParser.pyx":441
  *                 break
  * 
  *             offset_1 = offset             # <<<<<<<<<<<<<<
  *             children_1 = []
  *             while True: # start capture
  */
-    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 483, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 441, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_v_offset_1 = __pyx_t_1;
     __pyx_t_1 = 0;
 
-    /* "JSONParser.pyx":484
+    /* "JSONParser.pyx":442
  * 
  *             offset_1 = offset
  *             children_1 = []             # <<<<<<<<<<<<<<
  *             while True: # start capture
  *                 count = 0
  */
-    __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 484, __pyx_L1_error)
+    __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 442, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_v_children_1 = ((PyObject*)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "JSONParser.pyx":485
+    /* "JSONParser.pyx":443
  *             offset_1 = offset
  *             children_1 = []
  *             while True: # start capture             # <<<<<<<<<<<<<<
@@ -8042,7 +7215,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
     while (1) {
 
-      /* "JSONParser.pyx":486
+      /* "JSONParser.pyx":444
  *             children_1 = []
  *             while True: # start capture
  *                 count = 0             # <<<<<<<<<<<<<<
@@ -8051,7 +7224,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
       __pyx_v_count = 0;
 
-      /* "JSONParser.pyx":487
+      /* "JSONParser.pyx":445
  *             while True: # start capture
  *                 count = 0
  *                 while True:             # <<<<<<<<<<<<<<
@@ -8060,7 +7233,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
       while (1) {
 
-        /* "JSONParser.pyx":488
+        /* "JSONParser.pyx":446
  *                 count = 0
  *                 while True:
  *                     offset_2 = offset_1             # <<<<<<<<<<<<<<
@@ -8070,7 +7243,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
         __Pyx_INCREF(__pyx_v_offset_1);
         __Pyx_XDECREF_SET(__pyx_v_offset_2, __pyx_v_offset_1);
 
-        /* "JSONParser.pyx":489
+        /* "JSONParser.pyx":447
  *                 while True:
  *                     offset_2 = offset_1
  *                     line_start_1 = line_start             # <<<<<<<<<<<<<<
@@ -8079,7 +7252,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
         __pyx_v_line_start_1 = __pyx_v_line_start;
 
-        /* "JSONParser.pyx":490
+        /* "JSONParser.pyx":448
  *                     offset_2 = offset_1
  *                     line_start_1 = line_start
  *                     while True: # start choice             # <<<<<<<<<<<<<<
@@ -8088,7 +7261,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
         while (1) {
 
-          /* "JSONParser.pyx":491
+          /* "JSONParser.pyx":449
  *                     line_start_1 = line_start
  *                     while True: # start choice
  *                         offset_3 = offset_2             # <<<<<<<<<<<<<<
@@ -8098,7 +7271,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
           __Pyx_INCREF(__pyx_v_offset_2);
           __Pyx_XDECREF_SET(__pyx_v_offset_3, __pyx_v_offset_2);
 
-          /* "JSONParser.pyx":492
+          /* "JSONParser.pyx":450
  *                     while True: # start choice
  *                         offset_3 = offset_2
  *                         line_start_2 = line_start_1             # <<<<<<<<<<<<<<
@@ -8107,19 +7280,19 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
           __pyx_v_line_start_2 = __pyx_v_line_start_1;
 
-          /* "JSONParser.pyx":493
+          /* "JSONParser.pyx":451
  *                         offset_3 = offset_2
  *                         line_start_2 = line_start_1
  *                         children_2 = []             # <<<<<<<<<<<<<<
  *                         while True: # case
  *                             if buf[offset_3:offset_3+2] == '\\u':
  */
-          __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 493, __pyx_L1_error)
+          __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 451, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           __Pyx_XDECREF_SET(__pyx_v_children_2, ((PyObject*)__pyx_t_1));
           __pyx_t_1 = 0;
 
-          /* "JSONParser.pyx":494
+          /* "JSONParser.pyx":452
  *                         line_start_2 = line_start_1
  *                         children_2 = []
  *                         while True: # case             # <<<<<<<<<<<<<<
@@ -8128,7 +7301,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
           while (1) {
 
-            /* "JSONParser.pyx":495
+            /* "JSONParser.pyx":453
  *                         children_2 = []
  *                         while True: # case
  *                             if buf[offset_3:offset_3+2] == '\\u':             # <<<<<<<<<<<<<<
@@ -8137,7 +7310,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
             if (unlikely(__pyx_v_buf == Py_None)) {
               PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-              __PYX_ERR(0, 495, __pyx_L1_error)
+              __PYX_ERR(0, 453, __pyx_L1_error)
             }
             __Pyx_INCREF(__pyx_v_offset_3);
             __pyx_t_1 = __pyx_v_offset_3;
@@ -8145,40 +7318,40 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
             if (__pyx_t_3) {
               __pyx_t_4 = 0;
             } else {
-              __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 495, __pyx_L1_error)
+              __pyx_t_5 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_5 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 453, __pyx_L1_error)
               __pyx_t_4 = __pyx_t_5;
             }
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_2, 2, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 495, __pyx_L1_error)
+            __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_2, 2, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 453, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
             __pyx_t_3 = (__pyx_t_1 == Py_None);
             if (__pyx_t_3) {
               __pyx_t_5 = PY_SSIZE_T_MAX;
             } else {
-              __pyx_t_6 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_6 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 495, __pyx_L1_error)
+              __pyx_t_6 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_6 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 453, __pyx_L1_error)
               __pyx_t_5 = __pyx_t_6;
             }
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 495, __pyx_L1_error)
+            __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 453, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
-            __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u_u, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 495, __pyx_L1_error)
+            __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u_u, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 453, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
             __pyx_t_2 = (__pyx_t_3 != 0);
             if (__pyx_t_2) {
 
-              /* "JSONParser.pyx":496
+              /* "JSONParser.pyx":454
  *                         while True: # case
  *                             if buf[offset_3:offset_3+2] == '\\u':
  *                                 offset_3 += 2             # <<<<<<<<<<<<<<
  *                             else:
  *                                 offset_3 = -1
  */
-              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_2, 2, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 496, __pyx_L1_error)
+              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_2, 2, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 454, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_1);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_1);
               __pyx_t_1 = 0;
 
-              /* "JSONParser.pyx":495
+              /* "JSONParser.pyx":453
  *                         children_2 = []
  *                         while True: # case
  *                             if buf[offset_3:offset_3+2] == '\\u':             # <<<<<<<<<<<<<<
@@ -8188,7 +7361,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               goto __pyx_L14;
             }
 
-            /* "JSONParser.pyx":498
+            /* "JSONParser.pyx":456
  *                                 offset_3 += 2
  *                             else:
  *                                 offset_3 = -1             # <<<<<<<<<<<<<<
@@ -8199,40 +7372,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               __Pyx_INCREF(__pyx_int_neg_1);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_int_neg_1);
 
-              /* "JSONParser.pyx":499
+              /* "JSONParser.pyx":457
  *                             else:
  *                                 offset_3 = -1
  *                                 break             # <<<<<<<<<<<<<<
  * 
- *                             if offset_3 == len(buf):
+ *                             if offset_3 == buf_eof:
  */
               goto __pyx_L13_break;
             }
             __pyx_L14:;
 
-            /* "JSONParser.pyx":501
+            /* "JSONParser.pyx":459
  *                                 break
  * 
- *                             if offset_3 == len(buf):             # <<<<<<<<<<<<<<
+ *                             if offset_3 == buf_eof:             # <<<<<<<<<<<<<<
  *                                 offset_3 = -1
  *                                 break
  */
-            if (unlikely(__pyx_v_buf == Py_None)) {
-              PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
-              __PYX_ERR(0, 501, __pyx_L1_error)
-            }
-            __pyx_t_5 = __Pyx_PyUnicode_GET_LENGTH(__pyx_v_buf); if (unlikely(__pyx_t_5 == ((Py_ssize_t)-1))) __PYX_ERR(0, 501, __pyx_L1_error)
-            __pyx_t_1 = PyInt_FromSsize_t(__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 501, __pyx_L1_error)
+            __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_buf_eof); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 459, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
-            __pyx_t_7 = PyObject_RichCompare(__pyx_v_offset_3, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 501, __pyx_L1_error)
+            __pyx_t_7 = PyObject_RichCompare(__pyx_v_offset_3, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 459, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 501, __pyx_L1_error)
+            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 459, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
             if (__pyx_t_2) {
 
-              /* "JSONParser.pyx":502
+              /* "JSONParser.pyx":460
  * 
- *                             if offset_3 == len(buf):
+ *                             if offset_3 == buf_eof:
  *                                 offset_3 = -1             # <<<<<<<<<<<<<<
  *                                 break
  *                             elif '0' <= buf[offset_3] <= '9':
@@ -8240,8 +7408,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               __Pyx_INCREF(__pyx_int_neg_1);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_int_neg_1);
 
-              /* "JSONParser.pyx":503
- *                             if offset_3 == len(buf):
+              /* "JSONParser.pyx":461
+ *                             if offset_3 == buf_eof:
  *                                 offset_3 = -1
  *                                 break             # <<<<<<<<<<<<<<
  *                             elif '0' <= buf[offset_3] <= '9':
@@ -8249,47 +7417,47 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
               goto __pyx_L13_break;
 
-              /* "JSONParser.pyx":501
+              /* "JSONParser.pyx":459
  *                                 break
  * 
- *                             if offset_3 == len(buf):             # <<<<<<<<<<<<<<
+ *                             if offset_3 == buf_eof:             # <<<<<<<<<<<<<<
  *                                 offset_3 = -1
  *                                 break
  */
             }
 
-            /* "JSONParser.pyx":504
+            /* "JSONParser.pyx":462
  *                                 offset_3 = -1
  *                                 break
  *                             elif '0' <= buf[offset_3] <= '9':             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
  *                             elif 'a' <= buf[offset_3] <= 'f':
  */
-            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 504, __pyx_L1_error)
+            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 462, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_7);
-            __pyx_t_1 = PyObject_RichCompare(__pyx_kp_u_0, __pyx_t_7, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 504, __pyx_L1_error)
+            __pyx_t_1 = PyObject_RichCompare(__pyx_kp_u_0, __pyx_t_7, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 462, __pyx_L1_error)
             if (__Pyx_PyObject_IsTrue(__pyx_t_1)) {
               __Pyx_DECREF(__pyx_t_1);
-              __pyx_t_1 = PyObject_RichCompare(__pyx_t_7, __pyx_kp_u_9, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 504, __pyx_L1_error)
+              __pyx_t_1 = PyObject_RichCompare(__pyx_t_7, __pyx_kp_u_9, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 462, __pyx_L1_error)
             }
             __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 504, __pyx_L1_error)
+            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 462, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
             if (__pyx_t_2) {
 
-              /* "JSONParser.pyx":505
+              /* "JSONParser.pyx":463
  *                                 break
  *                             elif '0' <= buf[offset_3] <= '9':
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
  *                             elif 'a' <= buf[offset_3] <= 'f':
  *                                 offset_3 += 1
  */
-              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 505, __pyx_L1_error)
+              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 463, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_1);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_1);
               __pyx_t_1 = 0;
 
-              /* "JSONParser.pyx":504
+              /* "JSONParser.pyx":462
  *                                 offset_3 = -1
  *                                 break
  *                             elif '0' <= buf[offset_3] <= '9':             # <<<<<<<<<<<<<<
@@ -8299,38 +7467,38 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               goto __pyx_L15;
             }
 
-            /* "JSONParser.pyx":506
+            /* "JSONParser.pyx":464
  *                             elif '0' <= buf[offset_3] <= '9':
  *                                 offset_3 += 1
  *                             elif 'a' <= buf[offset_3] <= 'f':             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
  *                             elif 'A' <= buf[offset_3] <= 'F':
  */
-            __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 506, __pyx_L1_error)
+            __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 464, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
-            __pyx_t_7 = PyObject_RichCompare(__pyx_n_u_a, __pyx_t_1, Py_LE); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 506, __pyx_L1_error)
+            __pyx_t_7 = PyObject_RichCompare(__pyx_n_u_a, __pyx_t_1, Py_LE); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 464, __pyx_L1_error)
             if (__Pyx_PyObject_IsTrue(__pyx_t_7)) {
               __Pyx_DECREF(__pyx_t_7);
-              __pyx_t_7 = PyObject_RichCompare(__pyx_t_1, __pyx_n_u_f, Py_LE); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 506, __pyx_L1_error)
+              __pyx_t_7 = PyObject_RichCompare(__pyx_t_1, __pyx_n_u_f, Py_LE); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 464, __pyx_L1_error)
             }
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 506, __pyx_L1_error)
+            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 464, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
             if (__pyx_t_2) {
 
-              /* "JSONParser.pyx":507
+              /* "JSONParser.pyx":465
  *                                 offset_3 += 1
  *                             elif 'a' <= buf[offset_3] <= 'f':
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
  *                             elif 'A' <= buf[offset_3] <= 'F':
  *                                 offset_3 += 1
  */
-              __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 507, __pyx_L1_error)
+              __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 465, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_7);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_7);
               __pyx_t_7 = 0;
 
-              /* "JSONParser.pyx":506
+              /* "JSONParser.pyx":464
  *                             elif '0' <= buf[offset_3] <= '9':
  *                                 offset_3 += 1
  *                             elif 'a' <= buf[offset_3] <= 'f':             # <<<<<<<<<<<<<<
@@ -8340,38 +7508,38 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               goto __pyx_L15;
             }
 
-            /* "JSONParser.pyx":508
+            /* "JSONParser.pyx":466
  *                             elif 'a' <= buf[offset_3] <= 'f':
  *                                 offset_3 += 1
  *                             elif 'A' <= buf[offset_3] <= 'F':             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
  *                             else:
  */
-            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 508, __pyx_L1_error)
+            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 466, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_7);
-            __pyx_t_1 = PyObject_RichCompare(__pyx_n_u_A, __pyx_t_7, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 508, __pyx_L1_error)
+            __pyx_t_1 = PyObject_RichCompare(__pyx_n_u_A, __pyx_t_7, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 466, __pyx_L1_error)
             if (__Pyx_PyObject_IsTrue(__pyx_t_1)) {
               __Pyx_DECREF(__pyx_t_1);
-              __pyx_t_1 = PyObject_RichCompare(__pyx_t_7, __pyx_n_u_F, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 508, __pyx_L1_error)
+              __pyx_t_1 = PyObject_RichCompare(__pyx_t_7, __pyx_n_u_F, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 466, __pyx_L1_error)
             }
             __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 508, __pyx_L1_error)
+            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 466, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
             if (__pyx_t_2) {
 
-              /* "JSONParser.pyx":509
+              /* "JSONParser.pyx":467
  *                                 offset_3 += 1
  *                             elif 'A' <= buf[offset_3] <= 'F':
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
  *                             else:
  *                                 offset_3 = -1
  */
-              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 509, __pyx_L1_error)
+              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 467, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_1);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_1);
               __pyx_t_1 = 0;
 
-              /* "JSONParser.pyx":508
+              /* "JSONParser.pyx":466
  *                             elif 'a' <= buf[offset_3] <= 'f':
  *                                 offset_3 += 1
  *                             elif 'A' <= buf[offset_3] <= 'F':             # <<<<<<<<<<<<<<
@@ -8381,7 +7549,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               goto __pyx_L15;
             }
 
-            /* "JSONParser.pyx":511
+            /* "JSONParser.pyx":469
  *                                 offset_3 += 1
  *                             else:
  *                                 offset_3 = -1             # <<<<<<<<<<<<<<
@@ -8392,40 +7560,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               __Pyx_INCREF(__pyx_int_neg_1);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_int_neg_1);
 
-              /* "JSONParser.pyx":512
+              /* "JSONParser.pyx":470
  *                             else:
  *                                 offset_3 = -1
  *                                 break             # <<<<<<<<<<<<<<
  * 
- *                             if offset_3 == len(buf):
+ *                             if offset_3 == buf_eof:
  */
               goto __pyx_L13_break;
             }
             __pyx_L15:;
 
-            /* "JSONParser.pyx":514
+            /* "JSONParser.pyx":472
  *                                 break
  * 
- *                             if offset_3 == len(buf):             # <<<<<<<<<<<<<<
+ *                             if offset_3 == buf_eof:             # <<<<<<<<<<<<<<
  *                                 offset_3 = -1
  *                                 break
  */
-            if (unlikely(__pyx_v_buf == Py_None)) {
-              PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
-              __PYX_ERR(0, 514, __pyx_L1_error)
-            }
-            __pyx_t_5 = __Pyx_PyUnicode_GET_LENGTH(__pyx_v_buf); if (unlikely(__pyx_t_5 == ((Py_ssize_t)-1))) __PYX_ERR(0, 514, __pyx_L1_error)
-            __pyx_t_1 = PyInt_FromSsize_t(__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 514, __pyx_L1_error)
+            __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_buf_eof); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 472, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
-            __pyx_t_7 = PyObject_RichCompare(__pyx_v_offset_3, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 514, __pyx_L1_error)
+            __pyx_t_7 = PyObject_RichCompare(__pyx_v_offset_3, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 472, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 514, __pyx_L1_error)
+            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 472, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
             if (__pyx_t_2) {
 
-              /* "JSONParser.pyx":515
+              /* "JSONParser.pyx":473
  * 
- *                             if offset_3 == len(buf):
+ *                             if offset_3 == buf_eof:
  *                                 offset_3 = -1             # <<<<<<<<<<<<<<
  *                                 break
  *                             elif '0' <= buf[offset_3] <= '9':
@@ -8433,8 +7596,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               __Pyx_INCREF(__pyx_int_neg_1);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_int_neg_1);
 
-              /* "JSONParser.pyx":516
- *                             if offset_3 == len(buf):
+              /* "JSONParser.pyx":474
+ *                             if offset_3 == buf_eof:
  *                                 offset_3 = -1
  *                                 break             # <<<<<<<<<<<<<<
  *                             elif '0' <= buf[offset_3] <= '9':
@@ -8442,47 +7605,47 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
               goto __pyx_L13_break;
 
-              /* "JSONParser.pyx":514
+              /* "JSONParser.pyx":472
  *                                 break
  * 
- *                             if offset_3 == len(buf):             # <<<<<<<<<<<<<<
+ *                             if offset_3 == buf_eof:             # <<<<<<<<<<<<<<
  *                                 offset_3 = -1
  *                                 break
  */
             }
 
-            /* "JSONParser.pyx":517
+            /* "JSONParser.pyx":475
  *                                 offset_3 = -1
  *                                 break
  *                             elif '0' <= buf[offset_3] <= '9':             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
  *                             elif 'a' <= buf[offset_3] <= 'f':
  */
-            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 517, __pyx_L1_error)
+            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 475, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_7);
-            __pyx_t_1 = PyObject_RichCompare(__pyx_kp_u_0, __pyx_t_7, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 517, __pyx_L1_error)
+            __pyx_t_1 = PyObject_RichCompare(__pyx_kp_u_0, __pyx_t_7, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 475, __pyx_L1_error)
             if (__Pyx_PyObject_IsTrue(__pyx_t_1)) {
               __Pyx_DECREF(__pyx_t_1);
-              __pyx_t_1 = PyObject_RichCompare(__pyx_t_7, __pyx_kp_u_9, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 517, __pyx_L1_error)
+              __pyx_t_1 = PyObject_RichCompare(__pyx_t_7, __pyx_kp_u_9, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 475, __pyx_L1_error)
             }
             __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 517, __pyx_L1_error)
+            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 475, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
             if (__pyx_t_2) {
 
-              /* "JSONParser.pyx":518
+              /* "JSONParser.pyx":476
  *                                 break
  *                             elif '0' <= buf[offset_3] <= '9':
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
  *                             elif 'a' <= buf[offset_3] <= 'f':
  *                                 offset_3 += 1
  */
-              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 518, __pyx_L1_error)
+              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 476, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_1);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_1);
               __pyx_t_1 = 0;
 
-              /* "JSONParser.pyx":517
+              /* "JSONParser.pyx":475
  *                                 offset_3 = -1
  *                                 break
  *                             elif '0' <= buf[offset_3] <= '9':             # <<<<<<<<<<<<<<
@@ -8492,38 +7655,38 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               goto __pyx_L16;
             }
 
-            /* "JSONParser.pyx":519
+            /* "JSONParser.pyx":477
  *                             elif '0' <= buf[offset_3] <= '9':
  *                                 offset_3 += 1
  *                             elif 'a' <= buf[offset_3] <= 'f':             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
  *                             elif 'A' <= buf[offset_3] <= 'F':
  */
-            __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 519, __pyx_L1_error)
+            __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 477, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
-            __pyx_t_7 = PyObject_RichCompare(__pyx_n_u_a, __pyx_t_1, Py_LE); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 519, __pyx_L1_error)
+            __pyx_t_7 = PyObject_RichCompare(__pyx_n_u_a, __pyx_t_1, Py_LE); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 477, __pyx_L1_error)
             if (__Pyx_PyObject_IsTrue(__pyx_t_7)) {
               __Pyx_DECREF(__pyx_t_7);
-              __pyx_t_7 = PyObject_RichCompare(__pyx_t_1, __pyx_n_u_f, Py_LE); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 519, __pyx_L1_error)
+              __pyx_t_7 = PyObject_RichCompare(__pyx_t_1, __pyx_n_u_f, Py_LE); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 477, __pyx_L1_error)
             }
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 519, __pyx_L1_error)
+            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 477, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
             if (__pyx_t_2) {
 
-              /* "JSONParser.pyx":520
+              /* "JSONParser.pyx":478
  *                                 offset_3 += 1
  *                             elif 'a' <= buf[offset_3] <= 'f':
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
  *                             elif 'A' <= buf[offset_3] <= 'F':
  *                                 offset_3 += 1
  */
-              __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 520, __pyx_L1_error)
+              __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 478, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_7);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_7);
               __pyx_t_7 = 0;
 
-              /* "JSONParser.pyx":519
+              /* "JSONParser.pyx":477
  *                             elif '0' <= buf[offset_3] <= '9':
  *                                 offset_3 += 1
  *                             elif 'a' <= buf[offset_3] <= 'f':             # <<<<<<<<<<<<<<
@@ -8533,38 +7696,38 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               goto __pyx_L16;
             }
 
-            /* "JSONParser.pyx":521
+            /* "JSONParser.pyx":479
  *                             elif 'a' <= buf[offset_3] <= 'f':
  *                                 offset_3 += 1
  *                             elif 'A' <= buf[offset_3] <= 'F':             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
  *                             else:
  */
-            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 521, __pyx_L1_error)
+            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 479, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_7);
-            __pyx_t_1 = PyObject_RichCompare(__pyx_n_u_A, __pyx_t_7, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 521, __pyx_L1_error)
+            __pyx_t_1 = PyObject_RichCompare(__pyx_n_u_A, __pyx_t_7, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 479, __pyx_L1_error)
             if (__Pyx_PyObject_IsTrue(__pyx_t_1)) {
               __Pyx_DECREF(__pyx_t_1);
-              __pyx_t_1 = PyObject_RichCompare(__pyx_t_7, __pyx_n_u_F, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 521, __pyx_L1_error)
+              __pyx_t_1 = PyObject_RichCompare(__pyx_t_7, __pyx_n_u_F, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 479, __pyx_L1_error)
             }
             __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 521, __pyx_L1_error)
+            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 479, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
             if (__pyx_t_2) {
 
-              /* "JSONParser.pyx":522
+              /* "JSONParser.pyx":480
  *                                 offset_3 += 1
  *                             elif 'A' <= buf[offset_3] <= 'F':
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
  *                             else:
  *                                 offset_3 = -1
  */
-              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 522, __pyx_L1_error)
+              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 480, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_1);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_1);
               __pyx_t_1 = 0;
 
-              /* "JSONParser.pyx":521
+              /* "JSONParser.pyx":479
  *                             elif 'a' <= buf[offset_3] <= 'f':
  *                                 offset_3 += 1
  *                             elif 'A' <= buf[offset_3] <= 'F':             # <<<<<<<<<<<<<<
@@ -8574,7 +7737,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               goto __pyx_L16;
             }
 
-            /* "JSONParser.pyx":524
+            /* "JSONParser.pyx":482
  *                                 offset_3 += 1
  *                             else:
  *                                 offset_3 = -1             # <<<<<<<<<<<<<<
@@ -8585,40 +7748,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               __Pyx_INCREF(__pyx_int_neg_1);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_int_neg_1);
 
-              /* "JSONParser.pyx":525
+              /* "JSONParser.pyx":483
  *                             else:
  *                                 offset_3 = -1
  *                                 break             # <<<<<<<<<<<<<<
  * 
- *                             if offset_3 == len(buf):
+ *                             if offset_3 == buf_eof:
  */
               goto __pyx_L13_break;
             }
             __pyx_L16:;
 
-            /* "JSONParser.pyx":527
+            /* "JSONParser.pyx":485
  *                                 break
  * 
- *                             if offset_3 == len(buf):             # <<<<<<<<<<<<<<
+ *                             if offset_3 == buf_eof:             # <<<<<<<<<<<<<<
  *                                 offset_3 = -1
  *                                 break
  */
-            if (unlikely(__pyx_v_buf == Py_None)) {
-              PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
-              __PYX_ERR(0, 527, __pyx_L1_error)
-            }
-            __pyx_t_5 = __Pyx_PyUnicode_GET_LENGTH(__pyx_v_buf); if (unlikely(__pyx_t_5 == ((Py_ssize_t)-1))) __PYX_ERR(0, 527, __pyx_L1_error)
-            __pyx_t_1 = PyInt_FromSsize_t(__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 527, __pyx_L1_error)
+            __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_buf_eof); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 485, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
-            __pyx_t_7 = PyObject_RichCompare(__pyx_v_offset_3, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 527, __pyx_L1_error)
+            __pyx_t_7 = PyObject_RichCompare(__pyx_v_offset_3, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 485, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 527, __pyx_L1_error)
+            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 485, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
             if (__pyx_t_2) {
 
-              /* "JSONParser.pyx":528
+              /* "JSONParser.pyx":486
  * 
- *                             if offset_3 == len(buf):
+ *                             if offset_3 == buf_eof:
  *                                 offset_3 = -1             # <<<<<<<<<<<<<<
  *                                 break
  *                             elif '0' <= buf[offset_3] <= '9':
@@ -8626,8 +7784,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               __Pyx_INCREF(__pyx_int_neg_1);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_int_neg_1);
 
-              /* "JSONParser.pyx":529
- *                             if offset_3 == len(buf):
+              /* "JSONParser.pyx":487
+ *                             if offset_3 == buf_eof:
  *                                 offset_3 = -1
  *                                 break             # <<<<<<<<<<<<<<
  *                             elif '0' <= buf[offset_3] <= '9':
@@ -8635,47 +7793,47 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
               goto __pyx_L13_break;
 
-              /* "JSONParser.pyx":527
+              /* "JSONParser.pyx":485
  *                                 break
  * 
- *                             if offset_3 == len(buf):             # <<<<<<<<<<<<<<
+ *                             if offset_3 == buf_eof:             # <<<<<<<<<<<<<<
  *                                 offset_3 = -1
  *                                 break
  */
             }
 
-            /* "JSONParser.pyx":530
+            /* "JSONParser.pyx":488
  *                                 offset_3 = -1
  *                                 break
  *                             elif '0' <= buf[offset_3] <= '9':             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
  *                             elif 'a' <= buf[offset_3] <= 'f':
  */
-            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 530, __pyx_L1_error)
+            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 488, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_7);
-            __pyx_t_1 = PyObject_RichCompare(__pyx_kp_u_0, __pyx_t_7, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 530, __pyx_L1_error)
+            __pyx_t_1 = PyObject_RichCompare(__pyx_kp_u_0, __pyx_t_7, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 488, __pyx_L1_error)
             if (__Pyx_PyObject_IsTrue(__pyx_t_1)) {
               __Pyx_DECREF(__pyx_t_1);
-              __pyx_t_1 = PyObject_RichCompare(__pyx_t_7, __pyx_kp_u_9, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 530, __pyx_L1_error)
+              __pyx_t_1 = PyObject_RichCompare(__pyx_t_7, __pyx_kp_u_9, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 488, __pyx_L1_error)
             }
             __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 530, __pyx_L1_error)
+            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 488, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
             if (__pyx_t_2) {
 
-              /* "JSONParser.pyx":531
+              /* "JSONParser.pyx":489
  *                                 break
  *                             elif '0' <= buf[offset_3] <= '9':
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
  *                             elif 'a' <= buf[offset_3] <= 'f':
  *                                 offset_3 += 1
  */
-              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 531, __pyx_L1_error)
+              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 489, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_1);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_1);
               __pyx_t_1 = 0;
 
-              /* "JSONParser.pyx":530
+              /* "JSONParser.pyx":488
  *                                 offset_3 = -1
  *                                 break
  *                             elif '0' <= buf[offset_3] <= '9':             # <<<<<<<<<<<<<<
@@ -8685,38 +7843,38 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               goto __pyx_L17;
             }
 
-            /* "JSONParser.pyx":532
+            /* "JSONParser.pyx":490
  *                             elif '0' <= buf[offset_3] <= '9':
  *                                 offset_3 += 1
  *                             elif 'a' <= buf[offset_3] <= 'f':             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
  *                             elif 'A' <= buf[offset_3] <= 'F':
  */
-            __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 532, __pyx_L1_error)
+            __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 490, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
-            __pyx_t_7 = PyObject_RichCompare(__pyx_n_u_a, __pyx_t_1, Py_LE); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 532, __pyx_L1_error)
+            __pyx_t_7 = PyObject_RichCompare(__pyx_n_u_a, __pyx_t_1, Py_LE); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 490, __pyx_L1_error)
             if (__Pyx_PyObject_IsTrue(__pyx_t_7)) {
               __Pyx_DECREF(__pyx_t_7);
-              __pyx_t_7 = PyObject_RichCompare(__pyx_t_1, __pyx_n_u_f, Py_LE); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 532, __pyx_L1_error)
+              __pyx_t_7 = PyObject_RichCompare(__pyx_t_1, __pyx_n_u_f, Py_LE); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 490, __pyx_L1_error)
             }
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 532, __pyx_L1_error)
+            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 490, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
             if (__pyx_t_2) {
 
-              /* "JSONParser.pyx":533
+              /* "JSONParser.pyx":491
  *                                 offset_3 += 1
  *                             elif 'a' <= buf[offset_3] <= 'f':
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
  *                             elif 'A' <= buf[offset_3] <= 'F':
  *                                 offset_3 += 1
  */
-              __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 533, __pyx_L1_error)
+              __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 491, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_7);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_7);
               __pyx_t_7 = 0;
 
-              /* "JSONParser.pyx":532
+              /* "JSONParser.pyx":490
  *                             elif '0' <= buf[offset_3] <= '9':
  *                                 offset_3 += 1
  *                             elif 'a' <= buf[offset_3] <= 'f':             # <<<<<<<<<<<<<<
@@ -8726,38 +7884,38 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               goto __pyx_L17;
             }
 
-            /* "JSONParser.pyx":534
+            /* "JSONParser.pyx":492
  *                             elif 'a' <= buf[offset_3] <= 'f':
  *                                 offset_3 += 1
  *                             elif 'A' <= buf[offset_3] <= 'F':             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
  *                             else:
  */
-            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 534, __pyx_L1_error)
+            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 492, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_7);
-            __pyx_t_1 = PyObject_RichCompare(__pyx_n_u_A, __pyx_t_7, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 534, __pyx_L1_error)
+            __pyx_t_1 = PyObject_RichCompare(__pyx_n_u_A, __pyx_t_7, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 492, __pyx_L1_error)
             if (__Pyx_PyObject_IsTrue(__pyx_t_1)) {
               __Pyx_DECREF(__pyx_t_1);
-              __pyx_t_1 = PyObject_RichCompare(__pyx_t_7, __pyx_n_u_F, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 534, __pyx_L1_error)
+              __pyx_t_1 = PyObject_RichCompare(__pyx_t_7, __pyx_n_u_F, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 492, __pyx_L1_error)
             }
             __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 534, __pyx_L1_error)
+            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 492, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
             if (__pyx_t_2) {
 
-              /* "JSONParser.pyx":535
+              /* "JSONParser.pyx":493
  *                                 offset_3 += 1
  *                             elif 'A' <= buf[offset_3] <= 'F':
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
  *                             else:
  *                                 offset_3 = -1
  */
-              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 535, __pyx_L1_error)
+              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 493, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_1);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_1);
               __pyx_t_1 = 0;
 
-              /* "JSONParser.pyx":534
+              /* "JSONParser.pyx":492
  *                             elif 'a' <= buf[offset_3] <= 'f':
  *                                 offset_3 += 1
  *                             elif 'A' <= buf[offset_3] <= 'F':             # <<<<<<<<<<<<<<
@@ -8767,7 +7925,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               goto __pyx_L17;
             }
 
-            /* "JSONParser.pyx":537
+            /* "JSONParser.pyx":495
  *                                 offset_3 += 1
  *                             else:
  *                                 offset_3 = -1             # <<<<<<<<<<<<<<
@@ -8778,40 +7936,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               __Pyx_INCREF(__pyx_int_neg_1);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_int_neg_1);
 
-              /* "JSONParser.pyx":538
+              /* "JSONParser.pyx":496
  *                             else:
  *                                 offset_3 = -1
  *                                 break             # <<<<<<<<<<<<<<
  * 
- *                             if offset_3 == len(buf):
+ *                             if offset_3 == buf_eof:
  */
               goto __pyx_L13_break;
             }
             __pyx_L17:;
 
-            /* "JSONParser.pyx":540
+            /* "JSONParser.pyx":498
  *                                 break
  * 
- *                             if offset_3 == len(buf):             # <<<<<<<<<<<<<<
+ *                             if offset_3 == buf_eof:             # <<<<<<<<<<<<<<
  *                                 offset_3 = -1
  *                                 break
  */
-            if (unlikely(__pyx_v_buf == Py_None)) {
-              PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
-              __PYX_ERR(0, 540, __pyx_L1_error)
-            }
-            __pyx_t_5 = __Pyx_PyUnicode_GET_LENGTH(__pyx_v_buf); if (unlikely(__pyx_t_5 == ((Py_ssize_t)-1))) __PYX_ERR(0, 540, __pyx_L1_error)
-            __pyx_t_1 = PyInt_FromSsize_t(__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 540, __pyx_L1_error)
+            __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_buf_eof); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 498, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
-            __pyx_t_7 = PyObject_RichCompare(__pyx_v_offset_3, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 540, __pyx_L1_error)
+            __pyx_t_7 = PyObject_RichCompare(__pyx_v_offset_3, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 498, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 540, __pyx_L1_error)
+            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 498, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
             if (__pyx_t_2) {
 
-              /* "JSONParser.pyx":541
+              /* "JSONParser.pyx":499
  * 
- *                             if offset_3 == len(buf):
+ *                             if offset_3 == buf_eof:
  *                                 offset_3 = -1             # <<<<<<<<<<<<<<
  *                                 break
  *                             elif '0' <= buf[offset_3] <= '9':
@@ -8819,8 +7972,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               __Pyx_INCREF(__pyx_int_neg_1);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_int_neg_1);
 
-              /* "JSONParser.pyx":542
- *                             if offset_3 == len(buf):
+              /* "JSONParser.pyx":500
+ *                             if offset_3 == buf_eof:
  *                                 offset_3 = -1
  *                                 break             # <<<<<<<<<<<<<<
  *                             elif '0' <= buf[offset_3] <= '9':
@@ -8828,47 +7981,47 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
               goto __pyx_L13_break;
 
-              /* "JSONParser.pyx":540
+              /* "JSONParser.pyx":498
  *                                 break
  * 
- *                             if offset_3 == len(buf):             # <<<<<<<<<<<<<<
+ *                             if offset_3 == buf_eof:             # <<<<<<<<<<<<<<
  *                                 offset_3 = -1
  *                                 break
  */
             }
 
-            /* "JSONParser.pyx":543
+            /* "JSONParser.pyx":501
  *                                 offset_3 = -1
  *                                 break
  *                             elif '0' <= buf[offset_3] <= '9':             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
  *                             elif 'a' <= buf[offset_3] <= 'f':
  */
-            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 543, __pyx_L1_error)
+            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 501, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_7);
-            __pyx_t_1 = PyObject_RichCompare(__pyx_kp_u_0, __pyx_t_7, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 543, __pyx_L1_error)
+            __pyx_t_1 = PyObject_RichCompare(__pyx_kp_u_0, __pyx_t_7, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 501, __pyx_L1_error)
             if (__Pyx_PyObject_IsTrue(__pyx_t_1)) {
               __Pyx_DECREF(__pyx_t_1);
-              __pyx_t_1 = PyObject_RichCompare(__pyx_t_7, __pyx_kp_u_9, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 543, __pyx_L1_error)
+              __pyx_t_1 = PyObject_RichCompare(__pyx_t_7, __pyx_kp_u_9, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 501, __pyx_L1_error)
             }
             __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 543, __pyx_L1_error)
+            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 501, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
             if (__pyx_t_2) {
 
-              /* "JSONParser.pyx":544
+              /* "JSONParser.pyx":502
  *                                 break
  *                             elif '0' <= buf[offset_3] <= '9':
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
  *                             elif 'a' <= buf[offset_3] <= 'f':
  *                                 offset_3 += 1
  */
-              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 544, __pyx_L1_error)
+              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 502, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_1);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_1);
               __pyx_t_1 = 0;
 
-              /* "JSONParser.pyx":543
+              /* "JSONParser.pyx":501
  *                                 offset_3 = -1
  *                                 break
  *                             elif '0' <= buf[offset_3] <= '9':             # <<<<<<<<<<<<<<
@@ -8878,38 +8031,38 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               goto __pyx_L18;
             }
 
-            /* "JSONParser.pyx":545
+            /* "JSONParser.pyx":503
  *                             elif '0' <= buf[offset_3] <= '9':
  *                                 offset_3 += 1
  *                             elif 'a' <= buf[offset_3] <= 'f':             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
  *                             elif 'A' <= buf[offset_3] <= 'F':
  */
-            __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 545, __pyx_L1_error)
+            __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 503, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
-            __pyx_t_7 = PyObject_RichCompare(__pyx_n_u_a, __pyx_t_1, Py_LE); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 545, __pyx_L1_error)
+            __pyx_t_7 = PyObject_RichCompare(__pyx_n_u_a, __pyx_t_1, Py_LE); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 503, __pyx_L1_error)
             if (__Pyx_PyObject_IsTrue(__pyx_t_7)) {
               __Pyx_DECREF(__pyx_t_7);
-              __pyx_t_7 = PyObject_RichCompare(__pyx_t_1, __pyx_n_u_f, Py_LE); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 545, __pyx_L1_error)
+              __pyx_t_7 = PyObject_RichCompare(__pyx_t_1, __pyx_n_u_f, Py_LE); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 503, __pyx_L1_error)
             }
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 545, __pyx_L1_error)
+            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 503, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
             if (__pyx_t_2) {
 
-              /* "JSONParser.pyx":546
+              /* "JSONParser.pyx":504
  *                                 offset_3 += 1
  *                             elif 'a' <= buf[offset_3] <= 'f':
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
  *                             elif 'A' <= buf[offset_3] <= 'F':
  *                                 offset_3 += 1
  */
-              __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 546, __pyx_L1_error)
+              __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 504, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_7);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_7);
               __pyx_t_7 = 0;
 
-              /* "JSONParser.pyx":545
+              /* "JSONParser.pyx":503
  *                             elif '0' <= buf[offset_3] <= '9':
  *                                 offset_3 += 1
  *                             elif 'a' <= buf[offset_3] <= 'f':             # <<<<<<<<<<<<<<
@@ -8919,38 +8072,38 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               goto __pyx_L18;
             }
 
-            /* "JSONParser.pyx":547
+            /* "JSONParser.pyx":505
  *                             elif 'a' <= buf[offset_3] <= 'f':
  *                                 offset_3 += 1
  *                             elif 'A' <= buf[offset_3] <= 'F':             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
  *                             else:
  */
-            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 547, __pyx_L1_error)
+            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 505, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_7);
-            __pyx_t_1 = PyObject_RichCompare(__pyx_n_u_A, __pyx_t_7, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 547, __pyx_L1_error)
+            __pyx_t_1 = PyObject_RichCompare(__pyx_n_u_A, __pyx_t_7, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 505, __pyx_L1_error)
             if (__Pyx_PyObject_IsTrue(__pyx_t_1)) {
               __Pyx_DECREF(__pyx_t_1);
-              __pyx_t_1 = PyObject_RichCompare(__pyx_t_7, __pyx_n_u_F, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 547, __pyx_L1_error)
+              __pyx_t_1 = PyObject_RichCompare(__pyx_t_7, __pyx_n_u_F, Py_LE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 505, __pyx_L1_error)
             }
             __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 547, __pyx_L1_error)
+            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 505, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
             if (__pyx_t_2) {
 
-              /* "JSONParser.pyx":548
+              /* "JSONParser.pyx":506
  *                                 offset_3 += 1
  *                             elif 'A' <= buf[offset_3] <= 'F':
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
  *                             else:
  *                                 offset_3 = -1
  */
-              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 548, __pyx_L1_error)
+              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 506, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_1);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_1);
               __pyx_t_1 = 0;
 
-              /* "JSONParser.pyx":547
+              /* "JSONParser.pyx":505
  *                             elif 'a' <= buf[offset_3] <= 'f':
  *                                 offset_3 += 1
  *                             elif 'A' <= buf[offset_3] <= 'F':             # <<<<<<<<<<<<<<
@@ -8960,7 +8113,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               goto __pyx_L18;
             }
 
-            /* "JSONParser.pyx":550
+            /* "JSONParser.pyx":508
  *                                 offset_3 += 1
  *                             else:
  *                                 offset_3 = -1             # <<<<<<<<<<<<<<
@@ -8971,7 +8124,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               __Pyx_INCREF(__pyx_int_neg_1);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_int_neg_1);
 
-              /* "JSONParser.pyx":551
+              /* "JSONParser.pyx":509
  *                             else:
  *                                 offset_3 = -1
  *                                 break             # <<<<<<<<<<<<<<
@@ -8982,7 +8135,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
             }
             __pyx_L18:;
 
-            /* "JSONParser.pyx":554
+            /* "JSONParser.pyx":512
  * 
  * 
  *                             break             # <<<<<<<<<<<<<<
@@ -8993,20 +8146,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
           }
           __pyx_L13_break:;
 
-          /* "JSONParser.pyx":555
+          /* "JSONParser.pyx":513
  * 
  *                             break
  *                         if offset_3 != -1:             # <<<<<<<<<<<<<<
  *                             offset_2 = offset_3
  *                             line_start_1 = line_start_2
  */
-          __pyx_t_1 = __Pyx_PyInt_NeObjC(__pyx_v_offset_3, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 555, __pyx_L1_error)
+          __pyx_t_1 = __Pyx_PyInt_NeObjC(__pyx_v_offset_3, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 513, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 555, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 513, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
           if (__pyx_t_2) {
 
-            /* "JSONParser.pyx":556
+            /* "JSONParser.pyx":514
  *                             break
  *                         if offset_3 != -1:
  *                             offset_2 = offset_3             # <<<<<<<<<<<<<<
@@ -9016,7 +8169,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
             __Pyx_INCREF(__pyx_v_offset_3);
             __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_v_offset_3);
 
-            /* "JSONParser.pyx":557
+            /* "JSONParser.pyx":515
  *                         if offset_3 != -1:
  *                             offset_2 = offset_3
  *                             line_start_1 = line_start_2             # <<<<<<<<<<<<<<
@@ -9025,16 +8178,16 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
             __pyx_v_line_start_1 = __pyx_v_line_start_2;
 
-            /* "JSONParser.pyx":558
+            /* "JSONParser.pyx":516
  *                             offset_2 = offset_3
  *                             line_start_1 = line_start_2
  *                             children_1.extend(children_2)             # <<<<<<<<<<<<<<
  *                             break
  *                         # end case
  */
-            __pyx_t_8 = __Pyx_PyList_Extend(__pyx_v_children_1, __pyx_v_children_2); if (unlikely(__pyx_t_8 == ((int)-1))) __PYX_ERR(0, 558, __pyx_L1_error)
+            __pyx_t_8 = __Pyx_PyList_Extend(__pyx_v_children_1, __pyx_v_children_2); if (unlikely(__pyx_t_8 == ((int)-1))) __PYX_ERR(0, 516, __pyx_L1_error)
 
-            /* "JSONParser.pyx":559
+            /* "JSONParser.pyx":517
  *                             line_start_1 = line_start_2
  *                             children_1.extend(children_2)
  *                             break             # <<<<<<<<<<<<<<
@@ -9043,7 +8196,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
             goto __pyx_L11_break;
 
-            /* "JSONParser.pyx":555
+            /* "JSONParser.pyx":513
  * 
  *                             break
  *                         if offset_3 != -1:             # <<<<<<<<<<<<<<
@@ -9052,7 +8205,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
           }
 
-          /* "JSONParser.pyx":561
+          /* "JSONParser.pyx":519
  *                             break
  *                         # end case
  *                         offset_3 = offset_2             # <<<<<<<<<<<<<<
@@ -9062,7 +8215,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
           __Pyx_INCREF(__pyx_v_offset_2);
           __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_v_offset_2);
 
-          /* "JSONParser.pyx":562
+          /* "JSONParser.pyx":520
  *                         # end case
  *                         offset_3 = offset_2
  *                         line_start_2 = line_start_1             # <<<<<<<<<<<<<<
@@ -9071,19 +8224,19 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
           __pyx_v_line_start_2 = __pyx_v_line_start_1;
 
-          /* "JSONParser.pyx":563
+          /* "JSONParser.pyx":521
  *                         offset_3 = offset_2
  *                         line_start_2 = line_start_1
  *                         children_2 = []             # <<<<<<<<<<<<<<
  *                         while True: # case
  *                             if buf[offset_3:offset_3+1] == '\\':
  */
-          __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 563, __pyx_L1_error)
+          __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 521, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           __Pyx_DECREF_SET(__pyx_v_children_2, ((PyObject*)__pyx_t_1));
           __pyx_t_1 = 0;
 
-          /* "JSONParser.pyx":564
+          /* "JSONParser.pyx":522
  *                         line_start_2 = line_start_1
  *                         children_2 = []
  *                         while True: # case             # <<<<<<<<<<<<<<
@@ -9092,7 +8245,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
           while (1) {
 
-            /* "JSONParser.pyx":565
+            /* "JSONParser.pyx":523
  *                         children_2 = []
  *                         while True: # case
  *                             if buf[offset_3:offset_3+1] == '\\':             # <<<<<<<<<<<<<<
@@ -9101,7 +8254,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
             if (unlikely(__pyx_v_buf == Py_None)) {
               PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-              __PYX_ERR(0, 565, __pyx_L1_error)
+              __PYX_ERR(0, 523, __pyx_L1_error)
             }
             __Pyx_INCREF(__pyx_v_offset_3);
             __pyx_t_1 = __pyx_v_offset_3;
@@ -9109,40 +8262,40 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
             if (__pyx_t_2) {
               __pyx_t_5 = 0;
             } else {
-              __pyx_t_4 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_4 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 565, __pyx_L1_error)
+              __pyx_t_4 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_4 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 523, __pyx_L1_error)
               __pyx_t_5 = __pyx_t_4;
             }
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 565, __pyx_L1_error)
+            __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 523, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
             __pyx_t_2 = (__pyx_t_1 == Py_None);
             if (__pyx_t_2) {
               __pyx_t_4 = PY_SSIZE_T_MAX;
             } else {
-              __pyx_t_6 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_6 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 565, __pyx_L1_error)
+              __pyx_t_6 = __Pyx_PyIndex_AsSsize_t(__pyx_t_1); if (unlikely((__pyx_t_6 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 523, __pyx_L1_error)
               __pyx_t_4 = __pyx_t_6;
             }
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_5, __pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 565, __pyx_L1_error)
+            __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_5, __pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 523, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
-            __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u__6, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 565, __pyx_L1_error)
+            __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u__6, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 523, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
             __pyx_t_3 = (__pyx_t_2 != 0);
             if (__pyx_t_3) {
 
-              /* "JSONParser.pyx":566
+              /* "JSONParser.pyx":524
  *                         while True: # case
  *                             if buf[offset_3:offset_3+1] == '\\':
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
  *                             else:
  *                                 offset_3 = -1
  */
-              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 566, __pyx_L1_error)
+              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 524, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_1);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_1);
               __pyx_t_1 = 0;
 
-              /* "JSONParser.pyx":565
+              /* "JSONParser.pyx":523
  *                         children_2 = []
  *                         while True: # case
  *                             if buf[offset_3:offset_3+1] == '\\':             # <<<<<<<<<<<<<<
@@ -9152,7 +8305,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               goto __pyx_L22;
             }
 
-            /* "JSONParser.pyx":568
+            /* "JSONParser.pyx":526
  *                                 offset_3 += 1
  *                             else:
  *                                 offset_3 = -1             # <<<<<<<<<<<<<<
@@ -9163,40 +8316,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               __Pyx_INCREF(__pyx_int_neg_1);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_int_neg_1);
 
-              /* "JSONParser.pyx":569
+              /* "JSONParser.pyx":527
  *                             else:
  *                                 offset_3 = -1
  *                                 break             # <<<<<<<<<<<<<<
  * 
- *                             if offset_3 == len(buf):
+ *                             if offset_3 == buf_eof:
  */
               goto __pyx_L21_break;
             }
             __pyx_L22:;
 
-            /* "JSONParser.pyx":571
+            /* "JSONParser.pyx":529
  *                                 break
  * 
- *                             if offset_3 == len(buf):             # <<<<<<<<<<<<<<
+ *                             if offset_3 == buf_eof:             # <<<<<<<<<<<<<<
  *                                 offset_3 = -1
  *                                 break
  */
-            if (unlikely(__pyx_v_buf == Py_None)) {
-              PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
-              __PYX_ERR(0, 571, __pyx_L1_error)
-            }
-            __pyx_t_4 = __Pyx_PyUnicode_GET_LENGTH(__pyx_v_buf); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(0, 571, __pyx_L1_error)
-            __pyx_t_1 = PyInt_FromSsize_t(__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 571, __pyx_L1_error)
+            __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_buf_eof); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 529, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
-            __pyx_t_7 = PyObject_RichCompare(__pyx_v_offset_3, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 571, __pyx_L1_error)
+            __pyx_t_7 = PyObject_RichCompare(__pyx_v_offset_3, __pyx_t_1, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 529, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 571, __pyx_L1_error)
+            __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 529, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
             if (__pyx_t_3) {
 
-              /* "JSONParser.pyx":572
+              /* "JSONParser.pyx":530
  * 
- *                             if offset_3 == len(buf):
+ *                             if offset_3 == buf_eof:
  *                                 offset_3 = -1             # <<<<<<<<<<<<<<
  *                                 break
  *                             elif buf[offset_3] == '"':
@@ -9204,8 +8352,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               __Pyx_INCREF(__pyx_int_neg_1);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_int_neg_1);
 
-              /* "JSONParser.pyx":573
- *                             if offset_3 == len(buf):
+              /* "JSONParser.pyx":531
+ *                             if offset_3 == buf_eof:
  *                                 offset_3 = -1
  *                                 break             # <<<<<<<<<<<<<<
  *                             elif buf[offset_3] == '"':
@@ -9213,76 +8361,76 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
               goto __pyx_L21_break;
 
-              /* "JSONParser.pyx":571
+              /* "JSONParser.pyx":529
  *                                 break
  * 
- *                             if offset_3 == len(buf):             # <<<<<<<<<<<<<<
+ *                             if offset_3 == buf_eof:             # <<<<<<<<<<<<<<
  *                                 offset_3 = -1
  *                                 break
  */
             }
 
-            /* "JSONParser.pyx":574
- *                                 offset_3 = -1
- *                                 break
- *                             elif buf[offset_3] == '"':             # <<<<<<<<<<<<<<
- *                                 offset_3 += 1
- *                             elif buf[offset_3] == '\\':
- */
-            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 574, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_7);
-            __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_kp_u__5, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 574, __pyx_L1_error)
-            __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-            if (__pyx_t_3) {
-
-              /* "JSONParser.pyx":575
- *                                 break
- *                             elif buf[offset_3] == '"':
- *                                 offset_3 += 1             # <<<<<<<<<<<<<<
- *                             elif buf[offset_3] == '\\':
- *                                 offset_3 += 1
- */
-              __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 575, __pyx_L1_error)
-              __Pyx_GOTREF(__pyx_t_7);
-              __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_7);
-              __pyx_t_7 = 0;
-
-              /* "JSONParser.pyx":574
+            /* "JSONParser.pyx":532
  *                                 offset_3 = -1
  *                                 break
  *                             elif buf[offset_3] == '"':             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
  *                             elif buf[offset_3] == '\\':
  */
+            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 532, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_7);
+            __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_kp_u__5, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 532, __pyx_L1_error)
+            __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+            if (__pyx_t_3) {
+
+              /* "JSONParser.pyx":533
+ *                                 break
+ *                             elif buf[offset_3] == '"':
+ *                                 offset_3 += 1             # <<<<<<<<<<<<<<
+ *                             elif buf[offset_3] == '\\':
+ *                                 offset_3 += 1
+ */
+              __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 533, __pyx_L1_error)
+              __Pyx_GOTREF(__pyx_t_7);
+              __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_7);
+              __pyx_t_7 = 0;
+
+              /* "JSONParser.pyx":532
+ *                                 offset_3 = -1
+ *                                 break
+ *                             elif buf[offset_3] == '"':             # <<<<<<<<<<<<<<
+ *                                 offset_3 += 1
+ *                             elif buf[offset_3] == '\\':
+ */
               goto __pyx_L23;
             }
 
-            /* "JSONParser.pyx":576
+            /* "JSONParser.pyx":534
  *                             elif buf[offset_3] == '"':
  *                                 offset_3 += 1
  *                             elif buf[offset_3] == '\\':             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
  *                             elif buf[offset_3] == '/':
  */
-            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 576, __pyx_L1_error)
+            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 534, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_7);
-            __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_kp_u__6, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 576, __pyx_L1_error)
+            __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_kp_u__6, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 534, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
             if (__pyx_t_3) {
 
-              /* "JSONParser.pyx":577
+              /* "JSONParser.pyx":535
  *                                 offset_3 += 1
  *                             elif buf[offset_3] == '\\':
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
  *                             elif buf[offset_3] == '/':
  *                                 offset_3 += 1
  */
-              __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 577, __pyx_L1_error)
+              __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 535, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_7);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_7);
               __pyx_t_7 = 0;
 
-              /* "JSONParser.pyx":576
+              /* "JSONParser.pyx":534
  *                             elif buf[offset_3] == '"':
  *                                 offset_3 += 1
  *                             elif buf[offset_3] == '\\':             # <<<<<<<<<<<<<<
@@ -9292,32 +8440,32 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               goto __pyx_L23;
             }
 
-            /* "JSONParser.pyx":578
+            /* "JSONParser.pyx":536
  *                             elif buf[offset_3] == '\\':
  *                                 offset_3 += 1
  *                             elif buf[offset_3] == '/':             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
  *                             elif buf[offset_3] == 'b':
  */
-            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 578, __pyx_L1_error)
+            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 536, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_7);
-            __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_kp_u__7, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 578, __pyx_L1_error)
+            __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_kp_u__7, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 536, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
             if (__pyx_t_3) {
 
-              /* "JSONParser.pyx":579
+              /* "JSONParser.pyx":537
  *                                 offset_3 += 1
  *                             elif buf[offset_3] == '/':
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
  *                             elif buf[offset_3] == 'b':
  *                                 offset_3 += 1
  */
-              __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 579, __pyx_L1_error)
+              __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 537, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_7);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_7);
               __pyx_t_7 = 0;
 
-              /* "JSONParser.pyx":578
+              /* "JSONParser.pyx":536
  *                             elif buf[offset_3] == '\\':
  *                                 offset_3 += 1
  *                             elif buf[offset_3] == '/':             # <<<<<<<<<<<<<<
@@ -9327,32 +8475,32 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               goto __pyx_L23;
             }
 
-            /* "JSONParser.pyx":580
+            /* "JSONParser.pyx":538
  *                             elif buf[offset_3] == '/':
  *                                 offset_3 += 1
  *                             elif buf[offset_3] == 'b':             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
  *                             elif buf[offset_3] == 'f':
  */
-            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 580, __pyx_L1_error)
+            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 538, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_7);
-            __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_n_u_b, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 580, __pyx_L1_error)
+            __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_n_u_b, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 538, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
             if (__pyx_t_3) {
 
-              /* "JSONParser.pyx":581
+              /* "JSONParser.pyx":539
  *                                 offset_3 += 1
  *                             elif buf[offset_3] == 'b':
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
  *                             elif buf[offset_3] == 'f':
  *                                 offset_3 += 1
  */
-              __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 581, __pyx_L1_error)
+              __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 539, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_7);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_7);
               __pyx_t_7 = 0;
 
-              /* "JSONParser.pyx":580
+              /* "JSONParser.pyx":538
  *                             elif buf[offset_3] == '/':
  *                                 offset_3 += 1
  *                             elif buf[offset_3] == 'b':             # <<<<<<<<<<<<<<
@@ -9362,32 +8510,32 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               goto __pyx_L23;
             }
 
-            /* "JSONParser.pyx":582
+            /* "JSONParser.pyx":540
  *                             elif buf[offset_3] == 'b':
  *                                 offset_3 += 1
  *                             elif buf[offset_3] == 'f':             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
  *                             elif buf[offset_3] == 'n':
  */
-            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 582, __pyx_L1_error)
+            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 540, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_7);
-            __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_n_u_f, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 582, __pyx_L1_error)
+            __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_n_u_f, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 540, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
             if (__pyx_t_3) {
 
-              /* "JSONParser.pyx":583
+              /* "JSONParser.pyx":541
  *                                 offset_3 += 1
  *                             elif buf[offset_3] == 'f':
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
  *                             elif buf[offset_3] == 'n':
  *                                 offset_3 += 1
  */
-              __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 583, __pyx_L1_error)
+              __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 541, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_7);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_7);
               __pyx_t_7 = 0;
 
-              /* "JSONParser.pyx":582
+              /* "JSONParser.pyx":540
  *                             elif buf[offset_3] == 'b':
  *                                 offset_3 += 1
  *                             elif buf[offset_3] == 'f':             # <<<<<<<<<<<<<<
@@ -9397,32 +8545,32 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               goto __pyx_L23;
             }
 
-            /* "JSONParser.pyx":584
+            /* "JSONParser.pyx":542
  *                             elif buf[offset_3] == 'f':
  *                                 offset_3 += 1
  *                             elif buf[offset_3] == 'n':             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
  *                             elif buf[offset_3] == 'r':
  */
-            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 584, __pyx_L1_error)
+            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 542, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_7);
-            __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_n_u_n, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 584, __pyx_L1_error)
+            __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_n_u_n, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 542, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
             if (__pyx_t_3) {
 
-              /* "JSONParser.pyx":585
+              /* "JSONParser.pyx":543
  *                                 offset_3 += 1
  *                             elif buf[offset_3] == 'n':
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
  *                             elif buf[offset_3] == 'r':
  *                                 offset_3 += 1
  */
-              __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 585, __pyx_L1_error)
+              __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 543, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_7);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_7);
               __pyx_t_7 = 0;
 
-              /* "JSONParser.pyx":584
+              /* "JSONParser.pyx":542
  *                             elif buf[offset_3] == 'f':
  *                                 offset_3 += 1
  *                             elif buf[offset_3] == 'n':             # <<<<<<<<<<<<<<
@@ -9432,32 +8580,32 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               goto __pyx_L23;
             }
 
-            /* "JSONParser.pyx":586
+            /* "JSONParser.pyx":544
  *                             elif buf[offset_3] == 'n':
  *                                 offset_3 += 1
  *                             elif buf[offset_3] == 'r':             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
  *                             elif buf[offset_3] == 't':
  */
-            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 586, __pyx_L1_error)
+            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 544, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_7);
-            __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_n_u_r, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 586, __pyx_L1_error)
+            __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_n_u_r, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 544, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
             if (__pyx_t_3) {
 
-              /* "JSONParser.pyx":587
+              /* "JSONParser.pyx":545
  *                                 offset_3 += 1
  *                             elif buf[offset_3] == 'r':
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
  *                             elif buf[offset_3] == 't':
  *                                 offset_3 += 1
  */
-              __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 587, __pyx_L1_error)
+              __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 545, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_7);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_7);
               __pyx_t_7 = 0;
 
-              /* "JSONParser.pyx":586
+              /* "JSONParser.pyx":544
  *                             elif buf[offset_3] == 'n':
  *                                 offset_3 += 1
  *                             elif buf[offset_3] == 'r':             # <<<<<<<<<<<<<<
@@ -9467,32 +8615,32 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               goto __pyx_L23;
             }
 
-            /* "JSONParser.pyx":588
+            /* "JSONParser.pyx":546
  *                             elif buf[offset_3] == 'r':
  *                                 offset_3 += 1
  *                             elif buf[offset_3] == 't':             # <<<<<<<<<<<<<<
  *                                 offset_3 += 1
  *                             else:
  */
-            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 588, __pyx_L1_error)
+            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 546, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_7);
-            __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_n_u_t, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 588, __pyx_L1_error)
+            __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_n_u_t, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 546, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
             if (__pyx_t_3) {
 
-              /* "JSONParser.pyx":589
+              /* "JSONParser.pyx":547
  *                                 offset_3 += 1
  *                             elif buf[offset_3] == 't':
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
  *                             else:
  *                                 offset_3 = -1
  */
-              __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 589, __pyx_L1_error)
+              __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 547, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_7);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_7);
               __pyx_t_7 = 0;
 
-              /* "JSONParser.pyx":588
+              /* "JSONParser.pyx":546
  *                             elif buf[offset_3] == 'r':
  *                                 offset_3 += 1
  *                             elif buf[offset_3] == 't':             # <<<<<<<<<<<<<<
@@ -9502,7 +8650,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               goto __pyx_L23;
             }
 
-            /* "JSONParser.pyx":591
+            /* "JSONParser.pyx":549
  *                                 offset_3 += 1
  *                             else:
  *                                 offset_3 = -1             # <<<<<<<<<<<<<<
@@ -9513,7 +8661,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               __Pyx_INCREF(__pyx_int_neg_1);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_int_neg_1);
 
-              /* "JSONParser.pyx":592
+              /* "JSONParser.pyx":550
  *                             else:
  *                                 offset_3 = -1
  *                                 break             # <<<<<<<<<<<<<<
@@ -9524,7 +8672,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
             }
             __pyx_L23:;
 
-            /* "JSONParser.pyx":595
+            /* "JSONParser.pyx":553
  * 
  * 
  *                             break             # <<<<<<<<<<<<<<
@@ -9535,20 +8683,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
           }
           __pyx_L21_break:;
 
-          /* "JSONParser.pyx":596
+          /* "JSONParser.pyx":554
  * 
  *                             break
  *                         if offset_3 != -1:             # <<<<<<<<<<<<<<
  *                             offset_2 = offset_3
  *                             line_start_1 = line_start_2
  */
-          __pyx_t_7 = __Pyx_PyInt_NeObjC(__pyx_v_offset_3, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 596, __pyx_L1_error)
+          __pyx_t_7 = __Pyx_PyInt_NeObjC(__pyx_v_offset_3, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 554, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_7);
-          __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 596, __pyx_L1_error)
+          __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 554, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
           if (__pyx_t_3) {
 
-            /* "JSONParser.pyx":597
+            /* "JSONParser.pyx":555
  *                             break
  *                         if offset_3 != -1:
  *                             offset_2 = offset_3             # <<<<<<<<<<<<<<
@@ -9558,7 +8706,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
             __Pyx_INCREF(__pyx_v_offset_3);
             __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_v_offset_3);
 
-            /* "JSONParser.pyx":598
+            /* "JSONParser.pyx":556
  *                         if offset_3 != -1:
  *                             offset_2 = offset_3
  *                             line_start_1 = line_start_2             # <<<<<<<<<<<<<<
@@ -9567,16 +8715,16 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
             __pyx_v_line_start_1 = __pyx_v_line_start_2;
 
-            /* "JSONParser.pyx":599
+            /* "JSONParser.pyx":557
  *                             offset_2 = offset_3
  *                             line_start_1 = line_start_2
  *                             children_1.extend(children_2)             # <<<<<<<<<<<<<<
  *                             break
  *                         # end case
  */
-            __pyx_t_8 = __Pyx_PyList_Extend(__pyx_v_children_1, __pyx_v_children_2); if (unlikely(__pyx_t_8 == ((int)-1))) __PYX_ERR(0, 599, __pyx_L1_error)
+            __pyx_t_8 = __Pyx_PyList_Extend(__pyx_v_children_1, __pyx_v_children_2); if (unlikely(__pyx_t_8 == ((int)-1))) __PYX_ERR(0, 557, __pyx_L1_error)
 
-            /* "JSONParser.pyx":600
+            /* "JSONParser.pyx":558
  *                             line_start_1 = line_start_2
  *                             children_1.extend(children_2)
  *                             break             # <<<<<<<<<<<<<<
@@ -9585,7 +8733,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
             goto __pyx_L11_break;
 
-            /* "JSONParser.pyx":596
+            /* "JSONParser.pyx":554
  * 
  *                             break
  *                         if offset_3 != -1:             # <<<<<<<<<<<<<<
@@ -9594,7 +8742,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
           }
 
-          /* "JSONParser.pyx":602
+          /* "JSONParser.pyx":560
  *                             break
  *                         # end case
  *                         offset_3 = offset_2             # <<<<<<<<<<<<<<
@@ -9604,7 +8752,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
           __Pyx_INCREF(__pyx_v_offset_2);
           __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_v_offset_2);
 
-          /* "JSONParser.pyx":603
+          /* "JSONParser.pyx":561
  *                         # end case
  *                         offset_3 = offset_2
  *                         line_start_2 = line_start_1             # <<<<<<<<<<<<<<
@@ -9613,50 +8761,45 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
           __pyx_v_line_start_2 = __pyx_v_line_start_1;
 
-          /* "JSONParser.pyx":604
+          /* "JSONParser.pyx":562
  *                         offset_3 = offset_2
  *                         line_start_2 = line_start_1
  *                         children_2 = []             # <<<<<<<<<<<<<<
  *                         while True: # case
- *                             if offset_3 == len(buf):
+ *                             if offset_3 == buf_eof:
  */
-          __pyx_t_7 = PyList_New(0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 604, __pyx_L1_error)
+          __pyx_t_7 = PyList_New(0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 562, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_7);
           __Pyx_DECREF_SET(__pyx_v_children_2, ((PyObject*)__pyx_t_7));
           __pyx_t_7 = 0;
 
-          /* "JSONParser.pyx":605
+          /* "JSONParser.pyx":563
  *                         line_start_2 = line_start_1
  *                         children_2 = []
  *                         while True: # case             # <<<<<<<<<<<<<<
- *                             if offset_3 == len(buf):
+ *                             if offset_3 == buf_eof:
  *                                 offset_3 = -1
  */
           while (1) {
 
-            /* "JSONParser.pyx":606
+            /* "JSONParser.pyx":564
  *                         children_2 = []
  *                         while True: # case
- *                             if offset_3 == len(buf):             # <<<<<<<<<<<<<<
+ *                             if offset_3 == buf_eof:             # <<<<<<<<<<<<<<
  *                                 offset_3 = -1
  *                                 break
  */
-            if (unlikely(__pyx_v_buf == Py_None)) {
-              PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
-              __PYX_ERR(0, 606, __pyx_L1_error)
-            }
-            __pyx_t_4 = __Pyx_PyUnicode_GET_LENGTH(__pyx_v_buf); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(0, 606, __pyx_L1_error)
-            __pyx_t_7 = PyInt_FromSsize_t(__pyx_t_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 606, __pyx_L1_error)
+            __pyx_t_7 = __Pyx_PyInt_From_int(__pyx_v_buf_eof); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 564, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_7);
-            __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_3, __pyx_t_7, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 606, __pyx_L1_error)
+            __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_3, __pyx_t_7, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 564, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-            __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 606, __pyx_L1_error)
+            __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 564, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
             if (__pyx_t_3) {
 
-              /* "JSONParser.pyx":607
+              /* "JSONParser.pyx":565
  *                         while True: # case
- *                             if offset_3 == len(buf):
+ *                             if offset_3 == buf_eof:
  *                                 offset_3 = -1             # <<<<<<<<<<<<<<
  *                                 break
  *                             elif buf[offset_3] == '\\':
@@ -9664,8 +8807,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               __Pyx_INCREF(__pyx_int_neg_1);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_int_neg_1);
 
-              /* "JSONParser.pyx":608
- *                             if offset_3 == len(buf):
+              /* "JSONParser.pyx":566
+ *                             if offset_3 == buf_eof:
  *                                 offset_3 = -1
  *                                 break             # <<<<<<<<<<<<<<
  *                             elif buf[offset_3] == '\\':
@@ -9673,29 +8816,29 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
               goto __pyx_L26_break;
 
-              /* "JSONParser.pyx":606
+              /* "JSONParser.pyx":564
  *                         children_2 = []
  *                         while True: # case
- *                             if offset_3 == len(buf):             # <<<<<<<<<<<<<<
+ *                             if offset_3 == buf_eof:             # <<<<<<<<<<<<<<
  *                                 offset_3 = -1
  *                                 break
  */
             }
 
-            /* "JSONParser.pyx":609
+            /* "JSONParser.pyx":567
  *                                 offset_3 = -1
  *                                 break
  *                             elif buf[offset_3] == '\\':             # <<<<<<<<<<<<<<
  *                                 offset_3 = -1
  *                                 break
  */
-            __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 609, __pyx_L1_error)
+            __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 567, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
-            __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u__6, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 609, __pyx_L1_error)
+            __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u__6, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 567, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
             if (__pyx_t_3) {
 
-              /* "JSONParser.pyx":610
+              /* "JSONParser.pyx":568
  *                                 break
  *                             elif buf[offset_3] == '\\':
  *                                 offset_3 = -1             # <<<<<<<<<<<<<<
@@ -9705,7 +8848,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               __Pyx_INCREF(__pyx_int_neg_1);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_int_neg_1);
 
-              /* "JSONParser.pyx":611
+              /* "JSONParser.pyx":569
  *                             elif buf[offset_3] == '\\':
  *                                 offset_3 = -1
  *                                 break             # <<<<<<<<<<<<<<
@@ -9714,7 +8857,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
               goto __pyx_L26_break;
 
-              /* "JSONParser.pyx":609
+              /* "JSONParser.pyx":567
  *                                 offset_3 = -1
  *                                 break
  *                             elif buf[offset_3] == '\\':             # <<<<<<<<<<<<<<
@@ -9723,20 +8866,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
             }
 
-            /* "JSONParser.pyx":612
+            /* "JSONParser.pyx":570
  *                                 offset_3 = -1
  *                                 break
  *                             elif buf[offset_3] == '"':             # <<<<<<<<<<<<<<
  *                                 offset_3 = -1
  *                                 break
  */
-            __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 612, __pyx_L1_error)
+            __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 570, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
-            __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u__5, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 612, __pyx_L1_error)
+            __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u__5, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 570, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
             if (__pyx_t_3) {
 
-              /* "JSONParser.pyx":613
+              /* "JSONParser.pyx":571
  *                                 break
  *                             elif buf[offset_3] == '"':
  *                                 offset_3 = -1             # <<<<<<<<<<<<<<
@@ -9746,7 +8889,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
               __Pyx_INCREF(__pyx_int_neg_1);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_int_neg_1);
 
-              /* "JSONParser.pyx":614
+              /* "JSONParser.pyx":572
  *                             elif buf[offset_3] == '"':
  *                                 offset_3 = -1
  *                                 break             # <<<<<<<<<<<<<<
@@ -9755,7 +8898,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
               goto __pyx_L26_break;
 
-              /* "JSONParser.pyx":612
+              /* "JSONParser.pyx":570
  *                                 offset_3 = -1
  *                                 break
  *                             elif buf[offset_3] == '"':             # <<<<<<<<<<<<<<
@@ -9764,7 +8907,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
             }
 
-            /* "JSONParser.pyx":616
+            /* "JSONParser.pyx":574
  *                                 break
  *                             else:
  *                                 offset_3 += 1             # <<<<<<<<<<<<<<
@@ -9772,13 +8915,13 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  * 
  */
             /*else*/ {
-              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 616, __pyx_L1_error)
+              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 574, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_1);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_1);
               __pyx_t_1 = 0;
             }
 
-            /* "JSONParser.pyx":619
+            /* "JSONParser.pyx":577
  * 
  * 
  *                             break             # <<<<<<<<<<<<<<
@@ -9789,20 +8932,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
           }
           __pyx_L26_break:;
 
-          /* "JSONParser.pyx":620
+          /* "JSONParser.pyx":578
  * 
  *                             break
  *                         if offset_3 != -1:             # <<<<<<<<<<<<<<
  *                             offset_2 = offset_3
  *                             line_start_1 = line_start_2
  */
-          __pyx_t_1 = __Pyx_PyInt_NeObjC(__pyx_v_offset_3, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 620, __pyx_L1_error)
+          __pyx_t_1 = __Pyx_PyInt_NeObjC(__pyx_v_offset_3, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 578, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 620, __pyx_L1_error)
+          __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 578, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
           if (__pyx_t_3) {
 
-            /* "JSONParser.pyx":621
+            /* "JSONParser.pyx":579
  *                             break
  *                         if offset_3 != -1:
  *                             offset_2 = offset_3             # <<<<<<<<<<<<<<
@@ -9812,7 +8955,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
             __Pyx_INCREF(__pyx_v_offset_3);
             __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_v_offset_3);
 
-            /* "JSONParser.pyx":622
+            /* "JSONParser.pyx":580
  *                         if offset_3 != -1:
  *                             offset_2 = offset_3
  *                             line_start_1 = line_start_2             # <<<<<<<<<<<<<<
@@ -9821,16 +8964,16 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
             __pyx_v_line_start_1 = __pyx_v_line_start_2;
 
-            /* "JSONParser.pyx":623
+            /* "JSONParser.pyx":581
  *                             offset_2 = offset_3
  *                             line_start_1 = line_start_2
  *                             children_1.extend(children_2)             # <<<<<<<<<<<<<<
  *                             break
  *                         # end case
  */
-            __pyx_t_8 = __Pyx_PyList_Extend(__pyx_v_children_1, __pyx_v_children_2); if (unlikely(__pyx_t_8 == ((int)-1))) __PYX_ERR(0, 623, __pyx_L1_error)
+            __pyx_t_8 = __Pyx_PyList_Extend(__pyx_v_children_1, __pyx_v_children_2); if (unlikely(__pyx_t_8 == ((int)-1))) __PYX_ERR(0, 581, __pyx_L1_error)
 
-            /* "JSONParser.pyx":624
+            /* "JSONParser.pyx":582
  *                             line_start_1 = line_start_2
  *                             children_1.extend(children_2)
  *                             break             # <<<<<<<<<<<<<<
@@ -9839,7 +8982,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
             goto __pyx_L11_break;
 
-            /* "JSONParser.pyx":620
+            /* "JSONParser.pyx":578
  * 
  *                             break
  *                         if offset_3 != -1:             # <<<<<<<<<<<<<<
@@ -9848,7 +8991,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
           }
 
-          /* "JSONParser.pyx":626
+          /* "JSONParser.pyx":584
  *                             break
  *                         # end case
  *                         offset_2 = -1 # no more choices             # <<<<<<<<<<<<<<
@@ -9858,7 +9001,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
           __Pyx_INCREF(__pyx_int_neg_1);
           __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_int_neg_1);
 
-          /* "JSONParser.pyx":627
+          /* "JSONParser.pyx":585
  *                         # end case
  *                         offset_2 = -1 # no more choices
  *                         break # end choice             # <<<<<<<<<<<<<<
@@ -9869,20 +9012,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
         }
         __pyx_L11_break:;
 
-        /* "JSONParser.pyx":628
+        /* "JSONParser.pyx":586
  *                         offset_2 = -1 # no more choices
  *                         break # end choice
  *                     if offset_2 == -1:             # <<<<<<<<<<<<<<
  *                         break
  * 
  */
-        __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_2, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 628, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_2, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 586, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 628, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 586, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
         if (__pyx_t_3) {
 
-          /* "JSONParser.pyx":629
+          /* "JSONParser.pyx":587
  *                         break # end choice
  *                     if offset_2 == -1:
  *                         break             # <<<<<<<<<<<<<<
@@ -9891,7 +9034,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
           goto __pyx_L9_break;
 
-          /* "JSONParser.pyx":628
+          /* "JSONParser.pyx":586
  *                         offset_2 = -1 # no more choices
  *                         break # end choice
  *                     if offset_2 == -1:             # <<<<<<<<<<<<<<
@@ -9900,21 +9043,21 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
         }
 
-        /* "JSONParser.pyx":631
+        /* "JSONParser.pyx":589
  *                         break
  * 
  *                     if offset_1 == offset_2: break             # <<<<<<<<<<<<<<
  *                     offset_1 = offset_2
  *                     line_start = line_start_1
  */
-        __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_1, __pyx_v_offset_2, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 631, __pyx_L1_error)
-        __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 631, __pyx_L1_error)
+        __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_1, __pyx_v_offset_2, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 589, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 589, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
         if (__pyx_t_3) {
           goto __pyx_L9_break;
         }
 
-        /* "JSONParser.pyx":632
+        /* "JSONParser.pyx":590
  * 
  *                     if offset_1 == offset_2: break
  *                     offset_1 = offset_2             # <<<<<<<<<<<<<<
@@ -9924,7 +9067,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
         __Pyx_INCREF(__pyx_v_offset_2);
         __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_v_offset_2);
 
-        /* "JSONParser.pyx":633
+        /* "JSONParser.pyx":591
  *                     if offset_1 == offset_2: break
  *                     offset_1 = offset_2
  *                     line_start = line_start_1             # <<<<<<<<<<<<<<
@@ -9933,7 +9076,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
         __pyx_v_line_start = __pyx_v_line_start_1;
 
-        /* "JSONParser.pyx":634
+        /* "JSONParser.pyx":592
  *                     offset_1 = offset_2
  *                     line_start = line_start_1
  *                     count += 1             # <<<<<<<<<<<<<<
@@ -9944,7 +9087,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
       }
       __pyx_L9_break:;
 
-      /* "JSONParser.pyx":636
+      /* "JSONParser.pyx":594
  *                     count += 1
  * 
  *                 break             # <<<<<<<<<<<<<<
@@ -9955,20 +9098,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
     }
     __pyx_L7_break:;
 
-    /* "JSONParser.pyx":637
+    /* "JSONParser.pyx":595
  * 
  *                 break
  *             if offset_1 == -1:             # <<<<<<<<<<<<<<
  *                 offset = -1
  *                 break
  */
-    __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_1, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 637, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_1, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 595, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 637, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 595, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     if (__pyx_t_3) {
 
-      /* "JSONParser.pyx":638
+      /* "JSONParser.pyx":596
  *                 break
  *             if offset_1 == -1:
  *                 offset = -1             # <<<<<<<<<<<<<<
@@ -9977,7 +9120,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
       __pyx_v_offset = -1;
 
-      /* "JSONParser.pyx":639
+      /* "JSONParser.pyx":597
  *             if offset_1 == -1:
  *                 offset = -1
  *                 break             # <<<<<<<<<<<<<<
@@ -9986,7 +9129,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
       goto __pyx_L4_break;
 
-      /* "JSONParser.pyx":637
+      /* "JSONParser.pyx":595
  * 
  *                 break
  *             if offset_1 == -1:             # <<<<<<<<<<<<<<
@@ -9995,7 +9138,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
     }
 
-    /* "JSONParser.pyx":640
+    /* "JSONParser.pyx":598
  *                 offset = -1
  *                 break
  *             if self.builder is not None:             # <<<<<<<<<<<<<<
@@ -10006,7 +9149,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
     __pyx_t_2 = (__pyx_t_3 != 0);
     if (__pyx_t_2) {
 
-      /* "JSONParser.pyx":641
+      /* "JSONParser.pyx":599
  *                 break
  *             if self.builder is not None:
  *                 children.append(self.ParseNode('string', offset, offset_1, children_1, None))             # <<<<<<<<<<<<<<
@@ -10015,11 +9158,11 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
       if (unlikely(__pyx_v_children == Py_None)) {
         PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
-        __PYX_ERR(0, 641, __pyx_L1_error)
+        __PYX_ERR(0, 599, __pyx_L1_error)
       }
-      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 641, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 599, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 641, __pyx_L1_error)
+      __pyx_t_9 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 599, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_9);
       __pyx_t_10 = NULL;
       __pyx_t_11 = 0;
@@ -10036,7 +9179,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_7)) {
         PyObject *__pyx_temp[6] = {__pyx_t_10, __pyx_n_u_string, __pyx_t_9, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_11, 5+__pyx_t_11); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 641, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_11, 5+__pyx_t_11); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 599, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
@@ -10045,14 +9188,14 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
         PyObject *__pyx_temp[6] = {__pyx_t_10, __pyx_n_u_string, __pyx_t_9, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_11, 5+__pyx_t_11); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 641, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_11, 5+__pyx_t_11); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 599, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
       } else
       #endif
       {
-        __pyx_t_12 = PyTuple_New(5+__pyx_t_11); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 641, __pyx_L1_error)
+        __pyx_t_12 = PyTuple_New(5+__pyx_t_11); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 599, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_12);
         if (__pyx_t_10) {
           __Pyx_GIVEREF(__pyx_t_10); PyTuple_SET_ITEM(__pyx_t_12, 0, __pyx_t_10); __pyx_t_10 = NULL;
@@ -10072,15 +9215,15 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
         __Pyx_GIVEREF(Py_None);
         PyTuple_SET_ITEM(__pyx_t_12, 4+__pyx_t_11, Py_None);
         __pyx_t_9 = 0;
-        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_12, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 641, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_12, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 599, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
       }
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_8 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_8 == ((int)-1))) __PYX_ERR(0, 641, __pyx_L1_error)
+      __pyx_t_8 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_8 == ((int)-1))) __PYX_ERR(0, 599, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "JSONParser.pyx":640
+      /* "JSONParser.pyx":598
  *                 offset = -1
  *                 break
  *             if self.builder is not None:             # <<<<<<<<<<<<<<
@@ -10090,21 +9233,21 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
       goto __pyx_L32;
     }
 
-    /* "JSONParser.pyx":643
+    /* "JSONParser.pyx":601
  *                 children.append(self.ParseNode('string', offset, offset_1, children_1, None))
  *             else:
  *                 children.append(ParseNode('string', offset, offset_1, children_1, None))             # <<<<<<<<<<<<<<
- *                 children.append(ParseNode('string', offset, offset_1, children_1, None))
  *             offset = offset_1
+ * 
  */
     /*else*/ {
       if (unlikely(__pyx_v_children == Py_None)) {
         PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
-        __PYX_ERR(0, 643, __pyx_L1_error)
+        __PYX_ERR(0, 601, __pyx_L1_error)
       }
-      __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 643, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 601, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_12 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 643, __pyx_L1_error)
+      __pyx_t_12 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 601, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_12);
       __pyx_t_9 = NULL;
       __pyx_t_11 = 0;
@@ -10121,7 +9264,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_7)) {
         PyObject *__pyx_temp[6] = {__pyx_t_9, __pyx_n_u_string, __pyx_t_12, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_11, 5+__pyx_t_11); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 643, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_11, 5+__pyx_t_11); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 601, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
@@ -10130,14 +9273,14 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
         PyObject *__pyx_temp[6] = {__pyx_t_9, __pyx_n_u_string, __pyx_t_12, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_11, 5+__pyx_t_11); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 643, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_11, 5+__pyx_t_11); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 601, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
       } else
       #endif
       {
-        __pyx_t_10 = PyTuple_New(5+__pyx_t_11); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 643, __pyx_L1_error)
+        __pyx_t_10 = PyTuple_New(5+__pyx_t_11); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 601, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_10);
         if (__pyx_t_9) {
           __Pyx_GIVEREF(__pyx_t_9); PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_9); __pyx_t_9 = NULL;
@@ -10157,101 +9300,27 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
         __Pyx_GIVEREF(Py_None);
         PyTuple_SET_ITEM(__pyx_t_10, 4+__pyx_t_11, Py_None);
         __pyx_t_12 = 0;
-        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_10, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 643, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_10, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 601, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
       }
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_8 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_8 == ((int)-1))) __PYX_ERR(0, 643, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-      /* "JSONParser.pyx":644
- *             else:
- *                 children.append(ParseNode('string', offset, offset_1, children_1, None))
- *                 children.append(ParseNode('string', offset, offset_1, children_1, None))             # <<<<<<<<<<<<<<
- *             offset = offset_1
- * 
- */
-      if (unlikely(__pyx_v_children == Py_None)) {
-        PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
-        __PYX_ERR(0, 644, __pyx_L1_error)
-      }
-      __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 644, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_10 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 644, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_10);
-      __pyx_t_12 = NULL;
-      __pyx_t_11 = 0;
-      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_7))) {
-        __pyx_t_12 = PyMethod_GET_SELF(__pyx_t_7);
-        if (likely(__pyx_t_12)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
-          __Pyx_INCREF(__pyx_t_12);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_7, function);
-          __pyx_t_11 = 1;
-        }
-      }
-      #if CYTHON_FAST_PYCALL
-      if (PyFunction_Check(__pyx_t_7)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_12, __pyx_n_u_string, __pyx_t_10, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_11, 5+__pyx_t_11); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 644, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-      } else
-      #endif
-      #if CYTHON_FAST_PYCCALL
-      if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_12, __pyx_n_u_string, __pyx_t_10, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_11, 5+__pyx_t_11); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 644, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-      } else
-      #endif
-      {
-        __pyx_t_9 = PyTuple_New(5+__pyx_t_11); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 644, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_9);
-        if (__pyx_t_12) {
-          __Pyx_GIVEREF(__pyx_t_12); PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_12); __pyx_t_12 = NULL;
-        }
-        __Pyx_INCREF(__pyx_n_u_string);
-        __Pyx_GIVEREF(__pyx_n_u_string);
-        PyTuple_SET_ITEM(__pyx_t_9, 0+__pyx_t_11, __pyx_n_u_string);
-        __Pyx_GIVEREF(__pyx_t_10);
-        PyTuple_SET_ITEM(__pyx_t_9, 1+__pyx_t_11, __pyx_t_10);
-        __Pyx_INCREF(__pyx_v_offset_1);
-        __Pyx_GIVEREF(__pyx_v_offset_1);
-        PyTuple_SET_ITEM(__pyx_t_9, 2+__pyx_t_11, __pyx_v_offset_1);
-        __Pyx_INCREF(__pyx_v_children_1);
-        __Pyx_GIVEREF(__pyx_v_children_1);
-        PyTuple_SET_ITEM(__pyx_t_9, 3+__pyx_t_11, __pyx_v_children_1);
-        __Pyx_INCREF(Py_None);
-        __Pyx_GIVEREF(Py_None);
-        PyTuple_SET_ITEM(__pyx_t_9, 4+__pyx_t_11, Py_None);
-        __pyx_t_10 = 0;
-        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_9, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 644, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-      }
-      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_8 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_8 == ((int)-1))) __PYX_ERR(0, 644, __pyx_L1_error)
+      __pyx_t_8 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_8 == ((int)-1))) __PYX_ERR(0, 601, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     }
     __pyx_L32:;
 
-    /* "JSONParser.pyx":645
- *                 children.append(ParseNode('string', offset, offset_1, children_1, None))
+    /* "JSONParser.pyx":602
+ *             else:
  *                 children.append(ParseNode('string', offset, offset_1, children_1, None))
  *             offset = offset_1             # <<<<<<<<<<<<<<
  * 
  *             if buf[offset:offset+1] == '"':
  */
-    __pyx_t_11 = __Pyx_PyInt_As_int(__pyx_v_offset_1); if (unlikely((__pyx_t_11 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 645, __pyx_L1_error)
+    __pyx_t_11 = __Pyx_PyInt_As_int(__pyx_v_offset_1); if (unlikely((__pyx_t_11 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 602, __pyx_L1_error)
     __pyx_v_offset = __pyx_t_11;
 
-    /* "JSONParser.pyx":647
+    /* "JSONParser.pyx":604
  *             offset = offset_1
  * 
  *             if buf[offset:offset+1] == '"':             # <<<<<<<<<<<<<<
@@ -10260,16 +9329,16 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
     if (unlikely(__pyx_v_buf == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 647, __pyx_L1_error)
+      __PYX_ERR(0, 604, __pyx_L1_error)
     }
-    __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_v_offset, (__pyx_v_offset + 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 647, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_v_offset, (__pyx_v_offset + 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 604, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u__5, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 647, __pyx_L1_error)
+    __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u__5, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 604, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_3 = (__pyx_t_2 != 0);
     if (__pyx_t_3) {
 
-      /* "JSONParser.pyx":648
+      /* "JSONParser.pyx":605
  * 
  *             if buf[offset:offset+1] == '"':
  *                 offset += 1             # <<<<<<<<<<<<<<
@@ -10278,7 +9347,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
  */
       __pyx_v_offset = (__pyx_v_offset + 1);
 
-      /* "JSONParser.pyx":647
+      /* "JSONParser.pyx":604
  *             offset = offset_1
  * 
  *             if buf[offset:offset+1] == '"':             # <<<<<<<<<<<<<<
@@ -10288,7 +9357,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
       goto __pyx_L33;
     }
 
-    /* "JSONParser.pyx":650
+    /* "JSONParser.pyx":607
  *                 offset += 1
  *             else:
  *                 offset = -1             # <<<<<<<<<<<<<<
@@ -10298,7 +9367,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
     /*else*/ {
       __pyx_v_offset = -1;
 
-      /* "JSONParser.pyx":651
+      /* "JSONParser.pyx":608
  *             else:
  *                 offset = -1
  *                 break             # <<<<<<<<<<<<<<
@@ -10309,7 +9378,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
     }
     __pyx_L33:;
 
-    /* "JSONParser.pyx":654
+    /* "JSONParser.pyx":611
  * 
  * 
  *             break             # <<<<<<<<<<<<<<
@@ -10320,22 +9389,22 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
   }
   __pyx_L4_break:;
 
-  /* "JSONParser.pyx":655
+  /* "JSONParser.pyx":612
  * 
  *             break
  *         return offset, line_start             # <<<<<<<<<<<<<<
  * 
- *     cdef (int, int) parse_json_list(self, str buf, int offset, int line_start, int indent, list children):
+ *     cdef (int, int) parse_json_list(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):
  */
   __pyx_t_13.f0 = __pyx_v_offset;
   __pyx_t_13.f1 = __pyx_v_line_start;
   __pyx_r = __pyx_t_13;
   goto __pyx_L0;
 
-  /* "JSONParser.pyx":473
+  /* "JSONParser.pyx":431
  *         return offset, line_start
  * 
- *     cdef (int, int) parse_json_string(self, str buf, int offset, int line_start, int indent, list children):             # <<<<<<<<<<<<<<
+ *     cdef (int, int) parse_json_string(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
  *         cdef Py_UNICODE chr
  */
@@ -10359,15 +9428,15 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_string(
   return __pyx_r;
 }
 
-/* "JSONParser.pyx":657
+/* "JSONParser.pyx":614
  *         return offset, line_start
  * 
- *     cdef (int, int) parse_json_list(self, str buf, int offset, int line_start, int indent, list children):             # <<<<<<<<<<<<<<
+ *     cdef (int, int) parse_json_list(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
  *         cdef Py_UNICODE chr
  */
 
-static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(struct __pyx_obj_10JSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, int __pyx_v_indent, PyObject *__pyx_v_children) {
+static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(struct __pyx_obj_10JSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, int __pyx_v_indent, int __pyx_v_buf_eof, PyObject *__pyx_v_children) {
   int __pyx_v_count;
   Py_UNICODE __pyx_v_chr;
   PyObject *__pyx_v_offset_1 = NULL;
@@ -10383,12 +9452,12 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
   PyObject *__pyx_t_1 = NULL;
   int __pyx_t_2;
   int __pyx_t_3;
-  Py_ssize_t __pyx_t_4;
-  Py_UCS4 __pyx_t_5;
-  int __pyx_t_6;
-  __pyx_ctuple_int__and_int __pyx_t_7;
-  PyObject *__pyx_t_8 = NULL;
-  Py_UNICODE __pyx_t_9;
+  Py_UCS4 __pyx_t_4;
+  int __pyx_t_5;
+  __pyx_ctuple_int__and_int __pyx_t_6;
+  PyObject *__pyx_t_7 = NULL;
+  Py_UNICODE __pyx_t_8;
+  Py_ssize_t __pyx_t_9;
   Py_ssize_t __pyx_t_10;
   Py_ssize_t __pyx_t_11;
   PyObject *__pyx_t_12 = NULL;
@@ -10397,7 +9466,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
   int __pyx_t_15;
   __Pyx_RefNannySetupContext("parse_json_list", 0);
 
-  /* "JSONParser.pyx":660
+  /* "JSONParser.pyx":617
  *         cdef int count
  *         cdef Py_UNICODE chr
  *         while True: # note: return at end of loop             # <<<<<<<<<<<<<<
@@ -10406,7 +9475,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
  */
   while (1) {
 
-    /* "JSONParser.pyx":661
+    /* "JSONParser.pyx":618
  *         cdef Py_UNICODE chr
  *         while True: # note: return at end of loop
  *             if buf[offset:offset+1] == '[':             # <<<<<<<<<<<<<<
@@ -10415,16 +9484,16 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
  */
     if (unlikely(__pyx_v_buf == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 661, __pyx_L1_error)
+      __PYX_ERR(0, 618, __pyx_L1_error)
     }
-    __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_v_offset, (__pyx_v_offset + 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 661, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_v_offset, (__pyx_v_offset + 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 618, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u__8, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 661, __pyx_L1_error)
+    __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u__8, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 618, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_3 = (__pyx_t_2 != 0);
     if (__pyx_t_3) {
 
-      /* "JSONParser.pyx":662
+      /* "JSONParser.pyx":619
  *         while True: # note: return at end of loop
  *             if buf[offset:offset+1] == '[':
  *                 offset += 1             # <<<<<<<<<<<<<<
@@ -10433,7 +9502,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
  */
       __pyx_v_offset = (__pyx_v_offset + 1);
 
-      /* "JSONParser.pyx":661
+      /* "JSONParser.pyx":618
  *         cdef Py_UNICODE chr
  *         while True: # note: return at end of loop
  *             if buf[offset:offset+1] == '[':             # <<<<<<<<<<<<<<
@@ -10443,7 +9512,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
       goto __pyx_L5;
     }
 
-    /* "JSONParser.pyx":664
+    /* "JSONParser.pyx":621
  *                 offset += 1
  *             else:
  *                 offset = -1             # <<<<<<<<<<<<<<
@@ -10453,7 +9522,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
     /*else*/ {
       __pyx_v_offset = -1;
 
-      /* "JSONParser.pyx":665
+      /* "JSONParser.pyx":622
  *             else:
  *                 offset = -1
  *                 break             # <<<<<<<<<<<<<<
@@ -10464,43 +9533,38 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
     }
     __pyx_L5:;
 
-    /* "JSONParser.pyx":667
+    /* "JSONParser.pyx":624
  *                 break
  * 
  *             count = 0             # <<<<<<<<<<<<<<
- *             while offset != len(buf):
+ *             while offset != buf_eof:
  *                 chr = buf[offset]
  */
     __pyx_v_count = 0;
 
-    /* "JSONParser.pyx":668
+    /* "JSONParser.pyx":625
  * 
  *             count = 0
- *             while offset != len(buf):             # <<<<<<<<<<<<<<
+ *             while offset != buf_eof:             # <<<<<<<<<<<<<<
  *                 chr = buf[offset]
  *                 if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  */
     while (1) {
-      if (unlikely(__pyx_v_buf == Py_None)) {
-        PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
-        __PYX_ERR(0, 668, __pyx_L1_error)
-      }
-      __pyx_t_4 = __Pyx_PyUnicode_GET_LENGTH(__pyx_v_buf); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(0, 668, __pyx_L1_error)
-      __pyx_t_3 = ((__pyx_v_offset != __pyx_t_4) != 0);
+      __pyx_t_3 = ((__pyx_v_offset != __pyx_v_buf_eof) != 0);
       if (!__pyx_t_3) break;
 
-      /* "JSONParser.pyx":669
+      /* "JSONParser.pyx":626
  *             count = 0
- *             while offset != len(buf):
+ *             while offset != buf_eof:
  *                 chr = buf[offset]             # <<<<<<<<<<<<<<
  *                 if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                     offset +=1
  */
-      __pyx_t_5 = __Pyx_GetItemInt_Unicode(__pyx_v_buf, __pyx_v_offset, int, 1, __Pyx_PyInt_From_int, 0, 1, 0); if (unlikely(__pyx_t_5 == (Py_UCS4)-1)) __PYX_ERR(0, 669, __pyx_L1_error)
-      __pyx_v_chr = __pyx_t_5;
+      __pyx_t_4 = __Pyx_GetItemInt_Unicode(__pyx_v_buf, __pyx_v_offset, int, 1, __Pyx_PyInt_From_int, 0, 1, 0); if (unlikely(__pyx_t_4 == (Py_UCS4)-1)) __PYX_ERR(0, 626, __pyx_L1_error)
+      __pyx_v_chr = __pyx_t_4;
 
-      /* "JSONParser.pyx":670
- *             while offset != len(buf):
+      /* "JSONParser.pyx":627
+ *             while offset != buf_eof:
  *                 chr = buf[offset]
  *                 if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':             # <<<<<<<<<<<<<<
  *                     offset +=1
@@ -10635,7 +9699,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
       __pyx_L9_bool_binop_done:;
       if (__pyx_t_3) {
 
-        /* "JSONParser.pyx":671
+        /* "JSONParser.pyx":628
  *                 chr = buf[offset]
  *                 if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                     offset +=1             # <<<<<<<<<<<<<<
@@ -10644,7 +9708,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
  */
         __pyx_v_offset = (__pyx_v_offset + 1);
 
-        /* "JSONParser.pyx":672
+        /* "JSONParser.pyx":629
  *                 if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                     offset +=1
  *                     count +=1             # <<<<<<<<<<<<<<
@@ -10653,8 +9717,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
  */
         __pyx_v_count = (__pyx_v_count + 1);
 
-        /* "JSONParser.pyx":670
- *             while offset != len(buf):
+        /* "JSONParser.pyx":627
+ *             while offset != buf_eof:
  *                 chr = buf[offset]
  *                 if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':             # <<<<<<<<<<<<<<
  *                     offset +=1
@@ -10663,7 +9727,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
         goto __pyx_L8;
       }
 
-      /* "JSONParser.pyx":674
+      /* "JSONParser.pyx":631
  *                     count +=1
  *                 else:
  *                     break             # <<<<<<<<<<<<<<
@@ -10677,31 +9741,31 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
     }
     __pyx_L7_break:;
 
-    /* "JSONParser.pyx":676
+    /* "JSONParser.pyx":633
  *                     break
  * 
  *             offset_1 = offset             # <<<<<<<<<<<<<<
  *             children_1 = []
  *             while True: # start capture
  */
-    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 676, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 633, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_v_offset_1 = __pyx_t_1;
     __pyx_t_1 = 0;
 
-    /* "JSONParser.pyx":677
+    /* "JSONParser.pyx":634
  * 
  *             offset_1 = offset
  *             children_1 = []             # <<<<<<<<<<<<<<
  *             while True: # start capture
  *                 count = 0
  */
-    __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 677, __pyx_L1_error)
+    __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 634, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_v_children_1 = ((PyObject*)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "JSONParser.pyx":678
+    /* "JSONParser.pyx":635
  *             offset_1 = offset
  *             children_1 = []
  *             while True: # start capture             # <<<<<<<<<<<<<<
@@ -10710,7 +9774,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
  */
     while (1) {
 
-      /* "JSONParser.pyx":679
+      /* "JSONParser.pyx":636
  *             children_1 = []
  *             while True: # start capture
  *                 count = 0             # <<<<<<<<<<<<<<
@@ -10719,7 +9783,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
  */
       __pyx_v_count = 0;
 
-      /* "JSONParser.pyx":680
+      /* "JSONParser.pyx":637
  *             while True: # start capture
  *                 count = 0
  *                 while True:             # <<<<<<<<<<<<<<
@@ -10728,57 +9792,57 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
  */
       while (1) {
 
-        /* "JSONParser.pyx":681
+        /* "JSONParser.pyx":638
  *                 count = 0
  *                 while True:
  *                     offset_2 = offset_1             # <<<<<<<<<<<<<<
  *                     line_start_1 = line_start
- *                     offset_2, line_start_1 = self.parse_json_value(buf, offset_2, line_start_1, indent,children_1)
+ *                     offset_2, line_start_1 = self.parse_json_value(buf, offset_2, line_start_1, indent, buf_eof, children_1)
  */
         __Pyx_INCREF(__pyx_v_offset_1);
         __Pyx_XDECREF_SET(__pyx_v_offset_2, __pyx_v_offset_1);
 
-        /* "JSONParser.pyx":682
+        /* "JSONParser.pyx":639
  *                 while True:
  *                     offset_2 = offset_1
  *                     line_start_1 = line_start             # <<<<<<<<<<<<<<
- *                     offset_2, line_start_1 = self.parse_json_value(buf, offset_2, line_start_1, indent,children_1)
+ *                     offset_2, line_start_1 = self.parse_json_value(buf, offset_2, line_start_1, indent, buf_eof, children_1)
  *                     if offset_2 == -1: break
  */
         __pyx_v_line_start_1 = __pyx_v_line_start;
 
-        /* "JSONParser.pyx":683
+        /* "JSONParser.pyx":640
  *                     offset_2 = offset_1
  *                     line_start_1 = line_start
- *                     offset_2, line_start_1 = self.parse_json_value(buf, offset_2, line_start_1, indent,children_1)             # <<<<<<<<<<<<<<
+ *                     offset_2, line_start_1 = self.parse_json_value(buf, offset_2, line_start_1, indent, buf_eof, children_1)             # <<<<<<<<<<<<<<
  *                     if offset_2 == -1: break
  * 
  */
-        __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_offset_2); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 683, __pyx_L1_error)
-        __pyx_t_7 = ((struct __pyx_vtabstruct_10JSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_json_value(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_children_1);
-        __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_7.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 683, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_v_offset_2); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 640, __pyx_L1_error)
+        __pyx_t_6 = ((struct __pyx_vtabstruct_10JSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_json_value(__pyx_v_self, __pyx_v_buf, __pyx_t_5, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_1);
+        __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_6.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 640, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_6 = __pyx_t_7.f1;
+        __pyx_t_5 = __pyx_t_6.f1;
         __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_t_1);
         __pyx_t_1 = 0;
-        __pyx_v_line_start_1 = __pyx_t_6;
+        __pyx_v_line_start_1 = __pyx_t_5;
 
-        /* "JSONParser.pyx":684
+        /* "JSONParser.pyx":641
  *                     line_start_1 = line_start
- *                     offset_2, line_start_1 = self.parse_json_value(buf, offset_2, line_start_1, indent,children_1)
+ *                     offset_2, line_start_1 = self.parse_json_value(buf, offset_2, line_start_1, indent, buf_eof, children_1)
  *                     if offset_2 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
  */
-        __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_2, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 684, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_2, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 641, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 684, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 641, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
         if (__pyx_t_3) {
           goto __pyx_L32_break;
         }
 
-        /* "JSONParser.pyx":687
+        /* "JSONParser.pyx":644
  * 
  * 
  *                     count_1 = 0             # <<<<<<<<<<<<<<
@@ -10788,7 +9852,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
         __Pyx_INCREF(__pyx_int_0);
         __Pyx_XDECREF_SET(__pyx_v_count_1, __pyx_int_0);
 
-        /* "JSONParser.pyx":688
+        /* "JSONParser.pyx":645
  * 
  *                     count_1 = 0
  *                     while True:             # <<<<<<<<<<<<<<
@@ -10797,7 +9861,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
  */
         while (1) {
 
-          /* "JSONParser.pyx":689
+          /* "JSONParser.pyx":646
  *                     count_1 = 0
  *                     while True:
  *                         offset_3 = offset_2             # <<<<<<<<<<<<<<
@@ -10807,61 +9871,56 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
           __Pyx_INCREF(__pyx_v_offset_2);
           __Pyx_XDECREF_SET(__pyx_v_offset_3, __pyx_v_offset_2);
 
-          /* "JSONParser.pyx":690
+          /* "JSONParser.pyx":647
  *                     while True:
  *                         offset_3 = offset_2
  *                         line_start_2 = line_start_1             # <<<<<<<<<<<<<<
  *                         count_2 = 0
- *                         while offset_3 != len(buf):
+ *                         while offset_3 != buf_eof:
  */
           __pyx_v_line_start_2 = __pyx_v_line_start_1;
 
-          /* "JSONParser.pyx":691
+          /* "JSONParser.pyx":648
  *                         offset_3 = offset_2
  *                         line_start_2 = line_start_1
  *                         count_2 = 0             # <<<<<<<<<<<<<<
- *                         while offset_3 != len(buf):
+ *                         while offset_3 != buf_eof:
  *                             chr = buf[offset_3]
  */
           __Pyx_INCREF(__pyx_int_0);
           __Pyx_XDECREF_SET(__pyx_v_count_2, __pyx_int_0);
 
-          /* "JSONParser.pyx":692
+          /* "JSONParser.pyx":649
  *                         line_start_2 = line_start_1
  *                         count_2 = 0
- *                         while offset_3 != len(buf):             # <<<<<<<<<<<<<<
+ *                         while offset_3 != buf_eof:             # <<<<<<<<<<<<<<
  *                             chr = buf[offset_3]
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  */
           while (1) {
-            if (unlikely(__pyx_v_buf == Py_None)) {
-              PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
-              __PYX_ERR(0, 692, __pyx_L1_error)
-            }
-            __pyx_t_4 = __Pyx_PyUnicode_GET_LENGTH(__pyx_v_buf); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(0, 692, __pyx_L1_error)
-            __pyx_t_1 = PyInt_FromSsize_t(__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 692, __pyx_L1_error)
+            __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_buf_eof); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 649, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
-            __pyx_t_8 = PyObject_RichCompare(__pyx_v_offset_3, __pyx_t_1, Py_NE); __Pyx_XGOTREF(__pyx_t_8); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 692, __pyx_L1_error)
+            __pyx_t_7 = PyObject_RichCompare(__pyx_v_offset_3, __pyx_t_1, Py_NE); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 649, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 692, __pyx_L1_error)
-            __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+            __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 649, __pyx_L1_error)
+            __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
             if (!__pyx_t_3) break;
 
-            /* "JSONParser.pyx":693
+            /* "JSONParser.pyx":650
  *                         count_2 = 0
- *                         while offset_3 != len(buf):
+ *                         while offset_3 != buf_eof:
  *                             chr = buf[offset_3]             # <<<<<<<<<<<<<<
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                                 offset_3 +=1
  */
-            __pyx_t_8 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 693, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_8);
-            __pyx_t_9 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_8); if (unlikely((__pyx_t_9 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 693, __pyx_L1_error)
-            __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-            __pyx_v_chr = __pyx_t_9;
+            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 650, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_7);
+            __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_7); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 650, __pyx_L1_error)
+            __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+            __pyx_v_chr = __pyx_t_8;
 
-            /* "JSONParser.pyx":694
- *                         while offset_3 != len(buf):
+            /* "JSONParser.pyx":651
+ *                         while offset_3 != buf_eof:
  *                             chr = buf[offset_3]
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':             # <<<<<<<<<<<<<<
  *                                 offset_3 +=1
@@ -10996,32 +10055,32 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
             __pyx_L39_bool_binop_done:;
             if (__pyx_t_3) {
 
-              /* "JSONParser.pyx":695
+              /* "JSONParser.pyx":652
  *                             chr = buf[offset_3]
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                                 offset_3 +=1             # <<<<<<<<<<<<<<
  *                                 count_2 +=1
  *                             else:
  */
-              __pyx_t_8 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 695, __pyx_L1_error)
-              __Pyx_GOTREF(__pyx_t_8);
-              __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_8);
-              __pyx_t_8 = 0;
+              __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 652, __pyx_L1_error)
+              __Pyx_GOTREF(__pyx_t_7);
+              __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_7);
+              __pyx_t_7 = 0;
 
-              /* "JSONParser.pyx":696
+              /* "JSONParser.pyx":653
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                                 offset_3 +=1
  *                                 count_2 +=1             # <<<<<<<<<<<<<<
  *                             else:
  *                                 break
  */
-              __pyx_t_8 = __Pyx_PyInt_AddObjC(__pyx_v_count_2, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 696, __pyx_L1_error)
-              __Pyx_GOTREF(__pyx_t_8);
-              __Pyx_DECREF_SET(__pyx_v_count_2, __pyx_t_8);
-              __pyx_t_8 = 0;
+              __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_count_2, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 653, __pyx_L1_error)
+              __Pyx_GOTREF(__pyx_t_7);
+              __Pyx_DECREF_SET(__pyx_v_count_2, __pyx_t_7);
+              __pyx_t_7 = 0;
 
-              /* "JSONParser.pyx":694
- *                         while offset_3 != len(buf):
+              /* "JSONParser.pyx":651
+ *                         while offset_3 != buf_eof:
  *                             chr = buf[offset_3]
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':             # <<<<<<<<<<<<<<
  *                                 offset_3 +=1
@@ -11030,7 +10089,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
               goto __pyx_L38;
             }
 
-            /* "JSONParser.pyx":698
+            /* "JSONParser.pyx":655
  *                                 count_2 +=1
  *                             else:
  *                                 break             # <<<<<<<<<<<<<<
@@ -11044,7 +10103,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
           }
           __pyx_L37_break:;
 
-          /* "JSONParser.pyx":700
+          /* "JSONParser.pyx":657
  *                                 break
  * 
  *                         if buf[offset_3:offset_3+1] == ',':             # <<<<<<<<<<<<<<
@@ -11053,48 +10112,48 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
  */
           if (unlikely(__pyx_v_buf == Py_None)) {
             PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-            __PYX_ERR(0, 700, __pyx_L1_error)
+            __PYX_ERR(0, 657, __pyx_L1_error)
           }
           __Pyx_INCREF(__pyx_v_offset_3);
-          __pyx_t_8 = __pyx_v_offset_3;
-          __pyx_t_3 = (__pyx_t_8 == Py_None);
+          __pyx_t_7 = __pyx_v_offset_3;
+          __pyx_t_3 = (__pyx_t_7 == Py_None);
           if (__pyx_t_3) {
-            __pyx_t_4 = 0;
+            __pyx_t_9 = 0;
           } else {
-            __pyx_t_10 = __Pyx_PyIndex_AsSsize_t(__pyx_t_8); if (unlikely((__pyx_t_10 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 700, __pyx_L1_error)
-            __pyx_t_4 = __pyx_t_10;
+            __pyx_t_10 = __Pyx_PyIndex_AsSsize_t(__pyx_t_7); if (unlikely((__pyx_t_10 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 657, __pyx_L1_error)
+            __pyx_t_9 = __pyx_t_10;
           }
-          __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-          __pyx_t_8 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 700, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_8);
-          __pyx_t_3 = (__pyx_t_8 == Py_None);
+          __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+          __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 657, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_7);
+          __pyx_t_3 = (__pyx_t_7 == Py_None);
           if (__pyx_t_3) {
             __pyx_t_10 = PY_SSIZE_T_MAX;
           } else {
-            __pyx_t_11 = __Pyx_PyIndex_AsSsize_t(__pyx_t_8); if (unlikely((__pyx_t_11 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 700, __pyx_L1_error)
+            __pyx_t_11 = __Pyx_PyIndex_AsSsize_t(__pyx_t_7); if (unlikely((__pyx_t_11 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 657, __pyx_L1_error)
             __pyx_t_10 = __pyx_t_11;
           }
-          __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-          __pyx_t_8 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_4, __pyx_t_10); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 700, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_8);
-          __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_8, __pyx_kp_u__9, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 700, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+          __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+          __pyx_t_7 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_9, __pyx_t_10); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 657, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_7);
+          __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_kp_u__9, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 657, __pyx_L1_error)
+          __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
           __pyx_t_2 = (__pyx_t_3 != 0);
           if (__pyx_t_2) {
 
-            /* "JSONParser.pyx":701
+            /* "JSONParser.pyx":658
  * 
  *                         if buf[offset_3:offset_3+1] == ',':
  *                             offset_3 += 1             # <<<<<<<<<<<<<<
  *                         else:
  *                             offset_3 = -1
  */
-            __pyx_t_8 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 701, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_8);
-            __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_8);
-            __pyx_t_8 = 0;
+            __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 658, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_7);
+            __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_7);
+            __pyx_t_7 = 0;
 
-            /* "JSONParser.pyx":700
+            /* "JSONParser.pyx":657
  *                                 break
  * 
  *                         if buf[offset_3:offset_3+1] == ',':             # <<<<<<<<<<<<<<
@@ -11104,7 +10163,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
             goto __pyx_L59;
           }
 
-          /* "JSONParser.pyx":703
+          /* "JSONParser.pyx":660
  *                             offset_3 += 1
  *                         else:
  *                             offset_3 = -1             # <<<<<<<<<<<<<<
@@ -11115,7 +10174,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
             __Pyx_INCREF(__pyx_int_neg_1);
             __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_int_neg_1);
 
-            /* "JSONParser.pyx":704
+            /* "JSONParser.pyx":661
  *                         else:
  *                             offset_3 = -1
  *                             break             # <<<<<<<<<<<<<<
@@ -11126,52 +10185,47 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
           }
           __pyx_L59:;
 
-          /* "JSONParser.pyx":706
+          /* "JSONParser.pyx":663
  *                             break
  * 
  *                         count_2 = 0             # <<<<<<<<<<<<<<
- *                         while offset_3 != len(buf):
+ *                         while offset_3 != buf_eof:
  *                             chr = buf[offset_3]
  */
           __Pyx_INCREF(__pyx_int_0);
           __Pyx_DECREF_SET(__pyx_v_count_2, __pyx_int_0);
 
-          /* "JSONParser.pyx":707
+          /* "JSONParser.pyx":664
  * 
  *                         count_2 = 0
- *                         while offset_3 != len(buf):             # <<<<<<<<<<<<<<
+ *                         while offset_3 != buf_eof:             # <<<<<<<<<<<<<<
  *                             chr = buf[offset_3]
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  */
           while (1) {
-            if (unlikely(__pyx_v_buf == Py_None)) {
-              PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
-              __PYX_ERR(0, 707, __pyx_L1_error)
-            }
-            __pyx_t_10 = __Pyx_PyUnicode_GET_LENGTH(__pyx_v_buf); if (unlikely(__pyx_t_10 == ((Py_ssize_t)-1))) __PYX_ERR(0, 707, __pyx_L1_error)
-            __pyx_t_8 = PyInt_FromSsize_t(__pyx_t_10); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 707, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_8);
-            __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_3, __pyx_t_8, Py_NE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 707, __pyx_L1_error)
-            __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 707, __pyx_L1_error)
+            __pyx_t_7 = __Pyx_PyInt_From_int(__pyx_v_buf_eof); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 664, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_7);
+            __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_3, __pyx_t_7, Py_NE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 664, __pyx_L1_error)
+            __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 664, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
             if (!__pyx_t_2) break;
 
-            /* "JSONParser.pyx":708
+            /* "JSONParser.pyx":665
  *                         count_2 = 0
- *                         while offset_3 != len(buf):
+ *                         while offset_3 != buf_eof:
  *                             chr = buf[offset_3]             # <<<<<<<<<<<<<<
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                                 offset_3 +=1
  */
-            __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 708, __pyx_L1_error)
+            __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 665, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
-            __pyx_t_9 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_9 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 708, __pyx_L1_error)
+            __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 665, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            __pyx_v_chr = __pyx_t_9;
+            __pyx_v_chr = __pyx_t_8;
 
-            /* "JSONParser.pyx":709
- *                         while offset_3 != len(buf):
+            /* "JSONParser.pyx":666
+ *                         while offset_3 != buf_eof:
  *                             chr = buf[offset_3]
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':             # <<<<<<<<<<<<<<
  *                                 offset_3 +=1
@@ -11306,32 +10360,32 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
             __pyx_L63_bool_binop_done:;
             if (__pyx_t_2) {
 
-              /* "JSONParser.pyx":710
+              /* "JSONParser.pyx":667
  *                             chr = buf[offset_3]
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                                 offset_3 +=1             # <<<<<<<<<<<<<<
  *                                 count_2 +=1
  *                             else:
  */
-              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 710, __pyx_L1_error)
+              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 667, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_1);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_1);
               __pyx_t_1 = 0;
 
-              /* "JSONParser.pyx":711
+              /* "JSONParser.pyx":668
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                                 offset_3 +=1
  *                                 count_2 +=1             # <<<<<<<<<<<<<<
  *                             else:
  *                                 break
  */
-              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_count_2, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 711, __pyx_L1_error)
+              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_count_2, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 668, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_1);
               __Pyx_DECREF_SET(__pyx_v_count_2, __pyx_t_1);
               __pyx_t_1 = 0;
 
-              /* "JSONParser.pyx":709
- *                         while offset_3 != len(buf):
+              /* "JSONParser.pyx":666
+ *                         while offset_3 != buf_eof:
  *                             chr = buf[offset_3]
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':             # <<<<<<<<<<<<<<
  *                                 offset_3 +=1
@@ -11340,12 +10394,12 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
               goto __pyx_L62;
             }
 
-            /* "JSONParser.pyx":713
+            /* "JSONParser.pyx":670
  *                                 count_2 +=1
  *                             else:
  *                                 break             # <<<<<<<<<<<<<<
  * 
- *                         offset_3, line_start_2 = self.parse_json_value(buf, offset_3, line_start_2, indent,children_1)
+ *                         offset_3, line_start_2 = self.parse_json_value(buf, offset_3, line_start_2, indent, buf_eof, children_1)
  */
             /*else*/ {
               goto __pyx_L61_break;
@@ -11354,52 +10408,52 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
           }
           __pyx_L61_break:;
 
-          /* "JSONParser.pyx":715
+          /* "JSONParser.pyx":672
  *                                 break
  * 
- *                         offset_3, line_start_2 = self.parse_json_value(buf, offset_3, line_start_2, indent,children_1)             # <<<<<<<<<<<<<<
+ *                         offset_3, line_start_2 = self.parse_json_value(buf, offset_3, line_start_2, indent, buf_eof, children_1)             # <<<<<<<<<<<<<<
  *                         if offset_3 == -1: break
  * 
  */
-          __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_offset_3); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 715, __pyx_L1_error)
-          __pyx_t_7 = ((struct __pyx_vtabstruct_10JSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_json_value(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_2, __pyx_v_indent, __pyx_v_children_1);
-          __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_7.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 715, __pyx_L1_error)
+          __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_v_offset_3); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 672, __pyx_L1_error)
+          __pyx_t_6 = ((struct __pyx_vtabstruct_10JSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_json_value(__pyx_v_self, __pyx_v_buf, __pyx_t_5, __pyx_v_line_start_2, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_1);
+          __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_6.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 672, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_6 = __pyx_t_7.f1;
+          __pyx_t_5 = __pyx_t_6.f1;
           __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_1);
           __pyx_t_1 = 0;
-          __pyx_v_line_start_2 = __pyx_t_6;
+          __pyx_v_line_start_2 = __pyx_t_5;
 
-          /* "JSONParser.pyx":716
+          /* "JSONParser.pyx":673
  * 
- *                         offset_3, line_start_2 = self.parse_json_value(buf, offset_3, line_start_2, indent,children_1)
+ *                         offset_3, line_start_2 = self.parse_json_value(buf, offset_3, line_start_2, indent, buf_eof, children_1)
  *                         if offset_3 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
  */
-          __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_3, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 716, __pyx_L1_error)
+          __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_3, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 673, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 716, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 673, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
           if (__pyx_t_2) {
             goto __pyx_L35_break;
           }
 
-          /* "JSONParser.pyx":719
+          /* "JSONParser.pyx":676
  * 
  * 
  *                         if offset_2 == offset_3: break             # <<<<<<<<<<<<<<
  *                         offset_2 = offset_3
  *                         line_start_1 = line_start_2
  */
-          __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_2, __pyx_v_offset_3, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 719, __pyx_L1_error)
-          __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 719, __pyx_L1_error)
+          __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_2, __pyx_v_offset_3, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 676, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 676, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
           if (__pyx_t_2) {
             goto __pyx_L35_break;
           }
 
-          /* "JSONParser.pyx":720
+          /* "JSONParser.pyx":677
  * 
  *                         if offset_2 == offset_3: break
  *                         offset_2 = offset_3             # <<<<<<<<<<<<<<
@@ -11409,7 +10463,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
           __Pyx_INCREF(__pyx_v_offset_3);
           __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_v_offset_3);
 
-          /* "JSONParser.pyx":721
+          /* "JSONParser.pyx":678
  *                         if offset_2 == offset_3: break
  *                         offset_2 = offset_3
  *                         line_start_1 = line_start_2             # <<<<<<<<<<<<<<
@@ -11418,35 +10472,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
  */
           __pyx_v_line_start_1 = __pyx_v_line_start_2;
 
-          /* "JSONParser.pyx":722
+          /* "JSONParser.pyx":679
  *                         offset_2 = offset_3
  *                         line_start_1 = line_start_2
  *                         count_1 += 1             # <<<<<<<<<<<<<<
  * 
  *                     if offset_1 == offset_2: break
  */
-          __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_count_1, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 722, __pyx_L1_error)
+          __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_count_1, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 679, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           __Pyx_DECREF_SET(__pyx_v_count_1, __pyx_t_1);
           __pyx_t_1 = 0;
         }
         __pyx_L35_break:;
 
-        /* "JSONParser.pyx":724
+        /* "JSONParser.pyx":681
  *                         count_1 += 1
  * 
  *                     if offset_1 == offset_2: break             # <<<<<<<<<<<<<<
  *                     offset_1 = offset_2
  *                     line_start = line_start_1
  */
-        __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_1, __pyx_v_offset_2, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 724, __pyx_L1_error)
-        __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 724, __pyx_L1_error)
+        __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_1, __pyx_v_offset_2, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 681, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 681, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
         if (__pyx_t_2) {
           goto __pyx_L32_break;
         }
 
-        /* "JSONParser.pyx":725
+        /* "JSONParser.pyx":682
  * 
  *                     if offset_1 == offset_2: break
  *                     offset_1 = offset_2             # <<<<<<<<<<<<<<
@@ -11456,7 +10510,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
         __Pyx_INCREF(__pyx_v_offset_2);
         __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_v_offset_2);
 
-        /* "JSONParser.pyx":726
+        /* "JSONParser.pyx":683
  *                     if offset_1 == offset_2: break
  *                     offset_1 = offset_2
  *                     line_start = line_start_1             # <<<<<<<<<<<<<<
@@ -11465,7 +10519,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
  */
         __pyx_v_line_start = __pyx_v_line_start_1;
 
-        /* "JSONParser.pyx":727
+        /* "JSONParser.pyx":684
  *                     offset_1 = offset_2
  *                     line_start = line_start_1
  *                     count += 1             # <<<<<<<<<<<<<<
@@ -11476,7 +10530,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
       }
       __pyx_L32_break:;
 
-      /* "JSONParser.pyx":729
+      /* "JSONParser.pyx":686
  *                     count += 1
  * 
  *                 break             # <<<<<<<<<<<<<<
@@ -11487,20 +10541,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
     }
     __pyx_L30_break:;
 
-    /* "JSONParser.pyx":730
+    /* "JSONParser.pyx":687
  * 
  *                 break
  *             if offset_1 == -1:             # <<<<<<<<<<<<<<
  *                 offset = -1
  *                 break
  */
-    __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_1, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 730, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_1, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 687, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 730, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 687, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     if (__pyx_t_2) {
 
-      /* "JSONParser.pyx":731
+      /* "JSONParser.pyx":688
  *                 break
  *             if offset_1 == -1:
  *                 offset = -1             # <<<<<<<<<<<<<<
@@ -11509,7 +10563,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
  */
       __pyx_v_offset = -1;
 
-      /* "JSONParser.pyx":732
+      /* "JSONParser.pyx":689
  *             if offset_1 == -1:
  *                 offset = -1
  *                 break             # <<<<<<<<<<<<<<
@@ -11518,7 +10572,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
  */
       goto __pyx_L4_break;
 
-      /* "JSONParser.pyx":730
+      /* "JSONParser.pyx":687
  * 
  *                 break
  *             if offset_1 == -1:             # <<<<<<<<<<<<<<
@@ -11527,7 +10581,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
  */
     }
 
-    /* "JSONParser.pyx":733
+    /* "JSONParser.pyx":690
  *                 offset = -1
  *                 break
  *             if self.builder is not None:             # <<<<<<<<<<<<<<
@@ -11538,7 +10592,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
     __pyx_t_3 = (__pyx_t_2 != 0);
     if (__pyx_t_3) {
 
-      /* "JSONParser.pyx":734
+      /* "JSONParser.pyx":691
  *                 break
  *             if self.builder is not None:
  *                 children.append(self.ParseNode('list', offset, offset_1, children_1, None))             # <<<<<<<<<<<<<<
@@ -11547,72 +10601,72 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
  */
       if (unlikely(__pyx_v_children == Py_None)) {
         PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
-        __PYX_ERR(0, 734, __pyx_L1_error)
+        __PYX_ERR(0, 691, __pyx_L1_error)
       }
-      __pyx_t_8 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 734, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_8);
-      __pyx_t_12 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 734, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 691, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_7);
+      __pyx_t_12 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 691, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_12);
       __pyx_t_13 = NULL;
-      __pyx_t_6 = 0;
-      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_8))) {
-        __pyx_t_13 = PyMethod_GET_SELF(__pyx_t_8);
+      __pyx_t_5 = 0;
+      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_7))) {
+        __pyx_t_13 = PyMethod_GET_SELF(__pyx_t_7);
         if (likely(__pyx_t_13)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_8);
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
           __Pyx_INCREF(__pyx_t_13);
           __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_8, function);
-          __pyx_t_6 = 1;
+          __Pyx_DECREF_SET(__pyx_t_7, function);
+          __pyx_t_5 = 1;
         }
       }
       #if CYTHON_FAST_PYCALL
-      if (PyFunction_Check(__pyx_t_8)) {
+      if (PyFunction_Check(__pyx_t_7)) {
         PyObject *__pyx_temp[6] = {__pyx_t_13, __pyx_n_u_list, __pyx_t_12, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_6, 5+__pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 734, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_5, 5+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 691, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
       } else
       #endif
       #if CYTHON_FAST_PYCCALL
-      if (__Pyx_PyFastCFunction_Check(__pyx_t_8)) {
+      if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
         PyObject *__pyx_temp[6] = {__pyx_t_13, __pyx_n_u_list, __pyx_t_12, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_6, 5+__pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 734, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_5, 5+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 691, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
       } else
       #endif
       {
-        __pyx_t_14 = PyTuple_New(5+__pyx_t_6); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 734, __pyx_L1_error)
+        __pyx_t_14 = PyTuple_New(5+__pyx_t_5); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 691, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_14);
         if (__pyx_t_13) {
           __Pyx_GIVEREF(__pyx_t_13); PyTuple_SET_ITEM(__pyx_t_14, 0, __pyx_t_13); __pyx_t_13 = NULL;
         }
         __Pyx_INCREF(__pyx_n_u_list);
         __Pyx_GIVEREF(__pyx_n_u_list);
-        PyTuple_SET_ITEM(__pyx_t_14, 0+__pyx_t_6, __pyx_n_u_list);
+        PyTuple_SET_ITEM(__pyx_t_14, 0+__pyx_t_5, __pyx_n_u_list);
         __Pyx_GIVEREF(__pyx_t_12);
-        PyTuple_SET_ITEM(__pyx_t_14, 1+__pyx_t_6, __pyx_t_12);
+        PyTuple_SET_ITEM(__pyx_t_14, 1+__pyx_t_5, __pyx_t_12);
         __Pyx_INCREF(__pyx_v_offset_1);
         __Pyx_GIVEREF(__pyx_v_offset_1);
-        PyTuple_SET_ITEM(__pyx_t_14, 2+__pyx_t_6, __pyx_v_offset_1);
+        PyTuple_SET_ITEM(__pyx_t_14, 2+__pyx_t_5, __pyx_v_offset_1);
         __Pyx_INCREF(__pyx_v_children_1);
         __Pyx_GIVEREF(__pyx_v_children_1);
-        PyTuple_SET_ITEM(__pyx_t_14, 3+__pyx_t_6, __pyx_v_children_1);
+        PyTuple_SET_ITEM(__pyx_t_14, 3+__pyx_t_5, __pyx_v_children_1);
         __Pyx_INCREF(Py_None);
         __Pyx_GIVEREF(Py_None);
-        PyTuple_SET_ITEM(__pyx_t_14, 4+__pyx_t_6, Py_None);
+        PyTuple_SET_ITEM(__pyx_t_14, 4+__pyx_t_5, Py_None);
         __pyx_t_12 = 0;
-        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_14, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 734, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_14, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 691, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
       }
-      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      __pyx_t_15 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_15 == ((int)-1))) __PYX_ERR(0, 734, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+      __pyx_t_15 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_15 == ((int)-1))) __PYX_ERR(0, 691, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "JSONParser.pyx":733
+      /* "JSONParser.pyx":690
  *                 offset = -1
  *                 break
  *             if self.builder is not None:             # <<<<<<<<<<<<<<
@@ -11622,168 +10676,94 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
       goto __pyx_L87;
     }
 
-    /* "JSONParser.pyx":736
+    /* "JSONParser.pyx":693
  *                 children.append(self.ParseNode('list', offset, offset_1, children_1, None))
  *             else:
  *                 children.append(ParseNode('list', offset, offset_1, children_1, None))             # <<<<<<<<<<<<<<
- *                 children.append(ParseNode('list', offset, offset_1, children_1, None))
  *             offset = offset_1
+ * 
  */
     /*else*/ {
       if (unlikely(__pyx_v_children == Py_None)) {
         PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
-        __PYX_ERR(0, 736, __pyx_L1_error)
+        __PYX_ERR(0, 693, __pyx_L1_error)
       }
-      __Pyx_GetModuleGlobalName(__pyx_t_8, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 736, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_8);
-      __pyx_t_14 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 736, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 693, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_7);
+      __pyx_t_14 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 693, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_14);
       __pyx_t_12 = NULL;
-      __pyx_t_6 = 0;
-      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_8))) {
-        __pyx_t_12 = PyMethod_GET_SELF(__pyx_t_8);
+      __pyx_t_5 = 0;
+      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_7))) {
+        __pyx_t_12 = PyMethod_GET_SELF(__pyx_t_7);
         if (likely(__pyx_t_12)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_8);
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
           __Pyx_INCREF(__pyx_t_12);
           __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_8, function);
-          __pyx_t_6 = 1;
+          __Pyx_DECREF_SET(__pyx_t_7, function);
+          __pyx_t_5 = 1;
         }
       }
       #if CYTHON_FAST_PYCALL
-      if (PyFunction_Check(__pyx_t_8)) {
+      if (PyFunction_Check(__pyx_t_7)) {
         PyObject *__pyx_temp[6] = {__pyx_t_12, __pyx_n_u_list, __pyx_t_14, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_6, 5+__pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 736, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_5, 5+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 693, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
       } else
       #endif
       #if CYTHON_FAST_PYCCALL
-      if (__Pyx_PyFastCFunction_Check(__pyx_t_8)) {
+      if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
         PyObject *__pyx_temp[6] = {__pyx_t_12, __pyx_n_u_list, __pyx_t_14, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_6, 5+__pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 736, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_5, 5+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 693, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
       } else
       #endif
       {
-        __pyx_t_13 = PyTuple_New(5+__pyx_t_6); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 736, __pyx_L1_error)
+        __pyx_t_13 = PyTuple_New(5+__pyx_t_5); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 693, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_13);
         if (__pyx_t_12) {
           __Pyx_GIVEREF(__pyx_t_12); PyTuple_SET_ITEM(__pyx_t_13, 0, __pyx_t_12); __pyx_t_12 = NULL;
         }
         __Pyx_INCREF(__pyx_n_u_list);
         __Pyx_GIVEREF(__pyx_n_u_list);
-        PyTuple_SET_ITEM(__pyx_t_13, 0+__pyx_t_6, __pyx_n_u_list);
+        PyTuple_SET_ITEM(__pyx_t_13, 0+__pyx_t_5, __pyx_n_u_list);
         __Pyx_GIVEREF(__pyx_t_14);
-        PyTuple_SET_ITEM(__pyx_t_13, 1+__pyx_t_6, __pyx_t_14);
+        PyTuple_SET_ITEM(__pyx_t_13, 1+__pyx_t_5, __pyx_t_14);
         __Pyx_INCREF(__pyx_v_offset_1);
         __Pyx_GIVEREF(__pyx_v_offset_1);
-        PyTuple_SET_ITEM(__pyx_t_13, 2+__pyx_t_6, __pyx_v_offset_1);
+        PyTuple_SET_ITEM(__pyx_t_13, 2+__pyx_t_5, __pyx_v_offset_1);
         __Pyx_INCREF(__pyx_v_children_1);
         __Pyx_GIVEREF(__pyx_v_children_1);
-        PyTuple_SET_ITEM(__pyx_t_13, 3+__pyx_t_6, __pyx_v_children_1);
+        PyTuple_SET_ITEM(__pyx_t_13, 3+__pyx_t_5, __pyx_v_children_1);
         __Pyx_INCREF(Py_None);
         __Pyx_GIVEREF(Py_None);
-        PyTuple_SET_ITEM(__pyx_t_13, 4+__pyx_t_6, Py_None);
+        PyTuple_SET_ITEM(__pyx_t_13, 4+__pyx_t_5, Py_None);
         __pyx_t_14 = 0;
-        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_13, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 736, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_13, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 693, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
       }
-      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      __pyx_t_15 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_15 == ((int)-1))) __PYX_ERR(0, 736, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-      /* "JSONParser.pyx":737
- *             else:
- *                 children.append(ParseNode('list', offset, offset_1, children_1, None))
- *                 children.append(ParseNode('list', offset, offset_1, children_1, None))             # <<<<<<<<<<<<<<
- *             offset = offset_1
- * 
- */
-      if (unlikely(__pyx_v_children == Py_None)) {
-        PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
-        __PYX_ERR(0, 737, __pyx_L1_error)
-      }
-      __Pyx_GetModuleGlobalName(__pyx_t_8, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 737, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_8);
-      __pyx_t_13 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 737, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_13);
-      __pyx_t_14 = NULL;
-      __pyx_t_6 = 0;
-      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_8))) {
-        __pyx_t_14 = PyMethod_GET_SELF(__pyx_t_8);
-        if (likely(__pyx_t_14)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_8);
-          __Pyx_INCREF(__pyx_t_14);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_8, function);
-          __pyx_t_6 = 1;
-        }
-      }
-      #if CYTHON_FAST_PYCALL
-      if (PyFunction_Check(__pyx_t_8)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_14, __pyx_n_u_list, __pyx_t_13, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_6, 5+__pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 737, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-      } else
-      #endif
-      #if CYTHON_FAST_PYCCALL
-      if (__Pyx_PyFastCFunction_Check(__pyx_t_8)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_14, __pyx_n_u_list, __pyx_t_13, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_6, 5+__pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 737, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-      } else
-      #endif
-      {
-        __pyx_t_12 = PyTuple_New(5+__pyx_t_6); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 737, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_12);
-        if (__pyx_t_14) {
-          __Pyx_GIVEREF(__pyx_t_14); PyTuple_SET_ITEM(__pyx_t_12, 0, __pyx_t_14); __pyx_t_14 = NULL;
-        }
-        __Pyx_INCREF(__pyx_n_u_list);
-        __Pyx_GIVEREF(__pyx_n_u_list);
-        PyTuple_SET_ITEM(__pyx_t_12, 0+__pyx_t_6, __pyx_n_u_list);
-        __Pyx_GIVEREF(__pyx_t_13);
-        PyTuple_SET_ITEM(__pyx_t_12, 1+__pyx_t_6, __pyx_t_13);
-        __Pyx_INCREF(__pyx_v_offset_1);
-        __Pyx_GIVEREF(__pyx_v_offset_1);
-        PyTuple_SET_ITEM(__pyx_t_12, 2+__pyx_t_6, __pyx_v_offset_1);
-        __Pyx_INCREF(__pyx_v_children_1);
-        __Pyx_GIVEREF(__pyx_v_children_1);
-        PyTuple_SET_ITEM(__pyx_t_12, 3+__pyx_t_6, __pyx_v_children_1);
-        __Pyx_INCREF(Py_None);
-        __Pyx_GIVEREF(Py_None);
-        PyTuple_SET_ITEM(__pyx_t_12, 4+__pyx_t_6, Py_None);
-        __pyx_t_13 = 0;
-        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_12, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 737, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
-      }
-      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      __pyx_t_15 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_15 == ((int)-1))) __PYX_ERR(0, 737, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+      __pyx_t_15 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_1); if (unlikely(__pyx_t_15 == ((int)-1))) __PYX_ERR(0, 693, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     }
     __pyx_L87:;
 
-    /* "JSONParser.pyx":738
- *                 children.append(ParseNode('list', offset, offset_1, children_1, None))
+    /* "JSONParser.pyx":694
+ *             else:
  *                 children.append(ParseNode('list', offset, offset_1, children_1, None))
  *             offset = offset_1             # <<<<<<<<<<<<<<
  * 
  *             if buf[offset:offset+1] == ']':
  */
-    __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_offset_1); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 738, __pyx_L1_error)
-    __pyx_v_offset = __pyx_t_6;
+    __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_v_offset_1); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 694, __pyx_L1_error)
+    __pyx_v_offset = __pyx_t_5;
 
-    /* "JSONParser.pyx":740
+    /* "JSONParser.pyx":696
  *             offset = offset_1
  * 
  *             if buf[offset:offset+1] == ']':             # <<<<<<<<<<<<<<
@@ -11792,16 +10772,16 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
  */
     if (unlikely(__pyx_v_buf == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 740, __pyx_L1_error)
+      __PYX_ERR(0, 696, __pyx_L1_error)
     }
-    __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_v_offset, (__pyx_v_offset + 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 740, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_v_offset, (__pyx_v_offset + 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 696, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u__10, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 740, __pyx_L1_error)
+    __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u__10, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 696, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_2 = (__pyx_t_3 != 0);
     if (__pyx_t_2) {
 
-      /* "JSONParser.pyx":741
+      /* "JSONParser.pyx":697
  * 
  *             if buf[offset:offset+1] == ']':
  *                 offset += 1             # <<<<<<<<<<<<<<
@@ -11810,7 +10790,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
  */
       __pyx_v_offset = (__pyx_v_offset + 1);
 
-      /* "JSONParser.pyx":740
+      /* "JSONParser.pyx":696
  *             offset = offset_1
  * 
  *             if buf[offset:offset+1] == ']':             # <<<<<<<<<<<<<<
@@ -11820,7 +10800,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
       goto __pyx_L88;
     }
 
-    /* "JSONParser.pyx":743
+    /* "JSONParser.pyx":699
  *                 offset += 1
  *             else:
  *                 offset = -1             # <<<<<<<<<<<<<<
@@ -11830,7 +10810,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
     /*else*/ {
       __pyx_v_offset = -1;
 
-      /* "JSONParser.pyx":744
+      /* "JSONParser.pyx":700
  *             else:
  *                 offset = -1
  *                 break             # <<<<<<<<<<<<<<
@@ -11841,7 +10821,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
     }
     __pyx_L88:;
 
-    /* "JSONParser.pyx":747
+    /* "JSONParser.pyx":703
  * 
  * 
  *             break             # <<<<<<<<<<<<<<
@@ -11852,22 +10832,22 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
   }
   __pyx_L4_break:;
 
-  /* "JSONParser.pyx":748
+  /* "JSONParser.pyx":704
  * 
  *             break
  *         return offset, line_start             # <<<<<<<<<<<<<<
  * 
- *     cdef (int, int) parse_json_object(self, str buf, int offset, int line_start, int indent, list children):
+ *     cdef (int, int) parse_json_object(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):
  */
-  __pyx_t_7.f0 = __pyx_v_offset;
-  __pyx_t_7.f1 = __pyx_v_line_start;
-  __pyx_r = __pyx_t_7;
+  __pyx_t_6.f0 = __pyx_v_offset;
+  __pyx_t_6.f1 = __pyx_v_line_start;
+  __pyx_r = __pyx_t_6;
   goto __pyx_L0;
 
-  /* "JSONParser.pyx":657
+  /* "JSONParser.pyx":614
  *         return offset, line_start
  * 
- *     cdef (int, int) parse_json_list(self, str buf, int offset, int line_start, int indent, list children):             # <<<<<<<<<<<<<<
+ *     cdef (int, int) parse_json_list(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
  *         cdef Py_UNICODE chr
  */
@@ -11875,7 +10855,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_8);
+  __Pyx_XDECREF(__pyx_t_7);
   __Pyx_XDECREF(__pyx_t_12);
   __Pyx_XDECREF(__pyx_t_13);
   __Pyx_XDECREF(__pyx_t_14);
@@ -11892,15 +10872,15 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_list(st
   return __pyx_r;
 }
 
-/* "JSONParser.pyx":750
+/* "JSONParser.pyx":706
  *         return offset, line_start
  * 
- *     cdef (int, int) parse_json_object(self, str buf, int offset, int line_start, int indent, list children):             # <<<<<<<<<<<<<<
+ *     cdef (int, int) parse_json_object(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
  *         cdef Py_UNICODE chr
  */
 
-static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(struct __pyx_obj_10JSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, int __pyx_v_indent, PyObject *__pyx_v_children) {
+static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(struct __pyx_obj_10JSONParser_Parser *__pyx_v_self, PyObject *__pyx_v_buf, int __pyx_v_offset, int __pyx_v_line_start, int __pyx_v_indent, int __pyx_v_buf_eof, PyObject *__pyx_v_children) {
   int __pyx_v_count;
   Py_UNICODE __pyx_v_chr;
   PyObject *__pyx_v_offset_1 = NULL;
@@ -11918,12 +10898,12 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
   PyObject *__pyx_t_1 = NULL;
   int __pyx_t_2;
   int __pyx_t_3;
-  Py_ssize_t __pyx_t_4;
-  Py_UCS4 __pyx_t_5;
-  int __pyx_t_6;
-  __pyx_ctuple_int__and_int __pyx_t_7;
-  PyObject *__pyx_t_8 = NULL;
-  Py_UNICODE __pyx_t_9;
+  Py_UCS4 __pyx_t_4;
+  int __pyx_t_5;
+  __pyx_ctuple_int__and_int __pyx_t_6;
+  PyObject *__pyx_t_7 = NULL;
+  Py_UNICODE __pyx_t_8;
+  Py_ssize_t __pyx_t_9;
   Py_ssize_t __pyx_t_10;
   Py_ssize_t __pyx_t_11;
   PyObject *__pyx_t_12 = NULL;
@@ -11932,7 +10912,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
   PyObject *__pyx_t_15 = NULL;
   __Pyx_RefNannySetupContext("parse_json_object", 0);
 
-  /* "JSONParser.pyx":753
+  /* "JSONParser.pyx":709
  *         cdef int count
  *         cdef Py_UNICODE chr
  *         while True: # note: return at end of loop             # <<<<<<<<<<<<<<
@@ -11941,7 +10921,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
  */
   while (1) {
 
-    /* "JSONParser.pyx":754
+    /* "JSONParser.pyx":710
  *         cdef Py_UNICODE chr
  *         while True: # note: return at end of loop
  *             if buf[offset:offset+1] == '{':             # <<<<<<<<<<<<<<
@@ -11950,16 +10930,16 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
  */
     if (unlikely(__pyx_v_buf == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 754, __pyx_L1_error)
+      __PYX_ERR(0, 710, __pyx_L1_error)
     }
-    __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_v_offset, (__pyx_v_offset + 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 754, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_v_offset, (__pyx_v_offset + 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 710, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u__11, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 754, __pyx_L1_error)
+    __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_t_1, __pyx_kp_u__11, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 710, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_3 = (__pyx_t_2 != 0);
     if (__pyx_t_3) {
 
-      /* "JSONParser.pyx":755
+      /* "JSONParser.pyx":711
  *         while True: # note: return at end of loop
  *             if buf[offset:offset+1] == '{':
  *                 offset += 1             # <<<<<<<<<<<<<<
@@ -11968,7 +10948,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
  */
       __pyx_v_offset = (__pyx_v_offset + 1);
 
-      /* "JSONParser.pyx":754
+      /* "JSONParser.pyx":710
  *         cdef Py_UNICODE chr
  *         while True: # note: return at end of loop
  *             if buf[offset:offset+1] == '{':             # <<<<<<<<<<<<<<
@@ -11978,7 +10958,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
       goto __pyx_L5;
     }
 
-    /* "JSONParser.pyx":757
+    /* "JSONParser.pyx":713
  *                 offset += 1
  *             else:
  *                 offset = -1             # <<<<<<<<<<<<<<
@@ -11988,7 +10968,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
     /*else*/ {
       __pyx_v_offset = -1;
 
-      /* "JSONParser.pyx":758
+      /* "JSONParser.pyx":714
  *             else:
  *                 offset = -1
  *                 break             # <<<<<<<<<<<<<<
@@ -11999,43 +10979,38 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
     }
     __pyx_L5:;
 
-    /* "JSONParser.pyx":760
+    /* "JSONParser.pyx":716
  *                 break
  * 
  *             count = 0             # <<<<<<<<<<<<<<
- *             while offset != len(buf):
+ *             while offset != buf_eof:
  *                 chr = buf[offset]
  */
     __pyx_v_count = 0;
 
-    /* "JSONParser.pyx":761
+    /* "JSONParser.pyx":717
  * 
  *             count = 0
- *             while offset != len(buf):             # <<<<<<<<<<<<<<
+ *             while offset != buf_eof:             # <<<<<<<<<<<<<<
  *                 chr = buf[offset]
  *                 if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  */
     while (1) {
-      if (unlikely(__pyx_v_buf == Py_None)) {
-        PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
-        __PYX_ERR(0, 761, __pyx_L1_error)
-      }
-      __pyx_t_4 = __Pyx_PyUnicode_GET_LENGTH(__pyx_v_buf); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(0, 761, __pyx_L1_error)
-      __pyx_t_3 = ((__pyx_v_offset != __pyx_t_4) != 0);
+      __pyx_t_3 = ((__pyx_v_offset != __pyx_v_buf_eof) != 0);
       if (!__pyx_t_3) break;
 
-      /* "JSONParser.pyx":762
+      /* "JSONParser.pyx":718
  *             count = 0
- *             while offset != len(buf):
+ *             while offset != buf_eof:
  *                 chr = buf[offset]             # <<<<<<<<<<<<<<
  *                 if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                     offset +=1
  */
-      __pyx_t_5 = __Pyx_GetItemInt_Unicode(__pyx_v_buf, __pyx_v_offset, int, 1, __Pyx_PyInt_From_int, 0, 1, 0); if (unlikely(__pyx_t_5 == (Py_UCS4)-1)) __PYX_ERR(0, 762, __pyx_L1_error)
-      __pyx_v_chr = __pyx_t_5;
+      __pyx_t_4 = __Pyx_GetItemInt_Unicode(__pyx_v_buf, __pyx_v_offset, int, 1, __Pyx_PyInt_From_int, 0, 1, 0); if (unlikely(__pyx_t_4 == (Py_UCS4)-1)) __PYX_ERR(0, 718, __pyx_L1_error)
+      __pyx_v_chr = __pyx_t_4;
 
-      /* "JSONParser.pyx":763
- *             while offset != len(buf):
+      /* "JSONParser.pyx":719
+ *             while offset != buf_eof:
  *                 chr = buf[offset]
  *                 if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':             # <<<<<<<<<<<<<<
  *                     offset +=1
@@ -12170,7 +11145,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
       __pyx_L9_bool_binop_done:;
       if (__pyx_t_3) {
 
-        /* "JSONParser.pyx":764
+        /* "JSONParser.pyx":720
  *                 chr = buf[offset]
  *                 if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                     offset +=1             # <<<<<<<<<<<<<<
@@ -12179,7 +11154,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
  */
         __pyx_v_offset = (__pyx_v_offset + 1);
 
-        /* "JSONParser.pyx":765
+        /* "JSONParser.pyx":721
  *                 if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                     offset +=1
  *                     count +=1             # <<<<<<<<<<<<<<
@@ -12188,8 +11163,8 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
  */
         __pyx_v_count = (__pyx_v_count + 1);
 
-        /* "JSONParser.pyx":763
- *             while offset != len(buf):
+        /* "JSONParser.pyx":719
+ *             while offset != buf_eof:
  *                 chr = buf[offset]
  *                 if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':             # <<<<<<<<<<<<<<
  *                     offset +=1
@@ -12198,7 +11173,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
         goto __pyx_L8;
       }
 
-      /* "JSONParser.pyx":767
+      /* "JSONParser.pyx":723
  *                     count +=1
  *                 else:
  *                     break             # <<<<<<<<<<<<<<
@@ -12212,31 +11187,31 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
     }
     __pyx_L7_break:;
 
-    /* "JSONParser.pyx":769
+    /* "JSONParser.pyx":725
  *                     break
  * 
  *             offset_1 = offset             # <<<<<<<<<<<<<<
  *             children_1 = []
  *             while True: # start capture
  */
-    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 769, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 725, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_v_offset_1 = __pyx_t_1;
     __pyx_t_1 = 0;
 
-    /* "JSONParser.pyx":770
+    /* "JSONParser.pyx":726
  * 
  *             offset_1 = offset
  *             children_1 = []             # <<<<<<<<<<<<<<
  *             while True: # start capture
  *                 count = 0
  */
-    __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 770, __pyx_L1_error)
+    __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 726, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_v_children_1 = ((PyObject*)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "JSONParser.pyx":771
+    /* "JSONParser.pyx":727
  *             offset_1 = offset
  *             children_1 = []
  *             while True: # start capture             # <<<<<<<<<<<<<<
@@ -12245,7 +11220,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
  */
     while (1) {
 
-      /* "JSONParser.pyx":772
+      /* "JSONParser.pyx":728
  *             children_1 = []
  *             while True: # start capture
  *                 count = 0             # <<<<<<<<<<<<<<
@@ -12254,7 +11229,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
  */
       __pyx_v_count = 0;
 
-      /* "JSONParser.pyx":773
+      /* "JSONParser.pyx":729
  *             while True: # start capture
  *                 count = 0
  *                 while True:             # <<<<<<<<<<<<<<
@@ -12263,7 +11238,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
  */
       while (1) {
 
-        /* "JSONParser.pyx":774
+        /* "JSONParser.pyx":730
  *                 count = 0
  *                 while True:
  *                     offset_2 = offset_1             # <<<<<<<<<<<<<<
@@ -12273,7 +11248,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
         __Pyx_INCREF(__pyx_v_offset_1);
         __Pyx_XDECREF_SET(__pyx_v_offset_2, __pyx_v_offset_1);
 
-        /* "JSONParser.pyx":775
+        /* "JSONParser.pyx":731
  *                 while True:
  *                     offset_2 = offset_1
  *                     line_start_1 = line_start             # <<<<<<<<<<<<<<
@@ -12282,7 +11257,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
  */
         __pyx_v_line_start_1 = __pyx_v_line_start;
 
-        /* "JSONParser.pyx":776
+        /* "JSONParser.pyx":732
  *                     offset_2 = offset_1
  *                     line_start_1 = line_start
  *                     offset_3 = offset_2             # <<<<<<<<<<<<<<
@@ -12292,104 +11267,99 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
         __Pyx_INCREF(__pyx_v_offset_2);
         __Pyx_XDECREF_SET(__pyx_v_offset_3, __pyx_v_offset_2);
 
-        /* "JSONParser.pyx":777
+        /* "JSONParser.pyx":733
  *                     line_start_1 = line_start
  *                     offset_3 = offset_2
  *                     children_2 = []             # <<<<<<<<<<<<<<
  *                     while True: # start capture
- *                         offset_3, line_start_1 = self.parse_json_string(buf, offset_3, line_start_1, indent,children_2)
+ *                         offset_3, line_start_1 = self.parse_json_string(buf, offset_3, line_start_1, indent, buf_eof, children_2)
  */
-        __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 777, __pyx_L1_error)
+        __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 733, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_XDECREF_SET(__pyx_v_children_2, ((PyObject*)__pyx_t_1));
         __pyx_t_1 = 0;
 
-        /* "JSONParser.pyx":778
+        /* "JSONParser.pyx":734
  *                     offset_3 = offset_2
  *                     children_2 = []
  *                     while True: # start capture             # <<<<<<<<<<<<<<
- *                         offset_3, line_start_1 = self.parse_json_string(buf, offset_3, line_start_1, indent,children_2)
+ *                         offset_3, line_start_1 = self.parse_json_string(buf, offset_3, line_start_1, indent, buf_eof, children_2)
  *                         if offset_3 == -1: break
  */
         while (1) {
 
-          /* "JSONParser.pyx":779
+          /* "JSONParser.pyx":735
  *                     children_2 = []
  *                     while True: # start capture
- *                         offset_3, line_start_1 = self.parse_json_string(buf, offset_3, line_start_1, indent,children_2)             # <<<<<<<<<<<<<<
+ *                         offset_3, line_start_1 = self.parse_json_string(buf, offset_3, line_start_1, indent, buf_eof, children_2)             # <<<<<<<<<<<<<<
  *                         if offset_3 == -1: break
  * 
  */
-          __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_offset_3); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 779, __pyx_L1_error)
-          __pyx_t_7 = ((struct __pyx_vtabstruct_10JSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_json_string(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_children_2);
-          __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_7.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 779, __pyx_L1_error)
+          __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_v_offset_3); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 735, __pyx_L1_error)
+          __pyx_t_6 = ((struct __pyx_vtabstruct_10JSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_json_string(__pyx_v_self, __pyx_v_buf, __pyx_t_5, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_2);
+          __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_6.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 735, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_6 = __pyx_t_7.f1;
+          __pyx_t_5 = __pyx_t_6.f1;
           __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_1);
           __pyx_t_1 = 0;
-          __pyx_v_line_start_1 = __pyx_t_6;
+          __pyx_v_line_start_1 = __pyx_t_5;
 
-          /* "JSONParser.pyx":780
+          /* "JSONParser.pyx":736
  *                     while True: # start capture
- *                         offset_3, line_start_1 = self.parse_json_string(buf, offset_3, line_start_1, indent,children_2)
+ *                         offset_3, line_start_1 = self.parse_json_string(buf, offset_3, line_start_1, indent, buf_eof, children_2)
  *                         if offset_3 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
  */
-          __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_3, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 780, __pyx_L1_error)
+          __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_3, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 736, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 780, __pyx_L1_error)
+          __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 736, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
           if (__pyx_t_3) {
             goto __pyx_L34_break;
           }
 
-          /* "JSONParser.pyx":783
+          /* "JSONParser.pyx":739
  * 
  * 
  *                         count_1 = 0             # <<<<<<<<<<<<<<
- *                         while offset_3 != len(buf):
+ *                         while offset_3 != buf_eof:
  *                             chr = buf[offset_3]
  */
           __Pyx_INCREF(__pyx_int_0);
           __Pyx_XDECREF_SET(__pyx_v_count_1, __pyx_int_0);
 
-          /* "JSONParser.pyx":784
+          /* "JSONParser.pyx":740
  * 
  *                         count_1 = 0
- *                         while offset_3 != len(buf):             # <<<<<<<<<<<<<<
+ *                         while offset_3 != buf_eof:             # <<<<<<<<<<<<<<
  *                             chr = buf[offset_3]
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  */
           while (1) {
-            if (unlikely(__pyx_v_buf == Py_None)) {
-              PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
-              __PYX_ERR(0, 784, __pyx_L1_error)
-            }
-            __pyx_t_4 = __Pyx_PyUnicode_GET_LENGTH(__pyx_v_buf); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(0, 784, __pyx_L1_error)
-            __pyx_t_1 = PyInt_FromSsize_t(__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 784, __pyx_L1_error)
+            __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_buf_eof); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 740, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
-            __pyx_t_8 = PyObject_RichCompare(__pyx_v_offset_3, __pyx_t_1, Py_NE); __Pyx_XGOTREF(__pyx_t_8); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 784, __pyx_L1_error)
+            __pyx_t_7 = PyObject_RichCompare(__pyx_v_offset_3, __pyx_t_1, Py_NE); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 740, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 784, __pyx_L1_error)
-            __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+            __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 740, __pyx_L1_error)
+            __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
             if (!__pyx_t_3) break;
 
-            /* "JSONParser.pyx":785
+            /* "JSONParser.pyx":741
  *                         count_1 = 0
- *                         while offset_3 != len(buf):
+ *                         while offset_3 != buf_eof:
  *                             chr = buf[offset_3]             # <<<<<<<<<<<<<<
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                                 offset_3 +=1
  */
-            __pyx_t_8 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 785, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_8);
-            __pyx_t_9 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_8); if (unlikely((__pyx_t_9 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 785, __pyx_L1_error)
-            __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-            __pyx_v_chr = __pyx_t_9;
+            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 741, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_7);
+            __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_7); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 741, __pyx_L1_error)
+            __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+            __pyx_v_chr = __pyx_t_8;
 
-            /* "JSONParser.pyx":786
- *                         while offset_3 != len(buf):
+            /* "JSONParser.pyx":742
+ *                         while offset_3 != buf_eof:
  *                             chr = buf[offset_3]
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':             # <<<<<<<<<<<<<<
  *                                 offset_3 +=1
@@ -12524,32 +11494,32 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
             __pyx_L39_bool_binop_done:;
             if (__pyx_t_3) {
 
-              /* "JSONParser.pyx":787
+              /* "JSONParser.pyx":743
  *                             chr = buf[offset_3]
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                                 offset_3 +=1             # <<<<<<<<<<<<<<
  *                                 count_1 +=1
  *                             else:
  */
-              __pyx_t_8 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 787, __pyx_L1_error)
-              __Pyx_GOTREF(__pyx_t_8);
-              __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_8);
-              __pyx_t_8 = 0;
+              __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 743, __pyx_L1_error)
+              __Pyx_GOTREF(__pyx_t_7);
+              __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_7);
+              __pyx_t_7 = 0;
 
-              /* "JSONParser.pyx":788
+              /* "JSONParser.pyx":744
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                                 offset_3 +=1
  *                                 count_1 +=1             # <<<<<<<<<<<<<<
  *                             else:
  *                                 break
  */
-              __pyx_t_8 = __Pyx_PyInt_AddObjC(__pyx_v_count_1, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 788, __pyx_L1_error)
-              __Pyx_GOTREF(__pyx_t_8);
-              __Pyx_DECREF_SET(__pyx_v_count_1, __pyx_t_8);
-              __pyx_t_8 = 0;
+              __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_count_1, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 744, __pyx_L1_error)
+              __Pyx_GOTREF(__pyx_t_7);
+              __Pyx_DECREF_SET(__pyx_v_count_1, __pyx_t_7);
+              __pyx_t_7 = 0;
 
-              /* "JSONParser.pyx":786
- *                         while offset_3 != len(buf):
+              /* "JSONParser.pyx":742
+ *                         while offset_3 != buf_eof:
  *                             chr = buf[offset_3]
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':             # <<<<<<<<<<<<<<
  *                                 offset_3 +=1
@@ -12558,7 +11528,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
               goto __pyx_L38;
             }
 
-            /* "JSONParser.pyx":790
+            /* "JSONParser.pyx":746
  *                                 count_1 +=1
  *                             else:
  *                                 break             # <<<<<<<<<<<<<<
@@ -12572,7 +11542,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
           }
           __pyx_L37_break:;
 
-          /* "JSONParser.pyx":792
+          /* "JSONParser.pyx":748
  *                                 break
  * 
  *                         if buf[offset_3:offset_3+1] == ':':             # <<<<<<<<<<<<<<
@@ -12581,48 +11551,48 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
  */
           if (unlikely(__pyx_v_buf == Py_None)) {
             PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-            __PYX_ERR(0, 792, __pyx_L1_error)
+            __PYX_ERR(0, 748, __pyx_L1_error)
           }
           __Pyx_INCREF(__pyx_v_offset_3);
-          __pyx_t_8 = __pyx_v_offset_3;
-          __pyx_t_3 = (__pyx_t_8 == Py_None);
+          __pyx_t_7 = __pyx_v_offset_3;
+          __pyx_t_3 = (__pyx_t_7 == Py_None);
           if (__pyx_t_3) {
-            __pyx_t_4 = 0;
+            __pyx_t_9 = 0;
           } else {
-            __pyx_t_10 = __Pyx_PyIndex_AsSsize_t(__pyx_t_8); if (unlikely((__pyx_t_10 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 792, __pyx_L1_error)
-            __pyx_t_4 = __pyx_t_10;
+            __pyx_t_10 = __Pyx_PyIndex_AsSsize_t(__pyx_t_7); if (unlikely((__pyx_t_10 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 748, __pyx_L1_error)
+            __pyx_t_9 = __pyx_t_10;
           }
-          __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-          __pyx_t_8 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 792, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_8);
-          __pyx_t_3 = (__pyx_t_8 == Py_None);
+          __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+          __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 748, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_7);
+          __pyx_t_3 = (__pyx_t_7 == Py_None);
           if (__pyx_t_3) {
             __pyx_t_10 = PY_SSIZE_T_MAX;
           } else {
-            __pyx_t_11 = __Pyx_PyIndex_AsSsize_t(__pyx_t_8); if (unlikely((__pyx_t_11 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 792, __pyx_L1_error)
+            __pyx_t_11 = __Pyx_PyIndex_AsSsize_t(__pyx_t_7); if (unlikely((__pyx_t_11 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 748, __pyx_L1_error)
             __pyx_t_10 = __pyx_t_11;
           }
-          __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-          __pyx_t_8 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_4, __pyx_t_10); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 792, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_8);
-          __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_8, __pyx_kp_u__12, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 792, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+          __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+          __pyx_t_7 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_9, __pyx_t_10); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 748, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_7);
+          __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_kp_u__12, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 748, __pyx_L1_error)
+          __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
           __pyx_t_2 = (__pyx_t_3 != 0);
           if (__pyx_t_2) {
 
-            /* "JSONParser.pyx":793
+            /* "JSONParser.pyx":749
  * 
  *                         if buf[offset_3:offset_3+1] == ':':
  *                             offset_3 += 1             # <<<<<<<<<<<<<<
  *                         else:
  *                             offset_3 = -1
  */
-            __pyx_t_8 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 793, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_8);
-            __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_8);
-            __pyx_t_8 = 0;
+            __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 749, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_7);
+            __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_7);
+            __pyx_t_7 = 0;
 
-            /* "JSONParser.pyx":792
+            /* "JSONParser.pyx":748
  *                                 break
  * 
  *                         if buf[offset_3:offset_3+1] == ':':             # <<<<<<<<<<<<<<
@@ -12632,7 +11602,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
             goto __pyx_L59;
           }
 
-          /* "JSONParser.pyx":795
+          /* "JSONParser.pyx":751
  *                             offset_3 += 1
  *                         else:
  *                             offset_3 = -1             # <<<<<<<<<<<<<<
@@ -12643,7 +11613,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
             __Pyx_INCREF(__pyx_int_neg_1);
             __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_int_neg_1);
 
-            /* "JSONParser.pyx":796
+            /* "JSONParser.pyx":752
  *                         else:
  *                             offset_3 = -1
  *                             break             # <<<<<<<<<<<<<<
@@ -12654,52 +11624,47 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
           }
           __pyx_L59:;
 
-          /* "JSONParser.pyx":798
+          /* "JSONParser.pyx":754
  *                             break
  * 
  *                         count_1 = 0             # <<<<<<<<<<<<<<
- *                         while offset_3 != len(buf):
+ *                         while offset_3 != buf_eof:
  *                             chr = buf[offset_3]
  */
           __Pyx_INCREF(__pyx_int_0);
           __Pyx_DECREF_SET(__pyx_v_count_1, __pyx_int_0);
 
-          /* "JSONParser.pyx":799
+          /* "JSONParser.pyx":755
  * 
  *                         count_1 = 0
- *                         while offset_3 != len(buf):             # <<<<<<<<<<<<<<
+ *                         while offset_3 != buf_eof:             # <<<<<<<<<<<<<<
  *                             chr = buf[offset_3]
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  */
           while (1) {
-            if (unlikely(__pyx_v_buf == Py_None)) {
-              PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
-              __PYX_ERR(0, 799, __pyx_L1_error)
-            }
-            __pyx_t_10 = __Pyx_PyUnicode_GET_LENGTH(__pyx_v_buf); if (unlikely(__pyx_t_10 == ((Py_ssize_t)-1))) __PYX_ERR(0, 799, __pyx_L1_error)
-            __pyx_t_8 = PyInt_FromSsize_t(__pyx_t_10); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 799, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_8);
-            __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_3, __pyx_t_8, Py_NE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 799, __pyx_L1_error)
-            __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 799, __pyx_L1_error)
+            __pyx_t_7 = __Pyx_PyInt_From_int(__pyx_v_buf_eof); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 755, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_7);
+            __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_3, __pyx_t_7, Py_NE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 755, __pyx_L1_error)
+            __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 755, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
             if (!__pyx_t_2) break;
 
-            /* "JSONParser.pyx":800
+            /* "JSONParser.pyx":756
  *                         count_1 = 0
- *                         while offset_3 != len(buf):
+ *                         while offset_3 != buf_eof:
  *                             chr = buf[offset_3]             # <<<<<<<<<<<<<<
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                                 offset_3 +=1
  */
-            __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 800, __pyx_L1_error)
+            __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 756, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
-            __pyx_t_9 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_9 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 800, __pyx_L1_error)
+            __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 756, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            __pyx_v_chr = __pyx_t_9;
+            __pyx_v_chr = __pyx_t_8;
 
-            /* "JSONParser.pyx":801
- *                         while offset_3 != len(buf):
+            /* "JSONParser.pyx":757
+ *                         while offset_3 != buf_eof:
  *                             chr = buf[offset_3]
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':             # <<<<<<<<<<<<<<
  *                                 offset_3 +=1
@@ -12834,32 +11799,32 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
             __pyx_L63_bool_binop_done:;
             if (__pyx_t_2) {
 
-              /* "JSONParser.pyx":802
+              /* "JSONParser.pyx":758
  *                             chr = buf[offset_3]
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                                 offset_3 +=1             # <<<<<<<<<<<<<<
  *                                 count_1 +=1
  *                             else:
  */
-              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 802, __pyx_L1_error)
+              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 758, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_1);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_1);
               __pyx_t_1 = 0;
 
-              /* "JSONParser.pyx":803
+              /* "JSONParser.pyx":759
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                                 offset_3 +=1
  *                                 count_1 +=1             # <<<<<<<<<<<<<<
  *                             else:
  *                                 break
  */
-              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_count_1, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 803, __pyx_L1_error)
+              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_count_1, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 759, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_1);
               __Pyx_DECREF_SET(__pyx_v_count_1, __pyx_t_1);
               __pyx_t_1 = 0;
 
-              /* "JSONParser.pyx":801
- *                         while offset_3 != len(buf):
+              /* "JSONParser.pyx":757
+ *                         while offset_3 != buf_eof:
  *                             chr = buf[offset_3]
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':             # <<<<<<<<<<<<<<
  *                                 offset_3 +=1
@@ -12868,12 +11833,12 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
               goto __pyx_L62;
             }
 
-            /* "JSONParser.pyx":805
+            /* "JSONParser.pyx":761
  *                                 count_1 +=1
  *                             else:
  *                                 break             # <<<<<<<<<<<<<<
  * 
- *                         offset_3, line_start_1 = self.parse_json_value(buf, offset_3, line_start_1, indent,children_2)
+ *                         offset_3, line_start_1 = self.parse_json_value(buf, offset_3, line_start_1, indent, buf_eof, children_2)
  */
             /*else*/ {
               goto __pyx_L61_break;
@@ -12882,38 +11847,38 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
           }
           __pyx_L61_break:;
 
-          /* "JSONParser.pyx":807
+          /* "JSONParser.pyx":763
  *                                 break
  * 
- *                         offset_3, line_start_1 = self.parse_json_value(buf, offset_3, line_start_1, indent,children_2)             # <<<<<<<<<<<<<<
+ *                         offset_3, line_start_1 = self.parse_json_value(buf, offset_3, line_start_1, indent, buf_eof, children_2)             # <<<<<<<<<<<<<<
  *                         if offset_3 == -1: break
  * 
  */
-          __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_offset_3); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 807, __pyx_L1_error)
-          __pyx_t_7 = ((struct __pyx_vtabstruct_10JSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_json_value(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_children_2);
-          __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_7.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 807, __pyx_L1_error)
+          __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_v_offset_3); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 763, __pyx_L1_error)
+          __pyx_t_6 = ((struct __pyx_vtabstruct_10JSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_json_value(__pyx_v_self, __pyx_v_buf, __pyx_t_5, __pyx_v_line_start_1, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_2);
+          __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_6.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 763, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_6 = __pyx_t_7.f1;
+          __pyx_t_5 = __pyx_t_6.f1;
           __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_1);
           __pyx_t_1 = 0;
-          __pyx_v_line_start_1 = __pyx_t_6;
+          __pyx_v_line_start_1 = __pyx_t_5;
 
-          /* "JSONParser.pyx":808
+          /* "JSONParser.pyx":764
  * 
- *                         offset_3, line_start_1 = self.parse_json_value(buf, offset_3, line_start_1, indent,children_2)
+ *                         offset_3, line_start_1 = self.parse_json_value(buf, offset_3, line_start_1, indent, buf_eof, children_2)
  *                         if offset_3 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
  */
-          __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_3, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 808, __pyx_L1_error)
+          __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_3, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 764, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 808, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 764, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
           if (__pyx_t_2) {
             goto __pyx_L34_break;
           }
 
-          /* "JSONParser.pyx":811
+          /* "JSONParser.pyx":767
  * 
  * 
  *                         break             # <<<<<<<<<<<<<<
@@ -12924,20 +11889,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
         }
         __pyx_L34_break:;
 
-        /* "JSONParser.pyx":812
+        /* "JSONParser.pyx":768
  * 
  *                         break
  *                     if offset_3 == -1:             # <<<<<<<<<<<<<<
  *                         offset_2 = -1
  *                         break
  */
-        __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_3, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 812, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_3, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 768, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 812, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 768, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
         if (__pyx_t_2) {
 
-          /* "JSONParser.pyx":813
+          /* "JSONParser.pyx":769
  *                         break
  *                     if offset_3 == -1:
  *                         offset_2 = -1             # <<<<<<<<<<<<<<
@@ -12947,7 +11912,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
           __Pyx_INCREF(__pyx_int_neg_1);
           __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_int_neg_1);
 
-          /* "JSONParser.pyx":814
+          /* "JSONParser.pyx":770
  *                     if offset_3 == -1:
  *                         offset_2 = -1
  *                         break             # <<<<<<<<<<<<<<
@@ -12956,7 +11921,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
  */
           goto __pyx_L32_break;
 
-          /* "JSONParser.pyx":812
+          /* "JSONParser.pyx":768
  * 
  *                         break
  *                     if offset_3 == -1:             # <<<<<<<<<<<<<<
@@ -12965,7 +11930,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
  */
         }
 
-        /* "JSONParser.pyx":815
+        /* "JSONParser.pyx":771
  *                         offset_2 = -1
  *                         break
  *                     if self.builder is not None:             # <<<<<<<<<<<<<<
@@ -12976,73 +11941,73 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
         __pyx_t_3 = (__pyx_t_2 != 0);
         if (__pyx_t_3) {
 
-          /* "JSONParser.pyx":816
+          /* "JSONParser.pyx":772
  *                         break
  *                     if self.builder is not None:
  *                         children_1.append(self.ParseNode('pair', offset_2, offset_3, children_2, None))             # <<<<<<<<<<<<<<
  *                     else:
  *                         children_1.append(ParseNode('pair', offset_2, offset_3, children_2, None))
  */
-          __pyx_t_8 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 816, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_8);
+          __pyx_t_7 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 772, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_7);
           __pyx_t_12 = NULL;
-          __pyx_t_6 = 0;
-          if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_8))) {
-            __pyx_t_12 = PyMethod_GET_SELF(__pyx_t_8);
+          __pyx_t_5 = 0;
+          if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_7))) {
+            __pyx_t_12 = PyMethod_GET_SELF(__pyx_t_7);
             if (likely(__pyx_t_12)) {
-              PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_8);
+              PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
               __Pyx_INCREF(__pyx_t_12);
               __Pyx_INCREF(function);
-              __Pyx_DECREF_SET(__pyx_t_8, function);
-              __pyx_t_6 = 1;
+              __Pyx_DECREF_SET(__pyx_t_7, function);
+              __pyx_t_5 = 1;
             }
           }
           #if CYTHON_FAST_PYCALL
-          if (PyFunction_Check(__pyx_t_8)) {
+          if (PyFunction_Check(__pyx_t_7)) {
             PyObject *__pyx_temp[6] = {__pyx_t_12, __pyx_n_u_pair, __pyx_v_offset_2, __pyx_v_offset_3, __pyx_v_children_2, Py_None};
-            __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_6, 5+__pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 816, __pyx_L1_error)
+            __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_5, 5+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 772, __pyx_L1_error)
             __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
             __Pyx_GOTREF(__pyx_t_1);
           } else
           #endif
           #if CYTHON_FAST_PYCCALL
-          if (__Pyx_PyFastCFunction_Check(__pyx_t_8)) {
+          if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
             PyObject *__pyx_temp[6] = {__pyx_t_12, __pyx_n_u_pair, __pyx_v_offset_2, __pyx_v_offset_3, __pyx_v_children_2, Py_None};
-            __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_6, 5+__pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 816, __pyx_L1_error)
+            __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_5, 5+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 772, __pyx_L1_error)
             __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
             __Pyx_GOTREF(__pyx_t_1);
           } else
           #endif
           {
-            __pyx_t_13 = PyTuple_New(5+__pyx_t_6); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 816, __pyx_L1_error)
+            __pyx_t_13 = PyTuple_New(5+__pyx_t_5); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 772, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_13);
             if (__pyx_t_12) {
               __Pyx_GIVEREF(__pyx_t_12); PyTuple_SET_ITEM(__pyx_t_13, 0, __pyx_t_12); __pyx_t_12 = NULL;
             }
             __Pyx_INCREF(__pyx_n_u_pair);
             __Pyx_GIVEREF(__pyx_n_u_pair);
-            PyTuple_SET_ITEM(__pyx_t_13, 0+__pyx_t_6, __pyx_n_u_pair);
+            PyTuple_SET_ITEM(__pyx_t_13, 0+__pyx_t_5, __pyx_n_u_pair);
             __Pyx_INCREF(__pyx_v_offset_2);
             __Pyx_GIVEREF(__pyx_v_offset_2);
-            PyTuple_SET_ITEM(__pyx_t_13, 1+__pyx_t_6, __pyx_v_offset_2);
+            PyTuple_SET_ITEM(__pyx_t_13, 1+__pyx_t_5, __pyx_v_offset_2);
             __Pyx_INCREF(__pyx_v_offset_3);
             __Pyx_GIVEREF(__pyx_v_offset_3);
-            PyTuple_SET_ITEM(__pyx_t_13, 2+__pyx_t_6, __pyx_v_offset_3);
+            PyTuple_SET_ITEM(__pyx_t_13, 2+__pyx_t_5, __pyx_v_offset_3);
             __Pyx_INCREF(__pyx_v_children_2);
             __Pyx_GIVEREF(__pyx_v_children_2);
-            PyTuple_SET_ITEM(__pyx_t_13, 3+__pyx_t_6, __pyx_v_children_2);
+            PyTuple_SET_ITEM(__pyx_t_13, 3+__pyx_t_5, __pyx_v_children_2);
             __Pyx_INCREF(Py_None);
             __Pyx_GIVEREF(Py_None);
-            PyTuple_SET_ITEM(__pyx_t_13, 4+__pyx_t_6, Py_None);
-            __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_13, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 816, __pyx_L1_error)
+            PyTuple_SET_ITEM(__pyx_t_13, 4+__pyx_t_5, Py_None);
+            __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_13, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 772, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
             __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
           }
-          __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-          __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_children_1, __pyx_t_1); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 816, __pyx_L1_error)
+          __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+          __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_children_1, __pyx_t_1); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 772, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-          /* "JSONParser.pyx":815
+          /* "JSONParser.pyx":771
  *                         offset_2 = -1
  *                         break
  *                     if self.builder is not None:             # <<<<<<<<<<<<<<
@@ -13052,143 +12017,77 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
           goto __pyx_L85;
         }
 
-        /* "JSONParser.pyx":818
+        /* "JSONParser.pyx":774
  *                         children_1.append(self.ParseNode('pair', offset_2, offset_3, children_2, None))
  *                     else:
  *                         children_1.append(ParseNode('pair', offset_2, offset_3, children_2, None))             # <<<<<<<<<<<<<<
- *                         children_1.append(ParseNode('pair', offset_2, offset_3, children_2, None))
  *                     offset_2 = offset_3
+ * 
  */
         /*else*/ {
-          __Pyx_GetModuleGlobalName(__pyx_t_8, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 818, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_8);
+          __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 774, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_7);
           __pyx_t_13 = NULL;
-          __pyx_t_6 = 0;
-          if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_8))) {
-            __pyx_t_13 = PyMethod_GET_SELF(__pyx_t_8);
+          __pyx_t_5 = 0;
+          if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_7))) {
+            __pyx_t_13 = PyMethod_GET_SELF(__pyx_t_7);
             if (likely(__pyx_t_13)) {
-              PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_8);
+              PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
               __Pyx_INCREF(__pyx_t_13);
               __Pyx_INCREF(function);
-              __Pyx_DECREF_SET(__pyx_t_8, function);
-              __pyx_t_6 = 1;
+              __Pyx_DECREF_SET(__pyx_t_7, function);
+              __pyx_t_5 = 1;
             }
           }
           #if CYTHON_FAST_PYCALL
-          if (PyFunction_Check(__pyx_t_8)) {
+          if (PyFunction_Check(__pyx_t_7)) {
             PyObject *__pyx_temp[6] = {__pyx_t_13, __pyx_n_u_pair, __pyx_v_offset_2, __pyx_v_offset_3, __pyx_v_children_2, Py_None};
-            __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_6, 5+__pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 818, __pyx_L1_error)
+            __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_5, 5+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 774, __pyx_L1_error)
             __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
             __Pyx_GOTREF(__pyx_t_1);
           } else
           #endif
           #if CYTHON_FAST_PYCCALL
-          if (__Pyx_PyFastCFunction_Check(__pyx_t_8)) {
+          if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
             PyObject *__pyx_temp[6] = {__pyx_t_13, __pyx_n_u_pair, __pyx_v_offset_2, __pyx_v_offset_3, __pyx_v_children_2, Py_None};
-            __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_6, 5+__pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 818, __pyx_L1_error)
+            __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_5, 5+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 774, __pyx_L1_error)
             __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
             __Pyx_GOTREF(__pyx_t_1);
           } else
           #endif
           {
-            __pyx_t_12 = PyTuple_New(5+__pyx_t_6); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 818, __pyx_L1_error)
+            __pyx_t_12 = PyTuple_New(5+__pyx_t_5); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 774, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_12);
             if (__pyx_t_13) {
               __Pyx_GIVEREF(__pyx_t_13); PyTuple_SET_ITEM(__pyx_t_12, 0, __pyx_t_13); __pyx_t_13 = NULL;
             }
             __Pyx_INCREF(__pyx_n_u_pair);
             __Pyx_GIVEREF(__pyx_n_u_pair);
-            PyTuple_SET_ITEM(__pyx_t_12, 0+__pyx_t_6, __pyx_n_u_pair);
+            PyTuple_SET_ITEM(__pyx_t_12, 0+__pyx_t_5, __pyx_n_u_pair);
             __Pyx_INCREF(__pyx_v_offset_2);
             __Pyx_GIVEREF(__pyx_v_offset_2);
-            PyTuple_SET_ITEM(__pyx_t_12, 1+__pyx_t_6, __pyx_v_offset_2);
+            PyTuple_SET_ITEM(__pyx_t_12, 1+__pyx_t_5, __pyx_v_offset_2);
             __Pyx_INCREF(__pyx_v_offset_3);
             __Pyx_GIVEREF(__pyx_v_offset_3);
-            PyTuple_SET_ITEM(__pyx_t_12, 2+__pyx_t_6, __pyx_v_offset_3);
+            PyTuple_SET_ITEM(__pyx_t_12, 2+__pyx_t_5, __pyx_v_offset_3);
             __Pyx_INCREF(__pyx_v_children_2);
             __Pyx_GIVEREF(__pyx_v_children_2);
-            PyTuple_SET_ITEM(__pyx_t_12, 3+__pyx_t_6, __pyx_v_children_2);
+            PyTuple_SET_ITEM(__pyx_t_12, 3+__pyx_t_5, __pyx_v_children_2);
             __Pyx_INCREF(Py_None);
             __Pyx_GIVEREF(Py_None);
-            PyTuple_SET_ITEM(__pyx_t_12, 4+__pyx_t_6, Py_None);
-            __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_12, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 818, __pyx_L1_error)
+            PyTuple_SET_ITEM(__pyx_t_12, 4+__pyx_t_5, Py_None);
+            __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_12, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 774, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
             __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
           }
-          __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-          __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_children_1, __pyx_t_1); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 818, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-          /* "JSONParser.pyx":819
- *                     else:
- *                         children_1.append(ParseNode('pair', offset_2, offset_3, children_2, None))
- *                         children_1.append(ParseNode('pair', offset_2, offset_3, children_2, None))             # <<<<<<<<<<<<<<
- *                     offset_2 = offset_3
- * 
- */
-          __Pyx_GetModuleGlobalName(__pyx_t_8, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 819, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_8);
-          __pyx_t_12 = NULL;
-          __pyx_t_6 = 0;
-          if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_8))) {
-            __pyx_t_12 = PyMethod_GET_SELF(__pyx_t_8);
-            if (likely(__pyx_t_12)) {
-              PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_8);
-              __Pyx_INCREF(__pyx_t_12);
-              __Pyx_INCREF(function);
-              __Pyx_DECREF_SET(__pyx_t_8, function);
-              __pyx_t_6 = 1;
-            }
-          }
-          #if CYTHON_FAST_PYCALL
-          if (PyFunction_Check(__pyx_t_8)) {
-            PyObject *__pyx_temp[6] = {__pyx_t_12, __pyx_n_u_pair, __pyx_v_offset_2, __pyx_v_offset_3, __pyx_v_children_2, Py_None};
-            __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_6, 5+__pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 819, __pyx_L1_error)
-            __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
-            __Pyx_GOTREF(__pyx_t_1);
-          } else
-          #endif
-          #if CYTHON_FAST_PYCCALL
-          if (__Pyx_PyFastCFunction_Check(__pyx_t_8)) {
-            PyObject *__pyx_temp[6] = {__pyx_t_12, __pyx_n_u_pair, __pyx_v_offset_2, __pyx_v_offset_3, __pyx_v_children_2, Py_None};
-            __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_6, 5+__pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 819, __pyx_L1_error)
-            __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
-            __Pyx_GOTREF(__pyx_t_1);
-          } else
-          #endif
-          {
-            __pyx_t_13 = PyTuple_New(5+__pyx_t_6); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 819, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_13);
-            if (__pyx_t_12) {
-              __Pyx_GIVEREF(__pyx_t_12); PyTuple_SET_ITEM(__pyx_t_13, 0, __pyx_t_12); __pyx_t_12 = NULL;
-            }
-            __Pyx_INCREF(__pyx_n_u_pair);
-            __Pyx_GIVEREF(__pyx_n_u_pair);
-            PyTuple_SET_ITEM(__pyx_t_13, 0+__pyx_t_6, __pyx_n_u_pair);
-            __Pyx_INCREF(__pyx_v_offset_2);
-            __Pyx_GIVEREF(__pyx_v_offset_2);
-            PyTuple_SET_ITEM(__pyx_t_13, 1+__pyx_t_6, __pyx_v_offset_2);
-            __Pyx_INCREF(__pyx_v_offset_3);
-            __Pyx_GIVEREF(__pyx_v_offset_3);
-            PyTuple_SET_ITEM(__pyx_t_13, 2+__pyx_t_6, __pyx_v_offset_3);
-            __Pyx_INCREF(__pyx_v_children_2);
-            __Pyx_GIVEREF(__pyx_v_children_2);
-            PyTuple_SET_ITEM(__pyx_t_13, 3+__pyx_t_6, __pyx_v_children_2);
-            __Pyx_INCREF(Py_None);
-            __Pyx_GIVEREF(Py_None);
-            PyTuple_SET_ITEM(__pyx_t_13, 4+__pyx_t_6, Py_None);
-            __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_13, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 819, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_1);
-            __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-          }
-          __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-          __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_children_1, __pyx_t_1); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 819, __pyx_L1_error)
+          __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+          __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_children_1, __pyx_t_1); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 774, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
         }
         __pyx_L85:;
 
-        /* "JSONParser.pyx":820
- *                         children_1.append(ParseNode('pair', offset_2, offset_3, children_2, None))
+        /* "JSONParser.pyx":775
+ *                     else:
  *                         children_1.append(ParseNode('pair', offset_2, offset_3, children_2, None))
  *                     offset_2 = offset_3             # <<<<<<<<<<<<<<
  * 
@@ -13197,52 +12096,47 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
         __Pyx_INCREF(__pyx_v_offset_3);
         __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_v_offset_3);
 
-        /* "JSONParser.pyx":822
+        /* "JSONParser.pyx":777
  *                     offset_2 = offset_3
  * 
  *                     count_1 = 0             # <<<<<<<<<<<<<<
- *                     while offset_2 != len(buf):
+ *                     while offset_2 != buf_eof:
  *                         chr = buf[offset_2]
  */
         __Pyx_INCREF(__pyx_int_0);
         __Pyx_XDECREF_SET(__pyx_v_count_1, __pyx_int_0);
 
-        /* "JSONParser.pyx":823
+        /* "JSONParser.pyx":778
  * 
  *                     count_1 = 0
- *                     while offset_2 != len(buf):             # <<<<<<<<<<<<<<
+ *                     while offset_2 != buf_eof:             # <<<<<<<<<<<<<<
  *                         chr = buf[offset_2]
  *                         if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  */
         while (1) {
-          if (unlikely(__pyx_v_buf == Py_None)) {
-            PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
-            __PYX_ERR(0, 823, __pyx_L1_error)
-          }
-          __pyx_t_10 = __Pyx_PyUnicode_GET_LENGTH(__pyx_v_buf); if (unlikely(__pyx_t_10 == ((Py_ssize_t)-1))) __PYX_ERR(0, 823, __pyx_L1_error)
-          __pyx_t_1 = PyInt_FromSsize_t(__pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 823, __pyx_L1_error)
+          __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_buf_eof); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 778, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_8 = PyObject_RichCompare(__pyx_v_offset_2, __pyx_t_1, Py_NE); __Pyx_XGOTREF(__pyx_t_8); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 823, __pyx_L1_error)
+          __pyx_t_7 = PyObject_RichCompare(__pyx_v_offset_2, __pyx_t_1, Py_NE); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 778, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-          __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 823, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+          __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 778, __pyx_L1_error)
+          __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
           if (!__pyx_t_3) break;
 
-          /* "JSONParser.pyx":824
+          /* "JSONParser.pyx":779
  *                     count_1 = 0
- *                     while offset_2 != len(buf):
+ *                     while offset_2 != buf_eof:
  *                         chr = buf[offset_2]             # <<<<<<<<<<<<<<
  *                         if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                             offset_2 +=1
  */
-          __pyx_t_8 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_2); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 824, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_8);
-          __pyx_t_9 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_8); if (unlikely((__pyx_t_9 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 824, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-          __pyx_v_chr = __pyx_t_9;
+          __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 779, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_7);
+          __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_7); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 779, __pyx_L1_error)
+          __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+          __pyx_v_chr = __pyx_t_8;
 
-          /* "JSONParser.pyx":825
- *                     while offset_2 != len(buf):
+          /* "JSONParser.pyx":780
+ *                     while offset_2 != buf_eof:
  *                         chr = buf[offset_2]
  *                         if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':             # <<<<<<<<<<<<<<
  *                             offset_2 +=1
@@ -13377,32 +12271,32 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
           __pyx_L89_bool_binop_done:;
           if (__pyx_t_3) {
 
-            /* "JSONParser.pyx":826
+            /* "JSONParser.pyx":781
  *                         chr = buf[offset_2]
  *                         if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                             offset_2 +=1             # <<<<<<<<<<<<<<
  *                             count_1 +=1
  *                         else:
  */
-            __pyx_t_8 = __Pyx_PyInt_AddObjC(__pyx_v_offset_2, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 826, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_8);
-            __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_t_8);
-            __pyx_t_8 = 0;
+            __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_2, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 781, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_7);
+            __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_t_7);
+            __pyx_t_7 = 0;
 
-            /* "JSONParser.pyx":827
+            /* "JSONParser.pyx":782
  *                         if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                             offset_2 +=1
  *                             count_1 +=1             # <<<<<<<<<<<<<<
  *                         else:
  *                             break
  */
-            __pyx_t_8 = __Pyx_PyInt_AddObjC(__pyx_v_count_1, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 827, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_8);
-            __Pyx_DECREF_SET(__pyx_v_count_1, __pyx_t_8);
-            __pyx_t_8 = 0;
+            __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_count_1, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 782, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_7);
+            __Pyx_DECREF_SET(__pyx_v_count_1, __pyx_t_7);
+            __pyx_t_7 = 0;
 
-            /* "JSONParser.pyx":825
- *                     while offset_2 != len(buf):
+            /* "JSONParser.pyx":780
+ *                     while offset_2 != buf_eof:
  *                         chr = buf[offset_2]
  *                         if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':             # <<<<<<<<<<<<<<
  *                             offset_2 +=1
@@ -13411,7 +12305,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
             goto __pyx_L88;
           }
 
-          /* "JSONParser.pyx":829
+          /* "JSONParser.pyx":784
  *                             count_1 +=1
  *                         else:
  *                             break             # <<<<<<<<<<<<<<
@@ -13425,7 +12319,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
         }
         __pyx_L87_break:;
 
-        /* "JSONParser.pyx":831
+        /* "JSONParser.pyx":786
  *                             break
  * 
  *                     count_1 = 0             # <<<<<<<<<<<<<<
@@ -13435,7 +12329,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
         __Pyx_INCREF(__pyx_int_0);
         __Pyx_DECREF_SET(__pyx_v_count_1, __pyx_int_0);
 
-        /* "JSONParser.pyx":832
+        /* "JSONParser.pyx":787
  * 
  *                     count_1 = 0
  *                     while True:             # <<<<<<<<<<<<<<
@@ -13444,7 +12338,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
  */
         while (1) {
 
-          /* "JSONParser.pyx":833
+          /* "JSONParser.pyx":788
  *                     count_1 = 0
  *                     while True:
  *                         offset_3 = offset_2             # <<<<<<<<<<<<<<
@@ -13454,7 +12348,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
           __Pyx_INCREF(__pyx_v_offset_2);
           __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_v_offset_2);
 
-          /* "JSONParser.pyx":834
+          /* "JSONParser.pyx":789
  *                     while True:
  *                         offset_3 = offset_2
  *                         line_start_2 = line_start_1             # <<<<<<<<<<<<<<
@@ -13463,7 +12357,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
  */
           __pyx_v_line_start_2 = __pyx_v_line_start_1;
 
-          /* "JSONParser.pyx":835
+          /* "JSONParser.pyx":790
  *                         offset_3 = offset_2
  *                         line_start_2 = line_start_1
  *                         if buf[offset_3:offset_3+1] == ',':             # <<<<<<<<<<<<<<
@@ -13472,48 +12366,48 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
  */
           if (unlikely(__pyx_v_buf == Py_None)) {
             PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-            __PYX_ERR(0, 835, __pyx_L1_error)
+            __PYX_ERR(0, 790, __pyx_L1_error)
           }
           __Pyx_INCREF(__pyx_v_offset_3);
-          __pyx_t_8 = __pyx_v_offset_3;
-          __pyx_t_3 = (__pyx_t_8 == Py_None);
+          __pyx_t_7 = __pyx_v_offset_3;
+          __pyx_t_3 = (__pyx_t_7 == Py_None);
           if (__pyx_t_3) {
             __pyx_t_10 = 0;
           } else {
-            __pyx_t_4 = __Pyx_PyIndex_AsSsize_t(__pyx_t_8); if (unlikely((__pyx_t_4 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 835, __pyx_L1_error)
-            __pyx_t_10 = __pyx_t_4;
+            __pyx_t_9 = __Pyx_PyIndex_AsSsize_t(__pyx_t_7); if (unlikely((__pyx_t_9 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 790, __pyx_L1_error)
+            __pyx_t_10 = __pyx_t_9;
           }
-          __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-          __pyx_t_8 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 835, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_8);
-          __pyx_t_3 = (__pyx_t_8 == Py_None);
+          __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+          __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 790, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_7);
+          __pyx_t_3 = (__pyx_t_7 == Py_None);
           if (__pyx_t_3) {
-            __pyx_t_4 = PY_SSIZE_T_MAX;
+            __pyx_t_9 = PY_SSIZE_T_MAX;
           } else {
-            __pyx_t_11 = __Pyx_PyIndex_AsSsize_t(__pyx_t_8); if (unlikely((__pyx_t_11 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 835, __pyx_L1_error)
-            __pyx_t_4 = __pyx_t_11;
+            __pyx_t_11 = __Pyx_PyIndex_AsSsize_t(__pyx_t_7); if (unlikely((__pyx_t_11 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 790, __pyx_L1_error)
+            __pyx_t_9 = __pyx_t_11;
           }
-          __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-          __pyx_t_8 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_10, __pyx_t_4); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 835, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_8);
-          __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_8, __pyx_kp_u__9, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 835, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+          __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+          __pyx_t_7 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_10, __pyx_t_9); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 790, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_7);
+          __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_kp_u__9, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 790, __pyx_L1_error)
+          __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
           __pyx_t_2 = (__pyx_t_3 != 0);
           if (__pyx_t_2) {
 
-            /* "JSONParser.pyx":836
+            /* "JSONParser.pyx":791
  *                         line_start_2 = line_start_1
  *                         if buf[offset_3:offset_3+1] == ',':
  *                             offset_3 += 1             # <<<<<<<<<<<<<<
  *                         else:
  *                             offset_3 = -1
  */
-            __pyx_t_8 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 836, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_8);
-            __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_8);
-            __pyx_t_8 = 0;
+            __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 791, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_7);
+            __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_7);
+            __pyx_t_7 = 0;
 
-            /* "JSONParser.pyx":835
+            /* "JSONParser.pyx":790
  *                         offset_3 = offset_2
  *                         line_start_2 = line_start_1
  *                         if buf[offset_3:offset_3+1] == ',':             # <<<<<<<<<<<<<<
@@ -13523,7 +12417,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
             goto __pyx_L111;
           }
 
-          /* "JSONParser.pyx":838
+          /* "JSONParser.pyx":793
  *                             offset_3 += 1
  *                         else:
  *                             offset_3 = -1             # <<<<<<<<<<<<<<
@@ -13534,7 +12428,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
             __Pyx_INCREF(__pyx_int_neg_1);
             __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_int_neg_1);
 
-            /* "JSONParser.pyx":839
+            /* "JSONParser.pyx":794
  *                         else:
  *                             offset_3 = -1
  *                             break             # <<<<<<<<<<<<<<
@@ -13545,52 +12439,47 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
           }
           __pyx_L111:;
 
-          /* "JSONParser.pyx":841
+          /* "JSONParser.pyx":796
  *                             break
  * 
  *                         count_2 = 0             # <<<<<<<<<<<<<<
- *                         while offset_3 != len(buf):
+ *                         while offset_3 != buf_eof:
  *                             chr = buf[offset_3]
  */
           __Pyx_INCREF(__pyx_int_0);
           __Pyx_XDECREF_SET(__pyx_v_count_2, __pyx_int_0);
 
-          /* "JSONParser.pyx":842
+          /* "JSONParser.pyx":797
  * 
  *                         count_2 = 0
- *                         while offset_3 != len(buf):             # <<<<<<<<<<<<<<
+ *                         while offset_3 != buf_eof:             # <<<<<<<<<<<<<<
  *                             chr = buf[offset_3]
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  */
           while (1) {
-            if (unlikely(__pyx_v_buf == Py_None)) {
-              PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
-              __PYX_ERR(0, 842, __pyx_L1_error)
-            }
-            __pyx_t_4 = __Pyx_PyUnicode_GET_LENGTH(__pyx_v_buf); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(0, 842, __pyx_L1_error)
-            __pyx_t_8 = PyInt_FromSsize_t(__pyx_t_4); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 842, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_8);
-            __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_3, __pyx_t_8, Py_NE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 842, __pyx_L1_error)
-            __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 842, __pyx_L1_error)
+            __pyx_t_7 = __Pyx_PyInt_From_int(__pyx_v_buf_eof); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 797, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_7);
+            __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_3, __pyx_t_7, Py_NE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 797, __pyx_L1_error)
+            __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 797, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
             if (!__pyx_t_2) break;
 
-            /* "JSONParser.pyx":843
+            /* "JSONParser.pyx":798
  *                         count_2 = 0
- *                         while offset_3 != len(buf):
+ *                         while offset_3 != buf_eof:
  *                             chr = buf[offset_3]             # <<<<<<<<<<<<<<
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                                 offset_3 +=1
  */
-            __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 843, __pyx_L1_error)
+            __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 798, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
-            __pyx_t_9 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_9 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 843, __pyx_L1_error)
+            __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 798, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            __pyx_v_chr = __pyx_t_9;
+            __pyx_v_chr = __pyx_t_8;
 
-            /* "JSONParser.pyx":844
- *                         while offset_3 != len(buf):
+            /* "JSONParser.pyx":799
+ *                         while offset_3 != buf_eof:
  *                             chr = buf[offset_3]
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':             # <<<<<<<<<<<<<<
  *                                 offset_3 +=1
@@ -13725,32 +12614,32 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
             __pyx_L115_bool_binop_done:;
             if (__pyx_t_2) {
 
-              /* "JSONParser.pyx":845
+              /* "JSONParser.pyx":800
  *                             chr = buf[offset_3]
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                                 offset_3 +=1             # <<<<<<<<<<<<<<
  *                                 count_2 +=1
  *                             else:
  */
-              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 845, __pyx_L1_error)
+              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 800, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_1);
               __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_1);
               __pyx_t_1 = 0;
 
-              /* "JSONParser.pyx":846
+              /* "JSONParser.pyx":801
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                                 offset_3 +=1
  *                                 count_2 +=1             # <<<<<<<<<<<<<<
  *                             else:
  *                                 break
  */
-              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_count_2, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 846, __pyx_L1_error)
+              __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_count_2, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 801, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_1);
               __Pyx_DECREF_SET(__pyx_v_count_2, __pyx_t_1);
               __pyx_t_1 = 0;
 
-              /* "JSONParser.pyx":844
- *                         while offset_3 != len(buf):
+              /* "JSONParser.pyx":799
+ *                         while offset_3 != buf_eof:
  *                             chr = buf[offset_3]
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':             # <<<<<<<<<<<<<<
  *                                 offset_3 +=1
@@ -13759,7 +12648,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
               goto __pyx_L114;
             }
 
-            /* "JSONParser.pyx":848
+            /* "JSONParser.pyx":803
  *                                 count_2 +=1
  *                             else:
  *                                 break             # <<<<<<<<<<<<<<
@@ -13773,7 +12662,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
           }
           __pyx_L113_break:;
 
-          /* "JSONParser.pyx":850
+          /* "JSONParser.pyx":805
  *                                 break
  * 
  *                         offset_4 = offset_3             # <<<<<<<<<<<<<<
@@ -13783,104 +12672,99 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
           __Pyx_INCREF(__pyx_v_offset_3);
           __Pyx_XDECREF_SET(__pyx_v_offset_4, __pyx_v_offset_3);
 
-          /* "JSONParser.pyx":851
+          /* "JSONParser.pyx":806
  * 
  *                         offset_4 = offset_3
  *                         children_2 = []             # <<<<<<<<<<<<<<
  *                         while True: # start capture
- *                             offset_4, line_start_2 = self.parse_json_string(buf, offset_4, line_start_2, indent,children_2)
+ *                             offset_4, line_start_2 = self.parse_json_string(buf, offset_4, line_start_2, indent, buf_eof, children_2)
  */
-          __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 851, __pyx_L1_error)
+          __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 806, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
           __Pyx_DECREF_SET(__pyx_v_children_2, ((PyObject*)__pyx_t_1));
           __pyx_t_1 = 0;
 
-          /* "JSONParser.pyx":852
+          /* "JSONParser.pyx":807
  *                         offset_4 = offset_3
  *                         children_2 = []
  *                         while True: # start capture             # <<<<<<<<<<<<<<
- *                             offset_4, line_start_2 = self.parse_json_string(buf, offset_4, line_start_2, indent,children_2)
+ *                             offset_4, line_start_2 = self.parse_json_string(buf, offset_4, line_start_2, indent, buf_eof, children_2)
  *                             if offset_4 == -1: break
  */
           while (1) {
 
-            /* "JSONParser.pyx":853
+            /* "JSONParser.pyx":808
  *                         children_2 = []
  *                         while True: # start capture
- *                             offset_4, line_start_2 = self.parse_json_string(buf, offset_4, line_start_2, indent,children_2)             # <<<<<<<<<<<<<<
+ *                             offset_4, line_start_2 = self.parse_json_string(buf, offset_4, line_start_2, indent, buf_eof, children_2)             # <<<<<<<<<<<<<<
  *                             if offset_4 == -1: break
  * 
  */
-            __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_offset_4); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 853, __pyx_L1_error)
-            __pyx_t_7 = ((struct __pyx_vtabstruct_10JSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_json_string(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_2, __pyx_v_indent, __pyx_v_children_2);
-            __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_7.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 853, __pyx_L1_error)
+            __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_v_offset_4); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 808, __pyx_L1_error)
+            __pyx_t_6 = ((struct __pyx_vtabstruct_10JSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_json_string(__pyx_v_self, __pyx_v_buf, __pyx_t_5, __pyx_v_line_start_2, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_2);
+            __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_6.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 808, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
-            __pyx_t_6 = __pyx_t_7.f1;
+            __pyx_t_5 = __pyx_t_6.f1;
             __Pyx_DECREF_SET(__pyx_v_offset_4, __pyx_t_1);
             __pyx_t_1 = 0;
-            __pyx_v_line_start_2 = __pyx_t_6;
+            __pyx_v_line_start_2 = __pyx_t_5;
 
-            /* "JSONParser.pyx":854
+            /* "JSONParser.pyx":809
  *                         while True: # start capture
- *                             offset_4, line_start_2 = self.parse_json_string(buf, offset_4, line_start_2, indent,children_2)
+ *                             offset_4, line_start_2 = self.parse_json_string(buf, offset_4, line_start_2, indent, buf_eof, children_2)
  *                             if offset_4 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
  */
-            __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_4, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 854, __pyx_L1_error)
+            __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_4, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 809, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
-            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 854, __pyx_L1_error)
+            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 809, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
             if (__pyx_t_2) {
               goto __pyx_L136_break;
             }
 
-            /* "JSONParser.pyx":857
+            /* "JSONParser.pyx":812
  * 
  * 
  *                             count_2 = 0             # <<<<<<<<<<<<<<
- *                             while offset_4 != len(buf):
+ *                             while offset_4 != buf_eof:
  *                                 chr = buf[offset_4]
  */
             __Pyx_INCREF(__pyx_int_0);
             __Pyx_DECREF_SET(__pyx_v_count_2, __pyx_int_0);
 
-            /* "JSONParser.pyx":858
+            /* "JSONParser.pyx":813
  * 
  *                             count_2 = 0
- *                             while offset_4 != len(buf):             # <<<<<<<<<<<<<<
+ *                             while offset_4 != buf_eof:             # <<<<<<<<<<<<<<
  *                                 chr = buf[offset_4]
  *                                 if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  */
             while (1) {
-              if (unlikely(__pyx_v_buf == Py_None)) {
-                PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
-                __PYX_ERR(0, 858, __pyx_L1_error)
-              }
-              __pyx_t_4 = __Pyx_PyUnicode_GET_LENGTH(__pyx_v_buf); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(0, 858, __pyx_L1_error)
-              __pyx_t_1 = PyInt_FromSsize_t(__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 858, __pyx_L1_error)
+              __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_buf_eof); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 813, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_1);
-              __pyx_t_8 = PyObject_RichCompare(__pyx_v_offset_4, __pyx_t_1, Py_NE); __Pyx_XGOTREF(__pyx_t_8); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 858, __pyx_L1_error)
+              __pyx_t_7 = PyObject_RichCompare(__pyx_v_offset_4, __pyx_t_1, Py_NE); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 813, __pyx_L1_error)
               __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-              __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 858, __pyx_L1_error)
-              __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+              __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 813, __pyx_L1_error)
+              __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
               if (!__pyx_t_2) break;
 
-              /* "JSONParser.pyx":859
+              /* "JSONParser.pyx":814
  *                             count_2 = 0
- *                             while offset_4 != len(buf):
+ *                             while offset_4 != buf_eof:
  *                                 chr = buf[offset_4]             # <<<<<<<<<<<<<<
  *                                 if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                                     offset_4 +=1
  */
-              __pyx_t_8 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 859, __pyx_L1_error)
-              __Pyx_GOTREF(__pyx_t_8);
-              __pyx_t_9 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_8); if (unlikely((__pyx_t_9 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 859, __pyx_L1_error)
-              __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-              __pyx_v_chr = __pyx_t_9;
+              __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 814, __pyx_L1_error)
+              __Pyx_GOTREF(__pyx_t_7);
+              __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_7); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 814, __pyx_L1_error)
+              __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+              __pyx_v_chr = __pyx_t_8;
 
-              /* "JSONParser.pyx":860
- *                             while offset_4 != len(buf):
+              /* "JSONParser.pyx":815
+ *                             while offset_4 != buf_eof:
  *                                 chr = buf[offset_4]
  *                                 if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':             # <<<<<<<<<<<<<<
  *                                     offset_4 +=1
@@ -14015,32 +12899,32 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
               __pyx_L141_bool_binop_done:;
               if (__pyx_t_2) {
 
-                /* "JSONParser.pyx":861
+                /* "JSONParser.pyx":816
  *                                 chr = buf[offset_4]
  *                                 if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                                     offset_4 +=1             # <<<<<<<<<<<<<<
  *                                     count_2 +=1
  *                                 else:
  */
-                __pyx_t_8 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 861, __pyx_L1_error)
-                __Pyx_GOTREF(__pyx_t_8);
-                __Pyx_DECREF_SET(__pyx_v_offset_4, __pyx_t_8);
-                __pyx_t_8 = 0;
+                __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 816, __pyx_L1_error)
+                __Pyx_GOTREF(__pyx_t_7);
+                __Pyx_DECREF_SET(__pyx_v_offset_4, __pyx_t_7);
+                __pyx_t_7 = 0;
 
-                /* "JSONParser.pyx":862
+                /* "JSONParser.pyx":817
  *                                 if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                                     offset_4 +=1
  *                                     count_2 +=1             # <<<<<<<<<<<<<<
  *                                 else:
  *                                     break
  */
-                __pyx_t_8 = __Pyx_PyInt_AddObjC(__pyx_v_count_2, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 862, __pyx_L1_error)
-                __Pyx_GOTREF(__pyx_t_8);
-                __Pyx_DECREF_SET(__pyx_v_count_2, __pyx_t_8);
-                __pyx_t_8 = 0;
+                __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_count_2, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 817, __pyx_L1_error)
+                __Pyx_GOTREF(__pyx_t_7);
+                __Pyx_DECREF_SET(__pyx_v_count_2, __pyx_t_7);
+                __pyx_t_7 = 0;
 
-                /* "JSONParser.pyx":860
- *                             while offset_4 != len(buf):
+                /* "JSONParser.pyx":815
+ *                             while offset_4 != buf_eof:
  *                                 chr = buf[offset_4]
  *                                 if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':             # <<<<<<<<<<<<<<
  *                                     offset_4 +=1
@@ -14049,7 +12933,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
                 goto __pyx_L140;
               }
 
-              /* "JSONParser.pyx":864
+              /* "JSONParser.pyx":819
  *                                     count_2 +=1
  *                                 else:
  *                                     break             # <<<<<<<<<<<<<<
@@ -14063,7 +12947,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
             }
             __pyx_L139_break:;
 
-            /* "JSONParser.pyx":866
+            /* "JSONParser.pyx":821
  *                                     break
  * 
  *                             if buf[offset_4:offset_4+1] == ':':             # <<<<<<<<<<<<<<
@@ -14072,48 +12956,48 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
  */
             if (unlikely(__pyx_v_buf == Py_None)) {
               PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-              __PYX_ERR(0, 866, __pyx_L1_error)
+              __PYX_ERR(0, 821, __pyx_L1_error)
             }
             __Pyx_INCREF(__pyx_v_offset_4);
-            __pyx_t_8 = __pyx_v_offset_4;
-            __pyx_t_2 = (__pyx_t_8 == Py_None);
+            __pyx_t_7 = __pyx_v_offset_4;
+            __pyx_t_2 = (__pyx_t_7 == Py_None);
             if (__pyx_t_2) {
-              __pyx_t_4 = 0;
+              __pyx_t_9 = 0;
             } else {
-              __pyx_t_10 = __Pyx_PyIndex_AsSsize_t(__pyx_t_8); if (unlikely((__pyx_t_10 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 866, __pyx_L1_error)
-              __pyx_t_4 = __pyx_t_10;
+              __pyx_t_10 = __Pyx_PyIndex_AsSsize_t(__pyx_t_7); if (unlikely((__pyx_t_10 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 821, __pyx_L1_error)
+              __pyx_t_9 = __pyx_t_10;
             }
-            __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-            __pyx_t_8 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 866, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_8);
-            __pyx_t_2 = (__pyx_t_8 == Py_None);
+            __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+            __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 821, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_7);
+            __pyx_t_2 = (__pyx_t_7 == Py_None);
             if (__pyx_t_2) {
               __pyx_t_10 = PY_SSIZE_T_MAX;
             } else {
-              __pyx_t_11 = __Pyx_PyIndex_AsSsize_t(__pyx_t_8); if (unlikely((__pyx_t_11 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 866, __pyx_L1_error)
+              __pyx_t_11 = __Pyx_PyIndex_AsSsize_t(__pyx_t_7); if (unlikely((__pyx_t_11 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 821, __pyx_L1_error)
               __pyx_t_10 = __pyx_t_11;
             }
-            __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-            __pyx_t_8 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_4, __pyx_t_10); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 866, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_8);
-            __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_t_8, __pyx_kp_u__12, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 866, __pyx_L1_error)
-            __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+            __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+            __pyx_t_7 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_t_9, __pyx_t_10); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 821, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_7);
+            __pyx_t_2 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_kp_u__12, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 821, __pyx_L1_error)
+            __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
             __pyx_t_3 = (__pyx_t_2 != 0);
             if (__pyx_t_3) {
 
-              /* "JSONParser.pyx":867
+              /* "JSONParser.pyx":822
  * 
  *                             if buf[offset_4:offset_4+1] == ':':
  *                                 offset_4 += 1             # <<<<<<<<<<<<<<
  *                             else:
  *                                 offset_4 = -1
  */
-              __pyx_t_8 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 867, __pyx_L1_error)
-              __Pyx_GOTREF(__pyx_t_8);
-              __Pyx_DECREF_SET(__pyx_v_offset_4, __pyx_t_8);
-              __pyx_t_8 = 0;
+              __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 822, __pyx_L1_error)
+              __Pyx_GOTREF(__pyx_t_7);
+              __Pyx_DECREF_SET(__pyx_v_offset_4, __pyx_t_7);
+              __pyx_t_7 = 0;
 
-              /* "JSONParser.pyx":866
+              /* "JSONParser.pyx":821
  *                                     break
  * 
  *                             if buf[offset_4:offset_4+1] == ':':             # <<<<<<<<<<<<<<
@@ -14123,7 +13007,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
               goto __pyx_L161;
             }
 
-            /* "JSONParser.pyx":869
+            /* "JSONParser.pyx":824
  *                                 offset_4 += 1
  *                             else:
  *                                 offset_4 = -1             # <<<<<<<<<<<<<<
@@ -14134,7 +13018,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
               __Pyx_INCREF(__pyx_int_neg_1);
               __Pyx_DECREF_SET(__pyx_v_offset_4, __pyx_int_neg_1);
 
-              /* "JSONParser.pyx":870
+              /* "JSONParser.pyx":825
  *                             else:
  *                                 offset_4 = -1
  *                                 break             # <<<<<<<<<<<<<<
@@ -14145,52 +13029,47 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
             }
             __pyx_L161:;
 
-            /* "JSONParser.pyx":872
+            /* "JSONParser.pyx":827
  *                                 break
  * 
  *                             count_2 = 0             # <<<<<<<<<<<<<<
- *                             while offset_4 != len(buf):
+ *                             while offset_4 != buf_eof:
  *                                 chr = buf[offset_4]
  */
             __Pyx_INCREF(__pyx_int_0);
             __Pyx_DECREF_SET(__pyx_v_count_2, __pyx_int_0);
 
-            /* "JSONParser.pyx":873
+            /* "JSONParser.pyx":828
  * 
  *                             count_2 = 0
- *                             while offset_4 != len(buf):             # <<<<<<<<<<<<<<
+ *                             while offset_4 != buf_eof:             # <<<<<<<<<<<<<<
  *                                 chr = buf[offset_4]
  *                                 if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  */
             while (1) {
-              if (unlikely(__pyx_v_buf == Py_None)) {
-                PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
-                __PYX_ERR(0, 873, __pyx_L1_error)
-              }
-              __pyx_t_10 = __Pyx_PyUnicode_GET_LENGTH(__pyx_v_buf); if (unlikely(__pyx_t_10 == ((Py_ssize_t)-1))) __PYX_ERR(0, 873, __pyx_L1_error)
-              __pyx_t_8 = PyInt_FromSsize_t(__pyx_t_10); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 873, __pyx_L1_error)
-              __Pyx_GOTREF(__pyx_t_8);
-              __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_4, __pyx_t_8, Py_NE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 873, __pyx_L1_error)
-              __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-              __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 873, __pyx_L1_error)
+              __pyx_t_7 = __Pyx_PyInt_From_int(__pyx_v_buf_eof); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 828, __pyx_L1_error)
+              __Pyx_GOTREF(__pyx_t_7);
+              __pyx_t_1 = PyObject_RichCompare(__pyx_v_offset_4, __pyx_t_7, Py_NE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 828, __pyx_L1_error)
+              __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+              __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 828, __pyx_L1_error)
               __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
               if (!__pyx_t_3) break;
 
-              /* "JSONParser.pyx":874
+              /* "JSONParser.pyx":829
  *                             count_2 = 0
- *                             while offset_4 != len(buf):
+ *                             while offset_4 != buf_eof:
  *                                 chr = buf[offset_4]             # <<<<<<<<<<<<<<
  *                                 if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                                     offset_4 +=1
  */
-              __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 874, __pyx_L1_error)
+              __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 829, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_1);
-              __pyx_t_9 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_9 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 874, __pyx_L1_error)
+              __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_1); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 829, __pyx_L1_error)
               __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-              __pyx_v_chr = __pyx_t_9;
+              __pyx_v_chr = __pyx_t_8;
 
-              /* "JSONParser.pyx":875
- *                             while offset_4 != len(buf):
+              /* "JSONParser.pyx":830
+ *                             while offset_4 != buf_eof:
  *                                 chr = buf[offset_4]
  *                                 if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':             # <<<<<<<<<<<<<<
  *                                     offset_4 +=1
@@ -14325,32 +13204,32 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
               __pyx_L165_bool_binop_done:;
               if (__pyx_t_3) {
 
-                /* "JSONParser.pyx":876
+                /* "JSONParser.pyx":831
  *                                 chr = buf[offset_4]
  *                                 if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                                     offset_4 +=1             # <<<<<<<<<<<<<<
  *                                     count_2 +=1
  *                                 else:
  */
-                __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 876, __pyx_L1_error)
+                __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_offset_4, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 831, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_1);
                 __Pyx_DECREF_SET(__pyx_v_offset_4, __pyx_t_1);
                 __pyx_t_1 = 0;
 
-                /* "JSONParser.pyx":877
+                /* "JSONParser.pyx":832
  *                                 if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                                     offset_4 +=1
  *                                     count_2 +=1             # <<<<<<<<<<<<<<
  *                                 else:
  *                                     break
  */
-                __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_count_2, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 877, __pyx_L1_error)
+                __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_count_2, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 832, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_1);
                 __Pyx_DECREF_SET(__pyx_v_count_2, __pyx_t_1);
                 __pyx_t_1 = 0;
 
-                /* "JSONParser.pyx":875
- *                             while offset_4 != len(buf):
+                /* "JSONParser.pyx":830
+ *                             while offset_4 != buf_eof:
  *                                 chr = buf[offset_4]
  *                                 if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':             # <<<<<<<<<<<<<<
  *                                     offset_4 +=1
@@ -14359,12 +13238,12 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
                 goto __pyx_L164;
               }
 
-              /* "JSONParser.pyx":879
+              /* "JSONParser.pyx":834
  *                                     count_2 +=1
  *                                 else:
  *                                     break             # <<<<<<<<<<<<<<
  * 
- *                             offset_4, line_start_2 = self.parse_json_value(buf, offset_4, line_start_2, indent,children_2)
+ *                             offset_4, line_start_2 = self.parse_json_value(buf, offset_4, line_start_2, indent, buf_eof, children_2)
  */
               /*else*/ {
                 goto __pyx_L163_break;
@@ -14373,38 +13252,38 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
             }
             __pyx_L163_break:;
 
-            /* "JSONParser.pyx":881
+            /* "JSONParser.pyx":836
  *                                     break
  * 
- *                             offset_4, line_start_2 = self.parse_json_value(buf, offset_4, line_start_2, indent,children_2)             # <<<<<<<<<<<<<<
+ *                             offset_4, line_start_2 = self.parse_json_value(buf, offset_4, line_start_2, indent, buf_eof, children_2)             # <<<<<<<<<<<<<<
  *                             if offset_4 == -1: break
  * 
  */
-            __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_offset_4); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 881, __pyx_L1_error)
-            __pyx_t_7 = ((struct __pyx_vtabstruct_10JSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_json_value(__pyx_v_self, __pyx_v_buf, __pyx_t_6, __pyx_v_line_start_2, __pyx_v_indent, __pyx_v_children_2);
-            __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_7.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 881, __pyx_L1_error)
+            __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_v_offset_4); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 836, __pyx_L1_error)
+            __pyx_t_6 = ((struct __pyx_vtabstruct_10JSONParser_Parser *)__pyx_v_self->__pyx_vtab)->parse_json_value(__pyx_v_self, __pyx_v_buf, __pyx_t_5, __pyx_v_line_start_2, __pyx_v_indent, __pyx_v_buf_eof, __pyx_v_children_2);
+            __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_t_6.f0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 836, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
-            __pyx_t_6 = __pyx_t_7.f1;
+            __pyx_t_5 = __pyx_t_6.f1;
             __Pyx_DECREF_SET(__pyx_v_offset_4, __pyx_t_1);
             __pyx_t_1 = 0;
-            __pyx_v_line_start_2 = __pyx_t_6;
+            __pyx_v_line_start_2 = __pyx_t_5;
 
-            /* "JSONParser.pyx":882
+            /* "JSONParser.pyx":837
  * 
- *                             offset_4, line_start_2 = self.parse_json_value(buf, offset_4, line_start_2, indent,children_2)
+ *                             offset_4, line_start_2 = self.parse_json_value(buf, offset_4, line_start_2, indent, buf_eof, children_2)
  *                             if offset_4 == -1: break             # <<<<<<<<<<<<<<
  * 
  * 
  */
-            __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_4, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 882, __pyx_L1_error)
+            __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_4, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 837, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
-            __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 882, __pyx_L1_error)
+            __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 837, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
             if (__pyx_t_3) {
               goto __pyx_L136_break;
             }
 
-            /* "JSONParser.pyx":885
+            /* "JSONParser.pyx":840
  * 
  * 
  *                             break             # <<<<<<<<<<<<<<
@@ -14415,20 +13294,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
           }
           __pyx_L136_break:;
 
-          /* "JSONParser.pyx":886
+          /* "JSONParser.pyx":841
  * 
  *                             break
  *                         if offset_4 == -1:             # <<<<<<<<<<<<<<
  *                             offset_3 = -1
  *                             break
  */
-          __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_4, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 886, __pyx_L1_error)
+          __pyx_t_1 = __Pyx_PyInt_EqObjC(__pyx_v_offset_4, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 841, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 886, __pyx_L1_error)
+          __pyx_t_3 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 841, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
           if (__pyx_t_3) {
 
-            /* "JSONParser.pyx":887
+            /* "JSONParser.pyx":842
  *                             break
  *                         if offset_4 == -1:
  *                             offset_3 = -1             # <<<<<<<<<<<<<<
@@ -14438,7 +13317,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
             __Pyx_INCREF(__pyx_int_neg_1);
             __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_int_neg_1);
 
-            /* "JSONParser.pyx":888
+            /* "JSONParser.pyx":843
  *                         if offset_4 == -1:
  *                             offset_3 = -1
  *                             break             # <<<<<<<<<<<<<<
@@ -14447,7 +13326,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
  */
             goto __pyx_L110_break;
 
-            /* "JSONParser.pyx":886
+            /* "JSONParser.pyx":841
  * 
  *                             break
  *                         if offset_4 == -1:             # <<<<<<<<<<<<<<
@@ -14456,7 +13335,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
  */
           }
 
-          /* "JSONParser.pyx":889
+          /* "JSONParser.pyx":844
  *                             offset_3 = -1
  *                             break
  *                         if self.builder is not None:             # <<<<<<<<<<<<<<
@@ -14467,73 +13346,73 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
           __pyx_t_2 = (__pyx_t_3 != 0);
           if (__pyx_t_2) {
 
-            /* "JSONParser.pyx":890
+            /* "JSONParser.pyx":845
  *                             break
  *                         if self.builder is not None:
  *                             children_1.append(self.ParseNode('pair', offset_3, offset_4, children_2, None))             # <<<<<<<<<<<<<<
  *                         else:
  *                             children_1.append(ParseNode('pair', offset_3, offset_4, children_2, None))
  */
-            __pyx_t_8 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 890, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_8);
-            __pyx_t_13 = NULL;
-            __pyx_t_6 = 0;
-            if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_8))) {
-              __pyx_t_13 = PyMethod_GET_SELF(__pyx_t_8);
-              if (likely(__pyx_t_13)) {
-                PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_8);
-                __Pyx_INCREF(__pyx_t_13);
+            __pyx_t_7 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 845, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_7);
+            __pyx_t_12 = NULL;
+            __pyx_t_5 = 0;
+            if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_7))) {
+              __pyx_t_12 = PyMethod_GET_SELF(__pyx_t_7);
+              if (likely(__pyx_t_12)) {
+                PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
+                __Pyx_INCREF(__pyx_t_12);
                 __Pyx_INCREF(function);
-                __Pyx_DECREF_SET(__pyx_t_8, function);
-                __pyx_t_6 = 1;
+                __Pyx_DECREF_SET(__pyx_t_7, function);
+                __pyx_t_5 = 1;
               }
             }
             #if CYTHON_FAST_PYCALL
-            if (PyFunction_Check(__pyx_t_8)) {
-              PyObject *__pyx_temp[6] = {__pyx_t_13, __pyx_n_u_pair, __pyx_v_offset_3, __pyx_v_offset_4, __pyx_v_children_2, Py_None};
-              __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_6, 5+__pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 890, __pyx_L1_error)
-              __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
+            if (PyFunction_Check(__pyx_t_7)) {
+              PyObject *__pyx_temp[6] = {__pyx_t_12, __pyx_n_u_pair, __pyx_v_offset_3, __pyx_v_offset_4, __pyx_v_children_2, Py_None};
+              __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_5, 5+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 845, __pyx_L1_error)
+              __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
               __Pyx_GOTREF(__pyx_t_1);
             } else
             #endif
             #if CYTHON_FAST_PYCCALL
-            if (__Pyx_PyFastCFunction_Check(__pyx_t_8)) {
-              PyObject *__pyx_temp[6] = {__pyx_t_13, __pyx_n_u_pair, __pyx_v_offset_3, __pyx_v_offset_4, __pyx_v_children_2, Py_None};
-              __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_6, 5+__pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 890, __pyx_L1_error)
-              __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
+            if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
+              PyObject *__pyx_temp[6] = {__pyx_t_12, __pyx_n_u_pair, __pyx_v_offset_3, __pyx_v_offset_4, __pyx_v_children_2, Py_None};
+              __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_5, 5+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 845, __pyx_L1_error)
+              __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
               __Pyx_GOTREF(__pyx_t_1);
             } else
             #endif
             {
-              __pyx_t_12 = PyTuple_New(5+__pyx_t_6); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 890, __pyx_L1_error)
-              __Pyx_GOTREF(__pyx_t_12);
-              if (__pyx_t_13) {
-                __Pyx_GIVEREF(__pyx_t_13); PyTuple_SET_ITEM(__pyx_t_12, 0, __pyx_t_13); __pyx_t_13 = NULL;
+              __pyx_t_13 = PyTuple_New(5+__pyx_t_5); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 845, __pyx_L1_error)
+              __Pyx_GOTREF(__pyx_t_13);
+              if (__pyx_t_12) {
+                __Pyx_GIVEREF(__pyx_t_12); PyTuple_SET_ITEM(__pyx_t_13, 0, __pyx_t_12); __pyx_t_12 = NULL;
               }
               __Pyx_INCREF(__pyx_n_u_pair);
               __Pyx_GIVEREF(__pyx_n_u_pair);
-              PyTuple_SET_ITEM(__pyx_t_12, 0+__pyx_t_6, __pyx_n_u_pair);
+              PyTuple_SET_ITEM(__pyx_t_13, 0+__pyx_t_5, __pyx_n_u_pair);
               __Pyx_INCREF(__pyx_v_offset_3);
               __Pyx_GIVEREF(__pyx_v_offset_3);
-              PyTuple_SET_ITEM(__pyx_t_12, 1+__pyx_t_6, __pyx_v_offset_3);
+              PyTuple_SET_ITEM(__pyx_t_13, 1+__pyx_t_5, __pyx_v_offset_3);
               __Pyx_INCREF(__pyx_v_offset_4);
               __Pyx_GIVEREF(__pyx_v_offset_4);
-              PyTuple_SET_ITEM(__pyx_t_12, 2+__pyx_t_6, __pyx_v_offset_4);
+              PyTuple_SET_ITEM(__pyx_t_13, 2+__pyx_t_5, __pyx_v_offset_4);
               __Pyx_INCREF(__pyx_v_children_2);
               __Pyx_GIVEREF(__pyx_v_children_2);
-              PyTuple_SET_ITEM(__pyx_t_12, 3+__pyx_t_6, __pyx_v_children_2);
+              PyTuple_SET_ITEM(__pyx_t_13, 3+__pyx_t_5, __pyx_v_children_2);
               __Pyx_INCREF(Py_None);
               __Pyx_GIVEREF(Py_None);
-              PyTuple_SET_ITEM(__pyx_t_12, 4+__pyx_t_6, Py_None);
-              __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_12, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 890, __pyx_L1_error)
+              PyTuple_SET_ITEM(__pyx_t_13, 4+__pyx_t_5, Py_None);
+              __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_13, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 845, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_1);
-              __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
+              __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
             }
-            __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-            __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_children_1, __pyx_t_1); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 890, __pyx_L1_error)
+            __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+            __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_children_1, __pyx_t_1); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 845, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-            /* "JSONParser.pyx":889
+            /* "JSONParser.pyx":844
  *                             offset_3 = -1
  *                             break
  *                         if self.builder is not None:             # <<<<<<<<<<<<<<
@@ -14543,143 +13422,77 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
             goto __pyx_L187;
           }
 
-          /* "JSONParser.pyx":892
+          /* "JSONParser.pyx":847
  *                             children_1.append(self.ParseNode('pair', offset_3, offset_4, children_2, None))
  *                         else:
- *                             children_1.append(ParseNode('pair', offset_3, offset_4, children_2, None))             # <<<<<<<<<<<<<<
- *                             children_1.append(ParseNode('pair', offset_3, offset_4, children_2, None))
- *                         offset_3 = offset_4
- */
-          /*else*/ {
-            __Pyx_GetModuleGlobalName(__pyx_t_8, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 892, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_8);
-            __pyx_t_12 = NULL;
-            __pyx_t_6 = 0;
-            if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_8))) {
-              __pyx_t_12 = PyMethod_GET_SELF(__pyx_t_8);
-              if (likely(__pyx_t_12)) {
-                PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_8);
-                __Pyx_INCREF(__pyx_t_12);
-                __Pyx_INCREF(function);
-                __Pyx_DECREF_SET(__pyx_t_8, function);
-                __pyx_t_6 = 1;
-              }
-            }
-            #if CYTHON_FAST_PYCALL
-            if (PyFunction_Check(__pyx_t_8)) {
-              PyObject *__pyx_temp[6] = {__pyx_t_12, __pyx_n_u_pair, __pyx_v_offset_3, __pyx_v_offset_4, __pyx_v_children_2, Py_None};
-              __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_6, 5+__pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 892, __pyx_L1_error)
-              __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
-              __Pyx_GOTREF(__pyx_t_1);
-            } else
-            #endif
-            #if CYTHON_FAST_PYCCALL
-            if (__Pyx_PyFastCFunction_Check(__pyx_t_8)) {
-              PyObject *__pyx_temp[6] = {__pyx_t_12, __pyx_n_u_pair, __pyx_v_offset_3, __pyx_v_offset_4, __pyx_v_children_2, Py_None};
-              __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_6, 5+__pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 892, __pyx_L1_error)
-              __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
-              __Pyx_GOTREF(__pyx_t_1);
-            } else
-            #endif
-            {
-              __pyx_t_13 = PyTuple_New(5+__pyx_t_6); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 892, __pyx_L1_error)
-              __Pyx_GOTREF(__pyx_t_13);
-              if (__pyx_t_12) {
-                __Pyx_GIVEREF(__pyx_t_12); PyTuple_SET_ITEM(__pyx_t_13, 0, __pyx_t_12); __pyx_t_12 = NULL;
-              }
-              __Pyx_INCREF(__pyx_n_u_pair);
-              __Pyx_GIVEREF(__pyx_n_u_pair);
-              PyTuple_SET_ITEM(__pyx_t_13, 0+__pyx_t_6, __pyx_n_u_pair);
-              __Pyx_INCREF(__pyx_v_offset_3);
-              __Pyx_GIVEREF(__pyx_v_offset_3);
-              PyTuple_SET_ITEM(__pyx_t_13, 1+__pyx_t_6, __pyx_v_offset_3);
-              __Pyx_INCREF(__pyx_v_offset_4);
-              __Pyx_GIVEREF(__pyx_v_offset_4);
-              PyTuple_SET_ITEM(__pyx_t_13, 2+__pyx_t_6, __pyx_v_offset_4);
-              __Pyx_INCREF(__pyx_v_children_2);
-              __Pyx_GIVEREF(__pyx_v_children_2);
-              PyTuple_SET_ITEM(__pyx_t_13, 3+__pyx_t_6, __pyx_v_children_2);
-              __Pyx_INCREF(Py_None);
-              __Pyx_GIVEREF(Py_None);
-              PyTuple_SET_ITEM(__pyx_t_13, 4+__pyx_t_6, Py_None);
-              __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_13, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 892, __pyx_L1_error)
-              __Pyx_GOTREF(__pyx_t_1);
-              __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-            }
-            __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-            __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_children_1, __pyx_t_1); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 892, __pyx_L1_error)
-            __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-            /* "JSONParser.pyx":893
- *                         else:
- *                             children_1.append(ParseNode('pair', offset_3, offset_4, children_2, None))
  *                             children_1.append(ParseNode('pair', offset_3, offset_4, children_2, None))             # <<<<<<<<<<<<<<
  *                         offset_3 = offset_4
  * 
  */
-            __Pyx_GetModuleGlobalName(__pyx_t_8, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 893, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_8);
+          /*else*/ {
+            __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 847, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_7);
             __pyx_t_13 = NULL;
-            __pyx_t_6 = 0;
-            if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_8))) {
-              __pyx_t_13 = PyMethod_GET_SELF(__pyx_t_8);
+            __pyx_t_5 = 0;
+            if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_7))) {
+              __pyx_t_13 = PyMethod_GET_SELF(__pyx_t_7);
               if (likely(__pyx_t_13)) {
-                PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_8);
+                PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
                 __Pyx_INCREF(__pyx_t_13);
                 __Pyx_INCREF(function);
-                __Pyx_DECREF_SET(__pyx_t_8, function);
-                __pyx_t_6 = 1;
+                __Pyx_DECREF_SET(__pyx_t_7, function);
+                __pyx_t_5 = 1;
               }
             }
             #if CYTHON_FAST_PYCALL
-            if (PyFunction_Check(__pyx_t_8)) {
+            if (PyFunction_Check(__pyx_t_7)) {
               PyObject *__pyx_temp[6] = {__pyx_t_13, __pyx_n_u_pair, __pyx_v_offset_3, __pyx_v_offset_4, __pyx_v_children_2, Py_None};
-              __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_6, 5+__pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 893, __pyx_L1_error)
+              __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_5, 5+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 847, __pyx_L1_error)
               __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
               __Pyx_GOTREF(__pyx_t_1);
             } else
             #endif
             #if CYTHON_FAST_PYCCALL
-            if (__Pyx_PyFastCFunction_Check(__pyx_t_8)) {
+            if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
               PyObject *__pyx_temp[6] = {__pyx_t_13, __pyx_n_u_pair, __pyx_v_offset_3, __pyx_v_offset_4, __pyx_v_children_2, Py_None};
-              __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_8, __pyx_temp+1-__pyx_t_6, 5+__pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 893, __pyx_L1_error)
+              __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_5, 5+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 847, __pyx_L1_error)
               __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
               __Pyx_GOTREF(__pyx_t_1);
             } else
             #endif
             {
-              __pyx_t_12 = PyTuple_New(5+__pyx_t_6); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 893, __pyx_L1_error)
+              __pyx_t_12 = PyTuple_New(5+__pyx_t_5); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 847, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_12);
               if (__pyx_t_13) {
                 __Pyx_GIVEREF(__pyx_t_13); PyTuple_SET_ITEM(__pyx_t_12, 0, __pyx_t_13); __pyx_t_13 = NULL;
               }
               __Pyx_INCREF(__pyx_n_u_pair);
               __Pyx_GIVEREF(__pyx_n_u_pair);
-              PyTuple_SET_ITEM(__pyx_t_12, 0+__pyx_t_6, __pyx_n_u_pair);
+              PyTuple_SET_ITEM(__pyx_t_12, 0+__pyx_t_5, __pyx_n_u_pair);
               __Pyx_INCREF(__pyx_v_offset_3);
               __Pyx_GIVEREF(__pyx_v_offset_3);
-              PyTuple_SET_ITEM(__pyx_t_12, 1+__pyx_t_6, __pyx_v_offset_3);
+              PyTuple_SET_ITEM(__pyx_t_12, 1+__pyx_t_5, __pyx_v_offset_3);
               __Pyx_INCREF(__pyx_v_offset_4);
               __Pyx_GIVEREF(__pyx_v_offset_4);
-              PyTuple_SET_ITEM(__pyx_t_12, 2+__pyx_t_6, __pyx_v_offset_4);
+              PyTuple_SET_ITEM(__pyx_t_12, 2+__pyx_t_5, __pyx_v_offset_4);
               __Pyx_INCREF(__pyx_v_children_2);
               __Pyx_GIVEREF(__pyx_v_children_2);
-              PyTuple_SET_ITEM(__pyx_t_12, 3+__pyx_t_6, __pyx_v_children_2);
+              PyTuple_SET_ITEM(__pyx_t_12, 3+__pyx_t_5, __pyx_v_children_2);
               __Pyx_INCREF(Py_None);
               __Pyx_GIVEREF(Py_None);
-              PyTuple_SET_ITEM(__pyx_t_12, 4+__pyx_t_6, Py_None);
-              __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_t_12, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 893, __pyx_L1_error)
+              PyTuple_SET_ITEM(__pyx_t_12, 4+__pyx_t_5, Py_None);
+              __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_12, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 847, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_1);
               __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
             }
-            __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-            __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_children_1, __pyx_t_1); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 893, __pyx_L1_error)
+            __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+            __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_children_1, __pyx_t_1); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 847, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
           }
           __pyx_L187:;
 
-          /* "JSONParser.pyx":894
- *                             children_1.append(ParseNode('pair', offset_3, offset_4, children_2, None))
+          /* "JSONParser.pyx":848
+ *                         else:
  *                             children_1.append(ParseNode('pair', offset_3, offset_4, children_2, None))
  *                         offset_3 = offset_4             # <<<<<<<<<<<<<<
  * 
@@ -14688,52 +13501,47 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
           __Pyx_INCREF(__pyx_v_offset_4);
           __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_v_offset_4);
 
-          /* "JSONParser.pyx":896
+          /* "JSONParser.pyx":850
  *                         offset_3 = offset_4
  * 
  *                         count_2 = 0             # <<<<<<<<<<<<<<
- *                         while offset_3 != len(buf):
+ *                         while offset_3 != buf_eof:
  *                             chr = buf[offset_3]
  */
           __Pyx_INCREF(__pyx_int_0);
           __Pyx_DECREF_SET(__pyx_v_count_2, __pyx_int_0);
 
-          /* "JSONParser.pyx":897
+          /* "JSONParser.pyx":851
  * 
  *                         count_2 = 0
- *                         while offset_3 != len(buf):             # <<<<<<<<<<<<<<
+ *                         while offset_3 != buf_eof:             # <<<<<<<<<<<<<<
  *                             chr = buf[offset_3]
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  */
           while (1) {
-            if (unlikely(__pyx_v_buf == Py_None)) {
-              PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
-              __PYX_ERR(0, 897, __pyx_L1_error)
-            }
-            __pyx_t_10 = __Pyx_PyUnicode_GET_LENGTH(__pyx_v_buf); if (unlikely(__pyx_t_10 == ((Py_ssize_t)-1))) __PYX_ERR(0, 897, __pyx_L1_error)
-            __pyx_t_1 = PyInt_FromSsize_t(__pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 897, __pyx_L1_error)
+            __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_buf_eof); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 851, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
-            __pyx_t_8 = PyObject_RichCompare(__pyx_v_offset_3, __pyx_t_1, Py_NE); __Pyx_XGOTREF(__pyx_t_8); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 897, __pyx_L1_error)
+            __pyx_t_7 = PyObject_RichCompare(__pyx_v_offset_3, __pyx_t_1, Py_NE); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 851, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 897, __pyx_L1_error)
-            __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+            __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 851, __pyx_L1_error)
+            __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
             if (!__pyx_t_2) break;
 
-            /* "JSONParser.pyx":898
+            /* "JSONParser.pyx":852
  *                         count_2 = 0
- *                         while offset_3 != len(buf):
+ *                         while offset_3 != buf_eof:
  *                             chr = buf[offset_3]             # <<<<<<<<<<<<<<
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                                 offset_3 +=1
  */
-            __pyx_t_8 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 898, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_8);
-            __pyx_t_9 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_8); if (unlikely((__pyx_t_9 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 898, __pyx_L1_error)
-            __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-            __pyx_v_chr = __pyx_t_9;
+            __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_buf, __pyx_v_offset_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 852, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_7);
+            __pyx_t_8 = __Pyx_PyObject_AsPy_UNICODE(__pyx_t_7); if (unlikely((__pyx_t_8 == (Py_UNICODE)-1) && PyErr_Occurred())) __PYX_ERR(0, 852, __pyx_L1_error)
+            __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+            __pyx_v_chr = __pyx_t_8;
 
-            /* "JSONParser.pyx":899
- *                         while offset_3 != len(buf):
+            /* "JSONParser.pyx":853
+ *                         while offset_3 != buf_eof:
  *                             chr = buf[offset_3]
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':             # <<<<<<<<<<<<<<
  *                                 offset_3 +=1
@@ -14868,32 +13676,32 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
             __pyx_L191_bool_binop_done:;
             if (__pyx_t_2) {
 
-              /* "JSONParser.pyx":900
+              /* "JSONParser.pyx":854
  *                             chr = buf[offset_3]
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                                 offset_3 +=1             # <<<<<<<<<<<<<<
  *                                 count_2 +=1
  *                             else:
  */
-              __pyx_t_8 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 900, __pyx_L1_error)
-              __Pyx_GOTREF(__pyx_t_8);
-              __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_8);
-              __pyx_t_8 = 0;
+              __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_offset_3, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 854, __pyx_L1_error)
+              __Pyx_GOTREF(__pyx_t_7);
+              __Pyx_DECREF_SET(__pyx_v_offset_3, __pyx_t_7);
+              __pyx_t_7 = 0;
 
-              /* "JSONParser.pyx":901
+              /* "JSONParser.pyx":855
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':
  *                                 offset_3 +=1
  *                                 count_2 +=1             # <<<<<<<<<<<<<<
  *                             else:
  *                                 break
  */
-              __pyx_t_8 = __Pyx_PyInt_AddObjC(__pyx_v_count_2, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 901, __pyx_L1_error)
-              __Pyx_GOTREF(__pyx_t_8);
-              __Pyx_DECREF_SET(__pyx_v_count_2, __pyx_t_8);
-              __pyx_t_8 = 0;
+              __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_count_2, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 855, __pyx_L1_error)
+              __Pyx_GOTREF(__pyx_t_7);
+              __Pyx_DECREF_SET(__pyx_v_count_2, __pyx_t_7);
+              __pyx_t_7 = 0;
 
-              /* "JSONParser.pyx":899
- *                         while offset_3 != len(buf):
+              /* "JSONParser.pyx":853
+ *                         while offset_3 != buf_eof:
  *                             chr = buf[offset_3]
  *                             if chr == '(' or chr == "'" or chr == ' ' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 't' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'r' or chr == "'" or chr == ',' or chr == ' ' or chr == "'" or chr == '\\' or chr == 'n' or chr == "'" or chr == ')':             # <<<<<<<<<<<<<<
  *                                 offset_3 +=1
@@ -14902,7 +13710,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
               goto __pyx_L190;
             }
 
-            /* "JSONParser.pyx":903
+            /* "JSONParser.pyx":857
  *                                 count_2 +=1
  *                             else:
  *                                 break             # <<<<<<<<<<<<<<
@@ -14916,21 +13724,21 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
           }
           __pyx_L189_break:;
 
-          /* "JSONParser.pyx":905
+          /* "JSONParser.pyx":859
  *                                 break
  * 
  *                         if offset_2 == offset_3: break             # <<<<<<<<<<<<<<
  *                         offset_2 = offset_3
  *                         line_start_1 = line_start_2
  */
-          __pyx_t_8 = PyObject_RichCompare(__pyx_v_offset_2, __pyx_v_offset_3, Py_EQ); __Pyx_XGOTREF(__pyx_t_8); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 905, __pyx_L1_error)
-          __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 905, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+          __pyx_t_7 = PyObject_RichCompare(__pyx_v_offset_2, __pyx_v_offset_3, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 859, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 859, __pyx_L1_error)
+          __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
           if (__pyx_t_2) {
             goto __pyx_L110_break;
           }
 
-          /* "JSONParser.pyx":906
+          /* "JSONParser.pyx":860
  * 
  *                         if offset_2 == offset_3: break
  *                         offset_2 = offset_3             # <<<<<<<<<<<<<<
@@ -14940,7 +13748,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
           __Pyx_INCREF(__pyx_v_offset_3);
           __Pyx_DECREF_SET(__pyx_v_offset_2, __pyx_v_offset_3);
 
-          /* "JSONParser.pyx":907
+          /* "JSONParser.pyx":861
  *                         if offset_2 == offset_3: break
  *                         offset_2 = offset_3
  *                         line_start_1 = line_start_2             # <<<<<<<<<<<<<<
@@ -14949,35 +13757,35 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
  */
           __pyx_v_line_start_1 = __pyx_v_line_start_2;
 
-          /* "JSONParser.pyx":908
+          /* "JSONParser.pyx":862
  *                         offset_2 = offset_3
  *                         line_start_1 = line_start_2
  *                         count_1 += 1             # <<<<<<<<<<<<<<
  * 
  *                     if offset_1 == offset_2: break
  */
-          __pyx_t_8 = __Pyx_PyInt_AddObjC(__pyx_v_count_1, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 908, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_8);
-          __Pyx_DECREF_SET(__pyx_v_count_1, __pyx_t_8);
-          __pyx_t_8 = 0;
+          __pyx_t_7 = __Pyx_PyInt_AddObjC(__pyx_v_count_1, __pyx_int_1, 1, 1, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 862, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_7);
+          __Pyx_DECREF_SET(__pyx_v_count_1, __pyx_t_7);
+          __pyx_t_7 = 0;
         }
         __pyx_L110_break:;
 
-        /* "JSONParser.pyx":910
+        /* "JSONParser.pyx":864
  *                         count_1 += 1
  * 
  *                     if offset_1 == offset_2: break             # <<<<<<<<<<<<<<
  *                     offset_1 = offset_2
  *                     line_start = line_start_1
  */
-        __pyx_t_8 = PyObject_RichCompare(__pyx_v_offset_1, __pyx_v_offset_2, Py_EQ); __Pyx_XGOTREF(__pyx_t_8); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 910, __pyx_L1_error)
-        __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 910, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+        __pyx_t_7 = PyObject_RichCompare(__pyx_v_offset_1, __pyx_v_offset_2, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 864, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 864, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
         if (__pyx_t_2) {
           goto __pyx_L32_break;
         }
 
-        /* "JSONParser.pyx":911
+        /* "JSONParser.pyx":865
  * 
  *                     if offset_1 == offset_2: break
  *                     offset_1 = offset_2             # <<<<<<<<<<<<<<
@@ -14987,7 +13795,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
         __Pyx_INCREF(__pyx_v_offset_2);
         __Pyx_DECREF_SET(__pyx_v_offset_1, __pyx_v_offset_2);
 
-        /* "JSONParser.pyx":912
+        /* "JSONParser.pyx":866
  *                     if offset_1 == offset_2: break
  *                     offset_1 = offset_2
  *                     line_start = line_start_1             # <<<<<<<<<<<<<<
@@ -14996,7 +13804,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
  */
         __pyx_v_line_start = __pyx_v_line_start_1;
 
-        /* "JSONParser.pyx":913
+        /* "JSONParser.pyx":867
  *                     offset_1 = offset_2
  *                     line_start = line_start_1
  *                     count += 1             # <<<<<<<<<<<<<<
@@ -15007,7 +13815,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
       }
       __pyx_L32_break:;
 
-      /* "JSONParser.pyx":915
+      /* "JSONParser.pyx":869
  *                     count += 1
  * 
  *                 break             # <<<<<<<<<<<<<<
@@ -15018,20 +13826,20 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
     }
     __pyx_L30_break:;
 
-    /* "JSONParser.pyx":916
+    /* "JSONParser.pyx":870
  * 
  *                 break
  *             if offset_1 == -1:             # <<<<<<<<<<<<<<
  *                 offset = -1
  *                 break
  */
-    __pyx_t_8 = __Pyx_PyInt_EqObjC(__pyx_v_offset_1, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 916, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_8);
-    __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 916, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+    __pyx_t_7 = __Pyx_PyInt_EqObjC(__pyx_v_offset_1, __pyx_int_neg_1, -1L, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 870, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 870, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     if (__pyx_t_2) {
 
-      /* "JSONParser.pyx":917
+      /* "JSONParser.pyx":871
  *                 break
  *             if offset_1 == -1:
  *                 offset = -1             # <<<<<<<<<<<<<<
@@ -15040,7 +13848,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
  */
       __pyx_v_offset = -1;
 
-      /* "JSONParser.pyx":918
+      /* "JSONParser.pyx":872
  *             if offset_1 == -1:
  *                 offset = -1
  *                 break             # <<<<<<<<<<<<<<
@@ -15049,7 +13857,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
  */
       goto __pyx_L4_break;
 
-      /* "JSONParser.pyx":916
+      /* "JSONParser.pyx":870
  * 
  *                 break
  *             if offset_1 == -1:             # <<<<<<<<<<<<<<
@@ -15058,7 +13866,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
  */
     }
 
-    /* "JSONParser.pyx":919
+    /* "JSONParser.pyx":873
  *                 offset = -1
  *                 break
  *             if self.builder is not None:             # <<<<<<<<<<<<<<
@@ -15069,7 +13877,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
     __pyx_t_3 = (__pyx_t_2 != 0);
     if (__pyx_t_3) {
 
-      /* "JSONParser.pyx":920
+      /* "JSONParser.pyx":874
  *                 break
  *             if self.builder is not None:
  *                 children.append(self.ParseNode('object', offset, offset_1, children_1, None))             # <<<<<<<<<<<<<<
@@ -15078,14 +13886,14 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
  */
       if (unlikely(__pyx_v_children == Py_None)) {
         PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
-        __PYX_ERR(0, 920, __pyx_L1_error)
+        __PYX_ERR(0, 874, __pyx_L1_error)
       }
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 920, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 874, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_12 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 920, __pyx_L1_error)
+      __pyx_t_12 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 874, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_12);
       __pyx_t_13 = NULL;
-      __pyx_t_6 = 0;
+      __pyx_t_5 = 0;
       if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
         __pyx_t_13 = PyMethod_GET_SELF(__pyx_t_1);
         if (likely(__pyx_t_13)) {
@@ -15093,57 +13901,57 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
           __Pyx_INCREF(__pyx_t_13);
           __Pyx_INCREF(function);
           __Pyx_DECREF_SET(__pyx_t_1, function);
-          __pyx_t_6 = 1;
+          __pyx_t_5 = 1;
         }
       }
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_1)) {
         PyObject *__pyx_temp[6] = {__pyx_t_13, __pyx_n_u_object, __pyx_t_12, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_8 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_6, 5+__pyx_t_6); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 920, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_5, 5+__pyx_t_5); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 874, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
-        __Pyx_GOTREF(__pyx_t_8);
+        __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
       } else
       #endif
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
         PyObject *__pyx_temp[6] = {__pyx_t_13, __pyx_n_u_object, __pyx_t_12, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_8 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_6, 5+__pyx_t_6); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 920, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_5, 5+__pyx_t_5); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 874, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
-        __Pyx_GOTREF(__pyx_t_8);
+        __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
       } else
       #endif
       {
-        __pyx_t_15 = PyTuple_New(5+__pyx_t_6); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 920, __pyx_L1_error)
+        __pyx_t_15 = PyTuple_New(5+__pyx_t_5); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 874, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_15);
         if (__pyx_t_13) {
           __Pyx_GIVEREF(__pyx_t_13); PyTuple_SET_ITEM(__pyx_t_15, 0, __pyx_t_13); __pyx_t_13 = NULL;
         }
         __Pyx_INCREF(__pyx_n_u_object);
         __Pyx_GIVEREF(__pyx_n_u_object);
-        PyTuple_SET_ITEM(__pyx_t_15, 0+__pyx_t_6, __pyx_n_u_object);
+        PyTuple_SET_ITEM(__pyx_t_15, 0+__pyx_t_5, __pyx_n_u_object);
         __Pyx_GIVEREF(__pyx_t_12);
-        PyTuple_SET_ITEM(__pyx_t_15, 1+__pyx_t_6, __pyx_t_12);
+        PyTuple_SET_ITEM(__pyx_t_15, 1+__pyx_t_5, __pyx_t_12);
         __Pyx_INCREF(__pyx_v_offset_1);
         __Pyx_GIVEREF(__pyx_v_offset_1);
-        PyTuple_SET_ITEM(__pyx_t_15, 2+__pyx_t_6, __pyx_v_offset_1);
+        PyTuple_SET_ITEM(__pyx_t_15, 2+__pyx_t_5, __pyx_v_offset_1);
         __Pyx_INCREF(__pyx_v_children_1);
         __Pyx_GIVEREF(__pyx_v_children_1);
-        PyTuple_SET_ITEM(__pyx_t_15, 3+__pyx_t_6, __pyx_v_children_1);
+        PyTuple_SET_ITEM(__pyx_t_15, 3+__pyx_t_5, __pyx_v_children_1);
         __Pyx_INCREF(Py_None);
         __Pyx_GIVEREF(Py_None);
-        PyTuple_SET_ITEM(__pyx_t_15, 4+__pyx_t_6, Py_None);
+        PyTuple_SET_ITEM(__pyx_t_15, 4+__pyx_t_5, Py_None);
         __pyx_t_12 = 0;
-        __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_15, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 920, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_8);
+        __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_15, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 874, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
       }
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_8); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 920, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+      __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_7); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 874, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-      /* "JSONParser.pyx":919
+      /* "JSONParser.pyx":873
  *                 offset = -1
  *                 break
  *             if self.builder is not None:             # <<<<<<<<<<<<<<
@@ -15153,24 +13961,24 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
       goto __pyx_L214;
     }
 
-    /* "JSONParser.pyx":922
+    /* "JSONParser.pyx":876
  *                 children.append(self.ParseNode('object', offset, offset_1, children_1, None))
  *             else:
  *                 children.append(ParseNode('object', offset, offset_1, children_1, None))             # <<<<<<<<<<<<<<
- *                 children.append(ParseNode('object', offset, offset_1, children_1, None))
  *             offset = offset_1
+ * 
  */
     /*else*/ {
       if (unlikely(__pyx_v_children == Py_None)) {
         PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
-        __PYX_ERR(0, 922, __pyx_L1_error)
+        __PYX_ERR(0, 876, __pyx_L1_error)
       }
-      __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 922, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 876, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_15 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 922, __pyx_L1_error)
+      __pyx_t_15 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 876, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_15);
       __pyx_t_12 = NULL;
-      __pyx_t_6 = 0;
+      __pyx_t_5 = 0;
       if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_1))) {
         __pyx_t_12 = PyMethod_GET_SELF(__pyx_t_1);
         if (likely(__pyx_t_12)) {
@@ -15178,143 +13986,69 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
           __Pyx_INCREF(__pyx_t_12);
           __Pyx_INCREF(function);
           __Pyx_DECREF_SET(__pyx_t_1, function);
-          __pyx_t_6 = 1;
+          __pyx_t_5 = 1;
         }
       }
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_1)) {
         PyObject *__pyx_temp[6] = {__pyx_t_12, __pyx_n_u_object, __pyx_t_15, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_8 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_6, 5+__pyx_t_6); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 922, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_5, 5+__pyx_t_5); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 876, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
-        __Pyx_GOTREF(__pyx_t_8);
+        __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
       } else
       #endif
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
         PyObject *__pyx_temp[6] = {__pyx_t_12, __pyx_n_u_object, __pyx_t_15, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_8 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_6, 5+__pyx_t_6); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 922, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_5, 5+__pyx_t_5); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 876, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
-        __Pyx_GOTREF(__pyx_t_8);
+        __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
       } else
       #endif
       {
-        __pyx_t_13 = PyTuple_New(5+__pyx_t_6); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 922, __pyx_L1_error)
+        __pyx_t_13 = PyTuple_New(5+__pyx_t_5); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 876, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_13);
         if (__pyx_t_12) {
           __Pyx_GIVEREF(__pyx_t_12); PyTuple_SET_ITEM(__pyx_t_13, 0, __pyx_t_12); __pyx_t_12 = NULL;
         }
         __Pyx_INCREF(__pyx_n_u_object);
         __Pyx_GIVEREF(__pyx_n_u_object);
-        PyTuple_SET_ITEM(__pyx_t_13, 0+__pyx_t_6, __pyx_n_u_object);
+        PyTuple_SET_ITEM(__pyx_t_13, 0+__pyx_t_5, __pyx_n_u_object);
         __Pyx_GIVEREF(__pyx_t_15);
-        PyTuple_SET_ITEM(__pyx_t_13, 1+__pyx_t_6, __pyx_t_15);
+        PyTuple_SET_ITEM(__pyx_t_13, 1+__pyx_t_5, __pyx_t_15);
         __Pyx_INCREF(__pyx_v_offset_1);
         __Pyx_GIVEREF(__pyx_v_offset_1);
-        PyTuple_SET_ITEM(__pyx_t_13, 2+__pyx_t_6, __pyx_v_offset_1);
+        PyTuple_SET_ITEM(__pyx_t_13, 2+__pyx_t_5, __pyx_v_offset_1);
         __Pyx_INCREF(__pyx_v_children_1);
         __Pyx_GIVEREF(__pyx_v_children_1);
-        PyTuple_SET_ITEM(__pyx_t_13, 3+__pyx_t_6, __pyx_v_children_1);
+        PyTuple_SET_ITEM(__pyx_t_13, 3+__pyx_t_5, __pyx_v_children_1);
         __Pyx_INCREF(Py_None);
         __Pyx_GIVEREF(Py_None);
-        PyTuple_SET_ITEM(__pyx_t_13, 4+__pyx_t_6, Py_None);
+        PyTuple_SET_ITEM(__pyx_t_13, 4+__pyx_t_5, Py_None);
         __pyx_t_15 = 0;
-        __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_13, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 922, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_8);
+        __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_13, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 876, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
       }
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_8); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 922, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-
-      /* "JSONParser.pyx":923
- *             else:
- *                 children.append(ParseNode('object', offset, offset_1, children_1, None))
- *                 children.append(ParseNode('object', offset, offset_1, children_1, None))             # <<<<<<<<<<<<<<
- *             offset = offset_1
- * 
- */
-      if (unlikely(__pyx_v_children == Py_None)) {
-        PyErr_Format(PyExc_AttributeError, "'NoneType' object has no attribute '%.30s'", "append");
-        __PYX_ERR(0, 923, __pyx_L1_error)
-      }
-      __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_ParseNode); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 923, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_13 = __Pyx_PyInt_From_int(__pyx_v_offset); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 923, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_13);
-      __pyx_t_15 = NULL;
-      __pyx_t_6 = 0;
-      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_1))) {
-        __pyx_t_15 = PyMethod_GET_SELF(__pyx_t_1);
-        if (likely(__pyx_t_15)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
-          __Pyx_INCREF(__pyx_t_15);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_1, function);
-          __pyx_t_6 = 1;
-        }
-      }
-      #if CYTHON_FAST_PYCALL
-      if (PyFunction_Check(__pyx_t_1)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_15, __pyx_n_u_object, __pyx_t_13, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_8 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_6, 5+__pyx_t_6); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 923, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_15); __pyx_t_15 = 0;
-        __Pyx_GOTREF(__pyx_t_8);
-        __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-      } else
-      #endif
-      #if CYTHON_FAST_PYCCALL
-      if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
-        PyObject *__pyx_temp[6] = {__pyx_t_15, __pyx_n_u_object, __pyx_t_13, __pyx_v_offset_1, __pyx_v_children_1, Py_None};
-        __pyx_t_8 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_6, 5+__pyx_t_6); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 923, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_15); __pyx_t_15 = 0;
-        __Pyx_GOTREF(__pyx_t_8);
-        __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-      } else
-      #endif
-      {
-        __pyx_t_12 = PyTuple_New(5+__pyx_t_6); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 923, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_12);
-        if (__pyx_t_15) {
-          __Pyx_GIVEREF(__pyx_t_15); PyTuple_SET_ITEM(__pyx_t_12, 0, __pyx_t_15); __pyx_t_15 = NULL;
-        }
-        __Pyx_INCREF(__pyx_n_u_object);
-        __Pyx_GIVEREF(__pyx_n_u_object);
-        PyTuple_SET_ITEM(__pyx_t_12, 0+__pyx_t_6, __pyx_n_u_object);
-        __Pyx_GIVEREF(__pyx_t_13);
-        PyTuple_SET_ITEM(__pyx_t_12, 1+__pyx_t_6, __pyx_t_13);
-        __Pyx_INCREF(__pyx_v_offset_1);
-        __Pyx_GIVEREF(__pyx_v_offset_1);
-        PyTuple_SET_ITEM(__pyx_t_12, 2+__pyx_t_6, __pyx_v_offset_1);
-        __Pyx_INCREF(__pyx_v_children_1);
-        __Pyx_GIVEREF(__pyx_v_children_1);
-        PyTuple_SET_ITEM(__pyx_t_12, 3+__pyx_t_6, __pyx_v_children_1);
-        __Pyx_INCREF(Py_None);
-        __Pyx_GIVEREF(Py_None);
-        PyTuple_SET_ITEM(__pyx_t_12, 4+__pyx_t_6, Py_None);
-        __pyx_t_13 = 0;
-        __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_12, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 923, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_8);
-        __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
-      }
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_8); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 923, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+      __pyx_t_14 = __Pyx_PyList_Append(__pyx_v_children, __pyx_t_7); if (unlikely(__pyx_t_14 == ((int)-1))) __PYX_ERR(0, 876, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     }
     __pyx_L214:;
 
-    /* "JSONParser.pyx":924
- *                 children.append(ParseNode('object', offset, offset_1, children_1, None))
+    /* "JSONParser.pyx":877
+ *             else:
  *                 children.append(ParseNode('object', offset, offset_1, children_1, None))
  *             offset = offset_1             # <<<<<<<<<<<<<<
  * 
  *             if buf[offset:offset+1] == '}':
  */
-    __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_offset_1); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 924, __pyx_L1_error)
-    __pyx_v_offset = __pyx_t_6;
+    __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_v_offset_1); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 877, __pyx_L1_error)
+    __pyx_v_offset = __pyx_t_5;
 
-    /* "JSONParser.pyx":926
+    /* "JSONParser.pyx":879
  *             offset = offset_1
  * 
  *             if buf[offset:offset+1] == '}':             # <<<<<<<<<<<<<<
@@ -15323,16 +14057,16 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
  */
     if (unlikely(__pyx_v_buf == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 926, __pyx_L1_error)
+      __PYX_ERR(0, 879, __pyx_L1_error)
     }
-    __pyx_t_8 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_v_offset, (__pyx_v_offset + 1)); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 926, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_8);
-    __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_8, __pyx_kp_u__13, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 926, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+    __pyx_t_7 = __Pyx_PyUnicode_Substring(__pyx_v_buf, __pyx_v_offset, (__pyx_v_offset + 1)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 879, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __pyx_t_3 = (__Pyx_PyUnicode_Equals(__pyx_t_7, __pyx_kp_u__13, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 879, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __pyx_t_2 = (__pyx_t_3 != 0);
     if (__pyx_t_2) {
 
-      /* "JSONParser.pyx":927
+      /* "JSONParser.pyx":880
  * 
  *             if buf[offset:offset+1] == '}':
  *                 offset += 1             # <<<<<<<<<<<<<<
@@ -15341,7 +14075,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
  */
       __pyx_v_offset = (__pyx_v_offset + 1);
 
-      /* "JSONParser.pyx":926
+      /* "JSONParser.pyx":879
  *             offset = offset_1
  * 
  *             if buf[offset:offset+1] == '}':             # <<<<<<<<<<<<<<
@@ -15351,7 +14085,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
       goto __pyx_L215;
     }
 
-    /* "JSONParser.pyx":929
+    /* "JSONParser.pyx":882
  *                 offset += 1
  *             else:
  *                 offset = -1             # <<<<<<<<<<<<<<
@@ -15361,7 +14095,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
     /*else*/ {
       __pyx_v_offset = -1;
 
-      /* "JSONParser.pyx":930
+      /* "JSONParser.pyx":883
  *             else:
  *                 offset = -1
  *                 break             # <<<<<<<<<<<<<<
@@ -15372,7 +14106,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
     }
     __pyx_L215:;
 
-    /* "JSONParser.pyx":933
+    /* "JSONParser.pyx":886
  * 
  * 
  *             break             # <<<<<<<<<<<<<<
@@ -15383,21 +14117,21 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
   }
   __pyx_L4_break:;
 
-  /* "JSONParser.pyx":934
+  /* "JSONParser.pyx":887
  * 
  *             break
  *         return offset, line_start             # <<<<<<<<<<<<<<
  * 
  */
-  __pyx_t_7.f0 = __pyx_v_offset;
-  __pyx_t_7.f1 = __pyx_v_line_start;
-  __pyx_r = __pyx_t_7;
+  __pyx_t_6.f0 = __pyx_v_offset;
+  __pyx_t_6.f1 = __pyx_v_line_start;
+  __pyx_r = __pyx_t_6;
   goto __pyx_L0;
 
-  /* "JSONParser.pyx":750
+  /* "JSONParser.pyx":706
  *         return offset, line_start
  * 
- *     cdef (int, int) parse_json_object(self, str buf, int offset, int line_start, int indent, list children):             # <<<<<<<<<<<<<<
+ *     cdef (int, int) parse_json_object(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):             # <<<<<<<<<<<<<<
  *         cdef int count
  *         cdef Py_UNICODE chr
  */
@@ -15405,7 +14139,7 @@ static __pyx_ctuple_int__and_int __pyx_f_10JSONParser_6Parser_parse_json_object(
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_8);
+  __Pyx_XDECREF(__pyx_t_7);
   __Pyx_XDECREF(__pyx_t_12);
   __Pyx_XDECREF(__pyx_t_13);
   __Pyx_XDECREF(__pyx_t_15);
@@ -16456,15 +15190,11 @@ static int __Pyx_modinit_type_init_code(void) {
   __Pyx_RefNannySetupContext("__Pyx_modinit_type_init_code", 0);
   /*--- Type init code ---*/
   __pyx_vtabptr_10JSONParser_Parser = &__pyx_vtable_10JSONParser_Parser;
-  __pyx_vtable_10JSONParser_Parser.parse_document = (__pyx_ctuple_int__and_int (*)(struct __pyx_obj_10JSONParser_Parser *, PyObject *, int, int, int, PyObject *))__pyx_f_10JSONParser_6Parser_parse_document;
-  __pyx_vtable_10JSONParser_Parser.parse_json_value = (__pyx_ctuple_int__and_int (*)(struct __pyx_obj_10JSONParser_Parser *, PyObject *, int, int, int, PyObject *))__pyx_f_10JSONParser_6Parser_parse_json_value;
-  __pyx_vtable_10JSONParser_Parser.parse_json_true = (__pyx_ctuple_int__and_int (*)(struct __pyx_obj_10JSONParser_Parser *, PyObject *, int, int, int, PyObject *))__pyx_f_10JSONParser_6Parser_parse_json_true;
-  __pyx_vtable_10JSONParser_Parser.parse_json_false = (__pyx_ctuple_int__and_int (*)(struct __pyx_obj_10JSONParser_Parser *, PyObject *, int, int, int, PyObject *))__pyx_f_10JSONParser_6Parser_parse_json_false;
-  __pyx_vtable_10JSONParser_Parser.parse_json_null = (__pyx_ctuple_int__and_int (*)(struct __pyx_obj_10JSONParser_Parser *, PyObject *, int, int, int, PyObject *))__pyx_f_10JSONParser_6Parser_parse_json_null;
-  __pyx_vtable_10JSONParser_Parser.parse_json_number = (__pyx_ctuple_int__and_int (*)(struct __pyx_obj_10JSONParser_Parser *, PyObject *, int, int, int, PyObject *))__pyx_f_10JSONParser_6Parser_parse_json_number;
-  __pyx_vtable_10JSONParser_Parser.parse_json_string = (__pyx_ctuple_int__and_int (*)(struct __pyx_obj_10JSONParser_Parser *, PyObject *, int, int, int, PyObject *))__pyx_f_10JSONParser_6Parser_parse_json_string;
-  __pyx_vtable_10JSONParser_Parser.parse_json_list = (__pyx_ctuple_int__and_int (*)(struct __pyx_obj_10JSONParser_Parser *, PyObject *, int, int, int, PyObject *))__pyx_f_10JSONParser_6Parser_parse_json_list;
-  __pyx_vtable_10JSONParser_Parser.parse_json_object = (__pyx_ctuple_int__and_int (*)(struct __pyx_obj_10JSONParser_Parser *, PyObject *, int, int, int, PyObject *))__pyx_f_10JSONParser_6Parser_parse_json_object;
+  __pyx_vtable_10JSONParser_Parser.parse_document = (__pyx_ctuple_int__and_int (*)(struct __pyx_obj_10JSONParser_Parser *, PyObject *, int, int, int, int, PyObject *))__pyx_f_10JSONParser_6Parser_parse_document;
+  __pyx_vtable_10JSONParser_Parser.parse_json_value = (__pyx_ctuple_int__and_int (*)(struct __pyx_obj_10JSONParser_Parser *, PyObject *, int, int, int, int, PyObject *))__pyx_f_10JSONParser_6Parser_parse_json_value;
+  __pyx_vtable_10JSONParser_Parser.parse_json_string = (__pyx_ctuple_int__and_int (*)(struct __pyx_obj_10JSONParser_Parser *, PyObject *, int, int, int, int, PyObject *))__pyx_f_10JSONParser_6Parser_parse_json_string;
+  __pyx_vtable_10JSONParser_Parser.parse_json_list = (__pyx_ctuple_int__and_int (*)(struct __pyx_obj_10JSONParser_Parser *, PyObject *, int, int, int, int, PyObject *))__pyx_f_10JSONParser_6Parser_parse_json_list;
+  __pyx_vtable_10JSONParser_Parser.parse_json_object = (__pyx_ctuple_int__and_int (*)(struct __pyx_obj_10JSONParser_Parser *, PyObject *, int, int, int, int, PyObject *))__pyx_f_10JSONParser_6Parser_parse_json_object;
   if (PyType_Ready(&__pyx_type_10JSONParser_Parser) < 0) __PYX_ERR(0, 12, __pyx_L1_error)
   #if PY_VERSION_HEX < 0x030800B1
   __pyx_type_10JSONParser_Parser.tp_print = 0;

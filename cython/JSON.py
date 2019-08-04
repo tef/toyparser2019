@@ -10,7 +10,7 @@ def unescape(string):
     return codecs.decode(string, 'unicode_escape')
 
 builder = {
-    'number': (lambda buf, start, end, children: int(buf[start:end])),
+    'number': (lambda buf, start, end, children: float(buf[start:end])),
     'string': (lambda buf, start, end, children: unescape(buf[start:end])),
     'list': (lambda buf, start, end, children: children),
     'object': (lambda buf, start, end, children: dict(children)),
@@ -23,39 +23,35 @@ builder = {
 class JSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n"]):
     document = rule(whitespace, rule(json_list | json_object, capture="document"))
 
-    json_value = rule( 
-        json_list | json_object |
-        json_string | json_number |
-        json_true | json_false | 
-        json_null
-    )
-    
-    json_true = rule(accept("true"), capture="bool")
-    json_false = rule(accept("false"), capture="bool")
-    json_null = rule(accept("null"), capture="null")
-
     @rule()
-    def json_number(self):
-        with self.capture("number"):
-            with self.optional():
-                self.accept("-")
-            with self.choice():
-                with self.case():
-                    self.accept("0")
-                with self.case():
-                    self.range("1-9")
-                    with self.repeat():
-                        self.range("0-9")
-            with self.optional():
-                self.accept(".")
-                with self.repeat():
-                    self.range("0-9")
-            with self.optional():
-                self.accept("e", "E")
+    def json_value(self):
+        with self.choice():
+            with self.case(), self.capture("bool"): self.accept("true")
+            with self.case(), self.capture("bool"): self.accept("false")
+            with self.case(), self.capture("bool"): self.accept("null")
+            with self.case(), self.capture("number"):
                 with self.optional():
-                    self.accept("+", "-")
+                    self.accept("-")
+                with self.choice():
+                    with self.case():
+                        self.accept("0")
+                    with self.case():
+                        self.range("1-9")
+                        with self.repeat():
+                            self.range("0-9")
+                with self.optional():
+                    self.accept(".")
                     with self.repeat():
                         self.range("0-9")
+                with self.optional():
+                    self.accept("e", "E")
+                    with self.optional():
+                        self.accept("+", "-")
+                        with self.repeat():
+                            self.range("0-9")
+            with self.case(): self.json_string()
+            with self.case(): self.json_list()
+            with self.case(): self.json_object()
 
     @rule()
     def json_string(self):
@@ -116,12 +112,13 @@ class JSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n"]):
 
 
 if __name__ == "__main__":
-    import subprocess
-    code = compile_python(JSON, builder, cython=True)
-    with open("JSONParser.pyx", "w") as fh:
-        fh.write(code)
+    import subprocess, sys
+    if not sys.argv[1:] or sys.argv[1] != "--skip":
+        code = compile_python(JSON, builder, cython=True)
+        with open("JSONParser.pyx", "w") as fh:
+            fh.write(code)
 
-    subprocess.run(["python3", "setup.py", "build_ext"])
+        subprocess.run(["python3", "setup.py", "build_ext"])
 
     from JSONParser import Parser as JSONParser
     print()
@@ -133,7 +130,7 @@ if __name__ == "__main__":
 
     import time, json
 
-    s = json.dumps(list(range(25000))+list(str(x) for x in range(0,5000)))
+    s = json.dumps(list(range(50000))+list(str(x) for x in range(0,50000)))
     print('file is', len(s)/1024, 'k')
 
     def timeit(name,parser, buf):
@@ -148,7 +145,8 @@ if __name__ == "__main__":
     python_t = timeit("python-compiled", python_parser.parse, s)
     print("cython is",cython_t/json_t, "times slower than handrolled C",  python_t/cython_t, "times faster than python")
 
-    # timeit("python-compiled-old", old_python_parser.parse, s)
-    # timeit("python-interpreted", parser.parse, s)
+#    t2 = timeit("python-compiled-old", old_python_parser.parse, s)
+#    t3 = timeit("python-interpreted", parser.parse, s)
+#    print("cython is",t2/cython_t, "times faster than cheap codegen", t3/cython_t, "times faster than interpreter")
 
 

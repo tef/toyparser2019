@@ -1285,7 +1285,6 @@ def compile_python(grammar, builder=None, cython=False):
                     f"    {children}.append(self.ParseNode({name}, {offset}, {offset_0}, {children_0}, None))",
                     f"else:",
                     f"    {children}.append(ParseNode({name}, {offset}, {offset_0}, {children_0}, None))",
-                    f"    {children}.append(ParseNode({name}, {offset}, {offset_0}, {children_0}, None))"
                 ))
             elif builder:
                 steps.append(f"{children}.append(self.builder[{name}](buf, {offset}, {offset_0}, {children_0}))")
@@ -1402,7 +1401,7 @@ def compile_python(grammar, builder=None, cython=False):
         elif rule.kind == MATCH_INDENT:
             steps.extend((
                 f"{count} = {line_start} + {indent}]",
-                f"if count >= len(buf):"
+                f"if count >= buf_eof:"
                 f"    {offset} == -1; break",
                 f"while {offset} < {count}:",
                 f"    if buf[{offset}] in self.WHITESPACE:",
@@ -1416,7 +1415,7 @@ def compile_python(grammar, builder=None, cython=False):
 
         elif rule.kind == RULE:
             steps.extend((
-                f"{offset}, {line_start} = self.parse_{rule.args['name']}(buf, {offset}, {line_start}, {indent},{children})",
+                f"{offset}, {line_start} = self.parse_{rule.args['name']}(buf, {offset}, {line_start}, {indent}, buf_eof, {children})",
                 f"if {offset} == -1: break",
                 f"",
             ))
@@ -1424,7 +1423,7 @@ def compile_python(grammar, builder=None, cython=False):
         elif rule.kind == RANGE:
             invert = rule.args['invert']
             steps.extend((
-                f"if {offset} == len(buf):",
+                f"if {offset} == buf_eof:",
                 f"    {offset} = -1",
                 f"    break",
             ))
@@ -1504,7 +1503,7 @@ def compile_python(grammar, builder=None, cython=False):
             _min = rule.args['min']
             _max = rule.args['max']
 
-            cond = [f"{offset} != len(buf)"]
+            cond = [f"{offset} != buf_eof"]
             if _max is not None:
                 cond.append(f"{count} < {repr(_max)}")
             
@@ -1536,7 +1535,7 @@ def compile_python(grammar, builder=None, cython=False):
                 cond =f"chr in self.NEWLINE"
 
             steps.extend((
-                f"if {offset} < len(buf)",
+                f"if {offset} < buf_eof",
                 f"    chr = buf[{offset}]",
                 f"    if {cond}:",
                 f"        {offset} +=1",
@@ -1561,7 +1560,7 @@ def compile_python(grammar, builder=None, cython=False):
                 cond =f"chr in self.NEWLINE"
 
             steps.extend((
-                f"if {offset} != len(buf):",
+                f"if {offset} != buf_eof:",
                 f"    chr = buf[{offset}]",
                 f"    if {cond}:",
                 f"        {offset} +=1",
@@ -1572,7 +1571,7 @@ def compile_python(grammar, builder=None, cython=False):
             ))
         elif rule.kind == END_OF_FILE:
             steps.extend((
-                f"if {offset} != len(buf):",
+                f"if {offset} != buf_eof:",
                 f"    {offset} = -1",
                 f"    break",
             ))
@@ -1635,19 +1634,19 @@ def compile_python(grammar, builder=None, cython=False):
     start_rule = grammar.start
     output.extend((
         f"def parse(self, buf, offset=0):",
-        f"    line_start, indent, children = offset, None, []",
-        f"    new_offset, line_start = self.parse_{start_rule}(buf, offset, line_start, indent, children)",
+        f"    line_start, indent, eof, children = offset, len(buf), None, []",
+        f"    new_offset, line_start = self.parse_{start_rule}(buf, offset, line_start, indent, eof, children)",
         f"    return children[-1] if new_offset else None",
         f"",
     ))
 
     for name, rule in grammar.rules.items():
         if cython:
-            output.append(f"cdef (int, int) parse_{name}(self, str buf, int offset, int line_start, int indent, list children):")
+            output.append(f"cdef (int, int) parse_{name}(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):")
             output.append(f"    cdef int count")
             output.append(f"    cdef Py_UNICODE chr")
         else:
-            output.append(f"def parse_{name}(self, buf, offset, line_start, indent, children):")
+            output.append(f"def parse_{name}(self, buf, offset, line_start, indent, buf_eof, children):")
         #output.append(f"    print('enter {name}')")
         output.append(f"    while True: # note: return at end of loop")
 
