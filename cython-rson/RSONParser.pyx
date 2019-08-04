@@ -87,7 +87,9 @@ cdef class Parser:
                     if offset_2 == buf_eof:
                         offset_2 = -1
                         break
-                    elif buf[offset_2] == '\n':
+                    
+                    chr = buf[offset_2]
+                    if chr == '\n':
                         offset_2 = -1
                         break
                     else:
@@ -149,9 +151,11 @@ cdef class Parser:
                             if offset_3 == buf_eof:
                                 offset_3 = -1
                                 break
-                            elif 'a' <= buf[offset_3] <= 'z':
+                            
+                            chr = buf[offset_3]
+                            if 'a' <= chr <= 'z':
                                 offset_3 += 1
-                            elif 'a' <= buf[offset_3] <= 'Z':
+                            elif 'a' <= chr <= 'Z':
                                 offset_3 += 1
                             else:
                                 offset_3 = -1
@@ -164,13 +168,15 @@ cdef class Parser:
                                 if offset_4 == buf_eof:
                                     offset_4 = -1
                                     break
-                                elif '0' <= buf[offset_4] <= '9':
+                                
+                                chr = buf[offset_4]
+                                if '0' <= chr <= '9':
                                     offset_4 += 1
-                                elif 'a' <= buf[offset_4] <= 'z':
+                                elif 'a' <= chr <= 'z':
                                     offset_4 += 1
-                                elif 'A' <= buf[offset_4] <= 'Z':
+                                elif 'A' <= chr <= 'Z':
                                     offset_4 += 1
-                                elif buf[offset_4] == '_':
+                                elif chr == '_':
                                     offset_4 += 1
                                 else:
                                     offset_4 = -1
@@ -458,9 +464,11 @@ cdef class Parser:
                             if offset_3 == buf_eof:
                                 offset_3 = -1
                                 break
-                            elif buf[offset_3] == '-':
+                            
+                            chr = buf[offset_3]
+                            if chr == '-':
                                 offset_3 += 1
-                            elif buf[offset_3] == '+':
+                            elif chr == '+':
                                 offset_3 += 1
                             else:
                                 offset_3 = -1
@@ -480,11 +488,13 @@ cdef class Parser:
                         if offset_2 == buf_eof:
                             offset_2 = -1
                             break
-                        elif '0' <= buf[offset_2] <= '9':
+                        
+                        chr = buf[offset_2]
+                        if '0' <= chr <= '9':
                             offset_2 += 1
-                        elif 'A' <= buf[offset_2] <= 'F':
+                        elif 'A' <= chr <= 'F':
                             offset_2 += 1
-                        elif 'a' <= buf[offset_2] <= 'f':
+                        elif 'a' <= chr <= 'f':
                             offset_2 += 1
                         else:
                             offset_2 = -1
@@ -497,13 +507,15 @@ cdef class Parser:
                             if offset_3 == buf_eof:
                                 offset_3 = -1
                                 break
-                            elif '0' <= buf[offset_3] <= '9':
+                            
+                            chr = buf[offset_3]
+                            if '0' <= chr <= '9':
                                 offset_3 += 1
-                            elif 'A' <= buf[offset_3] <= 'F':
+                            elif 'A' <= chr <= 'F':
                                 offset_3 += 1
-                            elif 'a' <= buf[offset_3] <= 'f':
+                            elif 'a' <= chr <= 'f':
                                 offset_3 += 1
-                            elif buf[offset_3] == '_':
+                            elif chr == '_':
                                 offset_3 += 1
                             else:
                                 offset_3 = -1
@@ -533,9 +545,11 @@ cdef class Parser:
                             if offset_3 == buf_eof:
                                 offset_3 = -1
                                 break
-                            elif buf[offset_3] == '-':
+                            
+                            chr = buf[offset_3]
+                            if chr == '-':
                                 offset_3 += 1
-                            elif buf[offset_3] == '+':
+                            elif chr == '+':
                                 offset_3 += 1
                             else:
                                 offset_3 = -1
@@ -555,7 +569,9 @@ cdef class Parser:
                         if offset_2 == buf_eof:
                             offset_2 = -1
                             break
-                        elif '0' <= buf[offset_2] <= '8':
+                        
+                        chr = buf[offset_2]
+                        if '0' <= chr <= '8':
                             offset_2 += 1
                         else:
                             offset_2 = -1
@@ -568,9 +584,11 @@ cdef class Parser:
                             if offset_3 == buf_eof:
                                 offset_3 = -1
                                 break
-                            elif '0' <= buf[offset_3] <= '8':
+                            
+                            chr = buf[offset_3]
+                            if '0' <= chr <= '8':
                                 offset_3 += 1
-                            elif buf[offset_3] == '_':
+                            elif chr == '_':
                                 offset_3 += 1
                             else:
                                 offset_3 = -1
@@ -600,9 +618,11 @@ cdef class Parser:
                             if offset_3 == buf_eof:
                                 offset_3 = -1
                                 break
-                            elif buf[offset_3] == '-':
+                            
+                            chr = buf[offset_3]
+                            if chr == '-':
                                 offset_3 += 1
-                            elif buf[offset_3] == '+':
+                            elif chr == '+':
                                 offset_3 += 1
                             else:
                                 offset_3 = -1
@@ -622,7 +642,9 @@ cdef class Parser:
                         if offset_2 == buf_eof:
                             offset_2 = -1
                             break
-                        elif '0' <= buf[offset_2] <= '1':
+                        
+                        chr = buf[offset_2]
+                        if '0' <= chr <= '1':
                             offset_2 += 1
                         else:
                             offset_2 = -1
@@ -635,9 +657,11 @@ cdef class Parser:
                             if offset_3 == buf_eof:
                                 offset_3 = -1
                                 break
-                            elif '0' <= buf[offset_3] <= '1':
+                            
+                            chr = buf[offset_3]
+                            if '0' <= chr <= '1':
                                 offset_3 += 1
-                            elif buf[offset_3] == '_':
+                            elif chr == '_':
                                 offset_3 += 1
                             else:
                                 offset_3 = -1
@@ -667,9 +691,11 @@ cdef class Parser:
                             if offset_3 == buf_eof:
                                 offset_3 = -1
                                 break
-                            elif buf[offset_3] == '-':
+                            
+                            chr = buf[offset_3]
+                            if chr == '-':
                                 offset_3 += 1
-                            elif buf[offset_3] == '+':
+                            elif chr == '+':
                                 offset_3 += 1
                             else:
                                 offset_3 = -1
@@ -706,7 +732,9 @@ cdef class Parser:
                                 if offset_3 == buf_eof:
                                     offset_3 = -1
                                     break
-                                elif '1' <= buf[offset_3] <= '9':
+                                
+                                chr = buf[offset_3]
+                                if '1' <= chr <= '9':
                                     offset_3 += 1
                                 else:
                                     offset_3 = -1
@@ -719,7 +747,9 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    elif '0' <= buf[offset_4] <= '9':
+                                    
+                                    chr = buf[offset_4]
+                                    if '0' <= chr <= '9':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -760,7 +790,9 @@ cdef class Parser:
                                 if offset_4 == buf_eof:
                                     offset_4 = -1
                                     break
-                                elif '0' <= buf[offset_4] <= '9':
+                                
+                                chr = buf[offset_4]
+                                if '0' <= chr <= '9':
                                     offset_4 += 1
                                 else:
                                     offset_4 = -1
@@ -807,7 +839,9 @@ cdef class Parser:
                                     if offset_5 == buf_eof:
                                         offset_5 = -1
                                         break
-                                    elif '0' <= buf[offset_5] <= '9':
+                                    
+                                    chr = buf[offset_5]
+                                    if '0' <= chr <= '9':
                                         offset_5 += 1
                                     else:
                                         offset_5 = -1
@@ -884,16 +918,18 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    elif '\x00' <= buf[offset_4] <= '\x1f':
+                                    
+                                    chr = buf[offset_4]
+                                    if '\x00' <= chr <= '\x1f':
                                         offset_4 = -1
                                         break
-                                    elif buf[offset_4] == '\\':
+                                    elif chr == '\\':
                                         offset_4 = -1
                                         break
-                                    elif buf[offset_4] == '"':
+                                    elif chr == '"':
                                         offset_4 = -1
                                         break
-                                    elif '\ud800' <= buf[offset_4] <= '\udfff':
+                                    elif '\ud800' <= chr <= '\udfff':
                                         offset_4 = -1
                                         break
                                     else:
@@ -923,7 +959,9 @@ cdef class Parser:
                                         if offset_5 == buf_eof:
                                             offset_5 = -1
                                             break
-                                        elif '0' <= buf[offset_5] <= '1':
+                                        
+                                        chr = buf[offset_5]
+                                        if '0' <= chr <= '1':
                                             offset_5 += 1
                                         else:
                                             offset_5 = -1
@@ -937,11 +975,13 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    elif '0' <= buf[offset_4] <= '9':
+                                    
+                                    chr = buf[offset_4]
+                                    if '0' <= chr <= '9':
                                         offset_4 += 1
-                                    elif 'a' <= buf[offset_4] <= 'f':
+                                    elif 'a' <= chr <= 'f':
                                         offset_4 += 1
-                                    elif 'A' <= buf[offset_4] <= 'F':
+                                    elif 'A' <= chr <= 'F':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -950,11 +990,13 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    elif '0' <= buf[offset_4] <= '9':
+                                    
+                                    chr = buf[offset_4]
+                                    if '0' <= chr <= '9':
                                         offset_4 += 1
-                                    elif 'a' <= buf[offset_4] <= 'f':
+                                    elif 'a' <= chr <= 'f':
                                         offset_4 += 1
-                                    elif 'A' <= buf[offset_4] <= 'F':
+                                    elif 'A' <= chr <= 'F':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -990,7 +1032,9 @@ cdef class Parser:
                                         if offset_5 == buf_eof:
                                             offset_5 = -1
                                             break
-                                        elif '0' <= buf[offset_5] <= '1':
+                                        
+                                        chr = buf[offset_5]
+                                        if '0' <= chr <= '1':
                                             offset_5 += 1
                                         else:
                                             offset_5 = -1
@@ -1015,9 +1059,11 @@ cdef class Parser:
                                         if offset_5 == buf_eof:
                                             offset_5 = -1
                                             break
-                                        elif '8' <= buf[offset_5] <= '9':
+                                        
+                                        chr = buf[offset_5]
+                                        if '8' <= chr <= '9':
                                             offset_5 += 1
-                                        elif 'A' <= buf[offset_5] <= 'F':
+                                        elif 'A' <= chr <= 'F':
                                             offset_5 += 1
                                         else:
                                             offset_5 = -1
@@ -1031,11 +1077,13 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    elif '0' <= buf[offset_4] <= '9':
+                                    
+                                    chr = buf[offset_4]
+                                    if '0' <= chr <= '9':
                                         offset_4 += 1
-                                    elif 'a' <= buf[offset_4] <= 'f':
+                                    elif 'a' <= chr <= 'f':
                                         offset_4 += 1
-                                    elif 'A' <= buf[offset_4] <= 'F':
+                                    elif 'A' <= chr <= 'F':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -1044,11 +1092,13 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    elif '0' <= buf[offset_4] <= '9':
+                                    
+                                    chr = buf[offset_4]
+                                    if '0' <= chr <= '9':
                                         offset_4 += 1
-                                    elif 'a' <= buf[offset_4] <= 'f':
+                                    elif 'a' <= chr <= 'f':
                                         offset_4 += 1
-                                    elif 'A' <= buf[offset_4] <= 'F':
+                                    elif 'A' <= chr <= 'F':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -1057,11 +1107,13 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    elif '0' <= buf[offset_4] <= '9':
+                                    
+                                    chr = buf[offset_4]
+                                    if '0' <= chr <= '9':
                                         offset_4 += 1
-                                    elif 'a' <= buf[offset_4] <= 'f':
+                                    elif 'a' <= chr <= 'f':
                                         offset_4 += 1
-                                    elif 'A' <= buf[offset_4] <= 'F':
+                                    elif 'A' <= chr <= 'F':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -1070,11 +1122,13 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    elif '0' <= buf[offset_4] <= '9':
+                                    
+                                    chr = buf[offset_4]
+                                    if '0' <= chr <= '9':
                                         offset_4 += 1
-                                    elif 'a' <= buf[offset_4] <= 'f':
+                                    elif 'a' <= chr <= 'f':
                                         offset_4 += 1
-                                    elif 'A' <= buf[offset_4] <= 'F':
+                                    elif 'A' <= chr <= 'F':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -1110,7 +1164,9 @@ cdef class Parser:
                                         if offset_5 == buf_eof:
                                             offset_5 = -1
                                             break
-                                        elif '0' <= buf[offset_5] <= '1':
+                                        
+                                        chr = buf[offset_5]
+                                        if '0' <= chr <= '1':
                                             offset_5 += 1
                                         else:
                                             offset_5 = -1
@@ -1141,9 +1197,11 @@ cdef class Parser:
                                         if offset_5 == buf_eof:
                                             offset_5 = -1
                                             break
-                                        elif '8' <= buf[offset_5] <= '9':
+                                        
+                                        chr = buf[offset_5]
+                                        if '8' <= chr <= '9':
                                             offset_5 += 1
-                                        elif 'A' <= buf[offset_5] <= 'F':
+                                        elif 'A' <= chr <= 'F':
                                             offset_5 += 1
                                         else:
                                             offset_5 = -1
@@ -1157,11 +1215,13 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    elif '0' <= buf[offset_4] <= '9':
+                                    
+                                    chr = buf[offset_4]
+                                    if '0' <= chr <= '9':
                                         offset_4 += 1
-                                    elif 'a' <= buf[offset_4] <= 'f':
+                                    elif 'a' <= chr <= 'f':
                                         offset_4 += 1
-                                    elif 'A' <= buf[offset_4] <= 'F':
+                                    elif 'A' <= chr <= 'F':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -1170,11 +1230,13 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    elif '0' <= buf[offset_4] <= '9':
+                                    
+                                    chr = buf[offset_4]
+                                    if '0' <= chr <= '9':
                                         offset_4 += 1
-                                    elif 'a' <= buf[offset_4] <= 'f':
+                                    elif 'a' <= chr <= 'f':
                                         offset_4 += 1
-                                    elif 'A' <= buf[offset_4] <= 'F':
+                                    elif 'A' <= chr <= 'F':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -1183,11 +1245,13 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    elif '0' <= buf[offset_4] <= '9':
+                                    
+                                    chr = buf[offset_4]
+                                    if '0' <= chr <= '9':
                                         offset_4 += 1
-                                    elif 'a' <= buf[offset_4] <= 'f':
+                                    elif 'a' <= chr <= 'f':
                                         offset_4 += 1
-                                    elif 'A' <= buf[offset_4] <= 'F':
+                                    elif 'A' <= chr <= 'F':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -1196,11 +1260,13 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    elif '0' <= buf[offset_4] <= '9':
+                                    
+                                    chr = buf[offset_4]
+                                    if '0' <= chr <= '9':
                                         offset_4 += 1
-                                    elif 'a' <= buf[offset_4] <= 'f':
+                                    elif 'a' <= chr <= 'f':
                                         offset_4 += 1
-                                    elif 'A' <= buf[offset_4] <= 'F':
+                                    elif 'A' <= chr <= 'F':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -1209,11 +1275,13 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    elif '0' <= buf[offset_4] <= '9':
+                                    
+                                    chr = buf[offset_4]
+                                    if '0' <= chr <= '9':
                                         offset_4 += 1
-                                    elif 'a' <= buf[offset_4] <= 'f':
+                                    elif 'a' <= chr <= 'f':
                                         offset_4 += 1
-                                    elif 'A' <= buf[offset_4] <= 'F':
+                                    elif 'A' <= chr <= 'F':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -1222,11 +1290,13 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    elif '0' <= buf[offset_4] <= '9':
+                                    
+                                    chr = buf[offset_4]
+                                    if '0' <= chr <= '9':
                                         offset_4 += 1
-                                    elif 'a' <= buf[offset_4] <= 'f':
+                                    elif 'a' <= chr <= 'f':
                                         offset_4 += 1
-                                    elif 'A' <= buf[offset_4] <= 'F':
+                                    elif 'A' <= chr <= 'F':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -1235,11 +1305,13 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    elif '0' <= buf[offset_4] <= '9':
+                                    
+                                    chr = buf[offset_4]
+                                    if '0' <= chr <= '9':
                                         offset_4 += 1
-                                    elif 'a' <= buf[offset_4] <= 'f':
+                                    elif 'a' <= chr <= 'f':
                                         offset_4 += 1
-                                    elif 'A' <= buf[offset_4] <= 'F':
+                                    elif 'A' <= chr <= 'F':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -1248,11 +1320,13 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    elif '0' <= buf[offset_4] <= '9':
+                                    
+                                    chr = buf[offset_4]
+                                    if '0' <= chr <= '9':
                                         offset_4 += 1
-                                    elif 'a' <= buf[offset_4] <= 'f':
+                                    elif 'a' <= chr <= 'f':
                                         offset_4 += 1
-                                    elif 'A' <= buf[offset_4] <= 'F':
+                                    elif 'A' <= chr <= 'F':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -1279,25 +1353,27 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    elif buf[offset_4] == '"':
+                                    
+                                    chr = buf[offset_4]
+                                    if chr == '"':
                                         offset_4 += 1
-                                    elif buf[offset_4] == '\\':
+                                    elif chr == '\\':
                                         offset_4 += 1
-                                    elif buf[offset_4] == '/':
+                                    elif chr == '/':
                                         offset_4 += 1
-                                    elif buf[offset_4] == 'b':
+                                    elif chr == 'b':
                                         offset_4 += 1
-                                    elif buf[offset_4] == 'f':
+                                    elif chr == 'f':
                                         offset_4 += 1
-                                    elif buf[offset_4] == 'n':
+                                    elif chr == 'n':
                                         offset_4 += 1
-                                    elif buf[offset_4] == 'r':
+                                    elif chr == 'r':
                                         offset_4 += 1
-                                    elif buf[offset_4] == 't':
+                                    elif chr == 't':
                                         offset_4 += 1
-                                    elif buf[offset_4] == "'":
+                                    elif chr == "'":
                                         offset_4 += 1
-                                    elif buf[offset_4] == '\n':
+                                    elif chr == '\n':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -1370,16 +1446,18 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    elif '\x00' <= buf[offset_4] <= '\x1f':
+                                    
+                                    chr = buf[offset_4]
+                                    if '\x00' <= chr <= '\x1f':
                                         offset_4 = -1
                                         break
-                                    elif buf[offset_4] == '\\':
+                                    elif chr == '\\':
                                         offset_4 = -1
                                         break
-                                    elif buf[offset_4] == "'":
+                                    elif chr == "'":
                                         offset_4 = -1
                                         break
-                                    elif '\ud800' <= buf[offset_4] <= '\udfff':
+                                    elif '\ud800' <= chr <= '\udfff':
                                         offset_4 = -1
                                         break
                                     else:
@@ -1409,7 +1487,9 @@ cdef class Parser:
                                         if offset_5 == buf_eof:
                                             offset_5 = -1
                                             break
-                                        elif '0' <= buf[offset_5] <= '1':
+                                        
+                                        chr = buf[offset_5]
+                                        if '0' <= chr <= '1':
                                             offset_5 += 1
                                         else:
                                             offset_5 = -1
@@ -1423,11 +1503,13 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    elif '0' <= buf[offset_4] <= '9':
+                                    
+                                    chr = buf[offset_4]
+                                    if '0' <= chr <= '9':
                                         offset_4 += 1
-                                    elif 'a' <= buf[offset_4] <= 'f':
+                                    elif 'a' <= chr <= 'f':
                                         offset_4 += 1
-                                    elif 'A' <= buf[offset_4] <= 'F':
+                                    elif 'A' <= chr <= 'F':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -1436,11 +1518,13 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    elif '0' <= buf[offset_4] <= '9':
+                                    
+                                    chr = buf[offset_4]
+                                    if '0' <= chr <= '9':
                                         offset_4 += 1
-                                    elif 'a' <= buf[offset_4] <= 'f':
+                                    elif 'a' <= chr <= 'f':
                                         offset_4 += 1
-                                    elif 'A' <= buf[offset_4] <= 'F':
+                                    elif 'A' <= chr <= 'F':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -1476,7 +1560,9 @@ cdef class Parser:
                                         if offset_5 == buf_eof:
                                             offset_5 = -1
                                             break
-                                        elif '0' <= buf[offset_5] <= '1':
+                                        
+                                        chr = buf[offset_5]
+                                        if '0' <= chr <= '1':
                                             offset_5 += 1
                                         else:
                                             offset_5 = -1
@@ -1501,9 +1587,11 @@ cdef class Parser:
                                         if offset_5 == buf_eof:
                                             offset_5 = -1
                                             break
-                                        elif '8' <= buf[offset_5] <= '9':
+                                        
+                                        chr = buf[offset_5]
+                                        if '8' <= chr <= '9':
                                             offset_5 += 1
-                                        elif 'A' <= buf[offset_5] <= 'F':
+                                        elif 'A' <= chr <= 'F':
                                             offset_5 += 1
                                         else:
                                             offset_5 = -1
@@ -1517,11 +1605,13 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    elif '0' <= buf[offset_4] <= '9':
+                                    
+                                    chr = buf[offset_4]
+                                    if '0' <= chr <= '9':
                                         offset_4 += 1
-                                    elif 'a' <= buf[offset_4] <= 'f':
+                                    elif 'a' <= chr <= 'f':
                                         offset_4 += 1
-                                    elif 'A' <= buf[offset_4] <= 'F':
+                                    elif 'A' <= chr <= 'F':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -1530,11 +1620,13 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    elif '0' <= buf[offset_4] <= '9':
+                                    
+                                    chr = buf[offset_4]
+                                    if '0' <= chr <= '9':
                                         offset_4 += 1
-                                    elif 'a' <= buf[offset_4] <= 'f':
+                                    elif 'a' <= chr <= 'f':
                                         offset_4 += 1
-                                    elif 'A' <= buf[offset_4] <= 'F':
+                                    elif 'A' <= chr <= 'F':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -1543,11 +1635,13 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    elif '0' <= buf[offset_4] <= '9':
+                                    
+                                    chr = buf[offset_4]
+                                    if '0' <= chr <= '9':
                                         offset_4 += 1
-                                    elif 'a' <= buf[offset_4] <= 'f':
+                                    elif 'a' <= chr <= 'f':
                                         offset_4 += 1
-                                    elif 'A' <= buf[offset_4] <= 'F':
+                                    elif 'A' <= chr <= 'F':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -1556,11 +1650,13 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    elif '0' <= buf[offset_4] <= '9':
+                                    
+                                    chr = buf[offset_4]
+                                    if '0' <= chr <= '9':
                                         offset_4 += 1
-                                    elif 'a' <= buf[offset_4] <= 'f':
+                                    elif 'a' <= chr <= 'f':
                                         offset_4 += 1
-                                    elif 'A' <= buf[offset_4] <= 'F':
+                                    elif 'A' <= chr <= 'F':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -1596,7 +1692,9 @@ cdef class Parser:
                                         if offset_5 == buf_eof:
                                             offset_5 = -1
                                             break
-                                        elif '0' <= buf[offset_5] <= '1':
+                                        
+                                        chr = buf[offset_5]
+                                        if '0' <= chr <= '1':
                                             offset_5 += 1
                                         else:
                                             offset_5 = -1
@@ -1627,9 +1725,11 @@ cdef class Parser:
                                         if offset_5 == buf_eof:
                                             offset_5 = -1
                                             break
-                                        elif '8' <= buf[offset_5] <= '9':
+                                        
+                                        chr = buf[offset_5]
+                                        if '8' <= chr <= '9':
                                             offset_5 += 1
-                                        elif 'A' <= buf[offset_5] <= 'F':
+                                        elif 'A' <= chr <= 'F':
                                             offset_5 += 1
                                         else:
                                             offset_5 = -1
@@ -1643,11 +1743,13 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    elif '0' <= buf[offset_4] <= '9':
+                                    
+                                    chr = buf[offset_4]
+                                    if '0' <= chr <= '9':
                                         offset_4 += 1
-                                    elif 'a' <= buf[offset_4] <= 'f':
+                                    elif 'a' <= chr <= 'f':
                                         offset_4 += 1
-                                    elif 'A' <= buf[offset_4] <= 'F':
+                                    elif 'A' <= chr <= 'F':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -1656,11 +1758,13 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    elif '0' <= buf[offset_4] <= '9':
+                                    
+                                    chr = buf[offset_4]
+                                    if '0' <= chr <= '9':
                                         offset_4 += 1
-                                    elif 'a' <= buf[offset_4] <= 'f':
+                                    elif 'a' <= chr <= 'f':
                                         offset_4 += 1
-                                    elif 'A' <= buf[offset_4] <= 'F':
+                                    elif 'A' <= chr <= 'F':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -1669,11 +1773,13 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    elif '0' <= buf[offset_4] <= '9':
+                                    
+                                    chr = buf[offset_4]
+                                    if '0' <= chr <= '9':
                                         offset_4 += 1
-                                    elif 'a' <= buf[offset_4] <= 'f':
+                                    elif 'a' <= chr <= 'f':
                                         offset_4 += 1
-                                    elif 'A' <= buf[offset_4] <= 'F':
+                                    elif 'A' <= chr <= 'F':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -1682,11 +1788,13 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    elif '0' <= buf[offset_4] <= '9':
+                                    
+                                    chr = buf[offset_4]
+                                    if '0' <= chr <= '9':
                                         offset_4 += 1
-                                    elif 'a' <= buf[offset_4] <= 'f':
+                                    elif 'a' <= chr <= 'f':
                                         offset_4 += 1
-                                    elif 'A' <= buf[offset_4] <= 'F':
+                                    elif 'A' <= chr <= 'F':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -1695,11 +1803,13 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    elif '0' <= buf[offset_4] <= '9':
+                                    
+                                    chr = buf[offset_4]
+                                    if '0' <= chr <= '9':
                                         offset_4 += 1
-                                    elif 'a' <= buf[offset_4] <= 'f':
+                                    elif 'a' <= chr <= 'f':
                                         offset_4 += 1
-                                    elif 'A' <= buf[offset_4] <= 'F':
+                                    elif 'A' <= chr <= 'F':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -1708,11 +1818,13 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    elif '0' <= buf[offset_4] <= '9':
+                                    
+                                    chr = buf[offset_4]
+                                    if '0' <= chr <= '9':
                                         offset_4 += 1
-                                    elif 'a' <= buf[offset_4] <= 'f':
+                                    elif 'a' <= chr <= 'f':
                                         offset_4 += 1
-                                    elif 'A' <= buf[offset_4] <= 'F':
+                                    elif 'A' <= chr <= 'F':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -1721,11 +1833,13 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    elif '0' <= buf[offset_4] <= '9':
+                                    
+                                    chr = buf[offset_4]
+                                    if '0' <= chr <= '9':
                                         offset_4 += 1
-                                    elif 'a' <= buf[offset_4] <= 'f':
+                                    elif 'a' <= chr <= 'f':
                                         offset_4 += 1
-                                    elif 'A' <= buf[offset_4] <= 'F':
+                                    elif 'A' <= chr <= 'F':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -1734,11 +1848,13 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    elif '0' <= buf[offset_4] <= '9':
+                                    
+                                    chr = buf[offset_4]
+                                    if '0' <= chr <= '9':
                                         offset_4 += 1
-                                    elif 'a' <= buf[offset_4] <= 'f':
+                                    elif 'a' <= chr <= 'f':
                                         offset_4 += 1
-                                    elif 'A' <= buf[offset_4] <= 'F':
+                                    elif 'A' <= chr <= 'F':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -1765,25 +1881,27 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    elif buf[offset_4] == '"':
+                                    
+                                    chr = buf[offset_4]
+                                    if chr == '"':
                                         offset_4 += 1
-                                    elif buf[offset_4] == '\\':
+                                    elif chr == '\\':
                                         offset_4 += 1
-                                    elif buf[offset_4] == '/':
+                                    elif chr == '/':
                                         offset_4 += 1
-                                    elif buf[offset_4] == 'b':
+                                    elif chr == 'b':
                                         offset_4 += 1
-                                    elif buf[offset_4] == 'f':
+                                    elif chr == 'f':
                                         offset_4 += 1
-                                    elif buf[offset_4] == 'n':
+                                    elif chr == 'n':
                                         offset_4 += 1
-                                    elif buf[offset_4] == 'r':
+                                    elif chr == 'r':
                                         offset_4 += 1
-                                    elif buf[offset_4] == 't':
+                                    elif chr == 't':
                                         offset_4 += 1
-                                    elif buf[offset_4] == "'":
+                                    elif chr == "'":
                                         offset_4 += 1
-                                    elif buf[offset_4] == '\n':
+                                    elif chr == '\n':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1

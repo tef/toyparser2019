@@ -1452,22 +1452,25 @@ def compile_python(grammar, builder=None, cython=False):
                 f"if {offset} == buf_eof:",
                 f"    {offset} = -1",
                 f"    break",
+                f"",
+                f"chr = buf[{offset}]"
+                f"",
             ))
 
-
-            for literal in rule.args['range']:
+            for idx, literal in enumerate(rule.args['range']):
+                _if = {0:"if"}.get(idx, "elif")
                 if '-' in literal and len(literal) == 3:
                     start, end = repr(literal[0]), repr(literal[2])
 
                     if invert:
                         steps.extend((
-                            f"elif {start} <= buf[{offset}] <= {end}:",
+                            f"{_if} {start} <= chr <= {end}:",
                             f"    {offset} = -1",
                             f"    break",
                         ))
                     else:
                         steps.extend((
-                            f"elif {start} <= buf[{offset}] <= {end}:",
+                            f"{_if} {start} <= chr <= {end}:",
                             f"    {offset} += 1",
                         ))
 
@@ -1475,13 +1478,13 @@ def compile_python(grammar, builder=None, cython=False):
                     literal = repr(literal)
                     if invert:
                         steps.extend((
-                            f"elif buf[{offset}] == {literal}:",
+                            f"{_if} chr == {literal}:",
                             f"    {offset} = -1",
                             f"    break",
                         ))
                     else:
                         steps.extend((
-                            f"elif buf[{offset}] == {literal}:",
+                            f"{_if} chr == {literal}:",
                             f"    {offset} += 1",
                         ))
                 else:
