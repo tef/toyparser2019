@@ -358,9 +358,9 @@ class FunctionBuilder:
         if self.block_mode: raise SyntaxError()
         self.rules.append(LiteralNode(args))
 
-    def whitespace(self, min=0, max=None):
+    def whitespace(self, min=0, max=None, newline=False):
         if self.block_mode: raise SyntaxError()
-        self.rules.append(GrammarNode(WHITESPACE, args=dict(min=min, max=max)))
+        self.rules.append(GrammarNode(WHITESPACE, args=dict(min=min, max=max, newline=newline)))
 
     def capture_value(self, value):
         if self.block_mode: raise SyntaxError()
@@ -565,7 +565,7 @@ class Builtins:
         return RepeatNode(args, min=0, max=1)
     def choice(*args):
         return ChoiceNode(args)
-    whitespace = GrammarNode(WHITESPACE, args={'min':0, 'max':None})
+    whitespace = GrammarNode(WHITESPACE, args={'min':0, 'max':None, 'newline': False})
     eof = GrammarNode(END_OF_FILE)
     end_of_line = GrammarNode(END_OF_LINE)
     start_of_line = GrammarNode(START_OF_LINE)
@@ -631,10 +631,17 @@ class ParserState:
         if self.buf[self.offset:].startswith(text):
             return self.clone(offset=self.offset + len(text))
 
-    def advance_whitespace(self, literals, min=0, max=None):
+    def advance_whitespace(self, literals, newlines, min=0, max=None, newline=False):
         state = self
         count = 0
         while max is None or count < max:
+            if newline:
+                new = state.advance_newline(newlines)
+                if new:
+                    count += 1
+                    state = new
+                    continue
+
             for ws in literals:
                 new = state.advance(ws)
                 if new:
@@ -794,9 +801,10 @@ class Parser:
 
         elif rule.kind == WHITESPACE:
             _min, _max = rule.args['min'], rule.args['max']
+            _newline = rule.args['newline']
             _min = state.values.get(_min, _min)
             _max = state.values.get(_max, _max)
-            return state.advance_whitespace(self.grammar.whitespace, _min, _max)
+            return state.advance_whitespace(self.grammar.whitespace, self.grammar.newline, _min, _max, _newline)
 
         elif rule.kind == MATCH_INDENT:
             return state.advance_indent(self.grammar.whitespace)
@@ -1169,7 +1177,8 @@ def compile_old(grammar, builder=None):
 
         elif rule.kind == WHITESPACE:
             _min, _max = rule.args['min'], rule.args['max']
-            steps.append(f"{state} = {state}.advance_whitespace(self.WHITESPACE, min={repr(_min)}, max={repr(_max)})")
+            _newline = rule.args['newline']
+            steps.append(f"{state} = {state}.advance_whitespace(self.WHITESPACE, self.NEWLINE, {repr(_min)}, {repr(_max)}, {repr(_newline)})")
             if _min is not None and _min > 0:
                 steps.append(f"if {state} is None: break")
             steps.append(f"")
@@ -1401,8 +1410,8 @@ def compile_python(grammar, builder=None, cython=False):
         elif rule.kind == MATCH_INDENT:
             steps.extend((
                 f"{count} = {line_start} + {indent}",
-                # f"if {count} >= buf_eof:"
-                # f"    {offset} == -1; break",
+                f"if {count} >= buf_eof:"
+                f"    {offset} == -1; break",
                 f"while {offset} < {count}:",
                 f"    if buf[{offset}] in self.WHITESPACE:",
                 f"        {offset} +=1",
@@ -1502,23 +1511,44 @@ def compile_python(grammar, builder=None, cython=False):
         elif rule.kind == WHITESPACE:
             _min = rule.args['min']
             _max = rule.args['max']
+            _newline = rule.args['newline']
 
-            cond = [f"{offset} != buf_eof"]
+            cond = [f"{offset} < buf_eof"]
             if _max is not None:
                 cond.append(f"{count} < {repr(_max)}")
             
             cond2 =f"chr in self.WHITESPACE"
             if cython: cond2 = " or ".join(f"chr == {repr(chr)}" for chr in grammar.whitespace)
-            steps.extend((
-                f"{count} = 0",
-                f"while {' and '.join(cond)}:",
-                f"    chr = buf[{offset}]",
-                f"    if {cond2}:",
-                f"        {offset} +=1",
-                f"        {count} +=1",
-                f"    else:",
-                f"        break",
-            ))
+
+            if _newline:
+                cond3 =f"chr in self.NEWLINE"
+                if cython: cond3 = " or ".join(f"chr == {repr(chr)}" for chr in grammar.newline)
+                steps.extend((
+                    f"{count} = 0",
+                    f"while {' and '.join(cond)}:",
+                    f"    chr = buf[{offset}]",
+                    f"    if {cond3}:",
+                    f"        {offset} +=1",
+                    f"        {line_start} = {offset}",
+                    f"        {count} +=1",
+                    f"    elif {cond2}:",
+                    f"        {offset} +=1",
+                    f"        {count} +=1",
+                    f"    else:",
+                    f"        break",
+                ))
+
+            else:
+                steps.extend((
+                    f"{count} = 0",
+                    f"while {' and '.join(cond)}:",
+                    f"    chr = buf[{offset}]",
+                    f"    if {cond2}:",
+                    f"        {offset} +=1",
+                    f"        {count} +=1",
+                    f"    else:",
+                    f"        break",
+                ))
             if _min is not None and _min > 0:
                 steps.extend((
                     f"if {count} < {repr(_min)}:"
@@ -1644,7 +1674,7 @@ def compile_python(grammar, builder=None, cython=False):
             output.append(f"    cpdef Py_UNICODE chr")
         else:
             output.append(f"def parse_{name}(self, buf, offset, line_start, indent, buf_eof, children):")
-        # output.append(f"    print('enter {name}')")
+        # output.append(f"    print('enter {name},',offset,line_start,indent, repr(buf[offset:offset+10]))")
         output.append(f"    while True: # note: return at end of loop")
 
         build_steps(rule, 
@@ -1655,7 +1685,7 @@ def compile_python(grammar, builder=None, cython=False):
                 VarBuilder('children'),
                 VarBuilder("count"))
         output.append(f"        break")
-        # output.append(f"    print('exit {name}', offset)")
+        # output.append(f"    print(('exit' if offset != -1 else 'fail'), '{name}', offset, line_start, repr(buf[offset: offset+10]))")
         output.append(f"    return offset, line_start")
         output.append("")
     # for lineno, line in enumerate(output.output):

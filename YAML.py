@@ -83,36 +83,43 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
     @rule()
     def list_literal(self):
         self.accept("[")
-        self.whitespace()
+        self.whitespace(newline=True)
         with self.capture("list"), self.repeat(max=1):
             self.literal()
             with self.repeat(min=0):
-                self.whitespace()
+                self.whitespace(newline=True)
                 self.accept(",")
-                self.whitespace()
+                self.whitespace(newline=True)
                 self.literal()
+            self.whitespace(newline=True)
+            with self.optional():
+                self.accept(",")
+                self.whitespace(newline=True)
         self.accept("]")
 
     @rule()
     def object_literal(self):
         self.accept("{")
-        self.whitespace()
+        self.whitespace(newline=True)
         with self.capture("object"), self.optional():
             self.string_literal()
-            self.whitespace()
+            self.whitespace() # must be on same line as :
             self.accept(":")
-            self.whitespace()
+            self.whitespace(newline=True)
             self.literal()
-            self.whitespace()
             with self.repeat(min=0):
+                self.whitespace(newline=True)
                 self.accept(",")
-                self.whitespace()
+                self.whitespace(newline=True)
                 self.string_literal()
-                self.whitespace()
+                self.whitespace() # must be on same line as #
                 self.accept(":")
-                self.whitespace()
+                self.whitespace(newline=True)
                 self.literal()
-                self.whitespace()
+            self.whitespace(newline=True)
+            with self.optional():
+                self.accept(",")
+                self.whitespace(newline=True)
         self.accept("}")
 
     @rule()
@@ -148,6 +155,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
                 self.yaml_eol()
                 self.indent()
                 self.accept("-")
+                self.accept(' ')
                 with self.choice():
                     with self.case():
                         self.whitespace()
@@ -167,12 +175,12 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
                 self.accept(":")
                 with self.choice():
                     with self.case():
-                        self.whitespace()
-                        self.indented_value()
-                    with self.case():
                         self.yaml_eol()
                         self.indent()
                         self.accept(' ')
+                        self.whitespace()
+                        self.indented_value()
+                    with self.case():
                         self.whitespace()
                         self.indented_value()
 
@@ -189,6 +197,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
                     with self.case():
                         self.yaml_eol()
                         self.indent()
+                        self.accept(' ')
                         self.whitespace()
                         self.indented_value()
 
@@ -226,20 +235,22 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
 for name, value in YAML.rules.items():
     print(name, '<--', value,'.')
 
-parser = YAML.parser({})
-parser2 = YAML.compile()
+builder = {}
+parser = YAML.parser(builder)
+parser2 = YAML.compile(builder)
 import time
 
 def yaml(buf):
     print(len(buf))
+    print(buf)
     t1 = time.time()
     node = parser.parse(buf)
     t1 = time.time() - t1
     t2 = time.time()
     node2 = parser2.parse(buf)
     t2 = time.time() - t2
-    walk(node)
-    walk(node2)
+    print(node)
+    print(node2)
     print(t1, t2, t2/t1)
     print()
 
@@ -263,8 +274,26 @@ yaml("""\
 """)
 
 yaml("""\
-name: 1
-example: 2
+
+servers:
+    alpha: { "a": 1 }
+example: 
+    a: 1
+    b: 2
+""")
+yaml("""\
+servers:
+  alpha: {
+    "ip": "10.0.0.1",
+    "names": [
+      "alpha",
+      "alpha.server",
+    ],
+  }
+  beta: {
+    "ip": "10.0.0.2",
+    "names": ["beta"],
+  }
 """)
 
 yaml("""\
@@ -281,7 +310,6 @@ database:
   enabled: true
 
 servers:
-  # JSON-style objects
   alpha: {
     "ip": "10.0.0.1",
     "names": [
