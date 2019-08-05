@@ -11,17 +11,17 @@ def unescape(string):
     return codecs.decode(string, 'unicode_escape')
 
 builder = {
-    'document': (lambda buf, children: children),
-    'thematic_break': (lambda buf, children: {"hr": buf}),
-    'atx_heading': (lambda buf, children: {"heading":children}),
-    'atx_level': (lambda buf, children: len(buf)),
-    'setext_heading': (lambda buf, children: {"heading":[children[-1]]+children[:-1]}),
-    'indented_code': (lambda buf, children: {"indented_code":children}),
-    'fenced_code': (lambda buf, children: {"fenced_code":children}),
-    'para': (lambda buf, children: {"para":children}),
-    'blockquote': (lambda buf, children: {"blockquote":children}),
-    'text': (lambda buf, children: buf),
-    'info': (lambda buf, children: {"info":buf}),
+    'document': (lambda buf, pos, end, children: children),
+    'thematic_break': (lambda buf, pos, end, children: {"hr": buf[pos:end]}),
+    'atx_heading': (lambda buf, pos, end, children: {"aheading":children}),
+    'atx_level': (lambda buf, pos, end, children: end-pos),
+    'setext_heading': (lambda buf, pos, end, children: {"sheading":[children[-1]]+children[:-1]}),
+    'indented_code': (lambda buf, pos, end, children: {"indented_code":children}),
+    'fenced_code': (lambda buf, pos, end, children: {"fenced_code":children}),
+    'para': (lambda buf, pos, end, children: {"para":children}),
+    'blockquote': (lambda buf, pos, end, children: {"blockquote":children}),
+    'text': (lambda buf, pos, end, children: buf[pos:end]),
+    'info': (lambda buf, pos, end, children: {"info":buf[pos:end]}),
 }
 
 class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
@@ -323,11 +323,12 @@ for name, value in CommonMark.rules.items():
 print(CommonMark.version)
 
 def markup(buf):
-    parser = CommonMark.parser({})
+    parser = CommonMark.compile(builder)
     node = parser.parse(buf)
     if node:
-        walk(node)
-        print(node.build(buf, builder))
+        print(repr(buf), node)
+        #walk(node)
+        # print(node.build(buf, builder))
 
 markup("# butt")
 markup("""a b c\n\n""")
