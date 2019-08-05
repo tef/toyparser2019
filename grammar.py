@@ -1344,8 +1344,13 @@ def compile_python(grammar, builder=None, cython=False):
             _min = rule.args['min']
             _max = rule.args['max']
 
+            _minv = values.get(_min)
+            _maxv = values.get(_max)
+
             cond = "True"
-            if _max is not None and _max > 1:
+            if _maxv:
+                cond = f"{count} < {_maxv}"
+            elif _max is not None and _max > 0:
                 cond = f"{count} < {repr(_max)}"
 
             steps.extend((
@@ -1366,12 +1371,13 @@ def compile_python(grammar, builder=None, cython=False):
             steps_0.append(f"{offset} = {offset_0}")
             steps_0.append(f"{line_start} = {line_start_0}")
             steps_0.append(f"{count} += 1")
-            if _max == "1":
+            if _max == 1:
                 steps_0.append(f"break")
 
-            if _min is not None and _min > 0:
+            if _minv or (_min is not None and _min > 0):
+                _minv = _minv or repr(_min)
                 steps.extend((
-                    f"if {count} < {repr(_min)}:",
+                    f"if {count} < {_minv}:",
                     f"    {offset} = -1",
                     f"    break",
                 ))
