@@ -8,6 +8,11 @@ class ParseNode:
         self.value = value
     def __str__(self):
         return '{}[{}:{}]'.format(self.name, self.start, self.end)
+    def build(self, buf, builder):
+        children = [child.build(buf, builder) for child in self.children]
+        if self.name == "value": return self.value
+        return builder[self.name](buf, self.start, self.end, children)
+
 
 cdef class Parser:
     cpdef object builder
@@ -99,6 +104,8 @@ cdef class Parser:
                     offset_1 = offset_2
                     line_start_1 = line_start_2
                     count_1 += 1
+                if offset_1 == -1:
+                    break
                 
                 count_1 = 0
                 while offset_1 < buf_eof:
@@ -113,6 +120,8 @@ cdef class Parser:
                 offset_0 = offset_1
                 line_start_0 = line_start_1
                 count_0 += 1
+            if offset_0 == -1:
+                break
             
             count_0 = 0
             while offset_0 < buf_eof:
@@ -186,6 +195,8 @@ cdef class Parser:
                                 offset_3 = offset_4
                                 line_start_1 = line_start_2
                                 count_0 += 1
+                            if offset_3 == -1:
+                                break
                             
                             break
                         if offset_3 == -1:
@@ -458,7 +469,7 @@ cdef class Parser:
                     children_2 = []
                     while True: # case
                         count_0 = 0
-                        while True:
+                        while count_0 < 1:
                             offset_3 = offset_2
                             line_start_2 = line_start_1
                             if offset_3 == buf_eof:
@@ -478,6 +489,9 @@ cdef class Parser:
                             offset_2 = offset_3
                             line_start_1 = line_start_2
                             count_0 += 1
+                            break
+                        if offset_2 == -1:
+                            break
                         
                         if buf[offset_2:offset_2+2] == '0x':
                             offset_2 += 2
@@ -525,6 +539,8 @@ cdef class Parser:
                             offset_2 = offset_3
                             line_start_1 = line_start_2
                             count_0 += 1
+                        if offset_2 == -1:
+                            break
                         
                         
                         break
@@ -539,7 +555,7 @@ cdef class Parser:
                     children_2 = []
                     while True: # case
                         count_0 = 0
-                        while True:
+                        while count_0 < 1:
                             offset_3 = offset_2
                             line_start_2 = line_start_1
                             if offset_3 == buf_eof:
@@ -559,6 +575,9 @@ cdef class Parser:
                             offset_2 = offset_3
                             line_start_1 = line_start_2
                             count_0 += 1
+                            break
+                        if offset_2 == -1:
+                            break
                         
                         if buf[offset_2:offset_2+2] == '0o':
                             offset_2 += 2
@@ -598,6 +617,8 @@ cdef class Parser:
                             offset_2 = offset_3
                             line_start_1 = line_start_2
                             count_0 += 1
+                        if offset_2 == -1:
+                            break
                         
                         
                         break
@@ -612,7 +633,7 @@ cdef class Parser:
                     children_2 = []
                     while True: # case
                         count_0 = 0
-                        while True:
+                        while count_0 < 1:
                             offset_3 = offset_2
                             line_start_2 = line_start_1
                             if offset_3 == buf_eof:
@@ -632,6 +653,9 @@ cdef class Parser:
                             offset_2 = offset_3
                             line_start_1 = line_start_2
                             count_0 += 1
+                            break
+                        if offset_2 == -1:
+                            break
                         
                         if buf[offset_2:offset_2+2] == '0b':
                             offset_2 += 2
@@ -671,6 +695,8 @@ cdef class Parser:
                             offset_2 = offset_3
                             line_start_1 = line_start_2
                             count_0 += 1
+                        if offset_2 == -1:
+                            break
                         
                         
                         break
@@ -685,7 +711,7 @@ cdef class Parser:
                     children_2 = []
                     while True: # case
                         count_0 = 0
-                        while True:
+                        while count_0 < 1:
                             offset_3 = offset_2
                             line_start_2 = line_start_1
                             if offset_3 == buf_eof:
@@ -705,6 +731,9 @@ cdef class Parser:
                             offset_2 = offset_3
                             line_start_1 = line_start_2
                             count_0 += 1
+                            break
+                        if offset_2 == -1:
+                            break
                         
                         while True: # start choice
                             offset_3 = offset_2
@@ -759,6 +788,8 @@ cdef class Parser:
                                     offset_3 = offset_4
                                     line_start_2 = line_start_3
                                     count_0 += 1
+                                if offset_3 == -1:
+                                    break
                                 
                                 
                                 break
@@ -774,7 +805,7 @@ cdef class Parser:
                             break
                         
                         count_0 = 0
-                        while True:
+                        while count_0 < 1:
                             offset_3 = offset_2
                             line_start_2 = line_start_1
                             if buf[offset_3:offset_3+1] == '.':
@@ -802,14 +833,19 @@ cdef class Parser:
                                 offset_3 = offset_4
                                 line_start_2 = line_start_3
                                 count_1 += 1
+                            if offset_3 == -1:
+                                break
                             
                             if offset_2 == offset_3: break
                             offset_2 = offset_3
                             line_start_1 = line_start_2
                             count_0 += 1
+                            break
+                        if offset_2 == -1:
+                            break
                         
                         count_0 = 0
-                        while True:
+                        while count_0 < 1:
                             offset_3 = offset_2
                             line_start_2 = line_start_1
                             if buf[offset_3:offset_3+1] == 'e':
@@ -821,7 +857,7 @@ cdef class Parser:
                                 break
                             
                             count_1 = 0
-                            while True:
+                            while count_1 < 1:
                                 offset_4 = offset_3
                                 line_start_3 = line_start_2
                                 if buf[offset_4:offset_4+1] == '+':
@@ -851,16 +887,24 @@ cdef class Parser:
                                     offset_4 = offset_5
                                     line_start_3 = line_start_4
                                     count_2 += 1
+                                if offset_4 == -1:
+                                    break
                                 
                                 if offset_3 == offset_4: break
                                 offset_3 = offset_4
                                 line_start_2 = line_start_3
                                 count_1 += 1
+                                break
+                            if offset_3 == -1:
+                                break
                             
                             if offset_2 == offset_3: break
                             offset_2 = offset_3
                             line_start_1 = line_start_2
                             count_0 += 1
+                            break
+                        if offset_2 == -1:
+                            break
                         
                         
                         break
@@ -1396,6 +1440,8 @@ cdef class Parser:
                             offset_2 = offset_3
                             line_start_1 = line_start_2
                             count_0 += 1
+                        if offset_2 == -1:
+                            break
                         
                         break
                     if offset_2 == -1:
@@ -1924,6 +1970,8 @@ cdef class Parser:
                             offset_2 = offset_3
                             line_start_1 = line_start_2
                             count_0 += 1
+                        if offset_2 == -1:
+                            break
                         
                         break
                     if offset_2 == -1:
@@ -1975,7 +2023,7 @@ cdef class Parser:
             children_1 = []
             while True: # start capture
                 count_0 = 0
-                while True:
+                while count_0 < 1:
                     offset_2 = offset_1
                     line_start_1 = line_start_0
                     offset_2, line_start_1 = self.parse_rson_value(buf, offset_2, line_start_1, indent_0, buf_eof, children_1)
@@ -2008,13 +2056,15 @@ cdef class Parser:
                         offset_2 = offset_3
                         line_start_1 = line_start_2
                         count_1 += 1
+                    if offset_2 == -1:
+                        break
                     
                     offset_2, line_start_1 = self.parse_comment(buf, offset_2, line_start_1, indent_0, buf_eof, children_1)
                     if offset_2 == -1: break
                     
                     
                     count_1 = 0
-                    while True:
+                    while count_1 < 1:
                         offset_3 = offset_2
                         line_start_2 = line_start_1
                         if buf[offset_3:offset_3+1] == ',':
@@ -2031,11 +2081,17 @@ cdef class Parser:
                         offset_2 = offset_3
                         line_start_1 = line_start_2
                         count_1 += 1
+                        break
+                    if offset_2 == -1:
+                        break
                     
                     if offset_1 == offset_2: break
                     offset_1 = offset_2
                     line_start_0 = line_start_1
                     count_0 += 1
+                    break
+                if offset_1 == -1:
+                    break
                 
                 break
             if offset_1 == -1:
@@ -2075,7 +2131,7 @@ cdef class Parser:
             children_1 = []
             while True: # start capture
                 count_0 = 0
-                while True:
+                while count_0 < 1:
                     offset_2 = offset_1
                     line_start_1 = line_start_0
                     offset_3 = offset_2
@@ -2174,9 +2230,11 @@ cdef class Parser:
                         offset_2 = offset_3
                         line_start_1 = line_start_2
                         count_1 += 1
+                    if offset_2 == -1:
+                        break
                     
                     count_1 = 0
-                    while True:
+                    while count_1 < 1:
                         offset_3 = offset_2
                         line_start_2 = line_start_1
                         if buf[offset_3:offset_3+1] == ',':
@@ -2193,11 +2251,17 @@ cdef class Parser:
                         offset_2 = offset_3
                         line_start_1 = line_start_2
                         count_1 += 1
+                        break
+                    if offset_2 == -1:
+                        break
                     
                     if offset_1 == offset_2: break
                     offset_1 = offset_2
                     line_start_0 = line_start_1
                     count_0 += 1
+                    break
+                if offset_1 == -1:
+                    break
                 
                 break
             if offset_1 == -1:

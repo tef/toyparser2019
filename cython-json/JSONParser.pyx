@@ -1,4 +1,4 @@
-# cython: language_level=3
+# cython: language_level=3, bounds_check=False
 class ParseNode:
     def __init__(self, name, start, end, children, value):
         self.name = name
@@ -8,6 +8,11 @@ class ParseNode:
         self.value = value
     def __str__(self):
         return '{}[{}:{}]'.format(self.name, self.start, self.end)
+    def build(self, buf, builder):
+        children = [child.build(buf, builder) for child in self.children]
+        if self.name == "value": return self.value
+        return builder[self.name](buf, self.start, self.end, children)
+
 
 cdef class Parser:
     cpdef object builder
@@ -24,50 +29,50 @@ cdef class Parser:
         if children and new_offset > offset: return children[-1]
         if err is not None: raise err(buf, offset, 'no')
     
-    cdef (int, int) parse_document(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):
-        cdef int count
+    cdef (int, int) parse_document(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):
+        cdef int count_0
         cpdef Py_UCS4 chr
         while True: # note: return at end of loop
-            count = 0
-            while offset < buf_eof:
-                chr = buf[offset]
+            count_0 = 0
+            while offset_0 < buf_eof:
+                chr = buf[offset_0]
                 if chr == 32 or chr == 9 or chr == 13 or chr == 10:
-                    offset +=1
-                    count +=1
+                    offset_0 +=1
+                    count_0 +=1
                 else:
                     break
             
-            offset_1 = offset
+            offset_1 = offset_0
             children_1 = []
             while True: # start capture
                 while True: # start choice
                     offset_2 = offset_1
-                    line_start_1 = line_start
+                    line_start_1 = line_start_0
                     children_2 = []
                     while True: # case
-                        offset_2, line_start_1 = self.parse_json_list(buf, offset_2, line_start_1, indent, buf_eof, children_2)
+                        offset_2, line_start_1 = self.parse_json_list(buf, offset_2, line_start_1, indent_0, buf_eof, children_2)
                         if offset_2 == -1: break
                         
                         
                         break
                     if offset_2 != -1:
                         offset_1 = offset_2
-                        line_start = line_start_1
+                        line_start_0 = line_start_1
                         children_1.extend(children_2)
                         break
                     # end case
                     offset_2 = offset_1
-                    line_start_1 = line_start
+                    line_start_1 = line_start_0
                     children_2 = []
                     while True: # case
-                        offset_2, line_start_1 = self.parse_json_object(buf, offset_2, line_start_1, indent, buf_eof, children_2)
+                        offset_2, line_start_1 = self.parse_json_object(buf, offset_2, line_start_1, indent_0, buf_eof, children_2)
                         if offset_2 == -1: break
                         
                         
                         break
                     if offset_2 != -1:
                         offset_1 = offset_2
-                        line_start = line_start_1
+                        line_start_0 = line_start_1
                         children_1.extend(children_2)
                         break
                     # end case
@@ -78,25 +83,25 @@ cdef class Parser:
                 
                 break
             if offset_1 == -1:
-                offset = -1
+                offset_0 = -1
                 break
             if self.builder is not None:
-                children.append(self.builder['document'](buf, offset, offset_1, children_1))
+                children_0.append(self.builder['document'](buf, offset_0, offset_1, children_1))
             else:
-                children.append(ParseNode('document', offset, offset_1, list(children_1), None))
-            offset = offset_1
+                children_0.append(ParseNode('document', offset_0, offset_1, list(children_1), None))
+            offset_0 = offset_1
             
             
             break
-        return offset, line_start
+        return offset_0, line_start_0
     
-    cdef (int, int) parse_json_value(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):
-        cdef int count
+    cdef (int, int) parse_json_value(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):
+        cdef int count_0
         cpdef Py_UCS4 chr
         while True: # note: return at end of loop
             while True: # start choice
-                offset_1 = offset
-                line_start_1 = line_start
+                offset_1 = offset_0
+                line_start_1 = line_start_0
                 children_1 = []
                 while True: # case
                     offset_2 = offset_1
@@ -121,13 +126,13 @@ cdef class Parser:
                     
                     break
                 if offset_1 != -1:
-                    offset = offset_1
-                    line_start = line_start_1
-                    children.extend(children_1)
+                    offset_0 = offset_1
+                    line_start_0 = line_start_1
+                    children_0.extend(children_1)
                     break
                 # end case
-                offset_1 = offset
-                line_start_1 = line_start
+                offset_1 = offset_0
+                line_start_1 = line_start_0
                 children_1 = []
                 while True: # case
                     offset_2 = offset_1
@@ -152,13 +157,13 @@ cdef class Parser:
                     
                     break
                 if offset_1 != -1:
-                    offset = offset_1
-                    line_start = line_start_1
-                    children.extend(children_1)
+                    offset_0 = offset_1
+                    line_start_0 = line_start_1
+                    children_0.extend(children_1)
                     break
                 # end case
-                offset_1 = offset
-                line_start_1 = line_start
+                offset_1 = offset_0
+                line_start_1 = line_start_0
                 children_1 = []
                 while True: # case
                     offset_2 = offset_1
@@ -183,94 +188,94 @@ cdef class Parser:
                     
                     break
                 if offset_1 != -1:
-                    offset = offset_1
-                    line_start = line_start_1
-                    children.extend(children_1)
+                    offset_0 = offset_1
+                    line_start_0 = line_start_1
+                    children_0.extend(children_1)
                     break
                 # end case
-                offset_1 = offset
-                line_start_1 = line_start
+                offset_1 = offset_0
+                line_start_1 = line_start_0
                 children_1 = []
                 while True: # case
-                    offset_1, line_start_1 = self.parse_json_number(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+                    offset_1, line_start_1 = self.parse_json_number(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)
                     if offset_1 == -1: break
                     
                     
                     
                     break
                 if offset_1 != -1:
-                    offset = offset_1
-                    line_start = line_start_1
-                    children.extend(children_1)
+                    offset_0 = offset_1
+                    line_start_0 = line_start_1
+                    children_0.extend(children_1)
                     break
                 # end case
-                offset_1 = offset
-                line_start_1 = line_start
+                offset_1 = offset_0
+                line_start_1 = line_start_0
                 children_1 = []
                 while True: # case
-                    offset_1, line_start_1 = self.parse_json_string(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+                    offset_1, line_start_1 = self.parse_json_string(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)
                     if offset_1 == -1: break
                     
                     
                     
                     break
                 if offset_1 != -1:
-                    offset = offset_1
-                    line_start = line_start_1
-                    children.extend(children_1)
+                    offset_0 = offset_1
+                    line_start_0 = line_start_1
+                    children_0.extend(children_1)
                     break
                 # end case
-                offset_1 = offset
-                line_start_1 = line_start
+                offset_1 = offset_0
+                line_start_1 = line_start_0
                 children_1 = []
                 while True: # case
-                    offset_1, line_start_1 = self.parse_json_list(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+                    offset_1, line_start_1 = self.parse_json_list(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)
                     if offset_1 == -1: break
                     
                     
                     
                     break
                 if offset_1 != -1:
-                    offset = offset_1
-                    line_start = line_start_1
-                    children.extend(children_1)
+                    offset_0 = offset_1
+                    line_start_0 = line_start_1
+                    children_0.extend(children_1)
                     break
                 # end case
-                offset_1 = offset
-                line_start_1 = line_start
+                offset_1 = offset_0
+                line_start_1 = line_start_0
                 children_1 = []
                 while True: # case
-                    offset_1, line_start_1 = self.parse_json_object(buf, offset_1, line_start_1, indent, buf_eof, children_1)
+                    offset_1, line_start_1 = self.parse_json_object(buf, offset_1, line_start_1, indent_0, buf_eof, children_1)
                     if offset_1 == -1: break
                     
                     
                     
                     break
                 if offset_1 != -1:
-                    offset = offset_1
-                    line_start = line_start_1
-                    children.extend(children_1)
+                    offset_0 = offset_1
+                    line_start_0 = line_start_1
+                    children_0.extend(children_1)
                     break
                 # end case
-                offset = -1 # no more choices
+                offset_0 = -1 # no more choices
                 break # end choice
-            if offset == -1:
+            if offset_0 == -1:
                 break
             
             break
-        return offset, line_start
+        return offset_0, line_start_0
     
-    cdef (int, int) parse_json_number(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):
-        cdef int count
+    cdef (int, int) parse_json_number(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):
+        cdef int count_0
         cpdef Py_UCS4 chr
         while True: # note: return at end of loop
-            offset_1 = offset
+            offset_1 = offset_0
             children_1 = []
             while True: # start capture
-                count = 0
-                while True:
+                count_0 = 0
+                while count_0 < 1:
                     offset_2 = offset_1
-                    line_start_1 = line_start
+                    line_start_1 = line_start_0
                     if buf[offset_2:offset_2+1] == '-':
                         offset_2 += 1
                     else:
@@ -279,12 +284,15 @@ cdef class Parser:
                     
                     if offset_1 == offset_2: break
                     offset_1 = offset_2
-                    line_start = line_start_1
-                    count += 1
+                    line_start_0 = line_start_1
+                    count_0 += 1
+                    break
+                if offset_1 == -1:
+                    break
                 
                 while True: # start choice
                     offset_2 = offset_1
-                    line_start_1 = line_start
+                    line_start_1 = line_start_0
                     children_2 = []
                     while True: # case
                         if buf[offset_2:offset_2+1] == '0':
@@ -297,12 +305,12 @@ cdef class Parser:
                         break
                     if offset_2 != -1:
                         offset_1 = offset_2
-                        line_start = line_start_1
+                        line_start_0 = line_start_1
                         children_1.extend(children_2)
                         break
                     # end case
                     offset_2 = offset_1
-                    line_start_1 = line_start
+                    line_start_1 = line_start_0
                     children_2 = []
                     while True: # case
                         if offset_2 == buf_eof:
@@ -316,7 +324,7 @@ cdef class Parser:
                             offset_2 = -1
                             break
                         
-                        count = 0
+                        count_0 = 0
                         while True:
                             offset_3 = offset_2
                             line_start_2 = line_start_1
@@ -334,13 +342,15 @@ cdef class Parser:
                             if offset_2 == offset_3: break
                             offset_2 = offset_3
                             line_start_1 = line_start_2
-                            count += 1
+                            count_0 += 1
+                        if offset_2 == -1:
+                            break
                         
                         
                         break
                     if offset_2 != -1:
                         offset_1 = offset_2
-                        line_start = line_start_1
+                        line_start_0 = line_start_1
                         children_1.extend(children_2)
                         break
                     # end case
@@ -349,10 +359,10 @@ cdef class Parser:
                 if offset_1 == -1:
                     break
                 
-                count = 0
-                while True:
+                count_0 = 0
+                while count_0 < 1:
                     offset_2 = offset_1
-                    line_start_1 = line_start
+                    line_start_1 = line_start_0
                     if buf[offset_2:offset_2+1] == '.':
                         offset_2 += 1
                     else:
@@ -378,16 +388,21 @@ cdef class Parser:
                         offset_2 = offset_3
                         line_start_1 = line_start_2
                         count_1 += 1
+                    if offset_2 == -1:
+                        break
                     
                     if offset_1 == offset_2: break
                     offset_1 = offset_2
-                    line_start = line_start_1
-                    count += 1
+                    line_start_0 = line_start_1
+                    count_0 += 1
+                    break
+                if offset_1 == -1:
+                    break
                 
-                count = 0
-                while True:
+                count_0 = 0
+                while count_0 < 1:
                     offset_2 = offset_1
-                    line_start_1 = line_start
+                    line_start_1 = line_start_0
                     if buf[offset_2:offset_2+1] == 'e':
                         offset_2 += 1
                     elif buf[offset_2:offset_2+1] == 'E':
@@ -397,7 +412,7 @@ cdef class Parser:
                         break
                     
                     count_1 = 0
-                    while True:
+                    while count_1 < 1:
                         offset_3 = offset_2
                         line_start_2 = line_start_1
                         if buf[offset_3:offset_3+1] == '+':
@@ -427,47 +442,55 @@ cdef class Parser:
                             offset_3 = offset_4
                             line_start_2 = line_start_3
                             count_2 += 1
+                        if offset_3 == -1:
+                            break
                         
                         if offset_2 == offset_3: break
                         offset_2 = offset_3
                         line_start_1 = line_start_2
                         count_1 += 1
+                        break
+                    if offset_2 == -1:
+                        break
                     
                     if offset_1 == offset_2: break
                     offset_1 = offset_2
-                    line_start = line_start_1
-                    count += 1
+                    line_start_0 = line_start_1
+                    count_0 += 1
+                    break
+                if offset_1 == -1:
+                    break
                 
                 break
             if offset_1 == -1:
-                offset = -1
+                offset_0 = -1
                 break
             if self.builder is not None:
-                children.append(self.builder['number'](buf, offset, offset_1, children_1))
+                children_0.append(self.builder['number'](buf, offset_0, offset_1, children_1))
             else:
-                children.append(ParseNode('number', offset, offset_1, list(children_1), None))
-            offset = offset_1
+                children_0.append(ParseNode('number', offset_0, offset_1, list(children_1), None))
+            offset_0 = offset_1
             
             break
-        return offset, line_start
+        return offset_0, line_start_0
     
-    cdef (int, int) parse_json_string(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):
-        cdef int count
+    cdef (int, int) parse_json_string(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):
+        cdef int count_0
         cpdef Py_UCS4 chr
         while True: # note: return at end of loop
-            if buf[offset:offset+1] == '"':
-                offset += 1
+            if buf[offset_0:offset_0+1] == '"':
+                offset_0 += 1
             else:
-                offset = -1
+                offset_0 = -1
                 break
             
-            offset_1 = offset
+            offset_1 = offset_0
             children_1 = []
             while True: # start capture
-                count = 0
+                count_0 = 0
                 while True:
                     offset_2 = offset_1
-                    line_start_1 = line_start
+                    line_start_1 = line_start_0
                     while True: # start choice
                         offset_3 = offset_2
                         line_start_2 = line_start_1
@@ -623,56 +646,58 @@ cdef class Parser:
                     
                     if offset_1 == offset_2: break
                     offset_1 = offset_2
-                    line_start = line_start_1
-                    count += 1
+                    line_start_0 = line_start_1
+                    count_0 += 1
+                if offset_1 == -1:
+                    break
                 
                 break
             if offset_1 == -1:
-                offset = -1
+                offset_0 = -1
                 break
             if self.builder is not None:
-                children.append(self.builder['string'](buf, offset, offset_1, children_1))
+                children_0.append(self.builder['string'](buf, offset_0, offset_1, children_1))
             else:
-                children.append(ParseNode('string', offset, offset_1, list(children_1), None))
-            offset = offset_1
+                children_0.append(ParseNode('string', offset_0, offset_1, list(children_1), None))
+            offset_0 = offset_1
             
-            if buf[offset:offset+1] == '"':
-                offset += 1
+            if buf[offset_0:offset_0+1] == '"':
+                offset_0 += 1
             else:
-                offset = -1
+                offset_0 = -1
                 break
             
             
             break
-        return offset, line_start
+        return offset_0, line_start_0
     
-    cdef (int, int) parse_json_list(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):
-        cdef int count
+    cdef (int, int) parse_json_list(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):
+        cdef int count_0
         cpdef Py_UCS4 chr
         while True: # note: return at end of loop
-            if buf[offset:offset+1] == '[':
-                offset += 1
+            if buf[offset_0:offset_0+1] == '[':
+                offset_0 += 1
             else:
-                offset = -1
+                offset_0 = -1
                 break
             
-            count = 0
-            while offset < buf_eof:
-                chr = buf[offset]
+            count_0 = 0
+            while offset_0 < buf_eof:
+                chr = buf[offset_0]
                 if chr == 32 or chr == 9 or chr == 13 or chr == 10:
-                    offset +=1
-                    count +=1
+                    offset_0 +=1
+                    count_0 +=1
                 else:
                     break
             
-            offset_1 = offset
+            offset_1 = offset_0
             children_1 = []
             while True: # start capture
-                count = 0
-                while True:
+                count_0 = 0
+                while count_0 < 1:
                     offset_2 = offset_1
-                    line_start_1 = line_start
-                    offset_2, line_start_1 = self.parse_json_value(buf, offset_2, line_start_1, indent, buf_eof, children_1)
+                    line_start_1 = line_start_0
+                    offset_2, line_start_1 = self.parse_json_value(buf, offset_2, line_start_1, indent_0, buf_eof, children_1)
                     if offset_2 == -1: break
                     
                     
@@ -704,7 +729,7 @@ cdef class Parser:
                             else:
                                 break
                         
-                        offset_3, line_start_2 = self.parse_json_value(buf, offset_3, line_start_2, indent, buf_eof, children_1)
+                        offset_3, line_start_2 = self.parse_json_value(buf, offset_3, line_start_2, indent_0, buf_eof, children_1)
                         if offset_3 == -1: break
                         
                         
@@ -712,62 +737,67 @@ cdef class Parser:
                         offset_2 = offset_3
                         line_start_1 = line_start_2
                         count_1 += 1
+                    if offset_2 == -1:
+                        break
                     
                     if offset_1 == offset_2: break
                     offset_1 = offset_2
-                    line_start = line_start_1
-                    count += 1
+                    line_start_0 = line_start_1
+                    count_0 += 1
+                    break
+                if offset_1 == -1:
+                    break
                 
                 break
             if offset_1 == -1:
-                offset = -1
+                offset_0 = -1
                 break
             if self.builder is not None:
-                children.append(self.builder['list'](buf, offset, offset_1, children_1))
+                children_0.append(self.builder['list'](buf, offset_0, offset_1, children_1))
             else:
-                children.append(ParseNode('list', offset, offset_1, list(children_1), None))
-            offset = offset_1
+                children_0.append(ParseNode('list', offset_0, offset_1, list(children_1), None))
+            offset_0 = offset_1
             
-            if buf[offset:offset+1] == ']':
-                offset += 1
+            if buf[offset_0:offset_0+1] == ']':
+                offset_0 += 1
             else:
-                offset = -1
+                offset_0 = -1
                 break
             
             
             break
-        return offset, line_start
+        return offset_0, line_start_0
     
-    cdef (int, int) parse_json_object(self, str buf, int offset, int line_start, int indent, int buf_eof, list children):
-        cdef int count
+    cdef (int, int) parse_json_object(self, str buf, int offset_0, int line_start_0, int indent_0, int buf_eof, list children_0):
+        cdef int count_0
         cpdef Py_UCS4 chr
         while True: # note: return at end of loop
-            if buf[offset:offset+1] == '{':
-                offset += 1
+            if buf[offset_0:offset_0+1] == '{':
+                offset_0 += 1
             else:
-                offset = -1
+                offset_0 = -1
                 break
             
-            count = 0
-            while offset < buf_eof:
-                chr = buf[offset]
+            count_0 = 0
+            while offset_0 < buf_eof:
+                chr = buf[offset_0]
                 if chr == 32 or chr == 9 or chr == 13 or chr == 10:
-                    offset +=1
-                    count +=1
+                    offset_0 +=1
+                    count_0 +=1
                 else:
                     break
             
-            offset_1 = offset
+            offset_1 = offset_0
             children_1 = []
             while True: # start capture
-                count = 0
-                while True:
+                count_0 = 0
+                while count_0 < 1:
                     offset_2 = offset_1
-                    line_start_1 = line_start
+                    line_start_1 = line_start_0
                     offset_3 = offset_2
                     children_2 = []
                     while True: # start capture
-                        offset_3, line_start_1 = self.parse_json_string(buf, offset_3, line_start_1, indent, buf_eof, children_2)
+                        offset_3, line_start_1 = self.parse_json_string(buf, offset_3, line_start_1, indent_0, buf_eof, children_2)
                         if offset_3 == -1: break
                         
                         
@@ -795,7 +825,7 @@ cdef class Parser:
                             else:
                                 break
                         
-                        offset_3, line_start_1 = self.parse_json_value(buf, offset_3, line_start_1, indent, buf_eof, children_2)
+                        offset_3, line_start_1 = self.parse_json_value(buf, offset_3, line_start_1, indent_0, buf_eof, children_2)
                         if offset_3 == -1: break
                         
                         
@@ -840,7 +870,7 @@ cdef class Parser:
                         offset_4 = offset_3
                         children_2 = []
                         while True: # start capture
-                            offset_4, line_start_2 = self.parse_json_string(buf, offset_4, line_start_2, indent, buf_eof, children_2)
+                            offset_4, line_start_2 = self.parse_json_string(buf, offset_4, line_start_2, indent_0, buf_eof, children_2)
                             if offset_4 == -1: break
                             
                             
@@ -868,7 +898,7 @@ cdef class Parser:
                                 else:
                                     break
                             
-                            offset_4, line_start_2 = self.parse_json_value(buf, offset_4, line_start_2, indent, buf_eof, children_2)
+                            offset_4, line_start_2 = self.parse_json_value(buf, offset_4, line_start_2, indent_0, buf_eof, children_2)
                             if offset_4 == -1: break
                             
                             
@@ -895,29 +925,34 @@ cdef class Parser:
                         offset_2 = offset_3
                         line_start_1 = line_start_2
                         count_1 += 1
+                    if offset_2 == -1:
+                        break
                     
                     if offset_1 == offset_2: break
                     offset_1 = offset_2
-                    line_start = line_start_1
-                    count += 1
+                    line_start_0 = line_start_1
+                    count_0 += 1
+                    break
+                if offset_1 == -1:
+                    break
                 
                 break
             if offset_1 == -1:
-                offset = -1
+                offset_0 = -1
                 break
             if self.builder is not None:
-                children.append(self.builder['object'](buf, offset, offset_1, children_1))
+                children_0.append(self.builder['object'](buf, offset_0, offset_1, children_1))
             else:
-                children.append(ParseNode('object', offset, offset_1, list(children_1), None))
-            offset = offset_1
+                children_0.append(ParseNode('object', offset_0, offset_1, list(children_1), None))
+            offset_0 = offset_1
             
-            if buf[offset:offset+1] == '}':
-                offset += 1
+            if buf[offset_0:offset_0+1] == '}':
+                offset_0 += 1
             else:
-                offset = -1
+                offset_0 = -1
                 break
             
             
             break
-        return offset, line_start
+        return offset_0, line_start_0
     
