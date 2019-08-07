@@ -26,7 +26,7 @@ class Markup(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
         self.eof()
 
     element = rule(
-        header | para | hr | empty_lines
+        blockquote | header | para | hr | empty_lines
     )
 
     inline_element = rule(word)
@@ -34,7 +34,7 @@ class Markup(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
     @rule()
     def header(self):
         with self.capture("header"):
-            with self.count('>') as c, self.repeat(min=1):
+            with self.count('#') as c, self.repeat(min=1):
                 self.accept("#")
             self.capture_value(c)
             with self.optional():
@@ -101,7 +101,16 @@ class Markup(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
         with self.capture('text'), self.repeat(min=1):
             self.range(" ", "\n", invert=True)
 
+    @rule()
+    def start_blockquote(self):
+        self.whitespace()
+        self.accept('>')
         
+    @rule()
+    def blockquote(self):
+        self.start_blockquote()
+        with self.indented(prefix="start_blockquote"):
+            self.para()
 for name, value in Markup.rules.items():
     print(name, '<--', value,'.')
 

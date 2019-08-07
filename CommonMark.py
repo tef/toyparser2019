@@ -143,14 +143,14 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             self.whitespace()
             self.indented_code_line()
             with self.repeat():
-                self.start_of_line()
                 with self.choice():
                     with self.case():
-                        self.indent()
+                        self.start_of_line()
                         self.indented_code_line()
                     with self.case():
                         self.whitespace()
                         self.newline()
+                        self.start_of_line()
                         self.capture_value("")
 
     @rule()
@@ -223,26 +223,36 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
 
     @rule()
     def start_blockquote(self):
-        self.whitespace(max=3)
-        self.accept('>')
-        self.whitespace(max=1)
+        with self.choice():
+            with self.case():
+                self.whitespace(max=3)
+                self.accept('>')
+                self.whitespace(max=1)
+            with self.case(), self.reject(), self.choice():
+                with self.case(): self.thematic_break()
+                with self.case(): self.setext_heading_line()
+                with self.case(): self.start_fenced_block()
+
 
 
     @rule()
     def blockquote(self):
         with self.trace(False), self.capture("blockquote"):
-            self.start_blockquote()
-            self.inline_para()
-            with self.repeat():
-                self.end_of_line()
-                self.start_of_line()
-                self.start_blockquote()
-                with self.choice():
-                    with self.case():
-                        self.inline_para()
-                    with self.case():
-                        self.capture_value('\n')
-            self.line_end()
+            self.whitespace(max=3)
+            self.accept('>')
+            self.whitespace(max=1)
+            with self.indented(prefix="start_blockquote"):
+                self.block_element()
+                with self.repeat():
+                    self.start_of_line()
+                    with self.choice():
+                        with self.case():
+                            self.block_element()
+                            self.newline()
+                        with self.case():
+                            self.whitespace()
+                            self.newline()
+                            self.capture_value('\n')
 
 
     @rule()
@@ -256,6 +266,10 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                     self.eof()
                 with self.case():
                     self.newline()
+                    self.whitespace()
+                with self.case():
+                    self.newline()
+                    self.start_of_line()
                     self.whitespace()
             with self.choice():
                 # 4.1 Ex 27, 28. Thematic Breaks can interrupt a paragraph
@@ -274,20 +288,29 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                 self.newline()
                 self.whitespace()
                 self.newline()
+            with self.reject():
+                self.newline()
+                self.start_of_line()
+                self.whitespace()
+                self.newline()
             with self.choice():
                 with self.case(): 
                     self.whitespace(max=1)
                     self.newline()
+                    self.start_of_line()
+                    with self.reject():
+                        self.para_interrupt()
                     self.whitespace()
                 with self.case():
                     self.whitespace(min=2)
                     self.newline()
+                    self.start_of_line()
+                    with self.reject():
+                        self.para_interrupt()
                     self.capture_value("\n")
                 with self.case():
                     self.whitespace()
             # 4.1 Ex 27, 28. Thematic Breaks can interrupt a paragraph
-            with self.reject():
-                self.para_interrupt()
             with self.capture('text'):
                 self.inline_element()
 
@@ -305,6 +328,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
         with self.repeat(min=1):
             self.whitespace()
             self.newline()
+            self.start_of_line()
 
     @rule() # 2.1 line ends by newline or eof
     def line_end(self):
@@ -322,14 +346,16 @@ for name, value in CommonMark.rules.items():
 
 print(CommonMark.version)
 
-def markup(buf):
+def _markup(buf):
     parser = CommonMark.parser(builder)
     node = parser.parse(buf)
     if node:
-        print(repr(buf), node)
+        print(buf)
+        print(node)
         #walk(node)
         # print(node.build(buf, builder))
 
+markup = _markup # lambda x:x
 markup("# butt")
 markup("""a b c\n\n""")
 markup("""a b c\n""")
@@ -411,7 +437,7 @@ butt
 markup("# butt\n")
 markup("   ##### butt #####\n")
 markup("   ##### butt ##### a\n")
-markup("""
+_markup("""
 ab
 c
 
@@ -443,12 +469,9 @@ j l k
 b r b
 """
 )
-markup("""
-> a b
-c d e 
-> f g h
->
-> i   j dd kkk       
-kkk    
+_markup("""\
+> a 
+> b
+
 ddff
 """)

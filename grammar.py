@@ -845,13 +845,16 @@ def compile_python(grammar, builder=None, cython=False):
             steps.append(f'{prefix}.pop()')
             steps.append(f'if {offset} == -1: break')
 
-        elif rule.kind == MATCH_INDENT:
+        elif rule.kind == MATCH_INDENT or rule.kind == START_OF_LINE:
             cond = f"chr in self.WHITESPACE"
             if cython: cond = " or ".join(f"chr == {repr(ord(chr))}" for chr in grammar.whitespace)
 
             offset_0 = offset.incr()
 
             steps.extend((
+                f"if {offset} != {line_start}:",
+                f"    {offset} = -1",
+                f"    break",
                 f"for indent in {prefix}:",
                 f"    _children, _prefix = [], []",
                 f"    {offset}, {line_start} = indent(buf, {offset}, {line_start}, _prefix, buf_eof, _children)",
@@ -1042,12 +1045,6 @@ def compile_python(grammar, builder=None, cython=False):
                 f"    {offset} = -1",
                 f"    break",
             ))
-        elif rule.kind == START_OF_LINE:
-            steps.extend((
-                f"if {offset} != {line_start}:",
-                f"    {offset} = -1",
-                f"    break",
-            ))
         elif rule.kind == END_OF_LINE:
             cond =f"chr in self.NEWLINE"
             if cython: cond = " or ".join(f"chr == {repr(ord(chr))}" for chr in grammar.newline)
@@ -1156,7 +1153,7 @@ def compile_python(grammar, builder=None, cython=False):
             output.append(f"    cpdef Py_UCS4 chr")
         else:
             output.append(f"def parse_{name}(self, buf, offset_0, line_start_0, prefix_0, buf_eof, children_0):")
-#        output.append(f"    print('enter {name},',offset_0,line_start_0,prefix_0, repr(buf[offset_0:offset_0+10]))")
+   #     output.append(f"    print('enter {name},',offset_0,line_start_0,prefix_0, repr(buf[offset_0:offset_0+10]))")
         output.append(f"    while True: # note: return at end of loop")
 
         values = {}
@@ -1168,7 +1165,7 @@ def compile_python(grammar, builder=None, cython=False):
                 VarBuilder('children'),
                 VarBuilder("count"), values)
         output.append(f"        break")
-        # output.append(f"    print(('exit' if offset_0 != -1 else 'fail'), '{name}', offset_0, line_start_0, repr(buf[offset_0: offset_0+10]))")
+    #     output.append(f"    print(('exit' if offset_0 != -1 else 'fail'), '{name}', offset_0, line_start_0, repr(buf[offset_0: offset_0+10]))")
         output.append(f"    return offset_0, line_start_0")
         output.append("")
     # for lineno, line in enumerate(output.output):

@@ -147,14 +147,12 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
                 with self.case():
                     self.yaml_eol()
                     self.start_of_line()
-                    self.indent()
                     self.whitespace(min=1)
                     self.indented_value()
 
             with self.repeat():
                 self.yaml_eol()
                 self.start_of_line()
-                self.indent()
                 self.accept("-")
                 self.whitespace(min=1)
                 with self.choice():
@@ -164,7 +162,6 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
                     with self.case():
                         self.yaml_eol()
                         self.start_of_line()
-                        self.indent()
                         self.whitespace()
                         self.indented_value()
 
@@ -179,17 +176,15 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
                     with self.case():
                         self.yaml_eol()
                         self.start_of_line()
-                        self.indent()
                         self.whitespace(min=1)
                         self.indented_value()
                     with self.case():
                         self.whitespace()
                         self.indented_value()
 
-            with self.repeat(), self.capture("pair-tail"):
+            with self.repeat(), self.capture("pair"):
                 self.yaml_eol()
                 self.start_of_line()
-                self.indent()
                 self.identifier()
                 self.whitespace()
                 self.accept(":")
@@ -201,7 +196,6 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
                     with self.case():
                         self.yaml_eol()
                         self.start_of_line()
-                        self.indent()
                         self.whitespace(min=1)
                         self.indented_value()
 
