@@ -815,6 +815,8 @@ def compile_python(grammar, builder=None, cython=False):
             ))
 
         elif rule.kind == SET_INDENT:
+            # match existing prefixes in buf[line_start:offset]
+            # count remaining characters
             steps.append(f'{count} = {offset} - {line_start}+  ((self.tabstop -1) * buf[{line_start}:{offset}].count("\t"))')
             steps.append(f'{prefix}.append({count})')
             steps.append('while True:')
