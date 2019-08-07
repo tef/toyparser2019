@@ -22,22 +22,24 @@ cdef class Parser:
          self.tabstop = self.TABSTOP
 
     NEWLINE = ()
-    WHITESPACE = (' ', '\t', '\r', '\n')
+    WHITESPACE = (32, 9, 13, 10)
     TABSTOP = 8
 
-    def parse(self, buf, offset=0, err=None):
-        line_start, prefix, eof, children = offset, (), len(buf), []
+    def parse(self, buf, offset=0, end=None, err=None):
+        end = len(buf) if end is None else end
+        line_start, prefix, eof, children = offset, [], end, []
         new_offset, line_start = self.parse_document(buf, offset, line_start, prefix, eof, children)
-        if children and new_offset > offset: return children[-1]
-        if err is not None: raise err(buf, offset, 'no')
+        if children and new_offset == end: return children[-1]
+        print('no', offset, new_offset, end, buf[new_offset:])
+        if err is not None: raise err(buf, new_offset, 'no')
     
-    cdef (int, int) parse_document(self, str buf, int offset_0, int line_start_0, tuple prefix_0, int buf_eof, list children_0):
+    cdef (int, int) parse_document(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
         cdef int count_0
         cpdef Py_UCS4 chr
         while True: # note: return at end of loop
             count_0 = 0
             while offset_0 < buf_eof:
-                chr = buf[offset_0]
+                chr = ord(buf[offset_0])
                 if chr == 32 or chr == 9 or chr == 13 or chr == 10:
                     offset_0 +=1
                     count_0 +=1
@@ -98,7 +100,7 @@ cdef class Parser:
             break
         return offset_0, line_start_0
     
-    cdef (int, int) parse_json_value(self, str buf, int offset_0, int line_start_0, tuple prefix_0, int buf_eof, list children_0):
+    cdef (int, int) parse_json_value(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
         cdef int count_0
         cpdef Py_UCS4 chr
         while True: # note: return at end of loop
@@ -216,7 +218,7 @@ cdef class Parser:
             break
         return offset_0, line_start_0
     
-    cdef (int, int) parse_json_true(self, str buf, int offset_0, int line_start_0, tuple prefix_0, int buf_eof, list children_0):
+    cdef (int, int) parse_json_true(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
         cdef int count_0
         cpdef Py_UCS4 chr
         while True: # note: return at end of loop
@@ -243,7 +245,7 @@ cdef class Parser:
             break
         return offset_0, line_start_0
     
-    cdef (int, int) parse_json_false(self, str buf, int offset_0, int line_start_0, tuple prefix_0, int buf_eof, list children_0):
+    cdef (int, int) parse_json_false(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
         cdef int count_0
         cpdef Py_UCS4 chr
         while True: # note: return at end of loop
@@ -270,7 +272,7 @@ cdef class Parser:
             break
         return offset_0, line_start_0
     
-    cdef (int, int) parse_json_null(self, str buf, int offset_0, int line_start_0, tuple prefix_0, int buf_eof, list children_0):
+    cdef (int, int) parse_json_null(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
         cdef int count_0
         cpdef Py_UCS4 chr
         while True: # note: return at end of loop
@@ -297,7 +299,7 @@ cdef class Parser:
             break
         return offset_0, line_start_0
     
-    cdef (int, int) parse_json_number(self, str buf, int offset_0, int line_start_0, tuple prefix_0, int buf_eof, list children_0):
+    cdef (int, int) parse_json_number(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
         cdef int count_0
         cpdef Py_UCS4 chr
         while True: # note: return at end of loop
@@ -539,7 +541,7 @@ cdef class Parser:
             break
         return offset_0, line_start_0
     
-    cdef (int, int) parse_json_string(self, str buf, int offset_0, int line_start_0, tuple prefix_0, int buf_eof, list children_0):
+    cdef (int, int) parse_json_string(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
         cdef int count_0
         cpdef Py_UCS4 chr
         while True: # note: return at end of loop
@@ -747,7 +749,7 @@ cdef class Parser:
             break
         return offset_0, line_start_0
     
-    cdef (int, int) parse_json_list(self, str buf, int offset_0, int line_start_0, tuple prefix_0, int buf_eof, list children_0):
+    cdef (int, int) parse_json_list(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
         cdef int count_0
         cpdef Py_UCS4 chr
         while True: # note: return at end of loop
@@ -759,7 +761,7 @@ cdef class Parser:
             
             count_0 = 0
             while offset_0 < buf_eof:
-                chr = buf[offset_0]
+                chr = ord(buf[offset_0])
                 if chr == 32 or chr == 9 or chr == 13 or chr == 10:
                     offset_0 +=1
                     count_0 +=1
@@ -785,7 +787,7 @@ cdef class Parser:
                             while True:
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
+                                    chr = ord(buf[offset_3])
                                     if chr == 32 or chr == 9 or chr == 13 or chr == 10:
                                         offset_3 +=1
                                         count_2 +=1
@@ -800,7 +802,7 @@ cdef class Parser:
                                 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
+                                    chr = ord(buf[offset_3])
                                     if chr == 32 or chr == 9 or chr == 13 or chr == 10:
                                         offset_3 +=1
                                         count_2 +=1
@@ -853,7 +855,7 @@ cdef class Parser:
             break
         return offset_0, line_start_0
     
-    cdef (int, int) parse_json_object(self, str buf, int offset_0, int line_start_0, tuple prefix_0, int buf_eof, list children_0):
+    cdef (int, int) parse_json_object(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
         cdef int count_0
         cpdef Py_UCS4 chr
         while True: # note: return at end of loop
@@ -865,7 +867,7 @@ cdef class Parser:
             
             count_0 = 0
             while offset_0 < buf_eof:
-                chr = buf[offset_0]
+                chr = ord(buf[offset_0])
                 if chr == 32 or chr == 9 or chr == 13 or chr == 10:
                     offset_0 +=1
                     count_0 +=1
@@ -889,7 +891,7 @@ cdef class Parser:
                             
                             count_1 = 0
                             while offset_3 < buf_eof:
-                                chr = buf[offset_3]
+                                chr = ord(buf[offset_3])
                                 if chr == 32 or chr == 9 or chr == 13 or chr == 10:
                                     offset_3 +=1
                                     count_1 +=1
@@ -904,7 +906,7 @@ cdef class Parser:
                             
                             count_1 = 0
                             while offset_3 < buf_eof:
-                                chr = buf[offset_3]
+                                chr = ord(buf[offset_3])
                                 if chr == 32 or chr == 9 or chr == 13 or chr == 10:
                                     offset_3 +=1
                                     count_1 +=1
@@ -928,7 +930,7 @@ cdef class Parser:
                         
                         count_1 = 0
                         while offset_2 < buf_eof:
-                            chr = buf[offset_2]
+                            chr = ord(buf[offset_2])
                             if chr == 32 or chr == 9 or chr == 13 or chr == 10:
                                 offset_2 +=1
                                 count_1 +=1
@@ -948,7 +950,7 @@ cdef class Parser:
                                 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
+                                    chr = ord(buf[offset_3])
                                     if chr == 32 or chr == 9 or chr == 13 or chr == 10:
                                         offset_3 +=1
                                         count_2 +=1
@@ -964,7 +966,7 @@ cdef class Parser:
                                     
                                     count_2 = 0
                                     while offset_4 < buf_eof:
-                                        chr = buf[offset_4]
+                                        chr = ord(buf[offset_4])
                                         if chr == 32 or chr == 9 or chr == 13 or chr == 10:
                                             offset_4 +=1
                                             count_2 +=1
@@ -979,7 +981,7 @@ cdef class Parser:
                                     
                                     count_2 = 0
                                     while offset_4 < buf_eof:
-                                        chr = buf[offset_4]
+                                        chr = ord(buf[offset_4])
                                         if chr == 32 or chr == 9 or chr == 13 or chr == 10:
                                             offset_4 +=1
                                             count_2 +=1
@@ -1003,7 +1005,7 @@ cdef class Parser:
                                 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
+                                    chr = ord(buf[offset_3])
                                     if chr == 32 or chr == 9 or chr == 13 or chr == 10:
                                         offset_3 +=1
                                         count_2 +=1

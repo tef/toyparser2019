@@ -317,7 +317,7 @@ if __name__ == "__main__":
         with open("RSONParser.pyx", "w") as fh:
             fh.write(code)
 
-        subprocess.run(["python3", "setup.py", "build_ext", "--inplace"])
+        subprocess.run(["python3", "setup.py", "build_ext", "--inplace"]).check_returncode()
 
     import rsonlib
     from RSONParser import Parser as RSONParser

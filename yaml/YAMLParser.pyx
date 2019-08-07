@@ -21,17 +21,19 @@ cdef class Parser:
          self.builder = builder
          self.tabstop = self.TABSTOP
 
-    NEWLINE = ('\n',)
-    WHITESPACE = (' ', '\t')
+    NEWLINE = (10,)
+    WHITESPACE = (32, 9)
     TABSTOP = 8
 
-    def parse(self, buf, offset=0, err=None):
-        line_start, prefix, eof, children = offset, (), len(buf), []
+    def parse(self, buf, offset=0, end=None, err=None):
+        end = len(buf) if end is None else end
+        line_start, prefix, eof, children = offset, [], end, []
         new_offset, line_start = self.parse_document(buf, offset, line_start, prefix, eof, children)
-        if children and new_offset > offset: return children[-1]
-        if err is not None: raise err(buf, offset, 'no')
+        if children and new_offset == end: return children[-1]
+        print('no', offset, new_offset, end, buf[new_offset:])
+        if err is not None: raise err(buf, new_offset, 'no')
     
-    cdef (int, int) parse_literal(self, str buf, int offset_0, int line_start_0, tuple prefix_0, int buf_eof, list children_0):
+    cdef (int, int) parse_literal(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
         cdef int count_0
         cpdef Py_UCS4 chr
         while True: # note: return at end of loop
@@ -149,7 +151,7 @@ cdef class Parser:
             break
         return offset_0, line_start_0
     
-    cdef (int, int) parse_true_literal(self, str buf, int offset_0, int line_start_0, tuple prefix_0, int buf_eof, list children_0):
+    cdef (int, int) parse_true_literal(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
         cdef int count_0
         cpdef Py_UCS4 chr
         while True: # note: return at end of loop
@@ -176,7 +178,7 @@ cdef class Parser:
             break
         return offset_0, line_start_0
     
-    cdef (int, int) parse_false_literal(self, str buf, int offset_0, int line_start_0, tuple prefix_0, int buf_eof, list children_0):
+    cdef (int, int) parse_false_literal(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
         cdef int count_0
         cpdef Py_UCS4 chr
         while True: # note: return at end of loop
@@ -203,7 +205,7 @@ cdef class Parser:
             break
         return offset_0, line_start_0
     
-    cdef (int, int) parse_null_literal(self, str buf, int offset_0, int line_start_0, tuple prefix_0, int buf_eof, list children_0):
+    cdef (int, int) parse_null_literal(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
         cdef int count_0
         cpdef Py_UCS4 chr
         while True: # note: return at end of loop
@@ -230,7 +232,7 @@ cdef class Parser:
             break
         return offset_0, line_start_0
     
-    cdef (int, int) parse_identifier(self, str buf, int offset_0, int line_start_0, tuple prefix_0, int buf_eof, list children_0):
+    cdef (int, int) parse_identifier(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
         cdef int count_0
         cpdef Py_UCS4 chr
         while True: # note: return at end of loop
@@ -319,7 +321,7 @@ cdef class Parser:
             break
         return offset_0, line_start_0
     
-    cdef (int, int) parse_number_literal(self, str buf, int offset_0, int line_start_0, tuple prefix_0, int buf_eof, list children_0):
+    cdef (int, int) parse_number_literal(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
         cdef int count_0
         cpdef Py_UCS4 chr
         while True: # note: return at end of loop
@@ -524,7 +526,7 @@ cdef class Parser:
             break
         return offset_0, line_start_0
     
-    cdef (int, int) parse_string_literal(self, str buf, int offset_0, int line_start_0, tuple prefix_0, int buf_eof, list children_0):
+    cdef (int, int) parse_string_literal(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
         cdef int count_0
         cpdef Py_UCS4 chr
         while True: # note: return at end of loop
@@ -732,7 +734,7 @@ cdef class Parser:
             break
         return offset_0, line_start_0
     
-    cdef (int, int) parse_list_literal(self, str buf, int offset_0, int line_start_0, tuple prefix_0, int buf_eof, list children_0):
+    cdef (int, int) parse_list_literal(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
         cdef int count_0
         cpdef Py_UCS4 chr
         while True: # note: return at end of loop
@@ -744,7 +746,7 @@ cdef class Parser:
             
             count_0 = 0
             while offset_0 < buf_eof:
-                chr = buf[offset_0]
+                chr = ord(buf[offset_0])
                 if chr == 10:
                     offset_0 +=1
                     line_start_0 = offset_0
@@ -774,7 +776,7 @@ cdef class Parser:
                             while True:
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
+                                    chr = ord(buf[offset_3])
                                     if chr == 10:
                                         offset_3 +=1
                                         line_start_2 = offset_3
@@ -793,7 +795,7 @@ cdef class Parser:
                                 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
+                                    chr = ord(buf[offset_3])
                                     if chr == 10:
                                         offset_3 +=1
                                         line_start_2 = offset_3
@@ -820,7 +822,7 @@ cdef class Parser:
                         
                         count_1 = 0
                         while offset_2 < buf_eof:
-                            chr = buf[offset_2]
+                            chr = ord(buf[offset_2])
                             if chr == 10:
                                 offset_2 +=1
                                 line_start_1 = offset_2
@@ -844,7 +846,7 @@ cdef class Parser:
                                 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
+                                    chr = ord(buf[offset_3])
                                     if chr == 10:
                                         offset_3 +=1
                                         line_start_2 = offset_3
@@ -898,7 +900,7 @@ cdef class Parser:
             break
         return offset_0, line_start_0
     
-    cdef (int, int) parse_object_literal(self, str buf, int offset_0, int line_start_0, tuple prefix_0, int buf_eof, list children_0):
+    cdef (int, int) parse_object_literal(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
         cdef int count_0
         cpdef Py_UCS4 chr
         while True: # note: return at end of loop
@@ -910,7 +912,7 @@ cdef class Parser:
             
             count_0 = 0
             while offset_0 < buf_eof:
-                chr = buf[offset_0]
+                chr = ord(buf[offset_0])
                 if chr == 10:
                     offset_0 +=1
                     line_start_0 = offset_0
@@ -935,7 +937,7 @@ cdef class Parser:
                         
                         count_1 = 0
                         while offset_2 < buf_eof:
-                            chr = buf[offset_2]
+                            chr = ord(buf[offset_2])
                             if chr == 32 or chr == 9:
                                 offset_2 +=1
                                 count_1 +=1
@@ -950,7 +952,7 @@ cdef class Parser:
                         
                         count_1 = 0
                         while offset_2 < buf_eof:
-                            chr = buf[offset_2]
+                            chr = ord(buf[offset_2])
                             if chr == 10:
                                 offset_2 +=1
                                 line_start_1 = offset_2
@@ -972,7 +974,7 @@ cdef class Parser:
                             while True:
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
+                                    chr = ord(buf[offset_3])
                                     if chr == 10:
                                         offset_3 +=1
                                         line_start_2 = offset_3
@@ -991,7 +993,7 @@ cdef class Parser:
                                 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
+                                    chr = ord(buf[offset_3])
                                     if chr == 10:
                                         offset_3 +=1
                                         line_start_2 = offset_3
@@ -1008,7 +1010,7 @@ cdef class Parser:
                                 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
+                                    chr = ord(buf[offset_3])
                                     if chr == 32 or chr == 9:
                                         offset_3 +=1
                                         count_2 +=1
@@ -1023,7 +1025,7 @@ cdef class Parser:
                                 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
+                                    chr = ord(buf[offset_3])
                                     if chr == 10:
                                         offset_3 +=1
                                         line_start_2 = offset_3
@@ -1050,7 +1052,7 @@ cdef class Parser:
                         
                         count_1 = 0
                         while offset_2 < buf_eof:
-                            chr = buf[offset_2]
+                            chr = ord(buf[offset_2])
                             if chr == 10:
                                 offset_2 +=1
                                 line_start_1 = offset_2
@@ -1074,7 +1076,7 @@ cdef class Parser:
                                 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
+                                    chr = ord(buf[offset_3])
                                     if chr == 10:
                                         offset_3 +=1
                                         line_start_2 = offset_3
@@ -1128,7 +1130,7 @@ cdef class Parser:
             break
         return offset_0, line_start_0
     
-    cdef (int, int) parse_yaml_eol(self, str buf, int offset_0, int line_start_0, tuple prefix_0, int buf_eof, list children_0):
+    cdef (int, int) parse_yaml_eol(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
         cdef int count_0
         cpdef Py_UCS4 chr
         while True: # note: return at end of loop
@@ -1144,7 +1146,7 @@ cdef class Parser:
                         while True: # case
                             count_1 = 0
                             while offset_2 < buf_eof:
-                                chr = buf[offset_2]
+                                chr = ord(buf[offset_2])
                                 if chr == 32 or chr == 9:
                                     offset_2 +=1
                                     count_1 +=1
@@ -1152,7 +1154,7 @@ cdef class Parser:
                                     break
                             
                             if offset_2 < buf_eof:
-                                chr = buf[offset_2]
+                                chr = ord(buf[offset_2])
                                 if chr == 10:
                                     offset_2 +=1
                                     line_start_2 = offset_2
@@ -1177,7 +1179,7 @@ cdef class Parser:
                         while True: # case
                             count_1 = 0
                             while offset_2 < buf_eof:
-                                chr = buf[offset_2]
+                                chr = ord(buf[offset_2])
                                 if chr == 32 or chr == 9:
                                     offset_2 +=1
                                     count_1 +=1
@@ -1218,7 +1220,7 @@ cdef class Parser:
                                 break
                             
                             if offset_2 < buf_eof:
-                                chr = buf[offset_2]
+                                chr = ord(buf[offset_2])
                                 if chr == 10:
                                     offset_2 +=1
                                     line_start_2 = offset_2
@@ -1255,11 +1257,12 @@ cdef class Parser:
             break
         return offset_0, line_start_0
     
-    cdef (int, int) parse_indented_list(self, str buf, int offset_0, int line_start_0, tuple prefix_0, int buf_eof, list children_0):
+    cdef (int, int) parse_indented_list(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
         cdef int count_0
         cpdef Py_UCS4 chr
         while True: # note: return at end of loop
-            prefix_1 = (offset_0 - line_start_0, prefix_0)
+            count_0 = offset_0 - line_start_0+  ((self.tabstop -1) * buf[line_start_0:offset_0].count("	"))
+            prefix_0.append(count_0)
             while True:
                 offset_1 = offset_0
                 children_1 = []
@@ -1277,14 +1280,14 @@ cdef class Parser:
                         while True: # case
                             count_0 = 0
                             while offset_2 < buf_eof:
-                                chr = buf[offset_2]
+                                chr = ord(buf[offset_2])
                                 if chr == 32 or chr == 9:
                                     offset_2 +=1
                                     count_0 +=1
                                 else:
                                     break
                             
-                            offset_2, line_start_1 = self.parse_indented_value(buf, offset_2, line_start_1, prefix_1, buf_eof, children_2)
+                            offset_2, line_start_1 = self.parse_indented_value(buf, offset_2, line_start_1, prefix_0, buf_eof, children_2)
                             if offset_2 == -1: break
                             
                             
@@ -1300,7 +1303,7 @@ cdef class Parser:
                         line_start_1 = line_start_0
                         children_2 = []
                         while True: # case
-                            offset_2, line_start_1 = self.parse_yaml_eol(buf, offset_2, line_start_1, prefix_1, buf_eof, children_2)
+                            offset_2, line_start_1 = self.parse_yaml_eol(buf, offset_2, line_start_1, prefix_0, buf_eof, children_2)
                             if offset_2 == -1: break
                             
                             
@@ -1308,35 +1311,31 @@ cdef class Parser:
                                 offset_2 = -1
                                 break
                             
-                            count_0 = prefix_1[0]
+                            count_0 = prefix_0[len(prefix_0)-1]
                             while count_0 > 0 and offset_2 < buf_eof:
-                                chr = buf[offset_2]
+                                chr = ord(buf[offset_2])
                                 if chr == 32 or chr == 9:
                                     offset_2 +=1
-                                    count_0 -= 1
+                                    count_0 -= self.tabstop if chr == 9 else 1
                                 else:
                                     break
                             if count_0 != 0:
-                                print(count_0)
-                                offset_2 = -1
-                                break
-                            
-                            if buf[offset_2:offset_2+1] == ' ':
-                                offset_2 += 1
-                            else:
                                 offset_2 = -1
                                 break
                             
                             count_0 = 0
                             while offset_2 < buf_eof:
-                                chr = buf[offset_2]
+                                chr = ord(buf[offset_2])
                                 if chr == 32 or chr == 9:
                                     offset_2 +=1
                                     count_0 +=1
                                 else:
                                     break
+                            if count_0 < 1:
+                                offset_2 = -1
+                                break
                             
-                            offset_2, line_start_1 = self.parse_indented_value(buf, offset_2, line_start_1, prefix_1, buf_eof, children_2)
+                            offset_2, line_start_1 = self.parse_indented_value(buf, offset_2, line_start_1, prefix_0, buf_eof, children_2)
                             if offset_2 == -1: break
                             
                             
@@ -1358,7 +1357,7 @@ cdef class Parser:
                         offset_2 = offset_1
                         line_start_1 = line_start_0
                         while True:
-                            offset_2, line_start_1 = self.parse_yaml_eol(buf, offset_2, line_start_1, prefix_1, buf_eof, children_1)
+                            offset_2, line_start_1 = self.parse_yaml_eol(buf, offset_2, line_start_1, prefix_0, buf_eof, children_1)
                             if offset_2 == -1: break
                             
                             
@@ -1366,16 +1365,15 @@ cdef class Parser:
                                 offset_2 = -1
                                 break
                             
-                            count_1 = prefix_1[0]
+                            count_1 = prefix_0[len(prefix_0)-1]
                             while count_1 > 0 and offset_2 < buf_eof:
-                                chr = buf[offset_2]
+                                chr = ord(buf[offset_2])
                                 if chr == 32 or chr == 9:
                                     offset_2 +=1
-                                    count_1 -= 1
+                                    count_1 -= self.tabstop if chr == 9 else 1
                                 else:
                                     break
                             if count_1 != 0:
-                                print(count_1)
                                 offset_2 = -1
                                 break
                             
@@ -1385,9 +1383,15 @@ cdef class Parser:
                                 offset_2 = -1
                                 break
                             
-                            if buf[offset_2:offset_2+1] == ' ':
-                                offset_2 += 1
-                            else:
+                            count_1 = 0
+                            while offset_2 < buf_eof:
+                                chr = ord(buf[offset_2])
+                                if chr == 32 or chr == 9:
+                                    offset_2 +=1
+                                    count_1 +=1
+                                else:
+                                    break
+                            if count_1 < 1:
                                 offset_2 = -1
                                 break
                             
@@ -1398,14 +1402,14 @@ cdef class Parser:
                                 while True: # case
                                     count_1 = 0
                                     while offset_3 < buf_eof:
-                                        chr = buf[offset_3]
+                                        chr = ord(buf[offset_3])
                                         if chr == 32 or chr == 9:
                                             offset_3 +=1
                                             count_1 +=1
                                         else:
                                             break
                                     
-                                    offset_3, line_start_2 = self.parse_indented_value(buf, offset_3, line_start_2, prefix_1, buf_eof, children_2)
+                                    offset_3, line_start_2 = self.parse_indented_value(buf, offset_3, line_start_2, prefix_0, buf_eof, children_2)
                                     if offset_3 == -1: break
                                     
                                     
@@ -1421,7 +1425,7 @@ cdef class Parser:
                                 line_start_2 = line_start_1
                                 children_2 = []
                                 while True: # case
-                                    offset_3, line_start_2 = self.parse_yaml_eol(buf, offset_3, line_start_2, prefix_1, buf_eof, children_2)
+                                    offset_3, line_start_2 = self.parse_yaml_eol(buf, offset_3, line_start_2, prefix_0, buf_eof, children_2)
                                     if offset_3 == -1: break
                                     
                                     
@@ -1429,29 +1433,28 @@ cdef class Parser:
                                         offset_3 = -1
                                         break
                                     
-                                    count_1 = prefix_1[0]
+                                    count_1 = prefix_0[len(prefix_0)-1]
                                     while count_1 > 0 and offset_3 < buf_eof:
-                                        chr = buf[offset_3]
+                                        chr = ord(buf[offset_3])
                                         if chr == 32 or chr == 9:
                                             offset_3 +=1
-                                            count_1 -= 1
+                                            count_1 -= self.tabstop if chr == 9 else 1
                                         else:
                                             break
                                     if count_1 != 0:
-                                        print(count_1)
                                         offset_3 = -1
                                         break
                                     
                                     count_1 = 0
                                     while offset_3 < buf_eof:
-                                        chr = buf[offset_3]
+                                        chr = ord(buf[offset_3])
                                         if chr == 32 or chr == 9:
                                             offset_3 +=1
                                             count_1 +=1
                                         else:
                                             break
                                     
-                                    offset_3, line_start_2 = self.parse_indented_value(buf, offset_3, line_start_2, prefix_1, buf_eof, children_2)
+                                    offset_3, line_start_2 = self.parse_indented_value(buf, offset_3, line_start_2, prefix_0, buf_eof, children_2)
                                     if offset_3 == -1: break
                                     
                                     
@@ -1490,16 +1493,18 @@ cdef class Parser:
                 offset_0 = offset_1
                 
                 break
+            prefix_0.pop()
             if offset_0 == -1: break
             
             break
         return offset_0, line_start_0
     
-    cdef (int, int) parse_indented_object(self, str buf, int offset_0, int line_start_0, tuple prefix_0, int buf_eof, list children_0):
+    cdef (int, int) parse_indented_object(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
         cdef int count_0
         cpdef Py_UCS4 chr
         while True: # note: return at end of loop
-            prefix_1 = (offset_0 - line_start_0, prefix_0)
+            count_0 = offset_0 - line_start_0+  ((self.tabstop -1) * buf[line_start_0:offset_0].count("	"))
+            prefix_0.append(count_0)
             while True:
                 offset_1 = offset_0
                 children_1 = []
@@ -1507,13 +1512,13 @@ cdef class Parser:
                     offset_2 = offset_1
                     children_2 = []
                     while True: # start capture
-                        offset_2, line_start_0 = self.parse_identifier(buf, offset_2, line_start_0, prefix_1, buf_eof, children_2)
+                        offset_2, line_start_0 = self.parse_identifier(buf, offset_2, line_start_0, prefix_0, buf_eof, children_2)
                         if offset_2 == -1: break
                         
                         
                         count_0 = 0
                         while offset_2 < buf_eof:
-                            chr = buf[offset_2]
+                            chr = ord(buf[offset_2])
                             if chr == 32 or chr == 9:
                                 offset_2 +=1
                                 count_0 +=1
@@ -1531,7 +1536,7 @@ cdef class Parser:
                             line_start_1 = line_start_0
                             children_3 = []
                             while True: # case
-                                offset_3, line_start_1 = self.parse_yaml_eol(buf, offset_3, line_start_1, prefix_1, buf_eof, children_3)
+                                offset_3, line_start_1 = self.parse_yaml_eol(buf, offset_3, line_start_1, prefix_0, buf_eof, children_3)
                                 if offset_3 == -1: break
                                 
                                 
@@ -1539,35 +1544,31 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
                                 
-                                count_0 = prefix_1[0]
+                                count_0 = prefix_0[len(prefix_0)-1]
                                 while count_0 > 0 and offset_3 < buf_eof:
-                                    chr = buf[offset_3]
+                                    chr = ord(buf[offset_3])
                                     if chr == 32 or chr == 9:
                                         offset_3 +=1
-                                        count_0 -= 1
+                                        count_0 -= self.tabstop if chr == 9 else 1
                                     else:
                                         break
                                 if count_0 != 0:
-                                    print(count_0)
-                                    offset_3 = -1
-                                    break
-                                
-                                if buf[offset_3:offset_3+1] == ' ':
-                                    offset_3 += 1
-                                else:
                                     offset_3 = -1
                                     break
                                 
                                 count_0 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
+                                    chr = ord(buf[offset_3])
                                     if chr == 32 or chr == 9:
                                         offset_3 +=1
                                         count_0 +=1
                                     else:
                                         break
+                                if count_0 < 1:
+                                    offset_3 = -1
+                                    break
                                 
-                                offset_3, line_start_1 = self.parse_indented_value(buf, offset_3, line_start_1, prefix_1, buf_eof, children_3)
+                                offset_3, line_start_1 = self.parse_indented_value(buf, offset_3, line_start_1, prefix_0, buf_eof, children_3)
                                 if offset_3 == -1: break
                                 
                                 
@@ -1585,14 +1586,14 @@ cdef class Parser:
                             while True: # case
                                 count_0 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
+                                    chr = ord(buf[offset_3])
                                     if chr == 32 or chr == 9:
                                         offset_3 +=1
                                         count_0 +=1
                                     else:
                                         break
                                 
-                                offset_3, line_start_1 = self.parse_indented_value(buf, offset_3, line_start_1, prefix_1, buf_eof, children_3)
+                                offset_3, line_start_1 = self.parse_indented_value(buf, offset_3, line_start_1, prefix_0, buf_eof, children_3)
                                 if offset_3 == -1: break
                                 
                                 
@@ -1628,7 +1629,7 @@ cdef class Parser:
                             offset_3 = offset_2
                             children_2 = []
                             while True: # start capture
-                                offset_3, line_start_1 = self.parse_yaml_eol(buf, offset_3, line_start_1, prefix_1, buf_eof, children_2)
+                                offset_3, line_start_1 = self.parse_yaml_eol(buf, offset_3, line_start_1, prefix_0, buf_eof, children_2)
                                 if offset_3 == -1: break
                                 
                                 
@@ -1636,26 +1637,25 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
                                 
-                                count_1 = prefix_1[0]
+                                count_1 = prefix_0[len(prefix_0)-1]
                                 while count_1 > 0 and offset_3 < buf_eof:
-                                    chr = buf[offset_3]
+                                    chr = ord(buf[offset_3])
                                     if chr == 32 or chr == 9:
                                         offset_3 +=1
-                                        count_1 -= 1
+                                        count_1 -= self.tabstop if chr == 9 else 1
                                     else:
                                         break
                                 if count_1 != 0:
-                                    print(count_1)
                                     offset_3 = -1
                                     break
                                 
-                                offset_3, line_start_1 = self.parse_identifier(buf, offset_3, line_start_1, prefix_1, buf_eof, children_2)
+                                offset_3, line_start_1 = self.parse_identifier(buf, offset_3, line_start_1, prefix_0, buf_eof, children_2)
                                 if offset_3 == -1: break
                                 
                                 
                                 count_1 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
+                                    chr = ord(buf[offset_3])
                                     if chr == 32 or chr == 9:
                                         offset_3 +=1
                                         count_1 +=1
@@ -1680,14 +1680,14 @@ cdef class Parser:
                                     while True: # case
                                         count_1 = 0
                                         while offset_4 < buf_eof:
-                                            chr = buf[offset_4]
+                                            chr = ord(buf[offset_4])
                                             if chr == 32 or chr == 9:
                                                 offset_4 +=1
                                                 count_1 +=1
                                             else:
                                                 break
                                         
-                                        offset_4, line_start_2 = self.parse_indented_value(buf, offset_4, line_start_2, prefix_1, buf_eof, children_3)
+                                        offset_4, line_start_2 = self.parse_indented_value(buf, offset_4, line_start_2, prefix_0, buf_eof, children_3)
                                         if offset_4 == -1: break
                                         
                                         
@@ -1703,7 +1703,7 @@ cdef class Parser:
                                     line_start_2 = line_start_1
                                     children_3 = []
                                     while True: # case
-                                        offset_4, line_start_2 = self.parse_yaml_eol(buf, offset_4, line_start_2, prefix_1, buf_eof, children_3)
+                                        offset_4, line_start_2 = self.parse_yaml_eol(buf, offset_4, line_start_2, prefix_0, buf_eof, children_3)
                                         if offset_4 == -1: break
                                         
                                         
@@ -1711,35 +1711,31 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
                                         
-                                        count_1 = prefix_1[0]
+                                        count_1 = prefix_0[len(prefix_0)-1]
                                         while count_1 > 0 and offset_4 < buf_eof:
-                                            chr = buf[offset_4]
+                                            chr = ord(buf[offset_4])
                                             if chr == 32 or chr == 9:
                                                 offset_4 +=1
-                                                count_1 -= 1
+                                                count_1 -= self.tabstop if chr == 9 else 1
                                             else:
                                                 break
                                         if count_1 != 0:
-                                            print(count_1)
-                                            offset_4 = -1
-                                            break
-                                        
-                                        if buf[offset_4:offset_4+1] == ' ':
-                                            offset_4 += 1
-                                        else:
                                             offset_4 = -1
                                             break
                                         
                                         count_1 = 0
                                         while offset_4 < buf_eof:
-                                            chr = buf[offset_4]
+                                            chr = ord(buf[offset_4])
                                             if chr == 32 or chr == 9:
                                                 offset_4 +=1
                                                 count_1 +=1
                                             else:
                                                 break
+                                        if count_1 < 1:
+                                            offset_4 = -1
+                                            break
                                         
-                                        offset_4, line_start_2 = self.parse_indented_value(buf, offset_4, line_start_2, prefix_1, buf_eof, children_3)
+                                        offset_4, line_start_2 = self.parse_indented_value(buf, offset_4, line_start_2, prefix_0, buf_eof, children_3)
                                         if offset_4 == -1: break
                                         
                                         
@@ -1789,12 +1785,13 @@ cdef class Parser:
                 offset_0 = offset_1
                 
                 break
+            prefix_0.pop()
             if offset_0 == -1: break
             
             break
         return offset_0, line_start_0
     
-    cdef (int, int) parse_indented_value(self, str buf, int offset_0, int line_start_0, tuple prefix_0, int buf_eof, list children_0):
+    cdef (int, int) parse_indented_value(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
         cdef int count_0
         cpdef Py_UCS4 chr
         while True: # note: return at end of loop
@@ -1855,18 +1852,18 @@ cdef class Parser:
             break
         return offset_0, line_start_0
     
-    cdef (int, int) parse_document(self, str buf, int offset_0, int line_start_0, tuple prefix_0, int buf_eof, list children_0):
+    cdef (int, int) parse_document(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
         cdef int count_0
         cpdef Py_UCS4 chr
         while True: # note: return at end of loop
             count_0 = 0
-            while count_0 < 1:
+            while True:
                 offset_1 = offset_0
                 line_start_1 = line_start_0
                 while True:
                     count_1 = 0
                     while offset_1 < buf_eof:
-                        chr = buf[offset_1]
+                        chr = ord(buf[offset_1])
                         if chr == 32 or chr == 9:
                             offset_1 +=1
                             count_1 +=1
@@ -1884,7 +1881,6 @@ cdef class Parser:
                 offset_0 = offset_1
                 line_start_0 = line_start_1
                 count_0 += 1
-                break
             if offset_0 == -1:
                 break
             
@@ -1973,26 +1969,30 @@ cdef class Parser:
             offset_0 = offset_1
             
             count_0 = 0
+            while offset_0 < buf_eof:
+                chr = ord(buf[offset_0])
+                if chr == 32 or chr == 9:
+                    offset_0 +=1
+                    count_0 +=1
+                else:
+                    break
+            
+            count_0 = 0
             while True:
                 offset_1 = offset_0
                 line_start_1 = line_start_0
                 while True:
+                    offset_1, line_start_1 = self.parse_yaml_eol(buf, offset_1, line_start_1, prefix_0, buf_eof, children_0)
+                    if offset_1 == -1: break
+                    
+                    
                     count_1 = 0
                     while offset_1 < buf_eof:
-                        chr = buf[offset_1]
+                        chr = ord(buf[offset_1])
                         if chr == 32 or chr == 9:
                             offset_1 +=1
                             count_1 +=1
                         else:
-                            break
-                    
-                    if offset_1 < buf_eof:
-                        chr = buf[offset_1]
-                        if chr == 10:
-                            offset_1 +=1
-                            line_start_1 = offset_1
-                        else:
-                            offset_1 = -1
                             break
                     
                     break
@@ -2006,13 +2006,37 @@ cdef class Parser:
                 break
             
             count_0 = 0
-            while offset_0 < buf_eof:
-                chr = buf[offset_0]
-                if chr == 32 or chr == 9:
-                    offset_0 +=1
-                    count_0 +=1
-                else:
+            while True:
+                offset_1 = offset_0
+                line_start_1 = line_start_0
+                while True:
+                    if offset_1 < buf_eof:
+                        chr = ord(buf[offset_1])
+                        if chr == 10:
+                            offset_1 +=1
+                            line_start_1 = offset_1
+                        else:
+                            offset_1 = -1
+                            break
+                    
+                    count_1 = 0
+                    while offset_1 < buf_eof:
+                        chr = ord(buf[offset_1])
+                        if chr == 32 or chr == 9:
+                            offset_1 +=1
+                            count_1 +=1
+                        else:
+                            break
+                    
                     break
+                if offset_1 == -1:
+                    break
+                if offset_0 == offset_1: break
+                offset_0 = offset_1
+                line_start_0 = line_start_1
+                count_0 += 1
+            if offset_0 == -1:
+                break
             
             
             break

@@ -148,8 +148,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
                     self.yaml_eol()
                     self.start_of_line()
                     self.indent()
-                    self.accept(' ')
-                    self.whitespace()
+                    self.whitespace(min=1)
                     self.indented_value()
 
             with self.repeat():
@@ -157,7 +156,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
                 self.start_of_line()
                 self.indent()
                 self.accept("-")
-                self.accept(' ')
+                self.whitespace(min=1)
                 with self.choice():
                     with self.case():
                         self.whitespace()
@@ -181,8 +180,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
                         self.yaml_eol()
                         self.start_of_line()
                         self.indent()
-                        self.accept(' ')
-                        self.whitespace()
+                        self.whitespace(min=1)
                         self.indented_value()
                     with self.case():
                         self.whitespace()
@@ -204,8 +202,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
                         self.yaml_eol()
                         self.start_of_line()
                         self.indent()
-                        self.accept(' ')
-                        self.whitespace()
+                        self.whitespace(min=1)
                         self.indented_value()
 
     @rule()
@@ -232,10 +229,13 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
                 self.list_literal()
             with self.case():
                 self.object_literal()
-        with self.repeat():
-            self.whitespace()
-            self.end_of_line()
         self.whitespace()
+        with self.repeat():
+            self.yaml_eol()
+            self.whitespace()
+        with self.repeat():
+            self.end_of_line()
+            self.whitespace()
 
 
 if __name__ == '__main__':
@@ -245,52 +245,56 @@ if __name__ == '__main__':
         with open("YAMLParser.pyx", "w") as fh:
             fh.write(code)
 
-        subprocess.run(["python3", "setup.py", "build_ext", "--inplace"])
+        subprocess.run(["python3", "setup.py", "build_ext", "--inplace"]).check_returncode()
 
-    from YAMLParser import Parser as YAMLParser
-    from old_grammar import compile, Parser
+        from YAMLParser import Parser as YAMLParser
+        parser2 = YAMLParser(None)
+    else:
+        parser2 = YAML.parser()
+   # from old_grammar import compile, Parser
 
-    parser = Parser(YAML, None)
-    parser2 = YAMLParser(None)
+   # parser = Parser(YAML, None)
     import time
 
     def yaml(buf):
         print(len(buf))
         print(buf)
-        t1 = time.time()
-        node = parser.parse(buf)
-        t1 = time.time() - t1
+    #    t1 = time.time()
+    #    node = parser.parse(buf)
+    #    t1 = time.time() - t1
         t2 = time.time()
         node2 = parser2.parse(buf)
         t2 = time.time() - t2
-        if node:
-            walk(node)
-        else:
-            print('parser1failed')
+   #     if node:
+   #         walk(node)
+   #     else:
+   #         print('parser1failed')
         if node2:
             walk(node2)
         else:
+            raise Exception('no')
             print('parser2failed')
-        print(t1, t2, t2/t1*100)
+   #     print(t1, t2, t2/t1*100)
         print()
 
+    # yaml = lambda x:x
     yaml("""\
-    - 1
-    - 2
-    - 
-      - 3
-      - 4
-    - 5
-    - 6
-    - - 7
-      - 8
-      - - 9
-      - 
-        - 10
-        - 11
-    - 12
-    -
-     13
+- 1
+- 2
+- 
+  - 3
+  - 4
+- 5
+- 6
+- - 7
+  - 8
+  - - 9
+  - 
+    - 10
+    - 11
+- 12
+- 
+ 13
     """)
 
     yaml("""\
@@ -342,3 +346,8 @@ if __name__ == '__main__':
       }
     """)
 
+    yaml("""\
+example: 
+\ta: 1
+        b: 2
+""")

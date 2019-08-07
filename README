@@ -1,0 +1,30 @@
+# ugh
+
+this is a parsing expression library for python 3
+
+```
+
+from grammar import Grammar # here we go
+
+class MyGrammar(Grammar, whitespace=[" "], newline=["\n"], start="main"):
+    
+    @rule()
+    def main(self):
+        with self.capture("name"):
+            self.accept("yes")
+            self.newline()
+
+a = MyGrammar.parser()
+
+a.parse("yes\n")
+
+```
+
+it can also compile to cython for about a 2x speedup
+
+unlike other parsing expression libraries, this handles indentation grammars
+
+and i'm working on markdown parser
+
+i haven't worked out exactly how left corner parsing / left recursion will appear yet
+

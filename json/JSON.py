@@ -122,7 +122,7 @@ if __name__ == "__main__":
         with open("JSONParser.pyx", "w") as fh:
             fh.write(code)
 
-        subprocess.run(["python3", "setup.py", "build_ext", "--inplace"])
+        subprocess.run(["python3", "setup.py", "build_ext", "--inplace"]).check_returncode()
 
     from JSONParser import Parser as JSONParser
     from old_grammar import compile, Parser
