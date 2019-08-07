@@ -830,19 +830,28 @@ def compile_python(grammar, builder=None, cython=False):
             if cython: cond = " or ".join(f"chr == {repr(ord(chr))}" for chr in grammar.whitespace)
 
             offset_0 = offset.incr()
+            line_start_0 = line_start.incr()
 
             steps.extend((
-                f"{count} = {prefix}[len({prefix})-1]",
-                f"while {count} > 0 and {offset} < buf_eof:",
-                f"    chr = ord(buf[{offset}])",
-                f"    if {cond}:",
-                f"        {offset} +=1",
-                f"        {count} -= self.tabstop if chr == 9 else 1",
+                f"{line_start_0} = {line_start}",
+                f"for {count} in {prefix}:",
+                f"    if callable({count}):"
+                f"        {offset}, {line_start_0} = {count}(buf, {offset}, {line_start_0}, [], buf_eof, [])",
                 f"    else:",
+                f"        while {count} > 0 and {offset} < buf_eof:",
+                f"            chr = ord(buf[{offset}])",
+                f"            if {cond}:",
+                f"                {offset} +=1",
+                f"                {count} -= self.tabstop if chr == 9 else 1",
+                f"            else:",
+                f"                {offset} = -1",
+                f"                break",
+                f"    if {offset} == -1:",
                 f"        break",
-                f"if {count} != 0:",
-                f"    {offset} = -1",
+                f"    {line_start_0} = {offset}",
+                f"if {offset} == -1:",
                 f"    break",
+                f"{line_start} = {offset}",
             ))
 
         elif rule.kind == RULE:

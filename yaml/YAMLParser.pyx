@@ -1311,17 +1311,20 @@ cdef class Parser:
                                 offset_2 = -1
                                 break
                             
-                            count_0 = prefix_0[len(prefix_0)-1]
-                            while count_0 > 0 and offset_2 < buf_eof:
+                            for count_0 in prefix_0:
+                              while count_0 > 0 and offset_2 < buf_eof:
                                 chr = ord(buf[offset_2])
                                 if chr == 32 or chr == 9:
                                     offset_2 +=1
                                     count_0 -= self.tabstop if chr == 9 else 1
                                 else:
+                                    offset_2 = -1
                                     break
-                            if count_0 != 0:
-                                offset_2 = -1
+                              if offset_2 == -1:
                                 break
+                            if offset_2 == -1:
+                                break
+                            line_start_1 = offset_2
                             
                             count_0 = 0
                             while offset_2 < buf_eof:
@@ -1365,17 +1368,20 @@ cdef class Parser:
                                 offset_2 = -1
                                 break
                             
-                            count_1 = prefix_0[len(prefix_0)-1]
-                            while count_1 > 0 and offset_2 < buf_eof:
+                            for count_1 in prefix_0:
+                              while count_1 > 0 and offset_2 < buf_eof:
                                 chr = ord(buf[offset_2])
                                 if chr == 32 or chr == 9:
                                     offset_2 +=1
                                     count_1 -= self.tabstop if chr == 9 else 1
                                 else:
+                                    offset_2 = -1
                                     break
-                            if count_1 != 0:
-                                offset_2 = -1
+                              if offset_2 == -1:
                                 break
+                            if offset_2 == -1:
+                                break
+                            line_start_1 = offset_2
                             
                             if buf[offset_2:offset_2+1] == '-':
                                 offset_2 += 1
@@ -1433,17 +1439,20 @@ cdef class Parser:
                                         offset_3 = -1
                                         break
                                     
-                                    count_1 = prefix_0[len(prefix_0)-1]
-                                    while count_1 > 0 and offset_3 < buf_eof:
+                                    for count_1 in prefix_0:
+                                      while count_1 > 0 and offset_3 < buf_eof:
                                         chr = ord(buf[offset_3])
                                         if chr == 32 or chr == 9:
                                             offset_3 +=1
                                             count_1 -= self.tabstop if chr == 9 else 1
                                         else:
+                                            offset_3 = -1
                                             break
-                                    if count_1 != 0:
-                                        offset_3 = -1
+                                      if offset_3 == -1:
                                         break
+                                    if offset_3 == -1:
+                                        break
+                                    line_start_2 = offset_3
                                     
                                     count_1 = 0
                                     while offset_3 < buf_eof:
@@ -1544,17 +1553,20 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
                                 
-                                count_0 = prefix_0[len(prefix_0)-1]
-                                while count_0 > 0 and offset_3 < buf_eof:
+                                for count_0 in prefix_0:
+                                  while count_0 > 0 and offset_3 < buf_eof:
                                     chr = ord(buf[offset_3])
                                     if chr == 32 or chr == 9:
                                         offset_3 +=1
                                         count_0 -= self.tabstop if chr == 9 else 1
                                     else:
+                                        offset_3 = -1
                                         break
-                                if count_0 != 0:
-                                    offset_3 = -1
+                                  if offset_3 == -1:
                                     break
+                                if offset_3 == -1:
+                                    break
+                                line_start_1 = offset_3
                                 
                                 count_0 = 0
                                 while offset_3 < buf_eof:
@@ -1637,17 +1649,20 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
                                 
-                                count_1 = prefix_0[len(prefix_0)-1]
-                                while count_1 > 0 and offset_3 < buf_eof:
+                                for count_1 in prefix_0:
+                                  while count_1 > 0 and offset_3 < buf_eof:
                                     chr = ord(buf[offset_3])
                                     if chr == 32 or chr == 9:
                                         offset_3 +=1
                                         count_1 -= self.tabstop if chr == 9 else 1
                                     else:
+                                        offset_3 = -1
                                         break
-                                if count_1 != 0:
-                                    offset_3 = -1
+                                  if offset_3 == -1:
                                     break
+                                if offset_3 == -1:
+                                    break
+                                line_start_1 = offset_3
                                 
                                 offset_3, line_start_1 = self.parse_identifier(buf, offset_3, line_start_1, prefix_0, buf_eof, children_2)
                                 if offset_3 == -1: break
@@ -1711,17 +1726,20 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
                                         
-                                        count_1 = prefix_0[len(prefix_0)-1]
-                                        while count_1 > 0 and offset_4 < buf_eof:
+                                        for count_1 in prefix_0:
+                                          while count_1 > 0 and offset_4 < buf_eof:
                                             chr = ord(buf[offset_4])
                                             if chr == 32 or chr == 9:
                                                 offset_4 +=1
                                                 count_1 -= self.tabstop if chr == 9 else 1
                                             else:
+                                                offset_4 = -1
                                                 break
-                                        if count_1 != 0:
-                                            offset_4 = -1
+                                          if offset_4 == -1:
                                             break
+                                        if offset_4 == -1:
+                                            break
+                                        line_start_2 = offset_4
                                         
                                         count_1 = 0
                                         while offset_4 < buf_eof:
