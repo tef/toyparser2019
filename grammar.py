@@ -834,10 +834,11 @@ def compile_python(grammar, builder=None, cython=False):
                 f"    chr = buf[{offset}]",
                 f"    if {cond}:",
                 f"        {offset} +=1",
-                f"        {count} -= self.tabstop if chr == '\t' else 1",
+                f"        {count} -= 1",
                 f"    else:",
                 f"        break",
                 f"if {count} != 0:",
+                f"    print({count})",
                 f"    {offset} = -1",
                 f"    break",
             ))

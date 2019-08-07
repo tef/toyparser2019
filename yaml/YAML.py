@@ -1,4 +1,4 @@
-from grammar import Grammar
+from grammar import Grammar, compile_python
 
 import codecs
 
@@ -146,6 +146,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
                     self.indented_value()
                 with self.case():
                     self.yaml_eol()
+                    self.start_of_line()
                     self.indent()
                     self.accept(' ')
                     self.whitespace()
@@ -153,6 +154,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
 
             with self.repeat():
                 self.yaml_eol()
+                self.start_of_line()
                 self.indent()
                 self.accept("-")
                 self.accept(' ')
@@ -162,6 +164,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
                         self.indented_value()
                     with self.case():
                         self.yaml_eol()
+                        self.start_of_line()
                         self.indent()
                         self.whitespace()
                         self.indented_value()
@@ -176,6 +179,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
                 with self.choice():
                     with self.case():
                         self.yaml_eol()
+                        self.start_of_line()
                         self.indent()
                         self.accept(' ')
                         self.whitespace()
@@ -186,6 +190,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
 
             with self.repeat(), self.capture("pair-tail"):
                 self.yaml_eol()
+                self.start_of_line()
                 self.indent()
                 self.identifier()
                 self.whitespace()
@@ -197,6 +202,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
                         self.indented_value()
                     with self.case():
                         self.yaml_eol()
+                        self.start_of_line()
                         self.indent()
                         self.accept(' ')
                         self.whitespace()
@@ -214,7 +220,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
 
     @rule()
     def document(self):
-        with self.optional():
+        with self.repeat():
             self.whitespace()
             self.yaml_eol()
         with self.capture("document"), self.choice():
@@ -232,95 +238,107 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
         self.whitespace()
 
 
+if __name__ == '__main__':
+    import subprocess, sys
+    if not sys.argv[1:] or sys.argv[1] != "--skip":
+        code = compile_python(YAML, builder, cython=True)
+        with open("YAMLParser.pyx", "w") as fh:
+            fh.write(code)
 
-for name, value in YAML.rules.items():
-    print(name, '<--', value,'.')
+        subprocess.run(["python3", "setup.py", "build_ext", "--inplace"])
 
-builder = None
-from old_grammar import Parser 
-parser = Parser(YAML, builder)
-parser2 = YAML.parser(builder)
-import time
+    from YAMLParser import Parser as YAMLParser
+    from old_grammar import compile, Parser
 
-def yaml(buf):
-    print(len(buf))
-    print(buf)
-    t1 = time.time()
-    node = parser.parse(buf)
-    t1 = time.time() - t1
-    t2 = time.time()
-    node2 = parser2.parse(buf)
-    t2 = time.time() - t2
-    walk(node)
-    walk(node2)
-    print(t1, t2, t2/t1*100)
-    print()
+    parser = Parser(YAML, None)
+    parser2 = YAMLParser(None)
+    import time
 
-yaml("""\
-- 1
-- 2
-- 
-  - 3
-  - 4
-- 5
-- 6
-- - 7
-  - 8
-  - - 9
-  - 
-    - 10
-    - 11
-- 12
--
- 13
-""")
+    def yaml(buf):
+        print(len(buf))
+        print(buf)
+        t1 = time.time()
+        node = parser.parse(buf)
+        t1 = time.time() - t1
+        t2 = time.time()
+        node2 = parser2.parse(buf)
+        t2 = time.time() - t2
+        if node:
+            walk(node)
+        else:
+            print('parser1failed')
+        if node2:
+            walk(node2)
+        else:
+            print('parser2failed')
+        print(t1, t2, t2/t1*100)
+        print()
 
-yaml("""\
+    yaml("""\
+    - 1
+    - 2
+    - 
+      - 3
+      - 4
+    - 5
+    - 6
+    - - 7
+      - 8
+      - - 9
+      - 
+        - 10
+        - 11
+    - 12
+    -
+     13
+    """)
 
-servers:
-    alpha: { "a": 1 }
-example: 
-    a: 1
-    b: 2
-""")
-yaml("""\
-servers:
-  alpha: {
-    "ip": "10.0.0.1",
-    "names": [
-      "alpha",
-      "alpha.server",
-    ],
-  }
-  beta: {
-    "ip": "10.0.0.2",
-    "names": ["beta"],
-  }
-""")
+    yaml("""\
+    servers:
+        alpha: { "a": 1 }
+    example: 
+        a: 1
+        b: 2
+    """)
+    yaml("""\
+    servers:
+      alpha: {
+        "ip": "10.0.0.1",
+        "names": [
+          "alpha",
+          "alpha.server",
+        ],
+      }
+      beta: {
+        "ip": "10.0.0.2",
+        "names": ["beta"],
+      }
+    """)
 
-yaml("""\
-title: "SafeYAML Example"
+    yaml("""\
+    title: "SafeYAML Example"
 
-database:
-  server: "192.168.1.1"
+    database:
+      server: "192.168.1.1"
 
-  ports:
-    - 8000
-    - 8001
-    - 8002
+      ports:
+        - 8000
+        - 8001
+        - 8002
 
-  enabled: true
+      enabled: true
 
-servers:
-  alpha: {
-    "ip": "10.0.0.1",
-    "names": [
-      "alpha",
-      "alpha.server",
-    ],
-  }
-  beta: {
-    "ip": "10.0.0.2",
-    "names": ["beta"],
-  }
-""")
+    servers:
+      alpha: {
+        "ip": "10.0.0.1",
+        "names": [
+          "alpha",
+          "alpha.server",
+        ],
+      }
+      beta: {
+        "ip": "10.0.0.2",
+        "names": ["beta"],
+      }
+    """)
+
