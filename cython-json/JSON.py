@@ -124,11 +124,12 @@ if __name__ == "__main__":
         subprocess.run(["python3", "setup.py", "build_ext", "--inplace"])
 
     from JSONParser import Parser as JSONParser
+    from old_grammar import compile, Parser
     print()
 
-    parser = JSON.parser(builder)
-    old_python_parser = JSON.compile_old(builder)
-    python_parser = JSON.compile(builder)
+    parser = Parser(JSON, builder)
+    python_parser = JSON.parser(builder)
+    old_python_parser = compile(JSON, builder)
     cython_parser = JSONParser(builder)
 
     import time, json

@@ -813,21 +813,17 @@ def compile_python(grammar, builder=None, cython=False):
 
         elif rule.kind == MATCH_INDENT:
             steps.extend((
-                f"print('match_indent start', {offset}, repr({prefix}))",
                 f"{count} = {line_start} + {prefix}[0]",
                 f"if {count} >= buf_eof:",
-                f"    print('match_indent too long', {offset}, repr({prefix}))",
                 f"    {offset} = -1; break",
                 f"while {offset} < {count}:",
                 f"    if buf[{offset}] in self.WHITESPACE:",
                 f"        {offset} +=1",
                 f"    else:",
                 f"        break",
-                f"print('match_indent ran out of whitespace', {offset}, repr({prefix}))",
                 f"if {offset} != {count}:",
                 f"    {offset} = -1",
                 f"    break",
-                f"print('match_indent matched', {offset}, repr({prefix}))",
             ))
 
         elif rule.kind == RULE:
@@ -1062,7 +1058,7 @@ def compile_python(grammar, builder=None, cython=False):
         output.extend(parse_node)
         output.extend((
             f"cdef class Parser:",
-            f"    cpdef object builder",
+            f"    cpdef object builder, tabstop",
             f"",
             f"    def __init__(self, builder=None):",
             f"         self.builder = builder",

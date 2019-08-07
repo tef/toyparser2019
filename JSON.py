@@ -1,4 +1,4 @@
-from grammar import Grammar, ParserState
+from grammar import Grammar
 
 import codecs
 
@@ -121,7 +121,7 @@ if __name__ == "__main__":
         print(name, '<--', value,'.')
 
     print()
-    parser = JSON.parser({})
+    parser = JSON.parser(None)
     buf = '[1, 2, 3, "fooo"]'
     node = parser.parse(buf)
 
@@ -131,13 +131,9 @@ if __name__ == "__main__":
     print(node.build(buf, builder))
     print()
 
-    parser = JSON.parser(builder)
     print(parser.parse("[1, 2, 3]"))
     print()
 
-
-    parser1 = JSON.compile_old(builder)
-    parser2 = JSON.compile(builder)
 
     import time, json
 
@@ -152,8 +148,6 @@ if __name__ == "__main__":
 
 
     timeit("json", json.loads, s)
-    timeit("inew", parser2.parse, s)
-    timeit("comp", parser1.parse, s)
-    timeit("inter", parser.parse, s)
+    timeit("codegen", parser.parse, s)
 
 

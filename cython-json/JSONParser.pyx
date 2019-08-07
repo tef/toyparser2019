@@ -15,10 +15,11 @@ class Node:
 
 
 cdef class Parser:
-    cpdef object builder
+    cpdef object builder, tabstop
 
     def __init__(self, builder=None):
          self.builder = builder
+         self.tabstop = self.TABSTOP
 
     NEWLINE = ()
     WHITESPACE = (' ', '\t', '\r', '\n')
@@ -277,12 +278,16 @@ cdef class Parser:
                 while count_0 < 1:
                     offset_2 = offset_1
                     line_start_1 = line_start_0
-                    if buf[offset_2:offset_2+1] == '-':
-                        offset_2 += 1
-                    else:
-                        offset_2 = -1
+                    while True:
+                        if buf[offset_2:offset_2+1] == '-':
+                            offset_2 += 1
+                        else:
+                            offset_2 = -1
+                            break
+                        
                         break
-                    
+                    if offset_2 == -1:
+                        break
                     if offset_1 == offset_2: break
                     offset_1 = offset_2
                     line_start_0 = line_start_1
@@ -319,6 +324,7 @@ cdef class Parser:
                             break
                         
                         chr = ord(buf[offset_2])
+                        
                         if 49 <= chr <= 57:
                             offset_2 += 1
                         else:
@@ -329,17 +335,22 @@ cdef class Parser:
                         while True:
                             offset_3 = offset_2
                             line_start_2 = line_start_1
-                            if offset_3 == buf_eof:
-                                offset_3 = -1
+                            while True:
+                                if offset_3 == buf_eof:
+                                    offset_3 = -1
+                                    break
+                                
+                                chr = ord(buf[offset_3])
+                                
+                                if 48 <= chr <= 57:
+                                    offset_3 += 1
+                                else:
+                                    offset_3 = -1
+                                    break
+                                
                                 break
-                            
-                            chr = ord(buf[offset_3])
-                            if 48 <= chr <= 57:
-                                offset_3 += 1
-                            else:
-                                offset_3 = -1
+                            if offset_3 == -1:
                                 break
-                            
                             if offset_2 == offset_3: break
                             offset_2 = offset_3
                             line_start_1 = line_start_2
@@ -364,34 +375,43 @@ cdef class Parser:
                 while count_0 < 1:
                     offset_2 = offset_1
                     line_start_1 = line_start_0
-                    if buf[offset_2:offset_2+1] == '.':
-                        offset_2 += 1
-                    else:
-                        offset_2 = -1
-                        break
-                    
-                    count_1 = 0
                     while True:
-                        offset_3 = offset_2
-                        line_start_2 = line_start_1
-                        if offset_3 == buf_eof:
-                            offset_3 = -1
-                            break
-                        
-                        chr = ord(buf[offset_3])
-                        if 48 <= chr <= 57:
-                            offset_3 += 1
+                        if buf[offset_2:offset_2+1] == '.':
+                            offset_2 += 1
                         else:
-                            offset_3 = -1
+                            offset_2 = -1
                             break
                         
-                        if offset_2 == offset_3: break
-                        offset_2 = offset_3
-                        line_start_1 = line_start_2
-                        count_1 += 1
+                        count_1 = 0
+                        while True:
+                            offset_3 = offset_2
+                            line_start_2 = line_start_1
+                            while True:
+                                if offset_3 == buf_eof:
+                                    offset_3 = -1
+                                    break
+                                
+                                chr = ord(buf[offset_3])
+                                
+                                if 48 <= chr <= 57:
+                                    offset_3 += 1
+                                else:
+                                    offset_3 = -1
+                                    break
+                                
+                                break
+                            if offset_3 == -1:
+                                break
+                            if offset_2 == offset_3: break
+                            offset_2 = offset_3
+                            line_start_1 = line_start_2
+                            count_1 += 1
+                        if offset_2 == -1:
+                            break
+                        
+                        break
                     if offset_2 == -1:
                         break
-                    
                     if offset_1 == offset_2: break
                     offset_1 = offset_2
                     line_start_0 = line_start_1
@@ -404,56 +424,69 @@ cdef class Parser:
                 while count_0 < 1:
                     offset_2 = offset_1
                     line_start_1 = line_start_0
-                    if buf[offset_2:offset_2+1] == 'e':
-                        offset_2 += 1
-                    elif buf[offset_2:offset_2+1] == 'E':
-                        offset_2 += 1
-                    else:
-                        offset_2 = -1
-                        break
-                    
-                    count_1 = 0
-                    while count_1 < 1:
-                        offset_3 = offset_2
-                        line_start_2 = line_start_1
-                        if buf[offset_3:offset_3+1] == '+':
-                            offset_3 += 1
-                        elif buf[offset_3:offset_3+1] == '-':
-                            offset_3 += 1
+                    while True:
+                        if buf[offset_2:offset_2+1] == 'e':
+                            offset_2 += 1
+                        elif buf[offset_2:offset_2+1] == 'E':
+                            offset_2 += 1
                         else:
-                            offset_3 = -1
+                            offset_2 = -1
                             break
                         
-                        count_2 = 0
-                        while True:
-                            offset_4 = offset_3
-                            line_start_3 = line_start_2
-                            if offset_4 == buf_eof:
-                                offset_4 = -1
+                        count_1 = 0
+                        while count_1 < 1:
+                            offset_3 = offset_2
+                            line_start_2 = line_start_1
+                            while True:
+                                if buf[offset_3:offset_3+1] == '+':
+                                    offset_3 += 1
+                                elif buf[offset_3:offset_3+1] == '-':
+                                    offset_3 += 1
+                                else:
+                                    offset_3 = -1
+                                    break
+                                
+                                count_2 = 0
+                                while True:
+                                    offset_4 = offset_3
+                                    line_start_3 = line_start_2
+                                    while True:
+                                        if offset_4 == buf_eof:
+                                            offset_4 = -1
+                                            break
+                                        
+                                        chr = ord(buf[offset_4])
+                                        
+                                        if 48 <= chr <= 57:
+                                            offset_4 += 1
+                                        else:
+                                            offset_4 = -1
+                                            break
+                                        
+                                        break
+                                    if offset_4 == -1:
+                                        break
+                                    if offset_3 == offset_4: break
+                                    offset_3 = offset_4
+                                    line_start_2 = line_start_3
+                                    count_2 += 1
+                                if offset_3 == -1:
+                                    break
+                                
                                 break
-                            
-                            chr = ord(buf[offset_4])
-                            if 48 <= chr <= 57:
-                                offset_4 += 1
-                            else:
-                                offset_4 = -1
+                            if offset_3 == -1:
                                 break
-                            
-                            if offset_3 == offset_4: break
-                            offset_3 = offset_4
-                            line_start_2 = line_start_3
-                            count_2 += 1
-                        if offset_3 == -1:
+                            if offset_2 == offset_3: break
+                            offset_2 = offset_3
+                            line_start_1 = line_start_2
+                            count_1 += 1
+                            break
+                        if offset_2 == -1:
                             break
                         
-                        if offset_2 == offset_3: break
-                        offset_2 = offset_3
-                        line_start_1 = line_start_2
-                        count_1 += 1
                         break
                     if offset_2 == -1:
                         break
-                    
                     if offset_1 == offset_2: break
                     offset_1 = offset_2
                     line_start_0 = line_start_1
@@ -492,159 +525,169 @@ cdef class Parser:
                 while True:
                     offset_2 = offset_1
                     line_start_1 = line_start_0
-                    while True: # start choice
-                        offset_3 = offset_2
-                        line_start_2 = line_start_1
-                        children_2 = []
-                        while True: # case
-                            if buf[offset_3:offset_3+2] == '\\u':
-                                offset_3 += 2
-                            else:
-                                offset_3 = -1
+                    while True:
+                        while True: # start choice
+                            offset_3 = offset_2
+                            line_start_2 = line_start_1
+                            children_2 = []
+                            while True: # case
+                                if buf[offset_3:offset_3+2] == '\\u':
+                                    offset_3 += 2
+                                else:
+                                    offset_3 = -1
+                                    break
+                                
+                                if offset_3 == buf_eof:
+                                    offset_3 = -1
+                                    break
+                                
+                                chr = ord(buf[offset_3])
+                                
+                                if 48 <= chr <= 57:
+                                    offset_3 += 1
+                                elif 97 <= chr <= 102:
+                                    offset_3 += 1
+                                elif 65 <= chr <= 70:
+                                    offset_3 += 1
+                                else:
+                                    offset_3 = -1
+                                    break
+                                
+                                if offset_3 == buf_eof:
+                                    offset_3 = -1
+                                    break
+                                
+                                chr = ord(buf[offset_3])
+                                
+                                if 48 <= chr <= 57:
+                                    offset_3 += 1
+                                elif 97 <= chr <= 102:
+                                    offset_3 += 1
+                                elif 65 <= chr <= 70:
+                                    offset_3 += 1
+                                else:
+                                    offset_3 = -1
+                                    break
+                                
+                                if offset_3 == buf_eof:
+                                    offset_3 = -1
+                                    break
+                                
+                                chr = ord(buf[offset_3])
+                                
+                                if 48 <= chr <= 57:
+                                    offset_3 += 1
+                                elif 97 <= chr <= 102:
+                                    offset_3 += 1
+                                elif 65 <= chr <= 70:
+                                    offset_3 += 1
+                                else:
+                                    offset_3 = -1
+                                    break
+                                
+                                if offset_3 == buf_eof:
+                                    offset_3 = -1
+                                    break
+                                
+                                chr = ord(buf[offset_3])
+                                
+                                if 48 <= chr <= 57:
+                                    offset_3 += 1
+                                elif 97 <= chr <= 102:
+                                    offset_3 += 1
+                                elif 65 <= chr <= 70:
+                                    offset_3 += 1
+                                else:
+                                    offset_3 = -1
+                                    break
+                                
+                                
                                 break
-                            
-                            if offset_3 == buf_eof:
-                                offset_3 = -1
+                            if offset_3 != -1:
+                                offset_2 = offset_3
+                                line_start_1 = line_start_2
+                                children_1.extend(children_2)
                                 break
-                            
-                            chr = ord(buf[offset_3])
-                            if 48 <= chr <= 57:
-                                offset_3 += 1
-                            elif 97 <= chr <= 102:
-                                offset_3 += 1
-                            elif 65 <= chr <= 70:
-                                offset_3 += 1
-                            else:
-                                offset_3 = -1
+                            # end case
+                            offset_3 = offset_2
+                            line_start_2 = line_start_1
+                            children_2 = []
+                            while True: # case
+                                if buf[offset_3:offset_3+1] == '\\':
+                                    offset_3 += 1
+                                else:
+                                    offset_3 = -1
+                                    break
+                                
+                                if offset_3 == buf_eof:
+                                    offset_3 = -1
+                                    break
+                                
+                                chr = ord(buf[offset_3])
+                                
+                                if chr == 34:
+                                    offset_3 += 1
+                                elif chr == 92:
+                                    offset_3 += 1
+                                elif chr == 47:
+                                    offset_3 += 1
+                                elif chr == 98:
+                                    offset_3 += 1
+                                elif chr == 102:
+                                    offset_3 += 1
+                                elif chr == 110:
+                                    offset_3 += 1
+                                elif chr == 114:
+                                    offset_3 += 1
+                                elif chr == 116:
+                                    offset_3 += 1
+                                else:
+                                    offset_3 = -1
+                                    break
+                                
+                                
                                 break
-                            
-                            if offset_3 == buf_eof:
-                                offset_3 = -1
+                            if offset_3 != -1:
+                                offset_2 = offset_3
+                                line_start_1 = line_start_2
+                                children_1.extend(children_2)
                                 break
-                            
-                            chr = ord(buf[offset_3])
-                            if 48 <= chr <= 57:
-                                offset_3 += 1
-                            elif 97 <= chr <= 102:
-                                offset_3 += 1
-                            elif 65 <= chr <= 70:
-                                offset_3 += 1
-                            else:
-                                offset_3 = -1
+                            # end case
+                            offset_3 = offset_2
+                            line_start_2 = line_start_1
+                            children_2 = []
+                            while True: # case
+                                if offset_3 == buf_eof:
+                                    offset_3 = -1
+                                    break
+                                
+                                chr = ord(buf[offset_3])
+                                
+                                if chr == 92:
+                                    offset_3 = -1
+                                    break
+                                elif chr == 34:
+                                    offset_3 = -1
+                                    break
+                                else:
+                                    offset_3 += 1
+                                
+                                
                                 break
-                            
-                            if offset_3 == buf_eof:
-                                offset_3 = -1
+                            if offset_3 != -1:
+                                offset_2 = offset_3
+                                line_start_1 = line_start_2
+                                children_1.extend(children_2)
                                 break
-                            
-                            chr = ord(buf[offset_3])
-                            if 48 <= chr <= 57:
-                                offset_3 += 1
-                            elif 97 <= chr <= 102:
-                                offset_3 += 1
-                            elif 65 <= chr <= 70:
-                                offset_3 += 1
-                            else:
-                                offset_3 = -1
-                                break
-                            
-                            if offset_3 == buf_eof:
-                                offset_3 = -1
-                                break
-                            
-                            chr = ord(buf[offset_3])
-                            if 48 <= chr <= 57:
-                                offset_3 += 1
-                            elif 97 <= chr <= 102:
-                                offset_3 += 1
-                            elif 65 <= chr <= 70:
-                                offset_3 += 1
-                            else:
-                                offset_3 = -1
-                                break
-                            
-                            
+                            # end case
+                            offset_2 = -1 # no more choices
+                            break # end choice
+                        if offset_2 == -1:
                             break
-                        if offset_3 != -1:
-                            offset_2 = offset_3
-                            line_start_1 = line_start_2
-                            children_1.extend(children_2)
-                            break
-                        # end case
-                        offset_3 = offset_2
-                        line_start_2 = line_start_1
-                        children_2 = []
-                        while True: # case
-                            if buf[offset_3:offset_3+1] == '\\':
-                                offset_3 += 1
-                            else:
-                                offset_3 = -1
-                                break
-                            
-                            if offset_3 == buf_eof:
-                                offset_3 = -1
-                                break
-                            
-                            chr = ord(buf[offset_3])
-                            if chr == 34:
-                                offset_3 += 1
-                            elif chr == 92:
-                                offset_3 += 1
-                            elif chr == 47:
-                                offset_3 += 1
-                            elif chr == 98:
-                                offset_3 += 1
-                            elif chr == 102:
-                                offset_3 += 1
-                            elif chr == 110:
-                                offset_3 += 1
-                            elif chr == 114:
-                                offset_3 += 1
-                            elif chr == 116:
-                                offset_3 += 1
-                            else:
-                                offset_3 = -1
-                                break
-                            
-                            
-                            break
-                        if offset_3 != -1:
-                            offset_2 = offset_3
-                            line_start_1 = line_start_2
-                            children_1.extend(children_2)
-                            break
-                        # end case
-                        offset_3 = offset_2
-                        line_start_2 = line_start_1
-                        children_2 = []
-                        while True: # case
-                            if offset_3 == buf_eof:
-                                offset_3 = -1
-                                break
-                            
-                            chr = ord(buf[offset_3])
-                            if chr == 92:
-                                offset_3 = -1
-                                break
-                            elif chr == 34:
-                                offset_3 = -1
-                                break
-                            else:
-                                offset_3 += 1
-                            
-                            
-                            break
-                        if offset_3 != -1:
-                            offset_2 = offset_3
-                            line_start_1 = line_start_2
-                            children_1.extend(children_2)
-                            break
-                        # end case
-                        offset_2 = -1 # no more choices
-                        break # end choice
+                        
+                        break
                     if offset_2 == -1:
                         break
-                    
                     if offset_1 == offset_2: break
                     offset_1 = offset_2
                     line_start_0 = line_start_1
@@ -698,49 +741,57 @@ cdef class Parser:
                 while count_0 < 1:
                     offset_2 = offset_1
                     line_start_1 = line_start_0
-                    offset_2, line_start_1 = self.parse_json_value(buf, offset_2, line_start_1, prefix_0, buf_eof, children_1)
-                    if offset_2 == -1: break
-                    
-                    
-                    count_1 = 0
                     while True:
-                        offset_3 = offset_2
-                        line_start_2 = line_start_1
-                        count_2 = 0
-                        while offset_3 < buf_eof:
-                            chr = buf[offset_3]
-                            if chr == 32 or chr == 9 or chr == 13 or chr == 10:
-                                offset_3 +=1
-                                count_2 +=1
-                            else:
-                                break
+                        offset_2, line_start_1 = self.parse_json_value(buf, offset_2, line_start_1, prefix_0, buf_eof, children_1)
+                        if offset_2 == -1: break
                         
-                        if buf[offset_3:offset_3+1] == ',':
-                            offset_3 += 1
-                        else:
-                            offset_3 = -1
+                        
+                        count_1 = 0
+                        while True:
+                            offset_3 = offset_2
+                            line_start_2 = line_start_1
+                            while True:
+                                count_2 = 0
+                                while offset_3 < buf_eof:
+                                    chr = buf[offset_3]
+                                    if chr == 32 or chr == 9 or chr == 13 or chr == 10:
+                                        offset_3 +=1
+                                        count_2 +=1
+                                    else:
+                                        break
+                                
+                                if buf[offset_3:offset_3+1] == ',':
+                                    offset_3 += 1
+                                else:
+                                    offset_3 = -1
+                                    break
+                                
+                                count_2 = 0
+                                while offset_3 < buf_eof:
+                                    chr = buf[offset_3]
+                                    if chr == 32 or chr == 9 or chr == 13 or chr == 10:
+                                        offset_3 +=1
+                                        count_2 +=1
+                                    else:
+                                        break
+                                
+                                offset_3, line_start_2 = self.parse_json_value(buf, offset_3, line_start_2, prefix_0, buf_eof, children_1)
+                                if offset_3 == -1: break
+                                
+                                
+                                break
+                            if offset_3 == -1:
+                                break
+                            if offset_2 == offset_3: break
+                            offset_2 = offset_3
+                            line_start_1 = line_start_2
+                            count_1 += 1
+                        if offset_2 == -1:
                             break
                         
-                        count_2 = 0
-                        while offset_3 < buf_eof:
-                            chr = buf[offset_3]
-                            if chr == 32 or chr == 9 or chr == 13 or chr == 10:
-                                offset_3 +=1
-                                count_2 +=1
-                            else:
-                                break
-                        
-                        offset_3, line_start_2 = self.parse_json_value(buf, offset_3, line_start_2, prefix_0, buf_eof, children_1)
-                        if offset_3 == -1: break
-                        
-                        
-                        if offset_2 == offset_3: break
-                        offset_2 = offset_3
-                        line_start_1 = line_start_2
-                        count_1 += 1
+                        break
                     if offset_2 == -1:
                         break
-                    
                     if offset_1 == offset_2: break
                     offset_1 = offset_2
                     line_start_0 = line_start_1
@@ -795,140 +846,148 @@ cdef class Parser:
                 while count_0 < 1:
                     offset_2 = offset_1
                     line_start_1 = line_start_0
-                    offset_3 = offset_2
-                    children_2 = []
-                    while True: # start capture
-                        offset_3, line_start_1 = self.parse_json_string(buf, offset_3, line_start_1, prefix_0, buf_eof, children_2)
-                        if offset_3 == -1: break
-                        
-                        
-                        count_1 = 0
-                        while offset_3 < buf_eof:
-                            chr = buf[offset_3]
-                            if chr == 32 or chr == 9 or chr == 13 or chr == 10:
-                                offset_3 +=1
-                                count_1 +=1
-                            else:
-                                break
-                        
-                        if buf[offset_3:offset_3+1] == ':':
-                            offset_3 += 1
-                        else:
-                            offset_3 = -1
-                            break
-                        
-                        count_1 = 0
-                        while offset_3 < buf_eof:
-                            chr = buf[offset_3]
-                            if chr == 32 or chr == 9 or chr == 13 or chr == 10:
-                                offset_3 +=1
-                                count_1 +=1
-                            else:
-                                break
-                        
-                        offset_3, line_start_1 = self.parse_json_value(buf, offset_3, line_start_1, prefix_0, buf_eof, children_2)
-                        if offset_3 == -1: break
-                        
-                        
-                        break
-                    if offset_3 == -1:
-                        offset_2 = -1
-                        break
-                    if self.builder is not None:
-                        children_1.append(self.builder['pair'](buf, offset_2, offset_3, children_2))
-                    else:
-                        children_1.append(Node('pair', offset_2, offset_3, list(children_2), None))
-                    offset_2 = offset_3
-                    
-                    count_1 = 0
-                    while offset_2 < buf_eof:
-                        chr = buf[offset_2]
-                        if chr == 32 or chr == 9 or chr == 13 or chr == 10:
-                            offset_2 +=1
-                            count_1 +=1
-                        else:
-                            break
-                    
-                    count_1 = 0
                     while True:
                         offset_3 = offset_2
-                        line_start_2 = line_start_1
-                        if buf[offset_3:offset_3+1] == ',':
-                            offset_3 += 1
-                        else:
-                            offset_3 = -1
-                            break
-                        
-                        count_2 = 0
-                        while offset_3 < buf_eof:
-                            chr = buf[offset_3]
-                            if chr == 32 or chr == 9 or chr == 13 or chr == 10:
-                                offset_3 +=1
-                                count_2 +=1
-                            else:
-                                break
-                        
-                        offset_4 = offset_3
                         children_2 = []
                         while True: # start capture
-                            offset_4, line_start_2 = self.parse_json_string(buf, offset_4, line_start_2, prefix_0, buf_eof, children_2)
-                            if offset_4 == -1: break
+                            offset_3, line_start_1 = self.parse_json_string(buf, offset_3, line_start_1, prefix_0, buf_eof, children_2)
+                            if offset_3 == -1: break
                             
                             
-                            count_2 = 0
-                            while offset_4 < buf_eof:
-                                chr = buf[offset_4]
+                            count_1 = 0
+                            while offset_3 < buf_eof:
+                                chr = buf[offset_3]
                                 if chr == 32 or chr == 9 or chr == 13 or chr == 10:
-                                    offset_4 +=1
-                                    count_2 +=1
+                                    offset_3 +=1
+                                    count_1 +=1
                                 else:
                                     break
                             
-                            if buf[offset_4:offset_4+1] == ':':
-                                offset_4 += 1
+                            if buf[offset_3:offset_3+1] == ':':
+                                offset_3 += 1
                             else:
-                                offset_4 = -1
+                                offset_3 = -1
                                 break
                             
-                            count_2 = 0
-                            while offset_4 < buf_eof:
-                                chr = buf[offset_4]
+                            count_1 = 0
+                            while offset_3 < buf_eof:
+                                chr = buf[offset_3]
                                 if chr == 32 or chr == 9 or chr == 13 or chr == 10:
-                                    offset_4 +=1
-                                    count_2 +=1
+                                    offset_3 +=1
+                                    count_1 +=1
                                 else:
                                     break
                             
-                            offset_4, line_start_2 = self.parse_json_value(buf, offset_4, line_start_2, prefix_0, buf_eof, children_2)
-                            if offset_4 == -1: break
+                            offset_3, line_start_1 = self.parse_json_value(buf, offset_3, line_start_1, prefix_0, buf_eof, children_2)
+                            if offset_3 == -1: break
                             
                             
                             break
-                        if offset_4 == -1:
-                            offset_3 = -1
+                        if offset_3 == -1:
+                            offset_2 = -1
                             break
                         if self.builder is not None:
-                            children_1.append(self.builder['pair'](buf, offset_3, offset_4, children_2))
+                            children_1.append(self.builder['pair'](buf, offset_2, offset_3, children_2))
                         else:
-                            children_1.append(Node('pair', offset_3, offset_4, list(children_2), None))
-                        offset_3 = offset_4
+                            children_1.append(Node('pair', offset_2, offset_3, list(children_2), None))
+                        offset_2 = offset_3
                         
-                        count_2 = 0
-                        while offset_3 < buf_eof:
-                            chr = buf[offset_3]
+                        count_1 = 0
+                        while offset_2 < buf_eof:
+                            chr = buf[offset_2]
                             if chr == 32 or chr == 9 or chr == 13 or chr == 10:
-                                offset_3 +=1
-                                count_2 +=1
+                                offset_2 +=1
+                                count_1 +=1
                             else:
                                 break
                         
-                        if offset_2 == offset_3: break
-                        offset_2 = offset_3
-                        line_start_1 = line_start_2
-                        count_1 += 1
+                        count_1 = 0
+                        while True:
+                            offset_3 = offset_2
+                            line_start_2 = line_start_1
+                            while True:
+                                if buf[offset_3:offset_3+1] == ',':
+                                    offset_3 += 1
+                                else:
+                                    offset_3 = -1
+                                    break
+                                
+                                count_2 = 0
+                                while offset_3 < buf_eof:
+                                    chr = buf[offset_3]
+                                    if chr == 32 or chr == 9 or chr == 13 or chr == 10:
+                                        offset_3 +=1
+                                        count_2 +=1
+                                    else:
+                                        break
+                                
+                                offset_4 = offset_3
+                                children_2 = []
+                                while True: # start capture
+                                    offset_4, line_start_2 = self.parse_json_string(buf, offset_4, line_start_2, prefix_0, buf_eof, children_2)
+                                    if offset_4 == -1: break
+                                    
+                                    
+                                    count_2 = 0
+                                    while offset_4 < buf_eof:
+                                        chr = buf[offset_4]
+                                        if chr == 32 or chr == 9 or chr == 13 or chr == 10:
+                                            offset_4 +=1
+                                            count_2 +=1
+                                        else:
+                                            break
+                                    
+                                    if buf[offset_4:offset_4+1] == ':':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+                                    
+                                    count_2 = 0
+                                    while offset_4 < buf_eof:
+                                        chr = buf[offset_4]
+                                        if chr == 32 or chr == 9 or chr == 13 or chr == 10:
+                                            offset_4 +=1
+                                            count_2 +=1
+                                        else:
+                                            break
+                                    
+                                    offset_4, line_start_2 = self.parse_json_value(buf, offset_4, line_start_2, prefix_0, buf_eof, children_2)
+                                    if offset_4 == -1: break
+                                    
+                                    
+                                    break
+                                if offset_4 == -1:
+                                    offset_3 = -1
+                                    break
+                                if self.builder is not None:
+                                    children_1.append(self.builder['pair'](buf, offset_3, offset_4, children_2))
+                                else:
+                                    children_1.append(Node('pair', offset_3, offset_4, list(children_2), None))
+                                offset_3 = offset_4
+                                
+                                count_2 = 0
+                                while offset_3 < buf_eof:
+                                    chr = buf[offset_3]
+                                    if chr == 32 or chr == 9 or chr == 13 or chr == 10:
+                                        offset_3 +=1
+                                        count_2 +=1
+                                    else:
+                                        break
+                                
+                                break
+                            if offset_3 == -1:
+                                break
+                            if offset_2 == offset_3: break
+                            offset_2 = offset_3
+                            line_start_1 = line_start_2
+                            count_1 += 1
+                        if offset_2 == -1:
+                            break
+                        
+                        break
                     if offset_2 == -1:
                         break
-                    
                     if offset_1 == offset_2: break
                     offset_1 = offset_2
                     line_start_0 = line_start_1

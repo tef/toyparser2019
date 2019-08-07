@@ -323,10 +323,12 @@ if __name__ == "__main__":
     from RSONParser import Parser as RSONParser
     print()
 
-    parser = RSON.parser(builder)
-    old_python_parser = RSON.compile_old(builder)
-    python_parser = RSON.compile(builder)
+    from old_grammar import compile, Parser
+
+    arser = Parser(RSON, builder)
     cython_parser = RSONParser(builder)
+    python_parser = RSON.parser(builder)
+    old_python_parser = compile(RSON, builder)
 
     def p(buf):
         return cython_parser.parse(buf, err=rsonlib.ParserErr)
