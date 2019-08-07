@@ -23,7 +23,7 @@ cdef class Parser:
 
     NEWLINE = ()
     WHITESPACE = (' ', '\t', '\r', '\n', '\ufeff')
-    TABSTOP = None
+    TABSTOP = 8
 
     def parse(self, buf, offset=0, err=None):
         line_start, prefix, eof, children = offset, (), len(buf), []
@@ -51,9 +51,10 @@ cdef class Parser:
                 offset_0 = -1
                 break
             if self.builder is not None:
-                children_0.append(self.builder['document'](buf, offset_0, offset_1, children_1))
+                value_0 = self.builder['document'](buf, offset_0, offset_1, children_1)
             else:
-                children_0.append(Node('document', offset_0, offset_1, list(children_1), None))
+                value_0 = Node('document', offset_0, offset_1, list(children_1), None)
+            children_0.append(value_0)
             offset_0 = offset_1
             
             offset_0, line_start_0 = self.parse_comment(buf, offset_0, line_start_0, prefix_0, buf_eof, children_0)
@@ -220,9 +221,10 @@ cdef class Parser:
                             offset_2 = -1
                             break
                         if self.builder is not None:
-                            children_2.append(self.builder['identifier'](buf, offset_2, offset_3, children_3))
+                            value_0 = self.builder['identifier'](buf, offset_2, offset_3, children_3)
                         else:
-                            children_2.append(Node('identifier', offset_2, offset_3, list(children_3), None))
+                            value_0 = Node('identifier', offset_2, offset_3, list(children_3), None)
+                        children_2.append(value_0)
                         offset_2 = offset_3
                         
                         if buf[offset_2:offset_2+1] == ' ':
@@ -240,9 +242,10 @@ cdef class Parser:
                         offset_1 = -1
                         break
                     if self.builder is not None:
-                        children_1.append(self.builder['tagged'](buf, offset_1, offset_2, children_2))
+                        value_1 = self.builder['tagged'](buf, offset_1, offset_2, children_2)
                     else:
-                        children_1.append(Node('tagged', offset_1, offset_2, list(children_2), None))
+                        value_1 = Node('tagged', offset_1, offset_2, list(children_2), None)
+                    children_1.append(value_1)
                     offset_1 = offset_2
                     
                     
@@ -413,9 +416,10 @@ cdef class Parser:
                 offset_0 = -1
                 break
             if self.builder is not None:
-                children_0.append(self.builder['bool'](buf, offset_0, offset_1, children_1))
+                value_0 = self.builder['bool'](buf, offset_0, offset_1, children_1)
             else:
-                children_0.append(Node('bool', offset_0, offset_1, list(children_1), None))
+                value_0 = Node('bool', offset_0, offset_1, list(children_1), None)
+            children_0.append(value_0)
             offset_0 = offset_1
             
             break
@@ -439,9 +443,10 @@ cdef class Parser:
                 offset_0 = -1
                 break
             if self.builder is not None:
-                children_0.append(self.builder['bool'](buf, offset_0, offset_1, children_1))
+                value_0 = self.builder['bool'](buf, offset_0, offset_1, children_1)
             else:
-                children_0.append(Node('bool', offset_0, offset_1, list(children_1), None))
+                value_0 = Node('bool', offset_0, offset_1, list(children_1), None)
+            children_0.append(value_0)
             offset_0 = offset_1
             
             break
@@ -465,9 +470,10 @@ cdef class Parser:
                 offset_0 = -1
                 break
             if self.builder is not None:
-                children_0.append(self.builder['null'](buf, offset_0, offset_1, children_1))
+                value_0 = self.builder['null'](buf, offset_0, offset_1, children_1)
             else:
-                children_0.append(Node('null', offset_0, offset_1, list(children_1), None))
+                value_0 = Node('null', offset_0, offset_1, list(children_1), None)
+            children_0.append(value_0)
             offset_0 = offset_1
             
             break
@@ -1007,9 +1013,10 @@ cdef class Parser:
                 offset_0 = -1
                 break
             if self.builder is not None:
-                children_0.append(self.builder['number'](buf, offset_0, offset_1, children_1))
+                value_0 = self.builder['number'](buf, offset_0, offset_1, children_1)
             else:
-                children_0.append(Node('number', offset_0, offset_1, list(children_1), None))
+                value_0 = Node('number', offset_0, offset_1, list(children_1), None)
+            children_0.append(value_0)
             offset_0 = offset_1
             
             break
@@ -1556,9 +1563,10 @@ cdef class Parser:
                         offset_1 = -1
                         break
                     if self.builder is not None:
-                        children_1.append(self.builder['string'](buf, offset_1, offset_2, children_2))
+                        value_0 = self.builder['string'](buf, offset_1, offset_2, children_2)
                     else:
-                        children_1.append(Node('string', offset_1, offset_2, list(children_2), None))
+                        value_0 = Node('string', offset_1, offset_2, list(children_2), None)
+                    children_1.append(value_0)
                     offset_1 = offset_2
                     
                     if buf[offset_1:offset_1+1] == '"':
@@ -2111,9 +2119,10 @@ cdef class Parser:
                         offset_1 = -1
                         break
                     if self.builder is not None:
-                        children_1.append(self.builder['string'](buf, offset_1, offset_2, children_2))
+                        value_1 = self.builder['string'](buf, offset_1, offset_2, children_2)
                     else:
-                        children_1.append(Node('string', offset_1, offset_2, list(children_2), None))
+                        value_1 = Node('string', offset_1, offset_2, list(children_2), None)
+                    children_1.append(value_1)
                     offset_1 = offset_2
                     
                     if buf[offset_1:offset_1+1] == "'":
@@ -2243,9 +2252,10 @@ cdef class Parser:
                 offset_0 = -1
                 break
             if self.builder is not None:
-                children_0.append(self.builder['list'](buf, offset_0, offset_1, children_1))
+                value_0 = self.builder['list'](buf, offset_0, offset_1, children_1)
             else:
-                children_0.append(Node('list', offset_0, offset_1, list(children_1), None))
+                value_0 = Node('list', offset_0, offset_1, list(children_1), None)
+            children_0.append(value_0)
             offset_0 = offset_1
             
             if buf[offset_0:offset_0+1] == ']':
@@ -2310,9 +2320,10 @@ cdef class Parser:
                             offset_2 = -1
                             break
                         if self.builder is not None:
-                            children_1.append(self.builder['pair'](buf, offset_2, offset_3, children_2))
+                            value_0 = self.builder['pair'](buf, offset_2, offset_3, children_2)
                         else:
-                            children_1.append(Node('pair', offset_2, offset_3, list(children_2), None))
+                            value_0 = Node('pair', offset_2, offset_3, list(children_2), None)
+                        children_1.append(value_0)
                         offset_2 = offset_3
                         
                         offset_2, line_start_1 = self.parse_comment(buf, offset_2, line_start_1, prefix_0, buf_eof, children_1)
@@ -2364,9 +2375,10 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
                                 if self.builder is not None:
-                                    children_1.append(self.builder['pair'](buf, offset_3, offset_4, children_2))
+                                    value_1 = self.builder['pair'](buf, offset_3, offset_4, children_2)
                                 else:
-                                    children_1.append(Node('pair', offset_3, offset_4, list(children_2), None))
+                                    value_1 = Node('pair', offset_3, offset_4, list(children_2), None)
+                                children_1.append(value_1)
                                 offset_3 = offset_4
                                 
                                 offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, prefix_0, buf_eof, children_1)
@@ -2425,9 +2437,10 @@ cdef class Parser:
                 offset_0 = -1
                 break
             if self.builder is not None:
-                children_0.append(self.builder['object'](buf, offset_0, offset_1, children_1))
+                value_2 = self.builder['object'](buf, offset_0, offset_1, children_1)
             else:
-                children_0.append(Node('object', offset_0, offset_1, list(children_1), None))
+                value_2 = Node('object', offset_0, offset_1, list(children_1), None)
+            children_0.append(value_2)
             offset_0 = offset_1
             
             if buf[offset_0:offset_0+1] == '}':
