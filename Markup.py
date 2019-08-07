@@ -34,8 +34,9 @@ class Markup(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
     @rule()
     def header(self):
         with self.capture("header"):
-            with self.capture('level'), self.repeat(min=1):
+            with self.count('>') as c, self.repeat(min=1):
                 self.accept("#")
+            self.capture_value(c)
             with self.optional():
                 self.whitespace()
             with self.capture('text'):
@@ -105,7 +106,7 @@ for name, value in Markup.rules.items():
     print(name, '<--', value,'.')
 
 def markup(buf):
-    parser = Markup.parser({})
+    parser = Markup.parser(None)
     node = parser.parse(buf)
     if node:
         walk(node)
