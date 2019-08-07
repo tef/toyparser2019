@@ -3,7 +3,7 @@ from grammar import Grammar
 import codecs
 
 def walk(node, indent="- "):
-    print(indent, node)
+    print(indent, node, node.value)
     for child in node.children:
         walk(child, indent+ "  ")
 
@@ -184,12 +184,13 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
                         self.whitespace()
                         self.indented_value()
 
-            with self.repeat(), self.capture("pair"):
+            with self.repeat(), self.capture("pair-tail"):
                 self.yaml_eol()
                 self.indent()
                 self.identifier()
                 self.whitespace()
                 self.accept(":")
+                self.capture_value("a")
                 with self.choice():
                     with self.case():
                         self.whitespace()
@@ -235,9 +236,10 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
 for name, value in YAML.rules.items():
     print(name, '<--', value,'.')
 
-builder = {}
-parser = YAML.parser(builder)
-parser2 = YAML.compile(builder)
+builder = None
+from old_grammar import Parser 
+parser = Parser(YAML, builder)
+parser2 = YAML.parser(builder)
 import time
 
 def yaml(buf):
@@ -249,8 +251,8 @@ def yaml(buf):
     t2 = time.time()
     node2 = parser2.parse(buf)
     t2 = time.time() - t2
-    print(node)
-    print(node2)
+    walk(node)
+    walk(node2)
     print(t1, t2, t2/t1)
     print()
 

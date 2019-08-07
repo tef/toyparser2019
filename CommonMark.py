@@ -323,7 +323,7 @@ for name, value in CommonMark.rules.items():
 print(CommonMark.version)
 
 def markup(buf):
-    parser = CommonMark.compile(builder)
+    parser = CommonMark.parser(builder)
     node = parser.parse(buf)
     if node:
         print(repr(buf), node)
