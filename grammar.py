@@ -61,7 +61,7 @@ def build_class_dict(attrs, start, whitespace, newline, tabstop):
     new_attrs['start'] = start
     new_attrs['whitespace'] = whitespace
     new_attrs['newline'] = newline
-    new_attrs['tabstop'] = tabstop
+    new_attrs['tabstop'] = tabstop or 8
 
     return new_attrs
 
@@ -281,17 +281,24 @@ class ValueNode(GrammarNode):
         return ParserRule('value', args=dict(value=self.value))
 
 class CaptureNode(GrammarNode):
-    def __init__(self, name, rules):
+    def __init__(self, name, args, rules, *, key=None):
         self.rules = rules
         self.name = name
+        self.args = args
+        self.key = key or object()
+
     def __str__(self):
         return f"({' '.join(str(x) for x in self.rules)})"
 
     def canonical(self, builder):
         rules = [r.canonical(builder) for r in self.rules]
-        return CaptureNode(self.name, rules)
+        return CaptureNode(self.name, self.args, rules, key=self.key)
     def make_rule(self):
-        return ParserRule(CAPTURE, args=dict(name=self.name), rules=[r.make_rule() for r in self.rules])
+        args = dict()
+        args['name'] = self.name
+        args['key'] =  self.key
+        args['args'] = self.args
+        return ParserRule(CAPTURE, args=args, rules=[r.make_rule() for r in self.rules])
 
 class RepeatNode(GrammarNode):
     def __init__(self, rules, min=0, max=None, key=None):
@@ -429,7 +436,7 @@ class FunctionBuilder:
         rules = self.rules
         self.rules = []
         yield
-        rules.append(CaptureNode(name, self.rules))
+        rules.append(CaptureNode(name, {}, self.rules))
         self.rules = rules
 
     @contextmanager
@@ -537,7 +544,7 @@ class Builtins:
     def rule(*args, inline=False, capture=None):
         def _wrapper(rules):
             if capture:
-                return CaptureNode(capture, rules)
+                return CaptureNode(capture, {}, rules)
             elif len(rules) > 1:
                 return SequenceNode(rules)
             else:
@@ -550,7 +557,7 @@ class Builtins:
             return _decorator
 
     def capture(name, *args):
-        return CaptureNode(name, args)
+        return CaptureNode(name, {}, args)
     def capture_value(arg):
         return ValueNode(arg)
     def accept(*args):
@@ -649,12 +656,16 @@ def compile_python(grammar, builder=None, cython=False):
             else:
                 node = "self.Node"
 
+            value = VarBuilder('value', len(values))
+            values[rule.args['key']] = value
+
             steps.extend((
                 # f"print(len(buf), {offset}, {offset_0}, {children})",
                 f"if self.builder is not None:",
-                f"    {children}.append(self.builder[{name}](buf, {offset}, {offset_0}, {children_0}))",
+                f"    {value} = self.builder[{name}](buf, {offset}, {offset_0}, {children_0})",
                 f"else:",
-                f"    {children}.append({node}({name}, {offset}, {offset_0}, list({children_0}), None))",
+                f"    {value} = {node}({name}, {offset}, {offset_0}, list({children_0}), None)",
+                f"{children}.append({value})",
             ))
             steps.append(f"{offset} = {offset_0}")
 
@@ -812,16 +823,21 @@ def compile_python(grammar, builder=None, cython=False):
             steps.append(f'if {offset} == -1: break')
 
         elif rule.kind == MATCH_INDENT:
+            cond = f"chr in self.WHITESPACE"
+            if cython: cond = " or ".join(f"chr == {repr(ord(chr))}" for chr in grammar.whitespace)
+
+            offset_0 = offset.incr()
+
             steps.extend((
-                f"{count} = {line_start} + {prefix}[0]",
-                f"if {count} >= buf_eof:",
-                f"    {offset} = -1; break",
-                f"while {offset} < {count}:",
-                f"    if buf[{offset}] in self.WHITESPACE:",
+                f"{count} = {prefix}[0]",
+                f"while {count} > 0 and {offset} < buf_eof:",
+                f"    chr = buf[{offset}]",
+                f"    if {cond}:",
                 f"        {offset} +=1",
+                f"        {count} -= self.tabstop if chr == '\t' else 1",
                 f"    else:",
                 f"        break",
-                f"if {offset} != {count}:",
+                f"if {count} != 0:",
                 f"    {offset} = -1",
                 f"    break",
             ))
@@ -930,10 +946,16 @@ def compile_python(grammar, builder=None, cython=False):
         elif rule.kind == WHITESPACE:
             _min = rule.args['min']
             _max = rule.args['max']
+
+            _minv = values.get(_min)
+            _maxv = values.get(_max)
+
             _newline = rule.args['newline']
 
             cond = [f"{offset} < buf_eof"]
-            if _max is not None:
+            if _maxv:
+                cond.append(f"{count} < {repr(_maxv)}")
+            elif _max is not None:
                 cond.append(f"{count} < {repr(_max)}")
 
             cond2 =f"chr in self.WHITESPACE"
@@ -968,7 +990,13 @@ def compile_python(grammar, builder=None, cython=False):
                     f"    else:",
                     f"        break",
                 ))
-            if _min is not None and _min > 0:
+            if _minv:
+                steps.extend((
+                    f"if {count} < {_minv}:",
+                    f"    {offset} = -1",
+                    f"    break",
+                ))
+            elif _min is not None and _min > 0:
                 steps.extend((
                     f"if {count} < {repr(_min)}:",
                     f"    {offset} = -1",

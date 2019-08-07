@@ -253,7 +253,7 @@ def yaml(buf):
     t2 = time.time() - t2
     walk(node)
     walk(node2)
-    print(t1, t2, t2/t1)
+    print(t1, t2, t2/t1*100)
     print()
 
 yaml("""\
