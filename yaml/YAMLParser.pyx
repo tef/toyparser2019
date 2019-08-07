@@ -1261,8 +1261,18 @@ cdef class Parser:
         cdef int count_0
         cpdef Py_UCS4 chr
         while True: # note: return at end of loop
-            count_0 = offset_0 - line_start_0+  ((self.tabstop -1) * buf[line_start_0:offset_0].count("	"))
-            prefix_0.append(count_0)
+            count_0 = offset_0 - line_start_0+  ((self.tabstop -1) * buf[line_start_0:offset_0].count('	'))
+            def _indent(buf, offset, line_start, prefix, buf_eof, children, count=count_0):
+                while count > 0 and offset < buf_eof:
+                    chr = ord(buf[offset])
+                    if chr == 32 or chr == 9:
+                        offset +=1
+                        count -= self.tabstop if chr == 9 else 1
+                    else:
+                        offset = -1
+                        break
+                return offset, line_start
+            prefix_0.append(_indent)
             while True:
                 offset_1 = offset_0
                 children_1 = []
@@ -1311,20 +1321,14 @@ cdef class Parser:
                                 offset_2 = -1
                                 break
                             
-                            for count_0 in prefix_0:
-                              while count_0 > 0 and offset_2 < buf_eof:
-                                chr = ord(buf[offset_2])
-                                if chr == 32 or chr == 9:
-                                    offset_2 +=1
-                                    count_0 -= self.tabstop if chr == 9 else 1
-                                else:
-                                    offset_2 = -1
+                            for indent in prefix_0:
+                                _children, _prefix = [], []
+                                offset_2, line_start_1 = indent(buf, offset_2, line_start_1, _prefix, buf_eof, _children)
+                                if offset_2 == -1 or _prefix or _children:
                                     break
-                              if offset_2 == -1:
-                                break
+                                line_start_1 = offset_2
                             if offset_2 == -1:
                                 break
-                            line_start_1 = offset_2
                             
                             count_0 = 0
                             while offset_2 < buf_eof:
@@ -1368,20 +1372,14 @@ cdef class Parser:
                                 offset_2 = -1
                                 break
                             
-                            for count_1 in prefix_0:
-                              while count_1 > 0 and offset_2 < buf_eof:
-                                chr = ord(buf[offset_2])
-                                if chr == 32 or chr == 9:
-                                    offset_2 +=1
-                                    count_1 -= self.tabstop if chr == 9 else 1
-                                else:
-                                    offset_2 = -1
+                            for indent in prefix_0:
+                                _children, _prefix = [], []
+                                offset_2, line_start_1 = indent(buf, offset_2, line_start_1, _prefix, buf_eof, _children)
+                                if offset_2 == -1 or _prefix or _children:
                                     break
-                              if offset_2 == -1:
-                                break
+                                line_start_1 = offset_2
                             if offset_2 == -1:
                                 break
-                            line_start_1 = offset_2
                             
                             if buf[offset_2:offset_2+1] == '-':
                                 offset_2 += 1
@@ -1439,20 +1437,14 @@ cdef class Parser:
                                         offset_3 = -1
                                         break
                                     
-                                    for count_1 in prefix_0:
-                                      while count_1 > 0 and offset_3 < buf_eof:
-                                        chr = ord(buf[offset_3])
-                                        if chr == 32 or chr == 9:
-                                            offset_3 +=1
-                                            count_1 -= self.tabstop if chr == 9 else 1
-                                        else:
-                                            offset_3 = -1
+                                    for indent in prefix_0:
+                                        _children, _prefix = [], []
+                                        offset_3, line_start_2 = indent(buf, offset_3, line_start_2, _prefix, buf_eof, _children)
+                                        if offset_3 == -1 or _prefix or _children:
                                             break
-                                      if offset_3 == -1:
-                                        break
+                                        line_start_2 = offset_3
                                     if offset_3 == -1:
                                         break
-                                    line_start_2 = offset_3
                                     
                                     count_1 = 0
                                     while offset_3 < buf_eof:
@@ -1512,8 +1504,18 @@ cdef class Parser:
         cdef int count_0
         cpdef Py_UCS4 chr
         while True: # note: return at end of loop
-            count_0 = offset_0 - line_start_0+  ((self.tabstop -1) * buf[line_start_0:offset_0].count("	"))
-            prefix_0.append(count_0)
+            count_0 = offset_0 - line_start_0+  ((self.tabstop -1) * buf[line_start_0:offset_0].count('	'))
+            def _indent(buf, offset, line_start, prefix, buf_eof, children, count=count_0):
+                while count > 0 and offset < buf_eof:
+                    chr = ord(buf[offset])
+                    if chr == 32 or chr == 9:
+                        offset +=1
+                        count -= self.tabstop if chr == 9 else 1
+                    else:
+                        offset = -1
+                        break
+                return offset, line_start
+            prefix_0.append(_indent)
             while True:
                 offset_1 = offset_0
                 children_1 = []
@@ -1553,20 +1555,14 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
                                 
-                                for count_0 in prefix_0:
-                                  while count_0 > 0 and offset_3 < buf_eof:
-                                    chr = ord(buf[offset_3])
-                                    if chr == 32 or chr == 9:
-                                        offset_3 +=1
-                                        count_0 -= self.tabstop if chr == 9 else 1
-                                    else:
-                                        offset_3 = -1
+                                for indent in prefix_0:
+                                    _children, _prefix = [], []
+                                    offset_3, line_start_1 = indent(buf, offset_3, line_start_1, _prefix, buf_eof, _children)
+                                    if offset_3 == -1 or _prefix or _children:
                                         break
-                                  if offset_3 == -1:
-                                    break
+                                    line_start_1 = offset_3
                                 if offset_3 == -1:
                                     break
-                                line_start_1 = offset_3
                                 
                                 count_0 = 0
                                 while offset_3 < buf_eof:
@@ -1649,20 +1645,14 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
                                 
-                                for count_1 in prefix_0:
-                                  while count_1 > 0 and offset_3 < buf_eof:
-                                    chr = ord(buf[offset_3])
-                                    if chr == 32 or chr == 9:
-                                        offset_3 +=1
-                                        count_1 -= self.tabstop if chr == 9 else 1
-                                    else:
-                                        offset_3 = -1
+                                for indent in prefix_0:
+                                    _children, _prefix = [], []
+                                    offset_3, line_start_1 = indent(buf, offset_3, line_start_1, _prefix, buf_eof, _children)
+                                    if offset_3 == -1 or _prefix or _children:
                                         break
-                                  if offset_3 == -1:
-                                    break
+                                    line_start_1 = offset_3
                                 if offset_3 == -1:
                                     break
-                                line_start_1 = offset_3
                                 
                                 offset_3, line_start_1 = self.parse_identifier(buf, offset_3, line_start_1, prefix_0, buf_eof, children_2)
                                 if offset_3 == -1: break
@@ -1726,20 +1716,14 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
                                         
-                                        for count_1 in prefix_0:
-                                          while count_1 > 0 and offset_4 < buf_eof:
-                                            chr = ord(buf[offset_4])
-                                            if chr == 32 or chr == 9:
-                                                offset_4 +=1
-                                                count_1 -= self.tabstop if chr == 9 else 1
-                                            else:
-                                                offset_4 = -1
+                                        for indent in prefix_0:
+                                            _children, _prefix = [], []
+                                            offset_4, line_start_2 = indent(buf, offset_4, line_start_2, _prefix, buf_eof, _children)
+                                            if offset_4 == -1 or _prefix or _children:
                                                 break
-                                          if offset_4 == -1:
-                                            break
+                                            line_start_2 = offset_4
                                         if offset_4 == -1:
                                             break
-                                        line_start_2 = offset_4
                                         
                                         count_1 = 0
                                         while offset_4 < buf_eof:
