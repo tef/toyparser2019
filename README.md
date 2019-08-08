@@ -47,16 +47,16 @@ print(a.parse("yes\n")) # and get "yes\n"
 
 ## annoying grammar handling
 
-      - indentaton
-	- lines must be {n} whitespace chars in from start
-        - or empty
-        - passing in a tabstop and if allowing mixed space/tabs, at parse time
+  - indentaton
+    - lines must be {n} whitespace chars in from start
+    - or empty
+    - passing in a tabstop and if allowing mixed space/tabs, at parse time
 
-      - prefixed
-        - blockquote/markdown '>' prefixed lines
+  - prefixed
+    - blockquote/markdown '>' prefixed lines
 
-      - data depedennt
-        - counting chars in string and passing it as a value to other rules
+  - data depedennt
+    - counting chars in string and passing it as a value to other rules
 
 
 ## wishlist:
