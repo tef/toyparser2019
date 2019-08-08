@@ -15,12 +15,13 @@ class Node:
 
 
 cdef class Parser:
-    cpdef object builder, tabstop, cache
+    cpdef object builder, tabstop, cache, allow_mixed_indent 
 
-    def __init__(self, builder=None):
+    def __init__(self, builder=None, tabstop=None, allow_mixed_indent=True):
          self.builder = builder
-         self.tabstop = self.TABSTOP
+         self.tabstop = tabstop or self.TABSTOP
          self.cache = None
+         self.allow_mixed_indent = allow_mixed_indent
 
     NEWLINE = ('\n', '\r', '\r\n')
     WHITESPACE = (' ', '\t')
@@ -1340,12 +1341,18 @@ cdef class Parser:
         cpdef Py_UCS4 chr
         while True: # note: return at end of loop
             count_0 = offset_0 - line_start_0+  ((self.tabstop -1) * buf[line_start_0:offset_0].count('	'))
-            def _indent(buf, offset, line_start, prefix, buf_eof, children, count=count_0):
+            def _indent(buf, offset, line_start, prefix, buf_eof, children, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
+                saw_tab, saw_not_tab = False, False
                 while count > 0 and offset < buf_eof:
                     chr = buf[offset]
                     if chr in ' \t':
                         offset +=1
                         count -= self.tabstop if chr == 9 else 1
+                        if not allow_mixed_indent:
+                            if chr == 9: saw_tab = True
+                            else: saw_not_tab = True
+                            if saw_tab and saw_not_tab:
+                                 offset -1; break
                     elif chr == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
                         break
                     elif chr in '\n\r':
@@ -1590,12 +1597,18 @@ cdef class Parser:
         cpdef Py_UCS4 chr
         while True: # note: return at end of loop
             count_0 = offset_0 - line_start_0+  ((self.tabstop -1) * buf[line_start_0:offset_0].count('	'))
-            def _indent(buf, offset, line_start, prefix, buf_eof, children, count=count_0):
+            def _indent(buf, offset, line_start, prefix, buf_eof, children, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
+                saw_tab, saw_not_tab = False, False
                 while count > 0 and offset < buf_eof:
                     chr = buf[offset]
                     if chr in ' \t':
                         offset +=1
                         count -= self.tabstop if chr == 9 else 1
+                        if not allow_mixed_indent:
+                            if chr == 9: saw_tab = True
+                            else: saw_not_tab = True
+                            if saw_tab and saw_not_tab:
+                                 offset -1; break
                     elif chr == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
                         break
                     elif chr in '\n\r':

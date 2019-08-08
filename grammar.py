@@ -897,13 +897,19 @@ def compile_python(grammar, builder=None, cython=False):
                     steps.append(f"{count} = {offset} - {line_start}+  ((self.tabstop -1) * buf[{line_start}:{offset}].count('\t'))")
                     
                 steps.extend((
-                        f"def _indent(buf, offset, line_start, prefix, buf_eof, children, count={count}):",
+                        f"def _indent(buf, offset, line_start, prefix, buf_eof, children, count={count}, allow_mixed_indent=self.allow_mixed_indent):",
                 #        f"    print('nice', offset, count, repr(buf[offset:offset+8]))",
+                        f"    saw_tab, saw_not_tab = False, False",
                         f"    while count > 0 and offset < buf_eof:",
                         f"        chr = buf[offset]",
                         f"        if {cond}:",
                         f"            offset +=1",
                         f"            count -= self.tabstop if chr == 9 else 1",
+                        f"            if not allow_mixed_indent:",
+                        f"                if chr == 9: saw_tab = True",
+                        f"                else: saw_not_tab = True",
+                        f"                if saw_tab and saw_not_tab:",
+                        f"                     offset -1; break",
                 ))
                 if newline_rn:
                     steps.extend((
@@ -1238,12 +1244,13 @@ def compile_python(grammar, builder=None, cython=False):
         output.extend(parse_node)
         output.extend((
             f"cdef class Parser:",
-            f"    cpdef object builder, tabstop, cache",
+            f"    cpdef object builder, tabstop, cache, allow_mixed_indent ",
             f"",
-            f"    def __init__(self, builder=None):",
+            f"    def __init__(self, builder=None, tabstop=None, allow_mixed_indent=True):",
             f"         self.builder = builder",
-            f"         self.tabstop = self.TABSTOP",
+            f"         self.tabstop = tabstop or self.TABSTOP",
             f"         self.cache = None",
+            f"         self.allow_mixed_indent = allow_mixed_indent",
             f"",
             f"    NEWLINE = {newline}",
             f"    WHITESPACE = {whitespace}",
@@ -1255,10 +1262,11 @@ def compile_python(grammar, builder=None, cython=False):
     else:
         output.extend((
             f"class Parser:",
-            f"    def __init__(self, builder=None):",
+            f"    def __init__(self, builder=None, tabstop=None, allow_mixed_indent=False):",
             f"         self.builder = builder",
-            f"         self.tabstop = self.TABSTOP",
+            f"         self.tabstop = tabstop or self.TABSTOP",
             f"         self.cache = None",
+            f"         self.allow_mixed_indent = allow_mixed_indent",
             "",
             f"    NEWLINE = {newline}",
             f"    WHITESPACE = {whitespace}",
