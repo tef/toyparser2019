@@ -1320,7 +1320,6 @@ cdef class Parser:
                             if offset_2 != line_start_1:
                                 offset_2 = -1
                                 break
-                            
                             for indent in prefix_0:
                                 _children, _prefix = [], []
                                 offset_2, line_start_1 = indent(buf, offset_2, line_start_1, _prefix, buf_eof, _children)
@@ -1371,7 +1370,6 @@ cdef class Parser:
                             if offset_2 != line_start_1:
                                 offset_2 = -1
                                 break
-                            
                             for indent in prefix_0:
                                 _children, _prefix = [], []
                                 offset_2, line_start_1 = indent(buf, offset_2, line_start_1, _prefix, buf_eof, _children)
@@ -1436,7 +1434,6 @@ cdef class Parser:
                                     if offset_3 != line_start_2:
                                         offset_3 = -1
                                         break
-                                    
                                     for indent in prefix_0:
                                         _children, _prefix = [], []
                                         offset_3, line_start_2 = indent(buf, offset_3, line_start_2, _prefix, buf_eof, _children)
@@ -1554,7 +1551,6 @@ cdef class Parser:
                                 if offset_3 != line_start_1:
                                     offset_3 = -1
                                     break
-                                
                                 for indent in prefix_0:
                                     _children, _prefix = [], []
                                     offset_3, line_start_1 = indent(buf, offset_3, line_start_1, _prefix, buf_eof, _children)
@@ -1644,7 +1640,6 @@ cdef class Parser:
                                 if offset_3 != line_start_1:
                                     offset_3 = -1
                                     break
-                                
                                 for indent in prefix_0:
                                     _children, _prefix = [], []
                                     offset_3, line_start_1 = indent(buf, offset_3, line_start_1, _prefix, buf_eof, _children)
@@ -1715,7 +1710,6 @@ cdef class Parser:
                                         if offset_4 != line_start_2:
                                             offset_4 = -1
                                             break
-                                        
                                         for indent in prefix_0:
                                             _children, _prefix = [], []
                                             offset_4, line_start_2 = indent(buf, offset_4, line_start_2, _prefix, buf_eof, _children)
@@ -1759,9 +1753,9 @@ cdef class Parser:
                                 offset_2 = -1
                                 break
                             if self.builder is not None:
-                                value_1 = self.builder['pair-tail'](buf, offset_2, offset_3, children_2)
+                                value_1 = self.builder['pair'](buf, offset_2, offset_3, children_2)
                             else:
-                                value_1 = Node('pair-tail', offset_2, offset_3, list(children_2), None)
+                                value_1 = Node('pair', offset_2, offset_3, list(children_2), None)
                             children_1.append(value_1)
                             offset_2 = offset_3
                             

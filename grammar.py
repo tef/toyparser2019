@@ -164,8 +164,7 @@ WHITESPACE = 'whitespace'
 NEWLINE = 'newline'
 END_OF_FILE = 'end-of-file'
 
-SET_INDENT = 'set-indent'
-MATCH_INDENT = 'match-indent'
+SET_LINE_PREFIX = 'set-line-prefix'
 
 LOOKAHEAD = 'lookahead'
 REJECT = 'reject'
@@ -357,8 +356,17 @@ class FunctionBuilder:
             def callback(*, rule=rule):
                     self.rule(rule)
             def _repeat(min=0, max=None, *, rule=rule):
-                    self.rule(RepeatNode([rule], min=min, max=max))
+                if self.block_mode: raise SyntaxError()
+                self.rule(RepeatNode([rule], min=min, max=max))
+            @contextmanager
+            def _as_prefix(*, rule=rule, name=name):
+                if self.block_mode: raise SyntaxError()
+                rules, self.rules = self.rules, []
+                yield
+                rules.append(GrammarNode(SET_LINE_PREFIX, args=dict(prefix=name), rules=self.rules))
+                self.rules = rules
             callback.repeat = _repeat
+            callback.as_line_prefix = _as_prefix
             setattr(self, name, callback)
 
     def rule(self, rule):
@@ -397,9 +405,6 @@ class FunctionBuilder:
         if self.block_mode: raise SyntaxError()
         self.rules.append(RangeNode(args, invert))
 
-    def indent(self):
-        if self.block_mode: raise SyntaxError()
-        self.rules.append(GrammarNode(MATCH_INDENT))
     def print(self, *args):
         if self.block_mode: raise SyntaxError()
         self.rules.append(GrammarNode(PRINT, args={'args':args}))
@@ -413,11 +418,11 @@ class FunctionBuilder:
         self.rules.append(GrammarNode(ACCEPT_IF, args=dict(cond=cond)))
 
     @contextmanager
-    def indented(self, prefix=None):
+    def indented(self):
         if self.block_mode: raise SyntaxError()
         rules, self.rules = self.rules, []
         yield
-        rules.append(GrammarNode(SET_INDENT, args=dict(prefix=prefix), rules=self.rules))
+        rules.append(GrammarNode(SET_LINE_PREFIX, args=dict(prefix=None), rules=self.rules))
         self.rules = rules
 
     @contextmanager
@@ -814,7 +819,7 @@ def compile_python(grammar, builder=None, cython=False):
                 f"    {children}.append({node}('value', {offset}, {offset}, (), {value}))",
             ))
 
-        elif rule.kind == SET_INDENT:
+        elif rule.kind == SET_LINE_PREFIX:
             cond = f"chr in self.WHITESPACE"
             if cython: cond = " or ".join(f"chr == {repr(ord(chr))}" for chr in grammar.whitespace)
 
@@ -845,7 +850,7 @@ def compile_python(grammar, builder=None, cython=False):
             steps.append(f'{prefix}.pop()')
             steps.append(f'if {offset} == -1: break')
 
-        elif rule.kind == MATCH_INDENT or rule.kind == START_OF_LINE:
+        elif rule.kind == START_OF_LINE:
             cond = f"chr in self.WHITESPACE"
             if cython: cond = " or ".join(f"chr == {repr(ord(chr))}" for chr in grammar.whitespace)
 

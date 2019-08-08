@@ -241,15 +241,13 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                 with self.case(): self.setext_heading_line()
                 with self.case(): self.start_fenced_block()
 
-
-
     @rule()
     def blockquote(self):
         with self.capture("blockquote"):
             self.whitespace(max=3)
             self.accept('>')
             self.whitespace(max=1)
-            with self.indented(prefix="start_blockquote"):
+            with self.start_blockquote.as_line_prefix():
                 self.block_element()
                 with self.repeat():
                     self.start_of_line()
