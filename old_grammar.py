@@ -696,7 +696,7 @@ def compile(grammar, builder=None):
         f"class Parser:",
         f"    def __init__(self, builder):",
         f"         self.builder = builder",
-        f"         self.tabstop = tabstop",
+        f"         self.tabstop = self.TABSTOP",
         "",
         f"    NEWLINE = {newline}",
         f"    WHITESPACE = {whitespace}",
