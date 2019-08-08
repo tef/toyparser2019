@@ -1192,7 +1192,7 @@ def compile_python(grammar, builder=None, cython=False):
         output.extend(parse_node)
         output.extend((
             f"cdef class Parser:",
-            f"    cpdef object builder, tabstop",
+            f"    cpdef object builder, tabstop, cache",
             f"",
             f"    def __init__(self, builder=None):",
             f"         self.builder = builder",

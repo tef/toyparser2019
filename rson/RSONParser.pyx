@@ -15,7 +15,7 @@ class Node:
 
 
 cdef class Parser:
-    cpdef object builder, tabstop
+    cpdef object builder, tabstop, cache
 
     def __init__(self, builder=None):
          self.builder = builder
