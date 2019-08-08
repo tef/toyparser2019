@@ -2,7 +2,12 @@
 
 this is a parsing expression library for python 3
 
+the big idea is that you should be able to express Python, Markdown, or similar
+without resorting to lexer hacks, or inlining code into the parser
+
 ## example
+
+it uses a builder/dsl like thingy to describe and build rules
 
 ```
 
@@ -10,37 +15,51 @@ from grammar import Grammar # here we go
 
 class MyGrammar(Grammar, whitespace=[" "], newline=["\n"], start="main"):
     
-    @rule()
-    def main(self):
-        with self.capture("name"):
-            self.accept("yes")
+    @rule()                              # must be decorated
+    def main(self): 			 # called, given a builder 
+        with self.capture("name"):       # scoped rules
+            self.accept("yes")           # built in operators
             self.newline()
 
 a = MyGrammar.parser()
 
-out = a.parse("yes\n")
+out = a.parse("yes\n")  # returns a Node("name", offset=0, end=4, children=())
 
 builder = {"name": (lambda buf, offset, end, children: buf[offset: end])}
 
+# instead of inline code, pass in a dict of callbacks
 
 print(out.build(builder))
 
 a = MyGrammar.parser(builder)
 
-print(a.parse("yes\n"))
+print(a.parse("yes\n")) # and get "yes\n"
 
 ```
 
 ## features
 
- - explict named captures, rather than return entire parse tree
- - indentaton handling / prefixed blocks of lines handling
- - cython output
- - data dependent grammars
+ - opt-in memoizaton (as opposed to packrat)
+ - explict named captures (as opposed to returning entire parse tree)
+ - currently cython output, but no python specific operations are involved
+ - handle annoying grammars (indents, prefixes, etc)
 
-the intent is that it should be able to express something like CommonMark without resorting to putting python code directly into the grammar, as well as things like JSON, YAML, or even Python
 
-wishlist:
+## annoying grammar handling
+
+      - indentaton
+	- lines must be {n} whitespace chars in from start
+        - or empty
+        - passing in a tabstop and if allowing mixed space/tabs, at parse time
+
+      - prefixed
+        - blockquote/markdown '>' prefixed lines
+
+      - data depedennt
+        - counting chars in string and passing it as a value to other rules
+
+
+## wishlist:
 
 - codegen for other languages
 - .peg file parsing
