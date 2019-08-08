@@ -1067,9 +1067,17 @@ def compile_python(grammar, builder=None, cython=False):
             ))
 
         elif rule.kind == PRINT:
-            steps.append(f'raise Exception("{rule.kind} missing") # unfinished {rule}')
+            args = [values.get(a, repr(a)) for a in rule.args['args']]
+            steps.append(f"print('print', {', '.join(args)}, 'at' ,{offset}, repr(buf[{offset}:{offset}+5]))")
         elif rule.kind == TRACE:
-            steps.append(f'raise Exception("{rule.kind} missing") # unfinished {rule}')
+            steps.append(f"print('begin trace', 'at' ,{offset}, repr(buf[{offset}:{offset}+5]))")
+            steps.append('while True:')
+            for subrule in rule.rules:
+                build_steps(subrule, steps.add_indent(), offset, line_start, prefix, children, count, values)
+                steps.append(f"    print('..... trace', 'at' ,{offset}, repr(buf[{offset}:{offset}+5]))")
+
+            steps.append('    break')
+            steps.append(f"print('exit trace', 'at' ,{offset}, repr(buf[{offset}:{offset}+5]))")
         else:
             raise Exception(f'Unknown kind {rule.kind}')
 

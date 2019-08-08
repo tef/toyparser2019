@@ -13,9 +13,9 @@ def unescape(string):
 builder = {
     'document': (lambda buf, pos, end, children: children),
     'thematic_break': (lambda buf, pos, end, children: {"hr": buf[pos:end]}),
-    'atx_heading': (lambda buf, pos, end, children: {"aheading":children}),
+    'atx_heading': (lambda buf, pos, end, children: {"heading":children}),
     'atx_level': (lambda buf, pos, end, children: end-pos),
-    'setext_heading': (lambda buf, pos, end, children: {"sheading":[children[-1]]+children[:-1]}),
+    'setext_heading': (lambda buf, pos, end, children: {"heading":[children[-1]]+children[:-1]}),
     'indented_code': (lambda buf, pos, end, children: {"indented_code":children}),
     'fenced_code': (lambda buf, pos, end, children: {"fenced_code":children}),
     'para': (lambda buf, pos, end, children: {"para":children}),
@@ -106,9 +106,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             with self.repeat():
                 self.accept("#")
         self.whitespace()
-        with self.choice():
-            with self.case(): self.eof()
-            with self.case(): self.newline()
+        self.end_of_line()
 
     @rule()
     def setext_heading(self):
@@ -148,9 +146,16 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                         self.start_of_line()
                         self.indented_code_line()
                     with self.case():
+                        self.start_of_line()
                         self.whitespace()
                         self.newline()
-                        self.start_of_line()
+                        self.capture_value("")
+                    with self.case():
+                        with self.repeat(min=1):
+                            self.whitespace()
+                            self.newline()
+                        with self.lookahead():
+                            self.start_of_line()
                         self.capture_value("")
 
     @rule()
@@ -182,7 +187,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     def backtick_code_block(self):
         fence = "```"
         self.accept(fence)
-        with self.capture('info'), self.repeat(min=1):
+        with self.capture('info'), self.repeat(min=0):
             with self.reject(): # Example 115
                 self.accept(fence)
             self.range("\n", invert=True)
@@ -192,7 +197,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             with self.reject():
                 self.whitespace(max=3)
                 self.accept(fence)
-            with self.capture('text'), self.repeat(min=1):
+            with self.capture('text'), self.repeat(min=0):
                 self.range("\n", invert=True)
             self.line_end()
         self.start_of_line()
@@ -205,7 +210,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     def tilde_code_block(self):
         fence = "~~~"
         self.accept(fence)
-        with self.capture('info'), self.repeat(min=1):
+        with self.capture('info'), self.repeat(min=0):
             self.range("\n", invert=True)
         self.line_end()
         with self.repeat():
@@ -213,7 +218,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             with self.reject():
                 self.whitespace(max=3)
                 self.accept(fence)
-            with self.capture('text'), self.repeat(min=1):
+            with self.capture('text'), self.repeat(min=0):
                 self.range("\n", invert=True)
             self.line_end()
         self.start_of_line()
@@ -229,6 +234,9 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                 self.accept('>')
                 self.whitespace(max=1)
             with self.case(), self.reject(), self.choice():
+                with self.case(): 
+                    self.whitespace()
+                    self.newline()
                 with self.case(): self.thematic_break()
                 with self.case(): self.setext_heading_line()
                 with self.case(): self.start_fenced_block()
@@ -237,7 +245,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
 
     @rule()
     def blockquote(self):
-        with self.trace(False), self.capture("blockquote"):
+        with self.capture("blockquote"):
             self.whitespace(max=3)
             self.accept('>')
             self.whitespace(max=1)
@@ -248,11 +256,9 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                     with self.choice():
                         with self.case():
                             self.block_element()
-                            self.newline()
                         with self.case():
                             self.whitespace()
                             self.newline()
-                            self.capture_value('\n')
 
 
     @rule()
@@ -261,22 +267,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
         with self.capture("para"):
             self.inline_para()
             self.whitespace()
-            with self.choice():
-                with self.case():
-                    self.eof()
-                with self.case():
-                    self.newline()
-                    self.whitespace()
-                with self.case():
-                    self.newline()
-                    self.start_of_line()
-                    self.whitespace()
-            with self.choice():
-                # 4.1 Ex 27, 28. Thematic Breaks can interrupt a paragraph
-                with self.case(), self.lookahead():
-                    self.para_interrupt()
-                with self.case(): self.eof()
-                with self.case(): self.newline()
+            self.end_of_line()
             
 
     @rule()
@@ -350,9 +341,12 @@ def _markup(buf):
     parser = CommonMark.parser(builder)
     node = parser.parse(buf)
     if node:
-        print(buf)
-        print(node)
-        #walk(node)
+        print("test")
+        for b in buf.splitlines():
+            print("  ", b)
+        print()
+        print(">", node)
+        print()
         # print(node.build(buf, builder))
 
 markup = _markup # lambda x:x
@@ -471,7 +465,7 @@ b r b
 )
 _markup("""\
 > a 
-> b
+> > b
 
 ddff
 """)
