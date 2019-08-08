@@ -180,6 +180,7 @@ SEQUENCE = 'seq'
 CAPTURE = 'capture'
 CHOICE = 'choice'
 REPEAT = 'repeat'
+MEMOIZE = 'memoize'
 
 PRINT = 'print'
 TRACE = 'trace'
@@ -298,6 +299,23 @@ class CaptureNode(GrammarNode):
         args['key'] =  self.key
         args['args'] = self.args
         return ParserRule(CAPTURE, args=args, rules=[r.make_rule() for r in self.rules])
+
+class MemoizeNode(GrammarNode):
+    def __init__(self, rules, *, key=None):
+        self.rules = rules
+        self.key = key or object()
+
+    def __str__(self):
+        return f"({' '.join(str(x) for x in self.rules)})"
+
+    def canonical(self, builder):
+        rules = [r.canonical(builder) for r in self.rules]
+        return MemoizeNode(rules, key=self.key)
+
+    def make_rule(self):
+        args = dict()
+        args['key'] =  self.key
+        return ParserRule(MEMOIZE, args=args, rules=[r.make_rule() for r in self.rules])
 
 class RepeatNode(GrammarNode):
     def __init__(self, rules, min=0, max=None, key=None):
@@ -442,6 +460,15 @@ class FunctionBuilder:
         self.rules = []
         yield
         rules.append(CaptureNode(name, {}, self.rules))
+        self.rules = rules
+
+    @contextmanager
+    def memoize(self):
+        if self.block_mode: raise SyntaxError()
+        rules = self.rules
+        self.rules = []
+        yield
+        rules.append(MemoizeNode(self.rules))
         self.rules = rules
 
     @contextmanager
@@ -634,6 +661,7 @@ class VarBuilder:
 
 
 def compile_python(grammar, builder=None, cython=False):
+    memoized = {}
 
     def build_subrules(rules, steps, offset, line_start, prefix, children, count, values):
         for subrule in rules:
@@ -643,6 +671,34 @@ def compile_python(grammar, builder=None, cython=False):
         # steps.append(f"print('start', {repr(str(rule))})")
         if rule.kind == SEQUENCE:
             build_subrules(rule.rules, steps, offset, line_start, prefix, children, count, values)
+
+        elif rule.kind == MEMOIZE:
+            key = rule.args['key']
+            value = memoized.get(key)
+            if not value:
+                value = repr(f"memo_{len(memoized)}")
+                memoized[key] = value
+
+            children_0 = children.incr()
+            offset_0 = offset.incr()
+            steps.append(f"{offset_0} = {offset}")
+            steps.append(f"{children_0} = []")
+            steps.append(f"{count} = ({value}, {offset})")
+            steps.append(f"if {count} in self.cache:")
+            steps.append(f"    {offset_0}, {line_start}, {children_0} = self.cache[{count}]")
+            steps.append("else:")
+
+            steps_0 = steps.add_indent()
+            steps_0.append(f"while True:")
+            build_subrules(rule.rules, steps_0.add_indent(), offset_0, line_start, prefix, children_0, count.incr(), values)
+            steps_0.append(f"    break")
+
+            steps_0.append(f"self.cache[{count}] = ({offset_0}, {line_start}, {children_0})")
+
+            steps.append(f"{offset} = {offset_0}")
+            steps.append(f"{children}.extend({children_0})")
+            steps.append(f"if {offset} == -1:")
+            steps.append(f"    break")
 
         elif rule.kind == CAPTURE:
             name = repr(rule.args['name'])
@@ -1123,6 +1179,7 @@ def compile_python(grammar, builder=None, cython=False):
             f"    def __init__(self, builder=None):",
             f"         self.builder = builder",
             f"         self.tabstop = self.TABSTOP",
+            f"         self.cache = None",
             f"",
             f"    NEWLINE = {newline}",
             f"    WHITESPACE = {whitespace}",
@@ -1137,6 +1194,7 @@ def compile_python(grammar, builder=None, cython=False):
             f"    def __init__(self, builder=None):",
             f"         self.builder = builder",
             f"         self.tabstop = self.TABSTOP",
+            f"         self.cache = None",
             "",
             f"    NEWLINE = {newline}",
             f"    WHITESPACE = {whitespace}",
@@ -1150,6 +1208,7 @@ def compile_python(grammar, builder=None, cython=False):
     start_rule = grammar.start
     output.extend((
         f"def parse(self, buf, offset=0, end=None, err=None):",
+        f"    self.cache = dict()",
         f"    end = len(buf) if end is None else end",
         f"    line_start, prefix, eof, children = offset, [], end, []",
         f"    new_offset, line_start = self.parse_{start_rule}(buf, offset, line_start, prefix, eof, children)",

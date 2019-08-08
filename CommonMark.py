@@ -313,7 +313,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     @rule()
     def para(self):
         self.whitespace(max=3)
-        with self.capture("para"):
+        with self.memoize(),self.capture("para"):
             self.inline_para()
             self.whitespace()
             self.end_of_line()
