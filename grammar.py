@@ -381,7 +381,7 @@ class FunctionBuilder:
                 if self.block_mode: raise SyntaxError()
                 rules, self.rules = self.rules, []
                 yield
-                rules.append(GrammarNode(SET_LINE_PREFIX, args=dict(prefix=name), rules=self.rules))
+                rules.append(GrammarNode(SET_LINE_PREFIX, args=dict(prefix=name, count=None), rules=self.rules))
                 self.rules = rules
             callback.repeat = _repeat
             callback.as_line_prefix = _as_prefix
@@ -436,11 +436,11 @@ class FunctionBuilder:
         self.rules.append(GrammarNode(ACCEPT_IF, args=dict(cond=cond)))
 
     @contextmanager
-    def indented(self):
+    def indented(self, count=None):
         if self.block_mode: raise SyntaxError()
         rules, self.rules = self.rules, []
         yield
-        rules.append(GrammarNode(SET_LINE_PREFIX, args=dict(prefix=None), rules=self.rules))
+        rules.append(GrammarNode(SET_LINE_PREFIX, args=dict(prefix=None, count=count), rules=self.rules))
         self.rules = rules
 
     @contextmanager
@@ -886,9 +886,15 @@ def compile_python(grammar, builder=None, cython=False):
             if cython: cond2 = " or ".join(f"chr == {repr(ord(chr))}" for chr in grammar.newline)
 
             if rule.args['prefix'] is None:
+                c = rule.args['count']
+                if c:
+                    steps.append(f"{count} = {values.get(c, repr(c))}")
+                else:
+                    steps.append(f"{count} = {offset} - {line_start}+  ((self.tabstop -1) * buf[{line_start}:{offset}].count('\t'))")
+                    
                 steps.extend((
-                    f"{count} = {offset} - {line_start}+  ((self.tabstop -1) * buf[{line_start}:{offset}].count('\t'))",
                     f"def _indent(buf, offset, line_start, prefix, buf_eof, children, count={count}):",
+            #        f"    print('nice', offset, count, repr(buf[offset:offset+8]))",
                     f"    while count > 0 and offset < buf_eof:",
                     f"        chr = ord(buf[offset])",
                     f"        if {cond}:",
@@ -899,12 +905,15 @@ def compile_python(grammar, builder=None, cython=False):
                     f"        else:",
                     f"            offset = -1",
                     f"            break",
+            #        f"    print('nice', offset)",
                     f"    return offset, line_start",
                     f'{prefix}.append(_indent)',
                 ))
             else:
                 prule = rule.args['prefix']
                 steps.append(f'{prefix}.append(self.parse_{prule})')
+
+            steps.append(f'{line_start} = {offset}')
 
             steps.append('while True:')
             build_subrules(rule.rules, steps.add_indent(), offset, line_start, prefix, children, count, values)
@@ -926,7 +935,9 @@ def compile_python(grammar, builder=None, cython=False):
                 f"for indent in {prefix}:",
                 f"    _children, _prefix = [], []",
                 f"    {offset}, {line_start} = indent(buf, {offset}, {line_start}, _prefix, buf_eof, _children)",
-                f"    if {offset} == -1 or _prefix or _children:",
+                f"    if _prefix or _children:",
+                f"       raise Exception('bar')",
+                f"    if {offset} == -1:"
                 f"        break",
                 f"    {line_start} = {offset}",
                 f"if {offset} == -1:",
@@ -1136,7 +1147,7 @@ def compile_python(grammar, builder=None, cython=False):
 
         elif rule.kind == PRINT:
             args = [values.get(a, repr(a)) for a in rule.args['args']]
-            steps.append(f"print('print', {', '.join(args)}, 'at' ,{offset}, repr(buf[{offset}:{offset}+5]))")
+            steps.append(f"print('print', {', '.join(args)}, 'at' ,{offset}, repr(buf[{offset}:{offset}+15]), {prefix})")
         elif rule.kind == TRACE:
             steps.append(f"print('begin trace', 'at' ,{offset}, repr(buf[{offset}:{offset}+5]))")
             steps.append('while True:')

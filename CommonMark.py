@@ -39,6 +39,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     # 3. Block and Inline Elemnts
 
     block_element = rule(
+        empty_lines |
         indented_code_block | 
         fenced_code_block |
         blockquote | 
@@ -51,8 +52,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
         # Link reference_definiton
         setext_heading |     
         block_list |
-        para | 
-        empty_lines
+        para 
     )
 
     inline_element = rule(word)
@@ -141,29 +141,30 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     def indented_code_block(self):
         self.whitespace(min=4, max=4)
         with self.indented(), self.capture('indented_code'):
-            self.whitespace()
-            self.indented_code_line()
+            with self.capture('text'), self.repeat(min=1):
+                self.range("\n", invert=True)
+            self.end_of_line()
             with self.repeat():
+                self.start_of_line()
                 with self.choice():
                     with self.case():
-                        self.start_of_line()
-                        self.indented_code_line()
+                        self.whitespace()
+                        with self.capture('text'), self.repeat(min=1):
+                            self.range("\n", invert=True)
+                        self.end_of_line()
                     with self.case():
+                        with self.capture('text'):
+                            self.whitespace()
+                        self.newline()
                         with self.repeat():
                             self.start_of_line()
-                            with self.capture("text"):
+                            with self.capture('text'):
                                 self.whitespace()
                             self.newline()
+                            self.end_of_line()
                         with self.lookahead():
                             self.start_of_line()
 
-    @rule()
-    def indented_code_line(self):
-        with self.capture('text'), self.repeat(min=1):
-            with self.reject():
-                self.line_end()
-            self.range("\n", invert=True)
-        self.end_of_line()
 
     @rule()
     def fenced_code_block(self):
@@ -232,10 +233,14 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                 self.whitespace(max=3)
                 self.accept('>')
                 self.whitespace(max=1, newline=True)
-            with self.case(), self.reject(), self.choice():
-                with self.case(): self.thematic_break()
-                with self.case(): self.setext_heading_line()
-                with self.case(): self.start_fenced_block()
+            with self.case():
+                with self.reject(), self.choice():
+                    with self.case(): 
+                        self.whitespace()
+                        self.newline()
+                    with self.case(): self.thematic_break()
+                    with self.case(): self.setext_heading_line()
+                    with self.case(): self.start_fenced_block()
 
     @rule()
     def blockquote(self):
@@ -280,6 +285,8 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                             self.newline()
                         with self.lookahead():
                             self.start_of_line()
+                            self.whitespace(max=3)
+                            self.accept('-')
                         self.capture_value("\n")
                     with self.case():
                         self.whitespace(max=3)
@@ -530,4 +537,19 @@ four
   - e
 
 - f
+
+""")
+markup("""\
+
+    a
+
+    v
+
+>     t
+>      
+>     u
+
+    b
+     
+    t
 """)

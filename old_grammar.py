@@ -62,7 +62,7 @@ class ParserState:
 
     def set_indent(self, tabstop, whitespace, newlines):
         count = self.offset-self.line_start + ((tabstop -1) * self.buf[self.line_start:self.offset].count('\t'))
-        return self.clone(indent=((lambda s: s.advance_indent(count, tabstop, whitespace, newlines)), self.indent))
+        return self.clone(indent=((lambda s: s.advance_indent(count, tabstop, whitespace, newlines)), self.indent), line_start=self.offset)
 
     def pop_indent(self):
         return self.clone(indent=self.indent[1])
