@@ -770,6 +770,7 @@ def compile_python(grammar, builder=None, cython=False):
             elif _max is not None and _max > 0:
                 cond = f"{count} < {repr(_max)}"
 
+
             steps.extend((
                 f"{count} = 0",
                 f"while {cond}:",
@@ -778,19 +779,21 @@ def compile_python(grammar, builder=None, cython=False):
             offset_0 = offset.incr()
             line_start_0 = line_start.incr()
             steps_0 = steps.add_indent()
-
+            children_0 = children.incr()
             steps_0.append(f"{offset_0} = {offset}")
             steps_0.append(f"{line_start_0} = {line_start}")
+            steps_0.append(f"{children_0} = []")
 
 
             steps_0.append("while True:")
             for subrule in rule.rules:
-                    build_steps(subrule, steps_0.add_indent(), offset_0, line_start_0, prefix, children, new_count, values)
+                    build_steps(subrule, steps_0.add_indent(), offset_0, line_start_0, prefix, children_0, new_count, values)
             steps_0.append("    break")
             steps_0.append(f"if {offset_0} == -1:")
             steps_0.append(f"    break")
 
             steps_0.append(f"if {offset} == {offset_0}: break")
+            steps_0.append(f"{children}.extend({children_0})")
             steps_0.append(f"{offset} = {offset_0}")
             steps_0.append(f"{line_start} = {line_start_0}")
             steps_0.append(f"{count} += 1")
@@ -879,6 +882,8 @@ def compile_python(grammar, builder=None, cython=False):
             cond = f"chr in self.WHITESPACE"
             if cython: cond = " or ".join(f"chr == {repr(ord(chr))}" for chr in grammar.whitespace)
 
+            cond2 = f"chr in self.NEWLINE"
+            if cython: cond2 = " or ".join(f"chr == {repr(ord(chr))}" for chr in grammar.newline)
 
             if rule.args['prefix'] is None:
                 steps.extend((
@@ -889,6 +894,8 @@ def compile_python(grammar, builder=None, cython=False):
                     f"        if {cond}:",
                     f"            offset +=1",
                     f"            count -= self.tabstop if chr == 9 else 1",
+                    f"        elif {cond2}:",
+                    f"            break",
                     f"        else:",
                     f"            offset = -1",
                     f"            break",

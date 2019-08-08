@@ -60,9 +60,9 @@ class ParserState:
         self.children.extend(new.children)
         return new.clone(children = self.children)
 
-    def set_indent(self, tabstop, whitespace):
+    def set_indent(self, tabstop, whitespace, newlines):
         count = self.offset-self.line_start + ((tabstop -1) * self.buf[self.line_start:self.offset].count('\t'))
-        return self.clone(indent=((lambda s: s.advance_indent(count, tabstop, whitespace)), self.indent))
+        return self.clone(indent=((lambda s: s.advance_indent(count, tabstop, whitespace, newlines)), self.indent))
 
     def pop_indent(self):
         return self.clone(indent=self.indent[1])
@@ -131,7 +131,7 @@ class ParserState:
             if new:
                 return new.clone(line_start=new.offset)
 
-    def advance_indent(self, count, tabstop, literals):
+    def advance_indent(self, count, tabstop, literals, newlines):
         state = self
         stop = count
         offset = self.offset
@@ -139,9 +139,12 @@ class ParserState:
             if self.buf[offset] in literals:
                 stop -= 8 if self.buf[offset] == '\t' else 1 
                 offset += 1
-            else:
+            elif self.buf[offset] in newlines:
                 break
-        if stop == 0:
+            else:
+                offset = -1
+                break
+        if offset != -1:
             return state.clone(offset=offset)
 
     def advance_range(self, text):
@@ -274,7 +277,7 @@ class Parser:
 
         elif rule.kind == SET_LINE_PREFIX:
             if rule.args['prefix']: raise Exception('unfinished')
-            state = state.set_indent(self.grammar.tabstop, self.grammar.whitespace)
+            state = state.set_indent(self.grammar.tabstop, self.grammar.whitespace, self.grammar.newline)
             for step in rule.rules:
                 state = self.parse_rule(step, state)
                 if state is None:
@@ -369,25 +372,26 @@ class Parser:
             c= 0
             while c < start:
                 start_offset = state.offset
+                new = state.choice()
                 for step in rule.rules:
                     # print('rep', repr(state.buf[state.offset:state.offset+5]), step, rule)
-                    state = self.parse_rule(step, state)
-                    if state is None:
+                    new = self.parse_rule(step, new)
+                    if new is None:
                         return None
+                state = state.merge_choice(new)
                 c+=1
             while end is None or c < end:
-                old = state
+                new = state.choice()
                 for step in rule.rules:
                     # print('rep+', repr(state.buf[state.offset:state.offset+5]), step, rule)
-                    new_state = self.parse_rule(step, state)
-                    if new_state is None:
-                        old.values[rule.args['key']] = c
-                        return old
-                    state = new_state
-                if old.offset == state.offset:
+                    new = self.parse_rule(step, new)
+                    if new is None:
+                        state.values[rule.args['key']] = c
+                        return state
+                if new.offset == state.offset:
                     state.values[rule.args['key']] = c
                     return state
-                old = state
+                state = state.merge_choice(new)
                 c+=1
             state.values[rule.args['key']] = c
             return state
@@ -510,11 +514,14 @@ def compile(grammar, builder=None):
             _max = rule.args['max']
             steps.append(f"{count} = 0")
             new_count = count.incr()
+            state_0 = state.incr()
             if _min is not None and _min > 0:
                 _min = repr(_min) # value todo
                 steps.append(f"while {count} < {_min}:")
-                build_subrules(rule.rules, steps.add_indent(), state, new_count)
-                steps.append("    count += 1")
+                steps.append(f"{state_0} = {state}.choice()")
+                build_subrules(rule.rules, steps.add_indent(), state_0, new_count)
+                steps.append(f"    count += 1")
+                steps.appena(f"    {state}.merge_choice({state_0})")
                 steps.append(f"if {state} is None: break")
 
             if _max is not None and _max > 1:
@@ -571,7 +578,7 @@ def compile(grammar, builder=None):
             steps.append(f'raise Exception("{rule.kind} missing") # unfinished {rule}')
 
         elif rule.kind == SET_LINE_PREFIX:
-            steps.append(f'{state} = {state}.set_indent(self.tabstop, self.WHITESPACE)')
+            steps.append(f'{state} = {state}.set_indent(self.tabstop, self.WHITESPACE, self.NEWLINE)')
             steps.append('while True:')
             build_subrules(rule.rules, steps.add_indent(), state, count)
             steps.apppend('    break')
