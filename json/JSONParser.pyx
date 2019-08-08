@@ -23,7 +23,7 @@ cdef class Parser:
          self.cache = None
 
     NEWLINE = ()
-    WHITESPACE = (32, 9, 13, 10)
+    WHITESPACE = (' ', '\t', '\r', '\n')
     TABSTOP = 8
 
     def parse(self, buf, offset=0, end=None, err=None):
@@ -41,8 +41,8 @@ cdef class Parser:
         while True: # note: return at end of loop
             count_0 = 0
             while offset_0 < buf_eof:
-                chr = ord(buf[offset_0])
-                if chr == 32 or chr == 9 or chr == 13 or chr == 10:
+                chr = buf[offset_0]
+                if chr in ' \t\r\n':
                     offset_0 +=1
                     count_0 +=1
                 else:
@@ -779,8 +779,8 @@ cdef class Parser:
             
             count_0 = 0
             while offset_0 < buf_eof:
-                chr = ord(buf[offset_0])
-                if chr == 32 or chr == 9 or chr == 13 or chr == 10:
+                chr = buf[offset_0]
+                if chr in ' \t\r\n':
                     offset_0 +=1
                     count_0 +=1
                 else:
@@ -807,8 +807,8 @@ cdef class Parser:
                             while True:
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = ord(buf[offset_3])
-                                    if chr == 32 or chr == 9 or chr == 13 or chr == 10:
+                                    chr = buf[offset_3]
+                                    if chr in ' \t\r\n':
                                         offset_3 +=1
                                         count_2 +=1
                                     else:
@@ -822,8 +822,8 @@ cdef class Parser:
                                 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = ord(buf[offset_3])
-                                    if chr == 32 or chr == 9 or chr == 13 or chr == 10:
+                                    chr = buf[offset_3]
+                                    if chr in ' \t\r\n':
                                         offset_3 +=1
                                         count_2 +=1
                                     else:
@@ -889,8 +889,8 @@ cdef class Parser:
             
             count_0 = 0
             while offset_0 < buf_eof:
-                chr = ord(buf[offset_0])
-                if chr == 32 or chr == 9 or chr == 13 or chr == 10:
+                chr = buf[offset_0]
+                if chr in ' \t\r\n':
                     offset_0 +=1
                     count_0 +=1
                 else:
@@ -914,8 +914,8 @@ cdef class Parser:
                             
                             count_1 = 0
                             while offset_3 < buf_eof:
-                                chr = ord(buf[offset_3])
-                                if chr == 32 or chr == 9 or chr == 13 or chr == 10:
+                                chr = buf[offset_3]
+                                if chr in ' \t\r\n':
                                     offset_3 +=1
                                     count_1 +=1
                                 else:
@@ -929,8 +929,8 @@ cdef class Parser:
                             
                             count_1 = 0
                             while offset_3 < buf_eof:
-                                chr = ord(buf[offset_3])
-                                if chr == 32 or chr == 9 or chr == 13 or chr == 10:
+                                chr = buf[offset_3]
+                                if chr in ' \t\r\n':
                                     offset_3 +=1
                                     count_1 +=1
                                 else:
@@ -953,8 +953,8 @@ cdef class Parser:
                         
                         count_1 = 0
                         while offset_2 < buf_eof:
-                            chr = ord(buf[offset_2])
-                            if chr == 32 or chr == 9 or chr == 13 or chr == 10:
+                            chr = buf[offset_2]
+                            if chr in ' \t\r\n':
                                 offset_2 +=1
                                 count_1 +=1
                             else:
@@ -974,8 +974,8 @@ cdef class Parser:
                                 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = ord(buf[offset_3])
-                                    if chr == 32 or chr == 9 or chr == 13 or chr == 10:
+                                    chr = buf[offset_3]
+                                    if chr in ' \t\r\n':
                                         offset_3 +=1
                                         count_2 +=1
                                     else:
@@ -990,8 +990,8 @@ cdef class Parser:
                                     
                                     count_2 = 0
                                     while offset_4 < buf_eof:
-                                        chr = ord(buf[offset_4])
-                                        if chr == 32 or chr == 9 or chr == 13 or chr == 10:
+                                        chr = buf[offset_4]
+                                        if chr in ' \t\r\n':
                                             offset_4 +=1
                                             count_2 +=1
                                         else:
@@ -1005,8 +1005,8 @@ cdef class Parser:
                                     
                                     count_2 = 0
                                     while offset_4 < buf_eof:
-                                        chr = ord(buf[offset_4])
-                                        if chr == 32 or chr == 9 or chr == 13 or chr == 10:
+                                        chr = buf[offset_4]
+                                        if chr in ' \t\r\n':
                                             offset_4 +=1
                                             count_2 +=1
                                         else:
@@ -1029,8 +1029,8 @@ cdef class Parser:
                                 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = ord(buf[offset_3])
-                                    if chr == 32 or chr == 9 or chr == 13 or chr == 10:
+                                    chr = buf[offset_3]
+                                    if chr in ' \t\r\n':
                                         offset_3 +=1
                                         count_2 +=1
                                     else:

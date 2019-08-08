@@ -26,7 +26,7 @@ builder = {
     'info': (lambda buf, pos, end, children: {"info":buf[pos:end]}),
 }
 
-class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
+class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"], tabstop=4):
     version = 0.29
     @rule()
     def document(self):
@@ -47,11 +47,10 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             # 4.1 Ex 29. Headers take precidence over thematic breaks
         thematic_break |  
             # 4.1 Ex 30. Thematic Breaks take precidence over lists
-        # list items
         # HTML Block
         # Link reference_definiton
-        setext_heading |     
         block_list |
+        setext_heading |     
         para 
     )
 

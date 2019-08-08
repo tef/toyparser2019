@@ -23,7 +23,7 @@ cdef class Parser:
          self.cache = None
 
     NEWLINE = ()
-    WHITESPACE = (32, 9, 13, 10, 65279)
+    WHITESPACE = (' ', '\t', '\r', '\n', '\ufeff')
     TABSTOP = 8
 
     def parse(self, buf, offset=0, end=None, err=None):
@@ -75,8 +75,8 @@ cdef class Parser:
         while True: # note: return at end of loop
             count_0 = 0
             while offset_0 < buf_eof:
-                chr = ord(buf[offset_0])
-                if chr == 32 or chr == 9 or chr == 13 or chr == 10 or chr == 65279:
+                chr = buf[offset_0]
+                if chr in ' \t\r\n\ufeff':
                     offset_0 +=1
                     count_0 +=1
                 else:
@@ -125,8 +125,8 @@ cdef class Parser:
                     
                     count_1 = 0
                     while offset_1 < buf_eof:
-                        chr = ord(buf[offset_1])
-                        if chr == 32 or chr == 9 or chr == 13 or chr == 10 or chr == 65279:
+                        chr = buf[offset_1]
+                        if chr in ' \t\r\n\ufeff':
                             offset_1 +=1
                             count_1 +=1
                         else:
@@ -145,8 +145,8 @@ cdef class Parser:
             
             count_0 = 0
             while offset_0 < buf_eof:
-                chr = ord(buf[offset_0])
-                if chr == 32 or chr == 9 or chr == 13 or chr == 10 or chr == 65279:
+                chr = buf[offset_0]
+                if chr in ' \t\r\n\ufeff':
                     offset_0 +=1
                     count_0 +=1
                 else:

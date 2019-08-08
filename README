@@ -1,6 +1,8 @@
-# ugh
+# untitled parser toy
 
 this is a parsing expression library for python 3
+
+## example
 
 ```
 
@@ -16,15 +18,116 @@ class MyGrammar(Grammar, whitespace=[" "], newline=["\n"], start="main"):
 
 a = MyGrammar.parser()
 
-a.parse("yes\n")
+out = a.parse("yes\n")
+
+builder = {"name": (lambda buf, offset, end, children: buf[offset: end])}
+
+
+print(out.build(builder))
+
+a = MyGrammar.parser(builder)
+
+print(a.parse("yes\n"))
 
 ```
 
-it can also compile to cython for about a 2x speedup
+## features
 
-unlike other parsing expression libraries, this handles indentation grammars
+ - explict named captures, rather than return entire parse tree
+ - indentaton handling / prefixed blocks of lines handling
+ - cython output
+ - data dependent grammars
 
-and i'm working on markdown parser
+the intent is that it should be able to express something like CommonMark without resorting to putting python code directly into the grammar, as well as things like JSON, YAML, or even Python
 
-i haven't worked out exactly how left corner parsing / left recursion will appear yet
+wishlist:
+
+- codegen for other languages
+- .peg file parsing
+
+## operators
+
+### terminal operators
+
+`self.whitespace()`, `self.whitespace(min=..., max=..., newline=True)`, `self.newline()`, `self.accept("string")`, `self.range("1", "a-b", invert=True)`,
+`self.end_of_line()` newline or eof, `self.end_of_file`, `self.start_of_line()`,
+
+
+### non terminal/group operators
+
+```
+with self.capture("name"): # capture start, end, name and children
+	...
+
+with self.lookahead():
+	self.accept("+")
+
+with self.repeat(min=1, max=2):
+	self.accept(".")
+
+with self.reject():
+	self.accept("123")
+
+with self.memoize():
+	self.awful_rule()
+```
+
+### data dependent operators:
+
+```
+with self.count(".") as c:
+    with self.repeat(): self.accept(".")
+
+with self.repeat(min=c, max=c):
+    self.accept("+")
+
+self.capture_value(c)
+```
+
+### intendation operators:
+
+```
+self.whitespace()
+with self.indented(): # use offset from line start
+	self.accept("1")
+	with self.repeat():
+	    self.newline()
+	    self.start_of_line() # include indent
+	    self.accept("1')
+	self.end_of_line()
+```
+
+```
+@rule()
+def line(self):
+    with self.repeat(): self.range("\n", invert=True)
+
+@rule()
+def quote(self):
+    self.accept(">")
+    self.whitespace(max=1)
+
+@rule()
+def blockquote(self):
+    self.quote()
+    with self.quote.as_prefix():
+        self.line()
+	with self.repeat():
+	    self.newline()
+	    self.start_of_line() # include indent
+	    self.line()
+        self.end_of_line()
+```
+
+
+### debugging operators:
+
+```
+
+self.print("string")
+
+with self.trace():
+	....
+```
+
 

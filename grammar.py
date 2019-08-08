@@ -40,6 +40,12 @@ def build_class_dict(attrs, start, whitespace, newline, tabstop):
     for name in attrs.named_rules:
         if name not in attrs:
             raise SyntaxError('missing rule', name)
+    if whitespace:
+        for x in whitespace:
+            if len(x) != 1: raise Exception('bad')
+    if newline:
+        for x in newline:
+            if len(x) != 1: raise Exception('bad')
     rules = {}
     new_attrs = {}
     for key, value in attrs.items():
@@ -879,11 +885,9 @@ def compile_python(grammar, builder=None, cython=False):
             ))
 
         elif rule.kind == SET_LINE_PREFIX:
-            cond = f"chr in self.WHITESPACE"
-            if cython: cond = " or ".join(f"chr == {repr(ord(chr))}" for chr in grammar.whitespace)
+            cond =f"chr in {repr(''.join(grammar.whitespace))}"
 
-            cond2 = f"chr in self.NEWLINE"
-            if cython: cond2 = " or ".join(f"chr == {repr(ord(chr))}" for chr in grammar.newline)
+            cond2 =f"chr in {repr(''.join(grammar.newline))}"
 
             if rule.args['prefix'] is None:
                 c = rule.args['count']
@@ -896,7 +900,7 @@ def compile_python(grammar, builder=None, cython=False):
                     f"def _indent(buf, offset, line_start, prefix, buf_eof, children, count={count}):",
             #        f"    print('nice', offset, count, repr(buf[offset:offset+8]))",
                     f"    while count > 0 and offset < buf_eof:",
-                    f"        chr = ord(buf[offset])",
+                    f"        chr = buf[offset]",
                     f"        if {cond}:",
                     f"            offset +=1",
                     f"            count -= self.tabstop if chr == 9 else 1",
@@ -923,11 +927,7 @@ def compile_python(grammar, builder=None, cython=False):
             steps.append(f'if {offset} == -1: break')
 
         elif rule.kind == START_OF_LINE:
-            cond = f"chr in self.WHITESPACE"
-            if cython: cond = " or ".join(f"chr == {repr(ord(chr))}" for chr in grammar.whitespace)
-
             offset_0 = offset.incr()
-
             steps.extend((
                 f"if {offset} != {line_start}:",
                 f"    {offset} = -1",
@@ -961,6 +961,8 @@ def compile_python(grammar, builder=None, cython=False):
                 f"chr = ord(buf[{offset}])",
                 f"",
             ))
+
+            literals = rule.args['range']
 
             for idx, literal in enumerate(rule.args['range']):
                 _if = {0:"if"}.get(idx, "elif")
@@ -1060,16 +1062,14 @@ def compile_python(grammar, builder=None, cython=False):
             elif _max is not None:
                 cond.append(f"{count} < {repr(_max)}")
 
-            cond2 =f"chr in self.WHITESPACE"
-            if cython: cond2 = " or ".join(f"chr == {repr(ord(chr))}" for chr in grammar.whitespace)
+            cond2 =f"chr in {repr(''.join(grammar.whitespace))}"
 
             if _newline:
-                cond3 =f"chr in self.NEWLINE"
-                if cython: cond3 = " or ".join(f"chr == {repr(ord(chr))}" for chr in grammar.newline)
+                cond3 =f"chr in {repr(''.join(grammar.newline))}"
                 steps.extend((
                     f"{count} = 0",
                     f"while {' and '.join(cond)}:",
-                    f"    chr = ord(buf[{offset}])",
+                    f"    chr = buf[{offset}]",
                     f"    if {cond3}:",
                     f"        {offset} +=1",
                     f"        {line_start} = {offset}",
@@ -1087,7 +1087,7 @@ def compile_python(grammar, builder=None, cython=False):
                 steps.extend((
                     f"{count} = 0",
                     f"while {' and '.join(cond)}:",
-                    f"    chr = ord(buf[{offset}])",
+                    f"    chr = buf[{offset}]",
                     f"    if {cond2}:",
                     f"        {offset} +=1",
                     f"        {count} +=1",
@@ -1108,12 +1108,10 @@ def compile_python(grammar, builder=None, cython=False):
                 ))
 
         elif rule.kind == NEWLINE:
-            cond =f"chr in self.NEWLINE"
-
-            if cython: cond = " or ".join(f"chr == {repr(ord(chr))}" for chr in grammar.newline)
+            cond =f"chr in {repr(''.join(grammar.newline))}"
             steps.extend((
                 f"if {offset} < buf_eof:",
-                f"    chr = ord(buf[{offset}])",
+                f"    chr = buf[{offset}]",
                 f"    if {cond}:",
                 f"        {offset} +=1",
                 f"        {line_start} = {offset}",
@@ -1125,12 +1123,11 @@ def compile_python(grammar, builder=None, cython=False):
                 f"    break",
             ))
         elif rule.kind == END_OF_LINE:
-            cond =f"chr in self.NEWLINE"
-            if cython: cond = " or ".join(f"chr == {repr(ord(chr))}" for chr in grammar.newline)
+            cond =f"chr in {repr(''.join(grammar.newline))}"
 
             steps.extend((
                 f"if {offset} < buf_eof:",
-                f"    chr = ord(buf[{offset}])",
+                f"    chr = buf[{offset}]",
                 f"    if {cond}:",
                 f"        {offset} +=1",
                 f"        {line_start} = {offset}",
@@ -1165,8 +1162,8 @@ def compile_python(grammar, builder=None, cython=False):
         return steps
 
     output = ParserBuilder([], 0)
-    newline = repr(tuple(ord(n) for n in grammar.newline)) if grammar.newline else '()'
-    whitespace = repr(tuple(ord(w) for w in grammar.whitespace)) if grammar.whitespace else '()'
+    newline = repr(tuple(grammar.newline)) if grammar.newline else '()'
+    whitespace = repr(tuple(grammar.whitespace)) if grammar.whitespace else '()'
 
 
 
