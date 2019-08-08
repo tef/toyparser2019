@@ -245,24 +245,25 @@ if __name__ == '__main__':
         parser2 = YAMLParser(None)
     else:
         parser2 = YAML.parser()
-   # from old_grammar import compile, Parser
+    from old_grammar import compile, Parser
 
-   # parser = Parser(YAML, None)
+    parser = Parser(YAML, None)
     import time
 
     def yaml(buf):
         print(len(buf))
         print(buf)
-    #    t1 = time.time()
-    #    node = parser.parse(buf)
-    #    t1 = time.time() - t1
+        t1 = time.time()
+        node = parser.parse(buf)
+        t1 = time.time() - t1
         t2 = time.time()
         node2 = parser2.parse(buf)
         t2 = time.time() - t2
-   #     if node:
-   #         walk(node)
-   #     else:
-   #         print('parser1failed')
+        if node:
+            walk(node)
+        else:
+            print('parser1failed')
+        print(parser2)
         if node2:
             walk(node2)
         else:

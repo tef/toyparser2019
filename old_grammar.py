@@ -4,8 +4,7 @@ WHITESPACE = 'whitespace'
 NEWLINE = 'newline'
 END_OF_FILE = 'end-of-file'
 
-SET_INDENT = 'set-indent'
-MATCH_INDENT = 'match-indent'
+SET_LINE_PREFIX = 'set-line-prefix'
 
 LOOKAHEAD = 'lookahead'
 REJECT = 'reject'
@@ -61,8 +60,9 @@ class ParserState:
         self.children.extend(new.children)
         return new.clone(children = self.children)
 
-    def set_indent(self):
-        return self.clone(indent=(self.offset-self.line_start, self.indent))
+    def set_indent(self, tabstop, whitespace):
+        count = self.offset-self.line_start + ((tabstop -1) * self.buf[self.line_start:self.offset].count('\t'))
+        return self.clone(indent=((lambda s: s.advance_indent(count, tabstop, whitespace)), self.indent))
 
     def pop_indent(self):
         return self.clone(indent=self.indent[1])
@@ -70,6 +70,26 @@ class ParserState:
     def advance(self, text):
         if self.buf[self.offset:].startswith(text):
             return self.clone(offset=self.offset + len(text))
+
+    def advance_prefix(self):
+        if self.offset != self.line_start:
+            return None
+
+        indent = self.indent
+
+        if not indent:
+            return self
+
+        def check(state, i):
+            if not i: return state
+            state = check(state, i[1])
+            if not state: return None
+            state = i[0](state)
+            if state: 
+                state.line_start = state.offset
+            return state
+
+        return check(self, indent)
 
     def advance_whitespace(self, literals, newlines, min=0, max=None, newline=False):
         state = self
@@ -111,20 +131,18 @@ class ParserState:
             if new:
                 return new.clone(line_start=new.offset)
 
-    def advance_indent(self, literals):
-        # print(self.line_start, self.offset, self.indent)
+    def advance_indent(self, count, tabstop, literals):
         state = self
-        stop = self.line_start + self.indent[0]
-        while state.offset < stop:
-            for ws in literals:
-                new = state.advance(ws)
-                if new:
-                    state = new
-                    break
+        stop = count
+        offset = self.offset
+        while stop > 0 and self.offset < len(self.buf):
+            if self.buf[offset] in literals:
+                stop -= 8 if self.buf[offset] == '\t' else 1 
+                offset += 1
             else:
                 break
-        if state.offset == stop:
-            return state
+        if stop == 0:
+            return state.clone(offset=offset)
 
     def advance_range(self, text):
         if '-' in text[1:2]:
@@ -239,11 +257,6 @@ class Parser:
         elif rule.kind == NEWLINE:
             return state.advance_newline(self.grammar.newline)
 
-        elif rule.kind == START_OF_LINE:
-            if state.offset == state.line_start:
-                return state
-            return
-
         elif rule.kind == END_OF_LINE:
             if state.offset == len(state.buf):
                 return state
@@ -256,11 +269,12 @@ class Parser:
             _max = state.values.get(_max, _max)
             return state.advance_whitespace(self.grammar.whitespace, self.grammar.newline, _min, _max, _newline)
 
-        elif rule.kind == MATCH_INDENT:
-            return state.advance_indent(self.grammar.whitespace)
+        elif rule.kind == START_OF_LINE:
+            return state.advance_prefix()
 
-        elif rule.kind == SET_INDENT:
-            state = state.set_indent()
+        elif rule.kind == SET_LINE_PREFIX:
+            if rule.args['prefix']: raise Exception('unfinished')
+            state = state.set_indent(self.grammar.tabstop, self.grammar.whitespace)
             for step in rule.rules:
                 state = self.parse_rule(step, state)
                 if state is None:
@@ -556,15 +570,23 @@ def compile(grammar, builder=None):
         elif rule.kind == VALUE:
             steps.append(f'raise Exception("{rule.kind} missing") # unfinished {rule}')
 
-        elif rule.kind == SET_INDENT:
-            steps.append(f'{state} = {state}.set_indent()')
-            build_subrules(rule.rules, steps, state, count)
-            steps.append(f'{state} = {state}.pop_indent()')
-
-        elif rule.kind == MATCH_INDENT:
+        elif rule.kind == SET_LINE_PREFIX:
+            steps.append(f'{state} = {state}.set_indent(self.tabstop, self.WHITESPACE)')
+            steps.append('while True:')
+            build_subrules(rule.rules, steps.add_indent(), state, count)
+            steps.apppend('    break')
+            steps.append(f'if {state}: {state} = {state}.pop_indent()')
             steps.extend((
-                f"{state} = {state}.advance_indent(self.WHITESPACE)",
-                f"if {state} is None: break",
+                f"if {state} is None:",
+                f"    break",
+                f"",
+            ))
+
+        elif rule.kind == START_OF_LINE:
+            steps.extend((
+                f"{state} = {state}.advance_prefix()",
+                f"if {state} is None:",
+                f"    break",
                 f"",
             ))
 
@@ -641,12 +663,6 @@ def compile(grammar, builder=None):
                 f"if {state} is None: break",
                 f"",
             ))
-        elif rule.kind == START_OF_LINE:
-            steps.extend((
-                f"if {state}.offset != {state}.line_start:",
-                f"    {state} = None",
-                f"    break",
-            ))
         elif rule.kind == END_OF_LINE:
             steps.extend((
                 f"if {state}.offset != len({state}.buf):",
@@ -680,9 +696,11 @@ def compile(grammar, builder=None):
         f"class Parser:",
         f"    def __init__(self, builder):",
         f"         self.builder = builder",
+        f"         self.tabstop = tabstop",
         "",
         f"    NEWLINE = {newline}",
         f"    WHITESPACE = {whitespace}",
+        f"    TABSTOP = {repr(grammar.tabstop)}",
         "",
     ))
 
