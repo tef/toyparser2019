@@ -22,7 +22,7 @@ builder = {
     'null': (lambda buf, start, end, children: None),
 }
 
-class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
+class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n", "\r", "\r\n"]):
     literal = rule( 
         list_literal | object_literal |
         string_literal | number_literal |

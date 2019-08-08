@@ -45,7 +45,7 @@ def build_class_dict(attrs, start, whitespace, newline, tabstop):
             if len(x) != 1: raise Exception('bad')
     if newline:
         for x in newline:
-            if len(x) != 1: raise Exception('bad')
+            if len(x) != 1 and x != "\r\n": raise Exception('bad')
     rules = {}
     new_attrs = {}
     for key, value in attrs.items():
@@ -887,7 +887,7 @@ def compile_python(grammar, builder=None, cython=False):
         elif rule.kind == SET_LINE_PREFIX:
             cond =f"chr in {repr(''.join(grammar.whitespace))}"
 
-            cond2 =f"chr in {repr(''.join(grammar.newline))}"
+            cond2 =f"chr in {repr(''.join(grammar_newline))}"
 
             if rule.args['prefix'] is None:
                 c = rule.args['count']
@@ -897,21 +897,28 @@ def compile_python(grammar, builder=None, cython=False):
                     steps.append(f"{count} = {offset} - {line_start}+  ((self.tabstop -1) * buf[{line_start}:{offset}].count('\t'))")
                     
                 steps.extend((
-                    f"def _indent(buf, offset, line_start, prefix, buf_eof, children, count={count}):",
-            #        f"    print('nice', offset, count, repr(buf[offset:offset+8]))",
-                    f"    while count > 0 and offset < buf_eof:",
-                    f"        chr = buf[offset]",
-                    f"        if {cond}:",
-                    f"            offset +=1",
-                    f"            count -= self.tabstop if chr == 9 else 1",
-                    f"        elif {cond2}:",
-                    f"            break",
-                    f"        else:",
-                    f"            offset = -1",
-                    f"            break",
-            #        f"    print('nice', offset)",
-                    f"    return offset, line_start",
-                    f'{prefix}.append(_indent)',
+                        f"def _indent(buf, offset, line_start, prefix, buf_eof, children, count={count}):",
+                #        f"    print('nice', offset, count, repr(buf[offset:offset+8]))",
+                        f"    while count > 0 and offset < buf_eof:",
+                        f"        chr = buf[offset]",
+                        f"        if {cond}:",
+                        f"            offset +=1",
+                        f"            count -= self.tabstop if chr == 9 else 1",
+                ))
+                if newline_rn:
+                    steps.extend((
+                        f"        elif chr == '\\r' and {offset} + 1 < buf_eof and buf[{offset}+1] == '\\n':", 
+                        f"            break",
+                    ))
+                steps.extend((
+                        f"        elif {cond2}:",
+                        f"            break",
+                        f"        else:",
+                        f"            offset = -1",
+                        f"            break",
+                #        f"    print('nice', offset)",
+                        f"    return offset, line_start",
+                        f'{prefix}.append(_indent)',
                 ))
             else:
                 prule = rule.args['prefix']
@@ -1065,21 +1072,35 @@ def compile_python(grammar, builder=None, cython=False):
             cond2 =f"chr in {repr(''.join(grammar.whitespace))}"
 
             if _newline:
-                cond3 =f"chr in {repr(''.join(grammar.newline))}"
+                cond3 =f"chr in {repr(''.join(grammar_newline))}"
                 steps.extend((
-                    f"{count} = 0",
-                    f"while {' and '.join(cond)}:",
-                    f"    chr = buf[{offset}]",
-                    f"    if {cond3}:",
-                    f"        {offset} +=1",
-                    f"        {line_start} = {offset}",
-                    f"        {count} +=1",
-                    f"    elif {cond2}:",
-                    f"        {offset} +=1",
-                    f"        {count} +=1",
-                    f"    else:",
-                    # f"        print(repr(buf[{offset}:{offset}+5]))",
-                    f"        break",
+                        f"{count} = 0",
+                        f"while {' and '.join(cond)}:",
+                        f"    chr = buf[{offset}]",
+                ))
+
+                if newline_rn:
+                    steps.extend((
+                        f"    if chr == '\\r' and {offset} + 1 < buf_eof and buf[{offset}+1] == '\\n':", 
+                        f"        {offset} +=2",
+                        f"        {line_start} = {offset}",
+                        f"    elif {cond3}:",
+                    ))
+                else:
+                    steps.extend((
+                        f"    if {cond3}:",
+                    ))
+
+                steps.extend((
+                        f"        {offset} +=1",
+                        f"        {line_start} = {offset}",
+                        f"        {count} +=1",
+                        f"    elif {cond2}:",
+                        f"        {offset} +=1",
+                        f"        {count} +=1",
+                        f"    else:",
+                        # f"        print(repr(buf[{offset}:{offset}+5]))",
+                        f"        break",
 
                 ))
 
@@ -1108,33 +1129,59 @@ def compile_python(grammar, builder=None, cython=False):
                 ))
 
         elif rule.kind == NEWLINE:
-            cond =f"chr in {repr(''.join(grammar.newline))}"
+            cond =f"chr in {repr(''.join(grammar_newline))}"
             steps.extend((
                 f"if {offset} < buf_eof:",
                 f"    chr = buf[{offset}]",
-                f"    if {cond}:",
-                f"        {offset} +=1",
-                f"        {line_start} = {offset}",
-                f"    else:",
-                f"        {offset} = -1",
-                f"        break",
-                f"else:",
-                f"    {offset} = -1",
-                f"    break",
             ))
+            if newline_rn:
+                steps.extend((
+                    f"    if chr == '\\r' and {offset} + 1 < buf_eof and buf[{offset}+1] == '\\n':", 
+                    f"        {offset} +=2",
+                    f"        {line_start} = {offset}",
+                    f"    elif {cond}:",
+                ))
+            else:
+                steps.extend((
+                    f"    if {cond}:",
+            ))
+            steps.extend((
+                    f"        {offset} +=1",
+                    f"        {line_start} = {offset}",
+                    f"    else:",
+                    f"        {offset} = -1",
+                    f"        break",
+                    f"else:",
+                    f"    {offset} = -1",
+                    f"    break",
+            ))
+
         elif rule.kind == END_OF_LINE:
-            cond =f"chr in {repr(''.join(grammar.newline))}"
+            cond =f"chr in {repr(''.join(grammar_newline))}"
 
             steps.extend((
                 f"if {offset} < buf_eof:",
                 f"    chr = buf[{offset}]",
-                f"    if {cond}:",
-                f"        {offset} +=1",
-                f"        {line_start} = {offset}",
-                f"    else:",
-                f"        {offset} = -1",
-                f"        break",
             ))
+            if newline_rn:
+                steps.extend((
+                    f"    if chr == '\\r' and {offset} + 1 < buf_eof and buf[{offset}+1] == '\\n':", 
+                    f"        {offset} +=2",
+                    f"        {line_start} = {offset}",
+                    f"    elif {cond}:",
+                ))
+            else:
+                steps.extend((
+                    f"    if {cond}:",
+            ))
+            steps.extend((
+                    f"        {offset} +=1",
+                    f"        {line_start} = {offset}",
+                    f"    else:",
+                    f"        {offset} = -1",
+                    f"        break",
+            ))
+
         elif rule.kind == END_OF_FILE:
             steps.extend((
                 f"if {offset} != buf_eof:",
@@ -1162,7 +1209,9 @@ def compile_python(grammar, builder=None, cython=False):
         return steps
 
     output = ParserBuilder([], 0)
+    grammar_newline = tuple(n for n in grammar.newline if n!='\r\n') if grammar.newline else ()
     newline = repr(tuple(grammar.newline)) if grammar.newline else '()'
+    newline_rn = bool(grammar.newline) and '\r\n' in grammar.newline
     whitespace = repr(tuple(grammar.whitespace)) if grammar.whitespace else '()'
 
 
