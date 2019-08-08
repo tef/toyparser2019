@@ -227,12 +227,10 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
         self.line_end()
 
     @rule()
-    def start_blockquote(self):
+    def blockquote_prefix(self):
         with self.choice():
             with self.case():
-                self.whitespace(max=3)
-                self.accept('>')
-                self.whitespace(max=1, newline=True)
+                self.start_blockquote()
             with self.case():
                 with self.reject(), self.choice():
                     with self.case(): 
@@ -241,14 +239,19 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                     with self.case(): self.thematic_break()
                     with self.case(): self.setext_heading_line()
                     with self.case(): self.start_fenced_block()
+                    with self.case(): self.start_list()
+
+    @rule()
+    def start_blockquote(self):
+        self.whitespace(max=3)
+        self.accept('>')
+        self.whitespace(max=1, newline=True)
 
     @rule()
     def blockquote(self):
         with self.capture("blockquote"):
-            self.whitespace(max=3)
-            self.accept('>')
-            self.whitespace(max=1)
-            with self.start_blockquote.as_line_prefix():
+            self.start_blockquote()
+            with self.blockquote_prefix.as_line_prefix():
                 self.block_element()
                 with self.repeat():
                     self.start_of_line()
@@ -268,9 +271,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     @rule()
     def block_list(self):
         with self.capture("block_list"):
-            self.whitespace(max=3)
-            self.accept('-')
-            self.whitespace(min=1)
+            self.start_list()
             with self.capture("list_item"):
                 self.list_item()
             with self.repeat():
@@ -363,9 +364,8 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             with self.case(): self.setext_heading_line()
             with self.case(): self.start_fenced_block()
             with self.case(): self.start_list()
-            with self.case(): 
-                self.whitespace(max=3)
-                self.accept(">")
+            with self.case(): self.start_blockquote()
+
     @rule()
     def empty_lines(self):
         with self.repeat(min=1):
