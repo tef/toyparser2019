@@ -20,6 +20,8 @@ builder = {
     'fenced_code': (lambda buf, pos, end, children: {"fenced_code":children}),
     'para': (lambda buf, pos, end, children: {"para":children}),
     'blockquote': (lambda buf, pos, end, children: {"blockquote":children}),
+    'block_list': (lambda buf, pos, end, children: {"list":children}),
+    'list_item': (lambda buf, pos, end, children: {"item":children}),
     'text': (lambda buf, pos, end, children: buf[pos:end]),
     'info': (lambda buf, pos, end, children: {"info":buf[pos:end]}),
 }
@@ -48,6 +50,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
         # HTML Block
         # Link reference_definiton
         setext_heading |     
+        block_list |
         para | 
         empty_lines
     )
@@ -258,6 +261,54 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                             self.whitespace()
                             self.newline()
 
+    @rule()
+    def start_list(self):
+        self.whitespace(max=3)
+        self.accept('-')
+        self.whitespace(min=1)
+
+    @rule()
+    def block_list(self):
+        with self.capture("block_list"):
+            self.whitespace(max=3)
+            self.accept('-')
+            self.whitespace(min=1)
+            with self.capture("list_item"):
+                self.list_item()
+            with self.repeat():
+                self.start_of_line()
+                with self.choice():
+                    with self.case():
+                        self.whitespace(max=3)
+                        self.accept('-')
+                        self.whitespace(min=1)
+                        with self.capture("list_item"):
+                            self.list_item()
+                    with self.case():
+                        with self.repeat(min=1):
+                            self.whitespace()
+                            self.newline()
+                        with self.lookahead():
+                            self.start_of_line()
+                            self.whitespace(max=3)
+                            self.accept('-')
+                            self.whitespace(min=1)
+                        self.capture_value("")
+
+    @rule()
+    def list_item(self):
+        with self.indented():
+            self.block_element()
+            with self.repeat():
+                self.start_of_line()
+                with self.choice():
+                    with self.case():
+                        self.block_element()
+                    with self.case():
+                        self.start_of_line()
+                        self.whitespace()
+                        self.newline()
+                        self.capture_value("")
 
     @rule()
     def para(self):
@@ -309,6 +360,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             with self.case(): self.thematic_break()
             with self.case(): self.setext_heading_line()
             with self.case(): self.start_fenced_block()
+            with self.case(): self.start_list()
             with self.case(): 
                 self.whitespace(max=3)
                 self.accept(">")
@@ -466,4 +518,19 @@ _markup("""\
 > > b
 
 ddff
+""")
+markup("""\
+- 1
+- 2
+- 3
+
+four
+
+- a
+
+- c
+
+  - d 
+
+  - e
 """)
