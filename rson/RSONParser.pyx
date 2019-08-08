@@ -20,12 +20,14 @@ cdef class Parser:
     def __init__(self, builder=None):
          self.builder = builder
          self.tabstop = self.TABSTOP
+         self.cache = None
 
     NEWLINE = ()
     WHITESPACE = (32, 9, 13, 10, 65279)
     TABSTOP = 8
 
     def parse(self, buf, offset=0, end=None, err=None):
+        self.cache = dict()
         end = len(buf) if end is None else end
         line_start, prefix, eof, children = offset, [], end, []
         new_offset, line_start = self.parse_document(buf, offset, line_start, prefix, eof, children)
@@ -84,6 +86,7 @@ cdef class Parser:
             while True:
                 offset_1 = offset_0
                 line_start_1 = line_start_0
+                children_1 = []
                 while True:
                     if buf[offset_1:offset_1+1] == '#':
                         offset_1 += 1
@@ -95,6 +98,7 @@ cdef class Parser:
                     while True:
                         offset_2 = offset_1
                         line_start_2 = line_start_1
+                        children_2 = []
                         while True:
                             if offset_2 == buf_eof:
                                 offset_2 = -1
@@ -112,6 +116,7 @@ cdef class Parser:
                         if offset_2 == -1:
                             break
                         if offset_1 == offset_2: break
+                        children_1.extend(children_2)
                         offset_1 = offset_2
                         line_start_1 = line_start_2
                         count_1 += 1
@@ -131,6 +136,7 @@ cdef class Parser:
                 if offset_1 == -1:
                     break
                 if offset_0 == offset_1: break
+                children_0.extend(children_1)
                 offset_0 = offset_1
                 line_start_0 = line_start_1
                 count_0 += 1
@@ -189,6 +195,7 @@ cdef class Parser:
                             while True:
                                 offset_4 = offset_3
                                 line_start_2 = line_start_1
+                                children_4 = []
                                 while True:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
@@ -212,6 +219,7 @@ cdef class Parser:
                                 if offset_4 == -1:
                                     break
                                 if offset_3 == offset_4: break
+                                children_3.extend(children_4)
                                 offset_3 = offset_4
                                 line_start_1 = line_start_2
                                 count_0 += 1
@@ -497,6 +505,7 @@ cdef class Parser:
                         while count_0 < 1:
                             offset_3 = offset_2
                             line_start_2 = line_start_1
+                            children_3 = []
                             while True:
                                 if offset_3 == buf_eof:
                                     offset_3 = -1
@@ -516,6 +525,7 @@ cdef class Parser:
                             if offset_3 == -1:
                                 break
                             if offset_2 == offset_3: break
+                            children_2.extend(children_3)
                             offset_2 = offset_3
                             line_start_1 = line_start_2
                             count_0 += 1
@@ -549,6 +559,7 @@ cdef class Parser:
                         while True:
                             offset_3 = offset_2
                             line_start_2 = line_start_1
+                            children_3 = []
                             while True:
                                 if offset_3 == buf_eof:
                                     offset_3 = -1
@@ -572,6 +583,7 @@ cdef class Parser:
                             if offset_3 == -1:
                                 break
                             if offset_2 == offset_3: break
+                            children_2.extend(children_3)
                             offset_2 = offset_3
                             line_start_1 = line_start_2
                             count_0 += 1
@@ -594,6 +606,7 @@ cdef class Parser:
                         while count_0 < 1:
                             offset_3 = offset_2
                             line_start_2 = line_start_1
+                            children_3 = []
                             while True:
                                 if offset_3 == buf_eof:
                                     offset_3 = -1
@@ -613,6 +626,7 @@ cdef class Parser:
                             if offset_3 == -1:
                                 break
                             if offset_2 == offset_3: break
+                            children_2.extend(children_3)
                             offset_2 = offset_3
                             line_start_1 = line_start_2
                             count_0 += 1
@@ -642,6 +656,7 @@ cdef class Parser:
                         while True:
                             offset_3 = offset_2
                             line_start_2 = line_start_1
+                            children_3 = []
                             while True:
                                 if offset_3 == buf_eof:
                                     offset_3 = -1
@@ -661,6 +676,7 @@ cdef class Parser:
                             if offset_3 == -1:
                                 break
                             if offset_2 == offset_3: break
+                            children_2.extend(children_3)
                             offset_2 = offset_3
                             line_start_1 = line_start_2
                             count_0 += 1
@@ -683,6 +699,7 @@ cdef class Parser:
                         while count_0 < 1:
                             offset_3 = offset_2
                             line_start_2 = line_start_1
+                            children_3 = []
                             while True:
                                 if offset_3 == buf_eof:
                                     offset_3 = -1
@@ -702,6 +719,7 @@ cdef class Parser:
                             if offset_3 == -1:
                                 break
                             if offset_2 == offset_3: break
+                            children_2.extend(children_3)
                             offset_2 = offset_3
                             line_start_1 = line_start_2
                             count_0 += 1
@@ -731,6 +749,7 @@ cdef class Parser:
                         while True:
                             offset_3 = offset_2
                             line_start_2 = line_start_1
+                            children_3 = []
                             while True:
                                 if offset_3 == buf_eof:
                                     offset_3 = -1
@@ -750,6 +769,7 @@ cdef class Parser:
                             if offset_3 == -1:
                                 break
                             if offset_2 == offset_3: break
+                            children_2.extend(children_3)
                             offset_2 = offset_3
                             line_start_1 = line_start_2
                             count_0 += 1
@@ -772,6 +792,7 @@ cdef class Parser:
                         while count_0 < 1:
                             offset_3 = offset_2
                             line_start_2 = line_start_1
+                            children_3 = []
                             while True:
                                 if offset_3 == buf_eof:
                                     offset_3 = -1
@@ -791,6 +812,7 @@ cdef class Parser:
                             if offset_3 == -1:
                                 break
                             if offset_2 == offset_3: break
+                            children_2.extend(children_3)
                             offset_2 = offset_3
                             line_start_1 = line_start_2
                             count_0 += 1
@@ -837,6 +859,7 @@ cdef class Parser:
                                 while True:
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    children_4 = []
                                     while True:
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
@@ -854,6 +877,7 @@ cdef class Parser:
                                     if offset_4 == -1:
                                         break
                                     if offset_3 == offset_4: break
+                                    children_3.extend(children_4)
                                     offset_3 = offset_4
                                     line_start_2 = line_start_3
                                     count_0 += 1
@@ -877,6 +901,7 @@ cdef class Parser:
                         while count_0 < 1:
                             offset_3 = offset_2
                             line_start_2 = line_start_1
+                            children_3 = []
                             while True:
                                 if buf[offset_3:offset_3+1] == '.':
                                     offset_3 += 1
@@ -888,6 +913,7 @@ cdef class Parser:
                                 while True:
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    children_4 = []
                                     while True:
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
@@ -905,6 +931,7 @@ cdef class Parser:
                                     if offset_4 == -1:
                                         break
                                     if offset_3 == offset_4: break
+                                    children_3.extend(children_4)
                                     offset_3 = offset_4
                                     line_start_2 = line_start_3
                                     count_1 += 1
@@ -915,6 +942,7 @@ cdef class Parser:
                             if offset_3 == -1:
                                 break
                             if offset_2 == offset_3: break
+                            children_2.extend(children_3)
                             offset_2 = offset_3
                             line_start_1 = line_start_2
                             count_0 += 1
@@ -926,6 +954,7 @@ cdef class Parser:
                         while count_0 < 1:
                             offset_3 = offset_2
                             line_start_2 = line_start_1
+                            children_3 = []
                             while True:
                                 if buf[offset_3:offset_3+1] == 'e':
                                     offset_3 += 1
@@ -939,6 +968,7 @@ cdef class Parser:
                                 while count_1 < 1:
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    children_4 = []
                                     while True:
                                         if buf[offset_4:offset_4+1] == '+':
                                             offset_4 += 1
@@ -952,6 +982,7 @@ cdef class Parser:
                                         while True:
                                             offset_5 = offset_4
                                             line_start_4 = line_start_3
+                                            children_5 = []
                                             while True:
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
@@ -969,6 +1000,7 @@ cdef class Parser:
                                             if offset_5 == -1:
                                                 break
                                             if offset_4 == offset_5: break
+                                            children_4.extend(children_5)
                                             offset_4 = offset_5
                                             line_start_3 = line_start_4
                                             count_2 += 1
@@ -979,6 +1011,7 @@ cdef class Parser:
                                     if offset_4 == -1:
                                         break
                                     if offset_3 == offset_4: break
+                                    children_3.extend(children_4)
                                     offset_3 = offset_4
                                     line_start_2 = line_start_3
                                     count_1 += 1
@@ -990,6 +1023,7 @@ cdef class Parser:
                             if offset_3 == -1:
                                 break
                             if offset_2 == offset_3: break
+                            children_2.extend(children_3)
                             offset_2 = offset_3
                             line_start_1 = line_start_2
                             count_0 += 1
@@ -1046,11 +1080,12 @@ cdef class Parser:
                         while True:
                             offset_3 = offset_2
                             line_start_2 = line_start_1
+                            children_3 = []
                             while True:
                                 while True: # start choice
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
-                                    children_3 = []
+                                    children_4 = []
                                     while True: # case
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
@@ -1078,12 +1113,12 @@ cdef class Parser:
                                     if offset_4 != -1:
                                         offset_3 = offset_4
                                         line_start_2 = line_start_3
-                                        children_2.extend(children_3)
+                                        children_3.extend(children_4)
                                         break
                                     # end case
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
-                                    children_3 = []
+                                    children_4 = []
                                     while True: # case
                                         if buf[offset_4:offset_4+2] == '\\x':
                                             offset_4 += 2
@@ -1092,7 +1127,7 @@ cdef class Parser:
                                             break
                                         
                                         while True: # start reject
-                                            children_4 = []
+                                            children_5 = []
                                             offset_5, line_start_4 = offset_4, line_start_3
                                             if offset_5 == buf_eof:
                                                 offset_5 = -1
@@ -1148,12 +1183,12 @@ cdef class Parser:
                                     if offset_4 != -1:
                                         offset_3 = offset_4
                                         line_start_2 = line_start_3
-                                        children_2.extend(children_3)
+                                        children_3.extend(children_4)
                                         break
                                     # end case
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
-                                    children_3 = []
+                                    children_4 = []
                                     while True: # case
                                         if buf[offset_4:offset_4+2] == '\\u':
                                             offset_4 += 2
@@ -1162,7 +1197,7 @@ cdef class Parser:
                                             break
                                         
                                         while True: # start reject
-                                            children_4 = []
+                                            children_5 = []
                                             offset_5, line_start_4 = offset_4, line_start_3
                                             if buf[offset_5:offset_5+3] == '000':
                                                 offset_5 += 3
@@ -1188,7 +1223,7 @@ cdef class Parser:
                                             break
                                         
                                         while True: # start reject
-                                            children_4 = []
+                                            children_5 = []
                                             offset_5, line_start_4 = offset_4, line_start_3
                                             if buf[offset_5:offset_5+1] == 'D':
                                                 offset_5 += 1
@@ -1286,12 +1321,12 @@ cdef class Parser:
                                     if offset_4 != -1:
                                         offset_3 = offset_4
                                         line_start_2 = line_start_3
-                                        children_2.extend(children_3)
+                                        children_3.extend(children_4)
                                         break
                                     # end case
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
-                                    children_3 = []
+                                    children_4 = []
                                     while True: # case
                                         if buf[offset_4:offset_4+2] == '\\U':
                                             offset_4 += 2
@@ -1300,7 +1335,7 @@ cdef class Parser:
                                             break
                                         
                                         while True: # start reject
-                                            children_4 = []
+                                            children_5 = []
                                             offset_5, line_start_4 = offset_4, line_start_3
                                             if buf[offset_5:offset_5+7] == '0000000':
                                                 offset_5 += 7
@@ -1326,7 +1361,7 @@ cdef class Parser:
                                             break
                                         
                                         while True: # start reject
-                                            children_4 = []
+                                            children_5 = []
                                             offset_5, line_start_4 = offset_4, line_start_3
                                             if buf[offset_5:offset_5+4] == '0000':
                                                 offset_5 += 4
@@ -1494,12 +1529,12 @@ cdef class Parser:
                                     if offset_4 != -1:
                                         offset_3 = offset_4
                                         line_start_2 = line_start_3
-                                        children_2.extend(children_3)
+                                        children_3.extend(children_4)
                                         break
                                     # end case
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
-                                    children_3 = []
+                                    children_4 = []
                                     while True: # case
                                         if buf[offset_4:offset_4+1] == '\\':
                                             offset_4 += 1
@@ -1542,7 +1577,7 @@ cdef class Parser:
                                     if offset_4 != -1:
                                         offset_3 = offset_4
                                         line_start_2 = line_start_3
-                                        children_2.extend(children_3)
+                                        children_3.extend(children_4)
                                         break
                                     # end case
                                     offset_3 = -1 # no more choices
@@ -1554,6 +1589,7 @@ cdef class Parser:
                             if offset_3 == -1:
                                 break
                             if offset_2 == offset_3: break
+                            children_2.extend(children_3)
                             offset_2 = offset_3
                             line_start_1 = line_start_2
                             count_0 += 1
@@ -1602,11 +1638,12 @@ cdef class Parser:
                         while True:
                             offset_3 = offset_2
                             line_start_2 = line_start_1
+                            children_3 = []
                             while True:
                                 while True: # start choice
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
-                                    children_3 = []
+                                    children_4 = []
                                     while True: # case
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
@@ -1634,12 +1671,12 @@ cdef class Parser:
                                     if offset_4 != -1:
                                         offset_3 = offset_4
                                         line_start_2 = line_start_3
-                                        children_2.extend(children_3)
+                                        children_3.extend(children_4)
                                         break
                                     # end case
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
-                                    children_3 = []
+                                    children_4 = []
                                     while True: # case
                                         if buf[offset_4:offset_4+2] == '\\x':
                                             offset_4 += 2
@@ -1648,7 +1685,7 @@ cdef class Parser:
                                             break
                                         
                                         while True: # start reject
-                                            children_4 = []
+                                            children_5 = []
                                             offset_5, line_start_4 = offset_4, line_start_3
                                             if offset_5 == buf_eof:
                                                 offset_5 = -1
@@ -1704,12 +1741,12 @@ cdef class Parser:
                                     if offset_4 != -1:
                                         offset_3 = offset_4
                                         line_start_2 = line_start_3
-                                        children_2.extend(children_3)
+                                        children_3.extend(children_4)
                                         break
                                     # end case
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
-                                    children_3 = []
+                                    children_4 = []
                                     while True: # case
                                         if buf[offset_4:offset_4+2] == '\\u':
                                             offset_4 += 2
@@ -1718,7 +1755,7 @@ cdef class Parser:
                                             break
                                         
                                         while True: # start reject
-                                            children_4 = []
+                                            children_5 = []
                                             offset_5, line_start_4 = offset_4, line_start_3
                                             if buf[offset_5:offset_5+2] == '00':
                                                 offset_5 += 2
@@ -1744,7 +1781,7 @@ cdef class Parser:
                                             break
                                         
                                         while True: # start reject
-                                            children_4 = []
+                                            children_5 = []
                                             offset_5, line_start_4 = offset_4, line_start_3
                                             if buf[offset_5:offset_5+1] == 'D':
                                                 offset_5 += 1
@@ -1842,12 +1879,12 @@ cdef class Parser:
                                     if offset_4 != -1:
                                         offset_3 = offset_4
                                         line_start_2 = line_start_3
-                                        children_2.extend(children_3)
+                                        children_3.extend(children_4)
                                         break
                                     # end case
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
-                                    children_3 = []
+                                    children_4 = []
                                     while True: # case
                                         if buf[offset_4:offset_4+2] == '\\U':
                                             offset_4 += 2
@@ -1856,7 +1893,7 @@ cdef class Parser:
                                             break
                                         
                                         while True: # start reject
-                                            children_4 = []
+                                            children_5 = []
                                             offset_5, line_start_4 = offset_4, line_start_3
                                             if buf[offset_5:offset_5+6] == '000000':
                                                 offset_5 += 6
@@ -1882,7 +1919,7 @@ cdef class Parser:
                                             break
                                         
                                         while True: # start reject
-                                            children_4 = []
+                                            children_5 = []
                                             offset_5, line_start_4 = offset_4, line_start_3
                                             if buf[offset_5:offset_5+4] == '0000':
                                                 offset_5 += 4
@@ -2050,12 +2087,12 @@ cdef class Parser:
                                     if offset_4 != -1:
                                         offset_3 = offset_4
                                         line_start_2 = line_start_3
-                                        children_2.extend(children_3)
+                                        children_3.extend(children_4)
                                         break
                                     # end case
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
-                                    children_3 = []
+                                    children_4 = []
                                     while True: # case
                                         if buf[offset_4:offset_4+1] == '\\':
                                             offset_4 += 1
@@ -2098,7 +2135,7 @@ cdef class Parser:
                                     if offset_4 != -1:
                                         offset_3 = offset_4
                                         line_start_2 = line_start_3
-                                        children_2.extend(children_3)
+                                        children_3.extend(children_4)
                                         break
                                     # end case
                                     offset_3 = -1 # no more choices
@@ -2110,6 +2147,7 @@ cdef class Parser:
                             if offset_3 == -1:
                                 break
                             if offset_2 == offset_3: break
+                            children_2.extend(children_3)
                             offset_2 = offset_3
                             line_start_1 = line_start_2
                             count_0 += 1
@@ -2170,8 +2208,9 @@ cdef class Parser:
                 while count_0 < 1:
                     offset_2 = offset_1
                     line_start_1 = line_start_0
+                    children_2 = []
                     while True:
-                        offset_2, line_start_1 = self.parse_rson_value(buf, offset_2, line_start_1, prefix_0, buf_eof, children_1)
+                        offset_2, line_start_1 = self.parse_rson_value(buf, offset_2, line_start_1, prefix_0, buf_eof, children_2)
                         if offset_2 == -1: break
                         
                         
@@ -2179,8 +2218,9 @@ cdef class Parser:
                         while True:
                             offset_3 = offset_2
                             line_start_2 = line_start_1
+                            children_3 = []
                             while True:
-                                offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, prefix_0, buf_eof, children_1)
+                                offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, prefix_0, buf_eof, children_3)
                                 if offset_3 == -1: break
                                 
                                 
@@ -2190,11 +2230,11 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
                                 
-                                offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, prefix_0, buf_eof, children_1)
+                                offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, prefix_0, buf_eof, children_3)
                                 if offset_3 == -1: break
                                 
                                 
-                                offset_3, line_start_2 = self.parse_rson_value(buf, offset_3, line_start_2, prefix_0, buf_eof, children_1)
+                                offset_3, line_start_2 = self.parse_rson_value(buf, offset_3, line_start_2, prefix_0, buf_eof, children_3)
                                 if offset_3 == -1: break
                                 
                                 
@@ -2202,13 +2242,14 @@ cdef class Parser:
                             if offset_3 == -1:
                                 break
                             if offset_2 == offset_3: break
+                            children_2.extend(children_3)
                             offset_2 = offset_3
                             line_start_1 = line_start_2
                             count_1 += 1
                         if offset_2 == -1:
                             break
                         
-                        offset_2, line_start_1 = self.parse_comment(buf, offset_2, line_start_1, prefix_0, buf_eof, children_1)
+                        offset_2, line_start_1 = self.parse_comment(buf, offset_2, line_start_1, prefix_0, buf_eof, children_2)
                         if offset_2 == -1: break
                         
                         
@@ -2216,6 +2257,7 @@ cdef class Parser:
                         while count_1 < 1:
                             offset_3 = offset_2
                             line_start_2 = line_start_1
+                            children_3 = []
                             while True:
                                 if buf[offset_3:offset_3+1] == ',':
                                     offset_3 += 1
@@ -2223,7 +2265,7 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
                                 
-                                offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, prefix_0, buf_eof, children_1)
+                                offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, prefix_0, buf_eof, children_3)
                                 if offset_3 == -1: break
                                 
                                 
@@ -2231,6 +2273,7 @@ cdef class Parser:
                             if offset_3 == -1:
                                 break
                             if offset_2 == offset_3: break
+                            children_2.extend(children_3)
                             offset_2 = offset_3
                             line_start_1 = line_start_2
                             count_1 += 1
@@ -2242,6 +2285,7 @@ cdef class Parser:
                     if offset_2 == -1:
                         break
                     if offset_1 == offset_2: break
+                    children_1.extend(children_2)
                     offset_1 = offset_2
                     line_start_0 = line_start_1
                     count_0 += 1
@@ -2291,15 +2335,16 @@ cdef class Parser:
                 while count_0 < 1:
                     offset_2 = offset_1
                     line_start_1 = line_start_0
+                    children_2 = []
                     while True:
                         offset_3 = offset_2
-                        children_2 = []
+                        children_3 = []
                         while True: # start capture
-                            offset_3, line_start_1 = self.parse_rson_string(buf, offset_3, line_start_1, prefix_0, buf_eof, children_2)
+                            offset_3, line_start_1 = self.parse_rson_string(buf, offset_3, line_start_1, prefix_0, buf_eof, children_3)
                             if offset_3 == -1: break
                             
                             
-                            offset_3, line_start_1 = self.parse_comment(buf, offset_3, line_start_1, prefix_0, buf_eof, children_2)
+                            offset_3, line_start_1 = self.parse_comment(buf, offset_3, line_start_1, prefix_0, buf_eof, children_3)
                             if offset_3 == -1: break
                             
                             
@@ -2309,11 +2354,11 @@ cdef class Parser:
                                 offset_3 = -1
                                 break
                             
-                            offset_3, line_start_1 = self.parse_comment(buf, offset_3, line_start_1, prefix_0, buf_eof, children_2)
+                            offset_3, line_start_1 = self.parse_comment(buf, offset_3, line_start_1, prefix_0, buf_eof, children_3)
                             if offset_3 == -1: break
                             
                             
-                            offset_3, line_start_1 = self.parse_rson_value(buf, offset_3, line_start_1, prefix_0, buf_eof, children_2)
+                            offset_3, line_start_1 = self.parse_rson_value(buf, offset_3, line_start_1, prefix_0, buf_eof, children_3)
                             if offset_3 == -1: break
                             
                             
@@ -2322,13 +2367,13 @@ cdef class Parser:
                             offset_2 = -1
                             break
                         if self.builder is not None:
-                            value_0 = self.builder['pair'](buf, offset_2, offset_3, children_2)
+                            value_0 = self.builder['pair'](buf, offset_2, offset_3, children_3)
                         else:
-                            value_0 = Node('pair', offset_2, offset_3, list(children_2), None)
-                        children_1.append(value_0)
+                            value_0 = Node('pair', offset_2, offset_3, list(children_3), None)
+                        children_2.append(value_0)
                         offset_2 = offset_3
                         
-                        offset_2, line_start_1 = self.parse_comment(buf, offset_2, line_start_1, prefix_0, buf_eof, children_1)
+                        offset_2, line_start_1 = self.parse_comment(buf, offset_2, line_start_1, prefix_0, buf_eof, children_2)
                         if offset_2 == -1: break
                         
                         
@@ -2336,6 +2381,7 @@ cdef class Parser:
                         while True:
                             offset_3 = offset_2
                             line_start_2 = line_start_1
+                            children_3 = []
                             while True:
                                 if buf[offset_3:offset_3+1] == ',':
                                     offset_3 += 1
@@ -2343,18 +2389,18 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
                                 
-                                offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, prefix_0, buf_eof, children_1)
+                                offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, prefix_0, buf_eof, children_3)
                                 if offset_3 == -1: break
                                 
                                 
                                 offset_4 = offset_3
-                                children_2 = []
+                                children_4 = []
                                 while True: # start capture
-                                    offset_4, line_start_2 = self.parse_rson_string(buf, offset_4, line_start_2, prefix_0, buf_eof, children_2)
+                                    offset_4, line_start_2 = self.parse_rson_string(buf, offset_4, line_start_2, prefix_0, buf_eof, children_4)
                                     if offset_4 == -1: break
                                     
                                     
-                                    offset_4, line_start_2 = self.parse_comment(buf, offset_4, line_start_2, prefix_0, buf_eof, children_2)
+                                    offset_4, line_start_2 = self.parse_comment(buf, offset_4, line_start_2, prefix_0, buf_eof, children_4)
                                     if offset_4 == -1: break
                                     
                                     
@@ -2364,11 +2410,11 @@ cdef class Parser:
                                         offset_4 = -1
                                         break
                                     
-                                    offset_4, line_start_2 = self.parse_comment(buf, offset_4, line_start_2, prefix_0, buf_eof, children_2)
+                                    offset_4, line_start_2 = self.parse_comment(buf, offset_4, line_start_2, prefix_0, buf_eof, children_4)
                                     if offset_4 == -1: break
                                     
                                     
-                                    offset_4, line_start_2 = self.parse_rson_value(buf, offset_4, line_start_2, prefix_0, buf_eof, children_2)
+                                    offset_4, line_start_2 = self.parse_rson_value(buf, offset_4, line_start_2, prefix_0, buf_eof, children_4)
                                     if offset_4 == -1: break
                                     
                                     
@@ -2377,13 +2423,13 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
                                 if self.builder is not None:
-                                    value_1 = self.builder['pair'](buf, offset_3, offset_4, children_2)
+                                    value_1 = self.builder['pair'](buf, offset_3, offset_4, children_4)
                                 else:
-                                    value_1 = Node('pair', offset_3, offset_4, list(children_2), None)
-                                children_1.append(value_1)
+                                    value_1 = Node('pair', offset_3, offset_4, list(children_4), None)
+                                children_3.append(value_1)
                                 offset_3 = offset_4
                                 
-                                offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, prefix_0, buf_eof, children_1)
+                                offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, prefix_0, buf_eof, children_3)
                                 if offset_3 == -1: break
                                 
                                 
@@ -2391,6 +2437,7 @@ cdef class Parser:
                             if offset_3 == -1:
                                 break
                             if offset_2 == offset_3: break
+                            children_2.extend(children_3)
                             offset_2 = offset_3
                             line_start_1 = line_start_2
                             count_1 += 1
@@ -2401,6 +2448,7 @@ cdef class Parser:
                         while count_1 < 1:
                             offset_3 = offset_2
                             line_start_2 = line_start_1
+                            children_3 = []
                             while True:
                                 if buf[offset_3:offset_3+1] == ',':
                                     offset_3 += 1
@@ -2408,7 +2456,7 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
                                 
-                                offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, prefix_0, buf_eof, children_1)
+                                offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, prefix_0, buf_eof, children_3)
                                 if offset_3 == -1: break
                                 
                                 
@@ -2416,6 +2464,7 @@ cdef class Parser:
                             if offset_3 == -1:
                                 break
                             if offset_2 == offset_3: break
+                            children_2.extend(children_3)
                             offset_2 = offset_3
                             line_start_1 = line_start_2
                             count_1 += 1
@@ -2427,6 +2476,7 @@ cdef class Parser:
                     if offset_2 == -1:
                         break
                     if offset_1 == offset_2: break
+                    children_1.extend(children_2)
                     offset_1 = offset_2
                     line_start_0 = line_start_1
                     count_0 += 1
