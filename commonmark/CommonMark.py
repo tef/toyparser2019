@@ -42,11 +42,12 @@ def join_blocks(children):
 
 @_builder
 def document(buf, pos,end, children):
-    return join_blocks(children)
+    o=join_blocks(children)
+    return o+"\n"
 
 @_builder
 def thematic_break(buf, pos,end, children):
-    return "<hr />\n"
+    return "<hr />"
 
 @_builder
 def atx_heading(buf, pos,end, children):
@@ -129,7 +130,7 @@ def hardbreak(buf, pos,end, children):
 
 @_builder
 def whitespace(buf, pos, end, children):
-    return " "
+    return buf[pos:end]
 
 class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"], tabstop=4):
     version = 0.29
@@ -378,7 +379,6 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             self.start_list()
             with self.capture("list_item"):
                 self.list_item()
-            self.print('end item')
             with self.repeat():
                 self.start_of_line()
                 with self.choice():
@@ -405,13 +405,10 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
         with self.indented():
             self.block_element()
             with self.repeat():
-                self.print('then... item')
                 self.start_of_line()
                 with self.choice():
                     with self.case():
-                        self.print('block?')
                         self.block_element()
-                        self.print('yes!')
                     with self.case():
                         with self.repeat():
                             self.start_of_line()
@@ -422,7 +419,6 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
 
     @rule()
     def para(self):
-        self.print('para?')
         self.whitespace(max=3)
         with self.memoize(),self.capture("para"):
             self.inline_para.inline()
@@ -486,7 +482,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             self.whitespace()
             self.newline()
         with self.capture("empty"):
-            self.print('empty')
+            pass
 
     @rule() # 2.1 line ends by newline or eof
     def line_end(self):
@@ -699,3 +695,27 @@ def
 
 butt
 """)
+
+import json
+with open("commonmark_0_29.json") as fh:
+    tests = json.load(fh)
+failed = 0
+worked = 0
+count =0
+
+parser = CommonMark.parser(builder)
+for t in tests:
+    markd = t['markdown']
+    if '<' in markd: continue
+    out = parser.parse(t['markdown'])
+    if out == t['html']: 
+        worked +=1
+        # print(repr(t['markdown']))
+        # print(repr(out))
+    else:
+        failed +=1
+        print(repr(out))
+        print(repr(t['html']))
+        print()
+    count +=1
+print(count, worked, failed)

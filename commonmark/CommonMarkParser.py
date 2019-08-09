@@ -2174,8 +2174,6 @@ class Parser:
                 children_1.append(value_0)
                 offset_1 = offset_2
 
-                print('print', 'end item', 'at' ,offset_1, repr(buf[offset_1:offset_1+15]), prefix_0)
-
                 count_0 = 0
                 while True:
                     offset_2 = offset_1
@@ -2455,8 +2453,6 @@ class Parser:
                     line_start_1 = line_start_0
                     children_1 = [] if children_0 is not None else None
                     while True:
-                        print('print', 'then... item', 'at' ,offset_1, repr(buf[offset_1:offset_1+15]), prefix_0)
-
                         if offset_1 != line_start_1:
                             offset_1 = -1
                             break
@@ -2475,13 +2471,9 @@ class Parser:
                             line_start_2 = line_start_1
                             children_2 = [] if children_1 is not None else None
                             while True: # case
-                                print('print', 'block?', 'at' ,offset_2, repr(buf[offset_2:offset_2+15]), prefix_0)
-
                                 offset_2, line_start_2 = self.parse_block_element(buf, offset_2, line_start_2, prefix_0, buf_eof, children_2)
                                 if offset_2 == -1: break
 
-
-                                print('print', 'yes!', 'at' ,offset_2, repr(buf[offset_2:offset_2+15]), prefix_0)
 
 
                                 break
@@ -2604,8 +2596,6 @@ class Parser:
 
     def parse_para(self, buf, offset_0, line_start_0, prefix_0, buf_eof, children_0):
         while True: # note: return at end of loop
-            print('print', 'para?', 'at' ,offset_0, repr(buf[offset_0:offset_0+15]), prefix_0)
-
             count_0 = 0
             while offset_0 < buf_eof and count_0 < 3:
                 chr = buf[offset_0]
@@ -3158,147 +3148,14 @@ class Parser:
                             else:
                                 break
 
-                        print('print', 'end para', 'at' ,offset_2, repr(buf[offset_2:offset_2+15]), prefix_0)
-
-                        while True: # start choice
-                            offset_3 = offset_2
-                            line_start_1 = line_start_0
-                            children_3 = [] if children_2 is not None else None
-                            while True: # case
-                                if offset_3 < buf_eof:
-                                    chr = buf[offset_3]
-                                    if chr in '\n':
-                                        offset_3 +=1
-                                        line_start_1 = offset_3
-                                    else:
-                                        offset_3 = -1
-                                        break
-
-
+                        if offset_2 < buf_eof:
+                            chr = buf[offset_2]
+                            if chr in '\n':
+                                offset_2 +=1
+                                line_start_0 = offset_2
+                            else:
+                                offset_2 = -1
                                 break
-                            if offset_3 != -1:
-                                offset_2 = offset_3
-                                line_start_0 = line_start_1
-                                if children_3 is not None and children_3 is not None:
-                                    children_2.extend(children_3)
-                                break
-                            # end case
-                            offset_3 = offset_2
-                            line_start_1 = line_start_0
-                            children_3 = [] if children_2 is not None else None
-                            while True: # case
-                                while True: # start reject
-                                    children_4 = []
-                                    offset_4, line_start_2 = offset_3, line_start_1
-                                    while True: # start choice
-                                        offset_5 = offset_4
-                                        line_start_3 = line_start_2
-                                        children_5 = [] if children_4 is not None else None
-                                        while True: # case
-                                            offset_5, line_start_3 = self.parse_thematic_break(buf, offset_5, line_start_3, prefix_0, buf_eof, children_5)
-                                            if offset_5 == -1: break
-
-
-
-                                            break
-                                        if offset_5 != -1:
-                                            offset_4 = offset_5
-                                            line_start_2 = line_start_3
-                                            if children_5 is not None and children_5 is not None:
-                                                children_4.extend(children_5)
-                                            break
-                                        # end case
-                                        offset_5 = offset_4
-                                        line_start_3 = line_start_2
-                                        children_5 = [] if children_4 is not None else None
-                                        while True: # case
-                                            offset_5, line_start_3 = self.parse_setext_heading_line(buf, offset_5, line_start_3, prefix_0, buf_eof, children_5)
-                                            if offset_5 == -1: break
-
-
-
-                                            break
-                                        if offset_5 != -1:
-                                            offset_4 = offset_5
-                                            line_start_2 = line_start_3
-                                            if children_5 is not None and children_5 is not None:
-                                                children_4.extend(children_5)
-                                            break
-                                        # end case
-                                        offset_5 = offset_4
-                                        line_start_3 = line_start_2
-                                        children_5 = [] if children_4 is not None else None
-                                        while True: # case
-                                            offset_5, line_start_3 = self.parse_start_fenced_block(buf, offset_5, line_start_3, prefix_0, buf_eof, children_5)
-                                            if offset_5 == -1: break
-
-
-
-                                            break
-                                        if offset_5 != -1:
-                                            offset_4 = offset_5
-                                            line_start_2 = line_start_3
-                                            if children_5 is not None and children_5 is not None:
-                                                children_4.extend(children_5)
-                                            break
-                                        # end case
-                                        offset_5 = offset_4
-                                        line_start_3 = line_start_2
-                                        children_5 = [] if children_4 is not None else None
-                                        while True: # case
-                                            offset_5, line_start_3 = self.parse_start_list(buf, offset_5, line_start_3, prefix_0, buf_eof, children_5)
-                                            if offset_5 == -1: break
-
-
-
-                                            break
-                                        if offset_5 != -1:
-                                            offset_4 = offset_5
-                                            line_start_2 = line_start_3
-                                            if children_5 is not None and children_5 is not None:
-                                                children_4.extend(children_5)
-                                            break
-                                        # end case
-                                        offset_5 = offset_4
-                                        line_start_3 = line_start_2
-                                        children_5 = [] if children_4 is not None else None
-                                        while True: # case
-                                            offset_5, line_start_3 = self.parse_start_blockquote(buf, offset_5, line_start_3, prefix_0, buf_eof, children_5)
-                                            if offset_5 == -1: break
-
-
-
-                                            break
-                                        if offset_5 != -1:
-                                            offset_4 = offset_5
-                                            line_start_2 = line_start_3
-                                            if children_5 is not None and children_5 is not None:
-                                                children_4.extend(children_5)
-                                            break
-                                        # end case
-                                        offset_4 = -1 # no more choices
-                                        break # end choice
-                                    if offset_4 == -1:
-                                        break
-
-                                    break
-                                if offset_4 == -1:
-                                    offset_3 = -1
-                                    break
-
-
-                                break
-                            if offset_3 != -1:
-                                offset_2 = offset_3
-                                line_start_0 = line_start_1
-                                if children_3 is not None and children_3 is not None:
-                                    children_2.extend(children_3)
-                                break
-                            # end case
-                            offset_2 = -1 # no more choices
-                            break # end choice
-                        if offset_2 == -1:
-                            break
 
                         break
                     if offset_2 == -1:
@@ -3928,14 +3785,6 @@ class Parser:
                 break
 
             offset_1 = offset_0
-            children_1 = []
-            while True: # start capture
-                print('print', 'empty', 'at' ,offset_1, repr(buf[offset_1:offset_1+15]), prefix_0)
-
-                break
-            if offset_1 == -1:
-                offset_0 = -1
-                break
             if self.builder is not None:
                 value_0 = self.builder['empty'](buf, offset_0, offset_1, children_1)
             else:
