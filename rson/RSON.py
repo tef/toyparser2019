@@ -103,7 +103,7 @@ class RSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n", "\uFEFF
         with self.choice():
             with self.case(), self.capture('tagged'):
                 self.accept('@')
-                with self.capture('identifier'):
+                with self.capture('identifier', nested=False):
                     self.range("a-z", "a-Z")
                     with self.repeat():
                         self.range("0-9", "a-z","A-Z","_")
@@ -128,7 +128,7 @@ class RSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n", "\uFEFF
 
     @rule()
     def rson_number(self):
-        with self.capture("number"), self.choice():
+        with self.capture("number", nested=False), self.choice():
             with self.case():
                 with self.optional():
                     self.range("-", "+")
@@ -176,7 +176,7 @@ class RSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n", "\uFEFF
         with self.choice():
             with self.case():
                 self.accept("\"")
-                with self.capture("string"), self.repeat(), self.choice():
+                with self.capture("string", nested=False), self.repeat(), self.choice():
                     with self.case():
                         self.range("\x00-\x1f", "\\", "\"", "\uD800-\uDFFF", invert=True)
                     with self.case():
@@ -223,7 +223,7 @@ class RSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n", "\uFEFF
                 self.accept("\"")
             with self.case():
                 self.accept("\'")
-                with self.capture("string"), self.repeat(), self.choice():
+                with self.capture("string", nested=False), self.repeat(), self.choice():
                     with self.case():
                         self.range("\x00-\x1f", "\\", "\'", "\uD800-\uDFFF", invert=True)
                     with self.case():

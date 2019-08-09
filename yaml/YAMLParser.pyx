@@ -279,7 +279,7 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
 
-                                chr = ord(buf[offset_3])
+                                chr = (buf[offset_3])
 
                                 if 97 <= chr <= 122:
                                     offset_3 += 1
@@ -369,7 +369,7 @@ cdef class Parser:
                             offset_2 = -1
                             break
 
-                        chr = ord(buf[offset_2])
+                        chr = (buf[offset_2])
 
                         if chr == 45:
                             offset_2 += 1
@@ -401,7 +401,7 @@ cdef class Parser:
                             offset_2 = -1
                             break
 
-                        chr = ord(buf[offset_2])
+                        chr = (buf[offset_2])
 
                         if 48 <= chr <= 57:
                             offset_2 += 1
@@ -445,7 +445,7 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
 
-                                chr = ord(buf[offset_3])
+                                chr = (buf[offset_3])
 
                                 if 48 <= chr <= 57:
                                     offset_3 += 1
@@ -514,7 +514,7 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = ord(buf[offset_4])
+                                        chr = (buf[offset_4])
 
                                         if 48 <= chr <= 57:
                                             offset_4 += 1
@@ -609,7 +609,7 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
 
-                                chr = ord(buf[offset_3])
+                                chr = (buf[offset_3])
 
                                 if 48 <= chr <= 57:
                                     offset_3 += 1
@@ -625,7 +625,7 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
 
-                                chr = ord(buf[offset_3])
+                                chr = (buf[offset_3])
 
                                 if 48 <= chr <= 57:
                                     offset_3 += 1
@@ -641,7 +641,7 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
 
-                                chr = ord(buf[offset_3])
+                                chr = (buf[offset_3])
 
                                 if 48 <= chr <= 57:
                                     offset_3 += 1
@@ -657,7 +657,7 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
 
-                                chr = ord(buf[offset_3])
+                                chr = (buf[offset_3])
 
                                 if 48 <= chr <= 57:
                                     offset_3 += 1
@@ -691,7 +691,7 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
 
-                                chr = ord(buf[offset_3])
+                                chr = (buf[offset_3])
 
                                 if chr == 34:
                                     offset_3 += 1
@@ -729,7 +729,7 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
 
-                                chr = ord(buf[offset_3])
+                                chr = (buf[offset_3])
 
                                 if chr == 92:
                                     offset_3 = -1
@@ -1317,7 +1317,7 @@ cdef class Parser:
                                         offset_3 = -1
                                         break
 
-                                    chr = ord(buf[offset_3])
+                                    chr = (buf[offset_3])
 
                                     if chr == 10:
                                         offset_3 = -1

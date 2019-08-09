@@ -41,13 +41,22 @@ class JSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n"]):
             with self.case(): self.json_false.inline()
             with self.case(): self.json_null.inline()
     
-    json_true = rule(accept("true"), capture="bool")
-    json_false = rule(accept("false"), capture="bool")
-    json_null = rule(accept("null"), capture="null")
+    @rule()
+    def json_true(self):
+        with self.capture("bool", nested=False):
+            self.accept("true")
+    @rule()
+    def json_false(self):
+        with self.capture("bool", nested=False):
+            self.accept("false")
+    @rule()
+    def json_null(self):
+        with self.capture("bool", nested=False):
+            self.accept("null")
 
     @rule()
     def json_number(self):
-        with self.capture("number"):
+        with self.capture("number", nested=False):
             with self.optional():
                 self.accept("-")
             with self.choice():
@@ -71,7 +80,7 @@ class JSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n"]):
     @rule()
     def json_string(self):
         self.accept("\"")
-        with self.capture("string"), self.repeat(), self.choice():
+        with self.capture("string", nested=False), self.repeat(), self.choice():
             with self.case():
                 self.accept("\\u")
                 self.range("0-9", "a-f", "A-F")
@@ -159,31 +168,17 @@ if __name__ == "__main__":
 
     import time, json
 
-    s = json.dumps(list(range(25000)))
-    print('file is', len(s)/1024, 'k')
-
-    def timeit(name,parser, buf):
-        t = time.time()
-        o = parser(buf)
-        t = time.time() - t
-        print(name, t)
-
-
-    timeit("json", json.loads, s)
-    timeit("codegen", parser.parse, s)
-
     inter_parser = Parser(JSON, builder)
     python_parser = JSON.parser(builder)
     old_python_parser = compile(JSON, builder)
     cython_parser = JSONParser(builder)
-
-    import time, json
 
     n= 80_000
     import random
     l = list(range(n))+list(str(x) for x in range(n))
     random.shuffle(l)
     s = json.dumps(l)
+    print()
     print('file is', len(s)/1024, 'k')
 
     def timeit(name,parser, buf):

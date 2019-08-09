@@ -370,7 +370,7 @@ class CaptureNode(GrammarNode):
         args = dict()
         args['name'] = self.name
         args['key'] =  self.key
-        args['args'] = self.args
+        args['nested'] = self.args['nested']
         rules=[r.make_rule() for r in self.rules]
         nullable = any(r.nullable for r in rules)
         regular = all(r.regular for r in rules)
@@ -540,7 +540,7 @@ class FunctionBuilder:
         rules.append(counter)
         self.rules = rules
 
-    def capture(self, name=None, *, value=NULL):
+    def capture(self, name=None, *, value=NULL, nested=True):
         if self.block_mode: raise SyntaxError()
         if value is not NULL:
             self.rules.append(ValueNode(value))
@@ -553,7 +553,7 @@ class FunctionBuilder:
             rules = self.rules
             self.rules = []
             yield
-            rules.append(CaptureNode(name, {}, self.rules))
+            rules.append(CaptureNode(name, args=dict(nested=nested), rules=self.rules))
             self.rules = rules
 
         return _capture()
@@ -672,7 +672,7 @@ class Builtins:
     def rule(*args, inline=False, capture=None):
         def _wrapper(rules):
             if capture:
-                return CaptureNode(capture, {}, rules)
+                return CaptureNode(capture, dict(nested=True), rules)
             elif len(rules) > 1:
                 return SequenceNode(rules)
             else:
@@ -685,7 +685,7 @@ class Builtins:
             return _decorator
 
     def capture(name, *args):
-        return CaptureNode(name, {}, args)
+        return CaptureNode(name,dict(nested=True), args)
     def capture_value(arg):
         return ValueNode(arg)
     def accept(*args):
@@ -817,7 +817,7 @@ def compile_python(grammar, builder=None, cython=False):
             children_0 = children.incr()
             offset_0 = offset.incr()
             steps.append(f"{offset_0} = {offset}")
-            steps.append(f"{children_0} = []")
+            steps.append(f"{children_0} = [] if {children} is not None else None")
             steps.append(f"{count} = ({value}, {offset})")
             steps.append(f"if {count} in self.cache:")
             steps.append(f"    {offset_0}, {line_start}, {children_0} = self.cache[{count}]")
@@ -831,7 +831,8 @@ def compile_python(grammar, builder=None, cython=False):
             steps_0.append(f"self.cache[{count}] = ({offset_0}, {line_start}, {children_0})")
 
             steps.append(f"{offset} = {offset_0}")
-            steps.append(f"{children}.extend({children_0})")
+            steps.append(f"if {children_0} is not None and {children_0} is not None:")
+            steps.append(f"    {children}.extend({children_0})")
             steps.append(f"if {offset} == -1:")
             steps.append(f"    break")
 
@@ -841,7 +842,10 @@ def compile_python(grammar, builder=None, cython=False):
             offset_0 = offset.incr()
             steps.append(f"{offset_0} = {offset}")
             if rule.rules:
-                steps.append(f"{children_0} = []")
+                if rule.args['nested']:
+                    steps.append(f"{children_0} = []")
+                else:
+                    steps.append(f"{children_0} = None")
                 steps.append(f"while True: # start capture")
                 build_subrules(rule.rules, steps.add_indent(), offset_0, line_start, prefix, children_0, count, values)
                 steps.append(f"    break")
@@ -861,7 +865,7 @@ def compile_python(grammar, builder=None, cython=False):
                 f"if self.builder is not None:",
                 f"    {value} = self.builder[{name}](buf, {offset}, {offset_0}, {children_0})",
                 f"else:",
-                f"    {value} = {node}({name}, {offset}, {offset_0}, list({children_0}), None)",
+                f"    {value} = {node}({name}, {offset}, {offset_0}, {children_0}, None)",
                 f"{children}.append({value})",
             ))
             steps.append(f"{offset} = {offset_0}")
@@ -877,14 +881,15 @@ def compile_python(grammar, builder=None, cython=False):
             for subrule in rule.rules:
                 steps_0.append(f"{offset_0} = {offset}")
                 steps_0.append(f"{line_start_0} = {line_start}")
-                steps_0.append(f"{children_0} = []")
+                steps_0.append(f"{children_0} = [] if {children} is not None else None")
                 steps_0.append(f"while True: # case")
                 build_steps(subrule, steps_0.add_indent(), offset_0, line_start_0, prefix, children_0, count, values)
                 steps_0.append(f"    break")
                 steps_0.append(f"if {offset_0} != -1:")
                 steps_0.append(f"    {offset} = {offset_0}")
                 steps_0.append(f"    {line_start} = {line_start_0}")
-                steps_0.append(f"    {children}.extend({children_0})")
+                steps_0.append(f"    if {children_0} is not None and {children_0} is not None:")
+                steps_0.append(f"        {children}.extend({children_0})")
                 steps_0.append(f"    break")
                 steps_0.append(f"# end case")
 
@@ -918,7 +923,7 @@ def compile_python(grammar, builder=None, cython=False):
             children_0 = children.incr()
             steps_0.append(f"{offset_0} = {offset}")
             steps_0.append(f"{line_start_0} = {line_start}")
-            steps_0.append(f"{children_0} = []")
+            steps_0.append(f"{children_0} = [] if {children} is not None else None")
 
 
             steps_0.append("while True:")
@@ -929,7 +934,8 @@ def compile_python(grammar, builder=None, cython=False):
             steps_0.append(f"    break")
 
             steps_0.append(f"if {offset} == {offset_0}: break")
-            steps_0.append(f"{children}.extend({children_0})")
+            steps_0.append(f"if {children_0} is not None and {children_0} is not None:")
+            steps_0.append(f"    {children}.extend({children_0})")
             steps_0.append(f"{offset} = {offset_0}")
             steps_0.append(f"{line_start} = {line_start_0}")
             steps_0.append(f"{count} += 1")
@@ -1357,7 +1363,7 @@ def compile_python(grammar, builder=None, cython=False):
         f"        self.name = name",
         f"        self.start = start",
         f"        self.end = end",
-        f"        self.children = children",
+        f"        self.children = children if children is not None else ()",
         f"        self.value = value",
         f"    def __str__(self):",
         "        return '{}[{}:{}]'.format(self.name, self.start, self.end)",
