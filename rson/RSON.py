@@ -83,10 +83,10 @@ builder['tagged'] = untag
 class RSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n", "\uFEFF"]):
     @rule()
     def document(self):
-        self.comment()
+        self.comment.inline()
         with self.capture('document'):
             self.rson_value()
-        self.comment()
+        self.comment.inline()
 
     @rule()
     def comment(self):
@@ -111,13 +111,16 @@ class RSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n", "\uFEFF
                 self.rson_literal()
             with self.case():
                 self.rson_literal()
-
-    rson_literal = rule( 
-        rson_list | rson_object |
-        rson_string | rson_number |
-        rson_true | rson_false | 
-        rson_null
-    )
+    @rule()
+    def rson_literal(self):
+        with self.choice():
+            with self.case(): self.rson_list.inline()
+            with self.case(): self.rson_object.inline()
+            with self.case(): self.rson_string.inline()
+            with self.case(): self.rson_number.inline()
+            with self.case(): self.rson_true.inline()
+            with self.case(): self.rson_false.inline()
+            with self.case(): self.rson_null.inline()
 
     rson_true = rule(accept("true"), capture="bool")
     rson_false = rule(accept("false"), capture="bool")

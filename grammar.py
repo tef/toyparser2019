@@ -102,7 +102,6 @@ def build_class_dict(attrs, start, whitespace, newline, tabstop):
         for name in all_rules:
             if name == n: continue
             if n not in rule_childs[name]: continue
-            print('inlining ', n, 'in', name)
             rules[name] = rules[name].inline(n, rules[n])
             
             rule_childs[name].remove(n)
@@ -122,8 +121,6 @@ def build_class_dict(attrs, start, whitespace, newline, tabstop):
                 if not safe: break
             if safe:
                 rules.pop(n)
-        
-
 
     new_attrs['rules'] = rules
     new_attrs['start'] = start
