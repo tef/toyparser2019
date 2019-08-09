@@ -15,7 +15,9 @@ class Node:
 
 
 cdef class Parser:
-    cpdef object builder, tabstop, cache, allow_mixed_indent 
+    cdef dict builder, cache
+    cdef int tabstop
+    cdef int allow_mixed_indent
 
     def __init__(self, builder=None, tabstop=None, allow_mixed_indent=True):
          self.builder = builder
@@ -35,10 +37,14 @@ cdef class Parser:
         if children and new_offset == end: return children[-1]
         print('no', offset, new_offset, end, buf[new_offset:])
         if err is not None: raise err(buf, new_offset, 'no')
-    
+
     cdef (int, int) parse_document(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+        cdef Py_UCS4 chr
+        cdef int offset_1, offset_2
+        cdef int line_start_1, line_start_2
+
+        cdef list children_1, children_2
+        cdef int count_1, count_2
         while True: # note: return at end of loop
             count_0 = 0
             while offset_0 < buf_eof:
@@ -48,7 +54,7 @@ cdef class Parser:
                     count_0 +=1
                 else:
                     break
-            
+
             count_0 = 0
             while True:
                 offset_1 = offset_0
@@ -60,7 +66,7 @@ cdef class Parser:
                     else:
                         offset_1 = -1
                         break
-                    
+
                     count_1 = 0
                     while True:
                         offset_2 = offset_1
@@ -70,15 +76,15 @@ cdef class Parser:
                             if offset_2 == buf_eof:
                                 offset_2 = -1
                                 break
-                            
+
                             chr = ord(buf[offset_2])
-                            
+
                             if chr == 10:
                                 offset_2 = -1
                                 break
                             else:
                                 offset_2 += 1
-                            
+
                             break
                         if offset_2 == -1:
                             break
@@ -89,7 +95,7 @@ cdef class Parser:
                         count_1 += 1
                     if offset_1 == -1:
                         break
-                    
+
                     count_1 = 0
                     while offset_1 < buf_eof:
                         chr = buf[offset_1]
@@ -98,7 +104,7 @@ cdef class Parser:
                             count_1 +=1
                         else:
                             break
-                    
+
                     break
                 if offset_1 == -1:
                     break
@@ -109,7 +115,7 @@ cdef class Parser:
                 count_0 += 1
             if offset_0 == -1:
                 break
-            
+
             count_0 = 0
             while offset_0 < buf_eof:
                 chr = buf[offset_0]
@@ -118,15 +124,15 @@ cdef class Parser:
                     count_0 +=1
                 else:
                     break
-            
-            
+
+
             offset_1 = offset_0
             children_1 = []
             while True: # start capture
                 offset_1, line_start_0 = self.parse_rson_value(buf, offset_1, line_start_0, prefix_0, buf_eof, children_1)
                 if offset_1 == -1: break
-                
-                
+
+
                 break
             if offset_1 == -1:
                 offset_0 = -1
@@ -137,7 +143,7 @@ cdef class Parser:
                 value_0 = Node('document', offset_0, offset_1, list(children_1), None)
             children_0.append(value_0)
             offset_0 = offset_1
-            
+
             count_0 = 0
             while offset_0 < buf_eof:
                 chr = buf[offset_0]
@@ -146,7 +152,7 @@ cdef class Parser:
                     count_0 +=1
                 else:
                     break
-            
+
             count_0 = 0
             while True:
                 offset_1 = offset_0
@@ -158,7 +164,7 @@ cdef class Parser:
                     else:
                         offset_1 = -1
                         break
-                    
+
                     count_1 = 0
                     while True:
                         offset_2 = offset_1
@@ -168,15 +174,15 @@ cdef class Parser:
                             if offset_2 == buf_eof:
                                 offset_2 = -1
                                 break
-                            
+
                             chr = ord(buf[offset_2])
-                            
+
                             if chr == 10:
                                 offset_2 = -1
                                 break
                             else:
                                 offset_2 += 1
-                            
+
                             break
                         if offset_2 == -1:
                             break
@@ -187,7 +193,7 @@ cdef class Parser:
                         count_1 += 1
                     if offset_1 == -1:
                         break
-                    
+
                     count_1 = 0
                     while offset_1 < buf_eof:
                         chr = buf[offset_1]
@@ -196,7 +202,7 @@ cdef class Parser:
                             count_1 +=1
                         else:
                             break
-                    
+
                     break
                 if offset_1 == -1:
                     break
@@ -207,7 +213,7 @@ cdef class Parser:
                 count_0 += 1
             if offset_0 == -1:
                 break
-            
+
             count_0 = 0
             while offset_0 < buf_eof:
                 chr = buf[offset_0]
@@ -216,102 +222,19 @@ cdef class Parser:
                     count_0 +=1
                 else:
                     break
-            
-            
-            
+
+
+
             break
         return offset_0, line_start_0
-    
-    cdef (int, int) parse_comment(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
-        while True: # note: return at end of loop
-            count_0 = 0
-            while offset_0 < buf_eof:
-                chr = buf[offset_0]
-                if chr in ' \t\r\n\ufeff':
-                    offset_0 +=1
-                    count_0 +=1
-                else:
-                    break
-            
-            count_0 = 0
-            while True:
-                offset_1 = offset_0
-                line_start_1 = line_start_0
-                children_1 = []
-                while True:
-                    if buf[offset_1:offset_1+1] == '#':
-                        offset_1 += 1
-                    else:
-                        offset_1 = -1
-                        break
-                    
-                    count_1 = 0
-                    while True:
-                        offset_2 = offset_1
-                        line_start_2 = line_start_1
-                        children_2 = []
-                        while True:
-                            if offset_2 == buf_eof:
-                                offset_2 = -1
-                                break
-                            
-                            chr = ord(buf[offset_2])
-                            
-                            if chr == 10:
-                                offset_2 = -1
-                                break
-                            else:
-                                offset_2 += 1
-                            
-                            break
-                        if offset_2 == -1:
-                            break
-                        if offset_1 == offset_2: break
-                        children_1.extend(children_2)
-                        offset_1 = offset_2
-                        line_start_1 = line_start_2
-                        count_1 += 1
-                    if offset_1 == -1:
-                        break
-                    
-                    count_1 = 0
-                    while offset_1 < buf_eof:
-                        chr = buf[offset_1]
-                        if chr in ' \t\r\n\ufeff':
-                            offset_1 +=1
-                            count_1 +=1
-                        else:
-                            break
-                    
-                    break
-                if offset_1 == -1:
-                    break
-                if offset_0 == offset_1: break
-                children_0.extend(children_1)
-                offset_0 = offset_1
-                line_start_0 = line_start_1
-                count_0 += 1
-            if offset_0 == -1:
-                break
-            
-            count_0 = 0
-            while offset_0 < buf_eof:
-                chr = buf[offset_0]
-                if chr in ' \t\r\n\ufeff':
-                    offset_0 +=1
-                    count_0 +=1
-                else:
-                    break
-            
-            
-            break
-        return offset_0, line_start_0
-    
+
     cdef (int, int) parse_rson_value(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+        cdef Py_UCS4 chr
+        cdef int offset_1, offset_2, offset_3, offset_4
+        cdef int line_start_1, line_start_2
+
+        cdef list children_1, children_2, children_3, children_4
+        cdef int count_1
         while True: # note: return at end of loop
             while True: # start choice
                 offset_1 = offset_0
@@ -326,16 +249,16 @@ cdef class Parser:
                         else:
                             offset_2 = -1
                             break
-                        
+
                         offset_3 = offset_2
                         children_3 = []
                         while True: # start capture
                             if offset_3 == buf_eof:
                                 offset_3 = -1
                                 break
-                            
+
                             chr = ord(buf[offset_3])
-                            
+
                             if 97 <= chr <= 122:
                                 offset_3 += 1
                             elif 97 <= chr <= 90:
@@ -343,7 +266,7 @@ cdef class Parser:
                             else:
                                 offset_3 = -1
                                 break
-                            
+
                             count_0 = 0
                             while True:
                                 offset_4 = offset_3
@@ -353,9 +276,9 @@ cdef class Parser:
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
-                                    
+
                                     chr = ord(buf[offset_4])
-                                    
+
                                     if 48 <= chr <= 57:
                                         offset_4 += 1
                                     elif 97 <= chr <= 122:
@@ -367,7 +290,7 @@ cdef class Parser:
                                     else:
                                         offset_4 = -1
                                         break
-                                    
+
                                     break
                                 if offset_4 == -1:
                                     break
@@ -378,7 +301,7 @@ cdef class Parser:
                                 count_0 += 1
                             if offset_3 == -1:
                                 break
-                            
+
                             break
                         if offset_3 == -1:
                             offset_2 = -1
@@ -389,17 +312,17 @@ cdef class Parser:
                             value_0 = Node('identifier', offset_2, offset_3, list(children_3), None)
                         children_2.append(value_0)
                         offset_2 = offset_3
-                        
+
                         if buf[offset_2:offset_2+1] == ' ':
                             offset_2 += 1
                         else:
                             offset_2 = -1
                             break
-                        
+
                         offset_2, line_start_1 = self.parse_rson_literal(buf, offset_2, line_start_1, prefix_0, buf_eof, children_2)
                         if offset_2 == -1: break
-                        
-                        
+
+
                         break
                     if offset_2 == -1:
                         offset_1 = -1
@@ -410,8 +333,8 @@ cdef class Parser:
                         value_1 = Node('tagged', offset_1, offset_2, list(children_2), None)
                     children_1.append(value_1)
                     offset_1 = offset_2
-                    
-                    
+
+
                     break
                 if offset_1 != -1:
                     offset_0 = offset_1
@@ -425,9 +348,9 @@ cdef class Parser:
                 while True: # case
                     offset_1, line_start_1 = self.parse_rson_literal(buf, offset_1, line_start_1, prefix_0, buf_eof, children_1)
                     if offset_1 == -1: break
-                    
-                    
-                    
+
+
+
                     break
                 if offset_1 != -1:
                     offset_0 = offset_1
@@ -439,13 +362,17 @@ cdef class Parser:
                 break # end choice
             if offset_0 == -1:
                 break
-            
+
             break
         return offset_0, line_start_0
-    
+
     cdef (int, int) parse_rson_literal(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+        cdef Py_UCS4 chr
+        cdef int offset_1, offset_2, offset_3, offset_4, offset_5, offset_6
+        cdef int line_start_1, line_start_2, line_start_3, line_start_4, line_start_5
+
+        cdef list children_1, children_2, children_3, children_4, children_5, children_6
+        cdef int count_1, count_2, count_3
         while True: # note: return at end of loop
             while True: # start choice
                 offset_1 = offset_0
@@ -454,9 +381,9 @@ cdef class Parser:
                 while True: # case
                     offset_1, line_start_1 = self.parse_rson_list(buf, offset_1, line_start_1, prefix_0, buf_eof, children_1)
                     if offset_1 == -1: break
-                    
-                    
-                    
+
+
+
                     break
                 if offset_1 != -1:
                     offset_0 = offset_1
@@ -470,9 +397,9 @@ cdef class Parser:
                 while True: # case
                     offset_1, line_start_1 = self.parse_rson_object(buf, offset_1, line_start_1, prefix_0, buf_eof, children_1)
                     if offset_1 == -1: break
-                    
-                    
-                    
+
+
+
                     break
                 if offset_1 != -1:
                     offset_0 = offset_1
@@ -494,7 +421,7 @@ cdef class Parser:
                             else:
                                 offset_2 = -1
                                 break
-                            
+
                             offset_3 = offset_2
                             children_3 = []
                             while True: # start capture
@@ -512,9 +439,9 @@ cdef class Parser:
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if chr <= 31:
                                                     offset_5 = -1
                                                     break
@@ -529,8 +456,8 @@ cdef class Parser:
                                                     break
                                                 else:
                                                     offset_5 += 1
-                                                
-                                                
+
+
                                                 break
                                             if offset_5 != -1:
                                                 offset_4 = offset_5
@@ -547,33 +474,33 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 while True: # start reject
                                                     children_6 = []
                                                     offset_6, line_start_5 = offset_5, line_start_4
                                                     if offset_6 == buf_eof:
                                                         offset_6 = -1
                                                         break
-                                                    
+
                                                     chr = ord(buf[offset_6])
-                                                    
+
                                                     if 48 <= chr <= 49:
                                                         offset_6 += 1
                                                     else:
                                                         offset_6 = -1
                                                         break
-                                                    
+
                                                     break
                                                 if offset_6 != -1:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if 48 <= chr <= 57:
                                                     offset_5 += 1
                                                 elif 97 <= chr <= 102:
@@ -583,13 +510,13 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if 48 <= chr <= 57:
                                                     offset_5 += 1
                                                 elif 97 <= chr <= 102:
@@ -599,8 +526,8 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
-                                                
+
+
                                                 break
                                             if offset_5 != -1:
                                                 offset_4 = offset_5
@@ -617,7 +544,7 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 while True: # start reject
                                                     children_6 = []
                                                     offset_6, line_start_5 = offset_5, line_start_4
@@ -626,24 +553,24 @@ cdef class Parser:
                                                     else:
                                                         offset_6 = -1
                                                         break
-                                                    
+
                                                     if offset_6 == buf_eof:
                                                         offset_6 = -1
                                                         break
-                                                    
+
                                                     chr = ord(buf[offset_6])
-                                                    
+
                                                     if 48 <= chr <= 49:
                                                         offset_6 += 1
                                                     else:
                                                         offset_6 = -1
                                                         break
-                                                    
+
                                                     break
                                                 if offset_6 != -1:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 while True: # start reject
                                                     children_6 = []
                                                     offset_6, line_start_5 = offset_5, line_start_4
@@ -654,13 +581,13 @@ cdef class Parser:
                                                     else:
                                                         offset_6 = -1
                                                         break
-                                                    
+
                                                     if offset_6 == buf_eof:
                                                         offset_6 = -1
                                                         break
-                                                    
+
                                                     chr = ord(buf[offset_6])
-                                                    
+
                                                     if 56 <= chr <= 57:
                                                         offset_6 += 1
                                                     elif 65 <= chr <= 70:
@@ -668,18 +595,18 @@ cdef class Parser:
                                                     else:
                                                         offset_6 = -1
                                                         break
-                                                    
+
                                                     break
                                                 if offset_6 != -1:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if 48 <= chr <= 57:
                                                     offset_5 += 1
                                                 elif 97 <= chr <= 102:
@@ -689,13 +616,13 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if 48 <= chr <= 57:
                                                     offset_5 += 1
                                                 elif 97 <= chr <= 102:
@@ -705,13 +632,13 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if 48 <= chr <= 57:
                                                     offset_5 += 1
                                                 elif 97 <= chr <= 102:
@@ -721,13 +648,13 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if 48 <= chr <= 57:
                                                     offset_5 += 1
                                                 elif 97 <= chr <= 102:
@@ -737,8 +664,8 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
-                                                
+
+
                                                 break
                                             if offset_5 != -1:
                                                 offset_4 = offset_5
@@ -755,7 +682,7 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 while True: # start reject
                                                     children_6 = []
                                                     offset_6, line_start_5 = offset_5, line_start_4
@@ -764,24 +691,24 @@ cdef class Parser:
                                                     else:
                                                         offset_6 = -1
                                                         break
-                                                    
+
                                                     if offset_6 == buf_eof:
                                                         offset_6 = -1
                                                         break
-                                                    
+
                                                     chr = ord(buf[offset_6])
-                                                    
+
                                                     if 48 <= chr <= 49:
                                                         offset_6 += 1
                                                     else:
                                                         offset_6 = -1
                                                         break
-                                                    
+
                                                     break
                                                 if offset_6 != -1:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 while True: # start reject
                                                     children_6 = []
                                                     offset_6, line_start_5 = offset_5, line_start_4
@@ -790,7 +717,7 @@ cdef class Parser:
                                                     else:
                                                         offset_6 = -1
                                                         break
-                                                    
+
                                                     if buf[offset_6:offset_6+1] == 'D':
                                                         offset_6 += 1
                                                     elif buf[offset_6:offset_6+1] == 'd':
@@ -798,13 +725,13 @@ cdef class Parser:
                                                     else:
                                                         offset_6 = -1
                                                         break
-                                                    
+
                                                     if offset_6 == buf_eof:
                                                         offset_6 = -1
                                                         break
-                                                    
+
                                                     chr = ord(buf[offset_6])
-                                                    
+
                                                     if 56 <= chr <= 57:
                                                         offset_6 += 1
                                                     elif 65 <= chr <= 70:
@@ -812,18 +739,18 @@ cdef class Parser:
                                                     else:
                                                         offset_6 = -1
                                                         break
-                                                    
+
                                                     break
                                                 if offset_6 != -1:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if 48 <= chr <= 57:
                                                     offset_5 += 1
                                                 elif 97 <= chr <= 102:
@@ -833,13 +760,13 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if 48 <= chr <= 57:
                                                     offset_5 += 1
                                                 elif 97 <= chr <= 102:
@@ -849,13 +776,13 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if 48 <= chr <= 57:
                                                     offset_5 += 1
                                                 elif 97 <= chr <= 102:
@@ -865,13 +792,13 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if 48 <= chr <= 57:
                                                     offset_5 += 1
                                                 elif 97 <= chr <= 102:
@@ -881,13 +808,13 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if 48 <= chr <= 57:
                                                     offset_5 += 1
                                                 elif 97 <= chr <= 102:
@@ -897,13 +824,13 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if 48 <= chr <= 57:
                                                     offset_5 += 1
                                                 elif 97 <= chr <= 102:
@@ -913,13 +840,13 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if 48 <= chr <= 57:
                                                     offset_5 += 1
                                                 elif 97 <= chr <= 102:
@@ -929,13 +856,13 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if 48 <= chr <= 57:
                                                     offset_5 += 1
                                                 elif 97 <= chr <= 102:
@@ -945,8 +872,8 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
-                                                
+
+
                                                 break
                                             if offset_5 != -1:
                                                 offset_4 = offset_5
@@ -963,13 +890,13 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if chr == 34:
                                                     offset_5 += 1
                                                 elif chr == 92:
@@ -993,8 +920,8 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
-                                                
+
+
                                                 break
                                             if offset_5 != -1:
                                                 offset_4 = offset_5
@@ -1006,7 +933,7 @@ cdef class Parser:
                                             break # end choice
                                         if offset_4 == -1:
                                             break
-                                        
+
                                         break
                                     if offset_4 == -1:
                                         break
@@ -1017,7 +944,7 @@ cdef class Parser:
                                     count_0 += 1
                                 if offset_3 == -1:
                                     break
-                                
+
                                 break
                             if offset_3 == -1:
                                 offset_2 = -1
@@ -1028,14 +955,14 @@ cdef class Parser:
                                 value_0 = Node('string', offset_2, offset_3, list(children_3), None)
                             children_2.append(value_0)
                             offset_2 = offset_3
-                            
+
                             if buf[offset_2:offset_2+1] == '"':
                                 offset_2 += 1
                             else:
                                 offset_2 = -1
                                 break
-                            
-                            
+
+
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
@@ -1052,7 +979,7 @@ cdef class Parser:
                             else:
                                 offset_2 = -1
                                 break
-                            
+
                             offset_3 = offset_2
                             children_3 = []
                             while True: # start capture
@@ -1070,9 +997,9 @@ cdef class Parser:
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if chr <= 31:
                                                     offset_5 = -1
                                                     break
@@ -1087,8 +1014,8 @@ cdef class Parser:
                                                     break
                                                 else:
                                                     offset_5 += 1
-                                                
-                                                
+
+
                                                 break
                                             if offset_5 != -1:
                                                 offset_4 = offset_5
@@ -1105,33 +1032,33 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 while True: # start reject
                                                     children_6 = []
                                                     offset_6, line_start_5 = offset_5, line_start_4
                                                     if offset_6 == buf_eof:
                                                         offset_6 = -1
                                                         break
-                                                    
+
                                                     chr = ord(buf[offset_6])
-                                                    
+
                                                     if 48 <= chr <= 49:
                                                         offset_6 += 1
                                                     else:
                                                         offset_6 = -1
                                                         break
-                                                    
+
                                                     break
                                                 if offset_6 != -1:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if 48 <= chr <= 57:
                                                     offset_5 += 1
                                                 elif 97 <= chr <= 102:
@@ -1141,13 +1068,13 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if 48 <= chr <= 57:
                                                     offset_5 += 1
                                                 elif 97 <= chr <= 102:
@@ -1157,8 +1084,8 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
-                                                
+
+
                                                 break
                                             if offset_5 != -1:
                                                 offset_4 = offset_5
@@ -1175,7 +1102,7 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 while True: # start reject
                                                     children_6 = []
                                                     offset_6, line_start_5 = offset_5, line_start_4
@@ -1184,24 +1111,24 @@ cdef class Parser:
                                                     else:
                                                         offset_6 = -1
                                                         break
-                                                    
+
                                                     if offset_6 == buf_eof:
                                                         offset_6 = -1
                                                         break
-                                                    
+
                                                     chr = ord(buf[offset_6])
-                                                    
+
                                                     if 48 <= chr <= 49:
                                                         offset_6 += 1
                                                     else:
                                                         offset_6 = -1
                                                         break
-                                                    
+
                                                     break
                                                 if offset_6 != -1:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 while True: # start reject
                                                     children_6 = []
                                                     offset_6, line_start_5 = offset_5, line_start_4
@@ -1212,13 +1139,13 @@ cdef class Parser:
                                                     else:
                                                         offset_6 = -1
                                                         break
-                                                    
+
                                                     if offset_6 == buf_eof:
                                                         offset_6 = -1
                                                         break
-                                                    
+
                                                     chr = ord(buf[offset_6])
-                                                    
+
                                                     if 56 <= chr <= 57:
                                                         offset_6 += 1
                                                     elif 65 <= chr <= 70:
@@ -1226,18 +1153,18 @@ cdef class Parser:
                                                     else:
                                                         offset_6 = -1
                                                         break
-                                                    
+
                                                     break
                                                 if offset_6 != -1:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if 48 <= chr <= 57:
                                                     offset_5 += 1
                                                 elif 97 <= chr <= 102:
@@ -1247,13 +1174,13 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if 48 <= chr <= 57:
                                                     offset_5 += 1
                                                 elif 97 <= chr <= 102:
@@ -1263,13 +1190,13 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if 48 <= chr <= 57:
                                                     offset_5 += 1
                                                 elif 97 <= chr <= 102:
@@ -1279,13 +1206,13 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if 48 <= chr <= 57:
                                                     offset_5 += 1
                                                 elif 97 <= chr <= 102:
@@ -1295,8 +1222,8 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
-                                                
+
+
                                                 break
                                             if offset_5 != -1:
                                                 offset_4 = offset_5
@@ -1313,7 +1240,7 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 while True: # start reject
                                                     children_6 = []
                                                     offset_6, line_start_5 = offset_5, line_start_4
@@ -1322,24 +1249,24 @@ cdef class Parser:
                                                     else:
                                                         offset_6 = -1
                                                         break
-                                                    
+
                                                     if offset_6 == buf_eof:
                                                         offset_6 = -1
                                                         break
-                                                    
+
                                                     chr = ord(buf[offset_6])
-                                                    
+
                                                     if 48 <= chr <= 49:
                                                         offset_6 += 1
                                                     else:
                                                         offset_6 = -1
                                                         break
-                                                    
+
                                                     break
                                                 if offset_6 != -1:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 while True: # start reject
                                                     children_6 = []
                                                     offset_6, line_start_5 = offset_5, line_start_4
@@ -1348,7 +1275,7 @@ cdef class Parser:
                                                     else:
                                                         offset_6 = -1
                                                         break
-                                                    
+
                                                     if buf[offset_6:offset_6+1] == 'D':
                                                         offset_6 += 1
                                                     elif buf[offset_6:offset_6+1] == 'd':
@@ -1356,13 +1283,13 @@ cdef class Parser:
                                                     else:
                                                         offset_6 = -1
                                                         break
-                                                    
+
                                                     if offset_6 == buf_eof:
                                                         offset_6 = -1
                                                         break
-                                                    
+
                                                     chr = ord(buf[offset_6])
-                                                    
+
                                                     if 56 <= chr <= 57:
                                                         offset_6 += 1
                                                     elif 65 <= chr <= 70:
@@ -1370,18 +1297,18 @@ cdef class Parser:
                                                     else:
                                                         offset_6 = -1
                                                         break
-                                                    
+
                                                     break
                                                 if offset_6 != -1:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if 48 <= chr <= 57:
                                                     offset_5 += 1
                                                 elif 97 <= chr <= 102:
@@ -1391,13 +1318,13 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if 48 <= chr <= 57:
                                                     offset_5 += 1
                                                 elif 97 <= chr <= 102:
@@ -1407,13 +1334,13 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if 48 <= chr <= 57:
                                                     offset_5 += 1
                                                 elif 97 <= chr <= 102:
@@ -1423,13 +1350,13 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if 48 <= chr <= 57:
                                                     offset_5 += 1
                                                 elif 97 <= chr <= 102:
@@ -1439,13 +1366,13 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if 48 <= chr <= 57:
                                                     offset_5 += 1
                                                 elif 97 <= chr <= 102:
@@ -1455,13 +1382,13 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if 48 <= chr <= 57:
                                                     offset_5 += 1
                                                 elif 97 <= chr <= 102:
@@ -1471,13 +1398,13 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if 48 <= chr <= 57:
                                                     offset_5 += 1
                                                 elif 97 <= chr <= 102:
@@ -1487,13 +1414,13 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if 48 <= chr <= 57:
                                                     offset_5 += 1
                                                 elif 97 <= chr <= 102:
@@ -1503,8 +1430,8 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
-                                                
+
+
                                                 break
                                             if offset_5 != -1:
                                                 offset_4 = offset_5
@@ -1521,13 +1448,13 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if chr == 34:
                                                     offset_5 += 1
                                                 elif chr == 92:
@@ -1551,8 +1478,8 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
-                                                
+
+
                                                 break
                                             if offset_5 != -1:
                                                 offset_4 = offset_5
@@ -1564,7 +1491,7 @@ cdef class Parser:
                                             break # end choice
                                         if offset_4 == -1:
                                             break
-                                        
+
                                         break
                                     if offset_4 == -1:
                                         break
@@ -1575,7 +1502,7 @@ cdef class Parser:
                                     count_0 += 1
                                 if offset_3 == -1:
                                     break
-                                
+
                                 break
                             if offset_3 == -1:
                                 offset_2 = -1
@@ -1586,14 +1513,14 @@ cdef class Parser:
                                 value_1 = Node('string', offset_2, offset_3, list(children_3), None)
                             children_2.append(value_1)
                             offset_2 = offset_3
-                            
+
                             if buf[offset_2:offset_2+1] == "'":
                                 offset_2 += 1
                             else:
                                 offset_2 = -1
                                 break
-                            
-                            
+
+
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
@@ -1605,8 +1532,8 @@ cdef class Parser:
                         break # end choice
                     if offset_1 == -1:
                         break
-                    
-                    
+
+
                     break
                 if offset_1 != -1:
                     offset_0 = offset_1
@@ -1635,9 +1562,9 @@ cdef class Parser:
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if chr == 45:
                                             offset_4 += 1
                                         elif chr == 43:
@@ -1645,7 +1572,7 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         break
                                     if offset_4 == -1:
                                         break
@@ -1657,19 +1584,19 @@ cdef class Parser:
                                     break
                                 if offset_3 == -1:
                                     break
-                                
+
                                 if buf[offset_3:offset_3+2] == '0x':
                                     offset_3 += 2
                                 else:
                                     offset_3 = -1
                                     break
-                                
+
                                 if offset_3 == buf_eof:
                                     offset_3 = -1
                                     break
-                                
+
                                 chr = ord(buf[offset_3])
-                                
+
                                 if 48 <= chr <= 57:
                                     offset_3 += 1
                                 elif 65 <= chr <= 70:
@@ -1679,7 +1606,7 @@ cdef class Parser:
                                 else:
                                     offset_3 = -1
                                     break
-                                
+
                                 count_0 = 0
                                 while True:
                                     offset_4 = offset_3
@@ -1689,9 +1616,9 @@ cdef class Parser:
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if 48 <= chr <= 57:
                                             offset_4 += 1
                                         elif 65 <= chr <= 70:
@@ -1703,7 +1630,7 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         break
                                     if offset_4 == -1:
                                         break
@@ -1714,8 +1641,8 @@ cdef class Parser:
                                     count_0 += 1
                                 if offset_3 == -1:
                                     break
-                                
-                                
+
+
                                 break
                             if offset_3 != -1:
                                 offset_2 = offset_3
@@ -1736,9 +1663,9 @@ cdef class Parser:
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if chr == 45:
                                             offset_4 += 1
                                         elif chr == 43:
@@ -1746,7 +1673,7 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         break
                                     if offset_4 == -1:
                                         break
@@ -1758,25 +1685,25 @@ cdef class Parser:
                                     break
                                 if offset_3 == -1:
                                     break
-                                
+
                                 if buf[offset_3:offset_3+2] == '0o':
                                     offset_3 += 2
                                 else:
                                     offset_3 = -1
                                     break
-                                
+
                                 if offset_3 == buf_eof:
                                     offset_3 = -1
                                     break
-                                
+
                                 chr = ord(buf[offset_3])
-                                
+
                                 if 48 <= chr <= 56:
                                     offset_3 += 1
                                 else:
                                     offset_3 = -1
                                     break
-                                
+
                                 count_0 = 0
                                 while True:
                                     offset_4 = offset_3
@@ -1786,9 +1713,9 @@ cdef class Parser:
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if 48 <= chr <= 56:
                                             offset_4 += 1
                                         elif chr == 95:
@@ -1796,7 +1723,7 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         break
                                     if offset_4 == -1:
                                         break
@@ -1807,8 +1734,8 @@ cdef class Parser:
                                     count_0 += 1
                                 if offset_3 == -1:
                                     break
-                                
-                                
+
+
                                 break
                             if offset_3 != -1:
                                 offset_2 = offset_3
@@ -1829,9 +1756,9 @@ cdef class Parser:
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if chr == 45:
                                             offset_4 += 1
                                         elif chr == 43:
@@ -1839,7 +1766,7 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         break
                                     if offset_4 == -1:
                                         break
@@ -1851,25 +1778,25 @@ cdef class Parser:
                                     break
                                 if offset_3 == -1:
                                     break
-                                
+
                                 if buf[offset_3:offset_3+2] == '0b':
                                     offset_3 += 2
                                 else:
                                     offset_3 = -1
                                     break
-                                
+
                                 if offset_3 == buf_eof:
                                     offset_3 = -1
                                     break
-                                
+
                                 chr = ord(buf[offset_3])
-                                
+
                                 if 48 <= chr <= 49:
                                     offset_3 += 1
                                 else:
                                     offset_3 = -1
                                     break
-                                
+
                                 count_0 = 0
                                 while True:
                                     offset_4 = offset_3
@@ -1879,9 +1806,9 @@ cdef class Parser:
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if 48 <= chr <= 49:
                                             offset_4 += 1
                                         elif chr == 95:
@@ -1889,7 +1816,7 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         break
                                     if offset_4 == -1:
                                         break
@@ -1900,8 +1827,8 @@ cdef class Parser:
                                     count_0 += 1
                                 if offset_3 == -1:
                                     break
-                                
-                                
+
+
                                 break
                             if offset_3 != -1:
                                 offset_2 = offset_3
@@ -1922,9 +1849,9 @@ cdef class Parser:
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if chr == 45:
                                             offset_4 += 1
                                         elif chr == 43:
@@ -1932,7 +1859,7 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         break
                                     if offset_4 == -1:
                                         break
@@ -1944,7 +1871,7 @@ cdef class Parser:
                                     break
                                 if offset_3 == -1:
                                     break
-                                
+
                                 while True: # start choice
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
@@ -1955,8 +1882,8 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
-                                        
+
+
                                         break
                                     if offset_4 != -1:
                                         offset_3 = offset_4
@@ -1971,15 +1898,15 @@ cdef class Parser:
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if 49 <= chr <= 57:
                                             offset_4 += 1
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         count_0 = 0
                                         while True:
                                             offset_5 = offset_4
@@ -1989,15 +1916,15 @@ cdef class Parser:
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if 48 <= chr <= 57:
                                                     offset_5 += 1
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 break
                                             if offset_5 == -1:
                                                 break
@@ -2008,8 +1935,8 @@ cdef class Parser:
                                             count_0 += 1
                                         if offset_4 == -1:
                                             break
-                                        
-                                        
+
+
                                         break
                                     if offset_4 != -1:
                                         offset_3 = offset_4
@@ -2021,7 +1948,7 @@ cdef class Parser:
                                     break # end choice
                                 if offset_3 == -1:
                                     break
-                                
+
                                 count_0 = 0
                                 while count_0 < 1:
                                     offset_4 = offset_3
@@ -2033,7 +1960,7 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         count_1 = 0
                                         while True:
                                             offset_5 = offset_4
@@ -2043,15 +1970,15 @@ cdef class Parser:
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 chr = ord(buf[offset_5])
-                                                
+
                                                 if 48 <= chr <= 57:
                                                     offset_5 += 1
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 break
                                             if offset_5 == -1:
                                                 break
@@ -2062,7 +1989,7 @@ cdef class Parser:
                                             count_1 += 1
                                         if offset_4 == -1:
                                             break
-                                        
+
                                         break
                                     if offset_4 == -1:
                                         break
@@ -2074,7 +2001,7 @@ cdef class Parser:
                                     break
                                 if offset_3 == -1:
                                     break
-                                
+
                                 count_0 = 0
                                 while count_0 < 1:
                                     offset_4 = offset_3
@@ -2088,7 +2015,7 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         count_1 = 0
                                         while count_1 < 1:
                                             offset_5 = offset_4
@@ -2102,7 +2029,7 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-                                                
+
                                                 count_2 = 0
                                                 while True:
                                                     offset_6 = offset_5
@@ -2112,15 +2039,15 @@ cdef class Parser:
                                                         if offset_6 == buf_eof:
                                                             offset_6 = -1
                                                             break
-                                                        
+
                                                         chr = ord(buf[offset_6])
-                                                        
+
                                                         if 48 <= chr <= 57:
                                                             offset_6 += 1
                                                         else:
                                                             offset_6 = -1
                                                             break
-                                                        
+
                                                         break
                                                     if offset_6 == -1:
                                                         break
@@ -2131,7 +2058,7 @@ cdef class Parser:
                                                     count_2 += 1
                                                 if offset_5 == -1:
                                                     break
-                                                
+
                                                 break
                                             if offset_5 == -1:
                                                 break
@@ -2143,7 +2070,7 @@ cdef class Parser:
                                             break
                                         if offset_4 == -1:
                                             break
-                                        
+
                                         break
                                     if offset_4 == -1:
                                         break
@@ -2155,8 +2082,8 @@ cdef class Parser:
                                     break
                                 if offset_3 == -1:
                                     break
-                                
-                                
+
+
                                 break
                             if offset_3 != -1:
                                 offset_2 = offset_3
@@ -2168,7 +2095,7 @@ cdef class Parser:
                             break # end choice
                         if offset_2 == -1:
                             break
-                        
+
                         break
                     if offset_2 == -1:
                         offset_1 = -1
@@ -2179,8 +2106,8 @@ cdef class Parser:
                         value_2 = Node('number', offset_1, offset_2, list(children_2), None)
                     children_1.append(value_2)
                     offset_1 = offset_2
-                    
-                    
+
+
                     break
                 if offset_1 != -1:
                     offset_0 = offset_1
@@ -2200,7 +2127,7 @@ cdef class Parser:
                         else:
                             offset_2 = -1
                             break
-                        
+
                         break
                     if offset_2 == -1:
                         offset_1 = -1
@@ -2211,8 +2138,8 @@ cdef class Parser:
                         value_3 = Node('bool', offset_1, offset_2, list(children_2), None)
                     children_1.append(value_3)
                     offset_1 = offset_2
-                    
-                    
+
+
                     break
                 if offset_1 != -1:
                     offset_0 = offset_1
@@ -2232,7 +2159,7 @@ cdef class Parser:
                         else:
                             offset_2 = -1
                             break
-                        
+
                         break
                     if offset_2 == -1:
                         offset_1 = -1
@@ -2243,8 +2170,8 @@ cdef class Parser:
                         value_4 = Node('bool', offset_1, offset_2, list(children_2), None)
                     children_1.append(value_4)
                     offset_1 = offset_2
-                    
-                    
+
+
                     break
                 if offset_1 != -1:
                     offset_0 = offset_1
@@ -2264,7 +2191,7 @@ cdef class Parser:
                         else:
                             offset_2 = -1
                             break
-                        
+
                         break
                     if offset_2 == -1:
                         offset_1 = -1
@@ -2275,8 +2202,8 @@ cdef class Parser:
                         value_5 = Node('null', offset_1, offset_2, list(children_2), None)
                     children_1.append(value_5)
                     offset_1 = offset_2
-                    
-                    
+
+
                     break
                 if offset_1 != -1:
                     offset_0 = offset_1
@@ -2288,13 +2215,17 @@ cdef class Parser:
                 break # end choice
             if offset_0 == -1:
                 break
-            
+
             break
         return offset_0, line_start_0
-    
+
     cdef (int, int) parse_rson_string(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+        cdef Py_UCS4 chr
+        cdef int offset_1, offset_2, offset_3, offset_4, offset_5
+        cdef int line_start_1, line_start_2, line_start_3, line_start_4
+
+        cdef list children_1, children_2, children_3, children_4, children_5
+        cdef int count_1
         while True: # note: return at end of loop
             while True: # start choice
                 offset_1 = offset_0
@@ -2306,7 +2237,7 @@ cdef class Parser:
                     else:
                         offset_1 = -1
                         break
-                    
+
                     offset_2 = offset_1
                     children_2 = []
                     while True: # start capture
@@ -2324,9 +2255,9 @@ cdef class Parser:
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if chr <= 31:
                                             offset_4 = -1
                                             break
@@ -2341,8 +2272,8 @@ cdef class Parser:
                                             break
                                         else:
                                             offset_4 += 1
-                                        
-                                        
+
+
                                         break
                                     if offset_4 != -1:
                                         offset_3 = offset_4
@@ -2359,33 +2290,33 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         while True: # start reject
                                             children_5 = []
                                             offset_5, line_start_4 = offset_4, line_start_3
                                             if offset_5 == buf_eof:
                                                 offset_5 = -1
                                                 break
-                                            
+
                                             chr = ord(buf[offset_5])
-                                            
+
                                             if 48 <= chr <= 49:
                                                 offset_5 += 1
                                             else:
                                                 offset_5 = -1
                                                 break
-                                            
+
                                             break
                                         if offset_5 != -1:
                                             offset_4 = -1
                                             break
-                                        
+
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if 48 <= chr <= 57:
                                             offset_4 += 1
                                         elif 97 <= chr <= 102:
@@ -2395,13 +2326,13 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if 48 <= chr <= 57:
                                             offset_4 += 1
                                         elif 97 <= chr <= 102:
@@ -2411,8 +2342,8 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
-                                        
+
+
                                         break
                                     if offset_4 != -1:
                                         offset_3 = offset_4
@@ -2429,7 +2360,7 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         while True: # start reject
                                             children_5 = []
                                             offset_5, line_start_4 = offset_4, line_start_3
@@ -2438,24 +2369,24 @@ cdef class Parser:
                                             else:
                                                 offset_5 = -1
                                                 break
-                                            
+
                                             if offset_5 == buf_eof:
                                                 offset_5 = -1
                                                 break
-                                            
+
                                             chr = ord(buf[offset_5])
-                                            
+
                                             if 48 <= chr <= 49:
                                                 offset_5 += 1
                                             else:
                                                 offset_5 = -1
                                                 break
-                                            
+
                                             break
                                         if offset_5 != -1:
                                             offset_4 = -1
                                             break
-                                        
+
                                         while True: # start reject
                                             children_5 = []
                                             offset_5, line_start_4 = offset_4, line_start_3
@@ -2466,13 +2397,13 @@ cdef class Parser:
                                             else:
                                                 offset_5 = -1
                                                 break
-                                            
+
                                             if offset_5 == buf_eof:
                                                 offset_5 = -1
                                                 break
-                                            
+
                                             chr = ord(buf[offset_5])
-                                            
+
                                             if 56 <= chr <= 57:
                                                 offset_5 += 1
                                             elif 65 <= chr <= 70:
@@ -2480,18 +2411,18 @@ cdef class Parser:
                                             else:
                                                 offset_5 = -1
                                                 break
-                                            
+
                                             break
                                         if offset_5 != -1:
                                             offset_4 = -1
                                             break
-                                        
+
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if 48 <= chr <= 57:
                                             offset_4 += 1
                                         elif 97 <= chr <= 102:
@@ -2501,13 +2432,13 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if 48 <= chr <= 57:
                                             offset_4 += 1
                                         elif 97 <= chr <= 102:
@@ -2517,13 +2448,13 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if 48 <= chr <= 57:
                                             offset_4 += 1
                                         elif 97 <= chr <= 102:
@@ -2533,13 +2464,13 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if 48 <= chr <= 57:
                                             offset_4 += 1
                                         elif 97 <= chr <= 102:
@@ -2549,8 +2480,8 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
-                                        
+
+
                                         break
                                     if offset_4 != -1:
                                         offset_3 = offset_4
@@ -2567,7 +2498,7 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         while True: # start reject
                                             children_5 = []
                                             offset_5, line_start_4 = offset_4, line_start_3
@@ -2576,24 +2507,24 @@ cdef class Parser:
                                             else:
                                                 offset_5 = -1
                                                 break
-                                            
+
                                             if offset_5 == buf_eof:
                                                 offset_5 = -1
                                                 break
-                                            
+
                                             chr = ord(buf[offset_5])
-                                            
+
                                             if 48 <= chr <= 49:
                                                 offset_5 += 1
                                             else:
                                                 offset_5 = -1
                                                 break
-                                            
+
                                             break
                                         if offset_5 != -1:
                                             offset_4 = -1
                                             break
-                                        
+
                                         while True: # start reject
                                             children_5 = []
                                             offset_5, line_start_4 = offset_4, line_start_3
@@ -2602,7 +2533,7 @@ cdef class Parser:
                                             else:
                                                 offset_5 = -1
                                                 break
-                                            
+
                                             if buf[offset_5:offset_5+1] == 'D':
                                                 offset_5 += 1
                                             elif buf[offset_5:offset_5+1] == 'd':
@@ -2610,13 +2541,13 @@ cdef class Parser:
                                             else:
                                                 offset_5 = -1
                                                 break
-                                            
+
                                             if offset_5 == buf_eof:
                                                 offset_5 = -1
                                                 break
-                                            
+
                                             chr = ord(buf[offset_5])
-                                            
+
                                             if 56 <= chr <= 57:
                                                 offset_5 += 1
                                             elif 65 <= chr <= 70:
@@ -2624,18 +2555,18 @@ cdef class Parser:
                                             else:
                                                 offset_5 = -1
                                                 break
-                                            
+
                                             break
                                         if offset_5 != -1:
                                             offset_4 = -1
                                             break
-                                        
+
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if 48 <= chr <= 57:
                                             offset_4 += 1
                                         elif 97 <= chr <= 102:
@@ -2645,13 +2576,13 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if 48 <= chr <= 57:
                                             offset_4 += 1
                                         elif 97 <= chr <= 102:
@@ -2661,13 +2592,13 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if 48 <= chr <= 57:
                                             offset_4 += 1
                                         elif 97 <= chr <= 102:
@@ -2677,13 +2608,13 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if 48 <= chr <= 57:
                                             offset_4 += 1
                                         elif 97 <= chr <= 102:
@@ -2693,13 +2624,13 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if 48 <= chr <= 57:
                                             offset_4 += 1
                                         elif 97 <= chr <= 102:
@@ -2709,13 +2640,13 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if 48 <= chr <= 57:
                                             offset_4 += 1
                                         elif 97 <= chr <= 102:
@@ -2725,13 +2656,13 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if 48 <= chr <= 57:
                                             offset_4 += 1
                                         elif 97 <= chr <= 102:
@@ -2741,13 +2672,13 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if 48 <= chr <= 57:
                                             offset_4 += 1
                                         elif 97 <= chr <= 102:
@@ -2757,8 +2688,8 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
-                                        
+
+
                                         break
                                     if offset_4 != -1:
                                         offset_3 = offset_4
@@ -2775,13 +2706,13 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if chr == 34:
                                             offset_4 += 1
                                         elif chr == 92:
@@ -2805,8 +2736,8 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
-                                        
+
+
                                         break
                                     if offset_4 != -1:
                                         offset_3 = offset_4
@@ -2818,7 +2749,7 @@ cdef class Parser:
                                     break # end choice
                                 if offset_3 == -1:
                                     break
-                                
+
                                 break
                             if offset_3 == -1:
                                 break
@@ -2829,7 +2760,7 @@ cdef class Parser:
                             count_0 += 1
                         if offset_2 == -1:
                             break
-                        
+
                         break
                     if offset_2 == -1:
                         offset_1 = -1
@@ -2840,14 +2771,14 @@ cdef class Parser:
                         value_0 = Node('string', offset_1, offset_2, list(children_2), None)
                     children_1.append(value_0)
                     offset_1 = offset_2
-                    
+
                     if buf[offset_1:offset_1+1] == '"':
                         offset_1 += 1
                     else:
                         offset_1 = -1
                         break
-                    
-                    
+
+
                     break
                 if offset_1 != -1:
                     offset_0 = offset_1
@@ -2864,7 +2795,7 @@ cdef class Parser:
                     else:
                         offset_1 = -1
                         break
-                    
+
                     offset_2 = offset_1
                     children_2 = []
                     while True: # start capture
@@ -2882,9 +2813,9 @@ cdef class Parser:
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if chr <= 31:
                                             offset_4 = -1
                                             break
@@ -2899,8 +2830,8 @@ cdef class Parser:
                                             break
                                         else:
                                             offset_4 += 1
-                                        
-                                        
+
+
                                         break
                                     if offset_4 != -1:
                                         offset_3 = offset_4
@@ -2917,33 +2848,33 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         while True: # start reject
                                             children_5 = []
                                             offset_5, line_start_4 = offset_4, line_start_3
                                             if offset_5 == buf_eof:
                                                 offset_5 = -1
                                                 break
-                                            
+
                                             chr = ord(buf[offset_5])
-                                            
+
                                             if 48 <= chr <= 49:
                                                 offset_5 += 1
                                             else:
                                                 offset_5 = -1
                                                 break
-                                            
+
                                             break
                                         if offset_5 != -1:
                                             offset_4 = -1
                                             break
-                                        
+
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if 48 <= chr <= 57:
                                             offset_4 += 1
                                         elif 97 <= chr <= 102:
@@ -2953,13 +2884,13 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if 48 <= chr <= 57:
                                             offset_4 += 1
                                         elif 97 <= chr <= 102:
@@ -2969,8 +2900,8 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
-                                        
+
+
                                         break
                                     if offset_4 != -1:
                                         offset_3 = offset_4
@@ -2987,7 +2918,7 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         while True: # start reject
                                             children_5 = []
                                             offset_5, line_start_4 = offset_4, line_start_3
@@ -2996,24 +2927,24 @@ cdef class Parser:
                                             else:
                                                 offset_5 = -1
                                                 break
-                                            
+
                                             if offset_5 == buf_eof:
                                                 offset_5 = -1
                                                 break
-                                            
+
                                             chr = ord(buf[offset_5])
-                                            
+
                                             if 48 <= chr <= 49:
                                                 offset_5 += 1
                                             else:
                                                 offset_5 = -1
                                                 break
-                                            
+
                                             break
                                         if offset_5 != -1:
                                             offset_4 = -1
                                             break
-                                        
+
                                         while True: # start reject
                                             children_5 = []
                                             offset_5, line_start_4 = offset_4, line_start_3
@@ -3024,13 +2955,13 @@ cdef class Parser:
                                             else:
                                                 offset_5 = -1
                                                 break
-                                            
+
                                             if offset_5 == buf_eof:
                                                 offset_5 = -1
                                                 break
-                                            
+
                                             chr = ord(buf[offset_5])
-                                            
+
                                             if 56 <= chr <= 57:
                                                 offset_5 += 1
                                             elif 65 <= chr <= 70:
@@ -3038,18 +2969,18 @@ cdef class Parser:
                                             else:
                                                 offset_5 = -1
                                                 break
-                                            
+
                                             break
                                         if offset_5 != -1:
                                             offset_4 = -1
                                             break
-                                        
+
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if 48 <= chr <= 57:
                                             offset_4 += 1
                                         elif 97 <= chr <= 102:
@@ -3059,13 +2990,13 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if 48 <= chr <= 57:
                                             offset_4 += 1
                                         elif 97 <= chr <= 102:
@@ -3075,13 +3006,13 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if 48 <= chr <= 57:
                                             offset_4 += 1
                                         elif 97 <= chr <= 102:
@@ -3091,13 +3022,13 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if 48 <= chr <= 57:
                                             offset_4 += 1
                                         elif 97 <= chr <= 102:
@@ -3107,8 +3038,8 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
-                                        
+
+
                                         break
                                     if offset_4 != -1:
                                         offset_3 = offset_4
@@ -3125,7 +3056,7 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         while True: # start reject
                                             children_5 = []
                                             offset_5, line_start_4 = offset_4, line_start_3
@@ -3134,24 +3065,24 @@ cdef class Parser:
                                             else:
                                                 offset_5 = -1
                                                 break
-                                            
+
                                             if offset_5 == buf_eof:
                                                 offset_5 = -1
                                                 break
-                                            
+
                                             chr = ord(buf[offset_5])
-                                            
+
                                             if 48 <= chr <= 49:
                                                 offset_5 += 1
                                             else:
                                                 offset_5 = -1
                                                 break
-                                            
+
                                             break
                                         if offset_5 != -1:
                                             offset_4 = -1
                                             break
-                                        
+
                                         while True: # start reject
                                             children_5 = []
                                             offset_5, line_start_4 = offset_4, line_start_3
@@ -3160,7 +3091,7 @@ cdef class Parser:
                                             else:
                                                 offset_5 = -1
                                                 break
-                                            
+
                                             if buf[offset_5:offset_5+1] == 'D':
                                                 offset_5 += 1
                                             elif buf[offset_5:offset_5+1] == 'd':
@@ -3168,13 +3099,13 @@ cdef class Parser:
                                             else:
                                                 offset_5 = -1
                                                 break
-                                            
+
                                             if offset_5 == buf_eof:
                                                 offset_5 = -1
                                                 break
-                                            
+
                                             chr = ord(buf[offset_5])
-                                            
+
                                             if 56 <= chr <= 57:
                                                 offset_5 += 1
                                             elif 65 <= chr <= 70:
@@ -3182,18 +3113,18 @@ cdef class Parser:
                                             else:
                                                 offset_5 = -1
                                                 break
-                                            
+
                                             break
                                         if offset_5 != -1:
                                             offset_4 = -1
                                             break
-                                        
+
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if 48 <= chr <= 57:
                                             offset_4 += 1
                                         elif 97 <= chr <= 102:
@@ -3203,13 +3134,13 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if 48 <= chr <= 57:
                                             offset_4 += 1
                                         elif 97 <= chr <= 102:
@@ -3219,13 +3150,13 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if 48 <= chr <= 57:
                                             offset_4 += 1
                                         elif 97 <= chr <= 102:
@@ -3235,13 +3166,13 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if 48 <= chr <= 57:
                                             offset_4 += 1
                                         elif 97 <= chr <= 102:
@@ -3251,13 +3182,13 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if 48 <= chr <= 57:
                                             offset_4 += 1
                                         elif 97 <= chr <= 102:
@@ -3267,13 +3198,13 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if 48 <= chr <= 57:
                                             offset_4 += 1
                                         elif 97 <= chr <= 102:
@@ -3283,13 +3214,13 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if 48 <= chr <= 57:
                                             offset_4 += 1
                                         elif 97 <= chr <= 102:
@@ -3299,13 +3230,13 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if 48 <= chr <= 57:
                                             offset_4 += 1
                                         elif 97 <= chr <= 102:
@@ -3315,8 +3246,8 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
-                                        
+
+
                                         break
                                     if offset_4 != -1:
                                         offset_3 = offset_4
@@ -3333,13 +3264,13 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
+
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
-                                        
+
                                         chr = ord(buf[offset_4])
-                                        
+
                                         if chr == 34:
                                             offset_4 += 1
                                         elif chr == 92:
@@ -3363,8 +3294,8 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-                                        
-                                        
+
+
                                         break
                                     if offset_4 != -1:
                                         offset_3 = offset_4
@@ -3376,7 +3307,7 @@ cdef class Parser:
                                     break # end choice
                                 if offset_3 == -1:
                                     break
-                                
+
                                 break
                             if offset_3 == -1:
                                 break
@@ -3387,7 +3318,7 @@ cdef class Parser:
                             count_0 += 1
                         if offset_2 == -1:
                             break
-                        
+
                         break
                     if offset_2 == -1:
                         offset_1 = -1
@@ -3398,14 +3329,14 @@ cdef class Parser:
                         value_1 = Node('string', offset_1, offset_2, list(children_2), None)
                     children_1.append(value_1)
                     offset_1 = offset_2
-                    
+
                     if buf[offset_1:offset_1+1] == "'":
                         offset_1 += 1
                     else:
                         offset_1 = -1
                         break
-                    
-                    
+
+
                     break
                 if offset_1 != -1:
                     offset_0 = offset_1
@@ -3417,24 +3348,104 @@ cdef class Parser:
                 break # end choice
             if offset_0 == -1:
                 break
-            
+
             break
         return offset_0, line_start_0
-    
+
     cdef (int, int) parse_rson_list(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+        cdef Py_UCS4 chr
+        cdef int offset_1, offset_2, offset_3, offset_4, offset_5
+        cdef int line_start_1, line_start_2, line_start_3, line_start_4
+
+        cdef list children_1, children_2, children_3, children_4, children_5
+        cdef int count_1, count_2, count_3, count_4
         while True: # note: return at end of loop
             if buf[offset_0:offset_0+1] == '[':
                 offset_0 += 1
             else:
                 offset_0 = -1
                 break
-            
-            offset_0, line_start_0 = self.parse_comment(buf, offset_0, line_start_0, prefix_0, buf_eof, children_0)
-            if offset_0 == -1: break
-            
-            
+
+            count_0 = 0
+            while offset_0 < buf_eof:
+                chr = buf[offset_0]
+                if chr in ' \t\r\n\ufeff':
+                    offset_0 +=1
+                    count_0 +=1
+                else:
+                    break
+
+            count_0 = 0
+            while True:
+                offset_1 = offset_0
+                line_start_1 = line_start_0
+                children_1 = []
+                while True:
+                    if buf[offset_1:offset_1+1] == '#':
+                        offset_1 += 1
+                    else:
+                        offset_1 = -1
+                        break
+
+                    count_1 = 0
+                    while True:
+                        offset_2 = offset_1
+                        line_start_2 = line_start_1
+                        children_2 = []
+                        while True:
+                            if offset_2 == buf_eof:
+                                offset_2 = -1
+                                break
+
+                            chr = ord(buf[offset_2])
+
+                            if chr == 10:
+                                offset_2 = -1
+                                break
+                            else:
+                                offset_2 += 1
+
+                            break
+                        if offset_2 == -1:
+                            break
+                        if offset_1 == offset_2: break
+                        children_1.extend(children_2)
+                        offset_1 = offset_2
+                        line_start_1 = line_start_2
+                        count_1 += 1
+                    if offset_1 == -1:
+                        break
+
+                    count_1 = 0
+                    while offset_1 < buf_eof:
+                        chr = buf[offset_1]
+                        if chr in ' \t\r\n\ufeff':
+                            offset_1 +=1
+                            count_1 +=1
+                        else:
+                            break
+
+                    break
+                if offset_1 == -1:
+                    break
+                if offset_0 == offset_1: break
+                children_0.extend(children_1)
+                offset_0 = offset_1
+                line_start_0 = line_start_1
+                count_0 += 1
+            if offset_0 == -1:
+                break
+
+            count_0 = 0
+            while offset_0 < buf_eof:
+                chr = buf[offset_0]
+                if chr in ' \t\r\n\ufeff':
+                    offset_0 +=1
+                    count_0 +=1
+                else:
+                    break
+
+
             offset_1 = offset_0
             children_1 = []
             while True: # start capture
@@ -3446,32 +3457,184 @@ cdef class Parser:
                     while True:
                         offset_2, line_start_1 = self.parse_rson_value(buf, offset_2, line_start_1, prefix_0, buf_eof, children_2)
                         if offset_2 == -1: break
-                        
-                        
+
+
                         count_1 = 0
                         while True:
                             offset_3 = offset_2
                             line_start_2 = line_start_1
                             children_3 = []
                             while True:
-                                offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, prefix_0, buf_eof, children_3)
-                                if offset_3 == -1: break
-                                
-                                
+                                count_2 = 0
+                                while offset_3 < buf_eof:
+                                    chr = buf[offset_3]
+                                    if chr in ' \t\r\n\ufeff':
+                                        offset_3 +=1
+                                        count_2 +=1
+                                    else:
+                                        break
+
+                                count_2 = 0
+                                while True:
+                                    offset_4 = offset_3
+                                    line_start_3 = line_start_2
+                                    children_4 = []
+                                    while True:
+                                        if buf[offset_4:offset_4+1] == '#':
+                                            offset_4 += 1
+                                        else:
+                                            offset_4 = -1
+                                            break
+
+                                        count_3 = 0
+                                        while True:
+                                            offset_5 = offset_4
+                                            line_start_4 = line_start_3
+                                            children_5 = []
+                                            while True:
+                                                if offset_5 == buf_eof:
+                                                    offset_5 = -1
+                                                    break
+
+                                                chr = ord(buf[offset_5])
+
+                                                if chr == 10:
+                                                    offset_5 = -1
+                                                    break
+                                                else:
+                                                    offset_5 += 1
+
+                                                break
+                                            if offset_5 == -1:
+                                                break
+                                            if offset_4 == offset_5: break
+                                            children_4.extend(children_5)
+                                            offset_4 = offset_5
+                                            line_start_3 = line_start_4
+                                            count_3 += 1
+                                        if offset_4 == -1:
+                                            break
+
+                                        count_3 = 0
+                                        while offset_4 < buf_eof:
+                                            chr = buf[offset_4]
+                                            if chr in ' \t\r\n\ufeff':
+                                                offset_4 +=1
+                                                count_3 +=1
+                                            else:
+                                                break
+
+                                        break
+                                    if offset_4 == -1:
+                                        break
+                                    if offset_3 == offset_4: break
+                                    children_3.extend(children_4)
+                                    offset_3 = offset_4
+                                    line_start_2 = line_start_3
+                                    count_2 += 1
+                                if offset_3 == -1:
+                                    break
+
+                                count_2 = 0
+                                while offset_3 < buf_eof:
+                                    chr = buf[offset_3]
+                                    if chr in ' \t\r\n\ufeff':
+                                        offset_3 +=1
+                                        count_2 +=1
+                                    else:
+                                        break
+
+
                                 if buf[offset_3:offset_3+1] == ',':
                                     offset_3 += 1
                                 else:
                                     offset_3 = -1
                                     break
-                                
-                                offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, prefix_0, buf_eof, children_3)
-                                if offset_3 == -1: break
-                                
-                                
+
+                                count_2 = 0
+                                while offset_3 < buf_eof:
+                                    chr = buf[offset_3]
+                                    if chr in ' \t\r\n\ufeff':
+                                        offset_3 +=1
+                                        count_2 +=1
+                                    else:
+                                        break
+
+                                count_2 = 0
+                                while True:
+                                    offset_4 = offset_3
+                                    line_start_3 = line_start_2
+                                    children_4 = []
+                                    while True:
+                                        if buf[offset_4:offset_4+1] == '#':
+                                            offset_4 += 1
+                                        else:
+                                            offset_4 = -1
+                                            break
+
+                                        count_3 = 0
+                                        while True:
+                                            offset_5 = offset_4
+                                            line_start_4 = line_start_3
+                                            children_5 = []
+                                            while True:
+                                                if offset_5 == buf_eof:
+                                                    offset_5 = -1
+                                                    break
+
+                                                chr = ord(buf[offset_5])
+
+                                                if chr == 10:
+                                                    offset_5 = -1
+                                                    break
+                                                else:
+                                                    offset_5 += 1
+
+                                                break
+                                            if offset_5 == -1:
+                                                break
+                                            if offset_4 == offset_5: break
+                                            children_4.extend(children_5)
+                                            offset_4 = offset_5
+                                            line_start_3 = line_start_4
+                                            count_3 += 1
+                                        if offset_4 == -1:
+                                            break
+
+                                        count_3 = 0
+                                        while offset_4 < buf_eof:
+                                            chr = buf[offset_4]
+                                            if chr in ' \t\r\n\ufeff':
+                                                offset_4 +=1
+                                                count_3 +=1
+                                            else:
+                                                break
+
+                                        break
+                                    if offset_4 == -1:
+                                        break
+                                    if offset_3 == offset_4: break
+                                    children_3.extend(children_4)
+                                    offset_3 = offset_4
+                                    line_start_2 = line_start_3
+                                    count_2 += 1
+                                if offset_3 == -1:
+                                    break
+
+                                count_2 = 0
+                                while offset_3 < buf_eof:
+                                    chr = buf[offset_3]
+                                    if chr in ' \t\r\n\ufeff':
+                                        offset_3 +=1
+                                        count_2 +=1
+                                    else:
+                                        break
+
+
                                 offset_3, line_start_2 = self.parse_rson_value(buf, offset_3, line_start_2, prefix_0, buf_eof, children_3)
                                 if offset_3 == -1: break
-                                
-                                
+
+
                                 break
                             if offset_3 == -1:
                                 break
@@ -3482,11 +3645,87 @@ cdef class Parser:
                             count_1 += 1
                         if offset_2 == -1:
                             break
-                        
-                        offset_2, line_start_1 = self.parse_comment(buf, offset_2, line_start_1, prefix_0, buf_eof, children_2)
-                        if offset_2 == -1: break
-                        
-                        
+
+                        count_1 = 0
+                        while offset_2 < buf_eof:
+                            chr = buf[offset_2]
+                            if chr in ' \t\r\n\ufeff':
+                                offset_2 +=1
+                                count_1 +=1
+                            else:
+                                break
+
+                        count_1 = 0
+                        while True:
+                            offset_3 = offset_2
+                            line_start_2 = line_start_1
+                            children_3 = []
+                            while True:
+                                if buf[offset_3:offset_3+1] == '#':
+                                    offset_3 += 1
+                                else:
+                                    offset_3 = -1
+                                    break
+
+                                count_2 = 0
+                                while True:
+                                    offset_4 = offset_3
+                                    line_start_3 = line_start_2
+                                    children_4 = []
+                                    while True:
+                                        if offset_4 == buf_eof:
+                                            offset_4 = -1
+                                            break
+
+                                        chr = ord(buf[offset_4])
+
+                                        if chr == 10:
+                                            offset_4 = -1
+                                            break
+                                        else:
+                                            offset_4 += 1
+
+                                        break
+                                    if offset_4 == -1:
+                                        break
+                                    if offset_3 == offset_4: break
+                                    children_3.extend(children_4)
+                                    offset_3 = offset_4
+                                    line_start_2 = line_start_3
+                                    count_2 += 1
+                                if offset_3 == -1:
+                                    break
+
+                                count_2 = 0
+                                while offset_3 < buf_eof:
+                                    chr = buf[offset_3]
+                                    if chr in ' \t\r\n\ufeff':
+                                        offset_3 +=1
+                                        count_2 +=1
+                                    else:
+                                        break
+
+                                break
+                            if offset_3 == -1:
+                                break
+                            if offset_2 == offset_3: break
+                            children_2.extend(children_3)
+                            offset_2 = offset_3
+                            line_start_1 = line_start_2
+                            count_1 += 1
+                        if offset_2 == -1:
+                            break
+
+                        count_1 = 0
+                        while offset_2 < buf_eof:
+                            chr = buf[offset_2]
+                            if chr in ' \t\r\n\ufeff':
+                                offset_2 +=1
+                                count_1 +=1
+                            else:
+                                break
+
+
                         count_1 = 0
                         while count_1 < 1:
                             offset_3 = offset_2
@@ -3498,11 +3737,87 @@ cdef class Parser:
                                 else:
                                     offset_3 = -1
                                     break
-                                
-                                offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, prefix_0, buf_eof, children_3)
-                                if offset_3 == -1: break
-                                
-                                
+
+                                count_2 = 0
+                                while offset_3 < buf_eof:
+                                    chr = buf[offset_3]
+                                    if chr in ' \t\r\n\ufeff':
+                                        offset_3 +=1
+                                        count_2 +=1
+                                    else:
+                                        break
+
+                                count_2 = 0
+                                while True:
+                                    offset_4 = offset_3
+                                    line_start_3 = line_start_2
+                                    children_4 = []
+                                    while True:
+                                        if buf[offset_4:offset_4+1] == '#':
+                                            offset_4 += 1
+                                        else:
+                                            offset_4 = -1
+                                            break
+
+                                        count_3 = 0
+                                        while True:
+                                            offset_5 = offset_4
+                                            line_start_4 = line_start_3
+                                            children_5 = []
+                                            while True:
+                                                if offset_5 == buf_eof:
+                                                    offset_5 = -1
+                                                    break
+
+                                                chr = ord(buf[offset_5])
+
+                                                if chr == 10:
+                                                    offset_5 = -1
+                                                    break
+                                                else:
+                                                    offset_5 += 1
+
+                                                break
+                                            if offset_5 == -1:
+                                                break
+                                            if offset_4 == offset_5: break
+                                            children_4.extend(children_5)
+                                            offset_4 = offset_5
+                                            line_start_3 = line_start_4
+                                            count_3 += 1
+                                        if offset_4 == -1:
+                                            break
+
+                                        count_3 = 0
+                                        while offset_4 < buf_eof:
+                                            chr = buf[offset_4]
+                                            if chr in ' \t\r\n\ufeff':
+                                                offset_4 +=1
+                                                count_3 +=1
+                                            else:
+                                                break
+
+                                        break
+                                    if offset_4 == -1:
+                                        break
+                                    if offset_3 == offset_4: break
+                                    children_3.extend(children_4)
+                                    offset_3 = offset_4
+                                    line_start_2 = line_start_3
+                                    count_2 += 1
+                                if offset_3 == -1:
+                                    break
+
+                                count_2 = 0
+                                while offset_3 < buf_eof:
+                                    chr = buf[offset_3]
+                                    if chr in ' \t\r\n\ufeff':
+                                        offset_3 +=1
+                                        count_2 +=1
+                                    else:
+                                        break
+
+
                                 break
                             if offset_3 == -1:
                                 break
@@ -3514,7 +3829,7 @@ cdef class Parser:
                             break
                         if offset_2 == -1:
                             break
-                        
+
                         break
                     if offset_2 == -1:
                         break
@@ -3526,7 +3841,7 @@ cdef class Parser:
                     break
                 if offset_1 == -1:
                     break
-                
+
                 break
             if offset_1 == -1:
                 offset_0 = -1
@@ -3537,31 +3852,111 @@ cdef class Parser:
                 value_0 = Node('list', offset_0, offset_1, list(children_1), None)
             children_0.append(value_0)
             offset_0 = offset_1
-            
+
             if buf[offset_0:offset_0+1] == ']':
                 offset_0 += 1
             else:
                 offset_0 = -1
                 break
-            
-            
+
+
             break
         return offset_0, line_start_0
-    
+
     cdef (int, int) parse_rson_object(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+        cdef Py_UCS4 chr
+        cdef int offset_1, offset_2, offset_3, offset_4, offset_5, offset_6
+        cdef int line_start_1, line_start_2, line_start_3, line_start_4
+
+        cdef list children_1, children_2, children_3, children_4, children_5, children_6
+        cdef int count_1, count_2, count_3, count_4
         while True: # note: return at end of loop
             if buf[offset_0:offset_0+1] == '{':
                 offset_0 += 1
             else:
                 offset_0 = -1
                 break
-            
-            offset_0, line_start_0 = self.parse_comment(buf, offset_0, line_start_0, prefix_0, buf_eof, children_0)
-            if offset_0 == -1: break
-            
-            
+
+            count_0 = 0
+            while offset_0 < buf_eof:
+                chr = buf[offset_0]
+                if chr in ' \t\r\n\ufeff':
+                    offset_0 +=1
+                    count_0 +=1
+                else:
+                    break
+
+            count_0 = 0
+            while True:
+                offset_1 = offset_0
+                line_start_1 = line_start_0
+                children_1 = []
+                while True:
+                    if buf[offset_1:offset_1+1] == '#':
+                        offset_1 += 1
+                    else:
+                        offset_1 = -1
+                        break
+
+                    count_1 = 0
+                    while True:
+                        offset_2 = offset_1
+                        line_start_2 = line_start_1
+                        children_2 = []
+                        while True:
+                            if offset_2 == buf_eof:
+                                offset_2 = -1
+                                break
+
+                            chr = ord(buf[offset_2])
+
+                            if chr == 10:
+                                offset_2 = -1
+                                break
+                            else:
+                                offset_2 += 1
+
+                            break
+                        if offset_2 == -1:
+                            break
+                        if offset_1 == offset_2: break
+                        children_1.extend(children_2)
+                        offset_1 = offset_2
+                        line_start_1 = line_start_2
+                        count_1 += 1
+                    if offset_1 == -1:
+                        break
+
+                    count_1 = 0
+                    while offset_1 < buf_eof:
+                        chr = buf[offset_1]
+                        if chr in ' \t\r\n\ufeff':
+                            offset_1 +=1
+                            count_1 +=1
+                        else:
+                            break
+
+                    break
+                if offset_1 == -1:
+                    break
+                if offset_0 == offset_1: break
+                children_0.extend(children_1)
+                offset_0 = offset_1
+                line_start_0 = line_start_1
+                count_0 += 1
+            if offset_0 == -1:
+                break
+
+            count_0 = 0
+            while offset_0 < buf_eof:
+                chr = buf[offset_0]
+                if chr in ' \t\r\n\ufeff':
+                    offset_0 +=1
+                    count_0 +=1
+                else:
+                    break
+
+
             offset_1 = offset_0
             children_1 = []
             while True: # start capture
@@ -3576,26 +3971,178 @@ cdef class Parser:
                         while True: # start capture
                             offset_3, line_start_1 = self.parse_rson_string(buf, offset_3, line_start_1, prefix_0, buf_eof, children_3)
                             if offset_3 == -1: break
-                            
-                            
-                            offset_3, line_start_1 = self.parse_comment(buf, offset_3, line_start_1, prefix_0, buf_eof, children_3)
-                            if offset_3 == -1: break
-                            
-                            
+
+
+                            count_1 = 0
+                            while offset_3 < buf_eof:
+                                chr = buf[offset_3]
+                                if chr in ' \t\r\n\ufeff':
+                                    offset_3 +=1
+                                    count_1 +=1
+                                else:
+                                    break
+
+                            count_1 = 0
+                            while True:
+                                offset_4 = offset_3
+                                line_start_2 = line_start_1
+                                children_4 = []
+                                while True:
+                                    if buf[offset_4:offset_4+1] == '#':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+
+                                    count_2 = 0
+                                    while True:
+                                        offset_5 = offset_4
+                                        line_start_3 = line_start_2
+                                        children_5 = []
+                                        while True:
+                                            if offset_5 == buf_eof:
+                                                offset_5 = -1
+                                                break
+
+                                            chr = ord(buf[offset_5])
+
+                                            if chr == 10:
+                                                offset_5 = -1
+                                                break
+                                            else:
+                                                offset_5 += 1
+
+                                            break
+                                        if offset_5 == -1:
+                                            break
+                                        if offset_4 == offset_5: break
+                                        children_4.extend(children_5)
+                                        offset_4 = offset_5
+                                        line_start_2 = line_start_3
+                                        count_2 += 1
+                                    if offset_4 == -1:
+                                        break
+
+                                    count_2 = 0
+                                    while offset_4 < buf_eof:
+                                        chr = buf[offset_4]
+                                        if chr in ' \t\r\n\ufeff':
+                                            offset_4 +=1
+                                            count_2 +=1
+                                        else:
+                                            break
+
+                                    break
+                                if offset_4 == -1:
+                                    break
+                                if offset_3 == offset_4: break
+                                children_3.extend(children_4)
+                                offset_3 = offset_4
+                                line_start_1 = line_start_2
+                                count_1 += 1
+                            if offset_3 == -1:
+                                break
+
+                            count_1 = 0
+                            while offset_3 < buf_eof:
+                                chr = buf[offset_3]
+                                if chr in ' \t\r\n\ufeff':
+                                    offset_3 +=1
+                                    count_1 +=1
+                                else:
+                                    break
+
+
                             if buf[offset_3:offset_3+1] == ':':
                                 offset_3 += 1
                             else:
                                 offset_3 = -1
                                 break
-                            
-                            offset_3, line_start_1 = self.parse_comment(buf, offset_3, line_start_1, prefix_0, buf_eof, children_3)
-                            if offset_3 == -1: break
-                            
-                            
+
+                            count_1 = 0
+                            while offset_3 < buf_eof:
+                                chr = buf[offset_3]
+                                if chr in ' \t\r\n\ufeff':
+                                    offset_3 +=1
+                                    count_1 +=1
+                                else:
+                                    break
+
+                            count_1 = 0
+                            while True:
+                                offset_4 = offset_3
+                                line_start_2 = line_start_1
+                                children_4 = []
+                                while True:
+                                    if buf[offset_4:offset_4+1] == '#':
+                                        offset_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+
+                                    count_2 = 0
+                                    while True:
+                                        offset_5 = offset_4
+                                        line_start_3 = line_start_2
+                                        children_5 = []
+                                        while True:
+                                            if offset_5 == buf_eof:
+                                                offset_5 = -1
+                                                break
+
+                                            chr = ord(buf[offset_5])
+
+                                            if chr == 10:
+                                                offset_5 = -1
+                                                break
+                                            else:
+                                                offset_5 += 1
+
+                                            break
+                                        if offset_5 == -1:
+                                            break
+                                        if offset_4 == offset_5: break
+                                        children_4.extend(children_5)
+                                        offset_4 = offset_5
+                                        line_start_2 = line_start_3
+                                        count_2 += 1
+                                    if offset_4 == -1:
+                                        break
+
+                                    count_2 = 0
+                                    while offset_4 < buf_eof:
+                                        chr = buf[offset_4]
+                                        if chr in ' \t\r\n\ufeff':
+                                            offset_4 +=1
+                                            count_2 +=1
+                                        else:
+                                            break
+
+                                    break
+                                if offset_4 == -1:
+                                    break
+                                if offset_3 == offset_4: break
+                                children_3.extend(children_4)
+                                offset_3 = offset_4
+                                line_start_1 = line_start_2
+                                count_1 += 1
+                            if offset_3 == -1:
+                                break
+
+                            count_1 = 0
+                            while offset_3 < buf_eof:
+                                chr = buf[offset_3]
+                                if chr in ' \t\r\n\ufeff':
+                                    offset_3 +=1
+                                    count_1 +=1
+                                else:
+                                    break
+
+
                             offset_3, line_start_1 = self.parse_rson_value(buf, offset_3, line_start_1, prefix_0, buf_eof, children_3)
                             if offset_3 == -1: break
-                            
-                            
+
+
                             break
                         if offset_3 == -1:
                             offset_2 = -1
@@ -3606,11 +4153,87 @@ cdef class Parser:
                             value_0 = Node('pair', offset_2, offset_3, list(children_3), None)
                         children_2.append(value_0)
                         offset_2 = offset_3
-                        
-                        offset_2, line_start_1 = self.parse_comment(buf, offset_2, line_start_1, prefix_0, buf_eof, children_2)
-                        if offset_2 == -1: break
-                        
-                        
+
+                        count_1 = 0
+                        while offset_2 < buf_eof:
+                            chr = buf[offset_2]
+                            if chr in ' \t\r\n\ufeff':
+                                offset_2 +=1
+                                count_1 +=1
+                            else:
+                                break
+
+                        count_1 = 0
+                        while True:
+                            offset_3 = offset_2
+                            line_start_2 = line_start_1
+                            children_3 = []
+                            while True:
+                                if buf[offset_3:offset_3+1] == '#':
+                                    offset_3 += 1
+                                else:
+                                    offset_3 = -1
+                                    break
+
+                                count_2 = 0
+                                while True:
+                                    offset_4 = offset_3
+                                    line_start_3 = line_start_2
+                                    children_4 = []
+                                    while True:
+                                        if offset_4 == buf_eof:
+                                            offset_4 = -1
+                                            break
+
+                                        chr = ord(buf[offset_4])
+
+                                        if chr == 10:
+                                            offset_4 = -1
+                                            break
+                                        else:
+                                            offset_4 += 1
+
+                                        break
+                                    if offset_4 == -1:
+                                        break
+                                    if offset_3 == offset_4: break
+                                    children_3.extend(children_4)
+                                    offset_3 = offset_4
+                                    line_start_2 = line_start_3
+                                    count_2 += 1
+                                if offset_3 == -1:
+                                    break
+
+                                count_2 = 0
+                                while offset_3 < buf_eof:
+                                    chr = buf[offset_3]
+                                    if chr in ' \t\r\n\ufeff':
+                                        offset_3 +=1
+                                        count_2 +=1
+                                    else:
+                                        break
+
+                                break
+                            if offset_3 == -1:
+                                break
+                            if offset_2 == offset_3: break
+                            children_2.extend(children_3)
+                            offset_2 = offset_3
+                            line_start_1 = line_start_2
+                            count_1 += 1
+                        if offset_2 == -1:
+                            break
+
+                        count_1 = 0
+                        while offset_2 < buf_eof:
+                            chr = buf[offset_2]
+                            if chr in ' \t\r\n\ufeff':
+                                offset_2 +=1
+                                count_1 +=1
+                            else:
+                                break
+
+
                         count_1 = 0
                         while True:
                             offset_3 = offset_2
@@ -3622,36 +4245,264 @@ cdef class Parser:
                                 else:
                                     offset_3 = -1
                                     break
-                                
-                                offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, prefix_0, buf_eof, children_3)
-                                if offset_3 == -1: break
-                                
-                                
+
+                                count_2 = 0
+                                while offset_3 < buf_eof:
+                                    chr = buf[offset_3]
+                                    if chr in ' \t\r\n\ufeff':
+                                        offset_3 +=1
+                                        count_2 +=1
+                                    else:
+                                        break
+
+                                count_2 = 0
+                                while True:
+                                    offset_4 = offset_3
+                                    line_start_3 = line_start_2
+                                    children_4 = []
+                                    while True:
+                                        if buf[offset_4:offset_4+1] == '#':
+                                            offset_4 += 1
+                                        else:
+                                            offset_4 = -1
+                                            break
+
+                                        count_3 = 0
+                                        while True:
+                                            offset_5 = offset_4
+                                            line_start_4 = line_start_3
+                                            children_5 = []
+                                            while True:
+                                                if offset_5 == buf_eof:
+                                                    offset_5 = -1
+                                                    break
+
+                                                chr = ord(buf[offset_5])
+
+                                                if chr == 10:
+                                                    offset_5 = -1
+                                                    break
+                                                else:
+                                                    offset_5 += 1
+
+                                                break
+                                            if offset_5 == -1:
+                                                break
+                                            if offset_4 == offset_5: break
+                                            children_4.extend(children_5)
+                                            offset_4 = offset_5
+                                            line_start_3 = line_start_4
+                                            count_3 += 1
+                                        if offset_4 == -1:
+                                            break
+
+                                        count_3 = 0
+                                        while offset_4 < buf_eof:
+                                            chr = buf[offset_4]
+                                            if chr in ' \t\r\n\ufeff':
+                                                offset_4 +=1
+                                                count_3 +=1
+                                            else:
+                                                break
+
+                                        break
+                                    if offset_4 == -1:
+                                        break
+                                    if offset_3 == offset_4: break
+                                    children_3.extend(children_4)
+                                    offset_3 = offset_4
+                                    line_start_2 = line_start_3
+                                    count_2 += 1
+                                if offset_3 == -1:
+                                    break
+
+                                count_2 = 0
+                                while offset_3 < buf_eof:
+                                    chr = buf[offset_3]
+                                    if chr in ' \t\r\n\ufeff':
+                                        offset_3 +=1
+                                        count_2 +=1
+                                    else:
+                                        break
+
+
                                 offset_4 = offset_3
                                 children_4 = []
                                 while True: # start capture
                                     offset_4, line_start_2 = self.parse_rson_string(buf, offset_4, line_start_2, prefix_0, buf_eof, children_4)
                                     if offset_4 == -1: break
-                                    
-                                    
-                                    offset_4, line_start_2 = self.parse_comment(buf, offset_4, line_start_2, prefix_0, buf_eof, children_4)
-                                    if offset_4 == -1: break
-                                    
-                                    
+
+
+                                    count_2 = 0
+                                    while offset_4 < buf_eof:
+                                        chr = buf[offset_4]
+                                        if chr in ' \t\r\n\ufeff':
+                                            offset_4 +=1
+                                            count_2 +=1
+                                        else:
+                                            break
+
+                                    count_2 = 0
+                                    while True:
+                                        offset_5 = offset_4
+                                        line_start_3 = line_start_2
+                                        children_5 = []
+                                        while True:
+                                            if buf[offset_5:offset_5+1] == '#':
+                                                offset_5 += 1
+                                            else:
+                                                offset_5 = -1
+                                                break
+
+                                            count_3 = 0
+                                            while True:
+                                                offset_6 = offset_5
+                                                line_start_4 = line_start_3
+                                                children_6 = []
+                                                while True:
+                                                    if offset_6 == buf_eof:
+                                                        offset_6 = -1
+                                                        break
+
+                                                    chr = ord(buf[offset_6])
+
+                                                    if chr == 10:
+                                                        offset_6 = -1
+                                                        break
+                                                    else:
+                                                        offset_6 += 1
+
+                                                    break
+                                                if offset_6 == -1:
+                                                    break
+                                                if offset_5 == offset_6: break
+                                                children_5.extend(children_6)
+                                                offset_5 = offset_6
+                                                line_start_3 = line_start_4
+                                                count_3 += 1
+                                            if offset_5 == -1:
+                                                break
+
+                                            count_3 = 0
+                                            while offset_5 < buf_eof:
+                                                chr = buf[offset_5]
+                                                if chr in ' \t\r\n\ufeff':
+                                                    offset_5 +=1
+                                                    count_3 +=1
+                                                else:
+                                                    break
+
+                                            break
+                                        if offset_5 == -1:
+                                            break
+                                        if offset_4 == offset_5: break
+                                        children_4.extend(children_5)
+                                        offset_4 = offset_5
+                                        line_start_2 = line_start_3
+                                        count_2 += 1
+                                    if offset_4 == -1:
+                                        break
+
+                                    count_2 = 0
+                                    while offset_4 < buf_eof:
+                                        chr = buf[offset_4]
+                                        if chr in ' \t\r\n\ufeff':
+                                            offset_4 +=1
+                                            count_2 +=1
+                                        else:
+                                            break
+
+
                                     if buf[offset_4:offset_4+1] == ':':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
                                         break
-                                    
-                                    offset_4, line_start_2 = self.parse_comment(buf, offset_4, line_start_2, prefix_0, buf_eof, children_4)
-                                    if offset_4 == -1: break
-                                    
-                                    
+
+                                    count_2 = 0
+                                    while offset_4 < buf_eof:
+                                        chr = buf[offset_4]
+                                        if chr in ' \t\r\n\ufeff':
+                                            offset_4 +=1
+                                            count_2 +=1
+                                        else:
+                                            break
+
+                                    count_2 = 0
+                                    while True:
+                                        offset_5 = offset_4
+                                        line_start_3 = line_start_2
+                                        children_5 = []
+                                        while True:
+                                            if buf[offset_5:offset_5+1] == '#':
+                                                offset_5 += 1
+                                            else:
+                                                offset_5 = -1
+                                                break
+
+                                            count_3 = 0
+                                            while True:
+                                                offset_6 = offset_5
+                                                line_start_4 = line_start_3
+                                                children_6 = []
+                                                while True:
+                                                    if offset_6 == buf_eof:
+                                                        offset_6 = -1
+                                                        break
+
+                                                    chr = ord(buf[offset_6])
+
+                                                    if chr == 10:
+                                                        offset_6 = -1
+                                                        break
+                                                    else:
+                                                        offset_6 += 1
+
+                                                    break
+                                                if offset_6 == -1:
+                                                    break
+                                                if offset_5 == offset_6: break
+                                                children_5.extend(children_6)
+                                                offset_5 = offset_6
+                                                line_start_3 = line_start_4
+                                                count_3 += 1
+                                            if offset_5 == -1:
+                                                break
+
+                                            count_3 = 0
+                                            while offset_5 < buf_eof:
+                                                chr = buf[offset_5]
+                                                if chr in ' \t\r\n\ufeff':
+                                                    offset_5 +=1
+                                                    count_3 +=1
+                                                else:
+                                                    break
+
+                                            break
+                                        if offset_5 == -1:
+                                            break
+                                        if offset_4 == offset_5: break
+                                        children_4.extend(children_5)
+                                        offset_4 = offset_5
+                                        line_start_2 = line_start_3
+                                        count_2 += 1
+                                    if offset_4 == -1:
+                                        break
+
+                                    count_2 = 0
+                                    while offset_4 < buf_eof:
+                                        chr = buf[offset_4]
+                                        if chr in ' \t\r\n\ufeff':
+                                            offset_4 +=1
+                                            count_2 +=1
+                                        else:
+                                            break
+
+
                                     offset_4, line_start_2 = self.parse_rson_value(buf, offset_4, line_start_2, prefix_0, buf_eof, children_4)
                                     if offset_4 == -1: break
-                                    
-                                    
+
+
                                     break
                                 if offset_4 == -1:
                                     offset_3 = -1
@@ -3662,11 +4513,87 @@ cdef class Parser:
                                     value_1 = Node('pair', offset_3, offset_4, list(children_4), None)
                                 children_3.append(value_1)
                                 offset_3 = offset_4
-                                
-                                offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, prefix_0, buf_eof, children_3)
-                                if offset_3 == -1: break
-                                
-                                
+
+                                count_2 = 0
+                                while offset_3 < buf_eof:
+                                    chr = buf[offset_3]
+                                    if chr in ' \t\r\n\ufeff':
+                                        offset_3 +=1
+                                        count_2 +=1
+                                    else:
+                                        break
+
+                                count_2 = 0
+                                while True:
+                                    offset_4 = offset_3
+                                    line_start_3 = line_start_2
+                                    children_4 = []
+                                    while True:
+                                        if buf[offset_4:offset_4+1] == '#':
+                                            offset_4 += 1
+                                        else:
+                                            offset_4 = -1
+                                            break
+
+                                        count_3 = 0
+                                        while True:
+                                            offset_5 = offset_4
+                                            line_start_4 = line_start_3
+                                            children_5 = []
+                                            while True:
+                                                if offset_5 == buf_eof:
+                                                    offset_5 = -1
+                                                    break
+
+                                                chr = ord(buf[offset_5])
+
+                                                if chr == 10:
+                                                    offset_5 = -1
+                                                    break
+                                                else:
+                                                    offset_5 += 1
+
+                                                break
+                                            if offset_5 == -1:
+                                                break
+                                            if offset_4 == offset_5: break
+                                            children_4.extend(children_5)
+                                            offset_4 = offset_5
+                                            line_start_3 = line_start_4
+                                            count_3 += 1
+                                        if offset_4 == -1:
+                                            break
+
+                                        count_3 = 0
+                                        while offset_4 < buf_eof:
+                                            chr = buf[offset_4]
+                                            if chr in ' \t\r\n\ufeff':
+                                                offset_4 +=1
+                                                count_3 +=1
+                                            else:
+                                                break
+
+                                        break
+                                    if offset_4 == -1:
+                                        break
+                                    if offset_3 == offset_4: break
+                                    children_3.extend(children_4)
+                                    offset_3 = offset_4
+                                    line_start_2 = line_start_3
+                                    count_2 += 1
+                                if offset_3 == -1:
+                                    break
+
+                                count_2 = 0
+                                while offset_3 < buf_eof:
+                                    chr = buf[offset_3]
+                                    if chr in ' \t\r\n\ufeff':
+                                        offset_3 +=1
+                                        count_2 +=1
+                                    else:
+                                        break
+
+
                                 break
                             if offset_3 == -1:
                                 break
@@ -3677,7 +4604,7 @@ cdef class Parser:
                             count_1 += 1
                         if offset_2 == -1:
                             break
-                        
+
                         count_1 = 0
                         while count_1 < 1:
                             offset_3 = offset_2
@@ -3689,11 +4616,87 @@ cdef class Parser:
                                 else:
                                     offset_3 = -1
                                     break
-                                
-                                offset_3, line_start_2 = self.parse_comment(buf, offset_3, line_start_2, prefix_0, buf_eof, children_3)
-                                if offset_3 == -1: break
-                                
-                                
+
+                                count_2 = 0
+                                while offset_3 < buf_eof:
+                                    chr = buf[offset_3]
+                                    if chr in ' \t\r\n\ufeff':
+                                        offset_3 +=1
+                                        count_2 +=1
+                                    else:
+                                        break
+
+                                count_2 = 0
+                                while True:
+                                    offset_4 = offset_3
+                                    line_start_3 = line_start_2
+                                    children_4 = []
+                                    while True:
+                                        if buf[offset_4:offset_4+1] == '#':
+                                            offset_4 += 1
+                                        else:
+                                            offset_4 = -1
+                                            break
+
+                                        count_3 = 0
+                                        while True:
+                                            offset_5 = offset_4
+                                            line_start_4 = line_start_3
+                                            children_5 = []
+                                            while True:
+                                                if offset_5 == buf_eof:
+                                                    offset_5 = -1
+                                                    break
+
+                                                chr = ord(buf[offset_5])
+
+                                                if chr == 10:
+                                                    offset_5 = -1
+                                                    break
+                                                else:
+                                                    offset_5 += 1
+
+                                                break
+                                            if offset_5 == -1:
+                                                break
+                                            if offset_4 == offset_5: break
+                                            children_4.extend(children_5)
+                                            offset_4 = offset_5
+                                            line_start_3 = line_start_4
+                                            count_3 += 1
+                                        if offset_4 == -1:
+                                            break
+
+                                        count_3 = 0
+                                        while offset_4 < buf_eof:
+                                            chr = buf[offset_4]
+                                            if chr in ' \t\r\n\ufeff':
+                                                offset_4 +=1
+                                                count_3 +=1
+                                            else:
+                                                break
+
+                                        break
+                                    if offset_4 == -1:
+                                        break
+                                    if offset_3 == offset_4: break
+                                    children_3.extend(children_4)
+                                    offset_3 = offset_4
+                                    line_start_2 = line_start_3
+                                    count_2 += 1
+                                if offset_3 == -1:
+                                    break
+
+                                count_2 = 0
+                                while offset_3 < buf_eof:
+                                    chr = buf[offset_3]
+                                    if chr in ' \t\r\n\ufeff':
+                                        offset_3 +=1
+                                        count_2 +=1
+                                    else:
+                                        break
+
+
                                 break
                             if offset_3 == -1:
                                 break
@@ -3705,7 +4708,7 @@ cdef class Parser:
                             break
                         if offset_2 == -1:
                             break
-                        
+
                         break
                     if offset_2 == -1:
                         break
@@ -3717,7 +4720,7 @@ cdef class Parser:
                     break
                 if offset_1 == -1:
                     break
-                
+
                 break
             if offset_1 == -1:
                 offset_0 = -1
@@ -3728,14 +4731,13 @@ cdef class Parser:
                 value_2 = Node('object', offset_0, offset_1, list(children_1), None)
             children_0.append(value_2)
             offset_0 = offset_1
-            
+
             if buf[offset_0:offset_0+1] == '}':
                 offset_0 += 1
             else:
                 offset_0 = -1
                 break
-            
-            
+
+
             break
         return offset_0, line_start_0
-    

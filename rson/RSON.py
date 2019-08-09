@@ -272,45 +272,45 @@ class RSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n", "\uFEFF
     @rule()
     def rson_list(self):
         self.accept("[")
-        self.comment()
+        self.comment.inline()
         with self.capture("list"), self.repeat(max=1):
             self.rson_value()
             with self.repeat(min=0):
-                self.comment()
+                self.comment.inline()
                 self.accept(",")
-                self.comment()
+                self.comment.inline()
                 self.rson_value()
-            self.comment()
+            self.comment.inline()
             with self.optional():
                 self.accept(",")
-                self.comment()
+                self.comment.inline()
         self.accept("]")
 
     @rule()
     def rson_object(self):
         self.accept("{")
-        self.comment()
+        self.comment.inline()
         with self.capture("object"), self.optional():
             with self.capture("pair"):
                 self.rson_string()
-                self.comment()
+                self.comment.inline()
                 self.accept(":")
-                self.comment()
+                self.comment.inline()
                 self.rson_value()
-            self.comment()
+            self.comment.inline()
             with self.repeat(min=0):
                 self.accept(",")
-                self.comment()
+                self.comment.inline()
                 with self.capture("pair"):
                     self.rson_string()
-                    self.comment()
+                    self.comment.inline()
                     self.accept(":")
-                    self.comment()
+                    self.comment.inline()
                     self.rson_value()
-                self.comment()
+                self.comment.inline()
             with self.optional():
                 self.accept(",")
-                self.comment()
+                self.comment.inline()
         self.accept("}")
 
 if __name__ == "__main__":

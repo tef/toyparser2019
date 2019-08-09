@@ -748,17 +748,30 @@ class ParserRule:
 
 
 class ParserBuilder:
-    def __init__(self, output, indent):
+    def __init__(self, output, indent, placeholders):
         self.output = output
+        self.placeholders = placeholders
         self.indent = indent
 
+    def append_placeholder(self):
+        key = object()
+        self.placeholders[key] = len(self.output), self.indent
+        self.output.append(key)
+        return key
+
+    def replace_placeholder(self, key, line):
+        lineno, indent = self.placeholders.pop(key) 
+        self.output[lineno] = (f"{' ' * indent}{line}")
+        
+
     def add_indent(self, n=4):
-        return ParserBuilder(self.output, self.indent+n)
+        return ParserBuilder(self.output, self.indent+n, self.placeholders)
 
     def append(self, line):
         self.output.append(f"{' ' * self.indent}{line}")
 
     def as_string(self):
+        if self.placeholders: raise Exception("no")
         return "\n".join(o.rstrip() for o in self.output)
 
     def extend(self, lines):
@@ -768,15 +781,18 @@ class ParserBuilder:
 
 
 class VarBuilder:
-    def __init__(self, name, n=0):
+    def __init__(self, name,*, maxes=None, n=0):
         self.n = n
         self.name = name
+        self.maxes = maxes
+        if maxes is not None:
+            maxes[name] = max(maxes.get(name,0), n)
 
     def __str__(self):
         return f"{self.name}_{self.n}" # if self.n else self.name
 
     def incr(self):
-        return VarBuilder(self.name, self.n+1)
+        return VarBuilder(self.name, maxes=self.maxes, n=self.n+1)
 
 
 def compile_python(grammar, builder=None, cython=False):
@@ -837,7 +853,7 @@ def compile_python(grammar, builder=None, cython=False):
             else:
                 node = "self.Node"
 
-            value = VarBuilder('value', len(values))
+            value = VarBuilder('value', n=len(values))
             values[rule.args['key']] = value
 
             steps.extend((
@@ -977,7 +993,7 @@ def compile_python(grammar, builder=None, cython=False):
             steps.append(f"if {offset_0} == -1:")
             steps.append(f"    {offset} = -1; break")
             # find var name
-            value = VarBuilder('value', len(values))
+            value = VarBuilder('value',n=len(values))
             values[rule.args['key']] = value
             steps.append(f"{value} = buf[{offset}:{offset_0}].count({repr(rule.args['char'])})")
             steps.append(f"{offset} = {offset_0}")
@@ -1080,12 +1096,13 @@ def compile_python(grammar, builder=None, cython=False):
 
         elif rule.kind == RANGE:
             invert = rule.args['invert']
+            _ord = "" if cython else "ord"
             steps.extend((
                 f"if {offset} == buf_eof:",
                 f"    {offset} = -1",
                 f"    break",
                 f"",
-                f"chr = ord(buf[{offset}])",
+                f"chr = {_ord}(buf[{offset}])",
                 f"",
             ))
 
@@ -1326,7 +1343,7 @@ def compile_python(grammar, builder=None, cython=False):
         steps.append("")
         return steps
 
-    output = ParserBuilder([], 0)
+    output = ParserBuilder([], 0, {})
     grammar_newline = tuple(n for n in grammar.newline if n!='\r\n') if grammar.newline else ()
     newline = repr(tuple(grammar.newline)) if grammar.newline else '()'
     newline_rn = bool(grammar.newline) and '\r\n' in grammar.newline
@@ -1356,7 +1373,9 @@ def compile_python(grammar, builder=None, cython=False):
         output.extend(parse_node)
         output.extend((
             f"cdef class Parser:",
-            f"    cpdef object builder, tabstop, cache, allow_mixed_indent ",
+            f"    cdef dict builder, cache",
+            f"    cdef int tabstop",
+            f"    cdef int allow_mixed_indent ",
             f"",
             f"    def __init__(self, builder=None, tabstop=None, allow_mixed_indent=True):",
             f"         self.builder = builder",
@@ -1402,24 +1421,34 @@ def compile_python(grammar, builder=None, cython=False):
         f"",
     ))
 
+    varnames = {"offset":"cdef int", "line_start":"cdef int", "prefix":"cdef list", "children":"cdef list", "count":"cdef int"}
     for name, rule in grammar.rules.items():
+        cdefs = {}
         if cython:
             output.append(f"cdef (int, int) parse_{name}(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):")
-            output.append(f"    cdef int count_0")
-            output.append(f"    cpdef Py_UCS4 chr")
+            output.append(f"    cdef Py_UCS4 chr")
+            
+            for v in varnames:
+                cdefs[v] = output.add_indent(4).append_placeholder()
         else:
             output.append(f"def parse_{name}(self, buf, offset_0, line_start_0, prefix_0, buf_eof, children_0):")
    #     output.append(f"    print('enter {name},',offset_0,line_start_0,prefix_0, repr(buf[offset_0:offset_0+10]))")
         output.append(f"    while True: # note: return at end of loop")
 
         values = {}
+        maxes = {}
         build_steps(rule,
                 output.add_indent(8),
-                VarBuilder("offset"),
-                VarBuilder('line_start'),
-                VarBuilder('prefix'),
-                VarBuilder('children'),
-                VarBuilder("count"), values)
+                VarBuilder("offset", maxes=maxes),
+                VarBuilder('line_start', maxes=maxes),
+                VarBuilder('prefix', maxes=maxes),
+                VarBuilder('children', maxes=maxes),
+                VarBuilder("count", maxes=maxes), values, )
+        if cdefs:
+            for v,p in cdefs.items():
+                line = ", ".join(f"{v}_{n}" for n in range(1, maxes[v]+1))
+                line = f"{varnames[v]} {line}" if line else ""
+                output.replace_placeholder(p, line)
         output.append(f"        break")
     #     output.append(f"    print(('exit' if offset_0 != -1 else 'fail'), '{name}', offset_0, line_start_0, repr(buf[offset_0: offset_0+10]))")
         output.append(f"    return offset_0, line_start_0")

@@ -21,14 +21,25 @@ builder = {
 }
 
 class JSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n"]):
-    document = rule(whitespace, rule(json_list | json_object, capture="document"))
+    @rule()
+    def document(self):
+        self.whitespace()
+        with self.lookahead():
+            self.accept('[', '{')
+        with self.capture("document"), self.choice():
+            with self.case(): self.json_list.inline()
+            with self.case(): self.json_object.inline()
 
-    json_value = rule( 
-        json_list | json_object |
-        json_string | json_number |
-        json_true | json_false | 
-        json_null
-    )
+    @rule()
+    def json_value(self):
+        with self.choice():
+            with self.case(): self.json_list.inline()
+            with self.case(): self.json_object.inline()
+            with self.case(): self.json_string.inline()
+            with self.case(): self.json_number.inline()
+            with self.case(): self.json_true.inline()
+            with self.case(): self.json_false.inline()
+            with self.case(): self.json_null.inline()
     
     json_true = rule(accept("true"), capture="bool")
     json_false = rule(accept("false"), capture="bool")
@@ -96,7 +107,7 @@ class JSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n"]):
         self.whitespace()
         with self.capture("object"), self.optional():
             with self.capture("pair"):
-                self.json_string()
+                self.json_string.inline()
                 self.whitespace()
                 self.accept(":")
                 self.whitespace()
@@ -168,8 +179,11 @@ if __name__ == "__main__":
 
     import time, json
 
-    n= 50_000
-    s = json.dumps(list(range(n))+list(str(x) for x in range(n)))
+    n= 80_000
+    import random
+    l = list(range(n))+list(str(x) for x in range(n))
+    random.shuffle(l)
+    s = json.dumps(l)
     print('file is', len(s)/1024, 'k')
 
     def timeit(name,parser, buf):

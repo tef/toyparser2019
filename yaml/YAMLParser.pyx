@@ -15,7 +15,9 @@ class Node:
 
 
 cdef class Parser:
-    cpdef object builder, tabstop, cache, allow_mixed_indent
+    cdef dict builder, cache
+    cdef int tabstop
+    cdef int allow_mixed_indent
 
     def __init__(self, builder=None, tabstop=None, allow_mixed_indent=True):
          self.builder = builder
@@ -37,8 +39,12 @@ cdef class Parser:
         if err is not None: raise err(buf, new_offset, 'no')
 
     cdef (int, int) parse_literal(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+        cdef Py_UCS4 chr
+        cdef int offset_1
+        cdef int line_start_1
+
+        cdef list children_1
+
         while True: # note: return at end of loop
             while True: # start choice
                 offset_1 = offset_0
@@ -155,8 +161,12 @@ cdef class Parser:
         return offset_0, line_start_0
 
     cdef (int, int) parse_true_literal(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+        cdef Py_UCS4 chr
+        cdef int offset_1
+
+
+        cdef list children_1
+
         while True: # note: return at end of loop
             offset_1 = offset_0
             children_1 = []
@@ -182,8 +192,12 @@ cdef class Parser:
         return offset_0, line_start_0
 
     cdef (int, int) parse_false_literal(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+        cdef Py_UCS4 chr
+        cdef int offset_1
+
+
+        cdef list children_1
+
         while True: # note: return at end of loop
             offset_1 = offset_0
             children_1 = []
@@ -209,8 +223,12 @@ cdef class Parser:
         return offset_0, line_start_0
 
     cdef (int, int) parse_null_literal(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+        cdef Py_UCS4 chr
+        cdef int offset_1
+
+
+        cdef list children_1
+
         while True: # note: return at end of loop
             offset_1 = offset_0
             children_1 = []
@@ -236,8 +254,12 @@ cdef class Parser:
         return offset_0, line_start_0
 
     cdef (int, int) parse_identifier(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+        cdef Py_UCS4 chr
+        cdef int offset_1, offset_2, offset_3
+        cdef int line_start_1, line_start_2
+
+        cdef list children_1, children_2, children_3
+        cdef int count_1
         while True: # note: return at end of loop
             while True: # start choice
                 offset_1 = offset_0
@@ -327,8 +349,12 @@ cdef class Parser:
         return offset_0, line_start_0
 
     cdef (int, int) parse_number_literal(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+        cdef Py_UCS4 chr
+        cdef int offset_1, offset_2, offset_3, offset_4
+        cdef int line_start_1, line_start_2, line_start_3
+
+        cdef list children_1, children_2, children_3, children_4
+        cdef int count_1, count_2, count_3
         while True: # note: return at end of loop
             offset_1 = offset_0
             children_1 = []
@@ -546,8 +572,12 @@ cdef class Parser:
         return offset_0, line_start_0
 
     cdef (int, int) parse_string_literal(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+        cdef Py_UCS4 chr
+        cdef int offset_1, offset_2, offset_3
+        cdef int line_start_1, line_start_2
+
+        cdef list children_1, children_2, children_3
+        cdef int count_1
         while True: # note: return at end of loop
             if buf[offset_0:offset_0+1] == '"':
                 offset_0 += 1
@@ -756,8 +786,12 @@ cdef class Parser:
         return offset_0, line_start_0
 
     cdef (int, int) parse_list_literal(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+        cdef Py_UCS4 chr
+        cdef int offset_1, offset_2, offset_3
+        cdef int line_start_1, line_start_2
+
+        cdef list children_1, children_2, children_3
+        cdef int count_1, count_2
         while True: # note: return at end of loop
             if buf[offset_0:offset_0+1] == '[':
                 offset_0 += 1
@@ -943,8 +977,12 @@ cdef class Parser:
         return offset_0, line_start_0
 
     cdef (int, int) parse_object_literal(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+        cdef Py_UCS4 chr
+        cdef int offset_1, offset_2, offset_3
+        cdef int line_start_1, line_start_2
+
+        cdef list children_1, children_2, children_3
+        cdef int count_1, count_2
         while True: # note: return at end of loop
             if buf[offset_0:offset_0+1] == '{':
                 offset_0 += 1
@@ -1200,8 +1238,12 @@ cdef class Parser:
         return offset_0, line_start_0
 
     cdef (int, int) parse_yaml_eol(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+        cdef Py_UCS4 chr
+        cdef int offset_1, offset_2, offset_3
+        cdef int line_start_1, line_start_2, line_start_3
+
+        cdef list children_1, children_2, children_3
+        cdef int count_1, count_2
         while True: # note: return at end of loop
             count_0 = 0
             while True:
@@ -1337,8 +1379,12 @@ cdef class Parser:
         return offset_0, line_start_0
 
     cdef (int, int) parse_indented_list(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+        cdef Py_UCS4 chr
+        cdef int offset_1, offset_2, offset_3, offset_4
+        cdef int line_start_1, line_start_2
+
+        cdef list children_1, children_2, children_3
+        cdef int count_1
         while True: # note: return at end of loop
             count_0 = offset_0 - line_start_0+  ((self.tabstop -1) * buf[line_start_0:offset_0].count('	'))
             def _indent(buf, offset, line_start, prefix, buf_eof, children, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
@@ -1593,8 +1639,12 @@ cdef class Parser:
         return offset_0, line_start_0
 
     cdef (int, int) parse_indented_object(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+        cdef Py_UCS4 chr
+        cdef int offset_1, offset_2, offset_3, offset_4, offset_5
+        cdef int line_start_1, line_start_2
+
+        cdef list children_1, children_2, children_3, children_4
+        cdef int count_1
         while True: # note: return at end of loop
             count_0 = offset_0 - line_start_0+  ((self.tabstop -1) * buf[line_start_0:offset_0].count('	'))
             def _indent(buf, offset, line_start, prefix, buf_eof, children, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
@@ -1899,8 +1949,12 @@ cdef class Parser:
         return offset_0, line_start_0
 
     cdef (int, int) parse_indented_value(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+        cdef Py_UCS4 chr
+        cdef int offset_1
+        cdef int line_start_1
+
+        cdef list children_1
+
         while True: # note: return at end of loop
             while True: # start choice
                 offset_1 = offset_0
@@ -1960,8 +2014,12 @@ cdef class Parser:
         return offset_0, line_start_0
 
     cdef (int, int) parse_document(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+        cdef Py_UCS4 chr
+        cdef int offset_1, offset_2
+        cdef int line_start_1
+
+        cdef list children_1, children_2
+        cdef int count_1
         while True: # note: return at end of loop
             count_0 = 0
             while True:
