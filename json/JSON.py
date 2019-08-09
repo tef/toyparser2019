@@ -118,6 +118,9 @@ class JSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n"]):
 if __name__ == "__main__":
     import subprocess, sys
     if not sys.argv[1:] or sys.argv[1] != "--skip":
+        code = compile_python(JSON, builder, cython=False)
+        with open("JSONParser.py", "w") as fh:
+            fh.write(code)
         code = compile_python(JSON, builder, cython=True)
         with open("JSONParser.pyx", "w") as fh:
             fh.write(code)

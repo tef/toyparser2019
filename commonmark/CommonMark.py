@@ -1,4 +1,4 @@
-from grammar import Grammar
+from grammar import Grammar, compile_python
 
 import codecs
 
@@ -410,7 +410,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     def para(self):
         self.whitespace(max=3)
         with self.memoize(),self.capture("para"):
-            self.inline_para()
+            self.inline_para.inline()
             self.whitespace()
             self.end_of_line()
             
@@ -435,14 +435,14 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                     self.newline()
                     self.start_of_line()
                     with self.reject():
-                        self.para_interrupt()
+                        self.para_interrupt.inline()
                     self.whitespace()
                 with self.case():
                     self.whitespace(min=2)
                     self.newline()
                     self.start_of_line()
                     with self.reject():
-                        self.para_interrupt()
+                        self.para_interrupt.inline()
                     with self.capture('empty'):
                         pass
                 with self.case():
@@ -479,11 +479,14 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
         with self.capture('text'), self.repeat(min=1):
             self.range(" ", "\n", invert=True)
 
-        
-for name, value in CommonMark.rules.items():
-    print(name, '<--', value,'.')
+if __name__ == "__main__":
+    with open('CommonMarkParser.py', 'w') as fh:
+        fh.write(compile_python(CommonMark))
+            
+    for name, value in CommonMark.rules.items():
+        print(name, '<--', value,'.')
 
-print(CommonMark.version)
+    print(CommonMark.version)
 
 def _markup(buf):
     parser = CommonMark.parser(builder)
@@ -498,6 +501,7 @@ def _markup(buf):
         # print(node.build(buf, builder))
 
 markup = _markup # lambda x:x
+if name != '__main__': markup = lambda x:x
 markup("# butt")
 markup("""a b c\n\n""")
 markup("""a b c\n""")

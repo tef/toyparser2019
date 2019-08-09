@@ -235,6 +235,9 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n", "\r
 if __name__ == '__main__':
     import subprocess, sys
     if not sys.argv[1:] or sys.argv[1] != "--skip":
+        code = compile_python(YAML, builder, cython=False)
+        with open("YAMLParser.py", "w") as fh:
+            fh.write(code)
         code = compile_python(YAML, builder, cython=True)
         with open("YAMLParser.pyx", "w") as fh:
             fh.write(code)

@@ -759,7 +759,7 @@ class ParserBuilder:
         self.output.append(f"{' ' * self.indent}{line}")
 
     def as_string(self):
-        return "\n".join(self.output)
+        return "\n".join(o.rstrip() for o in self.output)
 
     def extend(self, lines):
         if isinstance(lines, str): raise Exception('no')

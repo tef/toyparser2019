@@ -316,6 +316,9 @@ class RSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n", "\uFEFF
 if __name__ == "__main__":
     import subprocess, sys
     if not sys.argv[1:] or sys.argv[1] != "--skip":
+        code = compile_python(RSON, builder, cython=False)
+        with open("RSONParser.py", "w") as fh:
+            fh.write(code)
         code = compile_python(RSON, builder, cython=True)
         with open("RSONParser.pyx", "w") as fh:
             fh.write(code)

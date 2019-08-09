@@ -1,23 +1,5 @@
-# cython: language_level=3, bounds_check=False
-class Node:
-    def __init__(self, name, start, end, children, value):
-        self.name = name
-        self.start = start
-        self.end = end
-        self.children = children
-        self.value = value
-    def __str__(self):
-        return '{}[{}:{}]'.format(self.name, self.start, self.end)
-    def build(self, buf, builder):
-        children = [child.build(buf, builder) for child in self.children]
-        if self.name == "value": return self.value
-        return builder[self.name](buf, self.start, self.end, children)
-
-
-cdef class Parser:
-    cpdef object builder, tabstop, cache, allow_mixed_indent
-
-    def __init__(self, builder=None, tabstop=None, allow_mixed_indent=True):
+class Parser:
+    def __init__(self, builder=None, tabstop=None, allow_mixed_indent=False):
          self.builder = builder
          self.tabstop = tabstop or self.TABSTOP
          self.cache = None
@@ -26,6 +8,21 @@ cdef class Parser:
     NEWLINE = ('\n', '\r', '\r\n')
     WHITESPACE = (' ', '\t')
     TABSTOP = 8
+
+    class Node:
+        def __init__(self, name, start, end, children, value):
+            self.name = name
+            self.start = start
+            self.end = end
+            self.children = children
+            self.value = value
+        def __str__(self):
+            return '{}[{}:{}]'.format(self.name, self.start, self.end)
+        def build(self, buf, builder):
+            children = [child.build(buf, builder) for child in self.children]
+            if self.name == "value": return self.value
+            return builder[self.name](buf, self.start, self.end, children)
+
 
     def parse(self, buf, offset=0, end=None, err=None):
         self.cache = dict()
@@ -36,9 +33,7 @@ cdef class Parser:
         print('no', offset, new_offset, end, buf[new_offset:])
         if err is not None: raise err(buf, new_offset, 'no')
 
-    cdef (int, int) parse_literal(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+    def parse_literal(self, buf, offset_0, line_start_0, prefix_0, buf_eof, children_0):
         while True: # note: return at end of loop
             while True: # start choice
                 offset_1 = offset_0
@@ -154,9 +149,7 @@ cdef class Parser:
             break
         return offset_0, line_start_0
 
-    cdef (int, int) parse_true_literal(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+    def parse_true_literal(self, buf, offset_0, line_start_0, prefix_0, buf_eof, children_0):
         while True: # note: return at end of loop
             offset_1 = offset_0
             children_1 = []
@@ -174,16 +167,14 @@ cdef class Parser:
             if self.builder is not None:
                 value_0 = self.builder['bool'](buf, offset_0, offset_1, children_1)
             else:
-                value_0 = Node('bool', offset_0, offset_1, list(children_1), None)
+                value_0 = self.Node('bool', offset_0, offset_1, list(children_1), None)
             children_0.append(value_0)
             offset_0 = offset_1
 
             break
         return offset_0, line_start_0
 
-    cdef (int, int) parse_false_literal(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+    def parse_false_literal(self, buf, offset_0, line_start_0, prefix_0, buf_eof, children_0):
         while True: # note: return at end of loop
             offset_1 = offset_0
             children_1 = []
@@ -201,16 +192,14 @@ cdef class Parser:
             if self.builder is not None:
                 value_0 = self.builder['bool'](buf, offset_0, offset_1, children_1)
             else:
-                value_0 = Node('bool', offset_0, offset_1, list(children_1), None)
+                value_0 = self.Node('bool', offset_0, offset_1, list(children_1), None)
             children_0.append(value_0)
             offset_0 = offset_1
 
             break
         return offset_0, line_start_0
 
-    cdef (int, int) parse_null_literal(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+    def parse_null_literal(self, buf, offset_0, line_start_0, prefix_0, buf_eof, children_0):
         while True: # note: return at end of loop
             offset_1 = offset_0
             children_1 = []
@@ -228,16 +217,14 @@ cdef class Parser:
             if self.builder is not None:
                 value_0 = self.builder['null'](buf, offset_0, offset_1, children_1)
             else:
-                value_0 = Node('null', offset_0, offset_1, list(children_1), None)
+                value_0 = self.Node('null', offset_0, offset_1, list(children_1), None)
             children_0.append(value_0)
             offset_0 = offset_1
 
             break
         return offset_0, line_start_0
 
-    cdef (int, int) parse_identifier(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+    def parse_identifier(self, buf, offset_0, line_start_0, prefix_0, buf_eof, children_0):
         while True: # note: return at end of loop
             while True: # start choice
                 offset_1 = offset_0
@@ -290,7 +277,7 @@ cdef class Parser:
                     if self.builder is not None:
                         value_0 = self.builder['identifier'](buf, offset_1, offset_2, children_2)
                     else:
-                        value_0 = Node('identifier', offset_1, offset_2, list(children_2), None)
+                        value_0 = self.Node('identifier', offset_1, offset_2, list(children_2), None)
                     children_1.append(value_0)
                     offset_1 = offset_2
 
@@ -326,9 +313,7 @@ cdef class Parser:
             break
         return offset_0, line_start_0
 
-    cdef (int, int) parse_number_literal(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+    def parse_number_literal(self, buf, offset_0, line_start_0, prefix_0, buf_eof, children_0):
         while True: # note: return at end of loop
             offset_1 = offset_0
             children_1 = []
@@ -538,16 +523,14 @@ cdef class Parser:
             if self.builder is not None:
                 value_0 = self.builder['number'](buf, offset_0, offset_1, children_1)
             else:
-                value_0 = Node('number', offset_0, offset_1, list(children_1), None)
+                value_0 = self.Node('number', offset_0, offset_1, list(children_1), None)
             children_0.append(value_0)
             offset_0 = offset_1
 
             break
         return offset_0, line_start_0
 
-    cdef (int, int) parse_string_literal(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+    def parse_string_literal(self, buf, offset_0, line_start_0, prefix_0, buf_eof, children_0):
         while True: # note: return at end of loop
             if buf[offset_0:offset_0+1] == '"':
                 offset_0 += 1
@@ -741,7 +724,7 @@ cdef class Parser:
             if self.builder is not None:
                 value_0 = self.builder['string'](buf, offset_0, offset_1, children_1)
             else:
-                value_0 = Node('string', offset_0, offset_1, list(children_1), None)
+                value_0 = self.Node('string', offset_0, offset_1, list(children_1), None)
             children_0.append(value_0)
             offset_0 = offset_1
 
@@ -755,9 +738,7 @@ cdef class Parser:
             break
         return offset_0, line_start_0
 
-    cdef (int, int) parse_list_literal(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+    def parse_list_literal(self, buf, offset_0, line_start_0, prefix_0, buf_eof, children_0):
         while True: # note: return at end of loop
             if buf[offset_0:offset_0+1] == '[':
                 offset_0 += 1
@@ -928,7 +909,7 @@ cdef class Parser:
             if self.builder is not None:
                 value_0 = self.builder['list'](buf, offset_0, offset_1, children_1)
             else:
-                value_0 = Node('list', offset_0, offset_1, list(children_1), None)
+                value_0 = self.Node('list', offset_0, offset_1, list(children_1), None)
             children_0.append(value_0)
             offset_0 = offset_1
 
@@ -942,9 +923,7 @@ cdef class Parser:
             break
         return offset_0, line_start_0
 
-    cdef (int, int) parse_object_literal(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+    def parse_object_literal(self, buf, offset_0, line_start_0, prefix_0, buf_eof, children_0):
         while True: # note: return at end of loop
             if buf[offset_0:offset_0+1] == '{':
                 offset_0 += 1
@@ -1185,7 +1164,7 @@ cdef class Parser:
             if self.builder is not None:
                 value_0 = self.builder['object'](buf, offset_0, offset_1, children_1)
             else:
-                value_0 = Node('object', offset_0, offset_1, list(children_1), None)
+                value_0 = self.Node('object', offset_0, offset_1, list(children_1), None)
             children_0.append(value_0)
             offset_0 = offset_1
 
@@ -1199,9 +1178,7 @@ cdef class Parser:
             break
         return offset_0, line_start_0
 
-    cdef (int, int) parse_yaml_eol(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+    def parse_yaml_eol(self, buf, offset_0, line_start_0, prefix_0, buf_eof, children_0):
         while True: # note: return at end of loop
             count_0 = 0
             while True:
@@ -1336,9 +1313,7 @@ cdef class Parser:
             break
         return offset_0, line_start_0
 
-    cdef (int, int) parse_indented_list(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+    def parse_indented_list(self, buf, offset_0, line_start_0, prefix_0, buf_eof, children_0):
         while True: # note: return at end of loop
             count_0 = offset_0 - line_start_0+  ((self.tabstop -1) * buf[line_start_0:offset_0].count('	'))
             def _indent(buf, offset, line_start, prefix, buf_eof, children, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
@@ -1581,7 +1556,7 @@ cdef class Parser:
                 if self.builder is not None:
                     value_0 = self.builder['list'](buf, offset_0, offset_1, children_1)
                 else:
-                    value_0 = Node('list', offset_0, offset_1, list(children_1), None)
+                    value_0 = self.Node('list', offset_0, offset_1, list(children_1), None)
                 children_0.append(value_0)
                 offset_0 = offset_1
 
@@ -1592,9 +1567,7 @@ cdef class Parser:
             break
         return offset_0, line_start_0
 
-    cdef (int, int) parse_indented_object(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+    def parse_indented_object(self, buf, offset_0, line_start_0, prefix_0, buf_eof, children_0):
         while True: # note: return at end of loop
             count_0 = offset_0 - line_start_0+  ((self.tabstop -1) * buf[line_start_0:offset_0].count('	'))
             def _indent(buf, offset, line_start, prefix, buf_eof, children, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
@@ -1728,7 +1701,7 @@ cdef class Parser:
                     if self.builder is not None:
                         value_0 = self.builder['pair'](buf, offset_1, offset_2, children_2)
                     else:
-                        value_0 = Node('pair', offset_1, offset_2, list(children_2), None)
+                        value_0 = self.Node('pair', offset_1, offset_2, list(children_2), None)
                     children_1.append(value_0)
                     offset_1 = offset_2
 
@@ -1780,7 +1753,7 @@ cdef class Parser:
                                 if self.builder is not None:
                                     children_3.append('a')
                                 else:
-                                    children_3.append(Node('value', offset_3, offset_3, (), 'a'))
+                                    children_3.append(self.Node('value', offset_3, offset_3, (), 'a'))
 
                                 while True: # start choice
                                     offset_4 = offset_3
@@ -1865,7 +1838,7 @@ cdef class Parser:
                             if self.builder is not None:
                                 value_1 = self.builder['pair'](buf, offset_2, offset_3, children_3)
                             else:
-                                value_1 = Node('pair', offset_2, offset_3, list(children_3), None)
+                                value_1 = self.Node('pair', offset_2, offset_3, list(children_3), None)
                             children_2.append(value_1)
                             offset_2 = offset_3
 
@@ -1887,7 +1860,7 @@ cdef class Parser:
                 if self.builder is not None:
                     value_2 = self.builder['object'](buf, offset_0, offset_1, children_1)
                 else:
-                    value_2 = Node('object', offset_0, offset_1, list(children_1), None)
+                    value_2 = self.Node('object', offset_0, offset_1, list(children_1), None)
                 children_0.append(value_2)
                 offset_0 = offset_1
 
@@ -1898,9 +1871,7 @@ cdef class Parser:
             break
         return offset_0, line_start_0
 
-    cdef (int, int) parse_indented_value(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+    def parse_indented_value(self, buf, offset_0, line_start_0, prefix_0, buf_eof, children_0):
         while True: # note: return at end of loop
             while True: # start choice
                 offset_1 = offset_0
@@ -1959,9 +1930,7 @@ cdef class Parser:
             break
         return offset_0, line_start_0
 
-    cdef (int, int) parse_document(self, str buf, int offset_0, int line_start_0, list prefix_0, int buf_eof, list children_0):
-        cdef int count_0
-        cpdef Py_UCS4 chr
+    def parse_document(self, buf, offset_0, line_start_0, prefix_0, buf_eof, children_0):
         while True: # note: return at end of loop
             count_0 = 0
             while True:
@@ -2073,7 +2042,7 @@ cdef class Parser:
             if self.builder is not None:
                 value_0 = self.builder['document'](buf, offset_0, offset_1, children_1)
             else:
-                value_0 = Node('document', offset_0, offset_1, list(children_1), None)
+                value_0 = self.Node('document', offset_0, offset_1, list(children_1), None)
             children_0.append(value_0)
             offset_0 = offset_1
 
