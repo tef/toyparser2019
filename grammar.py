@@ -62,6 +62,55 @@ def build_class_dict(attrs, start, whitespace, newline, tabstop):
 
     builder = FunctionBuilder(names)
     rules = {k:r.canonical(builder).make_rule() for k,r in rules.items()}
+    
+    rule_childs = {}
+    dont_pop = set()
+    for name, rule in rules.items():
+        seen = set()
+        def visits(rule):
+            if rule.kind == RULE:
+                seen.add(rule.args['name'])
+            if rule.kind == SET_LINE_PREFIX:
+                prefix = rule.args['prefix']
+                if prefix: dont_pop.add(prefix)
+            
+        rule.visit(visits)
+        rule_childs[name] = seen
+
+    inlineable = {}
+    to_inline = []
+
+    for name, child in rule_childs.items():
+        seen = set((name,))
+        def walk(childs):
+            for c in childs:
+                if c in seen: return False
+                seen.add(c)
+                if not walk(rule_childs[c]):
+                    return False
+            return True
+        if child:
+            inlineable[name] = walk(child)
+        else:
+            inlineable[name] = True
+            to_inline.append(name)
+        
+    all_rules = set(rules.keys())
+    while to_inline:
+        n = to_inline.pop(0)
+        all_rules.remove(n)
+        for name in all_rules:
+            if name == n: continue
+            if n not in rule_childs[name]: continue
+            print('inlining ', n, 'in', name)
+            rules[name] = rules[name].inline(n, rules[n])
+            
+            rule_childs[name].remove(n)
+            if not rule_childs[name]:
+                to_inline.append(name)
+        if n not in dont_pop: rules.pop(n)
+        
+
 
     new_attrs['rules'] = rules
     new_attrs['start'] = start
@@ -192,10 +241,12 @@ PRINT = 'print'
 TRACE = 'trace'
 
 class GrammarNode:
-    def __init__(self, kind, *, rules=None, args=None):
+    def __init__(self, kind, *, rules=None, args=None, regular=False, nullable=True):
         self.kind = kind
         self.rules = rules
         self.args = args
+        self.regular = regular
+        self.nullable = nullable
 
     def __str__(self):
         rules = ' '.join(str(x) for x in self.rules) if self.rules else ''
@@ -205,11 +256,11 @@ class GrammarNode:
 
     def canonical(self, builder):
         rules = [r.canonical(builder) for r in self.rules] if self.rules else None
-        return GrammarNode(self.kind, rules=rules, args=self.args)
+        return GrammarNode(self.kind, rules=rules, args=self.args, regular=self.regular, nullable=self.nullable)
 
     def make_rule(self):
         rules = [r.make_rule() for r in self.rules] if self.rules else None
-        return ParserRule(self.kind, rules=rules, args=self.args)
+        return ParserRule(self.kind, rules=rules, args=self.args, regular=self.regular, nullable=self.nullable)
 
 class FunctionNode(GrammarNode):
     def __init__(self, fn, wrapper):
@@ -257,7 +308,10 @@ class ChoiceNode(GrammarNode):
         return ChoiceNode(rules)
 
     def make_rule(self):
-        return ParserRule(CHOICE, rules=[r.make_rule() for r in self.rules])
+        rules=[r.make_rule() for r in self.rules]
+        nullable = any(r.nullable for r in rules)
+        regular = all(r.regular for r in rules)
+        return ParserRule(CHOICE, rules=rules, regular=regular, nullable=nullable)
 
 class SequenceNode(GrammarNode):
     def __init__(self, rules):
@@ -272,7 +326,10 @@ class SequenceNode(GrammarNode):
         return SequenceNode(rules)
 
     def make_rule(self):
-        return ParserRule(SEQUENCE, rules=[r.make_rule() for r in self.rules])
+        rules=[r.make_rule() for r in self.rules]
+        nullable = any(r.nullable for r in rules)
+        regular = all(r.regular for r in rules)
+        return ParserRule(SEQUENCE, rules=rules, regular=regular, nullable=nullable)
 
 class ValueNode(GrammarNode):
     def __init__(self, value):
@@ -304,7 +361,10 @@ class CaptureNode(GrammarNode):
         args['name'] = self.name
         args['key'] =  self.key
         args['args'] = self.args
-        return ParserRule(CAPTURE, args=args, rules=[r.make_rule() for r in self.rules])
+        rules=[r.make_rule() for r in self.rules]
+        nullable = any(r.nullable for r in rules)
+        regular = all(r.regular for r in rules)
+        return ParserRule(CAPTURE, args=args, rules=rules, regular=regular, nullable=nullable)
 
 class MemoizeNode(GrammarNode):
     def __init__(self, rules, *, key=None):
@@ -335,10 +395,16 @@ class RepeatNode(GrammarNode):
         return RepeatNode(rules, self.min, self.max, self.key)
 
     def make_rule(self):
-        return ParserRule(REPEAT, args=dict(min=self.min, max=self.max, key=self.key), rules=[r.make_rule() for r in self.rules])
+        args=dict(min=self.min, max=self.max, key=self.key)
+        rules=[r.make_rule() for r in self.rules]
+        nullable = any(r.nullable for r in rules)
+        regular = all(r.regular for r in rules)
+        return ParserRule(REPEAT, args=args, rules=rules, regular=regular, nullable=nullable)
 
 class LiteralNode(GrammarNode):
     def __init__(self, args,invert=False):
+        if not args or "" in args:
+            raise Exception('bad')
         self.args = args
         self.invert = invert
 
@@ -351,7 +417,7 @@ class LiteralNode(GrammarNode):
         return "|".join("{}".format(repr(a)) for a in self.args)
 
     def make_rule(self):
-        return ParserRule(LITERAL, args={'invert': self.invert, 'literals': self.args})
+        return ParserRule(LITERAL, args={'invert': self.invert, 'literals': self.args}, nullable=False, regular=True)
 
 class RangeNode(GrammarNode):
     def __init__(self, args,invert):
@@ -367,9 +433,10 @@ class RangeNode(GrammarNode):
             return "[{}{}]".format(invert, self.args[0])
         return "[{}{}]".format(invert, "".join(repr(a)[1:-1] for a in self.args))
     def make_rule(self):
-        return ParserRule(RANGE, args=dict(invert=self.invert, range=self.args))
+        return ParserRule(RANGE, args=dict(invert=self.invert, range=self.args), nullable=False, regular=True)
 
 # Builders
+NULL = object()
 
 class FunctionBuilder:
     def __init__(self, names):
@@ -403,7 +470,7 @@ class FunctionBuilder:
 
     def whitespace(self, min=0, max=None, newline=False):
         if self.block_mode: raise SyntaxError()
-        self.rules.append(GrammarNode(WHITESPACE, args=dict(min=min, max=max, newline=newline)))
+        self.rules.append(GrammarNode(WHITESPACE, args=dict(min=min, max=max, newline=newline), nullable=(not min), regular=True))
 
     def capture_value(self, value):
         if self.block_mode: raise SyntaxError()
@@ -411,15 +478,15 @@ class FunctionBuilder:
 
     def newline(self):
         if self.block_mode: raise SyntaxError()
-        self.rules.append(GrammarNode(NEWLINE))
+        self.rules.append(GrammarNode(NEWLINE, regular=True, nullable=False))
 
     def eof(self):
         if self.block_mode: raise SyntaxError()
-        self.rules.append(GrammarNode(END_OF_FILE))
+        self.rules.append(GrammarNode(END_OF_FILE, regular=False, nullable=True))
 
     def end_of_line(self):
         if self.block_mode: raise SyntaxError()
-        self.rules.append(GrammarNode(END_OF_LINE))
+        self.rules.append(GrammarNode(END_OF_LINE, regular=True, nullable=True))
 
     def start_of_line(self):
         if self.block_mode: raise SyntaxError()
@@ -459,14 +526,23 @@ class FunctionBuilder:
         rules.append(counter)
         self.rules = rules
 
-    @contextmanager
-    def capture(self, name):
+    def capture(self, name=None, *, value=NULL):
         if self.block_mode: raise SyntaxError()
-        rules = self.rules
-        self.rules = []
-        yield
-        rules.append(CaptureNode(name, {}, self.rules))
-        self.rules = rules
+        if value is not NULL:
+            self.rules.append(ValueNode(value))
+            return
+        if name is None:
+            raise Exception('missing name')
+        
+        @contextmanager
+        def _capture():
+            rules = self.rules
+            self.rules = []
+            yield
+            rules.append(CaptureNode(name, {}, self.rules))
+            self.rules = rules
+
+        return _capture()
 
     @contextmanager
     def memoize(self):
@@ -621,16 +697,38 @@ class Builtins:
     newline = GrammarNode(NEWLINE)
 
 class ParserRule:
-    def __init__(self, kind, *, args=None, rules=None):
+    def __init__(self, kind, *, args=None, rules=None, nullable=True, regular=False):
         self.kind = kind
         self.args = args if args else None
         self.rules = rules if rules else None
+        self.nullable = nullable
+        self.regular = regular
 
     def __str__(self):
         rules =" ".join(str(r) for r in self.rules) if self.rules else None
         args = " ".join(f"{k}={v}" for k,v in self.args.items()) if self.args else None
 
         return "({} {})".format(self.kind, rules or args)
+
+    def visit(self, visitor):
+        visitor(self)
+        if self.rules:
+            for r in self.rules:
+                r.visit(visitor)
+    def inline(self, name, rule):
+        if self.kind == RULE:
+            if self.args['name'] == name:
+                return rule
+            else:
+                return self
+        if not self.rules:
+            return self
+        rules = [r.inline(name, rule) for r in self.rules]
+        nullable = any(r.nullable for r in rules)
+        regular = all(r.regular for r in rules)
+        return ParserRule(self.kind, args=self.args, rules=rules, nullable=nullable, regular=regular)
+
+            
 
 # Parser
 
@@ -650,6 +748,7 @@ class ParserBuilder:
         return "\n".join(self.output)
 
     def extend(self, lines):
+        if isinstance(lines, str): raise Exception('no')
         for line in lines:
             self.output.append(f"{' ' * self.indent}{line}")
 
@@ -711,13 +810,14 @@ def compile_python(grammar, builder=None, cython=False):
             children_0 = children.incr()
             offset_0 = offset.incr()
             steps.append(f"{offset_0} = {offset}")
-            steps.append(f"{children_0} = []")
-            steps.append(f"while True: # start capture")
-            build_subrules(rule.rules, steps.add_indent(), offset_0, line_start, prefix, children_0, count, values)
-            steps.append(f"    break")
-            steps.append(f"if {offset_0} == -1:")
-            steps.append(f"    {offset} = -1")
-            steps.append(f"    break")
+            if rule.rules:
+                steps.append(f"{children_0} = []")
+                steps.append(f"while True: # start capture")
+                build_subrules(rule.rules, steps.add_indent(), offset_0, line_start, prefix, children_0, count, values)
+                steps.append(f"    break")
+                steps.append(f"if {offset_0} == -1:")
+                steps.append(f"    {offset} = -1")
+                steps.append(f"    break")
             if cython:
                 node = "Node"
             else:
@@ -1031,15 +1131,13 @@ def compile_python(grammar, builder=None, cython=False):
 
 
         elif rule.kind == LITERAL:
-
-            # steps.append(f"_buf = buf[{offset}:]")
-
             for idx, literal in enumerate(rule.args['literals']):
                 _if = {0:"if"}.get(idx, "elif")
 
                 length = len(literal)
 
                 cond = f"buf[{offset}:{offset}+{length}] == {repr(literal)}"
+                # if length == 1: cond =f"buf[{offset}] == {repr(literal)}"
 
                 # cond = [f"{offset} + {length} <= buf_eof"]
                 # for i, c in enumerate(literal):

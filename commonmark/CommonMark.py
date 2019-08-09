@@ -10,21 +10,114 @@ def walk(node, indent="- "):
 def unescape(string):
     return codecs.decode(string, 'unicode_escape')
 
-builder = {
+ast_builder = {
     'document': (lambda buf, pos, end, children: children),
-    'thematic_break': (lambda buf, pos, end, children: {"hr": buf[pos:end]}),
+    'thematic_break': (lambda buf, pos, end, children: {'hr': buf[pos:end]}),
     'atx_heading': (lambda buf, pos, end, children: {"heading":children}),
-    'atx_level': (lambda buf, pos, end, children: end-pos),
     'setext_heading': (lambda buf, pos, end, children: {"heading":[children[-1]]+children[:-1]}),
     'indented_code': (lambda buf, pos, end, children: {"indented_code":children}),
     'fenced_code': (lambda buf, pos, end, children: {"fenced_code":children}),
-    'para': (lambda buf, pos, end, children: {"para":children}),
+    'info': (lambda buf, pos, end, children: {"info":buf[pos:end]}),
     'blockquote': (lambda buf, pos, end, children: {"blockquote":children}),
     'block_list': (lambda buf, pos, end, children: {"list":children}),
     'list_item': (lambda buf, pos, end, children: {"item":children}),
+    'para': (lambda buf, pos, end, children: {"para":children}),
     'text': (lambda buf, pos, end, children: buf[pos:end]),
-    'info': (lambda buf, pos, end, children: {"info":buf[pos:end]}),
 }
+
+builder = {}
+
+_builder = lambda fn:builder.__setitem__(fn.__name__,fn)
+
+@_builder
+def document(buf, pos,end, children):
+    def wrap(c):
+        if isinstance(c, tuple):
+            return f"<p>{c[0]}</p>"
+        return c
+    text = '\n'.join(wrap(c) for c in children if c)
+    return text
+
+@_builder
+def thematic_break(buf, pos,end, children):
+    return "<hr/>\n"
+
+@_builder
+def atx_heading(buf, pos,end, children):
+    return f"<h{children[0]}>{' '.join(children[1:])}</h{children[0]}>"
+
+@_builder
+def setext_heading(buf, pos,end, children):
+    return f"<h{children[-1]}>{' '.join(children[:-1])}</h{children[-1]}>"
+
+@_builder
+def indented_code(buf, pos,end, children):
+    text = "\n".join(children)
+    return f"<pre><code>{text}\n</code></pre>"
+
+@_builder
+def fenced_code(buf, pos,end, children):
+    info = children[0]
+    language = ""
+    if info:
+        language = f' class="language-{info}"'
+    text = "\n".join(children[1:])
+    return f"<pre><code{language}>{text}</code></pre>"
+
+@_builder
+def info(buf, pos,end, children):
+    text = buf[pos:end].lstrip().split(' ',1)
+    if text: return text[0]
+
+@_builder
+def blockquote(buf, pos, end, children):
+    def wrap(c):
+        if isinstance(c, tuple):
+            return f"<p>{c[0]}</p>"
+        return c
+    text = '\n'.join(wrap(c) for c in children if c)
+    return f"<blockquote>\n{text}\n</blockquote>"
+
+@_builder
+def block_list(buf, pos,end, children):
+    out = ["<ul>\n"]
+    print(children)
+    if None in children or any(None in c for c in children):
+        def wrap(c):
+            if isinstance(c, tuple):
+                return f"<p>{c[0]}</p>"
+            return c
+        for item in children:
+            if not item: continue
+            item = "\n".join(wrap(line) for line in item if line)
+            out.append(f"<li>\n{item}\n</li>\n")
+    else:
+        def wrap(c):
+            if isinstance(c, tuple):
+                return f"{c[0]}"
+            return c
+        for item in children:
+            item = "\n".join(wrap(line) for line in item) 
+            out.append(f"<li>{item}</li>\n")
+    out.extend("</ul>")
+    return "".join(out)
+
+@_builder
+def list_item(buf, pos,end, children):
+    return children
+
+@_builder
+def para(buf, pos,end, children):
+    text= " ".join(c for c in children if c)
+    return (text,)
+
+@_builder
+def text(buf, pos,end, children):
+    return buf[pos:end]
+
+@_builder
+def empty(buf, pos, end, children):
+    return None
 
 class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"], tabstop=4):
     version = 0.29
@@ -86,7 +179,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             with self.count('#') as level:
                 with self.repeat(min=1, max=6):
                     self.accept("#")
-            self.capture_value(level)
+            self.capture(value=level)
             with self.choice():
                 with self.case():
                     self.line_end()
@@ -129,11 +222,11 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             with self.case():
                 with self.repeat(min=1):
                     self.accept('-')
-                self.capture_value(2)
+                self.capture(value=2)
             with self.case():
                 with self.repeat(min=1):
                     self.accept('=')
-                self.capture_value(2)
+                self.capture(value=2)
         self.line_end()
 
     @rule()
@@ -287,7 +380,8 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                             self.start_of_line()
                             self.whitespace(max=3)
                             self.accept('-')
-                        self.capture_value("\n")
+                        with self.capture('empty'):
+                            pass
                     with self.case():
                         self.whitespace(max=3)
                         self.accept('-')
@@ -349,7 +443,8 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                     self.start_of_line()
                     with self.reject():
                         self.para_interrupt()
-                    self.capture_value("\n")
+                    with self.capture('empty'):
+                        pass
                 with self.case():
                     self.whitespace()
             # 4.1 Ex 27, 28. Thematic Breaks can interrupt a paragraph
@@ -371,6 +466,8 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             self.whitespace()
             self.newline()
             self.start_of_line()
+        with self.capture("empty"):
+            pass
 
     @rule() # 2.1 line ends by newline or eof
     def line_end(self):
@@ -394,9 +491,9 @@ def _markup(buf):
     if node:
         print("test")
         for b in buf.splitlines():
-            print("  ", b)
+            print(b)
         print()
-        print(">", node)
+        print(node)
         print()
         # print(node.build(buf, builder))
 
@@ -552,3 +649,6 @@ markup("""\
      
     t
 """)
+
+with open("../README.md") as readme:
+    markup(readme.read())
