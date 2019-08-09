@@ -108,7 +108,20 @@ def build_class_dict(attrs, start, whitespace, newline, tabstop):
             rule_childs[name].remove(n)
             if not rule_childs[name]:
                 to_inline.append(name)
-        if n not in dont_pop: rules.pop(n)
+        if n not in dont_pop: 
+            safe = True
+            for name, rule in rules.items():
+                if name == n: continue
+                def _visit(rule):
+                    nonlocal safe
+                    if rule.kind == RULE and rule.args['name'] == n:
+                        safe = False
+                    if rule.kind == SET_LINE_PREFIX and rule.args['prefix'] == n:
+                        safe = False
+                rule.visit(_visit)
+                if not safe: break
+            if safe:
+                rules.pop(n)
         
 
 
@@ -287,7 +300,7 @@ class NamedNode(GrammarNode):
         return self
 
     def make_rule(self):
-        return ParserRule(RULE, args=dict(name=self.name))
+        return ParserRule(RULE, args=dict(name=self.name, inline=False))
 
 class ChoiceNode(GrammarNode):
     def __init__(self, rules):
@@ -445,10 +458,13 @@ class FunctionBuilder:
         for name, rule in names.items():
             if hasattr(self, name): raise SyntaxError()
             def callback(*, rule=rule):
-                    self.rule(rule)
+                self.rule(rule)
             def _repeat(min=0, max=None, *, rule=rule):
                 if self.block_mode: raise SyntaxError()
                 self.rule(RepeatNode([rule], min=min, max=max))
+            def _inline(min=0, max=None, *, rule=rule):
+                if self.block_mode: raise SyntaxError()
+                self.rule(GrammarNode(RULE, args=dict(name=rule.name, inline=True)))
             @contextmanager
             def _as_prefix(*, rule=rule, name=name):
                 if self.block_mode: raise SyntaxError()
@@ -458,6 +474,7 @@ class FunctionBuilder:
                 self.rules = rules
             callback.repeat = _repeat
             callback.as_line_prefix = _as_prefix
+            callback.inline = _inline
             setattr(self, name, callback)
 
     def rule(self, rule):
@@ -717,7 +734,7 @@ class ParserRule:
                 r.visit(visitor)
     def inline(self, name, rule):
         if self.kind == RULE:
-            if self.args['name'] == name:
+            if self.args['name'] == name and self.args['inline']:
                 return rule
             else:
                 return self
