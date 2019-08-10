@@ -3247,7 +3247,6 @@ class Parser:
             if indent_end_0 == leftover_offset_0 and leftover_count_0 > 0:
                  count_0 += leftover_count_0
                  leftover_count_0 = 0
-                 print('leftover tab')
             count_1 = indent_end_0
             for chr in buf[indent_end_0:offset_0]:
                 count_0 += (self.tabstop-(count_1-line_start_0)%self.tabstop) if chr == '	' else 1

@@ -1068,7 +1068,6 @@ def compile_python(grammar, builder=None, cython=False):
                         f"if {indent_end} == {leftover_offset} and {leftover_count} > 0:",
                         f"     {count} += {leftover_count}", 
                         f"     {leftover_count} = 0",
-                        f"     print('leftover tab')",
                         f"{c0} = {indent_end}",
                         f"for chr in buf[{indent_end}:{offset}]:",
                         f"    {count} += (self.tabstop-({c0}-{line_start})%self.tabstop) if chr == '\t' else 1",

@@ -740,7 +740,7 @@ markup("""\
 """)
 
 with open("../README.md") as readme:
-    _markup(readme.read())
+    markup(readme.read())
 
 
 markup("""\
