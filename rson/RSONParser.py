@@ -1,13 +1,9 @@
 class Parser:
     def __init__(self, builder=None, tabstop=None, allow_mixed_indent=False):
          self.builder = builder
-         self.tabstop = tabstop or self.TABSTOP
+         self.tabstop = tabstop or 8
          self.cache = None
          self.allow_mixed_indent = allow_mixed_indent
-
-    NEWLINE = ()
-    WHITESPACE = (' ', '\t', '\r', '\n', '\ufeff')
-    TABSTOP = 8
 
     class Node:
         def __init__(self, name, start, end, children, value):
@@ -40,7 +36,7 @@ class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t\r\n\ufeff':
                     offset_0 +=1
-                    count_0 +=1
+                    count_0 += self.tabstop if chr == '	' else 1
                 else:
                     break
 
@@ -91,7 +87,7 @@ class Parser:
                         chr = buf[offset_1]
                         if chr in ' \t\r\n\ufeff':
                             offset_1 +=1
-                            count_1 +=1
+                            count_1 += self.tabstop if chr == '	' else 1
                         else:
                             break
 
@@ -112,7 +108,7 @@ class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t\r\n\ufeff':
                     offset_0 +=1
-                    count_0 +=1
+                    count_0 += self.tabstop if chr == '	' else 1
                 else:
                     break
 
@@ -140,7 +136,7 @@ class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t\r\n\ufeff':
                     offset_0 +=1
-                    count_0 +=1
+                    count_0 += self.tabstop if chr == '	' else 1
                 else:
                     break
 
@@ -191,7 +187,7 @@ class Parser:
                         chr = buf[offset_1]
                         if chr in ' \t\r\n\ufeff':
                             offset_1 +=1
-                            count_1 +=1
+                            count_1 += self.tabstop if chr == '	' else 1
                         else:
                             break
 
@@ -212,7 +208,7 @@ class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t\r\n\ufeff':
                     offset_0 +=1
-                    count_0 +=1
+                    count_0 += self.tabstop if chr == '	' else 1
                 else:
                     break
 
@@ -3397,7 +3393,7 @@ class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t\r\n\ufeff':
                     offset_0 +=1
-                    count_0 +=1
+                    count_0 += self.tabstop if chr == '	' else 1
                 else:
                     break
 
@@ -3448,7 +3444,7 @@ class Parser:
                         chr = buf[offset_1]
                         if chr in ' \t\r\n\ufeff':
                             offset_1 +=1
-                            count_1 +=1
+                            count_1 += self.tabstop if chr == '	' else 1
                         else:
                             break
 
@@ -3469,7 +3465,7 @@ class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t\r\n\ufeff':
                     offset_0 +=1
-                    count_0 +=1
+                    count_0 += self.tabstop if chr == '	' else 1
                 else:
                     break
 
@@ -3498,7 +3494,7 @@ class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t\r\n\ufeff':
                                         offset_3 +=1
-                                        count_2 +=1
+                                        count_2 += self.tabstop if chr == '	' else 1
                                     else:
                                         break
 
@@ -3549,7 +3545,7 @@ class Parser:
                                             chr = buf[offset_4]
                                             if chr in ' \t\r\n\ufeff':
                                                 offset_4 +=1
-                                                count_3 +=1
+                                                count_3 += self.tabstop if chr == '	' else 1
                                             else:
                                                 break
 
@@ -3570,7 +3566,7 @@ class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t\r\n\ufeff':
                                         offset_3 +=1
-                                        count_2 +=1
+                                        count_2 += self.tabstop if chr == '	' else 1
                                     else:
                                         break
 
@@ -3586,7 +3582,7 @@ class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t\r\n\ufeff':
                                         offset_3 +=1
-                                        count_2 +=1
+                                        count_2 += self.tabstop if chr == '	' else 1
                                     else:
                                         break
 
@@ -3637,7 +3633,7 @@ class Parser:
                                             chr = buf[offset_4]
                                             if chr in ' \t\r\n\ufeff':
                                                 offset_4 +=1
-                                                count_3 +=1
+                                                count_3 += self.tabstop if chr == '	' else 1
                                             else:
                                                 break
 
@@ -3658,7 +3654,7 @@ class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t\r\n\ufeff':
                                         offset_3 +=1
-                                        count_2 +=1
+                                        count_2 += self.tabstop if chr == '	' else 1
                                     else:
                                         break
 
@@ -3684,7 +3680,7 @@ class Parser:
                             chr = buf[offset_2]
                             if chr in ' \t\r\n\ufeff':
                                 offset_2 +=1
-                                count_1 +=1
+                                count_1 += self.tabstop if chr == '	' else 1
                             else:
                                 break
 
@@ -3735,7 +3731,7 @@ class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t\r\n\ufeff':
                                         offset_3 +=1
-                                        count_2 +=1
+                                        count_2 += self.tabstop if chr == '	' else 1
                                     else:
                                         break
 
@@ -3756,7 +3752,7 @@ class Parser:
                             chr = buf[offset_2]
                             if chr in ' \t\r\n\ufeff':
                                 offset_2 +=1
-                                count_1 +=1
+                                count_1 += self.tabstop if chr == '	' else 1
                             else:
                                 break
 
@@ -3778,7 +3774,7 @@ class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t\r\n\ufeff':
                                         offset_3 +=1
-                                        count_2 +=1
+                                        count_2 += self.tabstop if chr == '	' else 1
                                     else:
                                         break
 
@@ -3829,7 +3825,7 @@ class Parser:
                                             chr = buf[offset_4]
                                             if chr in ' \t\r\n\ufeff':
                                                 offset_4 +=1
-                                                count_3 +=1
+                                                count_3 += self.tabstop if chr == '	' else 1
                                             else:
                                                 break
 
@@ -3850,7 +3846,7 @@ class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t\r\n\ufeff':
                                         offset_3 +=1
-                                        count_2 +=1
+                                        count_2 += self.tabstop if chr == '	' else 1
                                     else:
                                         break
 
@@ -3915,7 +3911,7 @@ class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t\r\n\ufeff':
                     offset_0 +=1
-                    count_0 +=1
+                    count_0 += self.tabstop if chr == '	' else 1
                 else:
                     break
 
@@ -3966,7 +3962,7 @@ class Parser:
                         chr = buf[offset_1]
                         if chr in ' \t\r\n\ufeff':
                             offset_1 +=1
-                            count_1 +=1
+                            count_1 += self.tabstop if chr == '	' else 1
                         else:
                             break
 
@@ -3987,7 +3983,7 @@ class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t\r\n\ufeff':
                     offset_0 +=1
-                    count_0 +=1
+                    count_0 += self.tabstop if chr == '	' else 1
                 else:
                     break
 
@@ -4013,7 +4009,7 @@ class Parser:
                                 chr = buf[offset_3]
                                 if chr in ' \t\r\n\ufeff':
                                     offset_3 +=1
-                                    count_1 +=1
+                                    count_1 += self.tabstop if chr == '	' else 1
                                 else:
                                     break
 
@@ -4064,7 +4060,7 @@ class Parser:
                                         chr = buf[offset_4]
                                         if chr in ' \t\r\n\ufeff':
                                             offset_4 +=1
-                                            count_2 +=1
+                                            count_2 += self.tabstop if chr == '	' else 1
                                         else:
                                             break
 
@@ -4085,7 +4081,7 @@ class Parser:
                                 chr = buf[offset_3]
                                 if chr in ' \t\r\n\ufeff':
                                     offset_3 +=1
-                                    count_1 +=1
+                                    count_1 += self.tabstop if chr == '	' else 1
                                 else:
                                     break
 
@@ -4101,7 +4097,7 @@ class Parser:
                                 chr = buf[offset_3]
                                 if chr in ' \t\r\n\ufeff':
                                     offset_3 +=1
-                                    count_1 +=1
+                                    count_1 += self.tabstop if chr == '	' else 1
                                 else:
                                     break
 
@@ -4152,7 +4148,7 @@ class Parser:
                                         chr = buf[offset_4]
                                         if chr in ' \t\r\n\ufeff':
                                             offset_4 +=1
-                                            count_2 +=1
+                                            count_2 += self.tabstop if chr == '	' else 1
                                         else:
                                             break
 
@@ -4173,7 +4169,7 @@ class Parser:
                                 chr = buf[offset_3]
                                 if chr in ' \t\r\n\ufeff':
                                     offset_3 +=1
-                                    count_1 +=1
+                                    count_1 += self.tabstop if chr == '	' else 1
                                 else:
                                     break
 
@@ -4198,7 +4194,7 @@ class Parser:
                             chr = buf[offset_2]
                             if chr in ' \t\r\n\ufeff':
                                 offset_2 +=1
-                                count_1 +=1
+                                count_1 += self.tabstop if chr == '	' else 1
                             else:
                                 break
 
@@ -4249,7 +4245,7 @@ class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t\r\n\ufeff':
                                         offset_3 +=1
-                                        count_2 +=1
+                                        count_2 += self.tabstop if chr == '	' else 1
                                     else:
                                         break
 
@@ -4270,7 +4266,7 @@ class Parser:
                             chr = buf[offset_2]
                             if chr in ' \t\r\n\ufeff':
                                 offset_2 +=1
-                                count_1 +=1
+                                count_1 += self.tabstop if chr == '	' else 1
                             else:
                                 break
 
@@ -4292,7 +4288,7 @@ class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t\r\n\ufeff':
                                         offset_3 +=1
-                                        count_2 +=1
+                                        count_2 += self.tabstop if chr == '	' else 1
                                     else:
                                         break
 
@@ -4343,7 +4339,7 @@ class Parser:
                                             chr = buf[offset_4]
                                             if chr in ' \t\r\n\ufeff':
                                                 offset_4 +=1
-                                                count_3 +=1
+                                                count_3 += self.tabstop if chr == '	' else 1
                                             else:
                                                 break
 
@@ -4364,7 +4360,7 @@ class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t\r\n\ufeff':
                                         offset_3 +=1
-                                        count_2 +=1
+                                        count_2 += self.tabstop if chr == '	' else 1
                                     else:
                                         break
 
@@ -4381,7 +4377,7 @@ class Parser:
                                         chr = buf[offset_4]
                                         if chr in ' \t\r\n\ufeff':
                                             offset_4 +=1
-                                            count_2 +=1
+                                            count_2 += self.tabstop if chr == '	' else 1
                                         else:
                                             break
 
@@ -4432,7 +4428,7 @@ class Parser:
                                                 chr = buf[offset_5]
                                                 if chr in ' \t\r\n\ufeff':
                                                     offset_5 +=1
-                                                    count_3 +=1
+                                                    count_3 += self.tabstop if chr == '	' else 1
                                                 else:
                                                     break
 
@@ -4453,7 +4449,7 @@ class Parser:
                                         chr = buf[offset_4]
                                         if chr in ' \t\r\n\ufeff':
                                             offset_4 +=1
-                                            count_2 +=1
+                                            count_2 += self.tabstop if chr == '	' else 1
                                         else:
                                             break
 
@@ -4469,7 +4465,7 @@ class Parser:
                                         chr = buf[offset_4]
                                         if chr in ' \t\r\n\ufeff':
                                             offset_4 +=1
-                                            count_2 +=1
+                                            count_2 += self.tabstop if chr == '	' else 1
                                         else:
                                             break
 
@@ -4520,7 +4516,7 @@ class Parser:
                                                 chr = buf[offset_5]
                                                 if chr in ' \t\r\n\ufeff':
                                                     offset_5 +=1
-                                                    count_3 +=1
+                                                    count_3 += self.tabstop if chr == '	' else 1
                                                 else:
                                                     break
 
@@ -4541,7 +4537,7 @@ class Parser:
                                         chr = buf[offset_4]
                                         if chr in ' \t\r\n\ufeff':
                                             offset_4 +=1
-                                            count_2 +=1
+                                            count_2 += self.tabstop if chr == '	' else 1
                                         else:
                                             break
 
@@ -4566,7 +4562,7 @@ class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t\r\n\ufeff':
                                         offset_3 +=1
-                                        count_2 +=1
+                                        count_2 += self.tabstop if chr == '	' else 1
                                     else:
                                         break
 
@@ -4617,7 +4613,7 @@ class Parser:
                                             chr = buf[offset_4]
                                             if chr in ' \t\r\n\ufeff':
                                                 offset_4 +=1
-                                                count_3 +=1
+                                                count_3 += self.tabstop if chr == '	' else 1
                                             else:
                                                 break
 
@@ -4638,7 +4634,7 @@ class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t\r\n\ufeff':
                                         offset_3 +=1
-                                        count_2 +=1
+                                        count_2 += self.tabstop if chr == '	' else 1
                                     else:
                                         break
 
@@ -4672,7 +4668,7 @@ class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t\r\n\ufeff':
                                         offset_3 +=1
-                                        count_2 +=1
+                                        count_2 += self.tabstop if chr == '	' else 1
                                     else:
                                         break
 
@@ -4723,7 +4719,7 @@ class Parser:
                                             chr = buf[offset_4]
                                             if chr in ' \t\r\n\ufeff':
                                                 offset_4 +=1
-                                                count_3 +=1
+                                                count_3 += self.tabstop if chr == '	' else 1
                                             else:
                                                 break
 
@@ -4744,7 +4740,7 @@ class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t\r\n\ufeff':
                                         offset_3 +=1
-                                        count_2 +=1
+                                        count_2 += self.tabstop if chr == '	' else 1
                                     else:
                                         break
 

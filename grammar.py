@@ -1034,15 +1034,14 @@ def compile_python(grammar, builder=None, cython=False):
                     
                 steps.extend((
                         f"def _indent(buf, offset, line_start, prefix, buf_eof, children, count={count}, allow_mixed_indent=self.allow_mixed_indent):",
-                #        f"    print('nice', offset, count, repr(buf[offset:offset+8]))",
                         f"    saw_tab, saw_not_tab = False, False",
                         f"    while count > 0 and offset < buf_eof:",
                         f"        chr = buf[offset]",
                         f"        if {cond}:",
                         f"            offset +=1",
-                        f"            count -= self.tabstop if chr == 9 else 1",
+                        f"            count -= self.tabstop if chr == '\t' else 1",
                         f"            if not allow_mixed_indent:",
-                        f"                if chr == 9: saw_tab = True",
+                        f"                if chr == '\t': saw_tab = True",
                         f"                else: saw_not_tab = True",
                         f"                if saw_tab and saw_not_tab:",
                         f"                     offset -1; break",
@@ -1088,7 +1087,7 @@ def compile_python(grammar, builder=None, cython=False):
                 f"       raise Exception('bar')",
                 f"    if {offset} == -1:"
                 f"        break",
-                f"    {line_start} = {offset}",
+                f"    {indent_end} = {offset}",
                 f"if {offset} == -1:",
                 f"    break",
             ))
@@ -1168,20 +1167,25 @@ def compile_python(grammar, builder=None, cython=False):
 
 
         elif rule.kind == LITERAL:
+            literals = rule.args['literals']
+
             for idx, literal in enumerate(rule.args['literals']):
                 _if = {0:"if"}.get(idx, "elif")
 
-                length = len(literal)
-
-                cond = f"buf[{offset}:{offset}+{length}] == {repr(literal)}"
-                # if length == 1: cond =f"buf[{offset}] == {repr(literal)}"
-
-                # cond = [f"{offset} + {length} <= buf_eof"]
-                # for i, c in enumerate(literal):
-                #     cond.append(f"buf[{offset}+{i}] == {repr(c)}")
-                # cond = " and ".join(cond)
-
-                # cond = f"_buf.startswith({repr(literal)})"
+                if literal in values:
+                    vliteral = values[literal]
+                    length = f"len({literal})"
+                    cond = f"buf[{offset}:{offset}+{length}] == {(vliteral)}"
+                else:
+                    length = len(literal)
+                    vliteral = repr(literal)
+                    if cython:
+                        cond = [f"{offset} + {length} <= buf_eof"]
+                        for i, c in enumerate(literal):
+                             cond.append(f"buf[{offset}+{i}] == {repr(c)}")
+                        cond = " and ".join(cond)
+                    else:
+                        cond = f"buf[{offset}:{offset}+{length}] == {(vliteral)}"
 
                 steps.extend((
                     f"{_if} {cond}:",
@@ -1238,7 +1242,7 @@ def compile_python(grammar, builder=None, cython=False):
                         f"        {count} +=1",
                         f"    elif {cond2}:",
                         f"        {offset} +=1",
-                        f"        {count} +=1",
+                        f"        {count} += self.tabstop if chr == '\t' else 1",
                         f"    else:",
                         # f"        print(repr(buf[{offset}:{offset}+5]))",
                         f"        break",
@@ -1252,7 +1256,7 @@ def compile_python(grammar, builder=None, cython=False):
                     f"    chr = buf[{offset}]",
                     f"    if {cond2}:",
                     f"        {offset} +=1",
-                    f"        {count} +=1",
+                    f"        {count} += self.tabstop if chr == '\t' else 1",
                     f"    else:",
                     f"        break",
                 ))
@@ -1265,6 +1269,19 @@ def compile_python(grammar, builder=None, cython=False):
             elif _min is not None and _min > 0:
                 steps.extend((
                     f"if {count} < {repr(_min)}:",
+                    f"    {offset} = -1",
+                    f"    break",
+                ))
+
+            if _maxv:
+                steps.extend((
+                    f"if {count} > {_maxv}:",
+                    f"    {offset} = -1",
+                    f"    break",
+                ))
+            elif _max is not None:
+                steps.extend((
+                    f"if {count} > {repr(_max)}:",
                     f"    {offset} = -1",
                     f"    break",
                 ))
@@ -1385,13 +1402,9 @@ def compile_python(grammar, builder=None, cython=False):
             f"",
             f"    def __init__(self, builder=None, tabstop=None, allow_mixed_indent=True):",
             f"         self.builder = builder",
-            f"         self.tabstop = tabstop or self.TABSTOP",
+            f"         self.tabstop = tabstop or {grammar.tabstop}",
             f"         self.cache = None",
             f"         self.allow_mixed_indent = allow_mixed_indent",
-            f"",
-            f"    NEWLINE = {newline}",
-            f"    WHITESPACE = {whitespace}",
-            f"    TABSTOP = {grammar.tabstop}",
             "",
         ))
         output = output.add_indent(4)
@@ -1401,13 +1414,9 @@ def compile_python(grammar, builder=None, cython=False):
             f"class Parser:",
             f"    def __init__(self, builder=None, tabstop=None, allow_mixed_indent=False):",
             f"         self.builder = builder",
-            f"         self.tabstop = tabstop or self.TABSTOP",
+            f"         self.tabstop = tabstop or {grammar.tabstop}",
             f"         self.cache = None",
             f"         self.allow_mixed_indent = allow_mixed_indent",
-            "",
-            f"    NEWLINE = {newline}",
-            f"    WHITESPACE = {whitespace}",
-            f"    TABSTOP = {grammar.tabstop}",
             "",
         ))
 
@@ -1419,7 +1428,8 @@ def compile_python(grammar, builder=None, cython=False):
         f"def parse(self, buf, offset=0, end=None, err=None):",
         f"    self.cache = dict()",
         f"    end = len(buf) if end is None else end",
-        f"    line_start, prefix, eof, children = offset, [], end, []",
+        f"    line_start, indent_end, eof = offset, offset, end
+        f"    prefix, children = [], []",
         f"    new_offset, line_start = self.parse_{start_rule}(buf, offset, line_start, prefix, eof, children)",
         f"    if children and new_offset == end: return children[-1]",
         f"    print('no', offset, new_offset, end, buf[new_offset:])",
@@ -1447,6 +1457,7 @@ def compile_python(grammar, builder=None, cython=False):
                 output.add_indent(8),
                 VarBuilder("offset", maxes=maxes),
                 VarBuilder('line_start', maxes=maxes),
+                VarBuilder('indent_end', maxes=maxes),
                 VarBuilder('prefix', maxes=maxes),
                 VarBuilder('children', maxes=maxes),
                 VarBuilder("count", maxes=maxes), values, )

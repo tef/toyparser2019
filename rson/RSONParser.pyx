@@ -21,13 +21,9 @@ cdef class Parser:
 
     def __init__(self, builder=None, tabstop=None, allow_mixed_indent=True):
          self.builder = builder
-         self.tabstop = tabstop or self.TABSTOP
+         self.tabstop = tabstop or 8
          self.cache = None
          self.allow_mixed_indent = allow_mixed_indent
-
-    NEWLINE = ()
-    WHITESPACE = (' ', '\t', '\r', '\n', '\ufeff')
-    TABSTOP = 8
 
     def parse(self, buf, offset=0, end=None, err=None):
         self.cache = dict()
@@ -51,7 +47,7 @@ cdef class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t\r\n\ufeff':
                     offset_0 +=1
-                    count_0 +=1
+                    count_0 += self.tabstop if chr == '	' else 1
                 else:
                     break
 
@@ -61,7 +57,7 @@ cdef class Parser:
                 line_start_1 = line_start_0
                 children_1 = [] if children_0 is not None else None
                 while True:
-                    if buf[offset_1:offset_1+1] == '#':
+                    if offset_1 + 1 <= buf_eof and buf[offset_1+0] == '#':
                         offset_1 += 1
                     else:
                         offset_1 = -1
@@ -102,7 +98,7 @@ cdef class Parser:
                         chr = buf[offset_1]
                         if chr in ' \t\r\n\ufeff':
                             offset_1 +=1
-                            count_1 +=1
+                            count_1 += self.tabstop if chr == '	' else 1
                         else:
                             break
 
@@ -123,7 +119,7 @@ cdef class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t\r\n\ufeff':
                     offset_0 +=1
-                    count_0 +=1
+                    count_0 += self.tabstop if chr == '	' else 1
                 else:
                     break
 
@@ -151,7 +147,7 @@ cdef class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t\r\n\ufeff':
                     offset_0 +=1
-                    count_0 +=1
+                    count_0 += self.tabstop if chr == '	' else 1
                 else:
                     break
 
@@ -161,7 +157,7 @@ cdef class Parser:
                 line_start_1 = line_start_0
                 children_1 = [] if children_0 is not None else None
                 while True:
-                    if buf[offset_1:offset_1+1] == '#':
+                    if offset_1 + 1 <= buf_eof and buf[offset_1+0] == '#':
                         offset_1 += 1
                     else:
                         offset_1 = -1
@@ -202,7 +198,7 @@ cdef class Parser:
                         chr = buf[offset_1]
                         if chr in ' \t\r\n\ufeff':
                             offset_1 +=1
-                            count_1 +=1
+                            count_1 += self.tabstop if chr == '	' else 1
                         else:
                             break
 
@@ -223,7 +219,7 @@ cdef class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t\r\n\ufeff':
                     offset_0 +=1
-                    count_0 +=1
+                    count_0 += self.tabstop if chr == '	' else 1
                 else:
                     break
 
@@ -248,7 +244,7 @@ cdef class Parser:
                     offset_2 = offset_1
                     children_2 = []
                     while True: # start capture
-                        if buf[offset_2:offset_2+1] == '@':
+                        if offset_2 + 1 <= buf_eof and buf[offset_2+0] == '@':
                             offset_2 += 1
                         else:
                             offset_2 = -1
@@ -318,7 +314,7 @@ cdef class Parser:
                         children_2.append(value_0)
                         offset_2 = offset_3
 
-                        if buf[offset_2:offset_2+1] == ' ':
+                        if offset_2 + 1 <= buf_eof and buf[offset_2+0] == ' ':
                             offset_2 += 1
                         else:
                             offset_2 = -1
@@ -425,7 +421,7 @@ cdef class Parser:
                         line_start_2 = line_start_1
                         children_2 = [] if children_1 is not None else None
                         while True: # case
-                            if buf[offset_2:offset_2+1] == '"':
+                            if offset_2 + 1 <= buf_eof and buf[offset_2+0] == '"':
                                 offset_2 += 1
                             else:
                                 offset_2 = -1
@@ -479,7 +475,7 @@ cdef class Parser:
                                             line_start_4 = line_start_3
                                             children_5 = [] if children_4 is not None else None
                                             while True: # case
-                                                if buf[offset_5:offset_5+2] == '\\x':
+                                                if offset_5 + 2 <= buf_eof and buf[offset_5+0] == '\\' and buf[offset_5+1] == 'x':
                                                     offset_5 += 2
                                                 else:
                                                     offset_5 = -1
@@ -550,7 +546,7 @@ cdef class Parser:
                                             line_start_4 = line_start_3
                                             children_5 = [] if children_4 is not None else None
                                             while True: # case
-                                                if buf[offset_5:offset_5+2] == '\\u':
+                                                if offset_5 + 2 <= buf_eof and buf[offset_5+0] == '\\' and buf[offset_5+1] == 'u':
                                                     offset_5 += 2
                                                 else:
                                                     offset_5 = -1
@@ -559,7 +555,7 @@ cdef class Parser:
                                                 while True: # start reject
                                                     children_6 = []
                                                     offset_6, line_start_5 = offset_5, line_start_4
-                                                    if buf[offset_6:offset_6+3] == '000':
+                                                    if offset_6 + 3 <= buf_eof and buf[offset_6+0] == '0' and buf[offset_6+1] == '0' and buf[offset_6+2] == '0':
                                                         offset_6 += 3
                                                     else:
                                                         offset_6 = -1
@@ -585,9 +581,9 @@ cdef class Parser:
                                                 while True: # start reject
                                                     children_6 = []
                                                     offset_6, line_start_5 = offset_5, line_start_4
-                                                    if buf[offset_6:offset_6+1] == 'D':
+                                                    if offset_6 + 1 <= buf_eof and buf[offset_6+0] == 'D':
                                                         offset_6 += 1
-                                                    elif buf[offset_6:offset_6+1] == 'd':
+                                                    elif offset_6 + 1 <= buf_eof and buf[offset_6+0] == 'd':
                                                         offset_6 += 1
                                                     else:
                                                         offset_6 = -1
@@ -689,7 +685,7 @@ cdef class Parser:
                                             line_start_4 = line_start_3
                                             children_5 = [] if children_4 is not None else None
                                             while True: # case
-                                                if buf[offset_5:offset_5+2] == '\\U':
+                                                if offset_5 + 2 <= buf_eof and buf[offset_5+0] == '\\' and buf[offset_5+1] == 'U':
                                                     offset_5 += 2
                                                 else:
                                                     offset_5 = -1
@@ -698,7 +694,7 @@ cdef class Parser:
                                                 while True: # start reject
                                                     children_6 = []
                                                     offset_6, line_start_5 = offset_5, line_start_4
-                                                    if buf[offset_6:offset_6+7] == '0000000':
+                                                    if offset_6 + 7 <= buf_eof and buf[offset_6+0] == '0' and buf[offset_6+1] == '0' and buf[offset_6+2] == '0' and buf[offset_6+3] == '0' and buf[offset_6+4] == '0' and buf[offset_6+5] == '0' and buf[offset_6+6] == '0':
                                                         offset_6 += 7
                                                     else:
                                                         offset_6 = -1
@@ -724,15 +720,15 @@ cdef class Parser:
                                                 while True: # start reject
                                                     children_6 = []
                                                     offset_6, line_start_5 = offset_5, line_start_4
-                                                    if buf[offset_6:offset_6+4] == '0000':
+                                                    if offset_6 + 4 <= buf_eof and buf[offset_6+0] == '0' and buf[offset_6+1] == '0' and buf[offset_6+2] == '0' and buf[offset_6+3] == '0':
                                                         offset_6 += 4
                                                     else:
                                                         offset_6 = -1
                                                         break
 
-                                                    if buf[offset_6:offset_6+1] == 'D':
+                                                    if offset_6 + 1 <= buf_eof and buf[offset_6+0] == 'D':
                                                         offset_6 += 1
-                                                    elif buf[offset_6:offset_6+1] == 'd':
+                                                    elif offset_6 + 1 <= buf_eof and buf[offset_6+0] == 'd':
                                                         offset_6 += 1
                                                     else:
                                                         offset_6 = -1
@@ -898,7 +894,7 @@ cdef class Parser:
                                             line_start_4 = line_start_3
                                             children_5 = [] if children_4 is not None else None
                                             while True: # case
-                                                if buf[offset_5:offset_5+1] == '\\':
+                                                if offset_5 + 1 <= buf_eof and buf[offset_5+0] == '\\':
                                                     offset_5 += 1
                                                 else:
                                                     offset_5 = -1
@@ -971,7 +967,7 @@ cdef class Parser:
                             children_2.append(value_0)
                             offset_2 = offset_3
 
-                            if buf[offset_2:offset_2+1] == '"':
+                            if offset_2 + 1 <= buf_eof and buf[offset_2+0] == '"':
                                 offset_2 += 1
                             else:
                                 offset_2 = -1
@@ -990,7 +986,7 @@ cdef class Parser:
                         line_start_2 = line_start_1
                         children_2 = [] if children_1 is not None else None
                         while True: # case
-                            if buf[offset_2:offset_2+1] == "'":
+                            if offset_2 + 1 <= buf_eof and buf[offset_2+0] == "'":
                                 offset_2 += 1
                             else:
                                 offset_2 = -1
@@ -1044,7 +1040,7 @@ cdef class Parser:
                                             line_start_4 = line_start_3
                                             children_5 = [] if children_4 is not None else None
                                             while True: # case
-                                                if buf[offset_5:offset_5+2] == '\\x':
+                                                if offset_5 + 2 <= buf_eof and buf[offset_5+0] == '\\' and buf[offset_5+1] == 'x':
                                                     offset_5 += 2
                                                 else:
                                                     offset_5 = -1
@@ -1115,7 +1111,7 @@ cdef class Parser:
                                             line_start_4 = line_start_3
                                             children_5 = [] if children_4 is not None else None
                                             while True: # case
-                                                if buf[offset_5:offset_5+2] == '\\u':
+                                                if offset_5 + 2 <= buf_eof and buf[offset_5+0] == '\\' and buf[offset_5+1] == 'u':
                                                     offset_5 += 2
                                                 else:
                                                     offset_5 = -1
@@ -1124,7 +1120,7 @@ cdef class Parser:
                                                 while True: # start reject
                                                     children_6 = []
                                                     offset_6, line_start_5 = offset_5, line_start_4
-                                                    if buf[offset_6:offset_6+2] == '00':
+                                                    if offset_6 + 2 <= buf_eof and buf[offset_6+0] == '0' and buf[offset_6+1] == '0':
                                                         offset_6 += 2
                                                     else:
                                                         offset_6 = -1
@@ -1150,9 +1146,9 @@ cdef class Parser:
                                                 while True: # start reject
                                                     children_6 = []
                                                     offset_6, line_start_5 = offset_5, line_start_4
-                                                    if buf[offset_6:offset_6+1] == 'D':
+                                                    if offset_6 + 1 <= buf_eof and buf[offset_6+0] == 'D':
                                                         offset_6 += 1
-                                                    elif buf[offset_6:offset_6+1] == 'd':
+                                                    elif offset_6 + 1 <= buf_eof and buf[offset_6+0] == 'd':
                                                         offset_6 += 1
                                                     else:
                                                         offset_6 = -1
@@ -1254,7 +1250,7 @@ cdef class Parser:
                                             line_start_4 = line_start_3
                                             children_5 = [] if children_4 is not None else None
                                             while True: # case
-                                                if buf[offset_5:offset_5+2] == '\\U':
+                                                if offset_5 + 2 <= buf_eof and buf[offset_5+0] == '\\' and buf[offset_5+1] == 'U':
                                                     offset_5 += 2
                                                 else:
                                                     offset_5 = -1
@@ -1263,7 +1259,7 @@ cdef class Parser:
                                                 while True: # start reject
                                                     children_6 = []
                                                     offset_6, line_start_5 = offset_5, line_start_4
-                                                    if buf[offset_6:offset_6+6] == '000000':
+                                                    if offset_6 + 6 <= buf_eof and buf[offset_6+0] == '0' and buf[offset_6+1] == '0' and buf[offset_6+2] == '0' and buf[offset_6+3] == '0' and buf[offset_6+4] == '0' and buf[offset_6+5] == '0':
                                                         offset_6 += 6
                                                     else:
                                                         offset_6 = -1
@@ -1289,15 +1285,15 @@ cdef class Parser:
                                                 while True: # start reject
                                                     children_6 = []
                                                     offset_6, line_start_5 = offset_5, line_start_4
-                                                    if buf[offset_6:offset_6+4] == '0000':
+                                                    if offset_6 + 4 <= buf_eof and buf[offset_6+0] == '0' and buf[offset_6+1] == '0' and buf[offset_6+2] == '0' and buf[offset_6+3] == '0':
                                                         offset_6 += 4
                                                     else:
                                                         offset_6 = -1
                                                         break
 
-                                                    if buf[offset_6:offset_6+1] == 'D':
+                                                    if offset_6 + 1 <= buf_eof and buf[offset_6+0] == 'D':
                                                         offset_6 += 1
-                                                    elif buf[offset_6:offset_6+1] == 'd':
+                                                    elif offset_6 + 1 <= buf_eof and buf[offset_6+0] == 'd':
                                                         offset_6 += 1
                                                     else:
                                                         offset_6 = -1
@@ -1463,7 +1459,7 @@ cdef class Parser:
                                             line_start_4 = line_start_3
                                             children_5 = [] if children_4 is not None else None
                                             while True: # case
-                                                if buf[offset_5:offset_5+1] == '\\':
+                                                if offset_5 + 1 <= buf_eof and buf[offset_5+0] == '\\':
                                                     offset_5 += 1
                                                 else:
                                                     offset_5 = -1
@@ -1536,7 +1532,7 @@ cdef class Parser:
                             children_2.append(value_1)
                             offset_2 = offset_3
 
-                            if buf[offset_2:offset_2+1] == "'":
+                            if offset_2 + 1 <= buf_eof and buf[offset_2+0] == "'":
                                 offset_2 += 1
                             else:
                                 offset_2 = -1
@@ -1610,7 +1606,7 @@ cdef class Parser:
                                 if offset_3 == -1:
                                     break
 
-                                if buf[offset_3:offset_3+2] == '0x':
+                                if offset_3 + 2 <= buf_eof and buf[offset_3+0] == '0' and buf[offset_3+1] == 'x':
                                     offset_3 += 2
                                 else:
                                     offset_3 = -1
@@ -1714,7 +1710,7 @@ cdef class Parser:
                                 if offset_3 == -1:
                                     break
 
-                                if buf[offset_3:offset_3+2] == '0o':
+                                if offset_3 + 2 <= buf_eof and buf[offset_3+0] == '0' and buf[offset_3+1] == 'o':
                                     offset_3 += 2
                                 else:
                                     offset_3 = -1
@@ -1810,7 +1806,7 @@ cdef class Parser:
                                 if offset_3 == -1:
                                     break
 
-                                if buf[offset_3:offset_3+2] == '0b':
+                                if offset_3 + 2 <= buf_eof and buf[offset_3+0] == '0' and buf[offset_3+1] == 'b':
                                     offset_3 += 2
                                 else:
                                     offset_3 = -1
@@ -1911,7 +1907,7 @@ cdef class Parser:
                                     line_start_3 = line_start_2
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
-                                        if buf[offset_4:offset_4+1] == '0':
+                                        if offset_4 + 1 <= buf_eof and buf[offset_4+0] == '0':
                                             offset_4 += 1
                                         else:
                                             offset_4 = -1
@@ -1992,7 +1988,7 @@ cdef class Parser:
                                     line_start_3 = line_start_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
-                                        if buf[offset_4:offset_4+1] == '.':
+                                        if offset_4 + 1 <= buf_eof and buf[offset_4+0] == '.':
                                             offset_4 += 1
                                         else:
                                             offset_4 = -1
@@ -2047,9 +2043,9 @@ cdef class Parser:
                                     line_start_3 = line_start_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
-                                        if buf[offset_4:offset_4+1] == 'e':
+                                        if offset_4 + 1 <= buf_eof and buf[offset_4+0] == 'e':
                                             offset_4 += 1
-                                        elif buf[offset_4:offset_4+1] == 'E':
+                                        elif offset_4 + 1 <= buf_eof and buf[offset_4+0] == 'E':
                                             offset_4 += 1
                                         else:
                                             offset_4 = -1
@@ -2061,9 +2057,9 @@ cdef class Parser:
                                             line_start_4 = line_start_3
                                             children_5 = [] if children_4 is not None else None
                                             while True:
-                                                if buf[offset_5:offset_5+1] == '+':
+                                                if offset_5 + 1 <= buf_eof and buf[offset_5+0] == '+':
                                                     offset_5 += 1
-                                                elif buf[offset_5:offset_5+1] == '-':
+                                                elif offset_5 + 1 <= buf_eof and buf[offset_5+0] == '-':
                                                     offset_5 += 1
                                                 else:
                                                     offset_5 = -1
@@ -2166,7 +2162,7 @@ cdef class Parser:
                     offset_2 = offset_1
                     children_2 = []
                     while True: # start capture
-                        if buf[offset_2:offset_2+4] == 'true':
+                        if offset_2 + 4 <= buf_eof and buf[offset_2+0] == 't' and buf[offset_2+1] == 'r' and buf[offset_2+2] == 'u' and buf[offset_2+3] == 'e':
                             offset_2 += 4
                         else:
                             offset_2 = -1
@@ -2199,7 +2195,7 @@ cdef class Parser:
                     offset_2 = offset_1
                     children_2 = []
                     while True: # start capture
-                        if buf[offset_2:offset_2+5] == 'false':
+                        if offset_2 + 5 <= buf_eof and buf[offset_2+0] == 'f' and buf[offset_2+1] == 'a' and buf[offset_2+2] == 'l' and buf[offset_2+3] == 's' and buf[offset_2+4] == 'e':
                             offset_2 += 5
                         else:
                             offset_2 = -1
@@ -2232,7 +2228,7 @@ cdef class Parser:
                     offset_2 = offset_1
                     children_2 = []
                     while True: # start capture
-                        if buf[offset_2:offset_2+4] == 'null':
+                        if offset_2 + 4 <= buf_eof and buf[offset_2+0] == 'n' and buf[offset_2+1] == 'u' and buf[offset_2+2] == 'l' and buf[offset_2+3] == 'l':
                             offset_2 += 4
                         else:
                             offset_2 = -1
@@ -2279,7 +2275,7 @@ cdef class Parser:
                 line_start_1 = line_start_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    if buf[offset_1:offset_1+1] == '"':
+                    if offset_1 + 1 <= buf_eof and buf[offset_1+0] == '"':
                         offset_1 += 1
                     else:
                         offset_1 = -1
@@ -2333,7 +2329,7 @@ cdef class Parser:
                                     line_start_3 = line_start_2
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
-                                        if buf[offset_4:offset_4+2] == '\\x':
+                                        if offset_4 + 2 <= buf_eof and buf[offset_4+0] == '\\' and buf[offset_4+1] == 'x':
                                             offset_4 += 2
                                         else:
                                             offset_4 = -1
@@ -2404,7 +2400,7 @@ cdef class Parser:
                                     line_start_3 = line_start_2
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
-                                        if buf[offset_4:offset_4+2] == '\\u':
+                                        if offset_4 + 2 <= buf_eof and buf[offset_4+0] == '\\' and buf[offset_4+1] == 'u':
                                             offset_4 += 2
                                         else:
                                             offset_4 = -1
@@ -2413,7 +2409,7 @@ cdef class Parser:
                                         while True: # start reject
                                             children_5 = []
                                             offset_5, line_start_4 = offset_4, line_start_3
-                                            if buf[offset_5:offset_5+3] == '000':
+                                            if offset_5 + 3 <= buf_eof and buf[offset_5+0] == '0' and buf[offset_5+1] == '0' and buf[offset_5+2] == '0':
                                                 offset_5 += 3
                                             else:
                                                 offset_5 = -1
@@ -2439,9 +2435,9 @@ cdef class Parser:
                                         while True: # start reject
                                             children_5 = []
                                             offset_5, line_start_4 = offset_4, line_start_3
-                                            if buf[offset_5:offset_5+1] == 'D':
+                                            if offset_5 + 1 <= buf_eof and buf[offset_5+0] == 'D':
                                                 offset_5 += 1
-                                            elif buf[offset_5:offset_5+1] == 'd':
+                                            elif offset_5 + 1 <= buf_eof and buf[offset_5+0] == 'd':
                                                 offset_5 += 1
                                             else:
                                                 offset_5 = -1
@@ -2543,7 +2539,7 @@ cdef class Parser:
                                     line_start_3 = line_start_2
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
-                                        if buf[offset_4:offset_4+2] == '\\U':
+                                        if offset_4 + 2 <= buf_eof and buf[offset_4+0] == '\\' and buf[offset_4+1] == 'U':
                                             offset_4 += 2
                                         else:
                                             offset_4 = -1
@@ -2552,7 +2548,7 @@ cdef class Parser:
                                         while True: # start reject
                                             children_5 = []
                                             offset_5, line_start_4 = offset_4, line_start_3
-                                            if buf[offset_5:offset_5+7] == '0000000':
+                                            if offset_5 + 7 <= buf_eof and buf[offset_5+0] == '0' and buf[offset_5+1] == '0' and buf[offset_5+2] == '0' and buf[offset_5+3] == '0' and buf[offset_5+4] == '0' and buf[offset_5+5] == '0' and buf[offset_5+6] == '0':
                                                 offset_5 += 7
                                             else:
                                                 offset_5 = -1
@@ -2578,15 +2574,15 @@ cdef class Parser:
                                         while True: # start reject
                                             children_5 = []
                                             offset_5, line_start_4 = offset_4, line_start_3
-                                            if buf[offset_5:offset_5+4] == '0000':
+                                            if offset_5 + 4 <= buf_eof and buf[offset_5+0] == '0' and buf[offset_5+1] == '0' and buf[offset_5+2] == '0' and buf[offset_5+3] == '0':
                                                 offset_5 += 4
                                             else:
                                                 offset_5 = -1
                                                 break
 
-                                            if buf[offset_5:offset_5+1] == 'D':
+                                            if offset_5 + 1 <= buf_eof and buf[offset_5+0] == 'D':
                                                 offset_5 += 1
-                                            elif buf[offset_5:offset_5+1] == 'd':
+                                            elif offset_5 + 1 <= buf_eof and buf[offset_5+0] == 'd':
                                                 offset_5 += 1
                                             else:
                                                 offset_5 = -1
@@ -2752,7 +2748,7 @@ cdef class Parser:
                                     line_start_3 = line_start_2
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
-                                        if buf[offset_4:offset_4+1] == '\\':
+                                        if offset_4 + 1 <= buf_eof and buf[offset_4+0] == '\\':
                                             offset_4 += 1
                                         else:
                                             offset_4 = -1
@@ -2825,7 +2821,7 @@ cdef class Parser:
                     children_1.append(value_0)
                     offset_1 = offset_2
 
-                    if buf[offset_1:offset_1+1] == '"':
+                    if offset_1 + 1 <= buf_eof and buf[offset_1+0] == '"':
                         offset_1 += 1
                     else:
                         offset_1 = -1
@@ -2844,7 +2840,7 @@ cdef class Parser:
                 line_start_1 = line_start_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    if buf[offset_1:offset_1+1] == "'":
+                    if offset_1 + 1 <= buf_eof and buf[offset_1+0] == "'":
                         offset_1 += 1
                     else:
                         offset_1 = -1
@@ -2898,7 +2894,7 @@ cdef class Parser:
                                     line_start_3 = line_start_2
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
-                                        if buf[offset_4:offset_4+2] == '\\x':
+                                        if offset_4 + 2 <= buf_eof and buf[offset_4+0] == '\\' and buf[offset_4+1] == 'x':
                                             offset_4 += 2
                                         else:
                                             offset_4 = -1
@@ -2969,7 +2965,7 @@ cdef class Parser:
                                     line_start_3 = line_start_2
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
-                                        if buf[offset_4:offset_4+2] == '\\u':
+                                        if offset_4 + 2 <= buf_eof and buf[offset_4+0] == '\\' and buf[offset_4+1] == 'u':
                                             offset_4 += 2
                                         else:
                                             offset_4 = -1
@@ -2978,7 +2974,7 @@ cdef class Parser:
                                         while True: # start reject
                                             children_5 = []
                                             offset_5, line_start_4 = offset_4, line_start_3
-                                            if buf[offset_5:offset_5+2] == '00':
+                                            if offset_5 + 2 <= buf_eof and buf[offset_5+0] == '0' and buf[offset_5+1] == '0':
                                                 offset_5 += 2
                                             else:
                                                 offset_5 = -1
@@ -3004,9 +3000,9 @@ cdef class Parser:
                                         while True: # start reject
                                             children_5 = []
                                             offset_5, line_start_4 = offset_4, line_start_3
-                                            if buf[offset_5:offset_5+1] == 'D':
+                                            if offset_5 + 1 <= buf_eof and buf[offset_5+0] == 'D':
                                                 offset_5 += 1
-                                            elif buf[offset_5:offset_5+1] == 'd':
+                                            elif offset_5 + 1 <= buf_eof and buf[offset_5+0] == 'd':
                                                 offset_5 += 1
                                             else:
                                                 offset_5 = -1
@@ -3108,7 +3104,7 @@ cdef class Parser:
                                     line_start_3 = line_start_2
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
-                                        if buf[offset_4:offset_4+2] == '\\U':
+                                        if offset_4 + 2 <= buf_eof and buf[offset_4+0] == '\\' and buf[offset_4+1] == 'U':
                                             offset_4 += 2
                                         else:
                                             offset_4 = -1
@@ -3117,7 +3113,7 @@ cdef class Parser:
                                         while True: # start reject
                                             children_5 = []
                                             offset_5, line_start_4 = offset_4, line_start_3
-                                            if buf[offset_5:offset_5+6] == '000000':
+                                            if offset_5 + 6 <= buf_eof and buf[offset_5+0] == '0' and buf[offset_5+1] == '0' and buf[offset_5+2] == '0' and buf[offset_5+3] == '0' and buf[offset_5+4] == '0' and buf[offset_5+5] == '0':
                                                 offset_5 += 6
                                             else:
                                                 offset_5 = -1
@@ -3143,15 +3139,15 @@ cdef class Parser:
                                         while True: # start reject
                                             children_5 = []
                                             offset_5, line_start_4 = offset_4, line_start_3
-                                            if buf[offset_5:offset_5+4] == '0000':
+                                            if offset_5 + 4 <= buf_eof and buf[offset_5+0] == '0' and buf[offset_5+1] == '0' and buf[offset_5+2] == '0' and buf[offset_5+3] == '0':
                                                 offset_5 += 4
                                             else:
                                                 offset_5 = -1
                                                 break
 
-                                            if buf[offset_5:offset_5+1] == 'D':
+                                            if offset_5 + 1 <= buf_eof and buf[offset_5+0] == 'D':
                                                 offset_5 += 1
-                                            elif buf[offset_5:offset_5+1] == 'd':
+                                            elif offset_5 + 1 <= buf_eof and buf[offset_5+0] == 'd':
                                                 offset_5 += 1
                                             else:
                                                 offset_5 = -1
@@ -3317,7 +3313,7 @@ cdef class Parser:
                                     line_start_3 = line_start_2
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
-                                        if buf[offset_4:offset_4+1] == '\\':
+                                        if offset_4 + 1 <= buf_eof and buf[offset_4+0] == '\\':
                                             offset_4 += 1
                                         else:
                                             offset_4 = -1
@@ -3390,7 +3386,7 @@ cdef class Parser:
                     children_1.append(value_1)
                     offset_1 = offset_2
 
-                    if buf[offset_1:offset_1+1] == "'":
+                    if offset_1 + 1 <= buf_eof and buf[offset_1+0] == "'":
                         offset_1 += 1
                     else:
                         offset_1 = -1
@@ -3421,7 +3417,7 @@ cdef class Parser:
         cdef list children_1, children_2, children_3, children_4, children_5
         cdef int count_1, count_2, count_3, count_4
         while True: # note: return at end of loop
-            if buf[offset_0:offset_0+1] == '[':
+            if offset_0 + 1 <= buf_eof and buf[offset_0+0] == '[':
                 offset_0 += 1
             else:
                 offset_0 = -1
@@ -3432,7 +3428,7 @@ cdef class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t\r\n\ufeff':
                     offset_0 +=1
-                    count_0 +=1
+                    count_0 += self.tabstop if chr == '	' else 1
                 else:
                     break
 
@@ -3442,7 +3438,7 @@ cdef class Parser:
                 line_start_1 = line_start_0
                 children_1 = [] if children_0 is not None else None
                 while True:
-                    if buf[offset_1:offset_1+1] == '#':
+                    if offset_1 + 1 <= buf_eof and buf[offset_1+0] == '#':
                         offset_1 += 1
                     else:
                         offset_1 = -1
@@ -3483,7 +3479,7 @@ cdef class Parser:
                         chr = buf[offset_1]
                         if chr in ' \t\r\n\ufeff':
                             offset_1 +=1
-                            count_1 +=1
+                            count_1 += self.tabstop if chr == '	' else 1
                         else:
                             break
 
@@ -3504,7 +3500,7 @@ cdef class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t\r\n\ufeff':
                     offset_0 +=1
-                    count_0 +=1
+                    count_0 += self.tabstop if chr == '	' else 1
                 else:
                     break
 
@@ -3533,7 +3529,7 @@ cdef class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t\r\n\ufeff':
                                         offset_3 +=1
-                                        count_2 +=1
+                                        count_2 += self.tabstop if chr == '	' else 1
                                     else:
                                         break
 
@@ -3543,7 +3539,7 @@ cdef class Parser:
                                     line_start_3 = line_start_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
-                                        if buf[offset_4:offset_4+1] == '#':
+                                        if offset_4 + 1 <= buf_eof and buf[offset_4+0] == '#':
                                             offset_4 += 1
                                         else:
                                             offset_4 = -1
@@ -3584,7 +3580,7 @@ cdef class Parser:
                                             chr = buf[offset_4]
                                             if chr in ' \t\r\n\ufeff':
                                                 offset_4 +=1
-                                                count_3 +=1
+                                                count_3 += self.tabstop if chr == '	' else 1
                                             else:
                                                 break
 
@@ -3605,12 +3601,12 @@ cdef class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t\r\n\ufeff':
                                         offset_3 +=1
-                                        count_2 +=1
+                                        count_2 += self.tabstop if chr == '	' else 1
                                     else:
                                         break
 
 
-                                if buf[offset_3:offset_3+1] == ',':
+                                if offset_3 + 1 <= buf_eof and buf[offset_3+0] == ',':
                                     offset_3 += 1
                                 else:
                                     offset_3 = -1
@@ -3621,7 +3617,7 @@ cdef class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t\r\n\ufeff':
                                         offset_3 +=1
-                                        count_2 +=1
+                                        count_2 += self.tabstop if chr == '	' else 1
                                     else:
                                         break
 
@@ -3631,7 +3627,7 @@ cdef class Parser:
                                     line_start_3 = line_start_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
-                                        if buf[offset_4:offset_4+1] == '#':
+                                        if offset_4 + 1 <= buf_eof and buf[offset_4+0] == '#':
                                             offset_4 += 1
                                         else:
                                             offset_4 = -1
@@ -3672,7 +3668,7 @@ cdef class Parser:
                                             chr = buf[offset_4]
                                             if chr in ' \t\r\n\ufeff':
                                                 offset_4 +=1
-                                                count_3 +=1
+                                                count_3 += self.tabstop if chr == '	' else 1
                                             else:
                                                 break
 
@@ -3693,7 +3689,7 @@ cdef class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t\r\n\ufeff':
                                         offset_3 +=1
-                                        count_2 +=1
+                                        count_2 += self.tabstop if chr == '	' else 1
                                     else:
                                         break
 
@@ -3719,7 +3715,7 @@ cdef class Parser:
                             chr = buf[offset_2]
                             if chr in ' \t\r\n\ufeff':
                                 offset_2 +=1
-                                count_1 +=1
+                                count_1 += self.tabstop if chr == '	' else 1
                             else:
                                 break
 
@@ -3729,7 +3725,7 @@ cdef class Parser:
                             line_start_2 = line_start_1
                             children_3 = [] if children_2 is not None else None
                             while True:
-                                if buf[offset_3:offset_3+1] == '#':
+                                if offset_3 + 1 <= buf_eof and buf[offset_3+0] == '#':
                                     offset_3 += 1
                                 else:
                                     offset_3 = -1
@@ -3770,7 +3766,7 @@ cdef class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t\r\n\ufeff':
                                         offset_3 +=1
-                                        count_2 +=1
+                                        count_2 += self.tabstop if chr == '	' else 1
                                     else:
                                         break
 
@@ -3791,7 +3787,7 @@ cdef class Parser:
                             chr = buf[offset_2]
                             if chr in ' \t\r\n\ufeff':
                                 offset_2 +=1
-                                count_1 +=1
+                                count_1 += self.tabstop if chr == '	' else 1
                             else:
                                 break
 
@@ -3802,7 +3798,7 @@ cdef class Parser:
                             line_start_2 = line_start_1
                             children_3 = [] if children_2 is not None else None
                             while True:
-                                if buf[offset_3:offset_3+1] == ',':
+                                if offset_3 + 1 <= buf_eof and buf[offset_3+0] == ',':
                                     offset_3 += 1
                                 else:
                                     offset_3 = -1
@@ -3813,7 +3809,7 @@ cdef class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t\r\n\ufeff':
                                         offset_3 +=1
-                                        count_2 +=1
+                                        count_2 += self.tabstop if chr == '	' else 1
                                     else:
                                         break
 
@@ -3823,7 +3819,7 @@ cdef class Parser:
                                     line_start_3 = line_start_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
-                                        if buf[offset_4:offset_4+1] == '#':
+                                        if offset_4 + 1 <= buf_eof and buf[offset_4+0] == '#':
                                             offset_4 += 1
                                         else:
                                             offset_4 = -1
@@ -3864,7 +3860,7 @@ cdef class Parser:
                                             chr = buf[offset_4]
                                             if chr in ' \t\r\n\ufeff':
                                                 offset_4 +=1
-                                                count_3 +=1
+                                                count_3 += self.tabstop if chr == '	' else 1
                                             else:
                                                 break
 
@@ -3885,7 +3881,7 @@ cdef class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t\r\n\ufeff':
                                         offset_3 +=1
-                                        count_2 +=1
+                                        count_2 += self.tabstop if chr == '	' else 1
                                     else:
                                         break
 
@@ -3927,7 +3923,7 @@ cdef class Parser:
             children_0.append(value_0)
             offset_0 = offset_1
 
-            if buf[offset_0:offset_0+1] == ']':
+            if offset_0 + 1 <= buf_eof and buf[offset_0+0] == ']':
                 offset_0 += 1
             else:
                 offset_0 = -1
@@ -3945,7 +3941,7 @@ cdef class Parser:
         cdef list children_1, children_2, children_3, children_4, children_5, children_6
         cdef int count_1, count_2, count_3, count_4
         while True: # note: return at end of loop
-            if buf[offset_0:offset_0+1] == '{':
+            if offset_0 + 1 <= buf_eof and buf[offset_0+0] == '{':
                 offset_0 += 1
             else:
                 offset_0 = -1
@@ -3956,7 +3952,7 @@ cdef class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t\r\n\ufeff':
                     offset_0 +=1
-                    count_0 +=1
+                    count_0 += self.tabstop if chr == '	' else 1
                 else:
                     break
 
@@ -3966,7 +3962,7 @@ cdef class Parser:
                 line_start_1 = line_start_0
                 children_1 = [] if children_0 is not None else None
                 while True:
-                    if buf[offset_1:offset_1+1] == '#':
+                    if offset_1 + 1 <= buf_eof and buf[offset_1+0] == '#':
                         offset_1 += 1
                     else:
                         offset_1 = -1
@@ -4007,7 +4003,7 @@ cdef class Parser:
                         chr = buf[offset_1]
                         if chr in ' \t\r\n\ufeff':
                             offset_1 +=1
-                            count_1 +=1
+                            count_1 += self.tabstop if chr == '	' else 1
                         else:
                             break
 
@@ -4028,7 +4024,7 @@ cdef class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t\r\n\ufeff':
                     offset_0 +=1
-                    count_0 +=1
+                    count_0 += self.tabstop if chr == '	' else 1
                 else:
                     break
 
@@ -4054,7 +4050,7 @@ cdef class Parser:
                                 chr = buf[offset_3]
                                 if chr in ' \t\r\n\ufeff':
                                     offset_3 +=1
-                                    count_1 +=1
+                                    count_1 += self.tabstop if chr == '	' else 1
                                 else:
                                     break
 
@@ -4064,7 +4060,7 @@ cdef class Parser:
                                 line_start_2 = line_start_1
                                 children_4 = [] if children_3 is not None else None
                                 while True:
-                                    if buf[offset_4:offset_4+1] == '#':
+                                    if offset_4 + 1 <= buf_eof and buf[offset_4+0] == '#':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -4105,7 +4101,7 @@ cdef class Parser:
                                         chr = buf[offset_4]
                                         if chr in ' \t\r\n\ufeff':
                                             offset_4 +=1
-                                            count_2 +=1
+                                            count_2 += self.tabstop if chr == '	' else 1
                                         else:
                                             break
 
@@ -4126,12 +4122,12 @@ cdef class Parser:
                                 chr = buf[offset_3]
                                 if chr in ' \t\r\n\ufeff':
                                     offset_3 +=1
-                                    count_1 +=1
+                                    count_1 += self.tabstop if chr == '	' else 1
                                 else:
                                     break
 
 
-                            if buf[offset_3:offset_3+1] == ':':
+                            if offset_3 + 1 <= buf_eof and buf[offset_3+0] == ':':
                                 offset_3 += 1
                             else:
                                 offset_3 = -1
@@ -4142,7 +4138,7 @@ cdef class Parser:
                                 chr = buf[offset_3]
                                 if chr in ' \t\r\n\ufeff':
                                     offset_3 +=1
-                                    count_1 +=1
+                                    count_1 += self.tabstop if chr == '	' else 1
                                 else:
                                     break
 
@@ -4152,7 +4148,7 @@ cdef class Parser:
                                 line_start_2 = line_start_1
                                 children_4 = [] if children_3 is not None else None
                                 while True:
-                                    if buf[offset_4:offset_4+1] == '#':
+                                    if offset_4 + 1 <= buf_eof and buf[offset_4+0] == '#':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -4193,7 +4189,7 @@ cdef class Parser:
                                         chr = buf[offset_4]
                                         if chr in ' \t\r\n\ufeff':
                                             offset_4 +=1
-                                            count_2 +=1
+                                            count_2 += self.tabstop if chr == '	' else 1
                                         else:
                                             break
 
@@ -4214,7 +4210,7 @@ cdef class Parser:
                                 chr = buf[offset_3]
                                 if chr in ' \t\r\n\ufeff':
                                     offset_3 +=1
-                                    count_1 +=1
+                                    count_1 += self.tabstop if chr == '	' else 1
                                 else:
                                     break
 
@@ -4239,7 +4235,7 @@ cdef class Parser:
                             chr = buf[offset_2]
                             if chr in ' \t\r\n\ufeff':
                                 offset_2 +=1
-                                count_1 +=1
+                                count_1 += self.tabstop if chr == '	' else 1
                             else:
                                 break
 
@@ -4249,7 +4245,7 @@ cdef class Parser:
                             line_start_2 = line_start_1
                             children_3 = [] if children_2 is not None else None
                             while True:
-                                if buf[offset_3:offset_3+1] == '#':
+                                if offset_3 + 1 <= buf_eof and buf[offset_3+0] == '#':
                                     offset_3 += 1
                                 else:
                                     offset_3 = -1
@@ -4290,7 +4286,7 @@ cdef class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t\r\n\ufeff':
                                         offset_3 +=1
-                                        count_2 +=1
+                                        count_2 += self.tabstop if chr == '	' else 1
                                     else:
                                         break
 
@@ -4311,7 +4307,7 @@ cdef class Parser:
                             chr = buf[offset_2]
                             if chr in ' \t\r\n\ufeff':
                                 offset_2 +=1
-                                count_1 +=1
+                                count_1 += self.tabstop if chr == '	' else 1
                             else:
                                 break
 
@@ -4322,7 +4318,7 @@ cdef class Parser:
                             line_start_2 = line_start_1
                             children_3 = [] if children_2 is not None else None
                             while True:
-                                if buf[offset_3:offset_3+1] == ',':
+                                if offset_3 + 1 <= buf_eof and buf[offset_3+0] == ',':
                                     offset_3 += 1
                                 else:
                                     offset_3 = -1
@@ -4333,7 +4329,7 @@ cdef class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t\r\n\ufeff':
                                         offset_3 +=1
-                                        count_2 +=1
+                                        count_2 += self.tabstop if chr == '	' else 1
                                     else:
                                         break
 
@@ -4343,7 +4339,7 @@ cdef class Parser:
                                     line_start_3 = line_start_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
-                                        if buf[offset_4:offset_4+1] == '#':
+                                        if offset_4 + 1 <= buf_eof and buf[offset_4+0] == '#':
                                             offset_4 += 1
                                         else:
                                             offset_4 = -1
@@ -4384,7 +4380,7 @@ cdef class Parser:
                                             chr = buf[offset_4]
                                             if chr in ' \t\r\n\ufeff':
                                                 offset_4 +=1
-                                                count_3 +=1
+                                                count_3 += self.tabstop if chr == '	' else 1
                                             else:
                                                 break
 
@@ -4405,7 +4401,7 @@ cdef class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t\r\n\ufeff':
                                         offset_3 +=1
-                                        count_2 +=1
+                                        count_2 += self.tabstop if chr == '	' else 1
                                     else:
                                         break
 
@@ -4422,7 +4418,7 @@ cdef class Parser:
                                         chr = buf[offset_4]
                                         if chr in ' \t\r\n\ufeff':
                                             offset_4 +=1
-                                            count_2 +=1
+                                            count_2 += self.tabstop if chr == '	' else 1
                                         else:
                                             break
 
@@ -4432,7 +4428,7 @@ cdef class Parser:
                                         line_start_3 = line_start_2
                                         children_5 = [] if children_4 is not None else None
                                         while True:
-                                            if buf[offset_5:offset_5+1] == '#':
+                                            if offset_5 + 1 <= buf_eof and buf[offset_5+0] == '#':
                                                 offset_5 += 1
                                             else:
                                                 offset_5 = -1
@@ -4473,7 +4469,7 @@ cdef class Parser:
                                                 chr = buf[offset_5]
                                                 if chr in ' \t\r\n\ufeff':
                                                     offset_5 +=1
-                                                    count_3 +=1
+                                                    count_3 += self.tabstop if chr == '	' else 1
                                                 else:
                                                     break
 
@@ -4494,12 +4490,12 @@ cdef class Parser:
                                         chr = buf[offset_4]
                                         if chr in ' \t\r\n\ufeff':
                                             offset_4 +=1
-                                            count_2 +=1
+                                            count_2 += self.tabstop if chr == '	' else 1
                                         else:
                                             break
 
 
-                                    if buf[offset_4:offset_4+1] == ':':
+                                    if offset_4 + 1 <= buf_eof and buf[offset_4+0] == ':':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -4510,7 +4506,7 @@ cdef class Parser:
                                         chr = buf[offset_4]
                                         if chr in ' \t\r\n\ufeff':
                                             offset_4 +=1
-                                            count_2 +=1
+                                            count_2 += self.tabstop if chr == '	' else 1
                                         else:
                                             break
 
@@ -4520,7 +4516,7 @@ cdef class Parser:
                                         line_start_3 = line_start_2
                                         children_5 = [] if children_4 is not None else None
                                         while True:
-                                            if buf[offset_5:offset_5+1] == '#':
+                                            if offset_5 + 1 <= buf_eof and buf[offset_5+0] == '#':
                                                 offset_5 += 1
                                             else:
                                                 offset_5 = -1
@@ -4561,7 +4557,7 @@ cdef class Parser:
                                                 chr = buf[offset_5]
                                                 if chr in ' \t\r\n\ufeff':
                                                     offset_5 +=1
-                                                    count_3 +=1
+                                                    count_3 += self.tabstop if chr == '	' else 1
                                                 else:
                                                     break
 
@@ -4582,7 +4578,7 @@ cdef class Parser:
                                         chr = buf[offset_4]
                                         if chr in ' \t\r\n\ufeff':
                                             offset_4 +=1
-                                            count_2 +=1
+                                            count_2 += self.tabstop if chr == '	' else 1
                                         else:
                                             break
 
@@ -4607,7 +4603,7 @@ cdef class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t\r\n\ufeff':
                                         offset_3 +=1
-                                        count_2 +=1
+                                        count_2 += self.tabstop if chr == '	' else 1
                                     else:
                                         break
 
@@ -4617,7 +4613,7 @@ cdef class Parser:
                                     line_start_3 = line_start_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
-                                        if buf[offset_4:offset_4+1] == '#':
+                                        if offset_4 + 1 <= buf_eof and buf[offset_4+0] == '#':
                                             offset_4 += 1
                                         else:
                                             offset_4 = -1
@@ -4658,7 +4654,7 @@ cdef class Parser:
                                             chr = buf[offset_4]
                                             if chr in ' \t\r\n\ufeff':
                                                 offset_4 +=1
-                                                count_3 +=1
+                                                count_3 += self.tabstop if chr == '	' else 1
                                             else:
                                                 break
 
@@ -4679,7 +4675,7 @@ cdef class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t\r\n\ufeff':
                                         offset_3 +=1
-                                        count_2 +=1
+                                        count_2 += self.tabstop if chr == '	' else 1
                                     else:
                                         break
 
@@ -4702,7 +4698,7 @@ cdef class Parser:
                             line_start_2 = line_start_1
                             children_3 = [] if children_2 is not None else None
                             while True:
-                                if buf[offset_3:offset_3+1] == ',':
+                                if offset_3 + 1 <= buf_eof and buf[offset_3+0] == ',':
                                     offset_3 += 1
                                 else:
                                     offset_3 = -1
@@ -4713,7 +4709,7 @@ cdef class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t\r\n\ufeff':
                                         offset_3 +=1
-                                        count_2 +=1
+                                        count_2 += self.tabstop if chr == '	' else 1
                                     else:
                                         break
 
@@ -4723,7 +4719,7 @@ cdef class Parser:
                                     line_start_3 = line_start_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
-                                        if buf[offset_4:offset_4+1] == '#':
+                                        if offset_4 + 1 <= buf_eof and buf[offset_4+0] == '#':
                                             offset_4 += 1
                                         else:
                                             offset_4 = -1
@@ -4764,7 +4760,7 @@ cdef class Parser:
                                             chr = buf[offset_4]
                                             if chr in ' \t\r\n\ufeff':
                                                 offset_4 +=1
-                                                count_3 +=1
+                                                count_3 += self.tabstop if chr == '	' else 1
                                             else:
                                                 break
 
@@ -4785,7 +4781,7 @@ cdef class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t\r\n\ufeff':
                                         offset_3 +=1
-                                        count_2 +=1
+                                        count_2 += self.tabstop if chr == '	' else 1
                                     else:
                                         break
 
@@ -4827,7 +4823,7 @@ cdef class Parser:
             children_0.append(value_2)
             offset_0 = offset_1
 
-            if buf[offset_0:offset_0+1] == '}':
+            if offset_0 + 1 <= buf_eof and buf[offset_0+0] == '}':
                 offset_0 += 1
             else:
                 offset_0 = -1

@@ -189,8 +189,8 @@ if __name__ == "__main__":
         return t
 
     json_t = timeit("json", json.loads, s)
-    python_t = timeit("python-compiled", python_parser.parse, s)
-    cython_t = timeit("cython-compiled", cython_parser.parse, s)
+    cython_t = timeit("cython compiled", cython_parser.parse, s)
+    python_t = timeit("python", python_parser.parse, s)
     print("cython is",cython_t/json_t, "times slower than handrolled C",  python_t/cython_t, "times faster than python")
 
 #    t2 = timeit("python-compiled-old", old_python_parser.parse, s)

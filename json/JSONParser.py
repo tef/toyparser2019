@@ -1,13 +1,9 @@
 class Parser:
     def __init__(self, builder=None, tabstop=None, allow_mixed_indent=False):
          self.builder = builder
-         self.tabstop = tabstop or self.TABSTOP
+         self.tabstop = tabstop or 8
          self.cache = None
          self.allow_mixed_indent = allow_mixed_indent
-
-    NEWLINE = ()
-    WHITESPACE = (' ', '\t', '\r', '\n')
-    TABSTOP = 8
 
     class Node:
         def __init__(self, name, start, end, children, value):
@@ -40,16 +36,16 @@ class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t\r\n':
                     offset_0 +=1
-                    count_0 +=1
+                    count_0 += self.tabstop if chr == '	' else 1
                 else:
                     break
 
             while True: # start reject
                 children_1 = []
                 offset_1, line_start_1 = offset_0, line_start_0
-                if buf[offset_1:offset_1+1] == '[':
+                if offset_1 + 1 <= buf_eof and buf[offset_1+0] == '[':
                     offset_1 += 1
-                elif buf[offset_1:offset_1+1] == '{':
+                elif offset_1 + 1 <= buf_eof and buf[offset_1+0] == '{':
                     offset_1 += 1
                 else:
                     offset_1 = -1
@@ -159,7 +155,7 @@ class Parser:
                 line_start_1 = line_start_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    if buf[offset_1:offset_1+1] == '"':
+                    if offset_1 + 1 <= buf_eof and buf[offset_1+0] == '"':
                         offset_1 += 1
                     else:
                         offset_1 = -1
@@ -179,7 +175,7 @@ class Parser:
                                     line_start_3 = line_start_2
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
-                                        if buf[offset_4:offset_4+2] == '\\u':
+                                        if offset_4 + 2 <= buf_eof and buf[offset_4+0] == '\\' and buf[offset_4+1] == 'u':
                                             offset_4 += 2
                                         else:
                                             offset_4 = -1
@@ -262,7 +258,7 @@ class Parser:
                                     line_start_3 = line_start_2
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
-                                        if buf[offset_4:offset_4+1] == '\\':
+                                        if offset_4 + 1 <= buf_eof and buf[offset_4+0] == '\\':
                                             offset_4 += 1
                                         else:
                                             offset_4 = -1
@@ -359,7 +355,7 @@ class Parser:
                     children_1.append(value_0)
                     offset_1 = offset_2
 
-                    if buf[offset_1:offset_1+1] == '"':
+                    if offset_1 + 1 <= buf_eof and buf[offset_1+0] == '"':
                         offset_1 += 1
                     else:
                         offset_1 = -1
@@ -388,7 +384,7 @@ class Parser:
                             line_start_2 = line_start_1
                             children_3 = [] if children_2 is not None else None
                             while True:
-                                if buf[offset_3:offset_3+1] == '-':
+                                if offset_3 + 1 <= buf_eof and buf[offset_3+0] == '-':
                                     offset_3 += 1
                                 else:
                                     offset_3 = -1
@@ -412,7 +408,7 @@ class Parser:
                             line_start_2 = line_start_1
                             children_3 = [] if children_2 is not None else None
                             while True: # case
-                                if buf[offset_3:offset_3+1] == '0':
+                                if offset_3 + 1 <= buf_eof and buf[offset_3+0] == '0':
                                     offset_3 += 1
                                 else:
                                     offset_3 = -1
@@ -493,7 +489,7 @@ class Parser:
                             line_start_2 = line_start_1
                             children_3 = [] if children_2 is not None else None
                             while True:
-                                if buf[offset_3:offset_3+1] == '.':
+                                if offset_3 + 1 <= buf_eof and buf[offset_3+0] == '.':
                                     offset_3 += 1
                                 else:
                                     offset_3 = -1
@@ -548,9 +544,9 @@ class Parser:
                             line_start_2 = line_start_1
                             children_3 = [] if children_2 is not None else None
                             while True:
-                                if buf[offset_3:offset_3+1] == 'e':
+                                if offset_3 + 1 <= buf_eof and buf[offset_3+0] == 'e':
                                     offset_3 += 1
-                                elif buf[offset_3:offset_3+1] == 'E':
+                                elif offset_3 + 1 <= buf_eof and buf[offset_3+0] == 'E':
                                     offset_3 += 1
                                 else:
                                     offset_3 = -1
@@ -562,9 +558,9 @@ class Parser:
                                     line_start_3 = line_start_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
-                                        if buf[offset_4:offset_4+1] == '+':
+                                        if offset_4 + 1 <= buf_eof and buf[offset_4+0] == '+':
                                             offset_4 += 1
-                                        elif buf[offset_4:offset_4+1] == '-':
+                                        elif offset_4 + 1 <= buf_eof and buf[offset_4+0] == '-':
                                             offset_4 += 1
                                         else:
                                             offset_4 = -1
@@ -653,7 +649,7 @@ class Parser:
                     offset_2 = offset_1
                     children_2 = None
                     while True: # start capture
-                        if buf[offset_2:offset_2+4] == 'true':
+                        if offset_2 + 4 <= buf_eof and buf[offset_2+0] == 't' and buf[offset_2+1] == 'r' and buf[offset_2+2] == 'u' and buf[offset_2+3] == 'e':
                             offset_2 += 4
                         else:
                             offset_2 = -1
@@ -686,7 +682,7 @@ class Parser:
                     offset_2 = offset_1
                     children_2 = None
                     while True: # start capture
-                        if buf[offset_2:offset_2+5] == 'false':
+                        if offset_2 + 5 <= buf_eof and buf[offset_2+0] == 'f' and buf[offset_2+1] == 'a' and buf[offset_2+2] == 'l' and buf[offset_2+3] == 's' and buf[offset_2+4] == 'e':
                             offset_2 += 5
                         else:
                             offset_2 = -1
@@ -719,7 +715,7 @@ class Parser:
                     offset_2 = offset_1
                     children_2 = None
                     while True: # start capture
-                        if buf[offset_2:offset_2+4] == 'null':
+                        if offset_2 + 4 <= buf_eof and buf[offset_2+0] == 'n' and buf[offset_2+1] == 'u' and buf[offset_2+2] == 'l' and buf[offset_2+3] == 'l':
                             offset_2 += 4
                         else:
                             offset_2 = -1
@@ -755,7 +751,7 @@ class Parser:
 
     def parse_json_string(self, buf, offset_0, line_start_0, prefix_0, buf_eof, children_0):
         while True: # note: return at end of loop
-            if buf[offset_0:offset_0+1] == '"':
+            if offset_0 + 1 <= buf_eof and buf[offset_0+0] == '"':
                 offset_0 += 1
             else:
                 offset_0 = -1
@@ -775,7 +771,7 @@ class Parser:
                             line_start_2 = line_start_1
                             children_3 = [] if children_2 is not None else None
                             while True: # case
-                                if buf[offset_3:offset_3+2] == '\\u':
+                                if offset_3 + 2 <= buf_eof and buf[offset_3+0] == '\\' and buf[offset_3+1] == 'u':
                                     offset_3 += 2
                                 else:
                                     offset_3 = -1
@@ -858,7 +854,7 @@ class Parser:
                             line_start_2 = line_start_1
                             children_3 = [] if children_2 is not None else None
                             while True: # case
-                                if buf[offset_3:offset_3+1] == '\\':
+                                if offset_3 + 1 <= buf_eof and buf[offset_3+0] == '\\':
                                     offset_3 += 1
                                 else:
                                     offset_3 = -1
@@ -955,7 +951,7 @@ class Parser:
             children_0.append(value_0)
             offset_0 = offset_1
 
-            if buf[offset_0:offset_0+1] == '"':
+            if offset_0 + 1 <= buf_eof and buf[offset_0+0] == '"':
                 offset_0 += 1
             else:
                 offset_0 = -1
@@ -967,7 +963,7 @@ class Parser:
 
     def parse_json_list(self, buf, offset_0, line_start_0, prefix_0, buf_eof, children_0):
         while True: # note: return at end of loop
-            if buf[offset_0:offset_0+1] == '[':
+            if offset_0 + 1 <= buf_eof and buf[offset_0+0] == '[':
                 offset_0 += 1
             else:
                 offset_0 = -1
@@ -978,7 +974,7 @@ class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t\r\n':
                     offset_0 +=1
-                    count_0 +=1
+                    count_0 += self.tabstop if chr == '	' else 1
                 else:
                     break
 
@@ -1006,11 +1002,11 @@ class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t\r\n':
                                         offset_3 +=1
-                                        count_2 +=1
+                                        count_2 += self.tabstop if chr == '	' else 1
                                     else:
                                         break
 
-                                if buf[offset_3:offset_3+1] == ',':
+                                if offset_3 + 1 <= buf_eof and buf[offset_3+0] == ',':
                                     offset_3 += 1
                                 else:
                                     offset_3 = -1
@@ -1021,7 +1017,7 @@ class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t\r\n':
                                         offset_3 +=1
-                                        count_2 +=1
+                                        count_2 += self.tabstop if chr == '	' else 1
                                     else:
                                         break
 
@@ -1065,7 +1061,7 @@ class Parser:
             children_0.append(value_0)
             offset_0 = offset_1
 
-            if buf[offset_0:offset_0+1] == ']':
+            if offset_0 + 1 <= buf_eof and buf[offset_0+0] == ']':
                 offset_0 += 1
             else:
                 offset_0 = -1
@@ -1077,7 +1073,7 @@ class Parser:
 
     def parse_json_object(self, buf, offset_0, line_start_0, prefix_0, buf_eof, children_0):
         while True: # note: return at end of loop
-            if buf[offset_0:offset_0+1] == '{':
+            if offset_0 + 1 <= buf_eof and buf[offset_0+0] == '{':
                 offset_0 += 1
             else:
                 offset_0 = -1
@@ -1088,7 +1084,7 @@ class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t\r\n':
                     offset_0 +=1
-                    count_0 +=1
+                    count_0 += self.tabstop if chr == '	' else 1
                 else:
                     break
 
@@ -1104,7 +1100,7 @@ class Parser:
                         offset_3 = offset_2
                         children_3 = []
                         while True: # start capture
-                            if buf[offset_3:offset_3+1] == '"':
+                            if offset_3 + 1 <= buf_eof and buf[offset_3+0] == '"':
                                 offset_3 += 1
                             else:
                                 offset_3 = -1
@@ -1124,7 +1120,7 @@ class Parser:
                                             line_start_3 = line_start_2
                                             children_6 = [] if children_5 is not None else None
                                             while True: # case
-                                                if buf[offset_6:offset_6+2] == '\\u':
+                                                if offset_6 + 2 <= buf_eof and buf[offset_6+0] == '\\' and buf[offset_6+1] == 'u':
                                                     offset_6 += 2
                                                 else:
                                                     offset_6 = -1
@@ -1207,7 +1203,7 @@ class Parser:
                                             line_start_3 = line_start_2
                                             children_6 = [] if children_5 is not None else None
                                             while True: # case
-                                                if buf[offset_6:offset_6+1] == '\\':
+                                                if offset_6 + 1 <= buf_eof and buf[offset_6+0] == '\\':
                                                     offset_6 += 1
                                                 else:
                                                     offset_6 = -1
@@ -1304,7 +1300,7 @@ class Parser:
                             children_3.append(value_0)
                             offset_3 = offset_4
 
-                            if buf[offset_3:offset_3+1] == '"':
+                            if offset_3 + 1 <= buf_eof and buf[offset_3+0] == '"':
                                 offset_3 += 1
                             else:
                                 offset_3 = -1
@@ -1316,11 +1312,11 @@ class Parser:
                                 chr = buf[offset_3]
                                 if chr in ' \t\r\n':
                                     offset_3 +=1
-                                    count_1 +=1
+                                    count_1 += self.tabstop if chr == '	' else 1
                                 else:
                                     break
 
-                            if buf[offset_3:offset_3+1] == ':':
+                            if offset_3 + 1 <= buf_eof and buf[offset_3+0] == ':':
                                 offset_3 += 1
                             else:
                                 offset_3 = -1
@@ -1331,7 +1327,7 @@ class Parser:
                                 chr = buf[offset_3]
                                 if chr in ' \t\r\n':
                                     offset_3 +=1
-                                    count_1 +=1
+                                    count_1 += self.tabstop if chr == '	' else 1
                                 else:
                                     break
 
@@ -1355,7 +1351,7 @@ class Parser:
                             chr = buf[offset_2]
                             if chr in ' \t\r\n':
                                 offset_2 +=1
-                                count_1 +=1
+                                count_1 += self.tabstop if chr == '	' else 1
                             else:
                                 break
 
@@ -1365,7 +1361,7 @@ class Parser:
                             line_start_2 = line_start_1
                             children_3 = [] if children_2 is not None else None
                             while True:
-                                if buf[offset_3:offset_3+1] == ',':
+                                if offset_3 + 1 <= buf_eof and buf[offset_3+0] == ',':
                                     offset_3 += 1
                                 else:
                                     offset_3 = -1
@@ -1376,7 +1372,7 @@ class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t\r\n':
                                         offset_3 +=1
-                                        count_2 +=1
+                                        count_2 += self.tabstop if chr == '	' else 1
                                     else:
                                         break
 
@@ -1392,11 +1388,11 @@ class Parser:
                                         chr = buf[offset_4]
                                         if chr in ' \t\r\n':
                                             offset_4 +=1
-                                            count_2 +=1
+                                            count_2 += self.tabstop if chr == '	' else 1
                                         else:
                                             break
 
-                                    if buf[offset_4:offset_4+1] == ':':
+                                    if offset_4 + 1 <= buf_eof and buf[offset_4+0] == ':':
                                         offset_4 += 1
                                     else:
                                         offset_4 = -1
@@ -1407,7 +1403,7 @@ class Parser:
                                         chr = buf[offset_4]
                                         if chr in ' \t\r\n':
                                             offset_4 +=1
-                                            count_2 +=1
+                                            count_2 += self.tabstop if chr == '	' else 1
                                         else:
                                             break
 
@@ -1431,7 +1427,7 @@ class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t\r\n':
                                         offset_3 +=1
-                                        count_2 +=1
+                                        count_2 += self.tabstop if chr == '	' else 1
                                     else:
                                         break
 
@@ -1471,7 +1467,7 @@ class Parser:
             children_0.append(value_3)
             offset_0 = offset_1
 
-            if buf[offset_0:offset_0+1] == '}':
+            if offset_0 + 1 <= buf_eof and buf[offset_0+0] == '}':
                 offset_0 += 1
             else:
                 offset_0 = -1
