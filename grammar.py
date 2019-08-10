@@ -798,14 +798,14 @@ class VarBuilder:
 def compile_python(grammar, builder=None, cython=False):
     memoized = {}
 
-    def build_subrules(rules, steps, offset, line_start, indent_end, prefix, children, count, values):
+    def build_subrules(rules, steps, offset, line_start, indent_end, leftover_offset, leftover_count, prefix, children, count, values):
         for subrule in rules:
-            build_steps(subrule, steps, offset, line_start, indent_end, prefix, children, count, values)
+            build_steps(subrule, steps, offset, line_start, indent_end, leftover_offset, leftover_count, prefix, children, count, values)
 
-    def build_steps(rule, steps, offset, line_start, indent_end, prefix, children, count, values):
+    def build_steps(rule, steps, offset, line_start, indent_end, leftover_offset, leftover_count, prefix, children, count, values):
         # steps.append(f"print('start', {repr(str(rule))})")
         if rule.kind == SEQUENCE:
-            build_subrules(rule.rules, steps, offset, line_start, indent_end, prefix, children, count, values)
+            build_subrules(rule.rules, steps, offset, line_start, indent_end, leftover_offset, leftover_count, prefix, children, count, values)
 
         elif rule.kind == MEMOIZE:
             key = rule.args['key']
@@ -825,7 +825,7 @@ def compile_python(grammar, builder=None, cython=False):
 
             steps_0 = steps.add_indent()
             steps_0.append(f"while True:")
-            build_subrules(rule.rules, steps_0.add_indent(), offset_0, line_start, indent_end, prefix, children_0, count.incr(), values)
+            build_subrules(rule.rules, steps_0.add_indent(), offset_0, line_start, indent_end, leftover_offset, leftover_count, prefix, children_0, count.incr(), values)
             steps_0.append(f"    break")
 
             steps_0.append(f"self.cache[{count}] = ({offset_0}, {line_start}, {indent_end}, {children_0})")
@@ -847,7 +847,7 @@ def compile_python(grammar, builder=None, cython=False):
                 else:
                     steps.append(f"{children_0} = None")
                 steps.append(f"while True: # start capture")
-                build_subrules(rule.rules, steps.add_indent(), offset_0, line_start, indent_end, prefix, children_0, count, values)
+                build_subrules(rule.rules, steps.add_indent(), offset_0, line_start, indent_end, leftover_offset, leftover_count, prefix, children_0, count, values)
                 steps.append(f"    break")
                 steps.append(f"if {offset_0} == -1:")
                 steps.append(f"    {offset} = -1")
@@ -875,6 +875,8 @@ def compile_python(grammar, builder=None, cython=False):
             offset_0 = offset.incr()
             line_start_0 = line_start.incr()
             indent_end_0 = indent_end.incr()
+            leftover_offset_0 = leftover_offset.incr()
+            leftover_count_0 = leftover_count.incr()
 
             steps.append(f"while True: # start choice")
 
@@ -883,14 +885,18 @@ def compile_python(grammar, builder=None, cython=False):
                 steps_0.append(f"{offset_0} = {offset}")
                 steps_0.append(f"{line_start_0} = {line_start}")
                 steps_0.append(f"{indent_end_0} = {indent_end}")
+                steps_0.append(f"{leftover_offset_0} = {leftover_offset}")
+                steps_0.append(f"{leftover_count_0} = {leftover_count}")
                 steps_0.append(f"{children_0} = [] if {children} is not None else None")
                 steps_0.append(f"while True: # case")
-                build_steps(subrule, steps_0.add_indent(), offset_0, line_start_0, indent_end_0, prefix, children_0, count, values)
+                build_steps(subrule, steps_0.add_indent(), offset_0, line_start_0, indent_end_0, leftover_offset_0, leftover_count_0, prefix, children_0, count, values)
                 steps_0.append(f"    break")
                 steps_0.append(f"if {offset_0} != -1:")
                 steps_0.append(f"    {offset} = {offset_0}")
                 steps_0.append(f"    {line_start} = {line_start_0}")
                 steps_0.append(f"    {indent_end} = {indent_end_0}")
+                steps_0.append(f"    {leftover_offset} = {leftover_offset_0}")
+                steps_0.append(f"    {leftover_count} = {leftover_count_0}")
                 steps_0.append(f"    if {children_0} is not None and {children_0} is not None:")
                 steps_0.append(f"        {children}.extend({children_0})")
                 steps_0.append(f"    break")
@@ -923,17 +929,21 @@ def compile_python(grammar, builder=None, cython=False):
             offset_0 = offset.incr()
             line_start_0 = line_start.incr()
             indent_end_0 = indent_end.incr()
+            leftover_offset_0 = leftover_offset.incr()
+            leftover_count_0 = leftover_count.incr()
             steps_0 = steps.add_indent()
             children_0 = children.incr()
             steps_0.append(f"{offset_0} = {offset}")
             steps_0.append(f"{line_start_0} = {line_start}")
             steps_0.append(f"{indent_end_0} = {indent_end}")
+            steps_0.append(f"{leftover_offset_0} = {leftover_offset}")
+            steps_0.append(f"{leftover_count_0} = {leftover_count}")
             steps_0.append(f"{children_0} = [] if {children} is not None else None")
 
 
             steps_0.append("while True:")
             for subrule in rule.rules:
-                    build_steps(subrule, steps_0.add_indent(), offset_0, line_start_0, indent_end_0, prefix, children_0, new_count, values)
+                    build_steps(subrule, steps_0.add_indent(), offset_0, line_start_0, indent_end_0, leftover_offset_0, leftover_count_0, prefix, children_0, new_count, values)
             steps_0.append("    break")
             steps_0.append(f"if {offset_0} == -1:")
             steps_0.append(f"    break")
@@ -943,7 +953,9 @@ def compile_python(grammar, builder=None, cython=False):
             steps_0.append(f"    {children}.extend({children_0})")
             steps_0.append(f"{offset} = {offset_0}")
             steps_0.append(f"{line_start} = {line_start_0}")
-            steps_0.append(f"{indent_end_0} = {indent_end_0}")
+            steps_0.append(f"{indent_end} = {indent_end_0}")
+            steps_0.append(f"{leftover_offset} = {leftover_offset_0}")
+            steps_0.append(f"{leftover_count} = {leftover_count_0}")
             steps_0.append(f"{count} += 1")
             if _max == 1:
                 steps_0.append(f"break")
@@ -964,12 +976,16 @@ def compile_python(grammar, builder=None, cython=False):
             offset_0 = offset.incr()
             line_start_0 = line_start.incr()
             indent_end_0 = line_start.incr()
+            leftover_offset_0 = leftover_offset.incr()
+            leftover_count_0 = leftover_count.incr()
             steps.append(f"while True: # start reject")
             steps_0.append(f"{children_0} = []")
             steps_0.append(f"{offset_0} = {offset}")
             steps_0.append(f"{line_start_0} = {line_start}")
             steps_0.append(f"{indent_end_0} = {indent_end}")
-            build_subrules(rule.rules, steps_0, offset_0, line_start_0, indent_end_0, prefix, children_0, count, values)
+            steps_0.append(f"{leftover_offset_0} = {leftover_offset}")
+            steps_0.append(f"{leftover_count_0} = {leftover_count}")
+            build_subrules(rule.rules, steps_0, offset_0, line_start_0, indent_end_0, leftover_offset_0, leftover_count_0, prefix, children_0, count, values)
             steps_0.append("break")
 
             steps.append(f'if {offset_0} == -1:')
@@ -982,13 +998,17 @@ def compile_python(grammar, builder=None, cython=False):
             offset_0 = offset.incr()
             line_start_0 = line_start.incr()
             indent_end_0 = indent_end.incr()
+            leftover_offset_0 = leftover_offset.incr()
+            leftover_count_0 = leftover_count.incr()
             steps.append(f"while True: # start reject")
             steps_0.append(f"{children_0} = []")
             steps_0.append(f"{offset_0} = {offset}")
             steps_0.append(f"{line_start_0} = {line_start}")
             steps_0.append(f"{indent_end_0} = {indent_end}")
+            steps_0.append(f"{leftover_offset_0} = {leftover_offset}")
+            steps_0.append(f"{leftover_count_0} = {leftover_count}")
             # steps_0.append(f'print("reject", {offset_0})')
-            build_subrules(rule.rules, steps_0, offset_0, line_start_0, indent_end_0, prefix, children_0, count, values)
+            build_subrules(rule.rules, steps_0, offset_0, line_start_0, indent_end_0, leftover_offset_0, leftover_count_0, prefix, children_0, count, values)
             steps_0.append("break")
 
             # steps.append(f'print("exit", {offset_0})')
@@ -1006,7 +1026,7 @@ def compile_python(grammar, builder=None, cython=False):
             offset_0 = offset.incr()
             steps.append(f"{offset_0} = {offset}")
             steps.append(f"while True: # start count")
-            build_subrules(rule.rules, steps.add_indent(), offset_0, line_start, indent_end, prefix, children, count, values)
+            build_subrules(rule.rules, steps.add_indent(), offset_0, line_start, indent_end, leftover_offset, leftover_count, prefix, children, count, values)
             steps.append("    break")
             steps.append(f"if {offset_0} == -1:")
             steps.append(f"    {offset} = -1; break")
@@ -1045,6 +1065,10 @@ def compile_python(grammar, builder=None, cython=False):
                     c0 = count.incr()
                     steps.extend((
                         f"{count} = 0",
+                        f"if {indent_end} == {leftover_offset} and {leftover_count} > 0:",
+                        f"     {count} += {leftover_count}", 
+                        f"     {leftover_count} = 0",
+                        f"     print('leftover tab')",
                         f"{c0} = {indent_end}",
                         f"for chr in buf[{indent_end}:{offset}]:",
                         f"    {count} += (self.tabstop-({c0}-{line_start})%self.tabstop) if chr == '\t' else 1",
@@ -1053,18 +1077,23 @@ def compile_python(grammar, builder=None, cython=False):
                     ))
                     
                 steps.extend((
-                        f"def _indent(buf, offset, buf_eof, line_start, indent_end,  prefix,  children, count={count}, allow_mixed_indent=self.allow_mixed_indent):",
+                        f"def _indent(buf, offset, buf_eof, line_start, indent_end,  prefix,  children, leftover_offset, leftover_count, count={count}, allow_mixed_indent=self.allow_mixed_indent):",
                         f"    saw_tab, saw_not_tab = False, False",
+                        f"    if offset == leftover_offset: count -= leftover_count",
                         f"    while count > 0 and offset < buf_eof:",
                         f"        chr = buf[offset]",
                         f"        if {cond}:",
-                        f"            offset +=1",
-                        f"            count -= (self.tabstop-(offset-line_start)%self.tabstop) if chr == '\t' else 1",
                         f"            if not allow_mixed_indent:",
                         f"                if chr == '\t': saw_tab = True",
                         f"                else: saw_not_tab = True",
                         f"                if saw_tab and saw_not_tab:",
                         f"                     offset -1; break",
+                        f"            count -= (self.tabstop-(offset-line_start)%self.tabstop) if chr == '\t' else 1",
+                        f"            offset +=1",
+                        f"            if count < 0:",
+                        f"                leftover_offset = offset",
+                        f"                leftover_count = -count",
+                        f"                break",
                 ))
                 if newline_rn:
                     steps.extend((
@@ -1078,7 +1107,7 @@ def compile_python(grammar, builder=None, cython=False):
                         f"            offset = -1",
                         f"            break",
                 #        f"    print('nice', offset)",
-                        f"    return offset, line_start, indent_end",
+                        f"    return offset, line_start, indent_end, leftover_offset, leftover_count",
                         f'{prefix}.append(_indent)',
                 ))
             else:
@@ -1088,7 +1117,7 @@ def compile_python(grammar, builder=None, cython=False):
             steps.append(f'{indent_end} = {offset}')
 
             steps.append('while True:')
-            build_subrules(rule.rules, steps.add_indent(), offset, line_start, indent_end, prefix, children, count, values)
+            build_subrules(rule.rules, steps.add_indent(), offset, line_start, indent_end, leftover_offset, leftover_count, prefix, children, count, values)
             steps.append('    break')
 
             steps.append(f'{prefix}.pop()')
@@ -1103,7 +1132,7 @@ def compile_python(grammar, builder=None, cython=False):
                 f"{indent_end} = {offset}",
                 f"for indent in {prefix}:",
                 f"    _children, _prefix = [], []",
-                f"    {offset}, {line_start}, {indent_end} = indent(buf, {offset}, buf_eof, {line_start}, {indent_end}, _prefix, _children)",
+                f"    {offset}, {line_start}, {indent_end}, {leftover_offset}, {leftover_count} = indent(buf, {offset}, buf_eof, {line_start}, {indent_end}, _prefix, _children, {leftover_offset}, {leftover_count})",
                 f"    if _prefix or _children:",
                 f"       raise Exception('bar')",
                 f"    if {offset} == -1:"
@@ -1115,7 +1144,7 @@ def compile_python(grammar, builder=None, cython=False):
 
         elif rule.kind == RULE:
             steps.extend((
-                f"{offset}, {line_start}, {indent_end} = self.parse_{rule.args['name']}(buf, {offset}, buf_eof, {line_start}, {indent_end}, {prefix}, {children})",
+                f"{offset}, {line_start}, {indent_end}, {leftover_offset}, {leftover_count} = self.parse_{rule.args['name']}(buf, {offset}, buf_eof, {line_start}, {indent_end}, {prefix}, {children}, {leftover_offset}, {leftover_count})",
                 f"if {offset} == -1: break",
                 f"",
             ))
@@ -1236,11 +1265,16 @@ def compile_python(grammar, builder=None, cython=False):
                 cond.append(f"{count} < {repr(_max)}")
 
             cond2 =f"chr in {repr(''.join(grammar.whitespace))}"
+            cond3 =f"chr in {repr(''.join(grammar_newline))}"
+            steps.extend((
+                        f"{count} = 0",
+                        f"if {offset} == {leftover_offset} and {leftover_count} > 0:",
+                        f"     {count} += {leftover_count}", 
+                        f"     print('leftover tab')",
+            ))
 
             if _newline:
-                cond3 =f"chr in {repr(''.join(grammar_newline))}"
                 steps.extend((
-                        f"{count} = 0",
                         f"while {' and '.join(cond)}:",
                         f"    chr = buf[{offset}]",
                 ))
@@ -1274,12 +1308,11 @@ def compile_python(grammar, builder=None, cython=False):
 
             else:
                 steps.extend((
-                    f"{count} = 0",
                     f"while {' and '.join(cond)}:",
                     f"    chr = buf[{offset}]",
                     f"    if {cond2}:",
-                    f"        {offset} +=1",
                     f"        {count} += (self.tabstop-({offset}-{line_start})%self.tabstop) if chr == '\t' else 1",
+                    f"        {offset} +=1",
                     f"    else:",
                     f"        break",
                 ))
@@ -1299,15 +1332,24 @@ def compile_python(grammar, builder=None, cython=False):
             if _maxv:
                 steps.extend((
                     f"if {count} > {_maxv}:",
+                    f"    if chr == '\t':",
+                    f"        {leftover_offset} = {offset}",
+                    f"        {leftover_count} = {count} - {_maxv}",
+                    f"        break",
                     f"    {offset} = -1",
                     f"    break",
                 ))
             elif _max is not None:
                 steps.extend((
                     f"if {count} > {repr(_max)}:",
+                    f"    if chr == '\t':",
+                    f"        {leftover_offset} = {offset}",
+                    f"        {leftover_count} = {count} - {repr(_max)}",
+                    f"        break",
                     f"    {offset} = -1",
                     f"    break",
                 ))
+                    
 
         elif rule.kind == NEWLINE:
             cond =f"chr in {repr(''.join(grammar_newline))}"
@@ -1381,7 +1423,7 @@ def compile_python(grammar, builder=None, cython=False):
             steps.append(f"print('begin trace', 'at' ,{offset}, repr(buf[{offset}:{offset}+5]))")
             steps.append('while True:')
             for subrule in rule.rules:
-                build_steps(subrule, steps.add_indent(), offset, line_start, indent_end, prefix, children, count, values)
+                build_steps(subrule, steps.add_indent(), offset, line_start, indent_end, leftover_offset, leftover_count, prefix, children, count, values)
                 steps.append(f"    print('..... trace', 'at' ,{offset}, repr(buf[{offset}:{offset}+5]))")
 
             steps.append('    break')
@@ -1457,24 +1499,27 @@ def compile_python(grammar, builder=None, cython=False):
         f"    end = len(buf) if end is None else end",
         f"    line_start, indent_end, eof = offset, offset, end",
         f"    prefix, children = [], []",
-        f"    new_offset, line_start, indent_end = self.parse_{start_rule}(buf, offset, eof, line_start, indent_end, prefix, children)",
+        f"    new_offset, line_start, indent_end, leftover_offset, leftover_count = self.parse_{start_rule}(buf, offset, eof, line_start, indent_end, prefix, children, 0, 0)",
         f"    if children and new_offset == end: return children[-1]",
         f"    print('no', offset, new_offset, end, buf[new_offset:])",
         f"    if err is not None: raise err(buf, new_offset, 'no')",
         f"",
     ))
 
-    varnames = {"offset":"cdef int", "line_start":"cdef int", "prefix":"cdef list", "children":"cdef list", "count":"cdef int", "indent_end":"cdef int"}
+    varnames = {
+            "offset":"cdef int", "line_start":"cdef int", 
+            "prefix":"cdef list", "children":"cdef list", "count":"cdef int", "indent_end":"cdef int",
+            "leftover_offset":"cdef int", "leftover_count": "cdef int"}
     for name, rule in grammar.rules.items():
         cdefs = {}
         if cython:
-            output.append(f"cdef (int, int, int) parse_{name}(self, str buf, int offset_0, int buf_eof, int line_start_0, int indent_end_0,  list prefix_0, list children_0):")
+            output.append(f"cdef (int, int, int, int, int) parse_{name}(self, str buf, int offset_0, int buf_eof, int line_start_0, int indent_end_0,  list prefix_0, list children_0, int leftover_offset_0, int leftover_count_0):")
             output.append(f"    cdef Py_UCS4 chr")
             
             for v in varnames:
                 cdefs[v] = output.add_indent(4).append_placeholder()
         else:
-            output.append(f"def parse_{name}(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0):")
+            output.append(f"def parse_{name}(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0, leftover_offset_0, leftover_count_0):")
    #     output.append(f"    print('enter {name},',offset_0,line_start_0,prefix_0, repr(buf[offset_0:offset_0+10]))")
         output.append(f"    while True: # note: return at end of loop")
 
@@ -1485,6 +1530,8 @@ def compile_python(grammar, builder=None, cython=False):
                 VarBuilder("offset", maxes=maxes),
                 VarBuilder('line_start', maxes=maxes),
                 VarBuilder('indent_end', maxes=maxes),
+                VarBuilder('leftover_offset', maxes=maxes),
+                VarBuilder('leftover_count', maxes=maxes),
                 VarBuilder('prefix', maxes=maxes),
                 VarBuilder('children', maxes=maxes),
                 VarBuilder("count", maxes=maxes), values, )
@@ -1495,7 +1542,7 @@ def compile_python(grammar, builder=None, cython=False):
                 output.replace_placeholder(p, line)
         output.append(f"        break")
     #     output.append(f"    print(('exit' if offset_0 != -1 else 'fail'), '{name}', offset_0, line_start_0, repr(buf[offset_0: offset_0+10]))")
-        output.append(f"    return offset_0, line_start_0, indent_end_0")
+        output.append(f"    return offset_0, line_start_0, indent_end_0, leftover_offset_0, leftover_count_0")
         output.append("")
     # for lineno, line in enumerate(output.output):
     #    print(lineno, '\t', line)

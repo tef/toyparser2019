@@ -25,12 +25,12 @@ class Parser:
         end = len(buf) if end is None else end
         line_start, indent_end, eof = offset, offset, end
         prefix, children = [], []
-        new_offset, line_start, indent_end = self.parse_document(buf, offset, eof, line_start, indent_end, prefix, children)
+        new_offset, line_start, indent_end, leftover_offset, leftover_count = self.parse_document(buf, offset, eof, line_start, indent_end, prefix, children, 0, 0)
         if children and new_offset == end: return children[-1]
         print('no', offset, new_offset, end, buf[new_offset:])
         if err is not None: raise err(buf, new_offset, 'no')
 
-    def parse_literal(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0):
+    def parse_literal(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0, leftover_offset, leftover_count):
         while True: # note: return at end of loop
             while True: # start choice
                 offset_1 = offset_0
@@ -38,7 +38,7 @@ class Parser:
                 indent_end_1 = indent_end_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, line_start_1, indent_end_1 = self.parse_list_literal(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1)
+                    offset_1, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_list_literal(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1, leftover_offset, leftover_count)
                     if offset_1 == -1: break
 
 
@@ -56,7 +56,7 @@ class Parser:
                 indent_end_1 = indent_end_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, line_start_1, indent_end_1 = self.parse_object_literal(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1)
+                    offset_1, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_object_literal(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1, leftover_offset, leftover_count)
                     if offset_1 == -1: break
 
 
@@ -74,7 +74,7 @@ class Parser:
                 indent_end_1 = indent_end_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, line_start_1, indent_end_1 = self.parse_string_literal(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1)
+                    offset_1, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_string_literal(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1, leftover_offset, leftover_count)
                     if offset_1 == -1: break
 
 
@@ -92,7 +92,7 @@ class Parser:
                 indent_end_1 = indent_end_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, line_start_1, indent_end_1 = self.parse_number_literal(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1)
+                    offset_1, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_number_literal(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1, leftover_offset, leftover_count)
                     if offset_1 == -1: break
 
 
@@ -110,7 +110,7 @@ class Parser:
                 indent_end_1 = indent_end_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, line_start_1, indent_end_1 = self.parse_true_literal(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1)
+                    offset_1, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_true_literal(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1, leftover_offset, leftover_count)
                     if offset_1 == -1: break
 
 
@@ -128,7 +128,7 @@ class Parser:
                 indent_end_1 = indent_end_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, line_start_1, indent_end_1 = self.parse_false_literal(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1)
+                    offset_1, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_false_literal(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1, leftover_offset, leftover_count)
                     if offset_1 == -1: break
 
 
@@ -146,7 +146,7 @@ class Parser:
                 indent_end_1 = indent_end_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, line_start_1, indent_end_1 = self.parse_null_literal(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1)
+                    offset_1, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_null_literal(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1, leftover_offset, leftover_count)
                     if offset_1 == -1: break
 
 
@@ -165,9 +165,9 @@ class Parser:
                 break
 
             break
-        return offset_0, line_start_0, indent_end_0
+        return offset_0, line_start_0, indent_end_0, leftover_offset, leftover_count
 
-    def parse_true_literal(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0):
+    def parse_true_literal(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0, leftover_offset, leftover_count):
         while True: # note: return at end of loop
             offset_1 = offset_0
             children_1 = []
@@ -190,9 +190,9 @@ class Parser:
             offset_0 = offset_1
 
             break
-        return offset_0, line_start_0, indent_end_0
+        return offset_0, line_start_0, indent_end_0, leftover_offset, leftover_count
 
-    def parse_false_literal(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0):
+    def parse_false_literal(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0, leftover_offset, leftover_count):
         while True: # note: return at end of loop
             offset_1 = offset_0
             children_1 = []
@@ -215,9 +215,9 @@ class Parser:
             offset_0 = offset_1
 
             break
-        return offset_0, line_start_0, indent_end_0
+        return offset_0, line_start_0, indent_end_0, leftover_offset, leftover_count
 
-    def parse_null_literal(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0):
+    def parse_null_literal(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0, leftover_offset, leftover_count):
         while True: # note: return at end of loop
             offset_1 = offset_0
             children_1 = []
@@ -240,9 +240,9 @@ class Parser:
             offset_0 = offset_1
 
             break
-        return offset_0, line_start_0, indent_end_0
+        return offset_0, line_start_0, indent_end_0, leftover_offset, leftover_count
 
-    def parse_identifier(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0):
+    def parse_identifier(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0, leftover_offset, leftover_count):
         while True: # note: return at end of loop
             while True: # start choice
                 offset_1 = offset_0
@@ -318,7 +318,7 @@ class Parser:
                 indent_end_1 = indent_end_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, line_start_1, indent_end_1 = self.parse_string_literal(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1)
+                    offset_1, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_string_literal(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1, leftover_offset, leftover_count)
                     if offset_1 == -1: break
 
 
@@ -338,9 +338,9 @@ class Parser:
                 break
 
             break
-        return offset_0, line_start_0, indent_end_0
+        return offset_0, line_start_0, indent_end_0, leftover_offset, leftover_count
 
-    def parse_number_literal(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0):
+    def parse_number_literal(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0, leftover_offset, leftover_count):
         while True: # note: return at end of loop
             offset_1 = offset_0
             children_1 = []
@@ -576,9 +576,9 @@ class Parser:
             offset_0 = offset_1
 
             break
-        return offset_0, line_start_0, indent_end_0
+        return offset_0, line_start_0, indent_end_0, leftover_offset, leftover_count
 
-    def parse_string_literal(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0):
+    def parse_string_literal(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0, leftover_offset, leftover_count):
         while True: # note: return at end of loop
             if buf[offset_0:offset_0+1] == '"':
                 offset_0 += 1
@@ -796,9 +796,9 @@ class Parser:
 
 
             break
-        return offset_0, line_start_0, indent_end_0
+        return offset_0, line_start_0, indent_end_0, leftover_offset, leftover_count
 
-    def parse_list_literal(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0):
+    def parse_list_literal(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0, leftover_offset, leftover_count):
         while True: # note: return at end of loop
             if buf[offset_0:offset_0+1] == '[':
                 offset_0 += 1
@@ -807,6 +807,9 @@ class Parser:
                 break
 
             count_0 = 0
+            if offset_0 == leftover_offset and leftover_count > 0:
+                 count_0 += leftover_count
+                 print('leftover tab')
             while offset_0 < buf_eof:
                 chr = buf[offset_0]
                 if chr == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
@@ -834,7 +837,7 @@ class Parser:
                     indent_end_1 = indent_end_0
                     children_2 = [] if children_1 is not None else None
                     while True:
-                        offset_2, line_start_1, indent_end_1 = self.parse_literal(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2)
+                        offset_2, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_literal(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2, leftover_offset, leftover_count)
                         if offset_2 == -1: break
 
 
@@ -846,6 +849,9 @@ class Parser:
                             children_3 = [] if children_2 is not None else None
                             while True:
                                 count_2 = 0
+                                if offset_3 == leftover_offset and leftover_count > 0:
+                                     count_2 += leftover_count
+                                     print('leftover tab')
                                 while offset_3 < buf_eof:
                                     chr = buf[offset_3]
                                     if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
@@ -870,6 +876,9 @@ class Parser:
                                     break
 
                                 count_2 = 0
+                                if offset_3 == leftover_offset and leftover_count > 0:
+                                     count_2 += leftover_count
+                                     print('leftover tab')
                                 while offset_3 < buf_eof:
                                     chr = buf[offset_3]
                                     if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
@@ -887,7 +896,7 @@ class Parser:
                                     else:
                                         break
 
-                                offset_3, line_start_2, indent_end_2 = self.parse_literal(buf, offset_3, buf_eof, line_start_2, indent_end_2, prefix_0, children_3)
+                                offset_3, line_start_2, indent_end_2, leftover_offset, leftover_count = self.parse_literal(buf, offset_3, buf_eof, line_start_2, indent_end_2, prefix_0, children_3, leftover_offset, leftover_count)
                                 if offset_3 == -1: break
 
 
@@ -905,6 +914,9 @@ class Parser:
                             break
 
                         count_1 = 0
+                        if offset_2 == leftover_offset and leftover_count > 0:
+                             count_1 += leftover_count
+                             print('leftover tab')
                         while offset_2 < buf_eof:
                             chr = buf[offset_2]
                             if chr == '\r' and offset_2 + 1 < buf_eof and buf[offset_2+1] == '\n':
@@ -936,6 +948,9 @@ class Parser:
                                     break
 
                                 count_2 = 0
+                                if offset_3 == leftover_offset and leftover_count > 0:
+                                     count_2 += leftover_count
+                                     print('leftover tab')
                                 while offset_3 < buf_eof:
                                     chr = buf[offset_3]
                                     if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
@@ -1000,9 +1015,9 @@ class Parser:
 
 
             break
-        return offset_0, line_start_0, indent_end_0
+        return offset_0, line_start_0, indent_end_0, leftover_offset, leftover_count
 
-    def parse_object_literal(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0):
+    def parse_object_literal(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0, leftover_offset, leftover_count):
         while True: # note: return at end of loop
             if buf[offset_0:offset_0+1] == '{':
                 offset_0 += 1
@@ -1011,6 +1026,9 @@ class Parser:
                 break
 
             count_0 = 0
+            if offset_0 == leftover_offset and leftover_count > 0:
+                 count_0 += leftover_count
+                 print('leftover tab')
             while offset_0 < buf_eof:
                 chr = buf[offset_0]
                 if chr == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
@@ -1038,16 +1056,19 @@ class Parser:
                     indent_end_1 = indent_end_0
                     children_2 = [] if children_1 is not None else None
                     while True:
-                        offset_2, line_start_1, indent_end_1 = self.parse_string_literal(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2)
+                        offset_2, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_string_literal(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2, leftover_offset, leftover_count)
                         if offset_2 == -1: break
 
 
                         count_1 = 0
+                        if offset_2 == leftover_offset and leftover_count > 0:
+                             count_1 += leftover_count
+                             print('leftover tab')
                         while offset_2 < buf_eof:
                             chr = buf[offset_2]
                             if chr in ' \t':
-                                offset_2 +=1
                                 count_1 += (self.tabstop-(offset_2-line_start_1)%self.tabstop) if chr == '	' else 1
+                                offset_2 +=1
                             else:
                                 break
 
@@ -1058,6 +1079,9 @@ class Parser:
                             break
 
                         count_1 = 0
+                        if offset_2 == leftover_offset and leftover_count > 0:
+                             count_1 += leftover_count
+                             print('leftover tab')
                         while offset_2 < buf_eof:
                             chr = buf[offset_2]
                             if chr == '\r' and offset_2 + 1 < buf_eof and buf[offset_2+1] == '\n':
@@ -1075,7 +1099,7 @@ class Parser:
                             else:
                                 break
 
-                        offset_2, line_start_1, indent_end_1 = self.parse_literal(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2)
+                        offset_2, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_literal(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2, leftover_offset, leftover_count)
                         if offset_2 == -1: break
 
 
@@ -1087,6 +1111,9 @@ class Parser:
                             children_3 = [] if children_2 is not None else None
                             while True:
                                 count_2 = 0
+                                if offset_3 == leftover_offset and leftover_count > 0:
+                                     count_2 += leftover_count
+                                     print('leftover tab')
                                 while offset_3 < buf_eof:
                                     chr = buf[offset_3]
                                     if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
@@ -1111,6 +1138,9 @@ class Parser:
                                     break
 
                                 count_2 = 0
+                                if offset_3 == leftover_offset and leftover_count > 0:
+                                     count_2 += leftover_count
+                                     print('leftover tab')
                                 while offset_3 < buf_eof:
                                     chr = buf[offset_3]
                                     if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
@@ -1128,16 +1158,19 @@ class Parser:
                                     else:
                                         break
 
-                                offset_3, line_start_2, indent_end_2 = self.parse_string_literal(buf, offset_3, buf_eof, line_start_2, indent_end_2, prefix_0, children_3)
+                                offset_3, line_start_2, indent_end_2, leftover_offset, leftover_count = self.parse_string_literal(buf, offset_3, buf_eof, line_start_2, indent_end_2, prefix_0, children_3, leftover_offset, leftover_count)
                                 if offset_3 == -1: break
 
 
                                 count_2 = 0
+                                if offset_3 == leftover_offset and leftover_count > 0:
+                                     count_2 += leftover_count
+                                     print('leftover tab')
                                 while offset_3 < buf_eof:
                                     chr = buf[offset_3]
                                     if chr in ' \t':
-                                        offset_3 +=1
                                         count_2 += (self.tabstop-(offset_3-line_start_2)%self.tabstop) if chr == '	' else 1
+                                        offset_3 +=1
                                     else:
                                         break
 
@@ -1148,6 +1181,9 @@ class Parser:
                                     break
 
                                 count_2 = 0
+                                if offset_3 == leftover_offset and leftover_count > 0:
+                                     count_2 += leftover_count
+                                     print('leftover tab')
                                 while offset_3 < buf_eof:
                                     chr = buf[offset_3]
                                     if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
@@ -1165,7 +1201,7 @@ class Parser:
                                     else:
                                         break
 
-                                offset_3, line_start_2, indent_end_2 = self.parse_literal(buf, offset_3, buf_eof, line_start_2, indent_end_2, prefix_0, children_3)
+                                offset_3, line_start_2, indent_end_2, leftover_offset, leftover_count = self.parse_literal(buf, offset_3, buf_eof, line_start_2, indent_end_2, prefix_0, children_3, leftover_offset, leftover_count)
                                 if offset_3 == -1: break
 
 
@@ -1183,6 +1219,9 @@ class Parser:
                             break
 
                         count_1 = 0
+                        if offset_2 == leftover_offset and leftover_count > 0:
+                             count_1 += leftover_count
+                             print('leftover tab')
                         while offset_2 < buf_eof:
                             chr = buf[offset_2]
                             if chr == '\r' and offset_2 + 1 < buf_eof and buf[offset_2+1] == '\n':
@@ -1214,6 +1253,9 @@ class Parser:
                                     break
 
                                 count_2 = 0
+                                if offset_3 == leftover_offset and leftover_count > 0:
+                                     count_2 += leftover_count
+                                     print('leftover tab')
                                 while offset_3 < buf_eof:
                                     chr = buf[offset_3]
                                     if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
@@ -1278,9 +1320,9 @@ class Parser:
 
 
             break
-        return offset_0, line_start_0, indent_end_0
+        return offset_0, line_start_0, indent_end_0, leftover_offset, leftover_count
 
-    def parse_yaml_eol(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0):
+    def parse_yaml_eol(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0, leftover_offset, leftover_count):
         while True: # note: return at end of loop
             count_0 = 0
             while True:
@@ -1296,11 +1338,14 @@ class Parser:
                         children_2 = [] if children_1 is not None else None
                         while True: # case
                             count_1 = 0
+                            if offset_2 == leftover_offset and leftover_count > 0:
+                                 count_1 += leftover_count
+                                 print('leftover tab')
                             while offset_2 < buf_eof:
                                 chr = buf[offset_2]
                                 if chr in ' \t':
-                                    offset_2 +=1
                                     count_1 += (self.tabstop-(offset_2-line_start_2)%self.tabstop) if chr == '	' else 1
+                                    offset_2 +=1
                                 else:
                                     break
 
@@ -1337,11 +1382,14 @@ class Parser:
                         children_2 = [] if children_1 is not None else None
                         while True: # case
                             count_1 = 0
+                            if offset_2 == leftover_offset and leftover_count > 0:
+                                 count_1 += leftover_count
+                                 print('leftover tab')
                             while offset_2 < buf_eof:
                                 chr = buf[offset_2]
                                 if chr in ' \t':
-                                    offset_2 +=1
                                     count_1 += (self.tabstop-(offset_2-line_start_2)%self.tabstop) if chr == '	' else 1
+                                    offset_2 +=1
                                 else:
                                     break
 
@@ -1429,9 +1477,9 @@ class Parser:
                 break
 
             break
-        return offset_0, line_start_0, indent_end_0
+        return offset_0, line_start_0, indent_end_0, leftover_offset, leftover_count
 
-    def parse_indented_list(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0):
+    def parse_indented_list(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0, leftover_offset, leftover_count):
         while True: # note: return at end of loop
             count_0 = 0
             count_1 = indent_end_0
@@ -1439,18 +1487,22 @@ class Parser:
                 count_0 += (self.tabstop-(count_1-line_start_0)%self.tabstop) if chr == '	' else 1
                 count_1 +=1
 
-            def _indent(buf, offset, buf_eof, line_start, indent_end,  prefix,  children, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
+            def _indent(buf, offset, buf_eof, line_start, indent_end,  prefix,  children, leftover_offset, leftover_count, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
                 saw_tab, saw_not_tab = False, False
+                if offset == leftover_offset: count -= leftover_count
                 while count > 0 and offset < buf_eof:
                     chr = buf[offset]
                     if chr in ' \t':
-                        offset +=1
-                        count -= (self.tabstop-(offset-line_start)%self.tabstop) if chr == '	' else 1
                         if not allow_mixed_indent:
                             if chr == '	': saw_tab = True
                             else: saw_not_tab = True
                             if saw_tab and saw_not_tab:
                                  offset -1; break
+                        count -= (self.tabstop-(offset-line_start)%self.tabstop) if chr == '	' else 1
+                        offset +=1
+                        if count < 0:
+                            leftover_offset = offset
+                            leftover_count = -count
                     elif chr == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
                         break
                     elif chr in '\n\r':
@@ -1458,7 +1510,7 @@ class Parser:
                     else:
                         offset = -1
                         break
-                return offset, line_start, indent_end
+                return offset, line_start, indent_end, leftover_offset, leftover_count
             prefix_0.append(_indent)
             indent_end_0 = offset_0
             while True:
@@ -1478,15 +1530,18 @@ class Parser:
                         children_2 = [] if children_1 is not None else None
                         while True: # case
                             count_0 = 0
+                            if offset_2 == leftover_offset and leftover_count > 0:
+                                 count_0 += leftover_count
+                                 print('leftover tab')
                             while offset_2 < buf_eof:
                                 chr = buf[offset_2]
                                 if chr in ' \t':
-                                    offset_2 +=1
                                     count_0 += (self.tabstop-(offset_2-line_start_1)%self.tabstop) if chr == '	' else 1
+                                    offset_2 +=1
                                 else:
                                     break
 
-                            offset_2, line_start_1, indent_end_1 = self.parse_indented_value(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2)
+                            offset_2, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_indented_value(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2, leftover_offset, leftover_count)
                             if offset_2 == -1: break
 
 
@@ -1505,7 +1560,7 @@ class Parser:
                         indent_end_1 = indent_end_0
                         children_2 = [] if children_1 is not None else None
                         while True: # case
-                            offset_2, line_start_1, indent_end_1 = self.parse_yaml_eol(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2)
+                            offset_2, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_yaml_eol(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2, leftover_offset, leftover_count)
                             if offset_2 == -1: break
 
 
@@ -1515,7 +1570,7 @@ class Parser:
                             indent_end_1 = offset_2
                             for indent in prefix_0:
                                 _children, _prefix = [], []
-                                offset_2, line_start_1, indent_end_1 = indent(buf, offset_2, buf_eof, line_start_1, indent_end_1, _prefix, _children)
+                                offset_2, line_start_1, indent_end_1, leftover_offset, leftover_count = indent(buf, offset_2, buf_eof, line_start_1, indent_end_1, _prefix, _children, leftover_offset, leftover_count)
                                 if _prefix or _children:
                                    raise Exception('bar')
                                 if offset_2 == -1:        break
@@ -1524,18 +1579,21 @@ class Parser:
                                 break
 
                             count_0 = 0
+                            if offset_2 == leftover_offset and leftover_count > 0:
+                                 count_0 += leftover_count
+                                 print('leftover tab')
                             while offset_2 < buf_eof:
                                 chr = buf[offset_2]
                                 if chr in ' \t':
-                                    offset_2 +=1
                                     count_0 += (self.tabstop-(offset_2-line_start_1)%self.tabstop) if chr == '	' else 1
+                                    offset_2 +=1
                                 else:
                                     break
                             if count_0 < 1:
                                 offset_2 = -1
                                 break
 
-                            offset_2, line_start_1, indent_end_1 = self.parse_indented_value(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2)
+                            offset_2, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_indented_value(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2, leftover_offset, leftover_count)
                             if offset_2 == -1: break
 
 
@@ -1561,7 +1619,7 @@ class Parser:
                         indent_end_1 = indent_end_0
                         children_2 = [] if children_1 is not None else None
                         while True:
-                            offset_2, line_start_1, indent_end_1 = self.parse_yaml_eol(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2)
+                            offset_2, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_yaml_eol(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2, leftover_offset, leftover_count)
                             if offset_2 == -1: break
 
 
@@ -1571,7 +1629,7 @@ class Parser:
                             indent_end_1 = offset_2
                             for indent in prefix_0:
                                 _children, _prefix = [], []
-                                offset_2, line_start_1, indent_end_1 = indent(buf, offset_2, buf_eof, line_start_1, indent_end_1, _prefix, _children)
+                                offset_2, line_start_1, indent_end_1, leftover_offset, leftover_count = indent(buf, offset_2, buf_eof, line_start_1, indent_end_1, _prefix, _children, leftover_offset, leftover_count)
                                 if _prefix or _children:
                                    raise Exception('bar')
                                 if offset_2 == -1:        break
@@ -1586,11 +1644,14 @@ class Parser:
                                 break
 
                             count_1 = 0
+                            if offset_2 == leftover_offset and leftover_count > 0:
+                                 count_1 += leftover_count
+                                 print('leftover tab')
                             while offset_2 < buf_eof:
                                 chr = buf[offset_2]
                                 if chr in ' \t':
-                                    offset_2 +=1
                                     count_1 += (self.tabstop-(offset_2-line_start_1)%self.tabstop) if chr == '	' else 1
+                                    offset_2 +=1
                                 else:
                                     break
                             if count_1 < 1:
@@ -1604,15 +1665,18 @@ class Parser:
                                 children_3 = [] if children_2 is not None else None
                                 while True: # case
                                     count_1 = 0
+                                    if offset_3 == leftover_offset and leftover_count > 0:
+                                         count_1 += leftover_count
+                                         print('leftover tab')
                                     while offset_3 < buf_eof:
                                         chr = buf[offset_3]
                                         if chr in ' \t':
-                                            offset_3 +=1
                                             count_1 += (self.tabstop-(offset_3-line_start_2)%self.tabstop) if chr == '	' else 1
+                                            offset_3 +=1
                                         else:
                                             break
 
-                                    offset_3, line_start_2, indent_end_2 = self.parse_indented_value(buf, offset_3, buf_eof, line_start_2, indent_end_2, prefix_0, children_3)
+                                    offset_3, line_start_2, indent_end_2, leftover_offset, leftover_count = self.parse_indented_value(buf, offset_3, buf_eof, line_start_2, indent_end_2, prefix_0, children_3, leftover_offset, leftover_count)
                                     if offset_3 == -1: break
 
 
@@ -1631,7 +1695,7 @@ class Parser:
                                 indent_end_2 = indent_end_1
                                 children_3 = [] if children_2 is not None else None
                                 while True: # case
-                                    offset_3, line_start_2, indent_end_2 = self.parse_yaml_eol(buf, offset_3, buf_eof, line_start_2, indent_end_2, prefix_0, children_3)
+                                    offset_3, line_start_2, indent_end_2, leftover_offset, leftover_count = self.parse_yaml_eol(buf, offset_3, buf_eof, line_start_2, indent_end_2, prefix_0, children_3, leftover_offset, leftover_count)
                                     if offset_3 == -1: break
 
 
@@ -1641,7 +1705,7 @@ class Parser:
                                     indent_end_2 = offset_3
                                     for indent in prefix_0:
                                         _children, _prefix = [], []
-                                        offset_3, line_start_2, indent_end_2 = indent(buf, offset_3, buf_eof, line_start_2, indent_end_2, _prefix, _children)
+                                        offset_3, line_start_2, indent_end_2, leftover_offset, leftover_count = indent(buf, offset_3, buf_eof, line_start_2, indent_end_2, _prefix, _children, leftover_offset, leftover_count)
                                         if _prefix or _children:
                                            raise Exception('bar')
                                         if offset_3 == -1:        break
@@ -1650,15 +1714,18 @@ class Parser:
                                         break
 
                                     count_1 = 0
+                                    if offset_3 == leftover_offset and leftover_count > 0:
+                                         count_1 += leftover_count
+                                         print('leftover tab')
                                     while offset_3 < buf_eof:
                                         chr = buf[offset_3]
                                         if chr in ' \t':
-                                            offset_3 +=1
                                             count_1 += (self.tabstop-(offset_3-line_start_2)%self.tabstop) if chr == '	' else 1
+                                            offset_3 +=1
                                         else:
                                             break
 
-                                    offset_3, line_start_2, indent_end_2 = self.parse_indented_value(buf, offset_3, buf_eof, line_start_2, indent_end_2, prefix_0, children_3)
+                                    offset_3, line_start_2, indent_end_2, leftover_offset, leftover_count = self.parse_indented_value(buf, offset_3, buf_eof, line_start_2, indent_end_2, prefix_0, children_3, leftover_offset, leftover_count)
                                     if offset_3 == -1: break
 
 
@@ -1706,9 +1773,9 @@ class Parser:
             if offset_0 == -1: break
 
             break
-        return offset_0, line_start_0, indent_end_0
+        return offset_0, line_start_0, indent_end_0, leftover_offset, leftover_count
 
-    def parse_indented_object(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0):
+    def parse_indented_object(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0, leftover_offset, leftover_count):
         while True: # note: return at end of loop
             count_0 = 0
             count_1 = indent_end_0
@@ -1716,18 +1783,22 @@ class Parser:
                 count_0 += (self.tabstop-(count_1-line_start_0)%self.tabstop) if chr == '	' else 1
                 count_1 +=1
 
-            def _indent(buf, offset, buf_eof, line_start, indent_end,  prefix,  children, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
+            def _indent(buf, offset, buf_eof, line_start, indent_end,  prefix,  children, leftover_offset, leftover_count, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
                 saw_tab, saw_not_tab = False, False
+                if offset == leftover_offset: count -= leftover_count
                 while count > 0 and offset < buf_eof:
                     chr = buf[offset]
                     if chr in ' \t':
-                        offset +=1
-                        count -= (self.tabstop-(offset-line_start)%self.tabstop) if chr == '	' else 1
                         if not allow_mixed_indent:
                             if chr == '	': saw_tab = True
                             else: saw_not_tab = True
                             if saw_tab and saw_not_tab:
                                  offset -1; break
+                        count -= (self.tabstop-(offset-line_start)%self.tabstop) if chr == '	' else 1
+                        offset +=1
+                        if count < 0:
+                            leftover_offset = offset
+                            leftover_count = -count
                     elif chr == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
                         break
                     elif chr in '\n\r':
@@ -1735,7 +1806,7 @@ class Parser:
                     else:
                         offset = -1
                         break
-                return offset, line_start, indent_end
+                return offset, line_start, indent_end, leftover_offset, leftover_count
             prefix_0.append(_indent)
             indent_end_0 = offset_0
             while True:
@@ -1745,16 +1816,19 @@ class Parser:
                     offset_2 = offset_1
                     children_2 = []
                     while True: # start capture
-                        offset_2, line_start_0, indent_end_0 = self.parse_identifier(buf, offset_2, buf_eof, line_start_0, indent_end_0, prefix_0, children_2)
+                        offset_2, line_start_0, indent_end_0, leftover_offset, leftover_count = self.parse_identifier(buf, offset_2, buf_eof, line_start_0, indent_end_0, prefix_0, children_2, leftover_offset, leftover_count)
                         if offset_2 == -1: break
 
 
                         count_0 = 0
+                        if offset_2 == leftover_offset and leftover_count > 0:
+                             count_0 += leftover_count
+                             print('leftover tab')
                         while offset_2 < buf_eof:
                             chr = buf[offset_2]
                             if chr in ' \t':
-                                offset_2 +=1
                                 count_0 += (self.tabstop-(offset_2-line_start_0)%self.tabstop) if chr == '	' else 1
+                                offset_2 +=1
                             else:
                                 break
 
@@ -1770,7 +1844,7 @@ class Parser:
                             indent_end_1 = indent_end_0
                             children_3 = [] if children_2 is not None else None
                             while True: # case
-                                offset_3, line_start_1, indent_end_1 = self.parse_yaml_eol(buf, offset_3, buf_eof, line_start_1, indent_end_1, prefix_0, children_3)
+                                offset_3, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_yaml_eol(buf, offset_3, buf_eof, line_start_1, indent_end_1, prefix_0, children_3, leftover_offset, leftover_count)
                                 if offset_3 == -1: break
 
 
@@ -1780,7 +1854,7 @@ class Parser:
                                 indent_end_1 = offset_3
                                 for indent in prefix_0:
                                     _children, _prefix = [], []
-                                    offset_3, line_start_1, indent_end_1 = indent(buf, offset_3, buf_eof, line_start_1, indent_end_1, _prefix, _children)
+                                    offset_3, line_start_1, indent_end_1, leftover_offset, leftover_count = indent(buf, offset_3, buf_eof, line_start_1, indent_end_1, _prefix, _children, leftover_offset, leftover_count)
                                     if _prefix or _children:
                                        raise Exception('bar')
                                     if offset_3 == -1:        break
@@ -1789,18 +1863,21 @@ class Parser:
                                     break
 
                                 count_0 = 0
+                                if offset_3 == leftover_offset and leftover_count > 0:
+                                     count_0 += leftover_count
+                                     print('leftover tab')
                                 while offset_3 < buf_eof:
                                     chr = buf[offset_3]
                                     if chr in ' \t':
-                                        offset_3 +=1
                                         count_0 += (self.tabstop-(offset_3-line_start_1)%self.tabstop) if chr == '	' else 1
+                                        offset_3 +=1
                                     else:
                                         break
                                 if count_0 < 1:
                                     offset_3 = -1
                                     break
 
-                                offset_3, line_start_1, indent_end_1 = self.parse_indented_value(buf, offset_3, buf_eof, line_start_1, indent_end_1, prefix_0, children_3)
+                                offset_3, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_indented_value(buf, offset_3, buf_eof, line_start_1, indent_end_1, prefix_0, children_3, leftover_offset, leftover_count)
                                 if offset_3 == -1: break
 
 
@@ -1820,15 +1897,18 @@ class Parser:
                             children_3 = [] if children_2 is not None else None
                             while True: # case
                                 count_0 = 0
+                                if offset_3 == leftover_offset and leftover_count > 0:
+                                     count_0 += leftover_count
+                                     print('leftover tab')
                                 while offset_3 < buf_eof:
                                     chr = buf[offset_3]
                                     if chr in ' \t':
-                                        offset_3 +=1
                                         count_0 += (self.tabstop-(offset_3-line_start_1)%self.tabstop) if chr == '	' else 1
+                                        offset_3 +=1
                                     else:
                                         break
 
-                                offset_3, line_start_1, indent_end_1 = self.parse_indented_value(buf, offset_3, buf_eof, line_start_1, indent_end_1, prefix_0, children_3)
+                                offset_3, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_indented_value(buf, offset_3, buf_eof, line_start_1, indent_end_1, prefix_0, children_3, leftover_offset, leftover_count)
                                 if offset_3 == -1: break
 
 
@@ -1868,7 +1948,7 @@ class Parser:
                             offset_3 = offset_2
                             children_3 = []
                             while True: # start capture
-                                offset_3, line_start_1, indent_end_1 = self.parse_yaml_eol(buf, offset_3, buf_eof, line_start_1, indent_end_1, prefix_0, children_3)
+                                offset_3, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_yaml_eol(buf, offset_3, buf_eof, line_start_1, indent_end_1, prefix_0, children_3, leftover_offset, leftover_count)
                                 if offset_3 == -1: break
 
 
@@ -1878,7 +1958,7 @@ class Parser:
                                 indent_end_1 = offset_3
                                 for indent in prefix_0:
                                     _children, _prefix = [], []
-                                    offset_3, line_start_1, indent_end_1 = indent(buf, offset_3, buf_eof, line_start_1, indent_end_1, _prefix, _children)
+                                    offset_3, line_start_1, indent_end_1, leftover_offset, leftover_count = indent(buf, offset_3, buf_eof, line_start_1, indent_end_1, _prefix, _children, leftover_offset, leftover_count)
                                     if _prefix or _children:
                                        raise Exception('bar')
                                     if offset_3 == -1:        break
@@ -1886,16 +1966,19 @@ class Parser:
                                 if offset_3 == -1:
                                     break
 
-                                offset_3, line_start_1, indent_end_1 = self.parse_identifier(buf, offset_3, buf_eof, line_start_1, indent_end_1, prefix_0, children_3)
+                                offset_3, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_identifier(buf, offset_3, buf_eof, line_start_1, indent_end_1, prefix_0, children_3, leftover_offset, leftover_count)
                                 if offset_3 == -1: break
 
 
                                 count_1 = 0
+                                if offset_3 == leftover_offset and leftover_count > 0:
+                                     count_1 += leftover_count
+                                     print('leftover tab')
                                 while offset_3 < buf_eof:
                                     chr = buf[offset_3]
                                     if chr in ' \t':
-                                        offset_3 +=1
                                         count_1 += (self.tabstop-(offset_3-line_start_1)%self.tabstop) if chr == '	' else 1
+                                        offset_3 +=1
                                     else:
                                         break
 
@@ -1917,15 +2000,18 @@ class Parser:
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
                                         count_1 = 0
+                                        if offset_4 == leftover_offset and leftover_count > 0:
+                                             count_1 += leftover_count
+                                             print('leftover tab')
                                         while offset_4 < buf_eof:
                                             chr = buf[offset_4]
                                             if chr in ' \t':
-                                                offset_4 +=1
                                                 count_1 += (self.tabstop-(offset_4-line_start_2)%self.tabstop) if chr == '	' else 1
+                                                offset_4 +=1
                                             else:
                                                 break
 
-                                        offset_4, line_start_2, indent_end_2 = self.parse_indented_value(buf, offset_4, buf_eof, line_start_2, indent_end_2, prefix_0, children_4)
+                                        offset_4, line_start_2, indent_end_2, leftover_offset, leftover_count = self.parse_indented_value(buf, offset_4, buf_eof, line_start_2, indent_end_2, prefix_0, children_4, leftover_offset, leftover_count)
                                         if offset_4 == -1: break
 
 
@@ -1944,7 +2030,7 @@ class Parser:
                                     indent_end_2 = indent_end_1
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
-                                        offset_4, line_start_2, indent_end_2 = self.parse_yaml_eol(buf, offset_4, buf_eof, line_start_2, indent_end_2, prefix_0, children_4)
+                                        offset_4, line_start_2, indent_end_2, leftover_offset, leftover_count = self.parse_yaml_eol(buf, offset_4, buf_eof, line_start_2, indent_end_2, prefix_0, children_4, leftover_offset, leftover_count)
                                         if offset_4 == -1: break
 
 
@@ -1954,7 +2040,7 @@ class Parser:
                                         indent_end_2 = offset_4
                                         for indent in prefix_0:
                                             _children, _prefix = [], []
-                                            offset_4, line_start_2, indent_end_2 = indent(buf, offset_4, buf_eof, line_start_2, indent_end_2, _prefix, _children)
+                                            offset_4, line_start_2, indent_end_2, leftover_offset, leftover_count = indent(buf, offset_4, buf_eof, line_start_2, indent_end_2, _prefix, _children, leftover_offset, leftover_count)
                                             if _prefix or _children:
                                                raise Exception('bar')
                                             if offset_4 == -1:        break
@@ -1963,18 +2049,21 @@ class Parser:
                                             break
 
                                         count_1 = 0
+                                        if offset_4 == leftover_offset and leftover_count > 0:
+                                             count_1 += leftover_count
+                                             print('leftover tab')
                                         while offset_4 < buf_eof:
                                             chr = buf[offset_4]
                                             if chr in ' \t':
-                                                offset_4 +=1
                                                 count_1 += (self.tabstop-(offset_4-line_start_2)%self.tabstop) if chr == '	' else 1
+                                                offset_4 +=1
                                             else:
                                                 break
                                         if count_1 < 1:
                                             offset_4 = -1
                                             break
 
-                                        offset_4, line_start_2, indent_end_2 = self.parse_indented_value(buf, offset_4, buf_eof, line_start_2, indent_end_2, prefix_0, children_4)
+                                        offset_4, line_start_2, indent_end_2, leftover_offset, leftover_count = self.parse_indented_value(buf, offset_4, buf_eof, line_start_2, indent_end_2, prefix_0, children_4, leftover_offset, leftover_count)
                                         if offset_4 == -1: break
 
 
@@ -2033,9 +2122,9 @@ class Parser:
             if offset_0 == -1: break
 
             break
-        return offset_0, line_start_0, indent_end_0
+        return offset_0, line_start_0, indent_end_0, leftover_offset, leftover_count
 
-    def parse_indented_value(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0):
+    def parse_indented_value(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0, leftover_offset, leftover_count):
         while True: # note: return at end of loop
             while True: # start choice
                 offset_1 = offset_0
@@ -2043,7 +2132,7 @@ class Parser:
                 indent_end_1 = indent_end_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, line_start_1, indent_end_1 = self.parse_indented_object(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1)
+                    offset_1, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_indented_object(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1, leftover_offset, leftover_count)
                     if offset_1 == -1: break
 
 
@@ -2062,7 +2151,7 @@ class Parser:
                 indent_end_1 = indent_end_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, line_start_1, indent_end_1 = self.parse_indented_list(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1)
+                    offset_1, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_indented_list(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1, leftover_offset, leftover_count)
                     if offset_1 == -1: break
 
 
@@ -2081,7 +2170,7 @@ class Parser:
                 indent_end_1 = indent_end_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, line_start_1, indent_end_1 = self.parse_literal(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1)
+                    offset_1, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_literal(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1, leftover_offset, leftover_count)
                     if offset_1 == -1: break
 
 
@@ -2101,9 +2190,9 @@ class Parser:
                 break
 
             break
-        return offset_0, line_start_0, indent_end_0
+        return offset_0, line_start_0, indent_end_0, leftover_offset, leftover_count
 
-    def parse_document(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0):
+    def parse_document(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0, leftover_offset, leftover_count):
         while True: # note: return at end of loop
             count_0 = 0
             while True:
@@ -2113,15 +2202,18 @@ class Parser:
                 children_1 = [] if children_0 is not None else None
                 while True:
                     count_1 = 0
+                    if offset_1 == leftover_offset and leftover_count > 0:
+                         count_1 += leftover_count
+                         print('leftover tab')
                     while offset_1 < buf_eof:
                         chr = buf[offset_1]
                         if chr in ' \t':
-                            offset_1 +=1
                             count_1 += (self.tabstop-(offset_1-line_start_1)%self.tabstop) if chr == '	' else 1
+                            offset_1 +=1
                         else:
                             break
 
-                    offset_1, line_start_1, indent_end_1 = self.parse_yaml_eol(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1)
+                    offset_1, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_yaml_eol(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1, leftover_offset, leftover_count)
                     if offset_1 == -1: break
 
 
@@ -2147,7 +2239,7 @@ class Parser:
                     indent_end_1 = indent_end_0
                     children_2 = [] if children_1 is not None else None
                     while True: # case
-                        offset_2, line_start_1, indent_end_1 = self.parse_indented_object(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2)
+                        offset_2, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_indented_object(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2, leftover_offset, leftover_count)
                         if offset_2 == -1: break
 
 
@@ -2166,7 +2258,7 @@ class Parser:
                     indent_end_1 = indent_end_0
                     children_2 = [] if children_1 is not None else None
                     while True: # case
-                        offset_2, line_start_1, indent_end_1 = self.parse_indented_list(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2)
+                        offset_2, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_indented_list(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2, leftover_offset, leftover_count)
                         if offset_2 == -1: break
 
 
@@ -2185,7 +2277,7 @@ class Parser:
                     indent_end_1 = indent_end_0
                     children_2 = [] if children_1 is not None else None
                     while True: # case
-                        offset_2, line_start_1, indent_end_1 = self.parse_list_literal(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2)
+                        offset_2, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_list_literal(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2, leftover_offset, leftover_count)
                         if offset_2 == -1: break
 
 
@@ -2204,7 +2296,7 @@ class Parser:
                     indent_end_1 = indent_end_0
                     children_2 = [] if children_1 is not None else None
                     while True: # case
-                        offset_2, line_start_1, indent_end_1 = self.parse_object_literal(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2)
+                        offset_2, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_object_literal(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2, leftover_offset, leftover_count)
                         if offset_2 == -1: break
 
 
@@ -2235,11 +2327,14 @@ class Parser:
             offset_0 = offset_1
 
             count_0 = 0
+            if offset_0 == leftover_offset and leftover_count > 0:
+                 count_0 += leftover_count
+                 print('leftover tab')
             while offset_0 < buf_eof:
                 chr = buf[offset_0]
                 if chr in ' \t':
-                    offset_0 +=1
                     count_0 += (self.tabstop-(offset_0-line_start_0)%self.tabstop) if chr == '	' else 1
+                    offset_0 +=1
                 else:
                     break
 
@@ -2250,16 +2345,19 @@ class Parser:
                 indent_end_1 = indent_end_0
                 children_1 = [] if children_0 is not None else None
                 while True:
-                    offset_1, line_start_1, indent_end_1 = self.parse_yaml_eol(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1)
+                    offset_1, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_yaml_eol(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1, leftover_offset, leftover_count)
                     if offset_1 == -1: break
 
 
                     count_1 = 0
+                    if offset_1 == leftover_offset and leftover_count > 0:
+                         count_1 += leftover_count
+                         print('leftover tab')
                     while offset_1 < buf_eof:
                         chr = buf[offset_1]
                         if chr in ' \t':
-                            offset_1 +=1
                             count_1 += (self.tabstop-(offset_1-line_start_1)%self.tabstop) if chr == '	' else 1
+                            offset_1 +=1
                         else:
                             break
 
@@ -2298,11 +2396,14 @@ class Parser:
                             break
 
                     count_1 = 0
+                    if offset_1 == leftover_offset and leftover_count > 0:
+                         count_1 += leftover_count
+                         print('leftover tab')
                     while offset_1 < buf_eof:
                         chr = buf[offset_1]
                         if chr in ' \t':
-                            offset_1 +=1
                             count_1 += (self.tabstop-(offset_1-line_start_1)%self.tabstop) if chr == '	' else 1
+                            offset_1 +=1
                         else:
                             break
 
@@ -2321,4 +2422,4 @@ class Parser:
 
 
             break
-        return offset_0, line_start_0, indent_end_0
+        return offset_0, line_start_0, indent_end_0, leftover_offset, leftover_count

@@ -257,18 +257,14 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
 
     @rule()
     def indented_code_block(self):
-        with self.capture('indented_code'), self.indented():
-            self.accept("\t", " \t", "  \t", "    \t", "    ")
-
+        self.whitespace(min=4, max=4)
+        with self.capture('indented_code'), self.indented(count=4):
             with self.capture('code_line'), self.repeat(min=1):
                 self.range("\n", invert=True)
-
             self.end_of_line()
 
             with self.repeat():
                 self.start_of_line()
-                with self.capture('code_indent'):
-                    self.accept("\t", " \t", "  \t", "    \t", "    ")
                 with self.choice():
                     with self.case():
                         with self.capture('code_line'), self.repeat(min=1):
@@ -280,15 +276,12 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                         self.newline()
                         with self.repeat():
                             self.start_of_line()
-                            with self.capture('code_indent'):
-                                self.whitespace()
                             with self.capture('code_line'):
                                 pass
                             self.newline()
                             self.end_of_line()
                         with self.lookahead():
                             self.start_of_line()
-                            self.accept("\t", " \t", "  \t", "    \t", "    ")
 
 
     @rule()
@@ -380,9 +373,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     def start_blockquote(self):
         self.whitespace(max=3)
         self.accept('>')
-        with self.choice():
-            with self.case(): self.whitespace(max=1, newline=True)
-            with self.case(): self.whitespace(min=1)
+        self.whitespace(max=1, newline=True)
 
     @rule()
     def blockquote(self):
@@ -577,8 +568,8 @@ if __name__ == "__main__":
     with open('CommonMarkParser.py', 'w') as fh:
         fh.write(compile_python(CommonMark))
             
-    for name, value in CommonMark.rules.items():
-        print(name, '<--', value,'.')
+    #for name, value in CommonMark.rules.items():
+    #    print(name, '<--', value,'.')
 
     print(CommonMark.version)
 
@@ -749,7 +740,7 @@ markup("""\
 """)
 
 with open("../README.md") as readme:
-    markup(readme.read())
+    _markup(readme.read())
 
 
 markup("""\
@@ -782,6 +773,7 @@ failed = 0
 worked = 0
 count =0
 
+print('butt')
 parser = CommonMark.parser(builder)
 for t in tests:
     markd = t['markdown']
@@ -789,13 +781,14 @@ for t in tests:
     count +=1
     if out == t['html']: 
         worked +=1
-        # print(repr(t['markdown'].replace('\t', '    '))
-        # print(repr(out))
+        #print(repr(markd))
+        #print(repr(out))
     else:
         failed +=1
         if '<' in markd: continue
         if '*' in markd: continue
         if '1.' in markd: continue
+        if '`' in markd: continue
         print(t['example'])
         print(repr(markd))
         print('=', repr(t['html']))
