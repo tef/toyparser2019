@@ -23,13 +23,14 @@ class Parser:
     def parse(self, buf, offset=0, end=None, err=None):
         self.cache = dict()
         end = len(buf) if end is None else end
-        line_start, prefix, eof, children = offset, [], end, []
-        new_offset, line_start = self.parse_document(buf, offset, line_start, prefix, eof, children)
+        line_start, indent_end, eof = offset, offset, end
+        prefix, children = [], []
+        new_offset, line_start, indent_end = self.parse_document(buf, offset, eof, line_start, indent_end, prefix, children)
         if children and new_offset == end: return children[-1]
         print('no', offset, new_offset, end, buf[new_offset:])
         if err is not None: raise err(buf, new_offset, 'no')
 
-    def parse_document(self, buf, offset_0, line_start_0, prefix_0, buf_eof, children_0):
+    def parse_document(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0):
         while True: # note: return at end of loop
             count_0 = 0
             while offset_0 < buf_eof:
@@ -44,6 +45,7 @@ class Parser:
             while True:
                 offset_1 = offset_0
                 line_start_1 = line_start_0
+                indent_end_1 = indent_end_0
                 children_1 = [] if children_0 is not None else None
                 while True:
                     if buf[offset_1:offset_1+1] == '#':
@@ -56,6 +58,7 @@ class Parser:
                     while True:
                         offset_2 = offset_1
                         line_start_2 = line_start_1
+                        indent_end_2 = indent_end_1
                         children_2 = [] if children_1 is not None else None
                         while True:
                             if offset_2 == buf_eof:
@@ -78,6 +81,7 @@ class Parser:
                             children_1.extend(children_2)
                         offset_1 = offset_2
                         line_start_1 = line_start_2
+                        indent_end_2 = indent_end_2
                         count_1 += 1
                     if offset_1 == -1:
                         break
@@ -99,6 +103,7 @@ class Parser:
                     children_0.extend(children_1)
                 offset_0 = offset_1
                 line_start_0 = line_start_1
+                indent_end_1 = indent_end_1
                 count_0 += 1
             if offset_0 == -1:
                 break
@@ -116,7 +121,7 @@ class Parser:
             offset_1 = offset_0
             children_1 = []
             while True: # start capture
-                offset_1, line_start_0 = self.parse_rson_value(buf, offset_1, line_start_0, prefix_0, buf_eof, children_1)
+                offset_1, line_start_0, indent_end_0 = self.parse_rson_value(buf, offset_1, buf_eof, line_start_0, indent_end_0, prefix_0, children_1)
                 if offset_1 == -1: break
 
 
@@ -144,6 +149,7 @@ class Parser:
             while True:
                 offset_1 = offset_0
                 line_start_1 = line_start_0
+                indent_end_1 = indent_end_0
                 children_1 = [] if children_0 is not None else None
                 while True:
                     if buf[offset_1:offset_1+1] == '#':
@@ -156,6 +162,7 @@ class Parser:
                     while True:
                         offset_2 = offset_1
                         line_start_2 = line_start_1
+                        indent_end_2 = indent_end_1
                         children_2 = [] if children_1 is not None else None
                         while True:
                             if offset_2 == buf_eof:
@@ -178,6 +185,7 @@ class Parser:
                             children_1.extend(children_2)
                         offset_1 = offset_2
                         line_start_1 = line_start_2
+                        indent_end_2 = indent_end_2
                         count_1 += 1
                     if offset_1 == -1:
                         break
@@ -199,6 +207,7 @@ class Parser:
                     children_0.extend(children_1)
                 offset_0 = offset_1
                 line_start_0 = line_start_1
+                indent_end_1 = indent_end_1
                 count_0 += 1
             if offset_0 == -1:
                 break
@@ -215,13 +224,14 @@ class Parser:
 
 
             break
-        return offset_0, line_start_0
+        return offset_0, line_start_0, indent_end_0
 
-    def parse_rson_value(self, buf, offset_0, line_start_0, prefix_0, buf_eof, children_0):
+    def parse_rson_value(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0):
         while True: # note: return at end of loop
             while True: # start choice
                 offset_1 = offset_0
                 line_start_1 = line_start_0
+                indent_end_1 = indent_end_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
                     offset_2 = offset_1
@@ -254,6 +264,7 @@ class Parser:
                             while True:
                                 offset_4 = offset_3
                                 line_start_2 = line_start_1
+                                indent_end_2 = indent_end_1
                                 children_4 = [] if children_3 is not None else None
                                 while True:
                                     if offset_4 == buf_eof:
@@ -282,6 +293,7 @@ class Parser:
                                     children_3.extend(children_4)
                                 offset_3 = offset_4
                                 line_start_1 = line_start_2
+                                indent_end_2 = indent_end_2
                                 count_0 += 1
                             if offset_3 == -1:
                                 break
@@ -303,7 +315,7 @@ class Parser:
                             offset_2 = -1
                             break
 
-                        offset_2, line_start_1 = self.parse_rson_literal(buf, offset_2, line_start_1, prefix_0, buf_eof, children_2)
+                        offset_2, line_start_1, indent_end_1 = self.parse_rson_literal(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2)
                         if offset_2 == -1: break
 
 
@@ -323,15 +335,17 @@ class Parser:
                 if offset_1 != -1:
                     offset_0 = offset_1
                     line_start_0 = line_start_1
+                    indent_end_0 = indent_end_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
                 # end case
                 offset_1 = offset_0
                 line_start_1 = line_start_0
+                indent_end_1 = indent_end_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, line_start_1 = self.parse_rson_literal(buf, offset_1, line_start_1, prefix_0, buf_eof, children_1)
+                    offset_1, line_start_1, indent_end_1 = self.parse_rson_literal(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1)
                     if offset_1 == -1: break
 
 
@@ -340,6 +354,7 @@ class Parser:
                 if offset_1 != -1:
                     offset_0 = offset_1
                     line_start_0 = line_start_1
+                    indent_end_0 = indent_end_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
@@ -350,16 +365,17 @@ class Parser:
                 break
 
             break
-        return offset_0, line_start_0
+        return offset_0, line_start_0, indent_end_0
 
-    def parse_rson_literal(self, buf, offset_0, line_start_0, prefix_0, buf_eof, children_0):
+    def parse_rson_literal(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0):
         while True: # note: return at end of loop
             while True: # start choice
                 offset_1 = offset_0
                 line_start_1 = line_start_0
+                indent_end_1 = indent_end_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, line_start_1 = self.parse_rson_list(buf, offset_1, line_start_1, prefix_0, buf_eof, children_1)
+                    offset_1, line_start_1, indent_end_1 = self.parse_rson_list(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1)
                     if offset_1 == -1: break
 
 
@@ -368,15 +384,17 @@ class Parser:
                 if offset_1 != -1:
                     offset_0 = offset_1
                     line_start_0 = line_start_1
+                    indent_end_0 = indent_end_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
                 # end case
                 offset_1 = offset_0
                 line_start_1 = line_start_0
+                indent_end_1 = indent_end_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, line_start_1 = self.parse_rson_object(buf, offset_1, line_start_1, prefix_0, buf_eof, children_1)
+                    offset_1, line_start_1, indent_end_1 = self.parse_rson_object(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1)
                     if offset_1 == -1: break
 
 
@@ -385,17 +403,20 @@ class Parser:
                 if offset_1 != -1:
                     offset_0 = offset_1
                     line_start_0 = line_start_1
+                    indent_end_0 = indent_end_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
                 # end case
                 offset_1 = offset_0
                 line_start_1 = line_start_0
+                indent_end_1 = indent_end_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
                     while True: # start choice
                         offset_2 = offset_1
                         line_start_2 = line_start_1
+                        indent_end_2 = indent_end_1
                         children_2 = [] if children_1 is not None else None
                         while True: # case
                             if buf[offset_2:offset_2+1] == '"':
@@ -411,11 +432,13 @@ class Parser:
                                 while True:
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    indent_end_3 = indent_end_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
                                         while True: # start choice
                                             offset_5 = offset_4
                                             line_start_4 = line_start_3
+                                            indent_end_4 = indent_end_3
                                             children_5 = [] if children_4 is not None else None
                                             while True: # case
                                                 if offset_5 == buf_eof:
@@ -444,12 +467,14 @@ class Parser:
                                             if offset_5 != -1:
                                                 offset_4 = offset_5
                                                 line_start_3 = line_start_4
+                                                indent_end_3 = indent_end_4
                                                 if children_5 is not None and children_5 is not None:
                                                     children_4.extend(children_5)
                                                 break
                                             # end case
                                             offset_5 = offset_4
                                             line_start_4 = line_start_3
+                                            indent_end_4 = indent_end_3
                                             children_5 = [] if children_4 is not None else None
                                             while True: # case
                                                 if buf[offset_5:offset_5+2] == '\\x':
@@ -460,7 +485,9 @@ class Parser:
 
                                                 while True: # start reject
                                                     children_6 = []
-                                                    offset_6, line_start_5 = offset_5, line_start_4
+                                                    offset_6 = offset_5
+                                                    line_start_5 = line_start_4
+                                                    indent_end_5 = indent_end_4
                                                     if offset_6 == buf_eof:
                                                         offset_6 = -1
                                                         break
@@ -515,12 +542,14 @@ class Parser:
                                             if offset_5 != -1:
                                                 offset_4 = offset_5
                                                 line_start_3 = line_start_4
+                                                indent_end_3 = indent_end_4
                                                 if children_5 is not None and children_5 is not None:
                                                     children_4.extend(children_5)
                                                 break
                                             # end case
                                             offset_5 = offset_4
                                             line_start_4 = line_start_3
+                                            indent_end_4 = indent_end_3
                                             children_5 = [] if children_4 is not None else None
                                             while True: # case
                                                 if buf[offset_5:offset_5+2] == '\\u':
@@ -531,7 +560,9 @@ class Parser:
 
                                                 while True: # start reject
                                                     children_6 = []
-                                                    offset_6, line_start_5 = offset_5, line_start_4
+                                                    offset_6 = offset_5
+                                                    line_start_5 = line_start_4
+                                                    indent_end_5 = indent_end_4
                                                     if buf[offset_6:offset_6+3] == '000':
                                                         offset_6 += 3
                                                     else:
@@ -557,7 +588,9 @@ class Parser:
 
                                                 while True: # start reject
                                                     children_6 = []
-                                                    offset_6, line_start_5 = offset_5, line_start_4
+                                                    offset_6 = offset_5
+                                                    line_start_5 = line_start_4
+                                                    indent_end_5 = indent_end_4
                                                     if buf[offset_6:offset_6+1] == 'D':
                                                         offset_6 += 1
                                                     elif buf[offset_6:offset_6+1] == 'd':
@@ -654,12 +687,14 @@ class Parser:
                                             if offset_5 != -1:
                                                 offset_4 = offset_5
                                                 line_start_3 = line_start_4
+                                                indent_end_3 = indent_end_4
                                                 if children_5 is not None and children_5 is not None:
                                                     children_4.extend(children_5)
                                                 break
                                             # end case
                                             offset_5 = offset_4
                                             line_start_4 = line_start_3
+                                            indent_end_4 = indent_end_3
                                             children_5 = [] if children_4 is not None else None
                                             while True: # case
                                                 if buf[offset_5:offset_5+2] == '\\U':
@@ -670,7 +705,9 @@ class Parser:
 
                                                 while True: # start reject
                                                     children_6 = []
-                                                    offset_6, line_start_5 = offset_5, line_start_4
+                                                    offset_6 = offset_5
+                                                    line_start_5 = line_start_4
+                                                    indent_end_5 = indent_end_4
                                                     if buf[offset_6:offset_6+7] == '0000000':
                                                         offset_6 += 7
                                                     else:
@@ -696,7 +733,9 @@ class Parser:
 
                                                 while True: # start reject
                                                     children_6 = []
-                                                    offset_6, line_start_5 = offset_5, line_start_4
+                                                    offset_6 = offset_5
+                                                    line_start_5 = line_start_4
+                                                    indent_end_5 = indent_end_4
                                                     if buf[offset_6:offset_6+4] == '0000':
                                                         offset_6 += 4
                                                     else:
@@ -863,12 +902,14 @@ class Parser:
                                             if offset_5 != -1:
                                                 offset_4 = offset_5
                                                 line_start_3 = line_start_4
+                                                indent_end_3 = indent_end_4
                                                 if children_5 is not None and children_5 is not None:
                                                     children_4.extend(children_5)
                                                 break
                                             # end case
                                             offset_5 = offset_4
                                             line_start_4 = line_start_3
+                                            indent_end_4 = indent_end_3
                                             children_5 = [] if children_4 is not None else None
                                             while True: # case
                                                 if buf[offset_5:offset_5+1] == '\\':
@@ -912,6 +953,7 @@ class Parser:
                                             if offset_5 != -1:
                                                 offset_4 = offset_5
                                                 line_start_3 = line_start_4
+                                                indent_end_3 = indent_end_4
                                                 if children_5 is not None and children_5 is not None:
                                                     children_4.extend(children_5)
                                                 break
@@ -929,6 +971,7 @@ class Parser:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
                                     line_start_2 = line_start_3
+                                    indent_end_3 = indent_end_3
                                     count_0 += 1
                                 if offset_3 == -1:
                                     break
@@ -955,12 +998,14 @@ class Parser:
                         if offset_2 != -1:
                             offset_1 = offset_2
                             line_start_1 = line_start_2
+                            indent_end_1 = indent_end_2
                             if children_2 is not None and children_2 is not None:
                                 children_1.extend(children_2)
                             break
                         # end case
                         offset_2 = offset_1
                         line_start_2 = line_start_1
+                        indent_end_2 = indent_end_1
                         children_2 = [] if children_1 is not None else None
                         while True: # case
                             if buf[offset_2:offset_2+1] == "'":
@@ -976,11 +1021,13 @@ class Parser:
                                 while True:
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    indent_end_3 = indent_end_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
                                         while True: # start choice
                                             offset_5 = offset_4
                                             line_start_4 = line_start_3
+                                            indent_end_4 = indent_end_3
                                             children_5 = [] if children_4 is not None else None
                                             while True: # case
                                                 if offset_5 == buf_eof:
@@ -1009,12 +1056,14 @@ class Parser:
                                             if offset_5 != -1:
                                                 offset_4 = offset_5
                                                 line_start_3 = line_start_4
+                                                indent_end_3 = indent_end_4
                                                 if children_5 is not None and children_5 is not None:
                                                     children_4.extend(children_5)
                                                 break
                                             # end case
                                             offset_5 = offset_4
                                             line_start_4 = line_start_3
+                                            indent_end_4 = indent_end_3
                                             children_5 = [] if children_4 is not None else None
                                             while True: # case
                                                 if buf[offset_5:offset_5+2] == '\\x':
@@ -1025,7 +1074,9 @@ class Parser:
 
                                                 while True: # start reject
                                                     children_6 = []
-                                                    offset_6, line_start_5 = offset_5, line_start_4
+                                                    offset_6 = offset_5
+                                                    line_start_5 = line_start_4
+                                                    indent_end_5 = indent_end_4
                                                     if offset_6 == buf_eof:
                                                         offset_6 = -1
                                                         break
@@ -1080,12 +1131,14 @@ class Parser:
                                             if offset_5 != -1:
                                                 offset_4 = offset_5
                                                 line_start_3 = line_start_4
+                                                indent_end_3 = indent_end_4
                                                 if children_5 is not None and children_5 is not None:
                                                     children_4.extend(children_5)
                                                 break
                                             # end case
                                             offset_5 = offset_4
                                             line_start_4 = line_start_3
+                                            indent_end_4 = indent_end_3
                                             children_5 = [] if children_4 is not None else None
                                             while True: # case
                                                 if buf[offset_5:offset_5+2] == '\\u':
@@ -1096,7 +1149,9 @@ class Parser:
 
                                                 while True: # start reject
                                                     children_6 = []
-                                                    offset_6, line_start_5 = offset_5, line_start_4
+                                                    offset_6 = offset_5
+                                                    line_start_5 = line_start_4
+                                                    indent_end_5 = indent_end_4
                                                     if buf[offset_6:offset_6+2] == '00':
                                                         offset_6 += 2
                                                     else:
@@ -1122,7 +1177,9 @@ class Parser:
 
                                                 while True: # start reject
                                                     children_6 = []
-                                                    offset_6, line_start_5 = offset_5, line_start_4
+                                                    offset_6 = offset_5
+                                                    line_start_5 = line_start_4
+                                                    indent_end_5 = indent_end_4
                                                     if buf[offset_6:offset_6+1] == 'D':
                                                         offset_6 += 1
                                                     elif buf[offset_6:offset_6+1] == 'd':
@@ -1219,12 +1276,14 @@ class Parser:
                                             if offset_5 != -1:
                                                 offset_4 = offset_5
                                                 line_start_3 = line_start_4
+                                                indent_end_3 = indent_end_4
                                                 if children_5 is not None and children_5 is not None:
                                                     children_4.extend(children_5)
                                                 break
                                             # end case
                                             offset_5 = offset_4
                                             line_start_4 = line_start_3
+                                            indent_end_4 = indent_end_3
                                             children_5 = [] if children_4 is not None else None
                                             while True: # case
                                                 if buf[offset_5:offset_5+2] == '\\U':
@@ -1235,7 +1294,9 @@ class Parser:
 
                                                 while True: # start reject
                                                     children_6 = []
-                                                    offset_6, line_start_5 = offset_5, line_start_4
+                                                    offset_6 = offset_5
+                                                    line_start_5 = line_start_4
+                                                    indent_end_5 = indent_end_4
                                                     if buf[offset_6:offset_6+6] == '000000':
                                                         offset_6 += 6
                                                     else:
@@ -1261,7 +1322,9 @@ class Parser:
 
                                                 while True: # start reject
                                                     children_6 = []
-                                                    offset_6, line_start_5 = offset_5, line_start_4
+                                                    offset_6 = offset_5
+                                                    line_start_5 = line_start_4
+                                                    indent_end_5 = indent_end_4
                                                     if buf[offset_6:offset_6+4] == '0000':
                                                         offset_6 += 4
                                                     else:
@@ -1428,12 +1491,14 @@ class Parser:
                                             if offset_5 != -1:
                                                 offset_4 = offset_5
                                                 line_start_3 = line_start_4
+                                                indent_end_3 = indent_end_4
                                                 if children_5 is not None and children_5 is not None:
                                                     children_4.extend(children_5)
                                                 break
                                             # end case
                                             offset_5 = offset_4
                                             line_start_4 = line_start_3
+                                            indent_end_4 = indent_end_3
                                             children_5 = [] if children_4 is not None else None
                                             while True: # case
                                                 if buf[offset_5:offset_5+1] == '\\':
@@ -1477,6 +1542,7 @@ class Parser:
                                             if offset_5 != -1:
                                                 offset_4 = offset_5
                                                 line_start_3 = line_start_4
+                                                indent_end_3 = indent_end_4
                                                 if children_5 is not None and children_5 is not None:
                                                     children_4.extend(children_5)
                                                 break
@@ -1494,6 +1560,7 @@ class Parser:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
                                     line_start_2 = line_start_3
+                                    indent_end_3 = indent_end_3
                                     count_0 += 1
                                 if offset_3 == -1:
                                     break
@@ -1520,6 +1587,7 @@ class Parser:
                         if offset_2 != -1:
                             offset_1 = offset_2
                             line_start_1 = line_start_2
+                            indent_end_1 = indent_end_2
                             if children_2 is not None and children_2 is not None:
                                 children_1.extend(children_2)
                             break
@@ -1534,12 +1602,14 @@ class Parser:
                 if offset_1 != -1:
                     offset_0 = offset_1
                     line_start_0 = line_start_1
+                    indent_end_0 = indent_end_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
                 # end case
                 offset_1 = offset_0
                 line_start_1 = line_start_0
+                indent_end_1 = indent_end_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
                     offset_2 = offset_1
@@ -1548,12 +1618,14 @@ class Parser:
                         while True: # start choice
                             offset_3 = offset_2
                             line_start_2 = line_start_1
+                            indent_end_2 = indent_end_1
                             children_3 = [] if children_2 is not None else None
                             while True: # case
                                 count_0 = 0
                                 while count_0 < 1:
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    indent_end_3 = indent_end_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
                                         if offset_4 == buf_eof:
@@ -1578,6 +1650,7 @@ class Parser:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
                                     line_start_2 = line_start_3
+                                    indent_end_3 = indent_end_3
                                     count_0 += 1
                                     break
                                 if offset_3 == -1:
@@ -1609,6 +1682,7 @@ class Parser:
                                 while True:
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    indent_end_3 = indent_end_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
                                         if offset_4 == buf_eof:
@@ -1637,6 +1711,7 @@ class Parser:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
                                     line_start_2 = line_start_3
+                                    indent_end_3 = indent_end_3
                                     count_0 += 1
                                 if offset_3 == -1:
                                     break
@@ -1646,18 +1721,21 @@ class Parser:
                             if offset_3 != -1:
                                 offset_2 = offset_3
                                 line_start_1 = line_start_2
+                                indent_end_1 = indent_end_2
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 break
                             # end case
                             offset_3 = offset_2
                             line_start_2 = line_start_1
+                            indent_end_2 = indent_end_1
                             children_3 = [] if children_2 is not None else None
                             while True: # case
                                 count_0 = 0
                                 while count_0 < 1:
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    indent_end_3 = indent_end_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
                                         if offset_4 == buf_eof:
@@ -1682,6 +1760,7 @@ class Parser:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
                                     line_start_2 = line_start_3
+                                    indent_end_3 = indent_end_3
                                     count_0 += 1
                                     break
                                 if offset_3 == -1:
@@ -1709,6 +1788,7 @@ class Parser:
                                 while True:
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    indent_end_3 = indent_end_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
                                         if offset_4 == buf_eof:
@@ -1733,6 +1813,7 @@ class Parser:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
                                     line_start_2 = line_start_3
+                                    indent_end_3 = indent_end_3
                                     count_0 += 1
                                 if offset_3 == -1:
                                     break
@@ -1742,18 +1823,21 @@ class Parser:
                             if offset_3 != -1:
                                 offset_2 = offset_3
                                 line_start_1 = line_start_2
+                                indent_end_1 = indent_end_2
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 break
                             # end case
                             offset_3 = offset_2
                             line_start_2 = line_start_1
+                            indent_end_2 = indent_end_1
                             children_3 = [] if children_2 is not None else None
                             while True: # case
                                 count_0 = 0
                                 while count_0 < 1:
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    indent_end_3 = indent_end_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
                                         if offset_4 == buf_eof:
@@ -1778,6 +1862,7 @@ class Parser:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
                                     line_start_2 = line_start_3
+                                    indent_end_3 = indent_end_3
                                     count_0 += 1
                                     break
                                 if offset_3 == -1:
@@ -1805,6 +1890,7 @@ class Parser:
                                 while True:
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    indent_end_3 = indent_end_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
                                         if offset_4 == buf_eof:
@@ -1829,6 +1915,7 @@ class Parser:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
                                     line_start_2 = line_start_3
+                                    indent_end_3 = indent_end_3
                                     count_0 += 1
                                 if offset_3 == -1:
                                     break
@@ -1838,18 +1925,21 @@ class Parser:
                             if offset_3 != -1:
                                 offset_2 = offset_3
                                 line_start_1 = line_start_2
+                                indent_end_1 = indent_end_2
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 break
                             # end case
                             offset_3 = offset_2
                             line_start_2 = line_start_1
+                            indent_end_2 = indent_end_1
                             children_3 = [] if children_2 is not None else None
                             while True: # case
                                 count_0 = 0
                                 while count_0 < 1:
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    indent_end_3 = indent_end_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
                                         if offset_4 == buf_eof:
@@ -1874,6 +1964,7 @@ class Parser:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
                                     line_start_2 = line_start_3
+                                    indent_end_3 = indent_end_3
                                     count_0 += 1
                                     break
                                 if offset_3 == -1:
@@ -1882,6 +1973,7 @@ class Parser:
                                 while True: # start choice
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    indent_end_3 = indent_end_2
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
                                         if buf[offset_4:offset_4+1] == '0':
@@ -1895,12 +1987,14 @@ class Parser:
                                     if offset_4 != -1:
                                         offset_3 = offset_4
                                         line_start_2 = line_start_3
+                                        indent_end_2 = indent_end_3
                                         if children_4 is not None and children_4 is not None:
                                             children_3.extend(children_4)
                                         break
                                     # end case
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    indent_end_3 = indent_end_2
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
                                         if offset_4 == buf_eof:
@@ -1919,6 +2013,7 @@ class Parser:
                                         while True:
                                             offset_5 = offset_4
                                             line_start_4 = line_start_3
+                                            indent_end_4 = indent_end_3
                                             children_5 = [] if children_4 is not None else None
                                             while True:
                                                 if offset_5 == buf_eof:
@@ -1941,6 +2036,7 @@ class Parser:
                                                 children_4.extend(children_5)
                                             offset_4 = offset_5
                                             line_start_3 = line_start_4
+                                            indent_end_4 = indent_end_4
                                             count_0 += 1
                                         if offset_4 == -1:
                                             break
@@ -1950,6 +2046,7 @@ class Parser:
                                     if offset_4 != -1:
                                         offset_3 = offset_4
                                         line_start_2 = line_start_3
+                                        indent_end_2 = indent_end_3
                                         if children_4 is not None and children_4 is not None:
                                             children_3.extend(children_4)
                                         break
@@ -1963,6 +2060,7 @@ class Parser:
                                 while count_0 < 1:
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    indent_end_3 = indent_end_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
                                         if buf[offset_4:offset_4+1] == '.':
@@ -1975,6 +2073,7 @@ class Parser:
                                         while True:
                                             offset_5 = offset_4
                                             line_start_4 = line_start_3
+                                            indent_end_4 = indent_end_3
                                             children_5 = [] if children_4 is not None else None
                                             while True:
                                                 if offset_5 == buf_eof:
@@ -1997,6 +2096,7 @@ class Parser:
                                                 children_4.extend(children_5)
                                             offset_4 = offset_5
                                             line_start_3 = line_start_4
+                                            indent_end_4 = indent_end_4
                                             count_1 += 1
                                         if offset_4 == -1:
                                             break
@@ -2009,6 +2109,7 @@ class Parser:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
                                     line_start_2 = line_start_3
+                                    indent_end_3 = indent_end_3
                                     count_0 += 1
                                     break
                                 if offset_3 == -1:
@@ -2018,6 +2119,7 @@ class Parser:
                                 while count_0 < 1:
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    indent_end_3 = indent_end_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
                                         if buf[offset_4:offset_4+1] == 'e':
@@ -2032,6 +2134,7 @@ class Parser:
                                         while count_1 < 1:
                                             offset_5 = offset_4
                                             line_start_4 = line_start_3
+                                            indent_end_4 = indent_end_3
                                             children_5 = [] if children_4 is not None else None
                                             while True:
                                                 if buf[offset_5:offset_5+1] == '+':
@@ -2046,6 +2149,7 @@ class Parser:
                                                 while True:
                                                     offset_6 = offset_5
                                                     line_start_5 = line_start_4
+                                                    indent_end_5 = indent_end_4
                                                     children_6 = [] if children_5 is not None else None
                                                     while True:
                                                         if offset_6 == buf_eof:
@@ -2068,6 +2172,7 @@ class Parser:
                                                         children_5.extend(children_6)
                                                     offset_5 = offset_6
                                                     line_start_4 = line_start_5
+                                                    indent_end_5 = indent_end_5
                                                     count_2 += 1
                                                 if offset_5 == -1:
                                                     break
@@ -2080,6 +2185,7 @@ class Parser:
                                                 children_4.extend(children_5)
                                             offset_4 = offset_5
                                             line_start_3 = line_start_4
+                                            indent_end_4 = indent_end_4
                                             count_1 += 1
                                             break
                                         if offset_4 == -1:
@@ -2093,6 +2199,7 @@ class Parser:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
                                     line_start_2 = line_start_3
+                                    indent_end_3 = indent_end_3
                                     count_0 += 1
                                     break
                                 if offset_3 == -1:
@@ -2103,6 +2210,7 @@ class Parser:
                             if offset_3 != -1:
                                 offset_2 = offset_3
                                 line_start_1 = line_start_2
+                                indent_end_1 = indent_end_2
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 break
@@ -2128,12 +2236,14 @@ class Parser:
                 if offset_1 != -1:
                     offset_0 = offset_1
                     line_start_0 = line_start_1
+                    indent_end_0 = indent_end_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
                 # end case
                 offset_1 = offset_0
                 line_start_1 = line_start_0
+                indent_end_1 = indent_end_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
                     offset_2 = offset_1
@@ -2161,12 +2271,14 @@ class Parser:
                 if offset_1 != -1:
                     offset_0 = offset_1
                     line_start_0 = line_start_1
+                    indent_end_0 = indent_end_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
                 # end case
                 offset_1 = offset_0
                 line_start_1 = line_start_0
+                indent_end_1 = indent_end_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
                     offset_2 = offset_1
@@ -2194,12 +2306,14 @@ class Parser:
                 if offset_1 != -1:
                     offset_0 = offset_1
                     line_start_0 = line_start_1
+                    indent_end_0 = indent_end_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
                 # end case
                 offset_1 = offset_0
                 line_start_1 = line_start_0
+                indent_end_1 = indent_end_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
                     offset_2 = offset_1
@@ -2227,6 +2341,7 @@ class Parser:
                 if offset_1 != -1:
                     offset_0 = offset_1
                     line_start_0 = line_start_1
+                    indent_end_0 = indent_end_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
@@ -2237,13 +2352,14 @@ class Parser:
                 break
 
             break
-        return offset_0, line_start_0
+        return offset_0, line_start_0, indent_end_0
 
-    def parse_rson_string(self, buf, offset_0, line_start_0, prefix_0, buf_eof, children_0):
+    def parse_rson_string(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0):
         while True: # note: return at end of loop
             while True: # start choice
                 offset_1 = offset_0
                 line_start_1 = line_start_0
+                indent_end_1 = indent_end_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
                     if buf[offset_1:offset_1+1] == '"':
@@ -2259,11 +2375,13 @@ class Parser:
                         while True:
                             offset_3 = offset_2
                             line_start_2 = line_start_1
+                            indent_end_2 = indent_end_1
                             children_3 = [] if children_2 is not None else None
                             while True:
                                 while True: # start choice
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    indent_end_3 = indent_end_2
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
                                         if offset_4 == buf_eof:
@@ -2292,12 +2410,14 @@ class Parser:
                                     if offset_4 != -1:
                                         offset_3 = offset_4
                                         line_start_2 = line_start_3
+                                        indent_end_2 = indent_end_3
                                         if children_4 is not None and children_4 is not None:
                                             children_3.extend(children_4)
                                         break
                                     # end case
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    indent_end_3 = indent_end_2
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
                                         if buf[offset_4:offset_4+2] == '\\x':
@@ -2308,7 +2428,9 @@ class Parser:
 
                                         while True: # start reject
                                             children_5 = []
-                                            offset_5, line_start_4 = offset_4, line_start_3
+                                            offset_5 = offset_4
+                                            line_start_4 = line_start_3
+                                            indent_end_4 = indent_end_3
                                             if offset_5 == buf_eof:
                                                 offset_5 = -1
                                                 break
@@ -2363,12 +2485,14 @@ class Parser:
                                     if offset_4 != -1:
                                         offset_3 = offset_4
                                         line_start_2 = line_start_3
+                                        indent_end_2 = indent_end_3
                                         if children_4 is not None and children_4 is not None:
                                             children_3.extend(children_4)
                                         break
                                     # end case
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    indent_end_3 = indent_end_2
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
                                         if buf[offset_4:offset_4+2] == '\\u':
@@ -2379,7 +2503,9 @@ class Parser:
 
                                         while True: # start reject
                                             children_5 = []
-                                            offset_5, line_start_4 = offset_4, line_start_3
+                                            offset_5 = offset_4
+                                            line_start_4 = line_start_3
+                                            indent_end_4 = indent_end_3
                                             if buf[offset_5:offset_5+3] == '000':
                                                 offset_5 += 3
                                             else:
@@ -2405,7 +2531,9 @@ class Parser:
 
                                         while True: # start reject
                                             children_5 = []
-                                            offset_5, line_start_4 = offset_4, line_start_3
+                                            offset_5 = offset_4
+                                            line_start_4 = line_start_3
+                                            indent_end_4 = indent_end_3
                                             if buf[offset_5:offset_5+1] == 'D':
                                                 offset_5 += 1
                                             elif buf[offset_5:offset_5+1] == 'd':
@@ -2502,12 +2630,14 @@ class Parser:
                                     if offset_4 != -1:
                                         offset_3 = offset_4
                                         line_start_2 = line_start_3
+                                        indent_end_2 = indent_end_3
                                         if children_4 is not None and children_4 is not None:
                                             children_3.extend(children_4)
                                         break
                                     # end case
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    indent_end_3 = indent_end_2
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
                                         if buf[offset_4:offset_4+2] == '\\U':
@@ -2518,7 +2648,9 @@ class Parser:
 
                                         while True: # start reject
                                             children_5 = []
-                                            offset_5, line_start_4 = offset_4, line_start_3
+                                            offset_5 = offset_4
+                                            line_start_4 = line_start_3
+                                            indent_end_4 = indent_end_3
                                             if buf[offset_5:offset_5+7] == '0000000':
                                                 offset_5 += 7
                                             else:
@@ -2544,7 +2676,9 @@ class Parser:
 
                                         while True: # start reject
                                             children_5 = []
-                                            offset_5, line_start_4 = offset_4, line_start_3
+                                            offset_5 = offset_4
+                                            line_start_4 = line_start_3
+                                            indent_end_4 = indent_end_3
                                             if buf[offset_5:offset_5+4] == '0000':
                                                 offset_5 += 4
                                             else:
@@ -2711,12 +2845,14 @@ class Parser:
                                     if offset_4 != -1:
                                         offset_3 = offset_4
                                         line_start_2 = line_start_3
+                                        indent_end_2 = indent_end_3
                                         if children_4 is not None and children_4 is not None:
                                             children_3.extend(children_4)
                                         break
                                     # end case
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    indent_end_3 = indent_end_2
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
                                         if buf[offset_4:offset_4+1] == '\\':
@@ -2760,6 +2896,7 @@ class Parser:
                                     if offset_4 != -1:
                                         offset_3 = offset_4
                                         line_start_2 = line_start_3
+                                        indent_end_2 = indent_end_3
                                         if children_4 is not None and children_4 is not None:
                                             children_3.extend(children_4)
                                         break
@@ -2777,6 +2914,7 @@ class Parser:
                                 children_2.extend(children_3)
                             offset_2 = offset_3
                             line_start_1 = line_start_2
+                            indent_end_2 = indent_end_2
                             count_0 += 1
                         if offset_2 == -1:
                             break
@@ -2803,12 +2941,14 @@ class Parser:
                 if offset_1 != -1:
                     offset_0 = offset_1
                     line_start_0 = line_start_1
+                    indent_end_0 = indent_end_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
                 # end case
                 offset_1 = offset_0
                 line_start_1 = line_start_0
+                indent_end_1 = indent_end_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
                     if buf[offset_1:offset_1+1] == "'":
@@ -2824,11 +2964,13 @@ class Parser:
                         while True:
                             offset_3 = offset_2
                             line_start_2 = line_start_1
+                            indent_end_2 = indent_end_1
                             children_3 = [] if children_2 is not None else None
                             while True:
                                 while True: # start choice
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    indent_end_3 = indent_end_2
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
                                         if offset_4 == buf_eof:
@@ -2857,12 +2999,14 @@ class Parser:
                                     if offset_4 != -1:
                                         offset_3 = offset_4
                                         line_start_2 = line_start_3
+                                        indent_end_2 = indent_end_3
                                         if children_4 is not None and children_4 is not None:
                                             children_3.extend(children_4)
                                         break
                                     # end case
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    indent_end_3 = indent_end_2
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
                                         if buf[offset_4:offset_4+2] == '\\x':
@@ -2873,7 +3017,9 @@ class Parser:
 
                                         while True: # start reject
                                             children_5 = []
-                                            offset_5, line_start_4 = offset_4, line_start_3
+                                            offset_5 = offset_4
+                                            line_start_4 = line_start_3
+                                            indent_end_4 = indent_end_3
                                             if offset_5 == buf_eof:
                                                 offset_5 = -1
                                                 break
@@ -2928,12 +3074,14 @@ class Parser:
                                     if offset_4 != -1:
                                         offset_3 = offset_4
                                         line_start_2 = line_start_3
+                                        indent_end_2 = indent_end_3
                                         if children_4 is not None and children_4 is not None:
                                             children_3.extend(children_4)
                                         break
                                     # end case
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    indent_end_3 = indent_end_2
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
                                         if buf[offset_4:offset_4+2] == '\\u':
@@ -2944,7 +3092,9 @@ class Parser:
 
                                         while True: # start reject
                                             children_5 = []
-                                            offset_5, line_start_4 = offset_4, line_start_3
+                                            offset_5 = offset_4
+                                            line_start_4 = line_start_3
+                                            indent_end_4 = indent_end_3
                                             if buf[offset_5:offset_5+2] == '00':
                                                 offset_5 += 2
                                             else:
@@ -2970,7 +3120,9 @@ class Parser:
 
                                         while True: # start reject
                                             children_5 = []
-                                            offset_5, line_start_4 = offset_4, line_start_3
+                                            offset_5 = offset_4
+                                            line_start_4 = line_start_3
+                                            indent_end_4 = indent_end_3
                                             if buf[offset_5:offset_5+1] == 'D':
                                                 offset_5 += 1
                                             elif buf[offset_5:offset_5+1] == 'd':
@@ -3067,12 +3219,14 @@ class Parser:
                                     if offset_4 != -1:
                                         offset_3 = offset_4
                                         line_start_2 = line_start_3
+                                        indent_end_2 = indent_end_3
                                         if children_4 is not None and children_4 is not None:
                                             children_3.extend(children_4)
                                         break
                                     # end case
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    indent_end_3 = indent_end_2
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
                                         if buf[offset_4:offset_4+2] == '\\U':
@@ -3083,7 +3237,9 @@ class Parser:
 
                                         while True: # start reject
                                             children_5 = []
-                                            offset_5, line_start_4 = offset_4, line_start_3
+                                            offset_5 = offset_4
+                                            line_start_4 = line_start_3
+                                            indent_end_4 = indent_end_3
                                             if buf[offset_5:offset_5+6] == '000000':
                                                 offset_5 += 6
                                             else:
@@ -3109,7 +3265,9 @@ class Parser:
 
                                         while True: # start reject
                                             children_5 = []
-                                            offset_5, line_start_4 = offset_4, line_start_3
+                                            offset_5 = offset_4
+                                            line_start_4 = line_start_3
+                                            indent_end_4 = indent_end_3
                                             if buf[offset_5:offset_5+4] == '0000':
                                                 offset_5 += 4
                                             else:
@@ -3276,12 +3434,14 @@ class Parser:
                                     if offset_4 != -1:
                                         offset_3 = offset_4
                                         line_start_2 = line_start_3
+                                        indent_end_2 = indent_end_3
                                         if children_4 is not None and children_4 is not None:
                                             children_3.extend(children_4)
                                         break
                                     # end case
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    indent_end_3 = indent_end_2
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
                                         if buf[offset_4:offset_4+1] == '\\':
@@ -3325,6 +3485,7 @@ class Parser:
                                     if offset_4 != -1:
                                         offset_3 = offset_4
                                         line_start_2 = line_start_3
+                                        indent_end_2 = indent_end_3
                                         if children_4 is not None and children_4 is not None:
                                             children_3.extend(children_4)
                                         break
@@ -3342,6 +3503,7 @@ class Parser:
                                 children_2.extend(children_3)
                             offset_2 = offset_3
                             line_start_1 = line_start_2
+                            indent_end_2 = indent_end_2
                             count_0 += 1
                         if offset_2 == -1:
                             break
@@ -3368,6 +3530,7 @@ class Parser:
                 if offset_1 != -1:
                     offset_0 = offset_1
                     line_start_0 = line_start_1
+                    indent_end_0 = indent_end_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
@@ -3378,9 +3541,9 @@ class Parser:
                 break
 
             break
-        return offset_0, line_start_0
+        return offset_0, line_start_0, indent_end_0
 
-    def parse_rson_list(self, buf, offset_0, line_start_0, prefix_0, buf_eof, children_0):
+    def parse_rson_list(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0):
         while True: # note: return at end of loop
             if buf[offset_0:offset_0+1] == '[':
                 offset_0 += 1
@@ -3401,6 +3564,7 @@ class Parser:
             while True:
                 offset_1 = offset_0
                 line_start_1 = line_start_0
+                indent_end_1 = indent_end_0
                 children_1 = [] if children_0 is not None else None
                 while True:
                     if buf[offset_1:offset_1+1] == '#':
@@ -3413,6 +3577,7 @@ class Parser:
                     while True:
                         offset_2 = offset_1
                         line_start_2 = line_start_1
+                        indent_end_2 = indent_end_1
                         children_2 = [] if children_1 is not None else None
                         while True:
                             if offset_2 == buf_eof:
@@ -3435,6 +3600,7 @@ class Parser:
                             children_1.extend(children_2)
                         offset_1 = offset_2
                         line_start_1 = line_start_2
+                        indent_end_2 = indent_end_2
                         count_1 += 1
                     if offset_1 == -1:
                         break
@@ -3456,6 +3622,7 @@ class Parser:
                     children_0.extend(children_1)
                 offset_0 = offset_1
                 line_start_0 = line_start_1
+                indent_end_1 = indent_end_1
                 count_0 += 1
             if offset_0 == -1:
                 break
@@ -3477,9 +3644,10 @@ class Parser:
                 while count_0 < 1:
                     offset_2 = offset_1
                     line_start_1 = line_start_0
+                    indent_end_1 = indent_end_0
                     children_2 = [] if children_1 is not None else None
                     while True:
-                        offset_2, line_start_1 = self.parse_rson_value(buf, offset_2, line_start_1, prefix_0, buf_eof, children_2)
+                        offset_2, line_start_1, indent_end_1 = self.parse_rson_value(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2)
                         if offset_2 == -1: break
 
 
@@ -3487,6 +3655,7 @@ class Parser:
                         while True:
                             offset_3 = offset_2
                             line_start_2 = line_start_1
+                            indent_end_2 = indent_end_1
                             children_3 = [] if children_2 is not None else None
                             while True:
                                 count_2 = 0
@@ -3502,6 +3671,7 @@ class Parser:
                                 while True:
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    indent_end_3 = indent_end_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
                                         if buf[offset_4:offset_4+1] == '#':
@@ -3514,6 +3684,7 @@ class Parser:
                                         while True:
                                             offset_5 = offset_4
                                             line_start_4 = line_start_3
+                                            indent_end_4 = indent_end_3
                                             children_5 = [] if children_4 is not None else None
                                             while True:
                                                 if offset_5 == buf_eof:
@@ -3536,6 +3707,7 @@ class Parser:
                                                 children_4.extend(children_5)
                                             offset_4 = offset_5
                                             line_start_3 = line_start_4
+                                            indent_end_4 = indent_end_4
                                             count_3 += 1
                                         if offset_4 == -1:
                                             break
@@ -3557,6 +3729,7 @@ class Parser:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
                                     line_start_2 = line_start_3
+                                    indent_end_3 = indent_end_3
                                     count_2 += 1
                                 if offset_3 == -1:
                                     break
@@ -3590,6 +3763,7 @@ class Parser:
                                 while True:
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    indent_end_3 = indent_end_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
                                         if buf[offset_4:offset_4+1] == '#':
@@ -3602,6 +3776,7 @@ class Parser:
                                         while True:
                                             offset_5 = offset_4
                                             line_start_4 = line_start_3
+                                            indent_end_4 = indent_end_3
                                             children_5 = [] if children_4 is not None else None
                                             while True:
                                                 if offset_5 == buf_eof:
@@ -3624,6 +3799,7 @@ class Parser:
                                                 children_4.extend(children_5)
                                             offset_4 = offset_5
                                             line_start_3 = line_start_4
+                                            indent_end_4 = indent_end_4
                                             count_3 += 1
                                         if offset_4 == -1:
                                             break
@@ -3645,6 +3821,7 @@ class Parser:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
                                     line_start_2 = line_start_3
+                                    indent_end_3 = indent_end_3
                                     count_2 += 1
                                 if offset_3 == -1:
                                     break
@@ -3659,7 +3836,7 @@ class Parser:
                                         break
 
 
-                                offset_3, line_start_2 = self.parse_rson_value(buf, offset_3, line_start_2, prefix_0, buf_eof, children_3)
+                                offset_3, line_start_2, indent_end_2 = self.parse_rson_value(buf, offset_3, buf_eof, line_start_2, indent_end_2, prefix_0, children_3)
                                 if offset_3 == -1: break
 
 
@@ -3671,6 +3848,7 @@ class Parser:
                                 children_2.extend(children_3)
                             offset_2 = offset_3
                             line_start_1 = line_start_2
+                            indent_end_2 = indent_end_2
                             count_1 += 1
                         if offset_2 == -1:
                             break
@@ -3688,6 +3866,7 @@ class Parser:
                         while True:
                             offset_3 = offset_2
                             line_start_2 = line_start_1
+                            indent_end_2 = indent_end_1
                             children_3 = [] if children_2 is not None else None
                             while True:
                                 if buf[offset_3:offset_3+1] == '#':
@@ -3700,6 +3879,7 @@ class Parser:
                                 while True:
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    indent_end_3 = indent_end_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
                                         if offset_4 == buf_eof:
@@ -3722,6 +3902,7 @@ class Parser:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
                                     line_start_2 = line_start_3
+                                    indent_end_3 = indent_end_3
                                     count_2 += 1
                                 if offset_3 == -1:
                                     break
@@ -3743,6 +3924,7 @@ class Parser:
                                 children_2.extend(children_3)
                             offset_2 = offset_3
                             line_start_1 = line_start_2
+                            indent_end_2 = indent_end_2
                             count_1 += 1
                         if offset_2 == -1:
                             break
@@ -3761,6 +3943,7 @@ class Parser:
                         while count_1 < 1:
                             offset_3 = offset_2
                             line_start_2 = line_start_1
+                            indent_end_2 = indent_end_1
                             children_3 = [] if children_2 is not None else None
                             while True:
                                 if buf[offset_3:offset_3+1] == ',':
@@ -3782,6 +3965,7 @@ class Parser:
                                 while True:
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    indent_end_3 = indent_end_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
                                         if buf[offset_4:offset_4+1] == '#':
@@ -3794,6 +3978,7 @@ class Parser:
                                         while True:
                                             offset_5 = offset_4
                                             line_start_4 = line_start_3
+                                            indent_end_4 = indent_end_3
                                             children_5 = [] if children_4 is not None else None
                                             while True:
                                                 if offset_5 == buf_eof:
@@ -3816,6 +4001,7 @@ class Parser:
                                                 children_4.extend(children_5)
                                             offset_4 = offset_5
                                             line_start_3 = line_start_4
+                                            indent_end_4 = indent_end_4
                                             count_3 += 1
                                         if offset_4 == -1:
                                             break
@@ -3837,6 +4023,7 @@ class Parser:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
                                     line_start_2 = line_start_3
+                                    indent_end_3 = indent_end_3
                                     count_2 += 1
                                 if offset_3 == -1:
                                     break
@@ -3859,6 +4046,7 @@ class Parser:
                                 children_2.extend(children_3)
                             offset_2 = offset_3
                             line_start_1 = line_start_2
+                            indent_end_2 = indent_end_2
                             count_1 += 1
                             break
                         if offset_2 == -1:
@@ -3872,6 +4060,7 @@ class Parser:
                         children_1.extend(children_2)
                     offset_1 = offset_2
                     line_start_0 = line_start_1
+                    indent_end_1 = indent_end_1
                     count_0 += 1
                     break
                 if offset_1 == -1:
@@ -3896,9 +4085,9 @@ class Parser:
 
 
             break
-        return offset_0, line_start_0
+        return offset_0, line_start_0, indent_end_0
 
-    def parse_rson_object(self, buf, offset_0, line_start_0, prefix_0, buf_eof, children_0):
+    def parse_rson_object(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0):
         while True: # note: return at end of loop
             if buf[offset_0:offset_0+1] == '{':
                 offset_0 += 1
@@ -3919,6 +4108,7 @@ class Parser:
             while True:
                 offset_1 = offset_0
                 line_start_1 = line_start_0
+                indent_end_1 = indent_end_0
                 children_1 = [] if children_0 is not None else None
                 while True:
                     if buf[offset_1:offset_1+1] == '#':
@@ -3931,6 +4121,7 @@ class Parser:
                     while True:
                         offset_2 = offset_1
                         line_start_2 = line_start_1
+                        indent_end_2 = indent_end_1
                         children_2 = [] if children_1 is not None else None
                         while True:
                             if offset_2 == buf_eof:
@@ -3953,6 +4144,7 @@ class Parser:
                             children_1.extend(children_2)
                         offset_1 = offset_2
                         line_start_1 = line_start_2
+                        indent_end_2 = indent_end_2
                         count_1 += 1
                     if offset_1 == -1:
                         break
@@ -3974,6 +4166,7 @@ class Parser:
                     children_0.extend(children_1)
                 offset_0 = offset_1
                 line_start_0 = line_start_1
+                indent_end_1 = indent_end_1
                 count_0 += 1
             if offset_0 == -1:
                 break
@@ -3995,12 +4188,13 @@ class Parser:
                 while count_0 < 1:
                     offset_2 = offset_1
                     line_start_1 = line_start_0
+                    indent_end_1 = indent_end_0
                     children_2 = [] if children_1 is not None else None
                     while True:
                         offset_3 = offset_2
                         children_3 = []
                         while True: # start capture
-                            offset_3, line_start_1 = self.parse_rson_string(buf, offset_3, line_start_1, prefix_0, buf_eof, children_3)
+                            offset_3, line_start_1, indent_end_1 = self.parse_rson_string(buf, offset_3, buf_eof, line_start_1, indent_end_1, prefix_0, children_3)
                             if offset_3 == -1: break
 
 
@@ -4017,6 +4211,7 @@ class Parser:
                             while True:
                                 offset_4 = offset_3
                                 line_start_2 = line_start_1
+                                indent_end_2 = indent_end_1
                                 children_4 = [] if children_3 is not None else None
                                 while True:
                                     if buf[offset_4:offset_4+1] == '#':
@@ -4029,6 +4224,7 @@ class Parser:
                                     while True:
                                         offset_5 = offset_4
                                         line_start_3 = line_start_2
+                                        indent_end_3 = indent_end_2
                                         children_5 = [] if children_4 is not None else None
                                         while True:
                                             if offset_5 == buf_eof:
@@ -4051,6 +4247,7 @@ class Parser:
                                             children_4.extend(children_5)
                                         offset_4 = offset_5
                                         line_start_2 = line_start_3
+                                        indent_end_3 = indent_end_3
                                         count_2 += 1
                                     if offset_4 == -1:
                                         break
@@ -4072,6 +4269,7 @@ class Parser:
                                     children_3.extend(children_4)
                                 offset_3 = offset_4
                                 line_start_1 = line_start_2
+                                indent_end_2 = indent_end_2
                                 count_1 += 1
                             if offset_3 == -1:
                                 break
@@ -4105,6 +4303,7 @@ class Parser:
                             while True:
                                 offset_4 = offset_3
                                 line_start_2 = line_start_1
+                                indent_end_2 = indent_end_1
                                 children_4 = [] if children_3 is not None else None
                                 while True:
                                     if buf[offset_4:offset_4+1] == '#':
@@ -4117,6 +4316,7 @@ class Parser:
                                     while True:
                                         offset_5 = offset_4
                                         line_start_3 = line_start_2
+                                        indent_end_3 = indent_end_2
                                         children_5 = [] if children_4 is not None else None
                                         while True:
                                             if offset_5 == buf_eof:
@@ -4139,6 +4339,7 @@ class Parser:
                                             children_4.extend(children_5)
                                         offset_4 = offset_5
                                         line_start_2 = line_start_3
+                                        indent_end_3 = indent_end_3
                                         count_2 += 1
                                     if offset_4 == -1:
                                         break
@@ -4160,6 +4361,7 @@ class Parser:
                                     children_3.extend(children_4)
                                 offset_3 = offset_4
                                 line_start_1 = line_start_2
+                                indent_end_2 = indent_end_2
                                 count_1 += 1
                             if offset_3 == -1:
                                 break
@@ -4174,7 +4376,7 @@ class Parser:
                                     break
 
 
-                            offset_3, line_start_1 = self.parse_rson_value(buf, offset_3, line_start_1, prefix_0, buf_eof, children_3)
+                            offset_3, line_start_1, indent_end_1 = self.parse_rson_value(buf, offset_3, buf_eof, line_start_1, indent_end_1, prefix_0, children_3)
                             if offset_3 == -1: break
 
 
@@ -4202,6 +4404,7 @@ class Parser:
                         while True:
                             offset_3 = offset_2
                             line_start_2 = line_start_1
+                            indent_end_2 = indent_end_1
                             children_3 = [] if children_2 is not None else None
                             while True:
                                 if buf[offset_3:offset_3+1] == '#':
@@ -4214,6 +4417,7 @@ class Parser:
                                 while True:
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    indent_end_3 = indent_end_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
                                         if offset_4 == buf_eof:
@@ -4236,6 +4440,7 @@ class Parser:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
                                     line_start_2 = line_start_3
+                                    indent_end_3 = indent_end_3
                                     count_2 += 1
                                 if offset_3 == -1:
                                     break
@@ -4257,6 +4462,7 @@ class Parser:
                                 children_2.extend(children_3)
                             offset_2 = offset_3
                             line_start_1 = line_start_2
+                            indent_end_2 = indent_end_2
                             count_1 += 1
                         if offset_2 == -1:
                             break
@@ -4275,6 +4481,7 @@ class Parser:
                         while True:
                             offset_3 = offset_2
                             line_start_2 = line_start_1
+                            indent_end_2 = indent_end_1
                             children_3 = [] if children_2 is not None else None
                             while True:
                                 if buf[offset_3:offset_3+1] == ',':
@@ -4296,6 +4503,7 @@ class Parser:
                                 while True:
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    indent_end_3 = indent_end_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
                                         if buf[offset_4:offset_4+1] == '#':
@@ -4308,6 +4516,7 @@ class Parser:
                                         while True:
                                             offset_5 = offset_4
                                             line_start_4 = line_start_3
+                                            indent_end_4 = indent_end_3
                                             children_5 = [] if children_4 is not None else None
                                             while True:
                                                 if offset_5 == buf_eof:
@@ -4330,6 +4539,7 @@ class Parser:
                                                 children_4.extend(children_5)
                                             offset_4 = offset_5
                                             line_start_3 = line_start_4
+                                            indent_end_4 = indent_end_4
                                             count_3 += 1
                                         if offset_4 == -1:
                                             break
@@ -4351,6 +4561,7 @@ class Parser:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
                                     line_start_2 = line_start_3
+                                    indent_end_3 = indent_end_3
                                     count_2 += 1
                                 if offset_3 == -1:
                                     break
@@ -4368,7 +4579,7 @@ class Parser:
                                 offset_4 = offset_3
                                 children_4 = []
                                 while True: # start capture
-                                    offset_4, line_start_2 = self.parse_rson_string(buf, offset_4, line_start_2, prefix_0, buf_eof, children_4)
+                                    offset_4, line_start_2, indent_end_2 = self.parse_rson_string(buf, offset_4, buf_eof, line_start_2, indent_end_2, prefix_0, children_4)
                                     if offset_4 == -1: break
 
 
@@ -4385,6 +4596,7 @@ class Parser:
                                     while True:
                                         offset_5 = offset_4
                                         line_start_3 = line_start_2
+                                        indent_end_3 = indent_end_2
                                         children_5 = [] if children_4 is not None else None
                                         while True:
                                             if buf[offset_5:offset_5+1] == '#':
@@ -4397,6 +4609,7 @@ class Parser:
                                             while True:
                                                 offset_6 = offset_5
                                                 line_start_4 = line_start_3
+                                                indent_end_4 = indent_end_3
                                                 children_6 = [] if children_5 is not None else None
                                                 while True:
                                                     if offset_6 == buf_eof:
@@ -4419,6 +4632,7 @@ class Parser:
                                                     children_5.extend(children_6)
                                                 offset_5 = offset_6
                                                 line_start_3 = line_start_4
+                                                indent_end_4 = indent_end_4
                                                 count_3 += 1
                                             if offset_5 == -1:
                                                 break
@@ -4440,6 +4654,7 @@ class Parser:
                                             children_4.extend(children_5)
                                         offset_4 = offset_5
                                         line_start_2 = line_start_3
+                                        indent_end_3 = indent_end_3
                                         count_2 += 1
                                     if offset_4 == -1:
                                         break
@@ -4473,6 +4688,7 @@ class Parser:
                                     while True:
                                         offset_5 = offset_4
                                         line_start_3 = line_start_2
+                                        indent_end_3 = indent_end_2
                                         children_5 = [] if children_4 is not None else None
                                         while True:
                                             if buf[offset_5:offset_5+1] == '#':
@@ -4485,6 +4701,7 @@ class Parser:
                                             while True:
                                                 offset_6 = offset_5
                                                 line_start_4 = line_start_3
+                                                indent_end_4 = indent_end_3
                                                 children_6 = [] if children_5 is not None else None
                                                 while True:
                                                     if offset_6 == buf_eof:
@@ -4507,6 +4724,7 @@ class Parser:
                                                     children_5.extend(children_6)
                                                 offset_5 = offset_6
                                                 line_start_3 = line_start_4
+                                                indent_end_4 = indent_end_4
                                                 count_3 += 1
                                             if offset_5 == -1:
                                                 break
@@ -4528,6 +4746,7 @@ class Parser:
                                             children_4.extend(children_5)
                                         offset_4 = offset_5
                                         line_start_2 = line_start_3
+                                        indent_end_3 = indent_end_3
                                         count_2 += 1
                                     if offset_4 == -1:
                                         break
@@ -4542,7 +4761,7 @@ class Parser:
                                             break
 
 
-                                    offset_4, line_start_2 = self.parse_rson_value(buf, offset_4, line_start_2, prefix_0, buf_eof, children_4)
+                                    offset_4, line_start_2, indent_end_2 = self.parse_rson_value(buf, offset_4, buf_eof, line_start_2, indent_end_2, prefix_0, children_4)
                                     if offset_4 == -1: break
 
 
@@ -4570,6 +4789,7 @@ class Parser:
                                 while True:
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    indent_end_3 = indent_end_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
                                         if buf[offset_4:offset_4+1] == '#':
@@ -4582,6 +4802,7 @@ class Parser:
                                         while True:
                                             offset_5 = offset_4
                                             line_start_4 = line_start_3
+                                            indent_end_4 = indent_end_3
                                             children_5 = [] if children_4 is not None else None
                                             while True:
                                                 if offset_5 == buf_eof:
@@ -4604,6 +4825,7 @@ class Parser:
                                                 children_4.extend(children_5)
                                             offset_4 = offset_5
                                             line_start_3 = line_start_4
+                                            indent_end_4 = indent_end_4
                                             count_3 += 1
                                         if offset_4 == -1:
                                             break
@@ -4625,6 +4847,7 @@ class Parser:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
                                     line_start_2 = line_start_3
+                                    indent_end_3 = indent_end_3
                                     count_2 += 1
                                 if offset_3 == -1:
                                     break
@@ -4647,6 +4870,7 @@ class Parser:
                                 children_2.extend(children_3)
                             offset_2 = offset_3
                             line_start_1 = line_start_2
+                            indent_end_2 = indent_end_2
                             count_1 += 1
                         if offset_2 == -1:
                             break
@@ -4655,6 +4879,7 @@ class Parser:
                         while count_1 < 1:
                             offset_3 = offset_2
                             line_start_2 = line_start_1
+                            indent_end_2 = indent_end_1
                             children_3 = [] if children_2 is not None else None
                             while True:
                                 if buf[offset_3:offset_3+1] == ',':
@@ -4676,6 +4901,7 @@ class Parser:
                                 while True:
                                     offset_4 = offset_3
                                     line_start_3 = line_start_2
+                                    indent_end_3 = indent_end_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
                                         if buf[offset_4:offset_4+1] == '#':
@@ -4688,6 +4914,7 @@ class Parser:
                                         while True:
                                             offset_5 = offset_4
                                             line_start_4 = line_start_3
+                                            indent_end_4 = indent_end_3
                                             children_5 = [] if children_4 is not None else None
                                             while True:
                                                 if offset_5 == buf_eof:
@@ -4710,6 +4937,7 @@ class Parser:
                                                 children_4.extend(children_5)
                                             offset_4 = offset_5
                                             line_start_3 = line_start_4
+                                            indent_end_4 = indent_end_4
                                             count_3 += 1
                                         if offset_4 == -1:
                                             break
@@ -4731,6 +4959,7 @@ class Parser:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
                                     line_start_2 = line_start_3
+                                    indent_end_3 = indent_end_3
                                     count_2 += 1
                                 if offset_3 == -1:
                                     break
@@ -4753,6 +4982,7 @@ class Parser:
                                 children_2.extend(children_3)
                             offset_2 = offset_3
                             line_start_1 = line_start_2
+                            indent_end_2 = indent_end_2
                             count_1 += 1
                             break
                         if offset_2 == -1:
@@ -4766,6 +4996,7 @@ class Parser:
                         children_1.extend(children_2)
                     offset_1 = offset_2
                     line_start_0 = line_start_1
+                    indent_end_1 = indent_end_1
                     count_0 += 1
                     break
                 if offset_1 == -1:
@@ -4790,4 +5021,4 @@ class Parser:
 
 
             break
-        return offset_0, line_start_0
+        return offset_0, line_start_0, indent_end_0
