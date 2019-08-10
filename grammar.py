@@ -1042,7 +1042,15 @@ def compile_python(grammar, builder=None, cython=False):
                 if c:
                     steps.append(f"{count} = {values.get(c, repr(c))}")
                 else:
-                    steps.append(f"{count} = {offset} - {indent_end}+  ((self.tabstop -1) * buf[{indent_end}:{offset}].count('\t'))")
+                    c0 = count.incr()
+                    steps.extend((
+                        f"{count} = 0",
+                        f"{c0} = {indent_end}",
+                        f"for chr in buf[{indent_end}:{offset}]:",
+                        f"    {count} += (self.tabstop-({c0}-{line_start})%self.tabstop) if chr == '\t' else 1",
+                        f"    {c0} +=1",
+                        f""
+                    ))
                     
                 steps.extend((
                         f"def _indent(buf, offset, buf_eof, line_start, indent_end,  prefix,  children, count={count}, allow_mixed_indent=self.allow_mixed_indent):",
@@ -1051,7 +1059,7 @@ def compile_python(grammar, builder=None, cython=False):
                         f"        chr = buf[offset]",
                         f"        if {cond}:",
                         f"            offset +=1",
-                        f"            count -= self.tabstop if chr == '\t' else 1",
+                        f"            count -= (self.tabstop-(offset-line_start)%self.tabstop) if chr == '\t' else 1",
                         f"            if not allow_mixed_indent:",
                         f"                if chr == '\t': saw_tab = True",
                         f"                else: saw_not_tab = True",
@@ -1256,8 +1264,8 @@ def compile_python(grammar, builder=None, cython=False):
                         f"        {indent_end} = {offset}",
                         f"        {count} +=1",
                         f"    elif {cond2}:",
+                        f"        {count} += (self.tabstop-({offset}-{line_start})%self.tabstop) if chr == '\t' else 1",
                         f"        {offset} +=1",
-                        f"        {count} += self.tabstop if chr == '\t' else 1",
                         f"    else:",
                         # f"        print(repr(buf[{offset}:{offset}+5]))",
                         f"        break",
@@ -1271,7 +1279,7 @@ def compile_python(grammar, builder=None, cython=False):
                     f"    chr = buf[{offset}]",
                     f"    if {cond2}:",
                     f"        {offset} +=1",
-                    f"        {count} += self.tabstop if chr == '\t' else 1",
+                    f"        {count} += (self.tabstop-({offset}-{line_start})%self.tabstop) if chr == '\t' else 1",
                     f"    else:",
                     f"        break",
                 ))
