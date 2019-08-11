@@ -44,17 +44,16 @@ class Parser:
                     leftover_count_1 = leftover_count_0
                     children_2 = [] if children_1 is not None else None
                     while True:
-                        if column_1 != 0:
+                        if not (column_1 == indent_column_1 == 0):
                             offset_2 = -1
                             break
-                        indent_column_1 = 0
                         for indent in prefix_0:
                             _children, _prefix = [], []
                             offset_2, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = indent(buf, offset_2, buf_eof, column_1, indent_column_1, _prefix, _children, leftover_offset_1, leftover_count_1)
                             if _prefix or _children:
                                raise Exception('bar')
                             if offset_2 == -1:        break
-                            indent_column_1 = column_1 - leftover_count_1 if leftover_offset_1 == offset_2 else column_1
+                            indent_column_1 = column_1
                         if offset_2 == -1:
                             break
 
@@ -95,8 +94,9 @@ class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t':
                     width  = (self.tabstop-(column_0%self.tabstop)) if chr == '\t' else 1
+                    c = width
                     count_0 += width
-                    column_0 += width
+                    column_0 += c
                     offset_0 +=1
                 else:
                     break
@@ -327,8 +327,9 @@ class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t':
                     width  = (self.tabstop-(column_0%self.tabstop)) if chr == '\t' else 1
+                    c= min(3, width)
                     count_0 += width
-                    column_0 += width
+                    column_0 += c
                     offset_0 +=1
                 else:
                     break
@@ -374,8 +375,9 @@ class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t':
                                         width  = (self.tabstop-(column_2%self.tabstop)) if chr == '\t' else 1
+                                        c = width
                                         count_1 += width
-                                        column_2 += width
+                                        column_2 += c
                                         offset_3 +=1
                                     else:
                                         break
@@ -440,8 +442,9 @@ class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t':
                                         width  = (self.tabstop-(column_2%self.tabstop)) if chr == '\t' else 1
+                                        c = width
                                         count_1 += width
-                                        column_2 += width
+                                        column_2 += c
                                         offset_3 +=1
                                     else:
                                         break
@@ -506,8 +509,9 @@ class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t':
                                         width  = (self.tabstop-(column_2%self.tabstop)) if chr == '\t' else 1
+                                        c = width
                                         count_1 += width
-                                        column_2 += width
+                                        column_2 += c
                                         offset_3 +=1
                                     else:
                                         break
@@ -575,8 +579,9 @@ class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t':
                     width  = (self.tabstop-(column_0%self.tabstop)) if chr == '\t' else 1
+                    c= min(3, width)
                     count_0 += width
-                    column_0 += width
+                    column_0 += c
                     offset_0 +=1
                 else:
                     break
@@ -676,8 +681,9 @@ class Parser:
                             chr = buf[offset_2]
                             if chr in ' \t':
                                 width  = (self.tabstop-(column_1%self.tabstop)) if chr == '\t' else 1
+                                c = width
                                 count_0 += width
-                                column_1 += width
+                                column_1 += c
                                 offset_2 +=1
                             else:
                                 break
@@ -741,8 +747,9 @@ class Parser:
                                 chr = buf[offset_3]
                                 if chr in ' \t':
                                     width  = (self.tabstop-(column_1%self.tabstop)) if chr == '\t' else 1
+                                    c = width
                                     count_1 += width
-                                    column_1 += width
+                                    column_1 += c
                                     offset_3 +=1
                                 else:
                                     break
@@ -851,8 +858,9 @@ class Parser:
                         chr = buf[offset_1]
                         if chr in ' \t':
                             width  = (self.tabstop-(column_1%self.tabstop)) if chr == '\t' else 1
+                            c = width
                             count_1 += width
-                            column_1 += width
+                            column_1 += c
                             offset_1 +=1
                         else:
                             break
@@ -914,8 +922,9 @@ class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t':
                     width  = (self.tabstop-(column_0%self.tabstop)) if chr == '\t' else 1
+                    c = width
                     count_0 += width
-                    column_0 += width
+                    column_0 += c
                     offset_0 +=1
                 else:
                     break
@@ -943,8 +952,9 @@ class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t':
                     width  = (self.tabstop-(column_0%self.tabstop)) if chr == '\t' else 1
+                    c= min(3, width)
                     count_0 += width
-                    column_0 += width
+                    column_0 += c
                     offset_0 +=1
                 else:
                     break
@@ -970,8 +980,9 @@ class Parser:
                     chr = buf[offset_1]
                     if chr in ' \t':
                         width  = (self.tabstop-(column_0%self.tabstop)) if chr == '\t' else 1
+                        c = width
                         count_0 += width
-                        column_0 += width
+                        column_0 += c
                         offset_1 +=1
                     else:
                         break
@@ -989,17 +1000,16 @@ class Parser:
                     offset_1 = -1
                     break
 
-                if column_0 != 0:
+                if not (column_0 == indent_column_0 == 0):
                     offset_1 = -1
                     break
-                indent_column_0 = 0
                 for indent in prefix_0:
                     _children, _prefix = [], []
                     offset_1, column_0, indent_column_0, leftover_offset_0, leftover_count_0 = indent(buf, offset_1, buf_eof, column_0, indent_column_0, _prefix, _children, leftover_offset_0, leftover_count_0)
                     if _prefix or _children:
                        raise Exception('bar')
                     if offset_1 == -1:        break
-                    indent_column_0 = column_0 - leftover_count_0 if leftover_offset_0 == offset_1 else column_0
+                    indent_column_0 = column_0
                 if offset_1 == -1:
                     break
 
@@ -1031,8 +1041,9 @@ class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t':
                     width  = (self.tabstop-(column_0%self.tabstop)) if chr == '\t' else 1
+                    c= min(3, width)
                     count_0 += width
-                    column_0 += width
+                    column_0 += c
                     offset_0 +=1
                 else:
                     break
@@ -1183,8 +1194,9 @@ class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t':
                     width  = (self.tabstop-(column_0%self.tabstop)) if chr == '\t' else 1
+                    c= min(4, width)
                     count_0 += width
-                    column_0 += width
+                    column_0 += c
                     offset_0 +=1
                 else:
                     break
@@ -1215,9 +1227,10 @@ class Parser:
                                 if saw_tab and saw_not_tab:
                                      offset -1; break
                             width  = (self.tabstop-(column%self.tabstop)) if chr == '\t' else 1
-                            column += width
-                            count -= width
+                            c = min(width, count)
+                            column += c
                             offset +=1
+                            count -= width
                             if count < 0:
                                 leftover_offset = offset
                                 leftover_count = -count
@@ -1229,7 +1242,7 @@ class Parser:
                             break
                     return offset, column, indent_column, leftover_offset, leftover_count
                 prefix_0.append(_indent)
-                indent_column_0 = column_0 - leftover_count_0 if leftover_offset_0 == offset_1 else column_0
+                indent_column_0 = column_0
                 while True:
                     offset_2 = offset_1
                     children_2 = []
@@ -1304,17 +1317,16 @@ class Parser:
                         leftover_count_1 = leftover_count_0
                         children_2 = [] if children_1 is not None else None
                         while True:
-                            if column_1 != 0:
+                            if not (column_1 == indent_column_1 == 0):
                                 offset_2 = -1
                                 break
-                            indent_column_1 = 0
                             for indent in prefix_0:
                                 _children, _prefix = [], []
                                 offset_2, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = indent(buf, offset_2, buf_eof, column_1, indent_column_1, _prefix, _children, leftover_offset_1, leftover_count_1)
                                 if _prefix or _children:
                                    raise Exception('bar')
                                 if offset_2 == -1:        break
-                                indent_column_1 = column_1 - leftover_count_1 if leftover_offset_1 == offset_2 else column_1
+                                indent_column_1 = column_1
                             if offset_2 == -1:
                                 break
 
@@ -1419,8 +1431,9 @@ class Parser:
                                             chr = buf[offset_4]
                                             if chr in ' \t':
                                                 width  = (self.tabstop-(column_2%self.tabstop)) if chr == '\t' else 1
+                                                c = width
                                                 count_1 += width
-                                                column_2 += width
+                                                column_2 += c
                                                 offset_4 +=1
                                             else:
                                                 break
@@ -1458,17 +1471,16 @@ class Parser:
                                         leftover_count_3 = leftover_count_2
                                         children_4 = [] if children_3 is not None else None
                                         while True:
-                                            if column_3 != 0:
+                                            if not (column_3 == indent_column_3 == 0):
                                                 offset_4 = -1
                                                 break
-                                            indent_column_3 = 0
                                             for indent in prefix_0:
                                                 _children, _prefix = [], []
                                                 offset_4, column_3, indent_column_3, leftover_offset_3, leftover_count_3 = indent(buf, offset_4, buf_eof, column_3, indent_column_3, _prefix, _children, leftover_offset_3, leftover_count_3)
                                                 if _prefix or _children:
                                                    raise Exception('bar')
                                                 if offset_4 == -1:        break
-                                                indent_column_3 = column_3 - leftover_count_3 if leftover_offset_3 == offset_4 else column_3
+                                                indent_column_3 = column_3
                                             if offset_4 == -1:
                                                 break
 
@@ -1525,17 +1537,16 @@ class Parser:
                                         column_3 = indent_column_2
                                         leftover_offset_3 = leftover_offset_2
                                         leftover_count_3 = leftover_count_2
-                                        if column_3 != 0:
+                                        if not (column_3 == column_3 == 0):
                                             offset_4 = -1
                                             break
-                                        column_3 = 0
                                         for indent in prefix_0:
                                             _children, _prefix = [], []
                                             offset_4, column_3, column_3, leftover_offset_3, leftover_count_3 = indent(buf, offset_4, buf_eof, column_3, column_3, _prefix, _children, leftover_offset_3, leftover_count_3)
                                             if _prefix or _children:
                                                raise Exception('bar')
                                             if offset_4 == -1:        break
-                                            column_3 = column_3 - leftover_count_3 if leftover_offset_3 == offset_4 else column_3
+                                            column_3 = column_3
                                         if offset_4 == -1:
                                             break
 
@@ -1604,8 +1615,9 @@ class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t':
                     width  = (self.tabstop-(column_0%self.tabstop)) if chr == '\t' else 1
+                    c= min(3, width)
                     count_0 += width
-                    column_0 += width
+                    column_0 += c
                     offset_0 +=1
                 else:
                     break
@@ -1696,8 +1708,9 @@ class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t':
                     width  = (self.tabstop-(column_0%self.tabstop)) if chr == '\t' else 1
+                    c= min(3, width)
                     count_0 += width
-                    column_0 += width
+                    column_0 += c
                     offset_0 +=1
                 else:
                     break
@@ -1898,17 +1911,16 @@ class Parser:
                 leftover_count_1 = leftover_count_0
                 children_1 = [] if children_0 is not None else None
                 while True:
-                    if column_1 != 0:
+                    if not (column_1 == indent_column_1 == 0):
                         offset_1 = -1
                         break
-                    indent_column_1 = 0
                     for indent in prefix_0:
                         _children, _prefix = [], []
                         offset_1, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = indent(buf, offset_1, buf_eof, column_1, indent_column_1, _prefix, _children, leftover_offset_1, leftover_count_1)
                         if _prefix or _children:
                            raise Exception('bar')
                         if offset_1 == -1:        break
-                        indent_column_1 = column_1 - leftover_count_1 if leftover_offset_1 == offset_1 else column_1
+                        indent_column_1 = column_1
                     if offset_1 == -1:
                         break
 
@@ -1926,8 +1938,9 @@ class Parser:
                             chr = buf[offset_2]
                             if chr in ' \t':
                                 width  = (self.tabstop-(column_2%self.tabstop)) if chr == '\t' else 1
+                                c= min(3, width)
                                 count_1 += width
-                                column_2 += width
+                                column_2 += c
                                 offset_2 +=1
                             else:
                                 break
@@ -2052,17 +2065,16 @@ class Parser:
                 leftover_count_1 = leftover_count_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    if column_1 != 0:
+                    if not (column_1 == indent_column_1 == 0):
                         offset_1 = -1
                         break
-                    indent_column_1 = 0
                     for indent in prefix_0:
                         _children, _prefix = [], []
                         offset_1, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = indent(buf, offset_1, buf_eof, column_1, indent_column_1, _prefix, _children, leftover_offset_1, leftover_count_1)
                         if _prefix or _children:
                            raise Exception('bar')
                         if offset_1 == -1:        break
-                        indent_column_1 = column_1 - leftover_count_1 if leftover_offset_1 == offset_1 else column_1
+                        indent_column_1 = column_1
                     if offset_1 == -1:
                         break
 
@@ -2073,8 +2085,9 @@ class Parser:
                         chr = buf[offset_1]
                         if chr in ' \t':
                             width  = (self.tabstop-(column_1%self.tabstop)) if chr == '\t' else 1
+                            c= min(3, width)
                             count_0 += width
-                            column_1 += width
+                            column_1 += c
                             offset_1 +=1
                         else:
                             break
@@ -2253,17 +2266,16 @@ class Parser:
                 leftover_count_1 = leftover_count_0
                 children_1 = [] if children_0 is not None else None
                 while True:
-                    if column_1 != 0:
+                    if not (column_1 == indent_column_1 == 0):
                         offset_1 = -1
                         break
-                    indent_column_1 = 0
                     for indent in prefix_0:
                         _children, _prefix = [], []
                         offset_1, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = indent(buf, offset_1, buf_eof, column_1, indent_column_1, _prefix, _children, leftover_offset_1, leftover_count_1)
                         if _prefix or _children:
                            raise Exception('bar')
                         if offset_1 == -1:        break
-                        indent_column_1 = column_1 - leftover_count_1 if leftover_offset_1 == offset_1 else column_1
+                        indent_column_1 = column_1
                     if offset_1 == -1:
                         break
 
@@ -2281,8 +2293,9 @@ class Parser:
                             chr = buf[offset_2]
                             if chr in ' \t':
                                 width  = (self.tabstop-(column_2%self.tabstop)) if chr == '\t' else 1
+                                c= min(3, width)
                                 count_1 += width
-                                column_2 += width
+                                column_2 += c
                                 offset_2 +=1
                             else:
                                 break
@@ -2407,17 +2420,16 @@ class Parser:
                 leftover_count_1 = leftover_count_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    if column_1 != 0:
+                    if not (column_1 == indent_column_1 == 0):
                         offset_1 = -1
                         break
-                    indent_column_1 = 0
                     for indent in prefix_0:
                         _children, _prefix = [], []
                         offset_1, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = indent(buf, offset_1, buf_eof, column_1, indent_column_1, _prefix, _children, leftover_offset_1, leftover_count_1)
                         if _prefix or _children:
                            raise Exception('bar')
                         if offset_1 == -1:        break
-                        indent_column_1 = column_1 - leftover_count_1 if leftover_offset_1 == offset_1 else column_1
+                        indent_column_1 = column_1
                     if offset_1 == -1:
                         break
 
@@ -2428,8 +2440,9 @@ class Parser:
                         chr = buf[offset_1]
                         if chr in ' \t':
                             width  = (self.tabstop-(column_1%self.tabstop)) if chr == '\t' else 1
+                            c= min(3, width)
                             count_0 += width
-                            column_1 += width
+                            column_1 += c
                             offset_1 +=1
                         else:
                             break
@@ -2555,8 +2568,9 @@ class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t':
                                         width  = (self.tabstop-(column_3%self.tabstop)) if chr == '\t' else 1
+                                        c = width
                                         count_0 += width
-                                        column_3 += width
+                                        column_3 += c
                                         offset_3 +=1
                                     else:
                                         break
@@ -2717,8 +2731,9 @@ class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t':
                     width  = (self.tabstop-(column_0%self.tabstop)) if chr == '\t' else 1
+                    c= min(3, width)
                     count_0 += width
-                    column_0 += width
+                    column_0 += c
                     offset_0 +=1
                 else:
                     break
@@ -2749,8 +2764,9 @@ class Parser:
                     count_0 +=1
                 elif chr in ' \t':
                     width  = (self.tabstop-(column_0%self.tabstop)) if chr == '\t' else 1
+                    c= min(1, width)
                     count_0 += width
-                    column_0 += width
+                    column_0 += c
                     offset_0 +=1
                 else:
                     break
@@ -2776,7 +2792,7 @@ class Parser:
 
 
                 prefix_0.append(self.parse_blockquote_prefix)
-                indent_column_0 = column_0 - leftover_count_0 if leftover_offset_0 == offset_1 else column_0
+                indent_column_0 = column_0
                 while True:
                     offset_1, column_0, indent_column_0, leftover_offset_0, leftover_count_0 = self.parse_block_element(buf, offset_1, buf_eof, column_0, indent_column_0, prefix_0, children_1, leftover_offset_0, leftover_count_0)
                     if offset_1 == -1: break
@@ -2791,17 +2807,16 @@ class Parser:
                         leftover_count_1 = leftover_count_0
                         children_2 = [] if children_1 is not None else None
                         while True:
-                            if column_1 != 0:
+                            if not (column_1 == indent_column_1 == 0):
                                 offset_2 = -1
                                 break
-                            indent_column_1 = 0
                             for indent in prefix_0:
                                 _children, _prefix = [], []
                                 offset_2, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = indent(buf, offset_2, buf_eof, column_1, indent_column_1, _prefix, _children, leftover_offset_1, leftover_count_1)
                                 if _prefix or _children:
                                    raise Exception('bar')
                                 if offset_2 == -1:        break
-                                indent_column_1 = column_1 - leftover_count_1 if leftover_offset_1 == offset_2 else column_1
+                                indent_column_1 = column_1
                             if offset_2 == -1:
                                 break
 
@@ -2843,8 +2858,9 @@ class Parser:
                                         chr = buf[offset_3]
                                         if chr in ' \t':
                                             width  = (self.tabstop-(column_2%self.tabstop)) if chr == '\t' else 1
+                                            c = width
                                             count_1 += width
-                                            column_2 += width
+                                            column_2 += c
                                             offset_3 +=1
                                         else:
                                             break
@@ -2921,8 +2937,9 @@ class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t':
                     width  = (self.tabstop-(column_0%self.tabstop)) if chr == '\t' else 1
+                    c= min(3, width)
                     count_0 += width
-                    column_0 += width
+                    column_0 += c
                     offset_0 +=1
                 else:
                     break
@@ -2948,8 +2965,9 @@ class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t':
                     width  = (self.tabstop-(column_0%self.tabstop)) if chr == '\t' else 1
+                    c = width
                     count_0 += width
-                    column_0 += width
+                    column_0 += c
                     offset_0 +=1
                 else:
                     break
@@ -2997,17 +3015,16 @@ class Parser:
                     leftover_count_1 = leftover_count_0
                     children_2 = [] if children_1 is not None else None
                     while True:
-                        if column_1 != 0:
+                        if not (column_1 == indent_column_1 == 0):
                             offset_2 = -1
                             break
-                        indent_column_1 = 0
                         for indent in prefix_0:
                             _children, _prefix = [], []
                             offset_2, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = indent(buf, offset_2, buf_eof, column_1, indent_column_1, _prefix, _children, leftover_offset_1, leftover_count_1)
                             if _prefix or _children:
                                raise Exception('bar')
                             if offset_2 == -1:        break
-                            indent_column_1 = column_1 - leftover_count_1 if leftover_offset_1 == offset_2 else column_1
+                            indent_column_1 = column_1
                         if offset_2 == -1:
                             break
 
@@ -3026,8 +3043,9 @@ class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t':
                                         width  = (self.tabstop-(column_2%self.tabstop)) if chr == '\t' else 1
+                                        c = width
                                         count_1 += width
-                                        column_2 += width
+                                        column_2 += c
                                         offset_3 +=1
                                     else:
                                         break
@@ -3057,17 +3075,16 @@ class Parser:
                                         leftover_count_3 = leftover_count_2
                                         children_5 = [] if children_4 is not None else None
                                         while True:
-                                            if column_3 != 0:
+                                            if not (column_3 == indent_column_3 == 0):
                                                 offset_5 = -1
                                                 break
-                                            indent_column_3 = 0
                                             for indent in prefix_0:
                                                 _children, _prefix = [], []
                                                 offset_5, column_3, indent_column_3, leftover_offset_3, leftover_count_3 = indent(buf, offset_5, buf_eof, column_3, indent_column_3, _prefix, _children, leftover_offset_3, leftover_count_3)
                                                 if _prefix or _children:
                                                    raise Exception('bar')
                                                 if offset_5 == -1:        break
-                                                indent_column_3 = column_3 - leftover_count_3 if leftover_offset_3 == offset_5 else column_3
+                                                indent_column_3 = column_3
                                             if offset_5 == -1:
                                                 break
 
@@ -3078,8 +3095,9 @@ class Parser:
                                                 chr = buf[offset_5]
                                                 if chr in ' \t':
                                                     width  = (self.tabstop-(column_3%self.tabstop)) if chr == '\t' else 1
+                                                    c = width
                                                     count_2 += width
-                                                    column_3 += width
+                                                    column_3 += c
                                                     offset_5 +=1
                                                 else:
                                                     break
@@ -3130,17 +3148,16 @@ class Parser:
                                     column_3 = indent_column_2
                                     leftover_offset_3 = leftover_offset_2
                                     leftover_count_3 = leftover_count_2
-                                    if column_3 != 0:
+                                    if not (column_3 == column_3 == 0):
                                         offset_4 = -1
                                         break
-                                    column_3 = 0
                                     for indent in prefix_0:
                                         _children, _prefix = [], []
                                         offset_4, column_3, column_3, leftover_offset_3, leftover_count_3 = indent(buf, offset_4, buf_eof, column_3, column_3, _prefix, _children, leftover_offset_3, leftover_count_3)
                                         if _prefix or _children:
                                            raise Exception('bar')
                                         if offset_4 == -1:        break
-                                        column_3 = column_3 - leftover_count_3 if leftover_offset_3 == offset_4 else column_3
+                                        column_3 = column_3
                                     if offset_4 == -1:
                                         break
 
@@ -3151,8 +3168,9 @@ class Parser:
                                         chr = buf[offset_4]
                                         if chr in ' \t':
                                             width  = (self.tabstop-(column_3%self.tabstop)) if chr == '\t' else 1
+                                            c= min(3, width)
                                             count_1 += width
-                                            column_3 += width
+                                            column_3 += c
                                             offset_4 +=1
                                         else:
                                             break
@@ -3202,8 +3220,9 @@ class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t':
                                         width  = (self.tabstop-(column_2%self.tabstop)) if chr == '\t' else 1
+                                        c= min(3, width)
                                         count_1 += width
-                                        column_2 += width
+                                        column_2 += c
                                         offset_3 +=1
                                     else:
                                         break
@@ -3229,8 +3248,9 @@ class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t':
                                         width  = (self.tabstop-(column_2%self.tabstop)) if chr == '\t' else 1
+                                        c = width
                                         count_1 += width
-                                        column_2 += width
+                                        column_2 += c
                                         offset_3 +=1
                                     else:
                                         break
@@ -3305,7 +3325,6 @@ class Parser:
     def parse_list_item(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, leftover_offset_0, leftover_count_0):
         while True: # note: return at end of loop
             count_0 = column_0 - indent_column_0
-            if offset_0 == leftover_offset_0: count_0 -= leftover_count_0
             def _indent(buf, offset, buf_eof, column, indent_column,  prefix,  children, leftover_offset, leftover_count, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
                 saw_tab, saw_not_tab = False, False
                 if offset == leftover_offset: count -= leftover_count
@@ -3318,9 +3337,10 @@ class Parser:
                             if saw_tab and saw_not_tab:
                                  offset -1; break
                         width  = (self.tabstop-(column%self.tabstop)) if chr == '\t' else 1
-                        column += width
-                        count -= width
+                        c = min(width, count)
+                        column += c
                         offset +=1
+                        count -= width
                         if count < 0:
                             leftover_offset = offset
                             leftover_count = -count
@@ -3332,7 +3352,7 @@ class Parser:
                         break
                 return offset, column, indent_column, leftover_offset, leftover_count
             prefix_0.append(_indent)
-            indent_column_0 = column_0 - leftover_count_0 if leftover_offset_0 == offset_0 else column_0
+            indent_column_0 = column_0
             while True:
                 offset_0, column_0, indent_column_0, leftover_offset_0, leftover_count_0 = self.parse_block_element(buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, leftover_offset_0, leftover_count_0)
                 if offset_0 == -1: break
@@ -3347,17 +3367,16 @@ class Parser:
                     leftover_count_1 = leftover_count_0
                     children_1 = [] if children_0 is not None else None
                     while True:
-                        if column_1 != 0:
+                        if not (column_1 == indent_column_1 == 0):
                             offset_1 = -1
                             break
-                        indent_column_1 = 0
                         for indent in prefix_0:
                             _children, _prefix = [], []
                             offset_1, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = indent(buf, offset_1, buf_eof, column_1, indent_column_1, _prefix, _children, leftover_offset_1, leftover_count_1)
                             if _prefix or _children:
                                raise Exception('bar')
                             if offset_1 == -1:        break
-                            indent_column_1 = column_1 - leftover_count_1 if leftover_offset_1 == offset_1 else column_1
+                            indent_column_1 = column_1
                         if offset_1 == -1:
                             break
 
@@ -3401,17 +3420,16 @@ class Parser:
                                     leftover_count_3 = leftover_count_2
                                     children_3 = [] if children_2 is not None else None
                                     while True:
-                                        if column_3 != 0:
+                                        if not (column_3 == indent_column_3 == 0):
                                             offset_3 = -1
                                             break
-                                        indent_column_3 = 0
                                         for indent in prefix_0:
                                             _children, _prefix = [], []
                                             offset_3, column_3, indent_column_3, leftover_offset_3, leftover_count_3 = indent(buf, offset_3, buf_eof, column_3, indent_column_3, _prefix, _children, leftover_offset_3, leftover_count_3)
                                             if _prefix or _children:
                                                raise Exception('bar')
                                             if offset_3 == -1:        break
-                                            indent_column_3 = column_3 - leftover_count_3 if leftover_offset_3 == offset_3 else column_3
+                                            indent_column_3 = column_3
                                         if offset_3 == -1:
                                             break
 
@@ -3422,8 +3440,9 @@ class Parser:
                                             chr = buf[offset_3]
                                             if chr in ' \t':
                                                 width  = (self.tabstop-(column_3%self.tabstop)) if chr == '\t' else 1
+                                                c = width
                                                 count_2 += width
-                                                column_3 += width
+                                                column_3 += c
                                                 offset_3 +=1
                                             else:
                                                 break
@@ -3463,17 +3482,16 @@ class Parser:
                                     column_3 = indent_column_2
                                     leftover_offset_3 = leftover_offset_2
                                     leftover_count_3 = leftover_count_2
-                                    if column_3 != 0:
+                                    if not (column_3 == column_3 == 0):
                                         offset_3 = -1
                                         break
-                                    column_3 = 0
                                     for indent in prefix_0:
                                         _children, _prefix = [], []
                                         offset_3, column_3, column_3, leftover_offset_3, leftover_count_3 = indent(buf, offset_3, buf_eof, column_3, column_3, _prefix, _children, leftover_offset_3, leftover_count_3)
                                         if _prefix or _children:
                                            raise Exception('bar')
                                         if offset_3 == -1:        break
-                                        column_3 = column_3 - leftover_count_3 if leftover_offset_3 == offset_3 else column_3
+                                        column_3 = column_3
                                     if offset_3 == -1:
                                         break
 
@@ -3530,8 +3548,9 @@ class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t':
                     width  = (self.tabstop-(column_0%self.tabstop)) if chr == '\t' else 1
+                    c= min(3, width)
                     count_0 += width
-                    column_0 += width
+                    column_0 += c
                     offset_0 +=1
                 else:
                     break
@@ -3593,8 +3612,9 @@ class Parser:
                                         chr = buf[offset_4]
                                         if chr in ' \t':
                                             width  = (self.tabstop-(column_2%self.tabstop)) if chr == '\t' else 1
+                                            c = width
                                             count_2 += width
-                                            column_2 += width
+                                            column_2 += c
                                             offset_4 +=1
                                         else:
                                             break
@@ -3637,17 +3657,16 @@ class Parser:
                                         offset_4 = -1
                                         break
 
-                                    if column_2 != 0:
+                                    if not (column_2 == indent_column_2 == 0):
                                         offset_4 = -1
                                         break
-                                    indent_column_2 = 0
                                     for indent in prefix_0:
                                         _children, _prefix = [], []
                                         offset_4, column_2, indent_column_2, leftover_offset_2, leftover_count_2 = indent(buf, offset_4, buf_eof, column_2, indent_column_2, _prefix, _children, leftover_offset_2, leftover_count_2)
                                         if _prefix or _children:
                                            raise Exception('bar')
                                         if offset_4 == -1:        break
-                                        indent_column_2 = column_2 - leftover_count_2 if leftover_offset_2 == offset_4 else column_2
+                                        indent_column_2 = column_2
                                     if offset_4 == -1:
                                         break
 
@@ -3658,8 +3677,9 @@ class Parser:
                                         chr = buf[offset_4]
                                         if chr in ' \t':
                                             width  = (self.tabstop-(column_2%self.tabstop)) if chr == '\t' else 1
+                                            c = width
                                             count_2 += width
-                                            column_2 += width
+                                            column_2 += c
                                             offset_4 +=1
                                         else:
                                             break
@@ -3697,8 +3717,9 @@ class Parser:
                                             chr = buf[offset_4]
                                             if chr in ' \t':
                                                 width  = (self.tabstop-(column_2%self.tabstop)) if chr == '\t' else 1
+                                                c= min(1, width)
                                                 count_2 += width
-                                                column_2 += width
+                                                column_2 += c
                                                 offset_4 +=1
                                             else:
                                                 break
@@ -3737,17 +3758,16 @@ class Parser:
                                         children_4.append(value_0)
                                         offset_4 = offset_5
 
-                                        if column_2 != 0:
+                                        if not (column_2 == indent_column_2 == 0):
                                             offset_4 = -1
                                             break
-                                        indent_column_2 = 0
                                         for indent in prefix_0:
                                             _children, _prefix = [], []
                                             offset_4, column_2, indent_column_2, leftover_offset_2, leftover_count_2 = indent(buf, offset_4, buf_eof, column_2, indent_column_2, _prefix, _children, leftover_offset_2, leftover_count_2)
                                             if _prefix or _children:
                                                raise Exception('bar')
                                             if offset_4 == -1:        break
-                                            indent_column_2 = column_2 - leftover_count_2 if leftover_offset_2 == offset_4 else column_2
+                                            indent_column_2 = column_2
                                         if offset_4 == -1:
                                             break
 
@@ -3891,8 +3911,9 @@ class Parser:
                                             chr = buf[offset_4]
                                             if chr in ' \t':
                                                 width  = (self.tabstop-(column_2%self.tabstop)) if chr == '\t' else 1
+                                                c = width
                                                 count_2 += width
-                                                column_2 += width
+                                                column_2 += c
                                                 offset_4 +=1
                                             else:
                                                 break
@@ -3931,8 +3952,9 @@ class Parser:
                                                     chr = buf[offset_5]
                                                     if chr in ' \t':
                                                         width  = (self.tabstop-(column_3%self.tabstop)) if chr == '\t' else 1
+                                                        c = width
                                                         count_2 += width
-                                                        column_3 += width
+                                                        column_3 += c
                                                         offset_5 +=1
                                                     else:
                                                         break
@@ -4010,17 +4032,16 @@ class Parser:
                                         children_4.append(value_1)
                                         offset_4 = offset_5
 
-                                        if column_2 != 0:
+                                        if not (column_2 == indent_column_2 == 0):
                                             offset_4 = -1
                                             break
-                                        indent_column_2 = 0
                                         for indent in prefix_0:
                                             _children, _prefix = [], []
                                             offset_4, column_2, indent_column_2, leftover_offset_2, leftover_count_2 = indent(buf, offset_4, buf_eof, column_2, indent_column_2, _prefix, _children, leftover_offset_2, leftover_count_2)
                                             if _prefix or _children:
                                                raise Exception('bar')
                                             if offset_4 == -1:        break
-                                            indent_column_2 = column_2 - leftover_count_2 if leftover_offset_2 == offset_4 else column_2
+                                            indent_column_2 = column_2
                                         if offset_4 == -1:
                                             break
 
@@ -4164,8 +4185,9 @@ class Parser:
                                             chr = buf[offset_4]
                                             if chr in ' \t':
                                                 width  = (self.tabstop-(column_2%self.tabstop)) if chr == '\t' else 1
+                                                c = width
                                                 count_2 += width
-                                                column_2 += width
+                                                column_2 += c
                                                 offset_4 +=1
                                             else:
                                                 break
@@ -4199,8 +4221,9 @@ class Parser:
                                                 chr = buf[offset_5]
                                                 if chr in ' \t':
                                                     width  = (self.tabstop-(column_2%self.tabstop)) if chr == '\t' else 1
+                                                    c = width
                                                     count_2 += width
-                                                    column_2 += width
+                                                    column_2 += c
                                                     offset_5 +=1
                                                 else:
                                                     break
@@ -4260,8 +4283,9 @@ class Parser:
                             chr = buf[offset_2]
                             if chr in ' \t':
                                 width  = (self.tabstop-(column_0%self.tabstop)) if chr == '\t' else 1
+                                c = width
                                 count_1 += width
-                                column_0 += width
+                                column_0 += c
                                 offset_2 +=1
                             else:
                                 break
@@ -4378,8 +4402,9 @@ class Parser:
                             chr = buf[offset_2]
                             if chr in ' \t':
                                 width  = (self.tabstop-(column_2%self.tabstop)) if chr == '\t' else 1
+                                c = width
                                 count_1 += width
-                                column_2 += width
+                                column_2 += c
                                 offset_2 +=1
                             else:
                                 break
@@ -4422,17 +4447,16 @@ class Parser:
                             offset_2 = -1
                             break
 
-                        if column_2 != 0:
+                        if not (column_2 == indent_column_2 == 0):
                             offset_2 = -1
                             break
-                        indent_column_2 = 0
                         for indent in prefix_0:
                             _children, _prefix = [], []
                             offset_2, column_2, indent_column_2, leftover_offset_2, leftover_count_2 = indent(buf, offset_2, buf_eof, column_2, indent_column_2, _prefix, _children, leftover_offset_2, leftover_count_2)
                             if _prefix or _children:
                                raise Exception('bar')
                             if offset_2 == -1:        break
-                            indent_column_2 = column_2 - leftover_count_2 if leftover_offset_2 == offset_2 else column_2
+                            indent_column_2 = column_2
                         if offset_2 == -1:
                             break
 
@@ -4443,8 +4467,9 @@ class Parser:
                             chr = buf[offset_2]
                             if chr in ' \t':
                                 width  = (self.tabstop-(column_2%self.tabstop)) if chr == '\t' else 1
+                                c = width
                                 count_1 += width
-                                column_2 += width
+                                column_2 += c
                                 offset_2 +=1
                             else:
                                 break
@@ -4482,8 +4507,9 @@ class Parser:
                                 chr = buf[offset_2]
                                 if chr in ' \t':
                                     width  = (self.tabstop-(column_2%self.tabstop)) if chr == '\t' else 1
+                                    c= min(1, width)
                                     count_1 += width
-                                    column_2 += width
+                                    column_2 += c
                                     offset_2 +=1
                                 else:
                                     break
@@ -4522,17 +4548,16 @@ class Parser:
                             children_2.append(value_0)
                             offset_2 = offset_3
 
-                            if column_2 != 0:
+                            if not (column_2 == indent_column_2 == 0):
                                 offset_2 = -1
                                 break
-                            indent_column_2 = 0
                             for indent in prefix_0:
                                 _children, _prefix = [], []
                                 offset_2, column_2, indent_column_2, leftover_offset_2, leftover_count_2 = indent(buf, offset_2, buf_eof, column_2, indent_column_2, _prefix, _children, leftover_offset_2, leftover_count_2)
                                 if _prefix or _children:
                                    raise Exception('bar')
                                 if offset_2 == -1:        break
-                                indent_column_2 = column_2 - leftover_count_2 if leftover_offset_2 == offset_2 else column_2
+                                indent_column_2 = column_2
                             if offset_2 == -1:
                                 break
 
@@ -4676,8 +4701,9 @@ class Parser:
                                 chr = buf[offset_2]
                                 if chr in ' \t':
                                     width  = (self.tabstop-(column_2%self.tabstop)) if chr == '\t' else 1
+                                    c = width
                                     count_1 += width
-                                    column_2 += width
+                                    column_2 += c
                                     offset_2 +=1
                                 else:
                                     break
@@ -4716,8 +4742,9 @@ class Parser:
                                         chr = buf[offset_3]
                                         if chr in ' \t':
                                             width  = (self.tabstop-(column_3%self.tabstop)) if chr == '\t' else 1
+                                            c = width
                                             count_1 += width
-                                            column_3 += width
+                                            column_3 += c
                                             offset_3 +=1
                                         else:
                                             break
@@ -4795,17 +4822,16 @@ class Parser:
                             children_2.append(value_1)
                             offset_2 = offset_3
 
-                            if column_2 != 0:
+                            if not (column_2 == indent_column_2 == 0):
                                 offset_2 = -1
                                 break
-                            indent_column_2 = 0
                             for indent in prefix_0:
                                 _children, _prefix = [], []
                                 offset_2, column_2, indent_column_2, leftover_offset_2, leftover_count_2 = indent(buf, offset_2, buf_eof, column_2, indent_column_2, _prefix, _children, leftover_offset_2, leftover_count_2)
                                 if _prefix or _children:
                                    raise Exception('bar')
                                 if offset_2 == -1:        break
-                                indent_column_2 = column_2 - leftover_count_2 if leftover_offset_2 == offset_2 else column_2
+                                indent_column_2 = column_2
                             if offset_2 == -1:
                                 break
 
@@ -4949,8 +4975,9 @@ class Parser:
                                 chr = buf[offset_2]
                                 if chr in ' \t':
                                     width  = (self.tabstop-(column_2%self.tabstop)) if chr == '\t' else 1
+                                    c = width
                                     count_1 += width
-                                    column_2 += width
+                                    column_2 += c
                                     offset_2 +=1
                                 else:
                                     break
@@ -4984,8 +5011,9 @@ class Parser:
                                     chr = buf[offset_3]
                                     if chr in ' \t':
                                         width  = (self.tabstop-(column_2%self.tabstop)) if chr == '\t' else 1
+                                        c = width
                                         count_1 += width
-                                        column_2 += width
+                                        column_2 += c
                                         offset_3 +=1
                                     else:
                                         break
@@ -5045,8 +5073,9 @@ class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t':
                     width  = (self.tabstop-(column_0%self.tabstop)) if chr == '\t' else 1
+                    c = width
                     count_0 += width
-                    column_0 += width
+                    column_0 += c
                     offset_0 +=1
                 else:
                     break
@@ -5101,8 +5130,9 @@ class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t':
                     width  = (self.tabstop-(column_0%self.tabstop)) if chr == '\t' else 1
+                    c = width
                     count_0 += width
-                    column_0 += width
+                    column_0 += c
                     offset_0 +=1
                 else:
                     break
@@ -5129,17 +5159,16 @@ class Parser:
                 leftover_count_1 = leftover_count_0
                 children_1 = [] if children_0 is not None else None
                 while True:
-                    if column_1 != 0:
+                    if not (column_1 == indent_column_1 == 0):
                         offset_1 = -1
                         break
-                    indent_column_1 = 0
                     for indent in prefix_0:
                         _children, _prefix = [], []
                         offset_1, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = indent(buf, offset_1, buf_eof, column_1, indent_column_1, _prefix, _children, leftover_offset_1, leftover_count_1)
                         if _prefix or _children:
                            raise Exception('bar')
                         if offset_1 == -1:        break
-                        indent_column_1 = column_1 - leftover_count_1 if leftover_offset_1 == offset_1 else column_1
+                        indent_column_1 = column_1
                     if offset_1 == -1:
                         break
 
@@ -5150,8 +5179,9 @@ class Parser:
                         chr = buf[offset_1]
                         if chr in ' \t':
                             width  = (self.tabstop-(column_1%self.tabstop)) if chr == '\t' else 1
+                            c = width
                             count_1 += width
-                            column_1 += width
+                            column_1 += c
                             offset_1 +=1
                         else:
                             break
@@ -5205,8 +5235,9 @@ class Parser:
                 chr = buf[offset_0]
                 if chr in ' \t':
                     width  = (self.tabstop-(column_0%self.tabstop)) if chr == '\t' else 1
+                    c = width
                     count_0 += width
-                    column_0 += width
+                    column_0 += c
                     offset_0 +=1
                 else:
                     break

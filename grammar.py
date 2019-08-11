@@ -1065,7 +1065,6 @@ def compile_python(grammar, builder=None, cython=False):
                     c0 = count.incr()
                     steps.extend((
                         f"{count} = {column} - {indent_column}",
-                        f"if {offset} == {leftover_offset}: {count} -= {leftover_count}",
                     ))
                     
                 steps.extend((
@@ -1081,9 +1080,10 @@ def compile_python(grammar, builder=None, cython=False):
                         f"                if saw_tab and saw_not_tab:",
                         f"                     offset -1; break",
                         f"            width  = (self.tabstop-(column%self.tabstop)) if chr == '\\t' else 1",
-                        f"            column += width",
-                        f"            count -= width",
+                        f"            c = min(width, count)",
+                        f"            column += c",
                         f"            offset +=1",
+                        f"            count -= width",
                         f"            if count < 0:",
                         f"                leftover_offset = offset",
                         f"                leftover_count = -count",
@@ -1108,7 +1108,7 @@ def compile_python(grammar, builder=None, cython=False):
                 prule = rule.args['prefix']
                 steps.append(f'{prefix}.append(self.parse_{prule})')
 
-            steps.append(f'{indent_column} = {column} - {leftover_count} if {leftover_offset} == {offset} else {column}')
+            steps.append(f'{indent_column} = {column}')
 
             steps.append('while True:')
             build_subrules(rule.rules, steps.add_indent(), offset, column, indent_column, leftover_offset, leftover_count, prefix, children, count, values)
@@ -1120,10 +1120,9 @@ def compile_python(grammar, builder=None, cython=False):
         elif rule.kind == START_OF_LINE:
             offset_0 = offset.incr()
             steps.extend((
-                f"if {column} != 0:",
+                f"if not ({column} == {indent_column} == 0):",
                 f"    {offset} = -1",
                 f"    break",
-                f"{indent_column} = 0",
                 f"for indent in {prefix}:",
                 f"    _children, _prefix = [], []",
                 f"    {offset}, {column}, {indent_column}, {leftover_offset}, {leftover_count} = indent(buf, {offset}, buf_eof, {column}, {indent_column}, _prefix, _children, {leftover_offset}, {leftover_count})",
@@ -1131,7 +1130,7 @@ def compile_python(grammar, builder=None, cython=False):
                 f"       raise Exception('bar')",
                 f"    if {offset} == -1:"
                 f"        break",
-                f"    {indent_column} = {column} - {leftover_count} if {leftover_offset} == {offset} else {column}",
+                f"    {indent_column} = {column}",
                 f"if {offset} == -1:",
                 f"    break",
             ))
@@ -1258,7 +1257,7 @@ def compile_python(grammar, builder=None, cython=False):
 
             cond = [f"{offset} < buf_eof"]
             if _maxv:
-                cond.append(f"{count} < {repr(_maxv)}")
+                cond.append(f"{count} < {_maxv}")
             elif _max is not None:
                 cond.append(f"{count} < {repr(_max)}")
 
@@ -1296,8 +1295,19 @@ def compile_python(grammar, builder=None, cython=False):
                         f"        {count} +=1",
                         f"    elif {cond2}:",
                         f"        width  = (self.tabstop-({column}%self.tabstop)) if chr == '\\t' else 1",
+                ))
+                if _maxv: steps.extend((
+                        f"        c= min({_maxv}, width)",
+                ))
+                elif _max is not None: steps.extend((
+                        f"        c= min({repr(_max)}, width)",
+                ))
+                else: steps.extend((
+                        f"        c = width",
+                ))
+                steps.extend((
                         f"        {count} += width",
-                        f"        {column} += width",
+                        f"        {column} += c",
                         f"        {offset} +=1",
                         f"    else:",
                         # f"        print(repr(buf[{offset}:{offset}+5]))",
@@ -1311,8 +1321,19 @@ def compile_python(grammar, builder=None, cython=False):
                     f"    chr = buf[{offset}]",
                     f"    if {cond2}:",
                     f"        width  = (self.tabstop-({column}%self.tabstop)) if chr == '\\t' else 1",
+                ))
+                if _maxv: steps.extend((
+                    f"        c= min({_maxv}, width)",
+                ))
+                elif _max is not None: steps.extend((
+                    f"        c= min({repr(_max)}, width)",
+                ))
+                else: steps.extend((
+                    f"        c = width",
+                ))
+                steps.extend((
                     f"        {count} += width",
-                    f"        {column} += width",
+                    f"        {column} += c",
                     f"        {offset} +=1",
                     f"    else:",
                     f"        break",
