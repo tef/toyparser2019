@@ -23,138 +23,166 @@ class Parser:
     def parse(self, buf, offset=0, end=None, err=None):
         self.cache = dict()
         end = len(buf) if end is None else end
-        line_start, indent_end, eof = offset, offset, end
+        column, indent_column, eof = offset, offset, end
         prefix, children = [], []
-        new_offset, line_start, indent_end, leftover_offset, leftover_count = self.parse_document(buf, offset, eof, line_start, indent_end, prefix, children, 0, 0)
+        new_offset, column, indent_column, leftover_offset, leftover_count = self.parse_document(buf, offset, eof, column, indent_column, prefix, children, 0, 0)
         if children and new_offset == end: return children[-1]
         print('no', offset, new_offset, end, buf[new_offset:])
         if err is not None: raise err(buf, new_offset, 'no')
 
-    def parse_literal(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0, leftover_offset, leftover_count):
+    def parse_literal(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, leftover_offset_0, leftover_count_0):
         while True: # note: return at end of loop
             while True: # start choice
                 offset_1 = offset_0
-                line_start_1 = line_start_0
-                indent_end_1 = indent_end_0
+                column_1 = column_0
+                indent_column_1 = indent_column_0
+                leftover_offset_1 = leftover_offset_0
+                leftover_count_1 = leftover_count_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_list_literal(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1, leftover_offset, leftover_count)
+                    offset_1, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_list_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, leftover_offset_1, leftover_count_1)
                     if offset_1 == -1: break
 
 
                     break
                 if offset_1 != -1:
                     offset_0 = offset_1
-                    line_start_0 = line_start_1
-                    indent_end_0 = indent_end_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    leftover_offset_0 = leftover_offset_1
+                    leftover_count_0 = leftover_count_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
                 # end case
                 offset_1 = offset_0
-                line_start_1 = line_start_0
-                indent_end_1 = indent_end_0
+                column_1 = column_0
+                indent_column_1 = indent_column_0
+                leftover_offset_1 = leftover_offset_0
+                leftover_count_1 = leftover_count_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_object_literal(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1, leftover_offset, leftover_count)
+                    offset_1, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_object_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, leftover_offset_1, leftover_count_1)
                     if offset_1 == -1: break
 
 
                     break
                 if offset_1 != -1:
                     offset_0 = offset_1
-                    line_start_0 = line_start_1
-                    indent_end_0 = indent_end_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    leftover_offset_0 = leftover_offset_1
+                    leftover_count_0 = leftover_count_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
                 # end case
                 offset_1 = offset_0
-                line_start_1 = line_start_0
-                indent_end_1 = indent_end_0
+                column_1 = column_0
+                indent_column_1 = indent_column_0
+                leftover_offset_1 = leftover_offset_0
+                leftover_count_1 = leftover_count_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_string_literal(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1, leftover_offset, leftover_count)
+                    offset_1, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_string_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, leftover_offset_1, leftover_count_1)
                     if offset_1 == -1: break
 
 
                     break
                 if offset_1 != -1:
                     offset_0 = offset_1
-                    line_start_0 = line_start_1
-                    indent_end_0 = indent_end_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    leftover_offset_0 = leftover_offset_1
+                    leftover_count_0 = leftover_count_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
                 # end case
                 offset_1 = offset_0
-                line_start_1 = line_start_0
-                indent_end_1 = indent_end_0
+                column_1 = column_0
+                indent_column_1 = indent_column_0
+                leftover_offset_1 = leftover_offset_0
+                leftover_count_1 = leftover_count_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_number_literal(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1, leftover_offset, leftover_count)
+                    offset_1, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_number_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, leftover_offset_1, leftover_count_1)
                     if offset_1 == -1: break
 
 
                     break
                 if offset_1 != -1:
                     offset_0 = offset_1
-                    line_start_0 = line_start_1
-                    indent_end_0 = indent_end_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    leftover_offset_0 = leftover_offset_1
+                    leftover_count_0 = leftover_count_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
                 # end case
                 offset_1 = offset_0
-                line_start_1 = line_start_0
-                indent_end_1 = indent_end_0
+                column_1 = column_0
+                indent_column_1 = indent_column_0
+                leftover_offset_1 = leftover_offset_0
+                leftover_count_1 = leftover_count_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_true_literal(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1, leftover_offset, leftover_count)
+                    offset_1, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_true_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, leftover_offset_1, leftover_count_1)
                     if offset_1 == -1: break
 
 
                     break
                 if offset_1 != -1:
                     offset_0 = offset_1
-                    line_start_0 = line_start_1
-                    indent_end_0 = indent_end_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    leftover_offset_0 = leftover_offset_1
+                    leftover_count_0 = leftover_count_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
                 # end case
                 offset_1 = offset_0
-                line_start_1 = line_start_0
-                indent_end_1 = indent_end_0
+                column_1 = column_0
+                indent_column_1 = indent_column_0
+                leftover_offset_1 = leftover_offset_0
+                leftover_count_1 = leftover_count_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_false_literal(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1, leftover_offset, leftover_count)
+                    offset_1, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_false_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, leftover_offset_1, leftover_count_1)
                     if offset_1 == -1: break
 
 
                     break
                 if offset_1 != -1:
                     offset_0 = offset_1
-                    line_start_0 = line_start_1
-                    indent_end_0 = indent_end_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    leftover_offset_0 = leftover_offset_1
+                    leftover_count_0 = leftover_count_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
                 # end case
                 offset_1 = offset_0
-                line_start_1 = line_start_0
-                indent_end_1 = indent_end_0
+                column_1 = column_0
+                indent_column_1 = indent_column_0
+                leftover_offset_1 = leftover_offset_0
+                leftover_count_1 = leftover_count_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_null_literal(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1, leftover_offset, leftover_count)
+                    offset_1, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_null_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, leftover_offset_1, leftover_count_1)
                     if offset_1 == -1: break
 
 
                     break
                 if offset_1 != -1:
                     offset_0 = offset_1
-                    line_start_0 = line_start_1
-                    indent_end_0 = indent_end_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    leftover_offset_0 = leftover_offset_1
+                    leftover_count_0 = leftover_count_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
@@ -165,15 +193,16 @@ class Parser:
                 break
 
             break
-        return offset_0, line_start_0, indent_end_0, leftover_offset, leftover_count
+        return offset_0, column_0, indent_column_0, leftover_offset_0, leftover_count_0
 
-    def parse_true_literal(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0, leftover_offset, leftover_count):
+    def parse_true_literal(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, leftover_offset_0, leftover_count_0):
         while True: # note: return at end of loop
             offset_1 = offset_0
             children_1 = []
             while True: # start capture
                 if buf[offset_1:offset_1+4] == 'true':
                     offset_1 += 4
+                    column_0 += 4
                 else:
                     offset_1 = -1
                     break
@@ -190,15 +219,16 @@ class Parser:
             offset_0 = offset_1
 
             break
-        return offset_0, line_start_0, indent_end_0, leftover_offset, leftover_count
+        return offset_0, column_0, indent_column_0, leftover_offset_0, leftover_count_0
 
-    def parse_false_literal(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0, leftover_offset, leftover_count):
+    def parse_false_literal(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, leftover_offset_0, leftover_count_0):
         while True: # note: return at end of loop
             offset_1 = offset_0
             children_1 = []
             while True: # start capture
                 if buf[offset_1:offset_1+5] == 'false':
                     offset_1 += 5
+                    column_0 += 5
                 else:
                     offset_1 = -1
                     break
@@ -215,15 +245,16 @@ class Parser:
             offset_0 = offset_1
 
             break
-        return offset_0, line_start_0, indent_end_0, leftover_offset, leftover_count
+        return offset_0, column_0, indent_column_0, leftover_offset_0, leftover_count_0
 
-    def parse_null_literal(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0, leftover_offset, leftover_count):
+    def parse_null_literal(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, leftover_offset_0, leftover_count_0):
         while True: # note: return at end of loop
             offset_1 = offset_0
             children_1 = []
             while True: # start capture
                 if buf[offset_1:offset_1+4] == 'null':
                     offset_1 += 4
+                    column_0 += 4
                 else:
                     offset_1 = -1
                     break
@@ -240,14 +271,16 @@ class Parser:
             offset_0 = offset_1
 
             break
-        return offset_0, line_start_0, indent_end_0, leftover_offset, leftover_count
+        return offset_0, column_0, indent_column_0, leftover_offset_0, leftover_count_0
 
-    def parse_identifier(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0, leftover_offset, leftover_count):
+    def parse_identifier(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, leftover_offset_0, leftover_count_0):
         while True: # note: return at end of loop
             while True: # start choice
                 offset_1 = offset_0
-                line_start_1 = line_start_0
-                indent_end_1 = indent_end_0
+                column_1 = column_0
+                indent_column_1 = indent_column_0
+                leftover_offset_1 = leftover_offset_0
+                leftover_count_1 = leftover_count_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
                     offset_2 = offset_1
@@ -256,8 +289,10 @@ class Parser:
                         count_0 = 0
                         while True:
                             offset_3 = offset_2
-                            line_start_2 = line_start_1
-                            indent_end_2 = indent_end_1
+                            column_2 = column_1
+                            indent_column_2 = indent_column_1
+                            leftover_offset_2 = leftover_offset_1
+                            leftover_count_2 = leftover_count_1
                             children_3 = [] if children_2 is not None else None
                             while True:
                                 if offset_3 == buf_eof:
@@ -268,10 +303,13 @@ class Parser:
 
                                 if 97 <= chr <= 122:
                                     offset_3 += 1
+                                    column_2 += 1
                                 elif 65 <= chr <= 90:
                                     offset_3 += 1
+                                    column_2 += 1
                                 elif chr == 95:
                                     offset_3 += 1
+                                    column_2 += 1
                                 else:
                                     offset_3 = -1
                                     break
@@ -283,8 +321,10 @@ class Parser:
                             if children_3 is not None and children_3 is not None:
                                 children_2.extend(children_3)
                             offset_2 = offset_3
-                            line_start_1 = line_start_2
-                            indent_end_2 = indent_end_2
+                            column_1 = column_2
+                            indent_column_1 = indent_column_2
+                            leftover_offset_1 = leftover_offset_2
+                            leftover_count_1 = leftover_count_2
                             count_0 += 1
                         if count_0 < 1:
                             offset_2 = -1
@@ -307,18 +347,22 @@ class Parser:
                     break
                 if offset_1 != -1:
                     offset_0 = offset_1
-                    line_start_0 = line_start_1
-                    indent_end_0 = indent_end_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    leftover_offset_0 = leftover_offset_1
+                    leftover_count_0 = leftover_count_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
                 # end case
                 offset_1 = offset_0
-                line_start_1 = line_start_0
-                indent_end_1 = indent_end_0
+                column_1 = column_0
+                indent_column_1 = indent_column_0
+                leftover_offset_1 = leftover_offset_0
+                leftover_count_1 = leftover_count_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_string_literal(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1, leftover_offset, leftover_count)
+                    offset_1, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_string_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, leftover_offset_1, leftover_count_1)
                     if offset_1 == -1: break
 
 
@@ -326,8 +370,10 @@ class Parser:
                     break
                 if offset_1 != -1:
                     offset_0 = offset_1
-                    line_start_0 = line_start_1
-                    indent_end_0 = indent_end_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    leftover_offset_0 = leftover_offset_1
+                    leftover_count_0 = leftover_count_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
@@ -338,9 +384,9 @@ class Parser:
                 break
 
             break
-        return offset_0, line_start_0, indent_end_0, leftover_offset, leftover_count
+        return offset_0, column_0, indent_column_0, leftover_offset_0, leftover_count_0
 
-    def parse_number_literal(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0, leftover_offset, leftover_count):
+    def parse_number_literal(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, leftover_offset_0, leftover_count_0):
         while True: # note: return at end of loop
             offset_1 = offset_0
             children_1 = []
@@ -348,8 +394,10 @@ class Parser:
                 count_0 = 0
                 while count_0 < 1:
                     offset_2 = offset_1
-                    line_start_1 = line_start_0
-                    indent_end_1 = indent_end_0
+                    column_1 = column_0
+                    indent_column_1 = indent_column_0
+                    leftover_offset_1 = leftover_offset_0
+                    leftover_count_1 = leftover_count_0
                     children_2 = [] if children_1 is not None else None
                     while True:
                         if offset_2 == buf_eof:
@@ -360,8 +408,10 @@ class Parser:
 
                         if chr == 45:
                             offset_2 += 1
+                            column_1 += 1
                         elif chr == 43:
                             offset_2 += 1
+                            column_1 += 1
                         else:
                             offset_2 = -1
                             break
@@ -373,8 +423,10 @@ class Parser:
                     if children_2 is not None and children_2 is not None:
                         children_1.extend(children_2)
                     offset_1 = offset_2
-                    line_start_0 = line_start_1
-                    indent_end_1 = indent_end_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    leftover_offset_0 = leftover_offset_1
+                    leftover_count_0 = leftover_count_1
                     count_0 += 1
                     break
                 if offset_1 == -1:
@@ -383,8 +435,10 @@ class Parser:
                 count_0 = 0
                 while True:
                     offset_2 = offset_1
-                    line_start_1 = line_start_0
-                    indent_end_1 = indent_end_0
+                    column_1 = column_0
+                    indent_column_1 = indent_column_0
+                    leftover_offset_1 = leftover_offset_0
+                    leftover_count_1 = leftover_count_0
                     children_2 = [] if children_1 is not None else None
                     while True:
                         if offset_2 == buf_eof:
@@ -395,6 +449,7 @@ class Parser:
 
                         if 48 <= chr <= 57:
                             offset_2 += 1
+                            column_1 += 1
                         else:
                             offset_2 = -1
                             break
@@ -406,8 +461,10 @@ class Parser:
                     if children_2 is not None and children_2 is not None:
                         children_1.extend(children_2)
                     offset_1 = offset_2
-                    line_start_0 = line_start_1
-                    indent_end_1 = indent_end_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    leftover_offset_0 = leftover_offset_1
+                    leftover_count_0 = leftover_count_1
                     count_0 += 1
                 if count_0 < 1:
                     offset_1 = -1
@@ -418,12 +475,15 @@ class Parser:
                 count_0 = 0
                 while count_0 < 1:
                     offset_2 = offset_1
-                    line_start_1 = line_start_0
-                    indent_end_1 = indent_end_0
+                    column_1 = column_0
+                    indent_column_1 = indent_column_0
+                    leftover_offset_1 = leftover_offset_0
+                    leftover_count_1 = leftover_count_0
                     children_2 = [] if children_1 is not None else None
                     while True:
                         if buf[offset_2:offset_2+1] == '.':
                             offset_2 += 1
+                            column_1 += 1
                         else:
                             offset_2 = -1
                             break
@@ -431,8 +491,10 @@ class Parser:
                         count_1 = 0
                         while True:
                             offset_3 = offset_2
-                            line_start_2 = line_start_1
-                            indent_end_2 = indent_end_1
+                            column_2 = column_1
+                            indent_column_2 = indent_column_1
+                            leftover_offset_2 = leftover_offset_1
+                            leftover_count_2 = leftover_count_1
                             children_3 = [] if children_2 is not None else None
                             while True:
                                 if offset_3 == buf_eof:
@@ -443,6 +505,7 @@ class Parser:
 
                                 if 48 <= chr <= 57:
                                     offset_3 += 1
+                                    column_2 += 1
                                 else:
                                     offset_3 = -1
                                     break
@@ -454,8 +517,10 @@ class Parser:
                             if children_3 is not None and children_3 is not None:
                                 children_2.extend(children_3)
                             offset_2 = offset_3
-                            line_start_1 = line_start_2
-                            indent_end_2 = indent_end_2
+                            column_1 = column_2
+                            indent_column_1 = indent_column_2
+                            leftover_offset_1 = leftover_offset_2
+                            leftover_count_1 = leftover_count_2
                             count_1 += 1
                         if offset_2 == -1:
                             break
@@ -467,8 +532,10 @@ class Parser:
                     if children_2 is not None and children_2 is not None:
                         children_1.extend(children_2)
                     offset_1 = offset_2
-                    line_start_0 = line_start_1
-                    indent_end_1 = indent_end_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    leftover_offset_0 = leftover_offset_1
+                    leftover_count_0 = leftover_count_1
                     count_0 += 1
                     break
                 if offset_1 == -1:
@@ -477,14 +544,18 @@ class Parser:
                 count_0 = 0
                 while count_0 < 1:
                     offset_2 = offset_1
-                    line_start_1 = line_start_0
-                    indent_end_1 = indent_end_0
+                    column_1 = column_0
+                    indent_column_1 = indent_column_0
+                    leftover_offset_1 = leftover_offset_0
+                    leftover_count_1 = leftover_count_0
                     children_2 = [] if children_1 is not None else None
                     while True:
                         if buf[offset_2:offset_2+1] == 'e':
                             offset_2 += 1
+                            column_1 += 1
                         elif buf[offset_2:offset_2+1] == 'E':
                             offset_2 += 1
+                            column_1 += 1
                         else:
                             offset_2 = -1
                             break
@@ -492,14 +563,18 @@ class Parser:
                         count_1 = 0
                         while count_1 < 1:
                             offset_3 = offset_2
-                            line_start_2 = line_start_1
-                            indent_end_2 = indent_end_1
+                            column_2 = column_1
+                            indent_column_2 = indent_column_1
+                            leftover_offset_2 = leftover_offset_1
+                            leftover_count_2 = leftover_count_1
                             children_3 = [] if children_2 is not None else None
                             while True:
                                 if buf[offset_3:offset_3+1] == '+':
                                     offset_3 += 1
+                                    column_2 += 1
                                 elif buf[offset_3:offset_3+1] == '-':
                                     offset_3 += 1
+                                    column_2 += 1
                                 else:
                                     offset_3 = -1
                                     break
@@ -507,8 +582,10 @@ class Parser:
                                 count_2 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    line_start_3 = line_start_2
-                                    indent_end_3 = indent_end_2
+                                    column_3 = column_2
+                                    indent_column_3 = indent_column_2
+                                    leftover_offset_3 = leftover_offset_2
+                                    leftover_count_3 = leftover_count_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
                                         if offset_4 == buf_eof:
@@ -519,6 +596,7 @@ class Parser:
 
                                         if 48 <= chr <= 57:
                                             offset_4 += 1
+                                            column_3 += 1
                                         else:
                                             offset_4 = -1
                                             break
@@ -530,8 +608,10 @@ class Parser:
                                     if children_4 is not None and children_4 is not None:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
-                                    line_start_2 = line_start_3
-                                    indent_end_3 = indent_end_3
+                                    column_2 = column_3
+                                    indent_column_2 = indent_column_3
+                                    leftover_offset_2 = leftover_offset_3
+                                    leftover_count_2 = leftover_count_3
                                     count_2 += 1
                                 if offset_3 == -1:
                                     break
@@ -543,8 +623,10 @@ class Parser:
                             if children_3 is not None and children_3 is not None:
                                 children_2.extend(children_3)
                             offset_2 = offset_3
-                            line_start_1 = line_start_2
-                            indent_end_2 = indent_end_2
+                            column_1 = column_2
+                            indent_column_1 = indent_column_2
+                            leftover_offset_1 = leftover_offset_2
+                            leftover_count_1 = leftover_count_2
                             count_1 += 1
                             break
                         if offset_2 == -1:
@@ -557,8 +639,10 @@ class Parser:
                     if children_2 is not None and children_2 is not None:
                         children_1.extend(children_2)
                     offset_1 = offset_2
-                    line_start_0 = line_start_1
-                    indent_end_1 = indent_end_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    leftover_offset_0 = leftover_offset_1
+                    leftover_count_0 = leftover_count_1
                     count_0 += 1
                     break
                 if offset_1 == -1:
@@ -576,12 +660,13 @@ class Parser:
             offset_0 = offset_1
 
             break
-        return offset_0, line_start_0, indent_end_0, leftover_offset, leftover_count
+        return offset_0, column_0, indent_column_0, leftover_offset_0, leftover_count_0
 
-    def parse_string_literal(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0, leftover_offset, leftover_count):
+    def parse_string_literal(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, leftover_offset_0, leftover_count_0):
         while True: # note: return at end of loop
             if buf[offset_0:offset_0+1] == '"':
                 offset_0 += 1
+                column_0 += 1
             else:
                 offset_0 = -1
                 break
@@ -592,18 +677,23 @@ class Parser:
                 count_0 = 0
                 while True:
                     offset_2 = offset_1
-                    line_start_1 = line_start_0
-                    indent_end_1 = indent_end_0
+                    column_1 = column_0
+                    indent_column_1 = indent_column_0
+                    leftover_offset_1 = leftover_offset_0
+                    leftover_count_1 = leftover_count_0
                     children_2 = [] if children_1 is not None else None
                     while True:
                         while True: # start choice
                             offset_3 = offset_2
-                            line_start_2 = line_start_1
-                            indent_end_2 = indent_end_1
+                            column_2 = column_1
+                            indent_column_2 = indent_column_1
+                            leftover_offset_2 = leftover_offset_1
+                            leftover_count_2 = leftover_count_1
                             children_3 = [] if children_2 is not None else None
                             while True: # case
                                 if buf[offset_3:offset_3+2] == '\\u':
                                     offset_3 += 2
+                                    column_2 += 2
                                 else:
                                     offset_3 = -1
                                     break
@@ -616,10 +706,13 @@ class Parser:
 
                                 if 48 <= chr <= 57:
                                     offset_3 += 1
+                                    column_2 += 1
                                 elif 97 <= chr <= 102:
                                     offset_3 += 1
+                                    column_2 += 1
                                 elif 65 <= chr <= 70:
                                     offset_3 += 1
+                                    column_2 += 1
                                 else:
                                     offset_3 = -1
                                     break
@@ -632,10 +725,13 @@ class Parser:
 
                                 if 48 <= chr <= 57:
                                     offset_3 += 1
+                                    column_2 += 1
                                 elif 97 <= chr <= 102:
                                     offset_3 += 1
+                                    column_2 += 1
                                 elif 65 <= chr <= 70:
                                     offset_3 += 1
+                                    column_2 += 1
                                 else:
                                     offset_3 = -1
                                     break
@@ -648,10 +744,13 @@ class Parser:
 
                                 if 48 <= chr <= 57:
                                     offset_3 += 1
+                                    column_2 += 1
                                 elif 97 <= chr <= 102:
                                     offset_3 += 1
+                                    column_2 += 1
                                 elif 65 <= chr <= 70:
                                     offset_3 += 1
+                                    column_2 += 1
                                 else:
                                     offset_3 = -1
                                     break
@@ -664,10 +763,13 @@ class Parser:
 
                                 if 48 <= chr <= 57:
                                     offset_3 += 1
+                                    column_2 += 1
                                 elif 97 <= chr <= 102:
                                     offset_3 += 1
+                                    column_2 += 1
                                 elif 65 <= chr <= 70:
                                     offset_3 += 1
+                                    column_2 += 1
                                 else:
                                     offset_3 = -1
                                     break
@@ -676,19 +778,24 @@ class Parser:
                                 break
                             if offset_3 != -1:
                                 offset_2 = offset_3
-                                line_start_1 = line_start_2
-                                indent_end_1 = indent_end_2
+                                column_1 = column_2
+                                indent_column_1 = indent_column_2
+                                leftover_offset_1 = leftover_offset_2
+                                leftover_count_1 = leftover_count_2
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 break
                             # end case
                             offset_3 = offset_2
-                            line_start_2 = line_start_1
-                            indent_end_2 = indent_end_1
+                            column_2 = column_1
+                            indent_column_2 = indent_column_1
+                            leftover_offset_2 = leftover_offset_1
+                            leftover_count_2 = leftover_count_1
                             children_3 = [] if children_2 is not None else None
                             while True: # case
                                 if buf[offset_3:offset_3+1] == '\\':
                                     offset_3 += 1
+                                    column_2 += 1
                                 else:
                                     offset_3 = -1
                                     break
@@ -701,20 +808,28 @@ class Parser:
 
                                 if chr == 34:
                                     offset_3 += 1
+                                    column_2 += 1
                                 elif chr == 92:
                                     offset_3 += 1
+                                    column_2 += 1
                                 elif chr == 47:
                                     offset_3 += 1
+                                    column_2 += 1
                                 elif chr == 98:
                                     offset_3 += 1
+                                    column_2 += 1
                                 elif chr == 102:
                                     offset_3 += 1
+                                    column_2 += 1
                                 elif chr == 110:
                                     offset_3 += 1
+                                    column_2 += 1
                                 elif chr == 114:
                                     offset_3 += 1
+                                    column_2 += 1
                                 elif chr == 116:
                                     offset_3 += 1
+                                    column_2 += 1
                                 else:
                                     offset_3 = -1
                                     break
@@ -723,15 +838,19 @@ class Parser:
                                 break
                             if offset_3 != -1:
                                 offset_2 = offset_3
-                                line_start_1 = line_start_2
-                                indent_end_1 = indent_end_2
+                                column_1 = column_2
+                                indent_column_1 = indent_column_2
+                                leftover_offset_1 = leftover_offset_2
+                                leftover_count_1 = leftover_count_2
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 break
                             # end case
                             offset_3 = offset_2
-                            line_start_2 = line_start_1
-                            indent_end_2 = indent_end_1
+                            column_2 = column_1
+                            indent_column_2 = indent_column_1
+                            leftover_offset_2 = leftover_offset_1
+                            leftover_count_2 = leftover_count_1
                             children_3 = [] if children_2 is not None else None
                             while True: # case
                                 if offset_3 == buf_eof:
@@ -748,13 +867,16 @@ class Parser:
                                     break
                                 else:
                                     offset_3 += 1
+                                    column_2 += 1
 
 
                                 break
                             if offset_3 != -1:
                                 offset_2 = offset_3
-                                line_start_1 = line_start_2
-                                indent_end_1 = indent_end_2
+                                column_1 = column_2
+                                indent_column_1 = indent_column_2
+                                leftover_offset_1 = leftover_offset_2
+                                leftover_count_1 = leftover_count_2
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 break
@@ -771,8 +893,10 @@ class Parser:
                     if children_2 is not None and children_2 is not None:
                         children_1.extend(children_2)
                     offset_1 = offset_2
-                    line_start_0 = line_start_1
-                    indent_end_1 = indent_end_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    leftover_offset_0 = leftover_offset_1
+                    leftover_count_0 = leftover_count_1
                     count_0 += 1
                 if offset_1 == -1:
                     break
@@ -790,39 +914,42 @@ class Parser:
 
             if buf[offset_0:offset_0+1] == '"':
                 offset_0 += 1
+                column_0 += 1
             else:
                 offset_0 = -1
                 break
 
 
             break
-        return offset_0, line_start_0, indent_end_0, leftover_offset, leftover_count
+        return offset_0, column_0, indent_column_0, leftover_offset_0, leftover_count_0
 
-    def parse_list_literal(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0, leftover_offset, leftover_count):
+    def parse_list_literal(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, leftover_offset_0, leftover_count_0):
         while True: # note: return at end of loop
             if buf[offset_0:offset_0+1] == '[':
                 offset_0 += 1
+                column_0 += 1
             else:
                 offset_0 = -1
                 break
 
             count_0 = 0
-            if offset_0 == leftover_offset and leftover_count > 0:
-                 count_0 += leftover_count
-                 print('leftover tab')
+            if offset_0 == leftover_offset_0 and leftover_count_0 > 0:
+                 count_0 += leftover_count_0
             while offset_0 < buf_eof:
                 chr = buf[offset_0]
                 if chr == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
                     offset_0 +=2
-                    line_start_0 = offset_0
-                    indent_end_0 = offset_0
+                    column_0 = 0
+                    indent_column_0 = 0
                 elif chr in '\n\r':
                     offset_0 +=1
-                    line_start_0 = offset_0
-                    indent_end_0 = offset_0
+                    column_0 = 0
+                    indent_column_0 = 0
                     count_0 +=1
                 elif chr in ' \t':
-                    count_0 += (self.tabstop-(offset_0-line_start_0)%self.tabstop) if chr == '	' else 1
+                    width  = (self.tabstop-(column_0%self.tabstop)) if chr == '	' else 1
+                    count_0 += width
+                    column_0 += width
                     offset_0 +=1
                 else:
                     break
@@ -833,70 +960,77 @@ class Parser:
                 count_0 = 0
                 while count_0 < 1:
                     offset_2 = offset_1
-                    line_start_1 = line_start_0
-                    indent_end_1 = indent_end_0
+                    column_1 = column_0
+                    indent_column_1 = indent_column_0
+                    leftover_offset_1 = leftover_offset_0
+                    leftover_count_1 = leftover_count_0
                     children_2 = [] if children_1 is not None else None
                     while True:
-                        offset_2, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_literal(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2, leftover_offset, leftover_count)
+                        offset_2, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_literal(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, leftover_offset_1, leftover_count_1)
                         if offset_2 == -1: break
 
 
                         count_1 = 0
                         while True:
                             offset_3 = offset_2
-                            line_start_2 = line_start_1
-                            indent_end_2 = indent_end_1
+                            column_2 = column_1
+                            indent_column_2 = indent_column_1
+                            leftover_offset_2 = leftover_offset_1
+                            leftover_count_2 = leftover_count_1
                             children_3 = [] if children_2 is not None else None
                             while True:
                                 count_2 = 0
-                                if offset_3 == leftover_offset and leftover_count > 0:
-                                     count_2 += leftover_count
-                                     print('leftover tab')
+                                if offset_3 == leftover_offset_2 and leftover_count_2 > 0:
+                                     count_2 += leftover_count_2
                                 while offset_3 < buf_eof:
                                     chr = buf[offset_3]
                                     if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
                                         offset_3 +=2
-                                        line_start_2 = offset_3
-                                        indent_end_2 = offset_3
+                                        column_2 = 0
+                                        indent_column_2 = 0
                                     elif chr in '\n\r':
                                         offset_3 +=1
-                                        line_start_2 = offset_3
-                                        indent_end_2 = offset_3
+                                        column_2 = 0
+                                        indent_column_2 = 0
                                         count_2 +=1
                                     elif chr in ' \t':
-                                        count_2 += (self.tabstop-(offset_3-line_start_2)%self.tabstop) if chr == '	' else 1
+                                        width  = (self.tabstop-(column_2%self.tabstop)) if chr == '	' else 1
+                                        count_2 += width
+                                        column_2 += width
                                         offset_3 +=1
                                     else:
                                         break
 
                                 if buf[offset_3:offset_3+1] == ',':
                                     offset_3 += 1
+                                    column_2 += 1
                                 else:
                                     offset_3 = -1
                                     break
 
                                 count_2 = 0
-                                if offset_3 == leftover_offset and leftover_count > 0:
-                                     count_2 += leftover_count
-                                     print('leftover tab')
+                                if offset_3 == leftover_offset_2 and leftover_count_2 > 0:
+                                     count_2 += leftover_count_2
                                 while offset_3 < buf_eof:
                                     chr = buf[offset_3]
                                     if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
                                         offset_3 +=2
-                                        line_start_2 = offset_3
-                                        indent_end_2 = offset_3
+                                        column_2 = 0
+                                        indent_column_2 = 0
                                     elif chr in '\n\r':
                                         offset_3 +=1
-                                        line_start_2 = offset_3
-                                        indent_end_2 = offset_3
+                                        column_2 = 0
+                                        indent_column_2 = 0
                                         count_2 +=1
                                     elif chr in ' \t':
-                                        count_2 += (self.tabstop-(offset_3-line_start_2)%self.tabstop) if chr == '	' else 1
+                                        width  = (self.tabstop-(column_2%self.tabstop)) if chr == '	' else 1
+                                        count_2 += width
+                                        column_2 += width
                                         offset_3 +=1
                                     else:
                                         break
 
-                                offset_3, line_start_2, indent_end_2, leftover_offset, leftover_count = self.parse_literal(buf, offset_3, buf_eof, line_start_2, indent_end_2, prefix_0, children_3, leftover_offset, leftover_count)
+                                offset_3, column_2, indent_column_2, leftover_offset_2, leftover_count_2 = self.parse_literal(buf, offset_3, buf_eof, column_2, indent_column_2, prefix_0, children_3, leftover_offset_2, leftover_count_2)
                                 if offset_3 == -1: break
 
 
@@ -907,29 +1041,32 @@ class Parser:
                             if children_3 is not None and children_3 is not None:
                                 children_2.extend(children_3)
                             offset_2 = offset_3
-                            line_start_1 = line_start_2
-                            indent_end_2 = indent_end_2
+                            column_1 = column_2
+                            indent_column_1 = indent_column_2
+                            leftover_offset_1 = leftover_offset_2
+                            leftover_count_1 = leftover_count_2
                             count_1 += 1
                         if offset_2 == -1:
                             break
 
                         count_1 = 0
-                        if offset_2 == leftover_offset and leftover_count > 0:
-                             count_1 += leftover_count
-                             print('leftover tab')
+                        if offset_2 == leftover_offset_1 and leftover_count_1 > 0:
+                             count_1 += leftover_count_1
                         while offset_2 < buf_eof:
                             chr = buf[offset_2]
                             if chr == '\r' and offset_2 + 1 < buf_eof and buf[offset_2+1] == '\n':
                                 offset_2 +=2
-                                line_start_1 = offset_2
-                                indent_end_1 = offset_2
+                                column_1 = 0
+                                indent_column_1 = 0
                             elif chr in '\n\r':
                                 offset_2 +=1
-                                line_start_1 = offset_2
-                                indent_end_1 = offset_2
+                                column_1 = 0
+                                indent_column_1 = 0
                                 count_1 +=1
                             elif chr in ' \t':
-                                count_1 += (self.tabstop-(offset_2-line_start_1)%self.tabstop) if chr == '	' else 1
+                                width  = (self.tabstop-(column_1%self.tabstop)) if chr == '	' else 1
+                                count_1 += width
+                                column_1 += width
                                 offset_2 +=1
                             else:
                                 break
@@ -937,33 +1074,37 @@ class Parser:
                         count_1 = 0
                         while count_1 < 1:
                             offset_3 = offset_2
-                            line_start_2 = line_start_1
-                            indent_end_2 = indent_end_1
+                            column_2 = column_1
+                            indent_column_2 = indent_column_1
+                            leftover_offset_2 = leftover_offset_1
+                            leftover_count_2 = leftover_count_1
                             children_3 = [] if children_2 is not None else None
                             while True:
                                 if buf[offset_3:offset_3+1] == ',':
                                     offset_3 += 1
+                                    column_2 += 1
                                 else:
                                     offset_3 = -1
                                     break
 
                                 count_2 = 0
-                                if offset_3 == leftover_offset and leftover_count > 0:
-                                     count_2 += leftover_count
-                                     print('leftover tab')
+                                if offset_3 == leftover_offset_2 and leftover_count_2 > 0:
+                                     count_2 += leftover_count_2
                                 while offset_3 < buf_eof:
                                     chr = buf[offset_3]
                                     if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
                                         offset_3 +=2
-                                        line_start_2 = offset_3
-                                        indent_end_2 = offset_3
+                                        column_2 = 0
+                                        indent_column_2 = 0
                                     elif chr in '\n\r':
                                         offset_3 +=1
-                                        line_start_2 = offset_3
-                                        indent_end_2 = offset_3
+                                        column_2 = 0
+                                        indent_column_2 = 0
                                         count_2 +=1
                                     elif chr in ' \t':
-                                        count_2 += (self.tabstop-(offset_3-line_start_2)%self.tabstop) if chr == '	' else 1
+                                        width  = (self.tabstop-(column_2%self.tabstop)) if chr == '	' else 1
+                                        count_2 += width
+                                        column_2 += width
                                         offset_3 +=1
                                     else:
                                         break
@@ -975,8 +1116,10 @@ class Parser:
                             if children_3 is not None and children_3 is not None:
                                 children_2.extend(children_3)
                             offset_2 = offset_3
-                            line_start_1 = line_start_2
-                            indent_end_2 = indent_end_2
+                            column_1 = column_2
+                            indent_column_1 = indent_column_2
+                            leftover_offset_1 = leftover_offset_2
+                            leftover_count_1 = leftover_count_2
                             count_1 += 1
                             break
                         if offset_2 == -1:
@@ -989,8 +1132,10 @@ class Parser:
                     if children_2 is not None and children_2 is not None:
                         children_1.extend(children_2)
                     offset_1 = offset_2
-                    line_start_0 = line_start_1
-                    indent_end_1 = indent_end_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    leftover_offset_0 = leftover_offset_1
+                    leftover_count_0 = leftover_count_1
                     count_0 += 1
                     break
                 if offset_1 == -1:
@@ -1009,39 +1154,42 @@ class Parser:
 
             if buf[offset_0:offset_0+1] == ']':
                 offset_0 += 1
+                column_0 += 1
             else:
                 offset_0 = -1
                 break
 
 
             break
-        return offset_0, line_start_0, indent_end_0, leftover_offset, leftover_count
+        return offset_0, column_0, indent_column_0, leftover_offset_0, leftover_count_0
 
-    def parse_object_literal(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0, leftover_offset, leftover_count):
+    def parse_object_literal(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, leftover_offset_0, leftover_count_0):
         while True: # note: return at end of loop
             if buf[offset_0:offset_0+1] == '{':
                 offset_0 += 1
+                column_0 += 1
             else:
                 offset_0 = -1
                 break
 
             count_0 = 0
-            if offset_0 == leftover_offset and leftover_count > 0:
-                 count_0 += leftover_count
-                 print('leftover tab')
+            if offset_0 == leftover_offset_0 and leftover_count_0 > 0:
+                 count_0 += leftover_count_0
             while offset_0 < buf_eof:
                 chr = buf[offset_0]
                 if chr == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
                     offset_0 +=2
-                    line_start_0 = offset_0
-                    indent_end_0 = offset_0
+                    column_0 = 0
+                    indent_column_0 = 0
                 elif chr in '\n\r':
                     offset_0 +=1
-                    line_start_0 = offset_0
-                    indent_end_0 = offset_0
+                    column_0 = 0
+                    indent_column_0 = 0
                     count_0 +=1
                 elif chr in ' \t':
-                    count_0 += (self.tabstop-(offset_0-line_start_0)%self.tabstop) if chr == '	' else 1
+                    width  = (self.tabstop-(column_0%self.tabstop)) if chr == '	' else 1
+                    count_0 += width
+                    column_0 += width
                     offset_0 +=1
                 else:
                     break
@@ -1052,156 +1200,167 @@ class Parser:
                 count_0 = 0
                 while count_0 < 1:
                     offset_2 = offset_1
-                    line_start_1 = line_start_0
-                    indent_end_1 = indent_end_0
+                    column_1 = column_0
+                    indent_column_1 = indent_column_0
+                    leftover_offset_1 = leftover_offset_0
+                    leftover_count_1 = leftover_count_0
                     children_2 = [] if children_1 is not None else None
                     while True:
-                        offset_2, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_string_literal(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2, leftover_offset, leftover_count)
+                        offset_2, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_string_literal(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, leftover_offset_1, leftover_count_1)
                         if offset_2 == -1: break
 
 
                         count_1 = 0
-                        if offset_2 == leftover_offset and leftover_count > 0:
-                             count_1 += leftover_count
-                             print('leftover tab')
+                        if offset_2 == leftover_offset_1 and leftover_count_1 > 0:
+                             count_1 += leftover_count_1
                         while offset_2 < buf_eof:
                             chr = buf[offset_2]
                             if chr in ' \t':
-                                count_1 += (self.tabstop-(offset_2-line_start_1)%self.tabstop) if chr == '	' else 1
-                                offset_2 +=1
+                                width  = (self.tabstop-(column_1%self.tabstop)) if chr == '	' else 1
+                                count_1 += width
+                                column_1 += width
                             else:
                                 break
 
                         if buf[offset_2:offset_2+1] == ':':
                             offset_2 += 1
+                            column_1 += 1
                         else:
                             offset_2 = -1
                             break
 
                         count_1 = 0
-                        if offset_2 == leftover_offset and leftover_count > 0:
-                             count_1 += leftover_count
-                             print('leftover tab')
+                        if offset_2 == leftover_offset_1 and leftover_count_1 > 0:
+                             count_1 += leftover_count_1
                         while offset_2 < buf_eof:
                             chr = buf[offset_2]
                             if chr == '\r' and offset_2 + 1 < buf_eof and buf[offset_2+1] == '\n':
                                 offset_2 +=2
-                                line_start_1 = offset_2
-                                indent_end_1 = offset_2
+                                column_1 = 0
+                                indent_column_1 = 0
                             elif chr in '\n\r':
                                 offset_2 +=1
-                                line_start_1 = offset_2
-                                indent_end_1 = offset_2
+                                column_1 = 0
+                                indent_column_1 = 0
                                 count_1 +=1
                             elif chr in ' \t':
-                                count_1 += (self.tabstop-(offset_2-line_start_1)%self.tabstop) if chr == '	' else 1
+                                width  = (self.tabstop-(column_1%self.tabstop)) if chr == '	' else 1
+                                count_1 += width
+                                column_1 += width
                                 offset_2 +=1
                             else:
                                 break
 
-                        offset_2, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_literal(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2, leftover_offset, leftover_count)
+                        offset_2, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_literal(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, leftover_offset_1, leftover_count_1)
                         if offset_2 == -1: break
 
 
                         count_1 = 0
                         while True:
                             offset_3 = offset_2
-                            line_start_2 = line_start_1
-                            indent_end_2 = indent_end_1
+                            column_2 = column_1
+                            indent_column_2 = indent_column_1
+                            leftover_offset_2 = leftover_offset_1
+                            leftover_count_2 = leftover_count_1
                             children_3 = [] if children_2 is not None else None
                             while True:
                                 count_2 = 0
-                                if offset_3 == leftover_offset and leftover_count > 0:
-                                     count_2 += leftover_count
-                                     print('leftover tab')
+                                if offset_3 == leftover_offset_2 and leftover_count_2 > 0:
+                                     count_2 += leftover_count_2
                                 while offset_3 < buf_eof:
                                     chr = buf[offset_3]
                                     if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
                                         offset_3 +=2
-                                        line_start_2 = offset_3
-                                        indent_end_2 = offset_3
+                                        column_2 = 0
+                                        indent_column_2 = 0
                                     elif chr in '\n\r':
                                         offset_3 +=1
-                                        line_start_2 = offset_3
-                                        indent_end_2 = offset_3
+                                        column_2 = 0
+                                        indent_column_2 = 0
                                         count_2 +=1
                                     elif chr in ' \t':
-                                        count_2 += (self.tabstop-(offset_3-line_start_2)%self.tabstop) if chr == '	' else 1
+                                        width  = (self.tabstop-(column_2%self.tabstop)) if chr == '	' else 1
+                                        count_2 += width
+                                        column_2 += width
                                         offset_3 +=1
                                     else:
                                         break
 
                                 if buf[offset_3:offset_3+1] == ',':
                                     offset_3 += 1
+                                    column_2 += 1
                                 else:
                                     offset_3 = -1
                                     break
 
                                 count_2 = 0
-                                if offset_3 == leftover_offset and leftover_count > 0:
-                                     count_2 += leftover_count
-                                     print('leftover tab')
+                                if offset_3 == leftover_offset_2 and leftover_count_2 > 0:
+                                     count_2 += leftover_count_2
                                 while offset_3 < buf_eof:
                                     chr = buf[offset_3]
                                     if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
                                         offset_3 +=2
-                                        line_start_2 = offset_3
-                                        indent_end_2 = offset_3
+                                        column_2 = 0
+                                        indent_column_2 = 0
                                     elif chr in '\n\r':
                                         offset_3 +=1
-                                        line_start_2 = offset_3
-                                        indent_end_2 = offset_3
+                                        column_2 = 0
+                                        indent_column_2 = 0
                                         count_2 +=1
                                     elif chr in ' \t':
-                                        count_2 += (self.tabstop-(offset_3-line_start_2)%self.tabstop) if chr == '	' else 1
+                                        width  = (self.tabstop-(column_2%self.tabstop)) if chr == '	' else 1
+                                        count_2 += width
+                                        column_2 += width
                                         offset_3 +=1
                                     else:
                                         break
 
-                                offset_3, line_start_2, indent_end_2, leftover_offset, leftover_count = self.parse_string_literal(buf, offset_3, buf_eof, line_start_2, indent_end_2, prefix_0, children_3, leftover_offset, leftover_count)
+                                offset_3, column_2, indent_column_2, leftover_offset_2, leftover_count_2 = self.parse_string_literal(buf, offset_3, buf_eof, column_2, indent_column_2, prefix_0, children_3, leftover_offset_2, leftover_count_2)
                                 if offset_3 == -1: break
 
 
                                 count_2 = 0
-                                if offset_3 == leftover_offset and leftover_count > 0:
-                                     count_2 += leftover_count
-                                     print('leftover tab')
+                                if offset_3 == leftover_offset_2 and leftover_count_2 > 0:
+                                     count_2 += leftover_count_2
                                 while offset_3 < buf_eof:
                                     chr = buf[offset_3]
                                     if chr in ' \t':
-                                        count_2 += (self.tabstop-(offset_3-line_start_2)%self.tabstop) if chr == '	' else 1
-                                        offset_3 +=1
+                                        width  = (self.tabstop-(column_2%self.tabstop)) if chr == '	' else 1
+                                        count_2 += width
+                                        column_2 += width
                                     else:
                                         break
 
                                 if buf[offset_3:offset_3+1] == ':':
                                     offset_3 += 1
+                                    column_2 += 1
                                 else:
                                     offset_3 = -1
                                     break
 
                                 count_2 = 0
-                                if offset_3 == leftover_offset and leftover_count > 0:
-                                     count_2 += leftover_count
-                                     print('leftover tab')
+                                if offset_3 == leftover_offset_2 and leftover_count_2 > 0:
+                                     count_2 += leftover_count_2
                                 while offset_3 < buf_eof:
                                     chr = buf[offset_3]
                                     if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
                                         offset_3 +=2
-                                        line_start_2 = offset_3
-                                        indent_end_2 = offset_3
+                                        column_2 = 0
+                                        indent_column_2 = 0
                                     elif chr in '\n\r':
                                         offset_3 +=1
-                                        line_start_2 = offset_3
-                                        indent_end_2 = offset_3
+                                        column_2 = 0
+                                        indent_column_2 = 0
                                         count_2 +=1
                                     elif chr in ' \t':
-                                        count_2 += (self.tabstop-(offset_3-line_start_2)%self.tabstop) if chr == '	' else 1
+                                        width  = (self.tabstop-(column_2%self.tabstop)) if chr == '	' else 1
+                                        count_2 += width
+                                        column_2 += width
                                         offset_3 +=1
                                     else:
                                         break
 
-                                offset_3, line_start_2, indent_end_2, leftover_offset, leftover_count = self.parse_literal(buf, offset_3, buf_eof, line_start_2, indent_end_2, prefix_0, children_3, leftover_offset, leftover_count)
+                                offset_3, column_2, indent_column_2, leftover_offset_2, leftover_count_2 = self.parse_literal(buf, offset_3, buf_eof, column_2, indent_column_2, prefix_0, children_3, leftover_offset_2, leftover_count_2)
                                 if offset_3 == -1: break
 
 
@@ -1212,29 +1371,32 @@ class Parser:
                             if children_3 is not None and children_3 is not None:
                                 children_2.extend(children_3)
                             offset_2 = offset_3
-                            line_start_1 = line_start_2
-                            indent_end_2 = indent_end_2
+                            column_1 = column_2
+                            indent_column_1 = indent_column_2
+                            leftover_offset_1 = leftover_offset_2
+                            leftover_count_1 = leftover_count_2
                             count_1 += 1
                         if offset_2 == -1:
                             break
 
                         count_1 = 0
-                        if offset_2 == leftover_offset and leftover_count > 0:
-                             count_1 += leftover_count
-                             print('leftover tab')
+                        if offset_2 == leftover_offset_1 and leftover_count_1 > 0:
+                             count_1 += leftover_count_1
                         while offset_2 < buf_eof:
                             chr = buf[offset_2]
                             if chr == '\r' and offset_2 + 1 < buf_eof and buf[offset_2+1] == '\n':
                                 offset_2 +=2
-                                line_start_1 = offset_2
-                                indent_end_1 = offset_2
+                                column_1 = 0
+                                indent_column_1 = 0
                             elif chr in '\n\r':
                                 offset_2 +=1
-                                line_start_1 = offset_2
-                                indent_end_1 = offset_2
+                                column_1 = 0
+                                indent_column_1 = 0
                                 count_1 +=1
                             elif chr in ' \t':
-                                count_1 += (self.tabstop-(offset_2-line_start_1)%self.tabstop) if chr == '	' else 1
+                                width  = (self.tabstop-(column_1%self.tabstop)) if chr == '	' else 1
+                                count_1 += width
+                                column_1 += width
                                 offset_2 +=1
                             else:
                                 break
@@ -1242,33 +1404,37 @@ class Parser:
                         count_1 = 0
                         while count_1 < 1:
                             offset_3 = offset_2
-                            line_start_2 = line_start_1
-                            indent_end_2 = indent_end_1
+                            column_2 = column_1
+                            indent_column_2 = indent_column_1
+                            leftover_offset_2 = leftover_offset_1
+                            leftover_count_2 = leftover_count_1
                             children_3 = [] if children_2 is not None else None
                             while True:
                                 if buf[offset_3:offset_3+1] == ',':
                                     offset_3 += 1
+                                    column_2 += 1
                                 else:
                                     offset_3 = -1
                                     break
 
                                 count_2 = 0
-                                if offset_3 == leftover_offset and leftover_count > 0:
-                                     count_2 += leftover_count
-                                     print('leftover tab')
+                                if offset_3 == leftover_offset_2 and leftover_count_2 > 0:
+                                     count_2 += leftover_count_2
                                 while offset_3 < buf_eof:
                                     chr = buf[offset_3]
                                     if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
                                         offset_3 +=2
-                                        line_start_2 = offset_3
-                                        indent_end_2 = offset_3
+                                        column_2 = 0
+                                        indent_column_2 = 0
                                     elif chr in '\n\r':
                                         offset_3 +=1
-                                        line_start_2 = offset_3
-                                        indent_end_2 = offset_3
+                                        column_2 = 0
+                                        indent_column_2 = 0
                                         count_2 +=1
                                     elif chr in ' \t':
-                                        count_2 += (self.tabstop-(offset_3-line_start_2)%self.tabstop) if chr == '	' else 1
+                                        width  = (self.tabstop-(column_2%self.tabstop)) if chr == '	' else 1
+                                        count_2 += width
+                                        column_2 += width
                                         offset_3 +=1
                                     else:
                                         break
@@ -1280,8 +1446,10 @@ class Parser:
                             if children_3 is not None and children_3 is not None:
                                 children_2.extend(children_3)
                             offset_2 = offset_3
-                            line_start_1 = line_start_2
-                            indent_end_2 = indent_end_2
+                            column_1 = column_2
+                            indent_column_1 = indent_column_2
+                            leftover_offset_1 = leftover_offset_2
+                            leftover_count_1 = leftover_count_2
                             count_1 += 1
                             break
                         if offset_2 == -1:
@@ -1294,8 +1462,10 @@ class Parser:
                     if children_2 is not None and children_2 is not None:
                         children_1.extend(children_2)
                     offset_1 = offset_2
-                    line_start_0 = line_start_1
-                    indent_end_1 = indent_end_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    leftover_offset_0 = leftover_offset_1
+                    leftover_count_0 = leftover_count_1
                     count_0 += 1
                     break
                 if offset_1 == -1:
@@ -1314,38 +1484,43 @@ class Parser:
 
             if buf[offset_0:offset_0+1] == '}':
                 offset_0 += 1
+                column_0 += 1
             else:
                 offset_0 = -1
                 break
 
 
             break
-        return offset_0, line_start_0, indent_end_0, leftover_offset, leftover_count
+        return offset_0, column_0, indent_column_0, leftover_offset_0, leftover_count_0
 
-    def parse_yaml_eol(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0, leftover_offset, leftover_count):
+    def parse_yaml_eol(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, leftover_offset_0, leftover_count_0):
         while True: # note: return at end of loop
             count_0 = 0
             while True:
                 offset_1 = offset_0
-                line_start_1 = line_start_0
-                indent_end_1 = indent_end_0
+                column_1 = column_0
+                indent_column_1 = indent_column_0
+                leftover_offset_1 = leftover_offset_0
+                leftover_count_1 = leftover_count_0
                 children_1 = [] if children_0 is not None else None
                 while True:
                     while True: # start choice
                         offset_2 = offset_1
-                        line_start_2 = line_start_1
-                        indent_end_2 = indent_end_1
+                        column_2 = column_1
+                        indent_column_2 = indent_column_1
+                        leftover_offset_2 = leftover_offset_1
+                        leftover_count_2 = leftover_count_1
                         children_2 = [] if children_1 is not None else None
                         while True: # case
                             count_1 = 0
-                            if offset_2 == leftover_offset and leftover_count > 0:
-                                 count_1 += leftover_count
-                                 print('leftover tab')
+                            if offset_2 == leftover_offset_2 and leftover_count_2 > 0:
+                                 count_1 += leftover_count_2
                             while offset_2 < buf_eof:
                                 chr = buf[offset_2]
                                 if chr in ' \t':
-                                    count_1 += (self.tabstop-(offset_2-line_start_2)%self.tabstop) if chr == '	' else 1
-                                    offset_2 +=1
+                                    width  = (self.tabstop-(column_2%self.tabstop)) if chr == '	' else 1
+                                    count_1 += width
+                                    column_2 += width
                                 else:
                                     break
 
@@ -1353,12 +1528,12 @@ class Parser:
                                 chr = buf[offset_2]
                                 if chr == '\r' and offset_2 + 1 < buf_eof and buf[offset_2+1] == '\n':
                                     offset_2 +=2
-                                    line_start_2 = offset_2
-                                    indent_end_2 = offset_2
+                                    column_2 = 0
+                                    indent_column_2 = 0
                                 elif chr in '\n\r':
                                     offset_2 +=1
-                                    line_start_2 = offset_2
-                                    indent_end_2 = offset_2
+                                    column_2 = 0
+                                    indent_column_2 = 0
                                 else:
                                     offset_2 = -1
                                     break
@@ -1370,31 +1545,36 @@ class Parser:
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            line_start_1 = line_start_2
-                            indent_end_1 = indent_end_2
+                            column_1 = column_2
+                            indent_column_1 = indent_column_2
+                            leftover_offset_1 = leftover_offset_2
+                            leftover_count_1 = leftover_count_2
                             if children_2 is not None and children_2 is not None:
                                 children_1.extend(children_2)
                             break
                         # end case
                         offset_2 = offset_1
-                        line_start_2 = line_start_1
-                        indent_end_2 = indent_end_1
+                        column_2 = column_1
+                        indent_column_2 = indent_column_1
+                        leftover_offset_2 = leftover_offset_1
+                        leftover_count_2 = leftover_count_1
                         children_2 = [] if children_1 is not None else None
                         while True: # case
                             count_1 = 0
-                            if offset_2 == leftover_offset and leftover_count > 0:
-                                 count_1 += leftover_count
-                                 print('leftover tab')
+                            if offset_2 == leftover_offset_2 and leftover_count_2 > 0:
+                                 count_1 += leftover_count_2
                             while offset_2 < buf_eof:
                                 chr = buf[offset_2]
                                 if chr in ' \t':
-                                    count_1 += (self.tabstop-(offset_2-line_start_2)%self.tabstop) if chr == '	' else 1
-                                    offset_2 +=1
+                                    width  = (self.tabstop-(column_2%self.tabstop)) if chr == '	' else 1
+                                    count_1 += width
+                                    column_2 += width
                                 else:
                                     break
 
                             if buf[offset_2:offset_2+1] == '#':
                                 offset_2 += 1
+                                column_2 += 1
                             else:
                                 offset_2 = -1
                                 break
@@ -1402,8 +1582,10 @@ class Parser:
                             count_1 = 0
                             while True:
                                 offset_3 = offset_2
-                                line_start_3 = line_start_2
-                                indent_end_3 = indent_end_2
+                                column_3 = column_2
+                                indent_column_3 = indent_column_2
+                                leftover_offset_3 = leftover_offset_2
+                                leftover_count_3 = leftover_count_2
                                 children_3 = [] if children_2 is not None else None
                                 while True:
                                     if offset_3 == buf_eof:
@@ -1417,6 +1599,7 @@ class Parser:
                                         break
                                     else:
                                         offset_3 += 1
+                                        column_3 += 1
 
                                     break
                                 if offset_3 == -1:
@@ -1425,8 +1608,10 @@ class Parser:
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 offset_2 = offset_3
-                                line_start_2 = line_start_3
-                                indent_end_3 = indent_end_3
+                                column_2 = column_3
+                                indent_column_2 = indent_column_3
+                                leftover_offset_2 = leftover_offset_3
+                                leftover_count_2 = leftover_count_3
                                 count_1 += 1
                             if offset_2 == -1:
                                 break
@@ -1435,12 +1620,12 @@ class Parser:
                                 chr = buf[offset_2]
                                 if chr == '\r' and offset_2 + 1 < buf_eof and buf[offset_2+1] == '\n':
                                     offset_2 +=2
-                                    line_start_2 = offset_2
-                                    indent_end_2 = offset_2
+                                    column_2 = 0
+                                    indent_column_2 = 0
                                 elif chr in '\n\r':
                                     offset_2 +=1
-                                    line_start_2 = offset_2
-                                    indent_end_2 = offset_2
+                                    column_2 = 0
+                                    indent_column_2 = 0
                                 else:
                                     offset_2 = -1
                                     break
@@ -1452,8 +1637,10 @@ class Parser:
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            line_start_1 = line_start_2
-                            indent_end_1 = indent_end_2
+                            column_1 = column_2
+                            indent_column_1 = indent_column_2
+                            leftover_offset_1 = leftover_offset_2
+                            leftover_count_1 = leftover_count_2
                             if children_2 is not None and children_2 is not None:
                                 children_1.extend(children_2)
                             break
@@ -1470,24 +1657,21 @@ class Parser:
                 if children_1 is not None and children_1 is not None:
                     children_0.extend(children_1)
                 offset_0 = offset_1
-                line_start_0 = line_start_1
-                indent_end_1 = indent_end_1
+                column_0 = column_1
+                indent_column_0 = indent_column_1
+                leftover_offset_0 = leftover_offset_1
+                leftover_count_0 = leftover_count_1
                 count_0 += 1
             if offset_0 == -1:
                 break
 
             break
-        return offset_0, line_start_0, indent_end_0, leftover_offset, leftover_count
+        return offset_0, column_0, indent_column_0, leftover_offset_0, leftover_count_0
 
-    def parse_indented_list(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0, leftover_offset, leftover_count):
+    def parse_indented_list(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, leftover_offset_0, leftover_count_0):
         while True: # note: return at end of loop
-            count_0 = 0
-            count_1 = indent_end_0
-            for chr in buf[indent_end_0:offset_0]:
-                count_0 += (self.tabstop-(count_1-line_start_0)%self.tabstop) if chr == '	' else 1
-                count_1 +=1
-
-            def _indent(buf, offset, buf_eof, line_start, indent_end,  prefix,  children, leftover_offset, leftover_count, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
+            count_0 = column_0 - indent_column_0
+            def _indent(buf, offset, buf_eof, column, indent_column,  prefix,  children, leftover_offset, leftover_count, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
                 saw_tab, saw_not_tab = False, False
                 if offset == leftover_offset: count -= leftover_count
                 while count > 0 and offset < buf_eof:
@@ -1498,11 +1682,14 @@ class Parser:
                             else: saw_not_tab = True
                             if saw_tab and saw_not_tab:
                                  offset -1; break
-                        count -= (self.tabstop-(offset-line_start)%self.tabstop) if chr == '	' else 1
+                        width  = (self.tabstop-(column%self.tabstop)) if chr == '	' else 1
+                        column += width
+                        count -= width
                         offset +=1
                         if count < 0:
                             leftover_offset = offset
                             leftover_count = -count
+                            break
                     elif chr == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
                         break
                     elif chr in '\n\r':
@@ -1510,38 +1697,41 @@ class Parser:
                     else:
                         offset = -1
                         break
-                return offset, line_start, indent_end, leftover_offset, leftover_count
+                return offset, column, indent_column, leftover_offset, leftover_count
             prefix_0.append(_indent)
-            indent_end_0 = offset_0
+            indent_column_0 = column_0 - leftover_count_0 if leftover_offset_0 == offset_0 else column_0
             while True:
                 offset_1 = offset_0
                 children_1 = []
                 while True: # start capture
                     if buf[offset_1:offset_1+1] == '-':
                         offset_1 += 1
+                        column_0 += 1
                     else:
                         offset_1 = -1
                         break
 
                     while True: # start choice
                         offset_2 = offset_1
-                        line_start_1 = line_start_0
-                        indent_end_1 = indent_end_0
+                        column_1 = column_0
+                        indent_column_1 = indent_column_0
+                        leftover_offset_1 = leftover_offset_0
+                        leftover_count_1 = leftover_count_0
                         children_2 = [] if children_1 is not None else None
                         while True: # case
                             count_0 = 0
-                            if offset_2 == leftover_offset and leftover_count > 0:
-                                 count_0 += leftover_count
-                                 print('leftover tab')
+                            if offset_2 == leftover_offset_1 and leftover_count_1 > 0:
+                                 count_0 += leftover_count_1
                             while offset_2 < buf_eof:
                                 chr = buf[offset_2]
                                 if chr in ' \t':
-                                    count_0 += (self.tabstop-(offset_2-line_start_1)%self.tabstop) if chr == '	' else 1
-                                    offset_2 +=1
+                                    width  = (self.tabstop-(column_1%self.tabstop)) if chr == '	' else 1
+                                    count_0 += width
+                                    column_1 += width
                                 else:
                                     break
 
-                            offset_2, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_indented_value(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2, leftover_offset, leftover_count)
+                            offset_2, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_indented_value(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, leftover_offset_1, leftover_count_1)
                             if offset_2 == -1: break
 
 
@@ -1549,51 +1739,55 @@ class Parser:
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            line_start_0 = line_start_1
-                            indent_end_0 = indent_end_1
+                            column_0 = column_1
+                            indent_column_0 = indent_column_1
+                            leftover_offset_0 = leftover_offset_1
+                            leftover_count_0 = leftover_count_1
                             if children_2 is not None and children_2 is not None:
                                 children_1.extend(children_2)
                             break
                         # end case
                         offset_2 = offset_1
-                        line_start_1 = line_start_0
-                        indent_end_1 = indent_end_0
+                        column_1 = column_0
+                        indent_column_1 = indent_column_0
+                        leftover_offset_1 = leftover_offset_0
+                        leftover_count_1 = leftover_count_0
                         children_2 = [] if children_1 is not None else None
                         while True: # case
-                            offset_2, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_yaml_eol(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2, leftover_offset, leftover_count)
+                            offset_2, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_yaml_eol(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, leftover_offset_1, leftover_count_1)
                             if offset_2 == -1: break
 
 
-                            if offset_2 != line_start_1 != indent_end_1:
+                            if column_1 != 0:
                                 offset_2 = -1
                                 break
-                            indent_end_1 = offset_2
+                            indent_column_1 = 0
                             for indent in prefix_0:
                                 _children, _prefix = [], []
-                                offset_2, line_start_1, indent_end_1, leftover_offset, leftover_count = indent(buf, offset_2, buf_eof, line_start_1, indent_end_1, _prefix, _children, leftover_offset, leftover_count)
+                                offset_2, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = indent(buf, offset_2, buf_eof, column_1, indent_column_1, _prefix, _children, leftover_offset_1, leftover_count_1)
                                 if _prefix or _children:
                                    raise Exception('bar')
                                 if offset_2 == -1:        break
-                                indent_end_1 = offset_2
+                                indent_column_1 = column_1 - leftover_count_1 if leftover_offset_1 == offset_2 else column_1
                             if offset_2 == -1:
                                 break
 
                             count_0 = 0
-                            if offset_2 == leftover_offset and leftover_count > 0:
-                                 count_0 += leftover_count
-                                 print('leftover tab')
+                            if offset_2 == leftover_offset_1 and leftover_count_1 > 0:
+                                 count_0 += leftover_count_1
                             while offset_2 < buf_eof:
                                 chr = buf[offset_2]
                                 if chr in ' \t':
-                                    count_0 += (self.tabstop-(offset_2-line_start_1)%self.tabstop) if chr == '	' else 1
-                                    offset_2 +=1
+                                    width  = (self.tabstop-(column_1%self.tabstop)) if chr == '	' else 1
+                                    count_0 += width
+                                    column_1 += width
                                 else:
                                     break
                             if count_0 < 1:
                                 offset_2 = -1
                                 break
 
-                            offset_2, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_indented_value(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2, leftover_offset, leftover_count)
+                            offset_2, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_indented_value(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, leftover_offset_1, leftover_count_1)
                             if offset_2 == -1: break
 
 
@@ -1601,8 +1795,10 @@ class Parser:
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            line_start_0 = line_start_1
-                            indent_end_0 = indent_end_1
+                            column_0 = column_1
+                            indent_column_0 = indent_column_1
+                            leftover_offset_0 = leftover_offset_1
+                            leftover_count_0 = leftover_count_1
                             if children_2 is not None and children_2 is not None:
                                 children_1.extend(children_2)
                             break
@@ -1615,43 +1811,46 @@ class Parser:
                     count_0 = 0
                     while True:
                         offset_2 = offset_1
-                        line_start_1 = line_start_0
-                        indent_end_1 = indent_end_0
+                        column_1 = column_0
+                        indent_column_1 = indent_column_0
+                        leftover_offset_1 = leftover_offset_0
+                        leftover_count_1 = leftover_count_0
                         children_2 = [] if children_1 is not None else None
                         while True:
-                            offset_2, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_yaml_eol(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2, leftover_offset, leftover_count)
+                            offset_2, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_yaml_eol(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, leftover_offset_1, leftover_count_1)
                             if offset_2 == -1: break
 
 
-                            if offset_2 != line_start_1 != indent_end_1:
+                            if column_1 != 0:
                                 offset_2 = -1
                                 break
-                            indent_end_1 = offset_2
+                            indent_column_1 = 0
                             for indent in prefix_0:
                                 _children, _prefix = [], []
-                                offset_2, line_start_1, indent_end_1, leftover_offset, leftover_count = indent(buf, offset_2, buf_eof, line_start_1, indent_end_1, _prefix, _children, leftover_offset, leftover_count)
+                                offset_2, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = indent(buf, offset_2, buf_eof, column_1, indent_column_1, _prefix, _children, leftover_offset_1, leftover_count_1)
                                 if _prefix or _children:
                                    raise Exception('bar')
                                 if offset_2 == -1:        break
-                                indent_end_1 = offset_2
+                                indent_column_1 = column_1 - leftover_count_1 if leftover_offset_1 == offset_2 else column_1
                             if offset_2 == -1:
                                 break
 
                             if buf[offset_2:offset_2+1] == '-':
                                 offset_2 += 1
+                                column_1 += 1
                             else:
                                 offset_2 = -1
                                 break
 
                             count_1 = 0
-                            if offset_2 == leftover_offset and leftover_count > 0:
-                                 count_1 += leftover_count
-                                 print('leftover tab')
+                            if offset_2 == leftover_offset_1 and leftover_count_1 > 0:
+                                 count_1 += leftover_count_1
                             while offset_2 < buf_eof:
                                 chr = buf[offset_2]
                                 if chr in ' \t':
-                                    count_1 += (self.tabstop-(offset_2-line_start_1)%self.tabstop) if chr == '	' else 1
-                                    offset_2 +=1
+                                    width  = (self.tabstop-(column_1%self.tabstop)) if chr == '	' else 1
+                                    count_1 += width
+                                    column_1 += width
                                 else:
                                     break
                             if count_1 < 1:
@@ -1660,23 +1859,25 @@ class Parser:
 
                             while True: # start choice
                                 offset_3 = offset_2
-                                line_start_2 = line_start_1
-                                indent_end_2 = indent_end_1
+                                column_2 = column_1
+                                indent_column_2 = indent_column_1
+                                leftover_offset_2 = leftover_offset_1
+                                leftover_count_2 = leftover_count_1
                                 children_3 = [] if children_2 is not None else None
                                 while True: # case
                                     count_1 = 0
-                                    if offset_3 == leftover_offset and leftover_count > 0:
-                                         count_1 += leftover_count
-                                         print('leftover tab')
+                                    if offset_3 == leftover_offset_2 and leftover_count_2 > 0:
+                                         count_1 += leftover_count_2
                                     while offset_3 < buf_eof:
                                         chr = buf[offset_3]
                                         if chr in ' \t':
-                                            count_1 += (self.tabstop-(offset_3-line_start_2)%self.tabstop) if chr == '	' else 1
-                                            offset_3 +=1
+                                            width  = (self.tabstop-(column_2%self.tabstop)) if chr == '	' else 1
+                                            count_1 += width
+                                            column_2 += width
                                         else:
                                             break
 
-                                    offset_3, line_start_2, indent_end_2, leftover_offset, leftover_count = self.parse_indented_value(buf, offset_3, buf_eof, line_start_2, indent_end_2, prefix_0, children_3, leftover_offset, leftover_count)
+                                    offset_3, column_2, indent_column_2, leftover_offset_2, leftover_count_2 = self.parse_indented_value(buf, offset_3, buf_eof, column_2, indent_column_2, prefix_0, children_3, leftover_offset_2, leftover_count_2)
                                     if offset_3 == -1: break
 
 
@@ -1684,48 +1885,52 @@ class Parser:
                                     break
                                 if offset_3 != -1:
                                     offset_2 = offset_3
-                                    line_start_1 = line_start_2
-                                    indent_end_1 = indent_end_2
+                                    column_1 = column_2
+                                    indent_column_1 = indent_column_2
+                                    leftover_offset_1 = leftover_offset_2
+                                    leftover_count_1 = leftover_count_2
                                     if children_3 is not None and children_3 is not None:
                                         children_2.extend(children_3)
                                     break
                                 # end case
                                 offset_3 = offset_2
-                                line_start_2 = line_start_1
-                                indent_end_2 = indent_end_1
+                                column_2 = column_1
+                                indent_column_2 = indent_column_1
+                                leftover_offset_2 = leftover_offset_1
+                                leftover_count_2 = leftover_count_1
                                 children_3 = [] if children_2 is not None else None
                                 while True: # case
-                                    offset_3, line_start_2, indent_end_2, leftover_offset, leftover_count = self.parse_yaml_eol(buf, offset_3, buf_eof, line_start_2, indent_end_2, prefix_0, children_3, leftover_offset, leftover_count)
+                                    offset_3, column_2, indent_column_2, leftover_offset_2, leftover_count_2 = self.parse_yaml_eol(buf, offset_3, buf_eof, column_2, indent_column_2, prefix_0, children_3, leftover_offset_2, leftover_count_2)
                                     if offset_3 == -1: break
 
 
-                                    if offset_3 != line_start_2 != indent_end_2:
+                                    if column_2 != 0:
                                         offset_3 = -1
                                         break
-                                    indent_end_2 = offset_3
+                                    indent_column_2 = 0
                                     for indent in prefix_0:
                                         _children, _prefix = [], []
-                                        offset_3, line_start_2, indent_end_2, leftover_offset, leftover_count = indent(buf, offset_3, buf_eof, line_start_2, indent_end_2, _prefix, _children, leftover_offset, leftover_count)
+                                        offset_3, column_2, indent_column_2, leftover_offset_2, leftover_count_2 = indent(buf, offset_3, buf_eof, column_2, indent_column_2, _prefix, _children, leftover_offset_2, leftover_count_2)
                                         if _prefix or _children:
                                            raise Exception('bar')
                                         if offset_3 == -1:        break
-                                        indent_end_2 = offset_3
+                                        indent_column_2 = column_2 - leftover_count_2 if leftover_offset_2 == offset_3 else column_2
                                     if offset_3 == -1:
                                         break
 
                                     count_1 = 0
-                                    if offset_3 == leftover_offset and leftover_count > 0:
-                                         count_1 += leftover_count
-                                         print('leftover tab')
+                                    if offset_3 == leftover_offset_2 and leftover_count_2 > 0:
+                                         count_1 += leftover_count_2
                                     while offset_3 < buf_eof:
                                         chr = buf[offset_3]
                                         if chr in ' \t':
-                                            count_1 += (self.tabstop-(offset_3-line_start_2)%self.tabstop) if chr == '	' else 1
-                                            offset_3 +=1
+                                            width  = (self.tabstop-(column_2%self.tabstop)) if chr == '	' else 1
+                                            count_1 += width
+                                            column_2 += width
                                         else:
                                             break
 
-                                    offset_3, line_start_2, indent_end_2, leftover_offset, leftover_count = self.parse_indented_value(buf, offset_3, buf_eof, line_start_2, indent_end_2, prefix_0, children_3, leftover_offset, leftover_count)
+                                    offset_3, column_2, indent_column_2, leftover_offset_2, leftover_count_2 = self.parse_indented_value(buf, offset_3, buf_eof, column_2, indent_column_2, prefix_0, children_3, leftover_offset_2, leftover_count_2)
                                     if offset_3 == -1: break
 
 
@@ -1733,8 +1938,10 @@ class Parser:
                                     break
                                 if offset_3 != -1:
                                     offset_2 = offset_3
-                                    line_start_1 = line_start_2
-                                    indent_end_1 = indent_end_2
+                                    column_1 = column_2
+                                    indent_column_1 = indent_column_2
+                                    leftover_offset_1 = leftover_offset_2
+                                    leftover_count_1 = leftover_count_2
                                     if children_3 is not None and children_3 is not None:
                                         children_2.extend(children_3)
                                     break
@@ -1751,8 +1958,10 @@ class Parser:
                         if children_2 is not None and children_2 is not None:
                             children_1.extend(children_2)
                         offset_1 = offset_2
-                        line_start_0 = line_start_1
-                        indent_end_1 = indent_end_1
+                        column_0 = column_1
+                        indent_column_0 = indent_column_1
+                        leftover_offset_0 = leftover_offset_1
+                        leftover_count_0 = leftover_count_1
                         count_0 += 1
                     if offset_1 == -1:
                         break
@@ -1773,17 +1982,12 @@ class Parser:
             if offset_0 == -1: break
 
             break
-        return offset_0, line_start_0, indent_end_0, leftover_offset, leftover_count
+        return offset_0, column_0, indent_column_0, leftover_offset_0, leftover_count_0
 
-    def parse_indented_object(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0, leftover_offset, leftover_count):
+    def parse_indented_object(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, leftover_offset_0, leftover_count_0):
         while True: # note: return at end of loop
-            count_0 = 0
-            count_1 = indent_end_0
-            for chr in buf[indent_end_0:offset_0]:
-                count_0 += (self.tabstop-(count_1-line_start_0)%self.tabstop) if chr == '	' else 1
-                count_1 +=1
-
-            def _indent(buf, offset, buf_eof, line_start, indent_end,  prefix,  children, leftover_offset, leftover_count, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
+            count_0 = column_0 - indent_column_0
+            def _indent(buf, offset, buf_eof, column, indent_column,  prefix,  children, leftover_offset, leftover_count, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
                 saw_tab, saw_not_tab = False, False
                 if offset == leftover_offset: count -= leftover_count
                 while count > 0 and offset < buf_eof:
@@ -1794,11 +1998,14 @@ class Parser:
                             else: saw_not_tab = True
                             if saw_tab and saw_not_tab:
                                  offset -1; break
-                        count -= (self.tabstop-(offset-line_start)%self.tabstop) if chr == '	' else 1
+                        width  = (self.tabstop-(column%self.tabstop)) if chr == '	' else 1
+                        column += width
+                        count -= width
                         offset +=1
                         if count < 0:
                             leftover_offset = offset
                             leftover_count = -count
+                            break
                     elif chr == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
                         break
                     elif chr in '\n\r':
@@ -1806,9 +2013,9 @@ class Parser:
                     else:
                         offset = -1
                         break
-                return offset, line_start, indent_end, leftover_offset, leftover_count
+                return offset, column, indent_column, leftover_offset, leftover_count
             prefix_0.append(_indent)
-            indent_end_0 = offset_0
+            indent_column_0 = column_0 - leftover_count_0 if leftover_offset_0 == offset_0 else column_0
             while True:
                 offset_1 = offset_0
                 children_1 = []
@@ -1816,68 +2023,71 @@ class Parser:
                     offset_2 = offset_1
                     children_2 = []
                     while True: # start capture
-                        offset_2, line_start_0, indent_end_0, leftover_offset, leftover_count = self.parse_identifier(buf, offset_2, buf_eof, line_start_0, indent_end_0, prefix_0, children_2, leftover_offset, leftover_count)
+                        offset_2, column_0, indent_column_0, leftover_offset_0, leftover_count_0 = self.parse_identifier(buf, offset_2, buf_eof, column_0, indent_column_0, prefix_0, children_2, leftover_offset_0, leftover_count_0)
                         if offset_2 == -1: break
 
 
                         count_0 = 0
-                        if offset_2 == leftover_offset and leftover_count > 0:
-                             count_0 += leftover_count
-                             print('leftover tab')
+                        if offset_2 == leftover_offset_0 and leftover_count_0 > 0:
+                             count_0 += leftover_count_0
                         while offset_2 < buf_eof:
                             chr = buf[offset_2]
                             if chr in ' \t':
-                                count_0 += (self.tabstop-(offset_2-line_start_0)%self.tabstop) if chr == '	' else 1
-                                offset_2 +=1
+                                width  = (self.tabstop-(column_0%self.tabstop)) if chr == '	' else 1
+                                count_0 += width
+                                column_0 += width
                             else:
                                 break
 
                         if buf[offset_2:offset_2+1] == ':':
                             offset_2 += 1
+                            column_0 += 1
                         else:
                             offset_2 = -1
                             break
 
                         while True: # start choice
                             offset_3 = offset_2
-                            line_start_1 = line_start_0
-                            indent_end_1 = indent_end_0
+                            column_1 = column_0
+                            indent_column_1 = indent_column_0
+                            leftover_offset_1 = leftover_offset_0
+                            leftover_count_1 = leftover_count_0
                             children_3 = [] if children_2 is not None else None
                             while True: # case
-                                offset_3, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_yaml_eol(buf, offset_3, buf_eof, line_start_1, indent_end_1, prefix_0, children_3, leftover_offset, leftover_count)
+                                offset_3, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_yaml_eol(buf, offset_3, buf_eof, column_1, indent_column_1, prefix_0, children_3, leftover_offset_1, leftover_count_1)
                                 if offset_3 == -1: break
 
 
-                                if offset_3 != line_start_1 != indent_end_1:
+                                if column_1 != 0:
                                     offset_3 = -1
                                     break
-                                indent_end_1 = offset_3
+                                indent_column_1 = 0
                                 for indent in prefix_0:
                                     _children, _prefix = [], []
-                                    offset_3, line_start_1, indent_end_1, leftover_offset, leftover_count = indent(buf, offset_3, buf_eof, line_start_1, indent_end_1, _prefix, _children, leftover_offset, leftover_count)
+                                    offset_3, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = indent(buf, offset_3, buf_eof, column_1, indent_column_1, _prefix, _children, leftover_offset_1, leftover_count_1)
                                     if _prefix or _children:
                                        raise Exception('bar')
                                     if offset_3 == -1:        break
-                                    indent_end_1 = offset_3
+                                    indent_column_1 = column_1 - leftover_count_1 if leftover_offset_1 == offset_3 else column_1
                                 if offset_3 == -1:
                                     break
 
                                 count_0 = 0
-                                if offset_3 == leftover_offset and leftover_count > 0:
-                                     count_0 += leftover_count
-                                     print('leftover tab')
+                                if offset_3 == leftover_offset_1 and leftover_count_1 > 0:
+                                     count_0 += leftover_count_1
                                 while offset_3 < buf_eof:
                                     chr = buf[offset_3]
                                     if chr in ' \t':
-                                        count_0 += (self.tabstop-(offset_3-line_start_1)%self.tabstop) if chr == '	' else 1
-                                        offset_3 +=1
+                                        width  = (self.tabstop-(column_1%self.tabstop)) if chr == '	' else 1
+                                        count_0 += width
+                                        column_1 += width
                                     else:
                                         break
                                 if count_0 < 1:
                                     offset_3 = -1
                                     break
 
-                                offset_3, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_indented_value(buf, offset_3, buf_eof, line_start_1, indent_end_1, prefix_0, children_3, leftover_offset, leftover_count)
+                                offset_3, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_indented_value(buf, offset_3, buf_eof, column_1, indent_column_1, prefix_0, children_3, leftover_offset_1, leftover_count_1)
                                 if offset_3 == -1: break
 
 
@@ -1885,30 +2095,34 @@ class Parser:
                                 break
                             if offset_3 != -1:
                                 offset_2 = offset_3
-                                line_start_0 = line_start_1
-                                indent_end_0 = indent_end_1
+                                column_0 = column_1
+                                indent_column_0 = indent_column_1
+                                leftover_offset_0 = leftover_offset_1
+                                leftover_count_0 = leftover_count_1
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 break
                             # end case
                             offset_3 = offset_2
-                            line_start_1 = line_start_0
-                            indent_end_1 = indent_end_0
+                            column_1 = column_0
+                            indent_column_1 = indent_column_0
+                            leftover_offset_1 = leftover_offset_0
+                            leftover_count_1 = leftover_count_0
                             children_3 = [] if children_2 is not None else None
                             while True: # case
                                 count_0 = 0
-                                if offset_3 == leftover_offset and leftover_count > 0:
-                                     count_0 += leftover_count
-                                     print('leftover tab')
+                                if offset_3 == leftover_offset_1 and leftover_count_1 > 0:
+                                     count_0 += leftover_count_1
                                 while offset_3 < buf_eof:
                                     chr = buf[offset_3]
                                     if chr in ' \t':
-                                        count_0 += (self.tabstop-(offset_3-line_start_1)%self.tabstop) if chr == '	' else 1
-                                        offset_3 +=1
+                                        width  = (self.tabstop-(column_1%self.tabstop)) if chr == '	' else 1
+                                        count_0 += width
+                                        column_1 += width
                                     else:
                                         break
 
-                                offset_3, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_indented_value(buf, offset_3, buf_eof, line_start_1, indent_end_1, prefix_0, children_3, leftover_offset, leftover_count)
+                                offset_3, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_indented_value(buf, offset_3, buf_eof, column_1, indent_column_1, prefix_0, children_3, leftover_offset_1, leftover_count_1)
                                 if offset_3 == -1: break
 
 
@@ -1916,8 +2130,10 @@ class Parser:
                                 break
                             if offset_3 != -1:
                                 offset_2 = offset_3
-                                line_start_0 = line_start_1
-                                indent_end_0 = indent_end_1
+                                column_0 = column_1
+                                indent_column_0 = indent_column_1
+                                leftover_offset_0 = leftover_offset_1
+                                leftover_count_0 = leftover_count_1
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 break
@@ -1941,49 +2157,52 @@ class Parser:
                     count_0 = 0
                     while True:
                         offset_2 = offset_1
-                        line_start_1 = line_start_0
-                        indent_end_1 = indent_end_0
+                        column_1 = column_0
+                        indent_column_1 = indent_column_0
+                        leftover_offset_1 = leftover_offset_0
+                        leftover_count_1 = leftover_count_0
                         children_2 = [] if children_1 is not None else None
                         while True:
                             offset_3 = offset_2
                             children_3 = []
                             while True: # start capture
-                                offset_3, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_yaml_eol(buf, offset_3, buf_eof, line_start_1, indent_end_1, prefix_0, children_3, leftover_offset, leftover_count)
+                                offset_3, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_yaml_eol(buf, offset_3, buf_eof, column_1, indent_column_1, prefix_0, children_3, leftover_offset_1, leftover_count_1)
                                 if offset_3 == -1: break
 
 
-                                if offset_3 != line_start_1 != indent_end_1:
+                                if column_1 != 0:
                                     offset_3 = -1
                                     break
-                                indent_end_1 = offset_3
+                                indent_column_1 = 0
                                 for indent in prefix_0:
                                     _children, _prefix = [], []
-                                    offset_3, line_start_1, indent_end_1, leftover_offset, leftover_count = indent(buf, offset_3, buf_eof, line_start_1, indent_end_1, _prefix, _children, leftover_offset, leftover_count)
+                                    offset_3, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = indent(buf, offset_3, buf_eof, column_1, indent_column_1, _prefix, _children, leftover_offset_1, leftover_count_1)
                                     if _prefix or _children:
                                        raise Exception('bar')
                                     if offset_3 == -1:        break
-                                    indent_end_1 = offset_3
+                                    indent_column_1 = column_1 - leftover_count_1 if leftover_offset_1 == offset_3 else column_1
                                 if offset_3 == -1:
                                     break
 
-                                offset_3, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_identifier(buf, offset_3, buf_eof, line_start_1, indent_end_1, prefix_0, children_3, leftover_offset, leftover_count)
+                                offset_3, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_identifier(buf, offset_3, buf_eof, column_1, indent_column_1, prefix_0, children_3, leftover_offset_1, leftover_count_1)
                                 if offset_3 == -1: break
 
 
                                 count_1 = 0
-                                if offset_3 == leftover_offset and leftover_count > 0:
-                                     count_1 += leftover_count
-                                     print('leftover tab')
+                                if offset_3 == leftover_offset_1 and leftover_count_1 > 0:
+                                     count_1 += leftover_count_1
                                 while offset_3 < buf_eof:
                                     chr = buf[offset_3]
                                     if chr in ' \t':
-                                        count_1 += (self.tabstop-(offset_3-line_start_1)%self.tabstop) if chr == '	' else 1
-                                        offset_3 +=1
+                                        width  = (self.tabstop-(column_1%self.tabstop)) if chr == '	' else 1
+                                        count_1 += width
+                                        column_1 += width
                                     else:
                                         break
 
                                 if buf[offset_3:offset_3+1] == ':':
                                     offset_3 += 1
+                                    column_1 += 1
                                 else:
                                     offset_3 = -1
                                     break
@@ -1995,23 +2214,25 @@ class Parser:
 
                                 while True: # start choice
                                     offset_4 = offset_3
-                                    line_start_2 = line_start_1
-                                    indent_end_2 = indent_end_1
+                                    column_2 = column_1
+                                    indent_column_2 = indent_column_1
+                                    leftover_offset_2 = leftover_offset_1
+                                    leftover_count_2 = leftover_count_1
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
                                         count_1 = 0
-                                        if offset_4 == leftover_offset and leftover_count > 0:
-                                             count_1 += leftover_count
-                                             print('leftover tab')
+                                        if offset_4 == leftover_offset_2 and leftover_count_2 > 0:
+                                             count_1 += leftover_count_2
                                         while offset_4 < buf_eof:
                                             chr = buf[offset_4]
                                             if chr in ' \t':
-                                                count_1 += (self.tabstop-(offset_4-line_start_2)%self.tabstop) if chr == '	' else 1
-                                                offset_4 +=1
+                                                width  = (self.tabstop-(column_2%self.tabstop)) if chr == '	' else 1
+                                                count_1 += width
+                                                column_2 += width
                                             else:
                                                 break
 
-                                        offset_4, line_start_2, indent_end_2, leftover_offset, leftover_count = self.parse_indented_value(buf, offset_4, buf_eof, line_start_2, indent_end_2, prefix_0, children_4, leftover_offset, leftover_count)
+                                        offset_4, column_2, indent_column_2, leftover_offset_2, leftover_count_2 = self.parse_indented_value(buf, offset_4, buf_eof, column_2, indent_column_2, prefix_0, children_4, leftover_offset_2, leftover_count_2)
                                         if offset_4 == -1: break
 
 
@@ -2019,51 +2240,55 @@ class Parser:
                                         break
                                     if offset_4 != -1:
                                         offset_3 = offset_4
-                                        line_start_1 = line_start_2
-                                        indent_end_1 = indent_end_2
+                                        column_1 = column_2
+                                        indent_column_1 = indent_column_2
+                                        leftover_offset_1 = leftover_offset_2
+                                        leftover_count_1 = leftover_count_2
                                         if children_4 is not None and children_4 is not None:
                                             children_3.extend(children_4)
                                         break
                                     # end case
                                     offset_4 = offset_3
-                                    line_start_2 = line_start_1
-                                    indent_end_2 = indent_end_1
+                                    column_2 = column_1
+                                    indent_column_2 = indent_column_1
+                                    leftover_offset_2 = leftover_offset_1
+                                    leftover_count_2 = leftover_count_1
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
-                                        offset_4, line_start_2, indent_end_2, leftover_offset, leftover_count = self.parse_yaml_eol(buf, offset_4, buf_eof, line_start_2, indent_end_2, prefix_0, children_4, leftover_offset, leftover_count)
+                                        offset_4, column_2, indent_column_2, leftover_offset_2, leftover_count_2 = self.parse_yaml_eol(buf, offset_4, buf_eof, column_2, indent_column_2, prefix_0, children_4, leftover_offset_2, leftover_count_2)
                                         if offset_4 == -1: break
 
 
-                                        if offset_4 != line_start_2 != indent_end_2:
+                                        if column_2 != 0:
                                             offset_4 = -1
                                             break
-                                        indent_end_2 = offset_4
+                                        indent_column_2 = 0
                                         for indent in prefix_0:
                                             _children, _prefix = [], []
-                                            offset_4, line_start_2, indent_end_2, leftover_offset, leftover_count = indent(buf, offset_4, buf_eof, line_start_2, indent_end_2, _prefix, _children, leftover_offset, leftover_count)
+                                            offset_4, column_2, indent_column_2, leftover_offset_2, leftover_count_2 = indent(buf, offset_4, buf_eof, column_2, indent_column_2, _prefix, _children, leftover_offset_2, leftover_count_2)
                                             if _prefix or _children:
                                                raise Exception('bar')
                                             if offset_4 == -1:        break
-                                            indent_end_2 = offset_4
+                                            indent_column_2 = column_2 - leftover_count_2 if leftover_offset_2 == offset_4 else column_2
                                         if offset_4 == -1:
                                             break
 
                                         count_1 = 0
-                                        if offset_4 == leftover_offset and leftover_count > 0:
-                                             count_1 += leftover_count
-                                             print('leftover tab')
+                                        if offset_4 == leftover_offset_2 and leftover_count_2 > 0:
+                                             count_1 += leftover_count_2
                                         while offset_4 < buf_eof:
                                             chr = buf[offset_4]
                                             if chr in ' \t':
-                                                count_1 += (self.tabstop-(offset_4-line_start_2)%self.tabstop) if chr == '	' else 1
-                                                offset_4 +=1
+                                                width  = (self.tabstop-(column_2%self.tabstop)) if chr == '	' else 1
+                                                count_1 += width
+                                                column_2 += width
                                             else:
                                                 break
                                         if count_1 < 1:
                                             offset_4 = -1
                                             break
 
-                                        offset_4, line_start_2, indent_end_2, leftover_offset, leftover_count = self.parse_indented_value(buf, offset_4, buf_eof, line_start_2, indent_end_2, prefix_0, children_4, leftover_offset, leftover_count)
+                                        offset_4, column_2, indent_column_2, leftover_offset_2, leftover_count_2 = self.parse_indented_value(buf, offset_4, buf_eof, column_2, indent_column_2, prefix_0, children_4, leftover_offset_2, leftover_count_2)
                                         if offset_4 == -1: break
 
 
@@ -2071,8 +2296,10 @@ class Parser:
                                         break
                                     if offset_4 != -1:
                                         offset_3 = offset_4
-                                        line_start_1 = line_start_2
-                                        indent_end_1 = indent_end_2
+                                        column_1 = column_2
+                                        indent_column_1 = indent_column_2
+                                        leftover_offset_1 = leftover_offset_2
+                                        leftover_count_1 = leftover_count_2
                                         if children_4 is not None and children_4 is not None:
                                             children_3.extend(children_4)
                                         break
@@ -2100,8 +2327,10 @@ class Parser:
                         if children_2 is not None and children_2 is not None:
                             children_1.extend(children_2)
                         offset_1 = offset_2
-                        line_start_0 = line_start_1
-                        indent_end_1 = indent_end_1
+                        column_0 = column_1
+                        indent_column_0 = indent_column_1
+                        leftover_offset_0 = leftover_offset_1
+                        leftover_count_0 = leftover_count_1
                         count_0 += 1
                     if offset_1 == -1:
                         break
@@ -2122,17 +2351,19 @@ class Parser:
             if offset_0 == -1: break
 
             break
-        return offset_0, line_start_0, indent_end_0, leftover_offset, leftover_count
+        return offset_0, column_0, indent_column_0, leftover_offset_0, leftover_count_0
 
-    def parse_indented_value(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0, leftover_offset, leftover_count):
+    def parse_indented_value(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, leftover_offset_0, leftover_count_0):
         while True: # note: return at end of loop
             while True: # start choice
                 offset_1 = offset_0
-                line_start_1 = line_start_0
-                indent_end_1 = indent_end_0
+                column_1 = column_0
+                indent_column_1 = indent_column_0
+                leftover_offset_1 = leftover_offset_0
+                leftover_count_1 = leftover_count_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_indented_object(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1, leftover_offset, leftover_count)
+                    offset_1, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_indented_object(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, leftover_offset_1, leftover_count_1)
                     if offset_1 == -1: break
 
 
@@ -2140,18 +2371,22 @@ class Parser:
                     break
                 if offset_1 != -1:
                     offset_0 = offset_1
-                    line_start_0 = line_start_1
-                    indent_end_0 = indent_end_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    leftover_offset_0 = leftover_offset_1
+                    leftover_count_0 = leftover_count_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
                 # end case
                 offset_1 = offset_0
-                line_start_1 = line_start_0
-                indent_end_1 = indent_end_0
+                column_1 = column_0
+                indent_column_1 = indent_column_0
+                leftover_offset_1 = leftover_offset_0
+                leftover_count_1 = leftover_count_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_indented_list(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1, leftover_offset, leftover_count)
+                    offset_1, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_indented_list(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, leftover_offset_1, leftover_count_1)
                     if offset_1 == -1: break
 
 
@@ -2159,18 +2394,22 @@ class Parser:
                     break
                 if offset_1 != -1:
                     offset_0 = offset_1
-                    line_start_0 = line_start_1
-                    indent_end_0 = indent_end_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    leftover_offset_0 = leftover_offset_1
+                    leftover_count_0 = leftover_count_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
                 # end case
                 offset_1 = offset_0
-                line_start_1 = line_start_0
-                indent_end_1 = indent_end_0
+                column_1 = column_0
+                indent_column_1 = indent_column_0
+                leftover_offset_1 = leftover_offset_0
+                leftover_count_1 = leftover_count_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_literal(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1, leftover_offset, leftover_count)
+                    offset_1, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, leftover_offset_1, leftover_count_1)
                     if offset_1 == -1: break
 
 
@@ -2178,8 +2417,10 @@ class Parser:
                     break
                 if offset_1 != -1:
                     offset_0 = offset_1
-                    line_start_0 = line_start_1
-                    indent_end_0 = indent_end_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    leftover_offset_0 = leftover_offset_1
+                    leftover_count_0 = leftover_count_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
@@ -2190,30 +2431,32 @@ class Parser:
                 break
 
             break
-        return offset_0, line_start_0, indent_end_0, leftover_offset, leftover_count
+        return offset_0, column_0, indent_column_0, leftover_offset_0, leftover_count_0
 
-    def parse_document(self, buf, offset_0, buf_eof, line_start_0, indent_end_0, prefix_0, children_0, leftover_offset, leftover_count):
+    def parse_document(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, leftover_offset_0, leftover_count_0):
         while True: # note: return at end of loop
             count_0 = 0
             while True:
                 offset_1 = offset_0
-                line_start_1 = line_start_0
-                indent_end_1 = indent_end_0
+                column_1 = column_0
+                indent_column_1 = indent_column_0
+                leftover_offset_1 = leftover_offset_0
+                leftover_count_1 = leftover_count_0
                 children_1 = [] if children_0 is not None else None
                 while True:
                     count_1 = 0
-                    if offset_1 == leftover_offset and leftover_count > 0:
-                         count_1 += leftover_count
-                         print('leftover tab')
+                    if offset_1 == leftover_offset_1 and leftover_count_1 > 0:
+                         count_1 += leftover_count_1
                     while offset_1 < buf_eof:
                         chr = buf[offset_1]
                         if chr in ' \t':
-                            count_1 += (self.tabstop-(offset_1-line_start_1)%self.tabstop) if chr == '	' else 1
-                            offset_1 +=1
+                            width  = (self.tabstop-(column_1%self.tabstop)) if chr == '	' else 1
+                            count_1 += width
+                            column_1 += width
                         else:
                             break
 
-                    offset_1, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_yaml_eol(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1, leftover_offset, leftover_count)
+                    offset_1, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_yaml_eol(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, leftover_offset_1, leftover_count_1)
                     if offset_1 == -1: break
 
 
@@ -2224,8 +2467,10 @@ class Parser:
                 if children_1 is not None and children_1 is not None:
                     children_0.extend(children_1)
                 offset_0 = offset_1
-                line_start_0 = line_start_1
-                indent_end_1 = indent_end_1
+                column_0 = column_1
+                indent_column_0 = indent_column_1
+                leftover_offset_0 = leftover_offset_1
+                leftover_count_0 = leftover_count_1
                 count_0 += 1
             if offset_0 == -1:
                 break
@@ -2235,11 +2480,13 @@ class Parser:
             while True: # start capture
                 while True: # start choice
                     offset_2 = offset_1
-                    line_start_1 = line_start_0
-                    indent_end_1 = indent_end_0
+                    column_1 = column_0
+                    indent_column_1 = indent_column_0
+                    leftover_offset_1 = leftover_offset_0
+                    leftover_count_1 = leftover_count_0
                     children_2 = [] if children_1 is not None else None
                     while True: # case
-                        offset_2, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_indented_object(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2, leftover_offset, leftover_count)
+                        offset_2, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_indented_object(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, leftover_offset_1, leftover_count_1)
                         if offset_2 == -1: break
 
 
@@ -2247,18 +2494,22 @@ class Parser:
                         break
                     if offset_2 != -1:
                         offset_1 = offset_2
-                        line_start_0 = line_start_1
-                        indent_end_0 = indent_end_1
+                        column_0 = column_1
+                        indent_column_0 = indent_column_1
+                        leftover_offset_0 = leftover_offset_1
+                        leftover_count_0 = leftover_count_1
                         if children_2 is not None and children_2 is not None:
                             children_1.extend(children_2)
                         break
                     # end case
                     offset_2 = offset_1
-                    line_start_1 = line_start_0
-                    indent_end_1 = indent_end_0
+                    column_1 = column_0
+                    indent_column_1 = indent_column_0
+                    leftover_offset_1 = leftover_offset_0
+                    leftover_count_1 = leftover_count_0
                     children_2 = [] if children_1 is not None else None
                     while True: # case
-                        offset_2, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_indented_list(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2, leftover_offset, leftover_count)
+                        offset_2, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_indented_list(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, leftover_offset_1, leftover_count_1)
                         if offset_2 == -1: break
 
 
@@ -2266,18 +2517,22 @@ class Parser:
                         break
                     if offset_2 != -1:
                         offset_1 = offset_2
-                        line_start_0 = line_start_1
-                        indent_end_0 = indent_end_1
+                        column_0 = column_1
+                        indent_column_0 = indent_column_1
+                        leftover_offset_0 = leftover_offset_1
+                        leftover_count_0 = leftover_count_1
                         if children_2 is not None and children_2 is not None:
                             children_1.extend(children_2)
                         break
                     # end case
                     offset_2 = offset_1
-                    line_start_1 = line_start_0
-                    indent_end_1 = indent_end_0
+                    column_1 = column_0
+                    indent_column_1 = indent_column_0
+                    leftover_offset_1 = leftover_offset_0
+                    leftover_count_1 = leftover_count_0
                     children_2 = [] if children_1 is not None else None
                     while True: # case
-                        offset_2, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_list_literal(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2, leftover_offset, leftover_count)
+                        offset_2, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_list_literal(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, leftover_offset_1, leftover_count_1)
                         if offset_2 == -1: break
 
 
@@ -2285,18 +2540,22 @@ class Parser:
                         break
                     if offset_2 != -1:
                         offset_1 = offset_2
-                        line_start_0 = line_start_1
-                        indent_end_0 = indent_end_1
+                        column_0 = column_1
+                        indent_column_0 = indent_column_1
+                        leftover_offset_0 = leftover_offset_1
+                        leftover_count_0 = leftover_count_1
                         if children_2 is not None and children_2 is not None:
                             children_1.extend(children_2)
                         break
                     # end case
                     offset_2 = offset_1
-                    line_start_1 = line_start_0
-                    indent_end_1 = indent_end_0
+                    column_1 = column_0
+                    indent_column_1 = indent_column_0
+                    leftover_offset_1 = leftover_offset_0
+                    leftover_count_1 = leftover_count_0
                     children_2 = [] if children_1 is not None else None
                     while True: # case
-                        offset_2, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_object_literal(buf, offset_2, buf_eof, line_start_1, indent_end_1, prefix_0, children_2, leftover_offset, leftover_count)
+                        offset_2, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_object_literal(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, leftover_offset_1, leftover_count_1)
                         if offset_2 == -1: break
 
 
@@ -2304,8 +2563,10 @@ class Parser:
                         break
                     if offset_2 != -1:
                         offset_1 = offset_2
-                        line_start_0 = line_start_1
-                        indent_end_0 = indent_end_1
+                        column_0 = column_1
+                        indent_column_0 = indent_column_1
+                        leftover_offset_0 = leftover_offset_1
+                        leftover_count_0 = leftover_count_1
                         if children_2 is not None and children_2 is not None:
                             children_1.extend(children_2)
                         break
@@ -2327,37 +2588,39 @@ class Parser:
             offset_0 = offset_1
 
             count_0 = 0
-            if offset_0 == leftover_offset and leftover_count > 0:
-                 count_0 += leftover_count
-                 print('leftover tab')
+            if offset_0 == leftover_offset_0 and leftover_count_0 > 0:
+                 count_0 += leftover_count_0
             while offset_0 < buf_eof:
                 chr = buf[offset_0]
                 if chr in ' \t':
-                    count_0 += (self.tabstop-(offset_0-line_start_0)%self.tabstop) if chr == '	' else 1
-                    offset_0 +=1
+                    width  = (self.tabstop-(column_0%self.tabstop)) if chr == '	' else 1
+                    count_0 += width
+                    column_0 += width
                 else:
                     break
 
             count_0 = 0
             while True:
                 offset_1 = offset_0
-                line_start_1 = line_start_0
-                indent_end_1 = indent_end_0
+                column_1 = column_0
+                indent_column_1 = indent_column_0
+                leftover_offset_1 = leftover_offset_0
+                leftover_count_1 = leftover_count_0
                 children_1 = [] if children_0 is not None else None
                 while True:
-                    offset_1, line_start_1, indent_end_1, leftover_offset, leftover_count = self.parse_yaml_eol(buf, offset_1, buf_eof, line_start_1, indent_end_1, prefix_0, children_1, leftover_offset, leftover_count)
+                    offset_1, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_yaml_eol(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, leftover_offset_1, leftover_count_1)
                     if offset_1 == -1: break
 
 
                     count_1 = 0
-                    if offset_1 == leftover_offset and leftover_count > 0:
-                         count_1 += leftover_count
-                         print('leftover tab')
+                    if offset_1 == leftover_offset_1 and leftover_count_1 > 0:
+                         count_1 += leftover_count_1
                     while offset_1 < buf_eof:
                         chr = buf[offset_1]
                         if chr in ' \t':
-                            count_1 += (self.tabstop-(offset_1-line_start_1)%self.tabstop) if chr == '	' else 1
-                            offset_1 +=1
+                            width  = (self.tabstop-(column_1%self.tabstop)) if chr == '	' else 1
+                            count_1 += width
+                            column_1 += width
                         else:
                             break
 
@@ -2368,8 +2631,10 @@ class Parser:
                 if children_1 is not None and children_1 is not None:
                     children_0.extend(children_1)
                 offset_0 = offset_1
-                line_start_0 = line_start_1
-                indent_end_1 = indent_end_1
+                column_0 = column_1
+                indent_column_0 = indent_column_1
+                leftover_offset_0 = leftover_offset_1
+                leftover_count_0 = leftover_count_1
                 count_0 += 1
             if offset_0 == -1:
                 break
@@ -2377,33 +2642,35 @@ class Parser:
             count_0 = 0
             while True:
                 offset_1 = offset_0
-                line_start_1 = line_start_0
-                indent_end_1 = indent_end_0
+                column_1 = column_0
+                indent_column_1 = indent_column_0
+                leftover_offset_1 = leftover_offset_0
+                leftover_count_1 = leftover_count_0
                 children_1 = [] if children_0 is not None else None
                 while True:
                     if offset_1 < buf_eof:
                         chr = buf[offset_1]
                         if chr == '\r' and offset_1 + 1 < buf_eof and buf[offset_1+1] == '\n':
                             offset_1 +=2
-                            line_start_1 = offset_1
-                            indent_end_1 = offset_1
+                            column_1 = 0
+                            indent_column_1 = 0
                         elif chr in '\n\r':
                             offset_1 +=1
-                            line_start_1 = offset_1
-                            indent_end_1 = offset_1
+                            column_1 = 0
+                            indent_column_1 = 0
                         else:
                             offset_1 = -1
                             break
 
                     count_1 = 0
-                    if offset_1 == leftover_offset and leftover_count > 0:
-                         count_1 += leftover_count
-                         print('leftover tab')
+                    if offset_1 == leftover_offset_1 and leftover_count_1 > 0:
+                         count_1 += leftover_count_1
                     while offset_1 < buf_eof:
                         chr = buf[offset_1]
                         if chr in ' \t':
-                            count_1 += (self.tabstop-(offset_1-line_start_1)%self.tabstop) if chr == '	' else 1
-                            offset_1 +=1
+                            width  = (self.tabstop-(column_1%self.tabstop)) if chr == '	' else 1
+                            count_1 += width
+                            column_1 += width
                         else:
                             break
 
@@ -2414,12 +2681,14 @@ class Parser:
                 if children_1 is not None and children_1 is not None:
                     children_0.extend(children_1)
                 offset_0 = offset_1
-                line_start_0 = line_start_1
-                indent_end_1 = indent_end_1
+                column_0 = column_1
+                indent_column_0 = indent_column_1
+                leftover_offset_0 = leftover_offset_1
+                leftover_count_0 = leftover_count_1
                 count_0 += 1
             if offset_0 == -1:
                 break
 
 
             break
-        return offset_0, line_start_0, indent_end_0, leftover_offset, leftover_count
+        return offset_0, column_0, indent_column_0, leftover_offset_0, leftover_count_0
