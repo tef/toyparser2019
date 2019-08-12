@@ -252,11 +252,11 @@ PRINT = 'print'
 TRACE = 'trace'
 
 class GrammarNode:
-    def __init__(self, kind, *, rules=None, args=None, regular=False, nullable=True):
+    def __init__(self, kind, *, key=None, rules=None, args=None, regular=False, nullable=True):
         self.kind = kind
         self.rules = rules
         self.args = args
-        # if 'key' not in args: args['key'] = object()
+        self.key = key if key else object()
         self.regular = regular
         self.nullable = nullable
 
@@ -268,11 +268,11 @@ class GrammarNode:
 
     def canonical(self, builder):
         rules = [r.canonical(builder) for r in self.rules] if self.rules else None
-        return GrammarNode(self.kind, rules=rules, args=self.args, regular=self.regular, nullable=self.nullable)
+        return GrammarNode(self.kind, key=self.key, rules=rules, args=self.args, regular=self.regular, nullable=self.nullable)
 
     def make_rule(self):
         rules = [r.make_rule() for r in self.rules] if self.rules else None
-        return ParserRule(self.kind, rules=rules, args=self.args, regular=self.regular, nullable=self.nullable)
+        return ParserRule(self.kind, key=self.key, rules=rules, args=self.args, regular=self.regular, nullable=self.nullable)
 
 class FunctionNode(GrammarNode):
     def __init__(self, fn, wrapper):
@@ -299,7 +299,7 @@ class NamedNode(GrammarNode):
         return self
 
     def make_rule(self):
-        return ParserRule(RULE, args=dict(name=self.name, inline=False))
+        return ParserRule(RULE,  args=dict(name=self.name, inline=False))
 
 class ChoiceNode(GrammarNode):
     def __init__(self, rules):
@@ -371,12 +371,11 @@ class CaptureNode(GrammarNode):
     def make_rule(self):
         args = dict()
         args['name'] = self.name
-        args['key'] =  self.key
         args['nested'] = self.args['nested']
         rules=[r.make_rule() for r in self.rules]
         nullable = any(r.nullable for r in rules)
         regular = all(r.regular for r in rules)
-        return ParserRule(CAPTURE, args=args, rules=rules, regular=regular, nullable=nullable)
+        return ParserRule(CAPTURE, key=self.key, args=args, rules=rules, regular=regular, nullable=nullable)
 
 class MemoizeNode(GrammarNode):
     def __init__(self, rules, *, key=None):
@@ -392,8 +391,7 @@ class MemoizeNode(GrammarNode):
 
     def make_rule(self):
         args = dict()
-        args['key'] =  self.key
-        return ParserRule(MEMOIZE, args=args, rules=[r.make_rule() for r in self.rules])
+        return ParserRule(MEMOIZE, key=self.key, args=args, rules=[r.make_rule() for r in self.rules])
 
 class RepeatNode(GrammarNode):
     def __init__(self, rules, min=0, max=None, key=None):
@@ -407,11 +405,11 @@ class RepeatNode(GrammarNode):
         return RepeatNode(rules, self.min, self.max, self.key)
 
     def make_rule(self):
-        args=dict(min=self.min, max=self.max, key=self.key)
+        args=dict(min=self.min, max=self.max, )
         rules=[r.make_rule() for r in self.rules]
         nullable = any(r.nullable for r in rules)
         regular = all(r.regular for r in rules)
-        return ParserRule(REPEAT, args=args, rules=rules, regular=regular, nullable=nullable)
+        return ParserRule(REPEAT, key=self.key, args=args, rules=rules, regular=regular, nullable=nullable)
 
 class LiteralNode(GrammarNode):
     def __init__(self, args,invert=False):
@@ -673,8 +671,7 @@ class CountNode(GrammarNode):
         return CountNode(self.name, self.args, rules, self.key)
     def make_rule(self):
         args = dict(self.args)
-        if 'key' not in args: args['key'] = self.key
-        return ParserRule(COUNT, args=args, rules=[r.make_rule() for r in self.rules])
+        return ParserRule(COUNT, key=self.key, args=args, rules=[r.make_rule() for r in self.rules])
 
 class Builtins:
     """ These methods are exported as functions inside the class defintion """
@@ -722,12 +719,13 @@ class Builtins:
     newline = GrammarNode(NEWLINE)
 
 class ParserRule:
-    def __init__(self, kind, *, args=None, rules=None, nullable=True, regular=False):
+    def __init__(self, kind, *, key=None,  args=None, rules=None, nullable=True, regular=False):
         self.kind = kind
         self.args = args if args else None
         self.rules = rules if rules else None
         self.nullable = nullable
         self.regular = regular
+        self.key = key
 
     def __str__(self):
         rules =" ".join(str(r) for r in self.rules) if self.rules else None
@@ -751,7 +749,7 @@ class ParserRule:
         rules = [r.inline(name, rule) for r in self.rules]
         nullable = any(r.nullable for r in rules)
         regular = all(r.regular for r in rules)
-        return ParserRule(self.kind, args=self.args, rules=rules, nullable=nullable, regular=regular)
+        return ParserRule(self.kind, key=self.key, args=self.args, rules=rules, nullable=nullable, regular=regular)
 
             
 
@@ -819,7 +817,7 @@ def compile_python(grammar, builder=None, cython=False):
             build_subrules(rule.rules, steps, offset, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children, count, values)
 
         elif rule.kind == MEMOIZE:
-            key = rule.args['key']
+            key = rule.key
             value = memoized.get(key)
             if not value:
                 value = repr(f"memo_{len(memoized)}")
@@ -869,7 +867,7 @@ def compile_python(grammar, builder=None, cython=False):
                 node = "self.Node"
 
             value = VarBuilder('value', n=len(values))
-            values[rule.args['key']] = value
+            values[rule.key] = value
 
             steps.extend((
                 # f"print(len(buf), {offset}, {offset_0}, {children})",
@@ -1049,7 +1047,7 @@ def compile_python(grammar, builder=None, cython=False):
             steps.append(f"    {offset} = -1; break")
             # find var name
             var_name = VarBuilder('value',n=len(values))
-            values[rule.args['key']] = var_name
+            values[rule.key] = var_name
             if rule.args['columns']:
                 value = f"{column_0} - {column}"
             elif rule.args['char']:

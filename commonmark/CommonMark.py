@@ -65,7 +65,7 @@ def indented_code(buf, pos,end, children):
     return f"<pre><code>{text}</code></pre>"
 
 @_builder
-def code_indent(buf, pos, end, children):
+def partial_indent(buf, pos, end, children):
     width = children[0]
     return " "*width
 
@@ -91,7 +91,8 @@ def info(buf, pos,end, children):
 @_builder
 def blockquote(buf, pos, end, children):
     text = join_blocks(children)
-    return f"<blockquote>\n{text}\n</blockquote>"
+    end = '\n' if text != '\n' else ''
+    return f"<blockquote>\n{text}{end}</blockquote>"
 
 @_builder
 def block_list(buf, pos,end, children):
@@ -110,9 +111,10 @@ def block_list(buf, pos,end, children):
         def wrap(c):
             if isinstance(c, tuple):
                 return f"{c[0]}"
-            return c
+            return c+"\n"
         for item in children:
             item = "\n".join(wrap(line) for line in item) 
+            if isinstance(item[0], tuple): item = f"\n{item}"
             out.append(f"<li>{item}</li>\n")
         out.extend("</ul>")
     return "".join(out)
@@ -259,35 +261,37 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     def indented_code_block(self):
         self.whitespace(min=4, max=4)
         with self.capture('indented_code'), self.indented():
-            with self.count(columns=True) as w: self.partial_tab()
-            with self.capture('code_indent'): self.capture(value=w)
 
-            with self.capture('code_line'), self.repeat(min=1):
-                self.range("\n", invert=True)
+            with self.count(columns=True) as w: self.partial_tab()
+            with self.capture('partial_indent'): self.capture(value=w)
+
+            with self.capture('code_line'):
+                self.whitespace()
+                with self.repeat(min=1): self.range("\n", invert=True)
             self.end_of_line()
 
             with self.repeat():
-                self.start_of_line()
                 with self.choice():
                     with self.case():
-                        with self.count(columns=True) as w: self.partial_tab()
-                        with self.capture('code_indent'): self.capture(value=w)
-
-                        with self.capture('code_line'), self.repeat(min=1):
-                            self.range("\n", invert=True)
-                        self.end_of_line()
-                    with self.case():
-                        with self.capture('code_line'):
-                            self.whitespace()
-                        self.newline()
-                        with self.repeat():
+                        with self.repeat(min=1):
                             self.start_of_line()
                             with self.capture('code_line'):
                                 self.whitespace()
                             self.newline()
-                            self.end_of_line()
                         with self.lookahead():
                             self.start_of_line()
+                            self.whitespace()
+                            self.range("\n", invert=True)
+
+                    with self.case():
+                        self.start_of_line()
+                        with self.count(columns=True) as w: self.partial_tab()
+                        with self.capture('partial_indent'): self.capture(value=w)
+
+                        with self.capture('code_line'):
+                            self.whitespace()
+                            with self.repeat(min=1): self.range("\n", invert=True)
+                        self.end_of_line()
 
 
     @rule()
@@ -378,6 +382,9 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                     with self.case(): 
                         self.whitespace()
                         self.newline()
+                    with self.case():
+                        self.whitespace(min=4, max=4)
+                        self.range(" ", "\t", "\n", invert=True)
                     with self.case(): self.thematic_break()
                     with self.case(): self.atx_heading()
                     with self.case(): self.start_fenced_block()
@@ -388,20 +395,22 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     def start_blockquote(self):
         self.whitespace(max=3)
         self.accept('>')
-        self.whitespace(max=1, newline=True)
+        self.whitespace(min=1, max=1)
 
     @rule()
     def blockquote(self):
         with self.capture("blockquote"):
             self.start_blockquote()
-            with self.blockquote_prefix.as_line_prefix():
+            with self.optional(), self.blockquote_prefix.as_line_prefix():
                 self.block_element()
                 with self.repeat():
-                    self.start_of_line()
                     with self.choice():
                         with self.case():
+                            self.start_of_line()
                             self.block_element()
                         with self.case():
+                            self.whitespace(max=3)
+                            self.accept('>')
                             self.whitespace()
                             self.newline()
 
@@ -441,7 +450,6 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     @rule()
     def list_item(self):
         with self.indented():
-
             self.block_element()
             with self.repeat():
                 self.start_of_line()
@@ -479,37 +487,42 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     def inline_para(self):
         self.inline_element()
         with self.repeat():
-            with self.reject():
-                self.newline()
-                self.whitespace()
-                self.newline()
-            with self.reject():
-                self.newline()
-                self.start_of_line()
-                self.whitespace()
-                self.newline()
             with self.choice():
-                with self.case(): 
-                    self.whitespace(max=1)
-                    with self.capture("softbreak"):
-                        self.newline()
-                    self.start_of_line()
-                    with self.reject():
-                        self.para_interrupt.inline()
-                    self.whitespace()
                 with self.case():
+                    # newline ?
                     with self.choice():
-                        with self.case(): self.whitespace(min=2)
-                        with self.case(): self.accept("\\")
-                    with self.capture("hardbreak"):
-                        self.newline()
-                    self.start_of_line()
-                    with self.reject():
-                        self.para_interrupt.inline()
-                    self.whitespace()
+                        with self.case():
+                            with self.choice():
+                                with self.case(): self.whitespace(min=2)
+                                with self.case(): self.accept("\\")
+                            with self.capture("hardbreak"):
+                                self.newline()
+                        with self.case():
+                            self.whitespace()
+                            with self.capture("softbreak"):
+                                self.newline()
+
+                    with self.choice():
+                        with self.case():
+                            self.start_of_line()
+                            with self.reject():
+                                self.para_interrupt.inline()
+                            self.whitespace()
+                            with self.reject():
+                                self.newline()
+                        with self.case():
+                            # lazy continuation
+                            with self.reject():
+                                self.start_of_line()
+                            with self.reject():
+                                self.para_interrupt.inline()
+                            self.whitespace()
+                            with self.reject():
+                                self.newline()
                 with self.case():
                     with self.capture("whitespace"):
                         self.whitespace()
+
             # 4.1 Ex 27, 28. Thematic Breaks can interrupt a paragraph
             self.inline_element()
 
@@ -791,10 +804,11 @@ worked = 0
 count =0
 
 print('butt')
-parser = CommonMark.parser(builder)
+parser = CommonMark.parser()
 for t in tests:
     markd = t['markdown']
-    out = parser.parse(t['markdown'])
+    out1 = parser.parse(markd)
+    out = out1.build(markd, builder)
     count +=1
     if out == t['html']: 
         worked +=1
@@ -806,10 +820,15 @@ for t in tests:
         if '*' in markd: continue
         if '1.' in markd: continue
         if '`' in markd: continue
+        if '[foo]' in markd: continue
+        if '[FOO]' in markd: continue
+        if out.replace('\n','') == t['html'].replace('\n',''): continue
         print(t['example'])
         print(repr(markd))
         print('=', repr(t['html']))
         print('X', repr(out))
+        print()
+        walk(out1)
         print()
 print(count, worked, failed)
 
