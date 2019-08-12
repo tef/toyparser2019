@@ -467,6 +467,15 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             self.block_element()
             with self.repeat():
                 self.start_of_line()
+                with self.optional():
+                    self.empty_lines()
+                    with self.lookahead():
+                        self.start_of_line()
+                        self.whitespace()
+                        self.range("\n", invert=True)
+                    self.start_of_line()
+                with self.reject():
+                    self.empty_lines()
                 self.block_element()
 
     @rule()
