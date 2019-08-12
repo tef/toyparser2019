@@ -3226,6 +3226,29 @@ class Parser:
                                     children_2.extend(children_3)
                                 break
                             # end case
+                            offset_3 = offset_2
+                            column_3 = column_2
+                            indent_column_3 = indent_column_2
+                            partial_tab_offset_3 = partial_tab_offset_2
+                            partial_tab_width_3 = partial_tab_width_2
+                            children_3 = [] if children_2 is not None else None
+                            while True: # case
+                                offset_3, column_3, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = self.parse_start_blockquote(buf, offset_3, buf_eof, column_3, indent_column_3, prefix_0, children_3, partial_tab_offset_3, partial_tab_width_3)
+                                if offset_3 == -1: break
+
+
+
+                                break
+                            if offset_3 != -1:
+                                offset_2 = offset_3
+                                column_2 = column_3
+                                indent_column_2 = indent_column_3
+                                partial_tab_offset_2 = partial_tab_offset_3
+                                partial_tab_width_2 = partial_tab_width_3
+                                if children_3 is not None and children_3 is not None:
+                                    children_2.extend(children_3)
+                                break
+                            # end case
                             offset_2 = -1 # no more choices
                             break # end choice
                         if offset_2 == -1:
@@ -3436,12 +3459,8 @@ class Parser:
             offset_1 = offset_0
             children_1 = []
             while True: # start capture
-                offset_1, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0 = self.parse_start_blockquote(buf, offset_1, buf_eof, column_0, indent_column_0, prefix_0, children_1, partial_tab_offset_0, partial_tab_width_0)
-                if offset_1 == -1: break
-
-
                 count_0 = 0
-                while count_0 < 1:
+                while True:
                     offset_2 = offset_1
                     column_1 = column_0
                     indent_column_1 = indent_column_0
@@ -3449,6 +3468,10 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
+                        offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_start_blockquote(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
+                        if offset_2 == -1: break
+
+
                         prefix_0.append(self.parse_blockquote_prefix)
                         indent_column_1 = column_1
                         while True:
@@ -3526,6 +3549,57 @@ class Parser:
                         prefix_0.pop()
                         if offset_2 == -1: break
 
+                        count_1 = 0
+                        while True:
+                            offset_3 = offset_2
+                            column_2 = column_1
+                            indent_column_2 = indent_column_1
+                            partial_tab_offset_2 = partial_tab_offset_1
+                            partial_tab_width_2 = partial_tab_width_1
+                            children_3 = [] if children_2 is not None else None
+                            while True:
+                                offset_3, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_start_blockquote(buf, offset_3, buf_eof, column_2, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
+                                if offset_3 == -1: break
+
+
+                                if offset_3 < buf_eof:
+                                    chr = buf[offset_3]
+                                    if chr in '\n':
+                                        offset_3 +=1
+                                        column_2 = 0
+                                        indent_column_2 = 0
+                                    else:
+                                        offset_3 = -1
+                                        break
+
+                                if not (column_2 == indent_column_2 == 0):
+                                    offset_3 = -1
+                                    break
+                                for indent in prefix_0:
+                                    _children, _prefix = [], []
+                                    offset_3, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = indent(buf, offset_3, buf_eof, column_2, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
+                                    if _prefix or _children:
+                                       raise Exception('bar')
+                                    if offset_3 == -1:        break
+                                    indent_column_2 = column_2
+                                if offset_3 == -1:
+                                    break
+
+                                break
+                            if offset_3 == -1:
+                                break
+                            if offset_2 == offset_3: break
+                            if children_3 is not None and children_3 is not None:
+                                children_2.extend(children_3)
+                            offset_2 = offset_3
+                            column_1 = column_2
+                            indent_column_1 = indent_column_2
+                            partial_tab_offset_1 = partial_tab_offset_2
+                            partial_tab_width_1 = partial_tab_width_2
+                            count_1 += 1
+                        if offset_2 == -1:
+                            break
+
                         break
                     if offset_2 == -1:
                         break
@@ -3538,6 +3612,8 @@ class Parser:
                     partial_tab_offset_0 = partial_tab_offset_1
                     partial_tab_width_0 = partial_tab_width_1
                     count_0 += 1
+                if count_0 < 1:
+                    offset_1 = -1
                     break
                 if offset_1 == -1:
                     break

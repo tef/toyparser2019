@@ -397,6 +397,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                     with self.case(): self.start_fenced_block()
                     with self.case(): self.start_list()
                     with self.case(): self.setext_heading_line()
+                    with self.case(): self.start_blockquote()
 
     @rule()
     def start_blockquote(self):
@@ -413,15 +414,19 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
 
     @rule()
     def blockquote(self):
-        with self.capture("blockquote"):
+        with self.capture("blockquote"), self.repeat(min=1):
             self.start_blockquote()
-            with self.optional(), self.blockquote_prefix.as_line_prefix():
+            with self.blockquote_prefix.as_line_prefix():
                 self.block_element()
                 with self.repeat():
                     self.start_of_line()
                     with self.choice():
                         with self.case():
                             self.block_element()
+            with self.repeat():
+                self.start_blockquote()
+                self.end_of_line()
+                self.start_of_line()
 
     @rule()
     def start_list(self):
