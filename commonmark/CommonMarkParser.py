@@ -683,7 +683,7 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True: # case
-                        offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_line_end(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
+                        offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_atx_heading_end(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                         if offset_2 == -1: break
 
 
@@ -1327,31 +1327,9 @@ class Parser:
                     offset_2 = offset_1
                     column_1 = column_0
                     while True: # start count
-                        count_0 = 0
-                        while offset_2 < buf_eof and count_0 < 3:
-                            chr = buf[offset_2]
-                            if chr in ' \t':
-                                if chr == '\t':
-                                    if offset_2 == partial_tab_offset_0 and partial_tab_width_0 > 0:
-                                        width = partial_tab_width_0
-                                    else:
-                                        width  = (self.tabstop-(column_1%self.tabstop))
-                                    if count_0 + width > 3:
-                                        new_width = 3 - count_0
-                                        count_0 += new_width
-                                        column_1 += new_width
-                                        partial_tab_offset_0 = offset_2
-                                        partial_tab_width_0 = width - new_width
-                                        break
-                                    count_0 += width
-                                    column_1 += width
-                                    offset_2 += 1
-                                else:
-                                    count_0 += 1
-                                    column_1 += 1
-                                    offset_2 += 1
-                            else:
-                                break
+                        if offset_2 == partial_tab_offset_0 and partial_tab_width_0 > 0:
+                            offset_2 += 1
+                            column_1 += partial_tab_width_0
 
                         break
                     if offset_2 == -1:
@@ -1476,31 +1454,9 @@ class Parser:
                                     offset_4 = offset_3
                                     column_3 = column_2
                                     while True: # start count
-                                        count_1 = 0
-                                        while offset_4 < buf_eof and count_1 < 3:
-                                            chr = buf[offset_4]
-                                            if chr in ' \t':
-                                                if chr == '\t':
-                                                    if offset_4 == partial_tab_offset_2 and partial_tab_width_2 > 0:
-                                                        width = partial_tab_width_2
-                                                    else:
-                                                        width  = (self.tabstop-(column_3%self.tabstop))
-                                                    if count_1 + width > 3:
-                                                        new_width = 3 - count_1
-                                                        count_1 += new_width
-                                                        column_3 += new_width
-                                                        partial_tab_offset_2 = offset_4
-                                                        partial_tab_width_2 = width - new_width
-                                                        break
-                                                    count_1 += width
-                                                    column_3 += width
-                                                    offset_4 += 1
-                                                else:
-                                                    count_1 += 1
-                                                    column_3 += 1
-                                                    offset_4 += 1
-                                            else:
-                                                break
+                                        if offset_4 == partial_tab_offset_2 and partial_tab_width_2 > 0:
+                                            offset_4 += 1
+                                            column_3 += partial_tab_width_2
 
                                         break
                                     if offset_4 == -1:
@@ -1612,61 +1568,6 @@ class Parser:
                                 children_3 = [] if children_2 is not None else None
                                 while True: # case
                                     offset_4 = offset_3
-                                    column_3 = column_2
-                                    while True: # start count
-                                        count_1 = 0
-                                        while offset_4 < buf_eof and count_1 < 3:
-                                            chr = buf[offset_4]
-                                            if chr in ' \t':
-                                                if chr == '\t':
-                                                    if offset_4 == partial_tab_offset_2 and partial_tab_width_2 > 0:
-                                                        width = partial_tab_width_2
-                                                    else:
-                                                        width  = (self.tabstop-(column_3%self.tabstop))
-                                                    if count_1 + width > 3:
-                                                        new_width = 3 - count_1
-                                                        count_1 += new_width
-                                                        column_3 += new_width
-                                                        partial_tab_offset_2 = offset_4
-                                                        partial_tab_width_2 = width - new_width
-                                                        break
-                                                    count_1 += width
-                                                    column_3 += width
-                                                    offset_4 += 1
-                                                else:
-                                                    count_1 += 1
-                                                    column_3 += 1
-                                                    offset_4 += 1
-                                            else:
-                                                break
-
-                                        break
-                                    if offset_4 == -1:
-                                        offset_3 = -1; break
-                                    value_6 = column_3 - column_2
-                                    offset_3 = offset_4
-                                    column_2 = column_3
-
-                                    offset_4 = offset_3
-                                    children_4 = []
-                                    while True: # start capture
-                                        if self.builder is not None:
-                                            children_4.append(value_6)
-                                        else:
-                                            children_4.append(self.Node('value', offset_4, offset_4, (), value_6))
-
-                                        break
-                                    if offset_4 == -1:
-                                        offset_3 = -1
-                                        break
-                                    if self.builder is not None:
-                                        value_7 = self.builder['code_indent'](buf, offset_3, offset_4, children_4)
-                                    else:
-                                        value_7 = self.Node('code_indent', offset_3, offset_4, children_4, None)
-                                    children_3.append(value_7)
-                                    offset_3 = offset_4
-
-                                    offset_4 = offset_3
                                     children_4 = []
                                     while True: # start capture
                                         count_1 = 0
@@ -1693,10 +1594,10 @@ class Parser:
                                         offset_3 = -1
                                         break
                                     if self.builder is not None:
-                                        value_8 = self.builder['code_line'](buf, offset_3, offset_4, children_4)
+                                        value_6 = self.builder['code_line'](buf, offset_3, offset_4, children_4)
                                     else:
-                                        value_8 = self.Node('code_line', offset_3, offset_4, children_4, None)
-                                    children_3.append(value_8)
+                                        value_6 = self.Node('code_line', offset_3, offset_4, children_4, None)
+                                    children_3.append(value_6)
                                     offset_3 = offset_4
 
                                     if offset_3 < buf_eof:
@@ -1737,28 +1638,34 @@ class Parser:
                                             offset_5 = offset_4
                                             children_5 = []
                                             while True: # start capture
-                                                if self.builder is not None:
-                                                    children_5.append(0)
-                                                else:
-                                                    children_5.append(self.Node('value', offset_5, offset_5, (), 0))
+                                                count_2 = 0
+                                                while offset_5 < buf_eof:
+                                                    chr = buf[offset_5]
+                                                    if chr in ' \t':
+                                                        if chr == '\t':
+                                                            if offset_5 == partial_tab_offset_3 and partial_tab_width_3 > 0:
+                                                                width = partial_tab_width_3
+                                                            else:
+                                                                width  = (self.tabstop-(column_3%self.tabstop))
+                                                            count_2 += width
+                                                            column_3 += width
+                                                            offset_5 += 1
+                                                        else:
+                                                            count_2 += 1
+                                                            column_3 += 1
+                                                            offset_5 += 1
+                                                    else:
+                                                        break
 
                                                 break
                                             if offset_5 == -1:
                                                 offset_4 = -1
                                                 break
                                             if self.builder is not None:
-                                                value_9 = self.builder['code_indent'](buf, offset_4, offset_5, children_5)
+                                                value_7 = self.builder['code_line'](buf, offset_4, offset_5, children_5)
                                             else:
-                                                value_9 = self.Node('code_indent', offset_4, offset_5, children_5, None)
-                                            children_4.append(value_9)
-                                            offset_4 = offset_5
-
-                                            offset_5 = offset_4
-                                            if self.builder is not None:
-                                                value_10 = self.builder['code_line'](buf, offset_4, offset_5, children_5)
-                                            else:
-                                                value_10 = self.Node('code_line', offset_4, offset_5, children_5, None)
-                                            children_4.append(value_10)
+                                                value_7 = self.Node('code_line', offset_4, offset_5, children_5, None)
+                                            children_4.append(value_7)
                                             offset_4 = offset_5
 
                                             if offset_4 < buf_eof:
@@ -1865,10 +1772,10 @@ class Parser:
                 offset_0 = -1
                 break
             if self.builder is not None:
-                value_11 = self.builder['indented_code'](buf, offset_0, offset_1, children_1)
+                value_8 = self.builder['indented_code'](buf, offset_0, offset_1, children_1)
             else:
-                value_11 = self.Node('indented_code', offset_0, offset_1, children_1, None)
-            children_0.append(value_11)
+                value_8 = self.Node('indented_code', offset_0, offset_1, children_1, None)
+            children_0.append(value_8)
             offset_0 = offset_1
 
 
@@ -2238,11 +2145,57 @@ class Parser:
                             else:
                                 break
 
-                        if buf[offset_2:offset_2+1] == '`':
-                            offset_2 += 1
-                            column_2 += 1
-                        else:
+                        count_1 = 0
+                        while True:
+                            offset_3 = offset_2
+                            column_3 = column_2
+                            indent_column_3 = indent_column_2
+                            partial_tab_offset_3 = partial_tab_offset_2
+                            partial_tab_width_3 = partial_tab_width_2
+                            children_3 = [] if children_2 is not None else None
+                            while True:
+                                if buf[offset_3:offset_3+1] == '`':
+                                    offset_3 += 1
+                                    column_3 += 1
+                                else:
+                                    offset_3 = -1
+                                    break
+
+                                count_2 = 0
+                                while offset_3 < buf_eof:
+                                    chr = buf[offset_3]
+                                    if chr in ' \t':
+                                        if chr == '\t':
+                                            if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
+                                                width = partial_tab_width_3
+                                            else:
+                                                width  = (self.tabstop-(column_3%self.tabstop))
+                                            count_2 += width
+                                            column_3 += width
+                                            offset_3 += 1
+                                        else:
+                                            count_2 += 1
+                                            column_3 += 1
+                                            offset_3 += 1
+                                    else:
+                                        break
+
+                                break
+                            if offset_3 == -1:
+                                break
+                            if offset_2 == offset_3: break
+                            if children_3 is not None and children_3 is not None:
+                                children_2.extend(children_3)
+                            offset_2 = offset_3
+                            column_2 = column_3
+                            indent_column_2 = indent_column_3
+                            partial_tab_offset_2 = partial_tab_offset_3
+                            partial_tab_width_2 = partial_tab_width_3
+                            count_1 += 1
+                        if count_1 < value_0:
                             offset_2 = -1
+                            break
+                        if offset_2 == -1:
                             break
 
                         break
@@ -2643,11 +2596,57 @@ class Parser:
                             else:
                                 break
 
-                        if buf[offset_2:offset_2+1] == '~':
-                            offset_2 += 1
-                            column_2 += 1
-                        else:
+                        count_1 = 0
+                        while True:
+                            offset_3 = offset_2
+                            column_3 = column_2
+                            indent_column_3 = indent_column_2
+                            partial_tab_offset_3 = partial_tab_offset_2
+                            partial_tab_width_3 = partial_tab_width_2
+                            children_3 = [] if children_2 is not None else None
+                            while True:
+                                if buf[offset_3:offset_3+1] == '~':
+                                    offset_3 += 1
+                                    column_3 += 1
+                                else:
+                                    offset_3 = -1
+                                    break
+
+                                count_2 = 0
+                                while offset_3 < buf_eof:
+                                    chr = buf[offset_3]
+                                    if chr in ' \t':
+                                        if chr == '\t':
+                                            if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
+                                                width = partial_tab_width_3
+                                            else:
+                                                width  = (self.tabstop-(column_3%self.tabstop))
+                                            count_2 += width
+                                            column_3 += width
+                                            offset_3 += 1
+                                        else:
+                                            count_2 += 1
+                                            column_3 += 1
+                                            offset_3 += 1
+                                    else:
+                                        break
+
+                                break
+                            if offset_3 == -1:
+                                break
+                            if offset_2 == offset_3: break
+                            if children_3 is not None and children_3 is not None:
+                                children_2.extend(children_3)
+                            offset_2 = offset_3
+                            column_2 = column_3
+                            indent_column_2 = indent_column_3
+                            partial_tab_offset_2 = partial_tab_offset_3
+                            partial_tab_width_2 = partial_tab_width_3
+                            count_1 += 1
+                        if count_1 < value_0:
                             offset_2 = -1
+                            break
+                        if offset_2 == -1:
                             break
 
                         break
@@ -3061,6 +3060,29 @@ class Parser:
                             children_3 = [] if children_2 is not None else None
                             while True: # case
                                 offset_3, column_3, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = self.parse_start_list(buf, offset_3, buf_eof, column_3, indent_column_3, prefix_0, children_3, partial_tab_offset_3, partial_tab_width_3)
+                                if offset_3 == -1: break
+
+
+
+                                break
+                            if offset_3 != -1:
+                                offset_2 = offset_3
+                                column_2 = column_3
+                                indent_column_2 = indent_column_3
+                                partial_tab_offset_2 = partial_tab_offset_3
+                                partial_tab_width_2 = partial_tab_width_3
+                                if children_3 is not None and children_3 is not None:
+                                    children_2.extend(children_3)
+                                break
+                            # end case
+                            offset_3 = offset_2
+                            column_3 = column_2
+                            indent_column_3 = indent_column_2
+                            partial_tab_offset_3 = partial_tab_offset_2
+                            partial_tab_width_3 = partial_tab_width_2
+                            children_3 = [] if children_2 is not None else None
+                            while True: # case
+                                offset_3, column_3, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = self.parse_setext_heading_line(buf, offset_3, buf_eof, column_3, indent_column_3, prefix_0, children_3, partial_tab_offset_3, partial_tab_width_3)
                                 if offset_3 == -1: break
 
 
