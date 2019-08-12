@@ -226,6 +226,7 @@ Then again to conver the GrammarNode tree into ParserNodes (make_rule())
 START_OF_LINE = 'start-of-line'
 END_OF_LINE = 'end-of-line'
 WHITESPACE = 'whitespace'
+PARTIAL_TAB = 'partial_tab'
 NEWLINE = 'newline'
 END_OF_FILE = 'end-of-file'
 
@@ -487,6 +488,11 @@ class FunctionBuilder:
         if self.block_mode: raise SyntaxError()
         self.rules.append(GrammarNode(WHITESPACE, args=dict(min=min, max=max, newline=newline), nullable=(not min), regular=True))
 
+    def partial_tab(self,):
+        if self.block_mode: raise SyntaxError()
+        self.rules.append(GrammarNode(PARTIAL_TAB))
+
+
     def capture_value(self, value):
         if self.block_mode: raise SyntaxError()
         self.rules.append(ValueNode(value))
@@ -707,6 +713,8 @@ class Builtins:
         return RepeatNode(args, min=0, max=1)
     def choice(*args):
         return ChoiceNode(args)
+    def partial_tab():
+        return GrammarNode(PARTIAL_TAB)
     whitespace = GrammarNode(WHITESPACE, args={'min':0, 'max':None, 'newline': False})
     eof = GrammarNode(END_OF_FILE)
     end_of_line = GrammarNode(END_OF_LINE)
@@ -1269,6 +1277,12 @@ def compile_python(grammar, builder=None, cython=False):
                 f"    break",
             ))
 
+        elif rule.kind == PARTIAL_TAB:
+            steps.extend((
+                f"if {offset} == {partial_tab_offset} and {partial_tab_width} > 0:",
+                f"    {offset} += 1",
+                f"    {column} += {partial_tab_width}",
+            ))
 
         elif rule.kind == WHITESPACE:
             _min = rule.args['min']

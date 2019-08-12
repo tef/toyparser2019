@@ -30,12 +30,12 @@ cdef class Parser:
         end = len(buf) if end is None else end
         column, indent_column, eof = offset, offset, end
         prefix, children = [], []
-        new_offset, column, indent_column, leftover_offset, leftover_count = self.parse_document(buf, offset, eof, column, indent_column, prefix, children, 0, 0)
+        new_offset, column, indent_column, partial_tab_offset, partial_tab_width = self.parse_document(buf, offset, eof, column, indent_column, prefix, children, 0, 0)
         if children and new_offset == end: return children[-1]
         print('no', offset, new_offset, end, buf[new_offset:])
         if err is not None: raise err(buf, new_offset, 'no')
 
-    cdef (int, int, int, int, int) parse_literal(self, str buf, int offset_0, int buf_eof, int column_0, int indent_column_0,  list prefix_0, list children_0, int leftover_offset_0, int leftover_count_0):
+    cdef (int, int, int, int, int) parse_literal(self, str buf, int offset_0, int buf_eof, int column_0, int indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
         cdef Py_UCS4 chr
         cdef int offset_1
         cdef int column_1
@@ -43,18 +43,18 @@ cdef class Parser:
         cdef list children_1
 
         cdef int indent_column_1
-        cdef int leftover_offset_1
-        cdef int leftover_count_1
+        cdef int partial_tab_offset_1
+        cdef int partial_tab_width_1
         while True: # note: return at end of loop
             while True: # start choice
                 offset_1 = offset_0
                 column_1 = column_0
                 indent_column_1 = indent_column_0
-                leftover_offset_1 = leftover_offset_0
-                leftover_count_1 = leftover_count_0
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_list_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, leftover_offset_1, leftover_count_1)
+                    offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_list_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                     if offset_1 == -1: break
 
 
@@ -63,8 +63,8 @@ cdef class Parser:
                     offset_0 = offset_1
                     column_0 = column_1
                     indent_column_0 = indent_column_1
-                    leftover_offset_0 = leftover_offset_1
-                    leftover_count_0 = leftover_count_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
@@ -72,11 +72,11 @@ cdef class Parser:
                 offset_1 = offset_0
                 column_1 = column_0
                 indent_column_1 = indent_column_0
-                leftover_offset_1 = leftover_offset_0
-                leftover_count_1 = leftover_count_0
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_object_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, leftover_offset_1, leftover_count_1)
+                    offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_object_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                     if offset_1 == -1: break
 
 
@@ -85,8 +85,8 @@ cdef class Parser:
                     offset_0 = offset_1
                     column_0 = column_1
                     indent_column_0 = indent_column_1
-                    leftover_offset_0 = leftover_offset_1
-                    leftover_count_0 = leftover_count_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
@@ -94,11 +94,11 @@ cdef class Parser:
                 offset_1 = offset_0
                 column_1 = column_0
                 indent_column_1 = indent_column_0
-                leftover_offset_1 = leftover_offset_0
-                leftover_count_1 = leftover_count_0
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_string_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, leftover_offset_1, leftover_count_1)
+                    offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_string_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                     if offset_1 == -1: break
 
 
@@ -107,8 +107,8 @@ cdef class Parser:
                     offset_0 = offset_1
                     column_0 = column_1
                     indent_column_0 = indent_column_1
-                    leftover_offset_0 = leftover_offset_1
-                    leftover_count_0 = leftover_count_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
@@ -116,11 +116,11 @@ cdef class Parser:
                 offset_1 = offset_0
                 column_1 = column_0
                 indent_column_1 = indent_column_0
-                leftover_offset_1 = leftover_offset_0
-                leftover_count_1 = leftover_count_0
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_number_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, leftover_offset_1, leftover_count_1)
+                    offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_number_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                     if offset_1 == -1: break
 
 
@@ -129,8 +129,8 @@ cdef class Parser:
                     offset_0 = offset_1
                     column_0 = column_1
                     indent_column_0 = indent_column_1
-                    leftover_offset_0 = leftover_offset_1
-                    leftover_count_0 = leftover_count_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
@@ -138,11 +138,11 @@ cdef class Parser:
                 offset_1 = offset_0
                 column_1 = column_0
                 indent_column_1 = indent_column_0
-                leftover_offset_1 = leftover_offset_0
-                leftover_count_1 = leftover_count_0
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_true_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, leftover_offset_1, leftover_count_1)
+                    offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_true_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                     if offset_1 == -1: break
 
 
@@ -151,8 +151,8 @@ cdef class Parser:
                     offset_0 = offset_1
                     column_0 = column_1
                     indent_column_0 = indent_column_1
-                    leftover_offset_0 = leftover_offset_1
-                    leftover_count_0 = leftover_count_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
@@ -160,11 +160,11 @@ cdef class Parser:
                 offset_1 = offset_0
                 column_1 = column_0
                 indent_column_1 = indent_column_0
-                leftover_offset_1 = leftover_offset_0
-                leftover_count_1 = leftover_count_0
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_false_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, leftover_offset_1, leftover_count_1)
+                    offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_false_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                     if offset_1 == -1: break
 
 
@@ -173,8 +173,8 @@ cdef class Parser:
                     offset_0 = offset_1
                     column_0 = column_1
                     indent_column_0 = indent_column_1
-                    leftover_offset_0 = leftover_offset_1
-                    leftover_count_0 = leftover_count_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
@@ -182,11 +182,11 @@ cdef class Parser:
                 offset_1 = offset_0
                 column_1 = column_0
                 indent_column_1 = indent_column_0
-                leftover_offset_1 = leftover_offset_0
-                leftover_count_1 = leftover_count_0
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_null_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, leftover_offset_1, leftover_count_1)
+                    offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_null_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                     if offset_1 == -1: break
 
 
@@ -195,8 +195,8 @@ cdef class Parser:
                     offset_0 = offset_1
                     column_0 = column_1
                     indent_column_0 = indent_column_1
-                    leftover_offset_0 = leftover_offset_1
-                    leftover_count_0 = leftover_count_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
@@ -207,9 +207,9 @@ cdef class Parser:
                 break
 
             break
-        return offset_0, column_0, indent_column_0, leftover_offset_0, leftover_count_0
+        return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
-    cdef (int, int, int, int, int) parse_true_literal(self, str buf, int offset_0, int buf_eof, int column_0, int indent_column_0,  list prefix_0, list children_0, int leftover_offset_0, int leftover_count_0):
+    cdef (int, int, int, int, int) parse_true_literal(self, str buf, int offset_0, int buf_eof, int column_0, int indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
         cdef Py_UCS4 chr
         cdef int offset_1
 
@@ -242,9 +242,9 @@ cdef class Parser:
             offset_0 = offset_1
 
             break
-        return offset_0, column_0, indent_column_0, leftover_offset_0, leftover_count_0
+        return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
-    cdef (int, int, int, int, int) parse_false_literal(self, str buf, int offset_0, int buf_eof, int column_0, int indent_column_0,  list prefix_0, list children_0, int leftover_offset_0, int leftover_count_0):
+    cdef (int, int, int, int, int) parse_false_literal(self, str buf, int offset_0, int buf_eof, int column_0, int indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
         cdef Py_UCS4 chr
         cdef int offset_1
 
@@ -277,9 +277,9 @@ cdef class Parser:
             offset_0 = offset_1
 
             break
-        return offset_0, column_0, indent_column_0, leftover_offset_0, leftover_count_0
+        return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
-    cdef (int, int, int, int, int) parse_null_literal(self, str buf, int offset_0, int buf_eof, int column_0, int indent_column_0,  list prefix_0, list children_0, int leftover_offset_0, int leftover_count_0):
+    cdef (int, int, int, int, int) parse_null_literal(self, str buf, int offset_0, int buf_eof, int column_0, int indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
         cdef Py_UCS4 chr
         cdef int offset_1
 
@@ -312,9 +312,9 @@ cdef class Parser:
             offset_0 = offset_1
 
             break
-        return offset_0, column_0, indent_column_0, leftover_offset_0, leftover_count_0
+        return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
-    cdef (int, int, int, int, int) parse_identifier(self, str buf, int offset_0, int buf_eof, int column_0, int indent_column_0,  list prefix_0, list children_0, int leftover_offset_0, int leftover_count_0):
+    cdef (int, int, int, int, int) parse_identifier(self, str buf, int offset_0, int buf_eof, int column_0, int indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
         cdef Py_UCS4 chr
         cdef int offset_1, offset_2, offset_3
         cdef int column_1, column_2
@@ -322,15 +322,15 @@ cdef class Parser:
         cdef list children_1, children_2, children_3
         cdef int count_1
         cdef int indent_column_1, indent_column_2
-        cdef int leftover_offset_1, leftover_offset_2
-        cdef int leftover_count_1, leftover_count_2
+        cdef int partial_tab_offset_1, partial_tab_offset_2
+        cdef int partial_tab_width_1, partial_tab_width_2
         while True: # note: return at end of loop
             while True: # start choice
                 offset_1 = offset_0
                 column_1 = column_0
                 indent_column_1 = indent_column_0
-                leftover_offset_1 = leftover_offset_0
-                leftover_count_1 = leftover_count_0
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
                     offset_2 = offset_1
@@ -341,8 +341,8 @@ cdef class Parser:
                             offset_3 = offset_2
                             column_2 = column_1
                             indent_column_2 = indent_column_1
-                            leftover_offset_2 = leftover_offset_1
-                            leftover_count_2 = leftover_count_1
+                            partial_tab_offset_2 = partial_tab_offset_1
+                            partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True:
                                 if offset_3 == buf_eof:
@@ -373,8 +373,8 @@ cdef class Parser:
                             offset_2 = offset_3
                             column_1 = column_2
                             indent_column_1 = indent_column_2
-                            leftover_offset_1 = leftover_offset_2
-                            leftover_count_1 = leftover_count_2
+                            partial_tab_offset_1 = partial_tab_offset_2
+                            partial_tab_width_1 = partial_tab_width_2
                             count_0 += 1
                         if count_0 < 1:
                             offset_2 = -1
@@ -399,8 +399,8 @@ cdef class Parser:
                     offset_0 = offset_1
                     column_0 = column_1
                     indent_column_0 = indent_column_1
-                    leftover_offset_0 = leftover_offset_1
-                    leftover_count_0 = leftover_count_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
@@ -408,11 +408,11 @@ cdef class Parser:
                 offset_1 = offset_0
                 column_1 = column_0
                 indent_column_1 = indent_column_0
-                leftover_offset_1 = leftover_offset_0
-                leftover_count_1 = leftover_count_0
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_string_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, leftover_offset_1, leftover_count_1)
+                    offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_string_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                     if offset_1 == -1: break
 
 
@@ -422,8 +422,8 @@ cdef class Parser:
                     offset_0 = offset_1
                     column_0 = column_1
                     indent_column_0 = indent_column_1
-                    leftover_offset_0 = leftover_offset_1
-                    leftover_count_0 = leftover_count_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
@@ -434,9 +434,9 @@ cdef class Parser:
                 break
 
             break
-        return offset_0, column_0, indent_column_0, leftover_offset_0, leftover_count_0
+        return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
-    cdef (int, int, int, int, int) parse_number_literal(self, str buf, int offset_0, int buf_eof, int column_0, int indent_column_0,  list prefix_0, list children_0, int leftover_offset_0, int leftover_count_0):
+    cdef (int, int, int, int, int) parse_number_literal(self, str buf, int offset_0, int buf_eof, int column_0, int indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
         cdef Py_UCS4 chr
         cdef int offset_1, offset_2, offset_3, offset_4
         cdef int column_1, column_2, column_3
@@ -444,8 +444,8 @@ cdef class Parser:
         cdef list children_1, children_2, children_3, children_4
         cdef int count_1, count_2, count_3
         cdef int indent_column_1, indent_column_2, indent_column_3
-        cdef int leftover_offset_1, leftover_offset_2, leftover_offset_3
-        cdef int leftover_count_1, leftover_count_2, leftover_count_3
+        cdef int partial_tab_offset_1, partial_tab_offset_2, partial_tab_offset_3
+        cdef int partial_tab_width_1, partial_tab_width_2, partial_tab_width_3
         while True: # note: return at end of loop
             offset_1 = offset_0
             children_1 = []
@@ -455,8 +455,8 @@ cdef class Parser:
                     offset_2 = offset_1
                     column_1 = column_0
                     indent_column_1 = indent_column_0
-                    leftover_offset_1 = leftover_offset_0
-                    leftover_count_1 = leftover_count_0
+                    partial_tab_offset_1 = partial_tab_offset_0
+                    partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
                         if offset_2 == buf_eof:
@@ -484,8 +484,8 @@ cdef class Parser:
                     offset_1 = offset_2
                     column_0 = column_1
                     indent_column_0 = indent_column_1
-                    leftover_offset_0 = leftover_offset_1
-                    leftover_count_0 = leftover_count_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
                     count_0 += 1
                     break
                 if offset_1 == -1:
@@ -496,8 +496,8 @@ cdef class Parser:
                     offset_2 = offset_1
                     column_1 = column_0
                     indent_column_1 = indent_column_0
-                    leftover_offset_1 = leftover_offset_0
-                    leftover_count_1 = leftover_count_0
+                    partial_tab_offset_1 = partial_tab_offset_0
+                    partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
                         if offset_2 == buf_eof:
@@ -522,8 +522,8 @@ cdef class Parser:
                     offset_1 = offset_2
                     column_0 = column_1
                     indent_column_0 = indent_column_1
-                    leftover_offset_0 = leftover_offset_1
-                    leftover_count_0 = leftover_count_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
                     count_0 += 1
                 if count_0 < 1:
                     offset_1 = -1
@@ -536,8 +536,8 @@ cdef class Parser:
                     offset_2 = offset_1
                     column_1 = column_0
                     indent_column_1 = indent_column_0
-                    leftover_offset_1 = leftover_offset_0
-                    leftover_count_1 = leftover_count_0
+                    partial_tab_offset_1 = partial_tab_offset_0
+                    partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
                         if offset_2 + 1 <= buf_eof and buf[offset_2+0] == '.':
@@ -552,8 +552,8 @@ cdef class Parser:
                             offset_3 = offset_2
                             column_2 = column_1
                             indent_column_2 = indent_column_1
-                            leftover_offset_2 = leftover_offset_1
-                            leftover_count_2 = leftover_count_1
+                            partial_tab_offset_2 = partial_tab_offset_1
+                            partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True:
                                 if offset_3 == buf_eof:
@@ -578,8 +578,8 @@ cdef class Parser:
                             offset_2 = offset_3
                             column_1 = column_2
                             indent_column_1 = indent_column_2
-                            leftover_offset_1 = leftover_offset_2
-                            leftover_count_1 = leftover_count_2
+                            partial_tab_offset_1 = partial_tab_offset_2
+                            partial_tab_width_1 = partial_tab_width_2
                             count_1 += 1
                         if offset_2 == -1:
                             break
@@ -593,8 +593,8 @@ cdef class Parser:
                     offset_1 = offset_2
                     column_0 = column_1
                     indent_column_0 = indent_column_1
-                    leftover_offset_0 = leftover_offset_1
-                    leftover_count_0 = leftover_count_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
                     count_0 += 1
                     break
                 if offset_1 == -1:
@@ -605,8 +605,8 @@ cdef class Parser:
                     offset_2 = offset_1
                     column_1 = column_0
                     indent_column_1 = indent_column_0
-                    leftover_offset_1 = leftover_offset_0
-                    leftover_count_1 = leftover_count_0
+                    partial_tab_offset_1 = partial_tab_offset_0
+                    partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
                         if offset_2 + 1 <= buf_eof and buf[offset_2+0] == 'e':
@@ -624,8 +624,8 @@ cdef class Parser:
                             offset_3 = offset_2
                             column_2 = column_1
                             indent_column_2 = indent_column_1
-                            leftover_offset_2 = leftover_offset_1
-                            leftover_count_2 = leftover_count_1
+                            partial_tab_offset_2 = partial_tab_offset_1
+                            partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True:
                                 if offset_3 + 1 <= buf_eof and buf[offset_3+0] == '+':
@@ -643,8 +643,8 @@ cdef class Parser:
                                     offset_4 = offset_3
                                     column_3 = column_2
                                     indent_column_3 = indent_column_2
-                                    leftover_offset_3 = leftover_offset_2
-                                    leftover_count_3 = leftover_count_2
+                                    partial_tab_offset_3 = partial_tab_offset_2
+                                    partial_tab_width_3 = partial_tab_width_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
                                         if offset_4 == buf_eof:
@@ -669,8 +669,8 @@ cdef class Parser:
                                     offset_3 = offset_4
                                     column_2 = column_3
                                     indent_column_2 = indent_column_3
-                                    leftover_offset_2 = leftover_offset_3
-                                    leftover_count_2 = leftover_count_3
+                                    partial_tab_offset_2 = partial_tab_offset_3
+                                    partial_tab_width_2 = partial_tab_width_3
                                     count_2 += 1
                                 if offset_3 == -1:
                                     break
@@ -684,8 +684,8 @@ cdef class Parser:
                             offset_2 = offset_3
                             column_1 = column_2
                             indent_column_1 = indent_column_2
-                            leftover_offset_1 = leftover_offset_2
-                            leftover_count_1 = leftover_count_2
+                            partial_tab_offset_1 = partial_tab_offset_2
+                            partial_tab_width_1 = partial_tab_width_2
                             count_1 += 1
                             break
                         if offset_2 == -1:
@@ -700,8 +700,8 @@ cdef class Parser:
                     offset_1 = offset_2
                     column_0 = column_1
                     indent_column_0 = indent_column_1
-                    leftover_offset_0 = leftover_offset_1
-                    leftover_count_0 = leftover_count_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
                     count_0 += 1
                     break
                 if offset_1 == -1:
@@ -719,9 +719,9 @@ cdef class Parser:
             offset_0 = offset_1
 
             break
-        return offset_0, column_0, indent_column_0, leftover_offset_0, leftover_count_0
+        return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
-    cdef (int, int, int, int, int) parse_string_literal(self, str buf, int offset_0, int buf_eof, int column_0, int indent_column_0,  list prefix_0, list children_0, int leftover_offset_0, int leftover_count_0):
+    cdef (int, int, int, int, int) parse_string_literal(self, str buf, int offset_0, int buf_eof, int column_0, int indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
         cdef Py_UCS4 chr
         cdef int offset_1, offset_2, offset_3
         cdef int column_1, column_2
@@ -729,8 +729,8 @@ cdef class Parser:
         cdef list children_1, children_2, children_3
         cdef int count_1
         cdef int indent_column_1, indent_column_2
-        cdef int leftover_offset_1, leftover_offset_2
-        cdef int leftover_count_1, leftover_count_2
+        cdef int partial_tab_offset_1, partial_tab_offset_2
+        cdef int partial_tab_width_1, partial_tab_width_2
         while True: # note: return at end of loop
             if offset_0 + 1 <= buf_eof and buf[offset_0+0] == '"':
                 offset_0 += 1
@@ -747,16 +747,16 @@ cdef class Parser:
                     offset_2 = offset_1
                     column_1 = column_0
                     indent_column_1 = indent_column_0
-                    leftover_offset_1 = leftover_offset_0
-                    leftover_count_1 = leftover_count_0
+                    partial_tab_offset_1 = partial_tab_offset_0
+                    partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
                         while True: # start choice
                             offset_3 = offset_2
                             column_2 = column_1
                             indent_column_2 = indent_column_1
-                            leftover_offset_2 = leftover_offset_1
-                            leftover_count_2 = leftover_count_1
+                            partial_tab_offset_2 = partial_tab_offset_1
+                            partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True: # case
                                 if offset_3 + 2 <= buf_eof and buf[offset_3+0] == '\\' and buf[offset_3+1] == 'u':
@@ -848,8 +848,8 @@ cdef class Parser:
                                 offset_2 = offset_3
                                 column_1 = column_2
                                 indent_column_1 = indent_column_2
-                                leftover_offset_1 = leftover_offset_2
-                                leftover_count_1 = leftover_count_2
+                                partial_tab_offset_1 = partial_tab_offset_2
+                                partial_tab_width_1 = partial_tab_width_2
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 break
@@ -857,8 +857,8 @@ cdef class Parser:
                             offset_3 = offset_2
                             column_2 = column_1
                             indent_column_2 = indent_column_1
-                            leftover_offset_2 = leftover_offset_1
-                            leftover_count_2 = leftover_count_1
+                            partial_tab_offset_2 = partial_tab_offset_1
+                            partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True: # case
                                 if offset_3 + 1 <= buf_eof and buf[offset_3+0] == '\\':
@@ -908,8 +908,8 @@ cdef class Parser:
                                 offset_2 = offset_3
                                 column_1 = column_2
                                 indent_column_1 = indent_column_2
-                                leftover_offset_1 = leftover_offset_2
-                                leftover_count_1 = leftover_count_2
+                                partial_tab_offset_1 = partial_tab_offset_2
+                                partial_tab_width_1 = partial_tab_width_2
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 break
@@ -917,8 +917,8 @@ cdef class Parser:
                             offset_3 = offset_2
                             column_2 = column_1
                             indent_column_2 = indent_column_1
-                            leftover_offset_2 = leftover_offset_1
-                            leftover_count_2 = leftover_count_1
+                            partial_tab_offset_2 = partial_tab_offset_1
+                            partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True: # case
                                 if offset_3 == buf_eof:
@@ -943,8 +943,8 @@ cdef class Parser:
                                 offset_2 = offset_3
                                 column_1 = column_2
                                 indent_column_1 = indent_column_2
-                                leftover_offset_1 = leftover_offset_2
-                                leftover_count_1 = leftover_count_2
+                                partial_tab_offset_1 = partial_tab_offset_2
+                                partial_tab_width_1 = partial_tab_width_2
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 break
@@ -963,8 +963,8 @@ cdef class Parser:
                     offset_1 = offset_2
                     column_0 = column_1
                     indent_column_0 = indent_column_1
-                    leftover_offset_0 = leftover_offset_1
-                    leftover_count_0 = leftover_count_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
                     count_0 += 1
                 if offset_1 == -1:
                     break
@@ -989,9 +989,9 @@ cdef class Parser:
 
 
             break
-        return offset_0, column_0, indent_column_0, leftover_offset_0, leftover_count_0
+        return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
-    cdef (int, int, int, int, int) parse_list_literal(self, str buf, int offset_0, int buf_eof, int column_0, int indent_column_0,  list prefix_0, list children_0, int leftover_offset_0, int leftover_count_0):
+    cdef (int, int, int, int, int) parse_list_literal(self, str buf, int offset_0, int buf_eof, int column_0, int indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
         cdef Py_UCS4 chr
         cdef int offset_1, offset_2, offset_3
         cdef int column_1, column_2
@@ -999,8 +999,8 @@ cdef class Parser:
         cdef list children_1, children_2, children_3
         cdef int count_1, count_2
         cdef int indent_column_1, indent_column_2
-        cdef int leftover_offset_1, leftover_offset_2
-        cdef int leftover_count_1, leftover_count_2
+        cdef int partial_tab_offset_1, partial_tab_offset_2
+        cdef int partial_tab_width_1, partial_tab_width_2
         while True: # note: return at end of loop
             if offset_0 + 1 <= buf_eof and buf[offset_0+0] == '[':
                 offset_0 += 1
@@ -1010,8 +1010,6 @@ cdef class Parser:
                 break
 
             count_0 = 0
-            if offset_0 == leftover_offset_0 and leftover_count_0 > 0:
-                 count_0 += leftover_count_0
             while offset_0 < buf_eof:
                 chr = buf[offset_0]
                 if chr == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
@@ -1024,10 +1022,18 @@ cdef class Parser:
                     indent_column_0 = 0
                     count_0 +=1
                 elif chr in ' \t':
-                    width  = (self.tabstop-(column_0%self.tabstop)) if chr == '	' else 1
-                    count_0 += width
-                    column_0 += width
-                    offset_0 +=1
+                    if chr == '\t':
+                        if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
+                            width = partial_tab_width_0
+                        else:
+                            width  = (self.tabstop-(column_0%self.tabstop))
+                        count_0 += width
+                        column_0 += width
+                        offset_0 += 1
+                    else:
+                        count_0 += 1
+                        column_0 += 1
+                        offset_0 += 1
                 else:
                     break
 
@@ -1039,11 +1045,11 @@ cdef class Parser:
                     offset_2 = offset_1
                     column_1 = column_0
                     indent_column_1 = indent_column_0
-                    leftover_offset_1 = leftover_offset_0
-                    leftover_count_1 = leftover_count_0
+                    partial_tab_offset_1 = partial_tab_offset_0
+                    partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
-                        offset_2, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_literal(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, leftover_offset_1, leftover_count_1)
+                        offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_literal(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                         if offset_2 == -1: break
 
 
@@ -1052,13 +1058,11 @@ cdef class Parser:
                             offset_3 = offset_2
                             column_2 = column_1
                             indent_column_2 = indent_column_1
-                            leftover_offset_2 = leftover_offset_1
-                            leftover_count_2 = leftover_count_1
+                            partial_tab_offset_2 = partial_tab_offset_1
+                            partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True:
                                 count_2 = 0
-                                if offset_3 == leftover_offset_2 and leftover_count_2 > 0:
-                                     count_2 += leftover_count_2
                                 while offset_3 < buf_eof:
                                     chr = buf[offset_3]
                                     if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
@@ -1071,10 +1075,18 @@ cdef class Parser:
                                         indent_column_2 = 0
                                         count_2 +=1
                                     elif chr in ' \t':
-                                        width  = (self.tabstop-(column_2%self.tabstop)) if chr == '	' else 1
-                                        count_2 += width
-                                        column_2 += width
-                                        offset_3 +=1
+                                        if chr == '\t':
+                                            if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
+                                                width = partial_tab_width_2
+                                            else:
+                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                            count_2 += width
+                                            column_2 += width
+                                            offset_3 += 1
+                                        else:
+                                            count_2 += 1
+                                            column_2 += 1
+                                            offset_3 += 1
                                     else:
                                         break
 
@@ -1086,8 +1098,6 @@ cdef class Parser:
                                     break
 
                                 count_2 = 0
-                                if offset_3 == leftover_offset_2 and leftover_count_2 > 0:
-                                     count_2 += leftover_count_2
                                 while offset_3 < buf_eof:
                                     chr = buf[offset_3]
                                     if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
@@ -1100,14 +1110,22 @@ cdef class Parser:
                                         indent_column_2 = 0
                                         count_2 +=1
                                     elif chr in ' \t':
-                                        width  = (self.tabstop-(column_2%self.tabstop)) if chr == '	' else 1
-                                        count_2 += width
-                                        column_2 += width
-                                        offset_3 +=1
+                                        if chr == '\t':
+                                            if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
+                                                width = partial_tab_width_2
+                                            else:
+                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                            count_2 += width
+                                            column_2 += width
+                                            offset_3 += 1
+                                        else:
+                                            count_2 += 1
+                                            column_2 += 1
+                                            offset_3 += 1
                                     else:
                                         break
 
-                                offset_3, column_2, indent_column_2, leftover_offset_2, leftover_count_2 = self.parse_literal(buf, offset_3, buf_eof, column_2, indent_column_2, prefix_0, children_3, leftover_offset_2, leftover_count_2)
+                                offset_3, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_literal(buf, offset_3, buf_eof, column_2, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
                                 if offset_3 == -1: break
 
 
@@ -1120,15 +1138,13 @@ cdef class Parser:
                             offset_2 = offset_3
                             column_1 = column_2
                             indent_column_1 = indent_column_2
-                            leftover_offset_1 = leftover_offset_2
-                            leftover_count_1 = leftover_count_2
+                            partial_tab_offset_1 = partial_tab_offset_2
+                            partial_tab_width_1 = partial_tab_width_2
                             count_1 += 1
                         if offset_2 == -1:
                             break
 
                         count_1 = 0
-                        if offset_2 == leftover_offset_1 and leftover_count_1 > 0:
-                             count_1 += leftover_count_1
                         while offset_2 < buf_eof:
                             chr = buf[offset_2]
                             if chr == '\r' and offset_2 + 1 < buf_eof and buf[offset_2+1] == '\n':
@@ -1141,10 +1157,18 @@ cdef class Parser:
                                 indent_column_1 = 0
                                 count_1 +=1
                             elif chr in ' \t':
-                                width  = (self.tabstop-(column_1%self.tabstop)) if chr == '	' else 1
-                                count_1 += width
-                                column_1 += width
-                                offset_2 +=1
+                                if chr == '\t':
+                                    if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
+                                        width = partial_tab_width_1
+                                    else:
+                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                    count_1 += width
+                                    column_1 += width
+                                    offset_2 += 1
+                                else:
+                                    count_1 += 1
+                                    column_1 += 1
+                                    offset_2 += 1
                             else:
                                 break
 
@@ -1153,8 +1177,8 @@ cdef class Parser:
                             offset_3 = offset_2
                             column_2 = column_1
                             indent_column_2 = indent_column_1
-                            leftover_offset_2 = leftover_offset_1
-                            leftover_count_2 = leftover_count_1
+                            partial_tab_offset_2 = partial_tab_offset_1
+                            partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True:
                                 if offset_3 + 1 <= buf_eof and buf[offset_3+0] == ',':
@@ -1165,8 +1189,6 @@ cdef class Parser:
                                     break
 
                                 count_2 = 0
-                                if offset_3 == leftover_offset_2 and leftover_count_2 > 0:
-                                     count_2 += leftover_count_2
                                 while offset_3 < buf_eof:
                                     chr = buf[offset_3]
                                     if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
@@ -1179,10 +1201,18 @@ cdef class Parser:
                                         indent_column_2 = 0
                                         count_2 +=1
                                     elif chr in ' \t':
-                                        width  = (self.tabstop-(column_2%self.tabstop)) if chr == '	' else 1
-                                        count_2 += width
-                                        column_2 += width
-                                        offset_3 +=1
+                                        if chr == '\t':
+                                            if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
+                                                width = partial_tab_width_2
+                                            else:
+                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                            count_2 += width
+                                            column_2 += width
+                                            offset_3 += 1
+                                        else:
+                                            count_2 += 1
+                                            column_2 += 1
+                                            offset_3 += 1
                                     else:
                                         break
 
@@ -1195,8 +1225,8 @@ cdef class Parser:
                             offset_2 = offset_3
                             column_1 = column_2
                             indent_column_1 = indent_column_2
-                            leftover_offset_1 = leftover_offset_2
-                            leftover_count_1 = leftover_count_2
+                            partial_tab_offset_1 = partial_tab_offset_2
+                            partial_tab_width_1 = partial_tab_width_2
                             count_1 += 1
                             break
                         if offset_2 == -1:
@@ -1211,8 +1241,8 @@ cdef class Parser:
                     offset_1 = offset_2
                     column_0 = column_1
                     indent_column_0 = indent_column_1
-                    leftover_offset_0 = leftover_offset_1
-                    leftover_count_0 = leftover_count_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
                     count_0 += 1
                     break
                 if offset_1 == -1:
@@ -1238,9 +1268,9 @@ cdef class Parser:
 
 
             break
-        return offset_0, column_0, indent_column_0, leftover_offset_0, leftover_count_0
+        return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
-    cdef (int, int, int, int, int) parse_object_literal(self, str buf, int offset_0, int buf_eof, int column_0, int indent_column_0,  list prefix_0, list children_0, int leftover_offset_0, int leftover_count_0):
+    cdef (int, int, int, int, int) parse_object_literal(self, str buf, int offset_0, int buf_eof, int column_0, int indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
         cdef Py_UCS4 chr
         cdef int offset_1, offset_2, offset_3
         cdef int column_1, column_2
@@ -1248,8 +1278,8 @@ cdef class Parser:
         cdef list children_1, children_2, children_3
         cdef int count_1, count_2
         cdef int indent_column_1, indent_column_2
-        cdef int leftover_offset_1, leftover_offset_2
-        cdef int leftover_count_1, leftover_count_2
+        cdef int partial_tab_offset_1, partial_tab_offset_2
+        cdef int partial_tab_width_1, partial_tab_width_2
         while True: # note: return at end of loop
             if offset_0 + 1 <= buf_eof and buf[offset_0+0] == '{':
                 offset_0 += 1
@@ -1259,8 +1289,6 @@ cdef class Parser:
                 break
 
             count_0 = 0
-            if offset_0 == leftover_offset_0 and leftover_count_0 > 0:
-                 count_0 += leftover_count_0
             while offset_0 < buf_eof:
                 chr = buf[offset_0]
                 if chr == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
@@ -1273,10 +1301,18 @@ cdef class Parser:
                     indent_column_0 = 0
                     count_0 +=1
                 elif chr in ' \t':
-                    width  = (self.tabstop-(column_0%self.tabstop)) if chr == '	' else 1
-                    count_0 += width
-                    column_0 += width
-                    offset_0 +=1
+                    if chr == '\t':
+                        if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
+                            width = partial_tab_width_0
+                        else:
+                            width  = (self.tabstop-(column_0%self.tabstop))
+                        count_0 += width
+                        column_0 += width
+                        offset_0 += 1
+                    else:
+                        count_0 += 1
+                        column_0 += 1
+                        offset_0 += 1
                 else:
                     break
 
@@ -1288,23 +1324,30 @@ cdef class Parser:
                     offset_2 = offset_1
                     column_1 = column_0
                     indent_column_1 = indent_column_0
-                    leftover_offset_1 = leftover_offset_0
-                    leftover_count_1 = leftover_count_0
+                    partial_tab_offset_1 = partial_tab_offset_0
+                    partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
-                        offset_2, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_string_literal(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, leftover_offset_1, leftover_count_1)
+                        offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_string_literal(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                         if offset_2 == -1: break
 
 
                         count_1 = 0
-                        if offset_2 == leftover_offset_1 and leftover_count_1 > 0:
-                             count_1 += leftover_count_1
                         while offset_2 < buf_eof:
                             chr = buf[offset_2]
                             if chr in ' \t':
-                                width  = (self.tabstop-(column_1%self.tabstop)) if chr == '	' else 1
-                                count_1 += width
-                                column_1 += width
+                                if chr == '\t':
+                                    if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
+                                        width = partial_tab_width_1
+                                    else:
+                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                    count_1 += width
+                                    column_1 += width
+                                    offset_2 += 1
+                                else:
+                                    count_1 += 1
+                                    column_1 += 1
+                                    offset_2 += 1
                             else:
                                 break
 
@@ -1316,8 +1359,6 @@ cdef class Parser:
                             break
 
                         count_1 = 0
-                        if offset_2 == leftover_offset_1 and leftover_count_1 > 0:
-                             count_1 += leftover_count_1
                         while offset_2 < buf_eof:
                             chr = buf[offset_2]
                             if chr == '\r' and offset_2 + 1 < buf_eof and buf[offset_2+1] == '\n':
@@ -1330,14 +1371,22 @@ cdef class Parser:
                                 indent_column_1 = 0
                                 count_1 +=1
                             elif chr in ' \t':
-                                width  = (self.tabstop-(column_1%self.tabstop)) if chr == '	' else 1
-                                count_1 += width
-                                column_1 += width
-                                offset_2 +=1
+                                if chr == '\t':
+                                    if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
+                                        width = partial_tab_width_1
+                                    else:
+                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                    count_1 += width
+                                    column_1 += width
+                                    offset_2 += 1
+                                else:
+                                    count_1 += 1
+                                    column_1 += 1
+                                    offset_2 += 1
                             else:
                                 break
 
-                        offset_2, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_literal(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, leftover_offset_1, leftover_count_1)
+                        offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_literal(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                         if offset_2 == -1: break
 
 
@@ -1346,13 +1395,11 @@ cdef class Parser:
                             offset_3 = offset_2
                             column_2 = column_1
                             indent_column_2 = indent_column_1
-                            leftover_offset_2 = leftover_offset_1
-                            leftover_count_2 = leftover_count_1
+                            partial_tab_offset_2 = partial_tab_offset_1
+                            partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True:
                                 count_2 = 0
-                                if offset_3 == leftover_offset_2 and leftover_count_2 > 0:
-                                     count_2 += leftover_count_2
                                 while offset_3 < buf_eof:
                                     chr = buf[offset_3]
                                     if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
@@ -1365,10 +1412,18 @@ cdef class Parser:
                                         indent_column_2 = 0
                                         count_2 +=1
                                     elif chr in ' \t':
-                                        width  = (self.tabstop-(column_2%self.tabstop)) if chr == '	' else 1
-                                        count_2 += width
-                                        column_2 += width
-                                        offset_3 +=1
+                                        if chr == '\t':
+                                            if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
+                                                width = partial_tab_width_2
+                                            else:
+                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                            count_2 += width
+                                            column_2 += width
+                                            offset_3 += 1
+                                        else:
+                                            count_2 += 1
+                                            column_2 += 1
+                                            offset_3 += 1
                                     else:
                                         break
 
@@ -1380,8 +1435,6 @@ cdef class Parser:
                                     break
 
                                 count_2 = 0
-                                if offset_3 == leftover_offset_2 and leftover_count_2 > 0:
-                                     count_2 += leftover_count_2
                                 while offset_3 < buf_eof:
                                     chr = buf[offset_3]
                                     if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
@@ -1394,26 +1447,41 @@ cdef class Parser:
                                         indent_column_2 = 0
                                         count_2 +=1
                                     elif chr in ' \t':
-                                        width  = (self.tabstop-(column_2%self.tabstop)) if chr == '	' else 1
-                                        count_2 += width
-                                        column_2 += width
-                                        offset_3 +=1
+                                        if chr == '\t':
+                                            if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
+                                                width = partial_tab_width_2
+                                            else:
+                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                            count_2 += width
+                                            column_2 += width
+                                            offset_3 += 1
+                                        else:
+                                            count_2 += 1
+                                            column_2 += 1
+                                            offset_3 += 1
                                     else:
                                         break
 
-                                offset_3, column_2, indent_column_2, leftover_offset_2, leftover_count_2 = self.parse_string_literal(buf, offset_3, buf_eof, column_2, indent_column_2, prefix_0, children_3, leftover_offset_2, leftover_count_2)
+                                offset_3, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_string_literal(buf, offset_3, buf_eof, column_2, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
                                 if offset_3 == -1: break
 
 
                                 count_2 = 0
-                                if offset_3 == leftover_offset_2 and leftover_count_2 > 0:
-                                     count_2 += leftover_count_2
                                 while offset_3 < buf_eof:
                                     chr = buf[offset_3]
                                     if chr in ' \t':
-                                        width  = (self.tabstop-(column_2%self.tabstop)) if chr == '	' else 1
-                                        count_2 += width
-                                        column_2 += width
+                                        if chr == '\t':
+                                            if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
+                                                width = partial_tab_width_2
+                                            else:
+                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                            count_2 += width
+                                            column_2 += width
+                                            offset_3 += 1
+                                        else:
+                                            count_2 += 1
+                                            column_2 += 1
+                                            offset_3 += 1
                                     else:
                                         break
 
@@ -1425,8 +1493,6 @@ cdef class Parser:
                                     break
 
                                 count_2 = 0
-                                if offset_3 == leftover_offset_2 and leftover_count_2 > 0:
-                                     count_2 += leftover_count_2
                                 while offset_3 < buf_eof:
                                     chr = buf[offset_3]
                                     if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
@@ -1439,14 +1505,22 @@ cdef class Parser:
                                         indent_column_2 = 0
                                         count_2 +=1
                                     elif chr in ' \t':
-                                        width  = (self.tabstop-(column_2%self.tabstop)) if chr == '	' else 1
-                                        count_2 += width
-                                        column_2 += width
-                                        offset_3 +=1
+                                        if chr == '\t':
+                                            if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
+                                                width = partial_tab_width_2
+                                            else:
+                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                            count_2 += width
+                                            column_2 += width
+                                            offset_3 += 1
+                                        else:
+                                            count_2 += 1
+                                            column_2 += 1
+                                            offset_3 += 1
                                     else:
                                         break
 
-                                offset_3, column_2, indent_column_2, leftover_offset_2, leftover_count_2 = self.parse_literal(buf, offset_3, buf_eof, column_2, indent_column_2, prefix_0, children_3, leftover_offset_2, leftover_count_2)
+                                offset_3, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_literal(buf, offset_3, buf_eof, column_2, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
                                 if offset_3 == -1: break
 
 
@@ -1459,15 +1533,13 @@ cdef class Parser:
                             offset_2 = offset_3
                             column_1 = column_2
                             indent_column_1 = indent_column_2
-                            leftover_offset_1 = leftover_offset_2
-                            leftover_count_1 = leftover_count_2
+                            partial_tab_offset_1 = partial_tab_offset_2
+                            partial_tab_width_1 = partial_tab_width_2
                             count_1 += 1
                         if offset_2 == -1:
                             break
 
                         count_1 = 0
-                        if offset_2 == leftover_offset_1 and leftover_count_1 > 0:
-                             count_1 += leftover_count_1
                         while offset_2 < buf_eof:
                             chr = buf[offset_2]
                             if chr == '\r' and offset_2 + 1 < buf_eof and buf[offset_2+1] == '\n':
@@ -1480,10 +1552,18 @@ cdef class Parser:
                                 indent_column_1 = 0
                                 count_1 +=1
                             elif chr in ' \t':
-                                width  = (self.tabstop-(column_1%self.tabstop)) if chr == '	' else 1
-                                count_1 += width
-                                column_1 += width
-                                offset_2 +=1
+                                if chr == '\t':
+                                    if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
+                                        width = partial_tab_width_1
+                                    else:
+                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                    count_1 += width
+                                    column_1 += width
+                                    offset_2 += 1
+                                else:
+                                    count_1 += 1
+                                    column_1 += 1
+                                    offset_2 += 1
                             else:
                                 break
 
@@ -1492,8 +1572,8 @@ cdef class Parser:
                             offset_3 = offset_2
                             column_2 = column_1
                             indent_column_2 = indent_column_1
-                            leftover_offset_2 = leftover_offset_1
-                            leftover_count_2 = leftover_count_1
+                            partial_tab_offset_2 = partial_tab_offset_1
+                            partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True:
                                 if offset_3 + 1 <= buf_eof and buf[offset_3+0] == ',':
@@ -1504,8 +1584,6 @@ cdef class Parser:
                                     break
 
                                 count_2 = 0
-                                if offset_3 == leftover_offset_2 and leftover_count_2 > 0:
-                                     count_2 += leftover_count_2
                                 while offset_3 < buf_eof:
                                     chr = buf[offset_3]
                                     if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
@@ -1518,10 +1596,18 @@ cdef class Parser:
                                         indent_column_2 = 0
                                         count_2 +=1
                                     elif chr in ' \t':
-                                        width  = (self.tabstop-(column_2%self.tabstop)) if chr == '	' else 1
-                                        count_2 += width
-                                        column_2 += width
-                                        offset_3 +=1
+                                        if chr == '\t':
+                                            if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
+                                                width = partial_tab_width_2
+                                            else:
+                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                            count_2 += width
+                                            column_2 += width
+                                            offset_3 += 1
+                                        else:
+                                            count_2 += 1
+                                            column_2 += 1
+                                            offset_3 += 1
                                     else:
                                         break
 
@@ -1534,8 +1620,8 @@ cdef class Parser:
                             offset_2 = offset_3
                             column_1 = column_2
                             indent_column_1 = indent_column_2
-                            leftover_offset_1 = leftover_offset_2
-                            leftover_count_1 = leftover_count_2
+                            partial_tab_offset_1 = partial_tab_offset_2
+                            partial_tab_width_1 = partial_tab_width_2
                             count_1 += 1
                             break
                         if offset_2 == -1:
@@ -1550,8 +1636,8 @@ cdef class Parser:
                     offset_1 = offset_2
                     column_0 = column_1
                     indent_column_0 = indent_column_1
-                    leftover_offset_0 = leftover_offset_1
-                    leftover_count_0 = leftover_count_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
                     count_0 += 1
                     break
                 if offset_1 == -1:
@@ -1577,9 +1663,9 @@ cdef class Parser:
 
 
             break
-        return offset_0, column_0, indent_column_0, leftover_offset_0, leftover_count_0
+        return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
-    cdef (int, int, int, int, int) parse_yaml_eol(self, str buf, int offset_0, int buf_eof, int column_0, int indent_column_0,  list prefix_0, list children_0, int leftover_offset_0, int leftover_count_0):
+    cdef (int, int, int, int, int) parse_yaml_eol(self, str buf, int offset_0, int buf_eof, int column_0, int indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
         cdef Py_UCS4 chr
         cdef int offset_1, offset_2, offset_3
         cdef int column_1, column_2, column_3
@@ -1587,35 +1673,42 @@ cdef class Parser:
         cdef list children_1, children_2, children_3
         cdef int count_1, count_2
         cdef int indent_column_1, indent_column_2, indent_column_3
-        cdef int leftover_offset_1, leftover_offset_2, leftover_offset_3
-        cdef int leftover_count_1, leftover_count_2, leftover_count_3
+        cdef int partial_tab_offset_1, partial_tab_offset_2, partial_tab_offset_3
+        cdef int partial_tab_width_1, partial_tab_width_2, partial_tab_width_3
         while True: # note: return at end of loop
             count_0 = 0
             while True:
                 offset_1 = offset_0
                 column_1 = column_0
                 indent_column_1 = indent_column_0
-                leftover_offset_1 = leftover_offset_0
-                leftover_count_1 = leftover_count_0
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True:
                     while True: # start choice
                         offset_2 = offset_1
                         column_2 = column_1
                         indent_column_2 = indent_column_1
-                        leftover_offset_2 = leftover_offset_1
-                        leftover_count_2 = leftover_count_1
+                        partial_tab_offset_2 = partial_tab_offset_1
+                        partial_tab_width_2 = partial_tab_width_1
                         children_2 = [] if children_1 is not None else None
                         while True: # case
                             count_1 = 0
-                            if offset_2 == leftover_offset_2 and leftover_count_2 > 0:
-                                 count_1 += leftover_count_2
                             while offset_2 < buf_eof:
                                 chr = buf[offset_2]
                                 if chr in ' \t':
-                                    width  = (self.tabstop-(column_2%self.tabstop)) if chr == '	' else 1
-                                    count_1 += width
-                                    column_2 += width
+                                    if chr == '\t':
+                                        if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
+                                            width = partial_tab_width_2
+                                        else:
+                                            width  = (self.tabstop-(column_2%self.tabstop))
+                                        count_1 += width
+                                        column_2 += width
+                                        offset_2 += 1
+                                    else:
+                                        count_1 += 1
+                                        column_2 += 1
+                                        offset_2 += 1
                                 else:
                                     break
 
@@ -1642,8 +1735,8 @@ cdef class Parser:
                             offset_1 = offset_2
                             column_1 = column_2
                             indent_column_1 = indent_column_2
-                            leftover_offset_1 = leftover_offset_2
-                            leftover_count_1 = leftover_count_2
+                            partial_tab_offset_1 = partial_tab_offset_2
+                            partial_tab_width_1 = partial_tab_width_2
                             if children_2 is not None and children_2 is not None:
                                 children_1.extend(children_2)
                             break
@@ -1651,19 +1744,26 @@ cdef class Parser:
                         offset_2 = offset_1
                         column_2 = column_1
                         indent_column_2 = indent_column_1
-                        leftover_offset_2 = leftover_offset_1
-                        leftover_count_2 = leftover_count_1
+                        partial_tab_offset_2 = partial_tab_offset_1
+                        partial_tab_width_2 = partial_tab_width_1
                         children_2 = [] if children_1 is not None else None
                         while True: # case
                             count_1 = 0
-                            if offset_2 == leftover_offset_2 and leftover_count_2 > 0:
-                                 count_1 += leftover_count_2
                             while offset_2 < buf_eof:
                                 chr = buf[offset_2]
                                 if chr in ' \t':
-                                    width  = (self.tabstop-(column_2%self.tabstop)) if chr == '	' else 1
-                                    count_1 += width
-                                    column_2 += width
+                                    if chr == '\t':
+                                        if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
+                                            width = partial_tab_width_2
+                                        else:
+                                            width  = (self.tabstop-(column_2%self.tabstop))
+                                        count_1 += width
+                                        column_2 += width
+                                        offset_2 += 1
+                                    else:
+                                        count_1 += 1
+                                        column_2 += 1
+                                        offset_2 += 1
                                 else:
                                     break
 
@@ -1679,8 +1779,8 @@ cdef class Parser:
                                 offset_3 = offset_2
                                 column_3 = column_2
                                 indent_column_3 = indent_column_2
-                                leftover_offset_3 = leftover_offset_2
-                                leftover_count_3 = leftover_count_2
+                                partial_tab_offset_3 = partial_tab_offset_2
+                                partial_tab_width_3 = partial_tab_width_2
                                 children_3 = [] if children_2 is not None else None
                                 while True:
                                     if offset_3 == buf_eof:
@@ -1705,8 +1805,8 @@ cdef class Parser:
                                 offset_2 = offset_3
                                 column_2 = column_3
                                 indent_column_2 = indent_column_3
-                                leftover_offset_2 = leftover_offset_3
-                                leftover_count_2 = leftover_count_3
+                                partial_tab_offset_2 = partial_tab_offset_3
+                                partial_tab_width_2 = partial_tab_width_3
                                 count_1 += 1
                             if offset_2 == -1:
                                 break
@@ -1734,8 +1834,8 @@ cdef class Parser:
                             offset_1 = offset_2
                             column_1 = column_2
                             indent_column_1 = indent_column_2
-                            leftover_offset_1 = leftover_offset_2
-                            leftover_count_1 = leftover_count_2
+                            partial_tab_offset_1 = partial_tab_offset_2
+                            partial_tab_width_1 = partial_tab_width_2
                             if children_2 is not None and children_2 is not None:
                                 children_1.extend(children_2)
                             break
@@ -1754,16 +1854,16 @@ cdef class Parser:
                 offset_0 = offset_1
                 column_0 = column_1
                 indent_column_0 = indent_column_1
-                leftover_offset_0 = leftover_offset_1
-                leftover_count_0 = leftover_count_1
+                partial_tab_offset_0 = partial_tab_offset_1
+                partial_tab_width_0 = partial_tab_width_1
                 count_0 += 1
             if offset_0 == -1:
                 break
 
             break
-        return offset_0, column_0, indent_column_0, leftover_offset_0, leftover_count_0
+        return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
-    cdef (int, int, int, int, int) parse_indented_list(self, str buf, int offset_0, int buf_eof, int column_0, int indent_column_0,  list prefix_0, list children_0, int leftover_offset_0, int leftover_count_0):
+    cdef (int, int, int, int, int) parse_indented_list(self, str buf, int offset_0, int buf_eof, int column_0, int indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
         cdef Py_UCS4 chr
         cdef int offset_1, offset_2, offset_3, offset_4
         cdef int column_1, column_2
@@ -1771,29 +1871,38 @@ cdef class Parser:
         cdef list children_1, children_2, children_3
         cdef int count_1
         cdef int indent_column_1, indent_column_2
-        cdef int leftover_offset_1, leftover_offset_2
-        cdef int leftover_count_1, leftover_count_2
+        cdef int partial_tab_offset_1, partial_tab_offset_2
+        cdef int partial_tab_width_1, partial_tab_width_2
         while True: # note: return at end of loop
             count_0 = column_0 - indent_column_0
-            def _indent(buf, offset, buf_eof, column, indent_column,  prefix,  children, leftover_offset, leftover_count, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
+            def _indent(buf, offset, buf_eof, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
                 saw_tab, saw_not_tab = False, False
-                if offset == leftover_offset: count -= leftover_count
                 while count > 0 and offset < buf_eof:
                     chr = buf[offset]
                     if chr in ' \t':
                         if not allow_mixed_indent:
-                            if chr == '	': saw_tab = True
+                            if chr == '\t': saw_tab = True
                             else: saw_not_tab = True
                             if saw_tab and saw_not_tab:
                                  offset -1; break
-                        width  = (self.tabstop-(column%self.tabstop)) if chr == '	' else 1
-                        column += width
-                        count -= width
-                        offset +=1
-                        if count < 0:
-                            leftover_offset = offset
-                            leftover_count = -count
-                            break
+                        if chr != '\t':
+                            column += 1
+                            offset += 1
+                            count -=1
+                        else:
+                            if offset == partial_tab_offset and partial_tab_width > 0:
+                                width = partial_tab_width
+                            else:
+                                width  = (self.tabstop-(column%self.tabstop))
+                            if width <= count:
+                                column += width
+                                offset += 1
+                                count -= width
+                            else:
+                                column += count
+                                partial_tab_offset = offset
+                                partial_tab_width = width-count
+                                break
                     elif chr == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
                         break
                     elif chr in '\n\r':
@@ -1801,9 +1910,9 @@ cdef class Parser:
                     else:
                         offset = -1
                         break
-                return offset, column, indent_column, leftover_offset, leftover_count
+                return offset, column, indent_column, partial_tab_offset, partial_tab_width
             prefix_0.append(_indent)
-            indent_column_0 = column_0 - leftover_count_0 if leftover_offset_0 == offset_0 else column_0
+            indent_column_0 = column_0
             while True:
                 offset_1 = offset_0
                 children_1 = []
@@ -1819,23 +1928,30 @@ cdef class Parser:
                         offset_2 = offset_1
                         column_1 = column_0
                         indent_column_1 = indent_column_0
-                        leftover_offset_1 = leftover_offset_0
-                        leftover_count_1 = leftover_count_0
+                        partial_tab_offset_1 = partial_tab_offset_0
+                        partial_tab_width_1 = partial_tab_width_0
                         children_2 = [] if children_1 is not None else None
                         while True: # case
                             count_0 = 0
-                            if offset_2 == leftover_offset_1 and leftover_count_1 > 0:
-                                 count_0 += leftover_count_1
                             while offset_2 < buf_eof:
                                 chr = buf[offset_2]
                                 if chr in ' \t':
-                                    width  = (self.tabstop-(column_1%self.tabstop)) if chr == '	' else 1
-                                    count_0 += width
-                                    column_1 += width
+                                    if chr == '\t':
+                                        if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
+                                            width = partial_tab_width_1
+                                        else:
+                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                        count_0 += width
+                                        column_1 += width
+                                        offset_2 += 1
+                                    else:
+                                        count_0 += 1
+                                        column_1 += 1
+                                        offset_2 += 1
                                 else:
                                     break
 
-                            offset_2, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_indented_value(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, leftover_offset_1, leftover_count_1)
+                            offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_indented_value(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                             if offset_2 == -1: break
 
 
@@ -1845,8 +1961,8 @@ cdef class Parser:
                             offset_1 = offset_2
                             column_0 = column_1
                             indent_column_0 = indent_column_1
-                            leftover_offset_0 = leftover_offset_1
-                            leftover_count_0 = leftover_count_1
+                            partial_tab_offset_0 = partial_tab_offset_1
+                            partial_tab_width_0 = partial_tab_width_1
                             if children_2 is not None and children_2 is not None:
                                 children_1.extend(children_2)
                             break
@@ -1854,44 +1970,50 @@ cdef class Parser:
                         offset_2 = offset_1
                         column_1 = column_0
                         indent_column_1 = indent_column_0
-                        leftover_offset_1 = leftover_offset_0
-                        leftover_count_1 = leftover_count_0
+                        partial_tab_offset_1 = partial_tab_offset_0
+                        partial_tab_width_1 = partial_tab_width_0
                         children_2 = [] if children_1 is not None else None
                         while True: # case
-                            offset_2, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_yaml_eol(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, leftover_offset_1, leftover_count_1)
+                            offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_yaml_eol(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                             if offset_2 == -1: break
 
 
-                            if column_1 != 0:
+                            if not (column_1 == indent_column_1 == 0):
                                 offset_2 = -1
                                 break
-                            indent_column_1 = 0
                             for indent in prefix_0:
                                 _children, _prefix = [], []
-                                offset_2, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = indent(buf, offset_2, buf_eof, column_1, indent_column_1, _prefix, _children, leftover_offset_1, leftover_count_1)
+                                offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, offset_2, buf_eof, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
                                 if _prefix or _children:
                                    raise Exception('bar')
                                 if offset_2 == -1:        break
-                                indent_column_1 = column_1 - leftover_count_1 if leftover_offset_1 == offset_2 else column_1
+                                indent_column_1 = column_1
                             if offset_2 == -1:
                                 break
 
                             count_0 = 0
-                            if offset_2 == leftover_offset_1 and leftover_count_1 > 0:
-                                 count_0 += leftover_count_1
                             while offset_2 < buf_eof:
                                 chr = buf[offset_2]
                                 if chr in ' \t':
-                                    width  = (self.tabstop-(column_1%self.tabstop)) if chr == '	' else 1
-                                    count_0 += width
-                                    column_1 += width
+                                    if chr == '\t':
+                                        if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
+                                            width = partial_tab_width_1
+                                        else:
+                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                        count_0 += width
+                                        column_1 += width
+                                        offset_2 += 1
+                                    else:
+                                        count_0 += 1
+                                        column_1 += 1
+                                        offset_2 += 1
                                 else:
                                     break
                             if count_0 < 1:
                                 offset_2 = -1
                                 break
 
-                            offset_2, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_indented_value(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, leftover_offset_1, leftover_count_1)
+                            offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_indented_value(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                             if offset_2 == -1: break
 
 
@@ -1901,8 +2023,8 @@ cdef class Parser:
                             offset_1 = offset_2
                             column_0 = column_1
                             indent_column_0 = indent_column_1
-                            leftover_offset_0 = leftover_offset_1
-                            leftover_count_0 = leftover_count_1
+                            partial_tab_offset_0 = partial_tab_offset_1
+                            partial_tab_width_0 = partial_tab_width_1
                             if children_2 is not None and children_2 is not None:
                                 children_1.extend(children_2)
                             break
@@ -1917,25 +2039,24 @@ cdef class Parser:
                         offset_2 = offset_1
                         column_1 = column_0
                         indent_column_1 = indent_column_0
-                        leftover_offset_1 = leftover_offset_0
-                        leftover_count_1 = leftover_count_0
+                        partial_tab_offset_1 = partial_tab_offset_0
+                        partial_tab_width_1 = partial_tab_width_0
                         children_2 = [] if children_1 is not None else None
                         while True:
-                            offset_2, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_yaml_eol(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, leftover_offset_1, leftover_count_1)
+                            offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_yaml_eol(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                             if offset_2 == -1: break
 
 
-                            if column_1 != 0:
+                            if not (column_1 == indent_column_1 == 0):
                                 offset_2 = -1
                                 break
-                            indent_column_1 = 0
                             for indent in prefix_0:
                                 _children, _prefix = [], []
-                                offset_2, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = indent(buf, offset_2, buf_eof, column_1, indent_column_1, _prefix, _children, leftover_offset_1, leftover_count_1)
+                                offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, offset_2, buf_eof, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
                                 if _prefix or _children:
                                    raise Exception('bar')
                                 if offset_2 == -1:        break
-                                indent_column_1 = column_1 - leftover_count_1 if leftover_offset_1 == offset_2 else column_1
+                                indent_column_1 = column_1
                             if offset_2 == -1:
                                 break
 
@@ -1947,14 +2068,21 @@ cdef class Parser:
                                 break
 
                             count_1 = 0
-                            if offset_2 == leftover_offset_1 and leftover_count_1 > 0:
-                                 count_1 += leftover_count_1
                             while offset_2 < buf_eof:
                                 chr = buf[offset_2]
                                 if chr in ' \t':
-                                    width  = (self.tabstop-(column_1%self.tabstop)) if chr == '	' else 1
-                                    count_1 += width
-                                    column_1 += width
+                                    if chr == '\t':
+                                        if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
+                                            width = partial_tab_width_1
+                                        else:
+                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                        count_1 += width
+                                        column_1 += width
+                                        offset_2 += 1
+                                    else:
+                                        count_1 += 1
+                                        column_1 += 1
+                                        offset_2 += 1
                                 else:
                                     break
                             if count_1 < 1:
@@ -1965,23 +2093,30 @@ cdef class Parser:
                                 offset_3 = offset_2
                                 column_2 = column_1
                                 indent_column_2 = indent_column_1
-                                leftover_offset_2 = leftover_offset_1
-                                leftover_count_2 = leftover_count_1
+                                partial_tab_offset_2 = partial_tab_offset_1
+                                partial_tab_width_2 = partial_tab_width_1
                                 children_3 = [] if children_2 is not None else None
                                 while True: # case
                                     count_1 = 0
-                                    if offset_3 == leftover_offset_2 and leftover_count_2 > 0:
-                                         count_1 += leftover_count_2
                                     while offset_3 < buf_eof:
                                         chr = buf[offset_3]
                                         if chr in ' \t':
-                                            width  = (self.tabstop-(column_2%self.tabstop)) if chr == '	' else 1
-                                            count_1 += width
-                                            column_2 += width
+                                            if chr == '\t':
+                                                if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
+                                                    width = partial_tab_width_2
+                                                else:
+                                                    width  = (self.tabstop-(column_2%self.tabstop))
+                                                count_1 += width
+                                                column_2 += width
+                                                offset_3 += 1
+                                            else:
+                                                count_1 += 1
+                                                column_2 += 1
+                                                offset_3 += 1
                                         else:
                                             break
 
-                                    offset_3, column_2, indent_column_2, leftover_offset_2, leftover_count_2 = self.parse_indented_value(buf, offset_3, buf_eof, column_2, indent_column_2, prefix_0, children_3, leftover_offset_2, leftover_count_2)
+                                    offset_3, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_indented_value(buf, offset_3, buf_eof, column_2, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
                                     if offset_3 == -1: break
 
 
@@ -1991,8 +2126,8 @@ cdef class Parser:
                                     offset_2 = offset_3
                                     column_1 = column_2
                                     indent_column_1 = indent_column_2
-                                    leftover_offset_1 = leftover_offset_2
-                                    leftover_count_1 = leftover_count_2
+                                    partial_tab_offset_1 = partial_tab_offset_2
+                                    partial_tab_width_1 = partial_tab_width_2
                                     if children_3 is not None and children_3 is not None:
                                         children_2.extend(children_3)
                                     break
@@ -2000,41 +2135,47 @@ cdef class Parser:
                                 offset_3 = offset_2
                                 column_2 = column_1
                                 indent_column_2 = indent_column_1
-                                leftover_offset_2 = leftover_offset_1
-                                leftover_count_2 = leftover_count_1
+                                partial_tab_offset_2 = partial_tab_offset_1
+                                partial_tab_width_2 = partial_tab_width_1
                                 children_3 = [] if children_2 is not None else None
                                 while True: # case
-                                    offset_3, column_2, indent_column_2, leftover_offset_2, leftover_count_2 = self.parse_yaml_eol(buf, offset_3, buf_eof, column_2, indent_column_2, prefix_0, children_3, leftover_offset_2, leftover_count_2)
+                                    offset_3, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_yaml_eol(buf, offset_3, buf_eof, column_2, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
                                     if offset_3 == -1: break
 
 
-                                    if column_2 != 0:
+                                    if not (column_2 == indent_column_2 == 0):
                                         offset_3 = -1
                                         break
-                                    indent_column_2 = 0
                                     for indent in prefix_0:
                                         _children, _prefix = [], []
-                                        offset_3, column_2, indent_column_2, leftover_offset_2, leftover_count_2 = indent(buf, offset_3, buf_eof, column_2, indent_column_2, _prefix, _children, leftover_offset_2, leftover_count_2)
+                                        offset_3, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = indent(buf, offset_3, buf_eof, column_2, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
                                         if _prefix or _children:
                                            raise Exception('bar')
                                         if offset_3 == -1:        break
-                                        indent_column_2 = column_2 - leftover_count_2 if leftover_offset_2 == offset_3 else column_2
+                                        indent_column_2 = column_2
                                     if offset_3 == -1:
                                         break
 
                                     count_1 = 0
-                                    if offset_3 == leftover_offset_2 and leftover_count_2 > 0:
-                                         count_1 += leftover_count_2
                                     while offset_3 < buf_eof:
                                         chr = buf[offset_3]
                                         if chr in ' \t':
-                                            width  = (self.tabstop-(column_2%self.tabstop)) if chr == '	' else 1
-                                            count_1 += width
-                                            column_2 += width
+                                            if chr == '\t':
+                                                if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
+                                                    width = partial_tab_width_2
+                                                else:
+                                                    width  = (self.tabstop-(column_2%self.tabstop))
+                                                count_1 += width
+                                                column_2 += width
+                                                offset_3 += 1
+                                            else:
+                                                count_1 += 1
+                                                column_2 += 1
+                                                offset_3 += 1
                                         else:
                                             break
 
-                                    offset_3, column_2, indent_column_2, leftover_offset_2, leftover_count_2 = self.parse_indented_value(buf, offset_3, buf_eof, column_2, indent_column_2, prefix_0, children_3, leftover_offset_2, leftover_count_2)
+                                    offset_3, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_indented_value(buf, offset_3, buf_eof, column_2, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
                                     if offset_3 == -1: break
 
 
@@ -2044,8 +2185,8 @@ cdef class Parser:
                                     offset_2 = offset_3
                                     column_1 = column_2
                                     indent_column_1 = indent_column_2
-                                    leftover_offset_1 = leftover_offset_2
-                                    leftover_count_1 = leftover_count_2
+                                    partial_tab_offset_1 = partial_tab_offset_2
+                                    partial_tab_width_1 = partial_tab_width_2
                                     if children_3 is not None and children_3 is not None:
                                         children_2.extend(children_3)
                                     break
@@ -2064,8 +2205,8 @@ cdef class Parser:
                         offset_1 = offset_2
                         column_0 = column_1
                         indent_column_0 = indent_column_1
-                        leftover_offset_0 = leftover_offset_1
-                        leftover_count_0 = leftover_count_1
+                        partial_tab_offset_0 = partial_tab_offset_1
+                        partial_tab_width_0 = partial_tab_width_1
                         count_0 += 1
                     if offset_1 == -1:
                         break
@@ -2086,9 +2227,9 @@ cdef class Parser:
             if offset_0 == -1: break
 
             break
-        return offset_0, column_0, indent_column_0, leftover_offset_0, leftover_count_0
+        return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
-    cdef (int, int, int, int, int) parse_indented_object(self, str buf, int offset_0, int buf_eof, int column_0, int indent_column_0,  list prefix_0, list children_0, int leftover_offset_0, int leftover_count_0):
+    cdef (int, int, int, int, int) parse_indented_object(self, str buf, int offset_0, int buf_eof, int column_0, int indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
         cdef Py_UCS4 chr
         cdef int offset_1, offset_2, offset_3, offset_4, offset_5
         cdef int column_1, column_2
@@ -2096,29 +2237,38 @@ cdef class Parser:
         cdef list children_1, children_2, children_3, children_4
         cdef int count_1
         cdef int indent_column_1, indent_column_2
-        cdef int leftover_offset_1, leftover_offset_2
-        cdef int leftover_count_1, leftover_count_2
+        cdef int partial_tab_offset_1, partial_tab_offset_2
+        cdef int partial_tab_width_1, partial_tab_width_2
         while True: # note: return at end of loop
             count_0 = column_0 - indent_column_0
-            def _indent(buf, offset, buf_eof, column, indent_column,  prefix,  children, leftover_offset, leftover_count, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
+            def _indent(buf, offset, buf_eof, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
                 saw_tab, saw_not_tab = False, False
-                if offset == leftover_offset: count -= leftover_count
                 while count > 0 and offset < buf_eof:
                     chr = buf[offset]
                     if chr in ' \t':
                         if not allow_mixed_indent:
-                            if chr == '	': saw_tab = True
+                            if chr == '\t': saw_tab = True
                             else: saw_not_tab = True
                             if saw_tab and saw_not_tab:
                                  offset -1; break
-                        width  = (self.tabstop-(column%self.tabstop)) if chr == '	' else 1
-                        column += width
-                        count -= width
-                        offset +=1
-                        if count < 0:
-                            leftover_offset = offset
-                            leftover_count = -count
-                            break
+                        if chr != '\t':
+                            column += 1
+                            offset += 1
+                            count -=1
+                        else:
+                            if offset == partial_tab_offset and partial_tab_width > 0:
+                                width = partial_tab_width
+                            else:
+                                width  = (self.tabstop-(column%self.tabstop))
+                            if width <= count:
+                                column += width
+                                offset += 1
+                                count -= width
+                            else:
+                                column += count
+                                partial_tab_offset = offset
+                                partial_tab_width = width-count
+                                break
                     elif chr == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
                         break
                     elif chr in '\n\r':
@@ -2126,9 +2276,9 @@ cdef class Parser:
                     else:
                         offset = -1
                         break
-                return offset, column, indent_column, leftover_offset, leftover_count
+                return offset, column, indent_column, partial_tab_offset, partial_tab_width
             prefix_0.append(_indent)
-            indent_column_0 = column_0 - leftover_count_0 if leftover_offset_0 == offset_0 else column_0
+            indent_column_0 = column_0
             while True:
                 offset_1 = offset_0
                 children_1 = []
@@ -2136,19 +2286,26 @@ cdef class Parser:
                     offset_2 = offset_1
                     children_2 = []
                     while True: # start capture
-                        offset_2, column_0, indent_column_0, leftover_offset_0, leftover_count_0 = self.parse_identifier(buf, offset_2, buf_eof, column_0, indent_column_0, prefix_0, children_2, leftover_offset_0, leftover_count_0)
+                        offset_2, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0 = self.parse_identifier(buf, offset_2, buf_eof, column_0, indent_column_0, prefix_0, children_2, partial_tab_offset_0, partial_tab_width_0)
                         if offset_2 == -1: break
 
 
                         count_0 = 0
-                        if offset_2 == leftover_offset_0 and leftover_count_0 > 0:
-                             count_0 += leftover_count_0
                         while offset_2 < buf_eof:
                             chr = buf[offset_2]
                             if chr in ' \t':
-                                width  = (self.tabstop-(column_0%self.tabstop)) if chr == '	' else 1
-                                count_0 += width
-                                column_0 += width
+                                if chr == '\t':
+                                    if offset_2 == partial_tab_offset_0 and partial_tab_width_0 > 0:
+                                        width = partial_tab_width_0
+                                    else:
+                                        width  = (self.tabstop-(column_0%self.tabstop))
+                                    count_0 += width
+                                    column_0 += width
+                                    offset_2 += 1
+                                else:
+                                    count_0 += 1
+                                    column_0 += 1
+                                    offset_2 += 1
                             else:
                                 break
 
@@ -2163,44 +2320,50 @@ cdef class Parser:
                             offset_3 = offset_2
                             column_1 = column_0
                             indent_column_1 = indent_column_0
-                            leftover_offset_1 = leftover_offset_0
-                            leftover_count_1 = leftover_count_0
+                            partial_tab_offset_1 = partial_tab_offset_0
+                            partial_tab_width_1 = partial_tab_width_0
                             children_3 = [] if children_2 is not None else None
                             while True: # case
-                                offset_3, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_yaml_eol(buf, offset_3, buf_eof, column_1, indent_column_1, prefix_0, children_3, leftover_offset_1, leftover_count_1)
+                                offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_yaml_eol(buf, offset_3, buf_eof, column_1, indent_column_1, prefix_0, children_3, partial_tab_offset_1, partial_tab_width_1)
                                 if offset_3 == -1: break
 
 
-                                if column_1 != 0:
+                                if not (column_1 == indent_column_1 == 0):
                                     offset_3 = -1
                                     break
-                                indent_column_1 = 0
                                 for indent in prefix_0:
                                     _children, _prefix = [], []
-                                    offset_3, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = indent(buf, offset_3, buf_eof, column_1, indent_column_1, _prefix, _children, leftover_offset_1, leftover_count_1)
+                                    offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, offset_3, buf_eof, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
                                     if _prefix or _children:
                                        raise Exception('bar')
                                     if offset_3 == -1:        break
-                                    indent_column_1 = column_1 - leftover_count_1 if leftover_offset_1 == offset_3 else column_1
+                                    indent_column_1 = column_1
                                 if offset_3 == -1:
                                     break
 
                                 count_0 = 0
-                                if offset_3 == leftover_offset_1 and leftover_count_1 > 0:
-                                     count_0 += leftover_count_1
                                 while offset_3 < buf_eof:
                                     chr = buf[offset_3]
                                     if chr in ' \t':
-                                        width  = (self.tabstop-(column_1%self.tabstop)) if chr == '	' else 1
-                                        count_0 += width
-                                        column_1 += width
+                                        if chr == '\t':
+                                            if offset_3 == partial_tab_offset_1 and partial_tab_width_1 > 0:
+                                                width = partial_tab_width_1
+                                            else:
+                                                width  = (self.tabstop-(column_1%self.tabstop))
+                                            count_0 += width
+                                            column_1 += width
+                                            offset_3 += 1
+                                        else:
+                                            count_0 += 1
+                                            column_1 += 1
+                                            offset_3 += 1
                                     else:
                                         break
                                 if count_0 < 1:
                                     offset_3 = -1
                                     break
 
-                                offset_3, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_indented_value(buf, offset_3, buf_eof, column_1, indent_column_1, prefix_0, children_3, leftover_offset_1, leftover_count_1)
+                                offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_indented_value(buf, offset_3, buf_eof, column_1, indent_column_1, prefix_0, children_3, partial_tab_offset_1, partial_tab_width_1)
                                 if offset_3 == -1: break
 
 
@@ -2210,8 +2373,8 @@ cdef class Parser:
                                 offset_2 = offset_3
                                 column_0 = column_1
                                 indent_column_0 = indent_column_1
-                                leftover_offset_0 = leftover_offset_1
-                                leftover_count_0 = leftover_count_1
+                                partial_tab_offset_0 = partial_tab_offset_1
+                                partial_tab_width_0 = partial_tab_width_1
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 break
@@ -2219,23 +2382,30 @@ cdef class Parser:
                             offset_3 = offset_2
                             column_1 = column_0
                             indent_column_1 = indent_column_0
-                            leftover_offset_1 = leftover_offset_0
-                            leftover_count_1 = leftover_count_0
+                            partial_tab_offset_1 = partial_tab_offset_0
+                            partial_tab_width_1 = partial_tab_width_0
                             children_3 = [] if children_2 is not None else None
                             while True: # case
                                 count_0 = 0
-                                if offset_3 == leftover_offset_1 and leftover_count_1 > 0:
-                                     count_0 += leftover_count_1
                                 while offset_3 < buf_eof:
                                     chr = buf[offset_3]
                                     if chr in ' \t':
-                                        width  = (self.tabstop-(column_1%self.tabstop)) if chr == '	' else 1
-                                        count_0 += width
-                                        column_1 += width
+                                        if chr == '\t':
+                                            if offset_3 == partial_tab_offset_1 and partial_tab_width_1 > 0:
+                                                width = partial_tab_width_1
+                                            else:
+                                                width  = (self.tabstop-(column_1%self.tabstop))
+                                            count_0 += width
+                                            column_1 += width
+                                            offset_3 += 1
+                                        else:
+                                            count_0 += 1
+                                            column_1 += 1
+                                            offset_3 += 1
                                     else:
                                         break
 
-                                offset_3, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_indented_value(buf, offset_3, buf_eof, column_1, indent_column_1, prefix_0, children_3, leftover_offset_1, leftover_count_1)
+                                offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_indented_value(buf, offset_3, buf_eof, column_1, indent_column_1, prefix_0, children_3, partial_tab_offset_1, partial_tab_width_1)
                                 if offset_3 == -1: break
 
 
@@ -2245,8 +2415,8 @@ cdef class Parser:
                                 offset_2 = offset_3
                                 column_0 = column_1
                                 indent_column_0 = indent_column_1
-                                leftover_offset_0 = leftover_offset_1
-                                leftover_count_0 = leftover_count_1
+                                partial_tab_offset_0 = partial_tab_offset_1
+                                partial_tab_width_0 = partial_tab_width_1
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 break
@@ -2272,44 +2442,50 @@ cdef class Parser:
                         offset_2 = offset_1
                         column_1 = column_0
                         indent_column_1 = indent_column_0
-                        leftover_offset_1 = leftover_offset_0
-                        leftover_count_1 = leftover_count_0
+                        partial_tab_offset_1 = partial_tab_offset_0
+                        partial_tab_width_1 = partial_tab_width_0
                         children_2 = [] if children_1 is not None else None
                         while True:
                             offset_3 = offset_2
                             children_3 = []
                             while True: # start capture
-                                offset_3, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_yaml_eol(buf, offset_3, buf_eof, column_1, indent_column_1, prefix_0, children_3, leftover_offset_1, leftover_count_1)
+                                offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_yaml_eol(buf, offset_3, buf_eof, column_1, indent_column_1, prefix_0, children_3, partial_tab_offset_1, partial_tab_width_1)
                                 if offset_3 == -1: break
 
 
-                                if column_1 != 0:
+                                if not (column_1 == indent_column_1 == 0):
                                     offset_3 = -1
                                     break
-                                indent_column_1 = 0
                                 for indent in prefix_0:
                                     _children, _prefix = [], []
-                                    offset_3, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = indent(buf, offset_3, buf_eof, column_1, indent_column_1, _prefix, _children, leftover_offset_1, leftover_count_1)
+                                    offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, offset_3, buf_eof, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
                                     if _prefix or _children:
                                        raise Exception('bar')
                                     if offset_3 == -1:        break
-                                    indent_column_1 = column_1 - leftover_count_1 if leftover_offset_1 == offset_3 else column_1
+                                    indent_column_1 = column_1
                                 if offset_3 == -1:
                                     break
 
-                                offset_3, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_identifier(buf, offset_3, buf_eof, column_1, indent_column_1, prefix_0, children_3, leftover_offset_1, leftover_count_1)
+                                offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_identifier(buf, offset_3, buf_eof, column_1, indent_column_1, prefix_0, children_3, partial_tab_offset_1, partial_tab_width_1)
                                 if offset_3 == -1: break
 
 
                                 count_1 = 0
-                                if offset_3 == leftover_offset_1 and leftover_count_1 > 0:
-                                     count_1 += leftover_count_1
                                 while offset_3 < buf_eof:
                                     chr = buf[offset_3]
                                     if chr in ' \t':
-                                        width  = (self.tabstop-(column_1%self.tabstop)) if chr == '	' else 1
-                                        count_1 += width
-                                        column_1 += width
+                                        if chr == '\t':
+                                            if offset_3 == partial_tab_offset_1 and partial_tab_width_1 > 0:
+                                                width = partial_tab_width_1
+                                            else:
+                                                width  = (self.tabstop-(column_1%self.tabstop))
+                                            count_1 += width
+                                            column_1 += width
+                                            offset_3 += 1
+                                        else:
+                                            count_1 += 1
+                                            column_1 += 1
+                                            offset_3 += 1
                                     else:
                                         break
 
@@ -2329,23 +2505,30 @@ cdef class Parser:
                                     offset_4 = offset_3
                                     column_2 = column_1
                                     indent_column_2 = indent_column_1
-                                    leftover_offset_2 = leftover_offset_1
-                                    leftover_count_2 = leftover_count_1
+                                    partial_tab_offset_2 = partial_tab_offset_1
+                                    partial_tab_width_2 = partial_tab_width_1
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
                                         count_1 = 0
-                                        if offset_4 == leftover_offset_2 and leftover_count_2 > 0:
-                                             count_1 += leftover_count_2
                                         while offset_4 < buf_eof:
                                             chr = buf[offset_4]
                                             if chr in ' \t':
-                                                width  = (self.tabstop-(column_2%self.tabstop)) if chr == '	' else 1
-                                                count_1 += width
-                                                column_2 += width
+                                                if chr == '\t':
+                                                    if offset_4 == partial_tab_offset_2 and partial_tab_width_2 > 0:
+                                                        width = partial_tab_width_2
+                                                    else:
+                                                        width  = (self.tabstop-(column_2%self.tabstop))
+                                                    count_1 += width
+                                                    column_2 += width
+                                                    offset_4 += 1
+                                                else:
+                                                    count_1 += 1
+                                                    column_2 += 1
+                                                    offset_4 += 1
                                             else:
                                                 break
 
-                                        offset_4, column_2, indent_column_2, leftover_offset_2, leftover_count_2 = self.parse_indented_value(buf, offset_4, buf_eof, column_2, indent_column_2, prefix_0, children_4, leftover_offset_2, leftover_count_2)
+                                        offset_4, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_indented_value(buf, offset_4, buf_eof, column_2, indent_column_2, prefix_0, children_4, partial_tab_offset_2, partial_tab_width_2)
                                         if offset_4 == -1: break
 
 
@@ -2355,8 +2538,8 @@ cdef class Parser:
                                         offset_3 = offset_4
                                         column_1 = column_2
                                         indent_column_1 = indent_column_2
-                                        leftover_offset_1 = leftover_offset_2
-                                        leftover_count_1 = leftover_count_2
+                                        partial_tab_offset_1 = partial_tab_offset_2
+                                        partial_tab_width_1 = partial_tab_width_2
                                         if children_4 is not None and children_4 is not None:
                                             children_3.extend(children_4)
                                         break
@@ -2364,44 +2547,50 @@ cdef class Parser:
                                     offset_4 = offset_3
                                     column_2 = column_1
                                     indent_column_2 = indent_column_1
-                                    leftover_offset_2 = leftover_offset_1
-                                    leftover_count_2 = leftover_count_1
+                                    partial_tab_offset_2 = partial_tab_offset_1
+                                    partial_tab_width_2 = partial_tab_width_1
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
-                                        offset_4, column_2, indent_column_2, leftover_offset_2, leftover_count_2 = self.parse_yaml_eol(buf, offset_4, buf_eof, column_2, indent_column_2, prefix_0, children_4, leftover_offset_2, leftover_count_2)
+                                        offset_4, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_yaml_eol(buf, offset_4, buf_eof, column_2, indent_column_2, prefix_0, children_4, partial_tab_offset_2, partial_tab_width_2)
                                         if offset_4 == -1: break
 
 
-                                        if column_2 != 0:
+                                        if not (column_2 == indent_column_2 == 0):
                                             offset_4 = -1
                                             break
-                                        indent_column_2 = 0
                                         for indent in prefix_0:
                                             _children, _prefix = [], []
-                                            offset_4, column_2, indent_column_2, leftover_offset_2, leftover_count_2 = indent(buf, offset_4, buf_eof, column_2, indent_column_2, _prefix, _children, leftover_offset_2, leftover_count_2)
+                                            offset_4, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = indent(buf, offset_4, buf_eof, column_2, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
                                             if _prefix or _children:
                                                raise Exception('bar')
                                             if offset_4 == -1:        break
-                                            indent_column_2 = column_2 - leftover_count_2 if leftover_offset_2 == offset_4 else column_2
+                                            indent_column_2 = column_2
                                         if offset_4 == -1:
                                             break
 
                                         count_1 = 0
-                                        if offset_4 == leftover_offset_2 and leftover_count_2 > 0:
-                                             count_1 += leftover_count_2
                                         while offset_4 < buf_eof:
                                             chr = buf[offset_4]
                                             if chr in ' \t':
-                                                width  = (self.tabstop-(column_2%self.tabstop)) if chr == '	' else 1
-                                                count_1 += width
-                                                column_2 += width
+                                                if chr == '\t':
+                                                    if offset_4 == partial_tab_offset_2 and partial_tab_width_2 > 0:
+                                                        width = partial_tab_width_2
+                                                    else:
+                                                        width  = (self.tabstop-(column_2%self.tabstop))
+                                                    count_1 += width
+                                                    column_2 += width
+                                                    offset_4 += 1
+                                                else:
+                                                    count_1 += 1
+                                                    column_2 += 1
+                                                    offset_4 += 1
                                             else:
                                                 break
                                         if count_1 < 1:
                                             offset_4 = -1
                                             break
 
-                                        offset_4, column_2, indent_column_2, leftover_offset_2, leftover_count_2 = self.parse_indented_value(buf, offset_4, buf_eof, column_2, indent_column_2, prefix_0, children_4, leftover_offset_2, leftover_count_2)
+                                        offset_4, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_indented_value(buf, offset_4, buf_eof, column_2, indent_column_2, prefix_0, children_4, partial_tab_offset_2, partial_tab_width_2)
                                         if offset_4 == -1: break
 
 
@@ -2411,8 +2600,8 @@ cdef class Parser:
                                         offset_3 = offset_4
                                         column_1 = column_2
                                         indent_column_1 = indent_column_2
-                                        leftover_offset_1 = leftover_offset_2
-                                        leftover_count_1 = leftover_count_2
+                                        partial_tab_offset_1 = partial_tab_offset_2
+                                        partial_tab_width_1 = partial_tab_width_2
                                         if children_4 is not None and children_4 is not None:
                                             children_3.extend(children_4)
                                         break
@@ -2442,8 +2631,8 @@ cdef class Parser:
                         offset_1 = offset_2
                         column_0 = column_1
                         indent_column_0 = indent_column_1
-                        leftover_offset_0 = leftover_offset_1
-                        leftover_count_0 = leftover_count_1
+                        partial_tab_offset_0 = partial_tab_offset_1
+                        partial_tab_width_0 = partial_tab_width_1
                         count_0 += 1
                     if offset_1 == -1:
                         break
@@ -2464,9 +2653,9 @@ cdef class Parser:
             if offset_0 == -1: break
 
             break
-        return offset_0, column_0, indent_column_0, leftover_offset_0, leftover_count_0
+        return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
-    cdef (int, int, int, int, int) parse_indented_value(self, str buf, int offset_0, int buf_eof, int column_0, int indent_column_0,  list prefix_0, list children_0, int leftover_offset_0, int leftover_count_0):
+    cdef (int, int, int, int, int) parse_indented_value(self, str buf, int offset_0, int buf_eof, int column_0, int indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
         cdef Py_UCS4 chr
         cdef int offset_1
         cdef int column_1
@@ -2474,18 +2663,18 @@ cdef class Parser:
         cdef list children_1
 
         cdef int indent_column_1
-        cdef int leftover_offset_1
-        cdef int leftover_count_1
+        cdef int partial_tab_offset_1
+        cdef int partial_tab_width_1
         while True: # note: return at end of loop
             while True: # start choice
                 offset_1 = offset_0
                 column_1 = column_0
                 indent_column_1 = indent_column_0
-                leftover_offset_1 = leftover_offset_0
-                leftover_count_1 = leftover_count_0
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_indented_object(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, leftover_offset_1, leftover_count_1)
+                    offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_indented_object(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                     if offset_1 == -1: break
 
 
@@ -2495,8 +2684,8 @@ cdef class Parser:
                     offset_0 = offset_1
                     column_0 = column_1
                     indent_column_0 = indent_column_1
-                    leftover_offset_0 = leftover_offset_1
-                    leftover_count_0 = leftover_count_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
@@ -2504,11 +2693,11 @@ cdef class Parser:
                 offset_1 = offset_0
                 column_1 = column_0
                 indent_column_1 = indent_column_0
-                leftover_offset_1 = leftover_offset_0
-                leftover_count_1 = leftover_count_0
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_indented_list(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, leftover_offset_1, leftover_count_1)
+                    offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_indented_list(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                     if offset_1 == -1: break
 
 
@@ -2518,8 +2707,8 @@ cdef class Parser:
                     offset_0 = offset_1
                     column_0 = column_1
                     indent_column_0 = indent_column_1
-                    leftover_offset_0 = leftover_offset_1
-                    leftover_count_0 = leftover_count_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
@@ -2527,11 +2716,11 @@ cdef class Parser:
                 offset_1 = offset_0
                 column_1 = column_0
                 indent_column_1 = indent_column_0
-                leftover_offset_1 = leftover_offset_0
-                leftover_count_1 = leftover_count_0
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    offset_1, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, leftover_offset_1, leftover_count_1)
+                    offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                     if offset_1 == -1: break
 
 
@@ -2541,8 +2730,8 @@ cdef class Parser:
                     offset_0 = offset_1
                     column_0 = column_1
                     indent_column_0 = indent_column_1
-                    leftover_offset_0 = leftover_offset_1
-                    leftover_count_0 = leftover_count_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
                     if children_1 is not None and children_1 is not None:
                         children_0.extend(children_1)
                     break
@@ -2553,9 +2742,9 @@ cdef class Parser:
                 break
 
             break
-        return offset_0, column_0, indent_column_0, leftover_offset_0, leftover_count_0
+        return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
-    cdef (int, int, int, int, int) parse_document(self, str buf, int offset_0, int buf_eof, int column_0, int indent_column_0,  list prefix_0, list children_0, int leftover_offset_0, int leftover_count_0):
+    cdef (int, int, int, int, int) parse_document(self, str buf, int offset_0, int buf_eof, int column_0, int indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
         cdef Py_UCS4 chr
         cdef int offset_1, offset_2
         cdef int column_1
@@ -2563,31 +2752,38 @@ cdef class Parser:
         cdef list children_1, children_2
         cdef int count_1
         cdef int indent_column_1
-        cdef int leftover_offset_1
-        cdef int leftover_count_1
+        cdef int partial_tab_offset_1
+        cdef int partial_tab_width_1
         while True: # note: return at end of loop
             count_0 = 0
             while True:
                 offset_1 = offset_0
                 column_1 = column_0
                 indent_column_1 = indent_column_0
-                leftover_offset_1 = leftover_offset_0
-                leftover_count_1 = leftover_count_0
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True:
                     count_1 = 0
-                    if offset_1 == leftover_offset_1 and leftover_count_1 > 0:
-                         count_1 += leftover_count_1
                     while offset_1 < buf_eof:
                         chr = buf[offset_1]
                         if chr in ' \t':
-                            width  = (self.tabstop-(column_1%self.tabstop)) if chr == '	' else 1
-                            count_1 += width
-                            column_1 += width
+                            if chr == '\t':
+                                if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
+                                    width = partial_tab_width_1
+                                else:
+                                    width  = (self.tabstop-(column_1%self.tabstop))
+                                count_1 += width
+                                column_1 += width
+                                offset_1 += 1
+                            else:
+                                count_1 += 1
+                                column_1 += 1
+                                offset_1 += 1
                         else:
                             break
 
-                    offset_1, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_yaml_eol(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, leftover_offset_1, leftover_count_1)
+                    offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_yaml_eol(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                     if offset_1 == -1: break
 
 
@@ -2600,8 +2796,8 @@ cdef class Parser:
                 offset_0 = offset_1
                 column_0 = column_1
                 indent_column_0 = indent_column_1
-                leftover_offset_0 = leftover_offset_1
-                leftover_count_0 = leftover_count_1
+                partial_tab_offset_0 = partial_tab_offset_1
+                partial_tab_width_0 = partial_tab_width_1
                 count_0 += 1
             if offset_0 == -1:
                 break
@@ -2613,11 +2809,11 @@ cdef class Parser:
                     offset_2 = offset_1
                     column_1 = column_0
                     indent_column_1 = indent_column_0
-                    leftover_offset_1 = leftover_offset_0
-                    leftover_count_1 = leftover_count_0
+                    partial_tab_offset_1 = partial_tab_offset_0
+                    partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True: # case
-                        offset_2, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_indented_object(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, leftover_offset_1, leftover_count_1)
+                        offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_indented_object(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                         if offset_2 == -1: break
 
 
@@ -2627,8 +2823,8 @@ cdef class Parser:
                         offset_1 = offset_2
                         column_0 = column_1
                         indent_column_0 = indent_column_1
-                        leftover_offset_0 = leftover_offset_1
-                        leftover_count_0 = leftover_count_1
+                        partial_tab_offset_0 = partial_tab_offset_1
+                        partial_tab_width_0 = partial_tab_width_1
                         if children_2 is not None and children_2 is not None:
                             children_1.extend(children_2)
                         break
@@ -2636,11 +2832,11 @@ cdef class Parser:
                     offset_2 = offset_1
                     column_1 = column_0
                     indent_column_1 = indent_column_0
-                    leftover_offset_1 = leftover_offset_0
-                    leftover_count_1 = leftover_count_0
+                    partial_tab_offset_1 = partial_tab_offset_0
+                    partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True: # case
-                        offset_2, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_indented_list(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, leftover_offset_1, leftover_count_1)
+                        offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_indented_list(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                         if offset_2 == -1: break
 
 
@@ -2650,8 +2846,8 @@ cdef class Parser:
                         offset_1 = offset_2
                         column_0 = column_1
                         indent_column_0 = indent_column_1
-                        leftover_offset_0 = leftover_offset_1
-                        leftover_count_0 = leftover_count_1
+                        partial_tab_offset_0 = partial_tab_offset_1
+                        partial_tab_width_0 = partial_tab_width_1
                         if children_2 is not None and children_2 is not None:
                             children_1.extend(children_2)
                         break
@@ -2659,11 +2855,11 @@ cdef class Parser:
                     offset_2 = offset_1
                     column_1 = column_0
                     indent_column_1 = indent_column_0
-                    leftover_offset_1 = leftover_offset_0
-                    leftover_count_1 = leftover_count_0
+                    partial_tab_offset_1 = partial_tab_offset_0
+                    partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True: # case
-                        offset_2, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_list_literal(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, leftover_offset_1, leftover_count_1)
+                        offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_list_literal(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                         if offset_2 == -1: break
 
 
@@ -2673,8 +2869,8 @@ cdef class Parser:
                         offset_1 = offset_2
                         column_0 = column_1
                         indent_column_0 = indent_column_1
-                        leftover_offset_0 = leftover_offset_1
-                        leftover_count_0 = leftover_count_1
+                        partial_tab_offset_0 = partial_tab_offset_1
+                        partial_tab_width_0 = partial_tab_width_1
                         if children_2 is not None and children_2 is not None:
                             children_1.extend(children_2)
                         break
@@ -2682,11 +2878,11 @@ cdef class Parser:
                     offset_2 = offset_1
                     column_1 = column_0
                     indent_column_1 = indent_column_0
-                    leftover_offset_1 = leftover_offset_0
-                    leftover_count_1 = leftover_count_0
+                    partial_tab_offset_1 = partial_tab_offset_0
+                    partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True: # case
-                        offset_2, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_object_literal(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, leftover_offset_1, leftover_count_1)
+                        offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_object_literal(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                         if offset_2 == -1: break
 
 
@@ -2696,8 +2892,8 @@ cdef class Parser:
                         offset_1 = offset_2
                         column_0 = column_1
                         indent_column_0 = indent_column_1
-                        leftover_offset_0 = leftover_offset_1
-                        leftover_count_0 = leftover_count_1
+                        partial_tab_offset_0 = partial_tab_offset_1
+                        partial_tab_width_0 = partial_tab_width_1
                         if children_2 is not None and children_2 is not None:
                             children_1.extend(children_2)
                         break
@@ -2719,14 +2915,21 @@ cdef class Parser:
             offset_0 = offset_1
 
             count_0 = 0
-            if offset_0 == leftover_offset_0 and leftover_count_0 > 0:
-                 count_0 += leftover_count_0
             while offset_0 < buf_eof:
                 chr = buf[offset_0]
                 if chr in ' \t':
-                    width  = (self.tabstop-(column_0%self.tabstop)) if chr == '	' else 1
-                    count_0 += width
-                    column_0 += width
+                    if chr == '\t':
+                        if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
+                            width = partial_tab_width_0
+                        else:
+                            width  = (self.tabstop-(column_0%self.tabstop))
+                        count_0 += width
+                        column_0 += width
+                        offset_0 += 1
+                    else:
+                        count_0 += 1
+                        column_0 += 1
+                        offset_0 += 1
                 else:
                     break
 
@@ -2735,23 +2938,30 @@ cdef class Parser:
                 offset_1 = offset_0
                 column_1 = column_0
                 indent_column_1 = indent_column_0
-                leftover_offset_1 = leftover_offset_0
-                leftover_count_1 = leftover_count_0
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True:
-                    offset_1, column_1, indent_column_1, leftover_offset_1, leftover_count_1 = self.parse_yaml_eol(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, leftover_offset_1, leftover_count_1)
+                    offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_yaml_eol(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                     if offset_1 == -1: break
 
 
                     count_1 = 0
-                    if offset_1 == leftover_offset_1 and leftover_count_1 > 0:
-                         count_1 += leftover_count_1
                     while offset_1 < buf_eof:
                         chr = buf[offset_1]
                         if chr in ' \t':
-                            width  = (self.tabstop-(column_1%self.tabstop)) if chr == '	' else 1
-                            count_1 += width
-                            column_1 += width
+                            if chr == '\t':
+                                if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
+                                    width = partial_tab_width_1
+                                else:
+                                    width  = (self.tabstop-(column_1%self.tabstop))
+                                count_1 += width
+                                column_1 += width
+                                offset_1 += 1
+                            else:
+                                count_1 += 1
+                                column_1 += 1
+                                offset_1 += 1
                         else:
                             break
 
@@ -2764,8 +2974,8 @@ cdef class Parser:
                 offset_0 = offset_1
                 column_0 = column_1
                 indent_column_0 = indent_column_1
-                leftover_offset_0 = leftover_offset_1
-                leftover_count_0 = leftover_count_1
+                partial_tab_offset_0 = partial_tab_offset_1
+                partial_tab_width_0 = partial_tab_width_1
                 count_0 += 1
             if offset_0 == -1:
                 break
@@ -2775,8 +2985,8 @@ cdef class Parser:
                 offset_1 = offset_0
                 column_1 = column_0
                 indent_column_1 = indent_column_0
-                leftover_offset_1 = leftover_offset_0
-                leftover_count_1 = leftover_count_0
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True:
                     if offset_1 < buf_eof:
@@ -2794,14 +3004,21 @@ cdef class Parser:
                             break
 
                     count_1 = 0
-                    if offset_1 == leftover_offset_1 and leftover_count_1 > 0:
-                         count_1 += leftover_count_1
                     while offset_1 < buf_eof:
                         chr = buf[offset_1]
                         if chr in ' \t':
-                            width  = (self.tabstop-(column_1%self.tabstop)) if chr == '	' else 1
-                            count_1 += width
-                            column_1 += width
+                            if chr == '\t':
+                                if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
+                                    width = partial_tab_width_1
+                                else:
+                                    width  = (self.tabstop-(column_1%self.tabstop))
+                                count_1 += width
+                                column_1 += width
+                                offset_1 += 1
+                            else:
+                                count_1 += 1
+                                column_1 += 1
+                                offset_1 += 1
                         else:
                             break
 
@@ -2814,12 +3031,12 @@ cdef class Parser:
                 offset_0 = offset_1
                 column_0 = column_1
                 indent_column_0 = indent_column_1
-                leftover_offset_0 = leftover_offset_1
-                leftover_count_0 = leftover_count_1
+                partial_tab_offset_0 = partial_tab_offset_1
+                partial_tab_width_0 = partial_tab_width_1
                 count_0 += 1
             if offset_0 == -1:
                 break
 
 
             break
-        return offset_0, column_0, indent_column_0, leftover_offset_0, leftover_count_0
+        return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
