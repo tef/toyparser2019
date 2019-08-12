@@ -66,9 +66,8 @@ def indented_code(buf, pos,end, children):
 
 @_builder
 def code_indent(buf, pos, end, children):
-    text = buf[pos:end]
-    width = sum((4 if c == '\t' else 1) for c in text)
-    return " "*(width-4)
+    width = children[0]
+    return " "*width
 
 @_builder
 def code_line(buf, pos, end, children):
@@ -106,6 +105,7 @@ def block_list(buf, pos,end, children):
             if item == None: continue
             item = "\n".join(wrap(line) for line in item if line)
             out.append(f"<li>\n{item}\n</li>\n")
+        out.extend("</ul>")
     else:
         def wrap(c):
             if isinstance(c, tuple):
@@ -114,7 +114,7 @@ def block_list(buf, pos,end, children):
         for item in children:
             item = "\n".join(wrap(line) for line in item) 
             out.append(f"<li>{item}</li>\n")
-    out.extend("</ul>")
+        out.extend("</ul>")
     return "".join(out)
 
 @_builder
@@ -199,7 +199,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     def atx_heading(self):
         self.whitespace(max=3)
         with self.capture("atx_heading"):
-            with self.count('#') as level:
+            with self.count(char='#') as level:
                 with self.repeat(min=1, max=6):
                     self.accept("#")
             self.capture(value=level)
@@ -208,17 +208,17 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                     self.line_end()
                 with self.case():
                     self.whitespace(min=1)
-            self.inline_element()
-            with self.repeat():
-                with self.reject():
+                    self.inline_element()
+                    with self.repeat():
+                        with self.reject():
+                            self.atx_heading_end()
+                        with self.capture("whitespace"):
+                            self.whitespace()
+                        self.inline_element()
+                    with self.optional():
+                        self.accept("\\")
+                        self.capture(value="\\")
                     self.atx_heading_end()
-                with self.capture("whitespace"):
-                    self.whitespace()
-                self.inline_element()
-            with self.optional():
-                self.accept("\\")
-                self.capture(value="\\")
-        self.atx_heading_end()
 
     @rule()
     def atx_heading_end(self):
@@ -247,18 +247,21 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
         with self.choice():
             with self.case():
                 with self.repeat(min=1):
-                    self.accept('-')
-                self.capture(value=2)
-            with self.case():
-                with self.repeat(min=1):
                     self.accept('=')
                 self.capture(value=1)
+            with self.case():
+                with self.repeat(min=1):
+                    self.accept('-')
+                self.capture(value=2)
         self.line_end()
 
     @rule()
     def indented_code_block(self):
         self.whitespace(min=4, max=4)
-        with self.capture('indented_code'), self.indented(count=4):
+        with self.capture('indented_code'), self.indented():
+            with self.count(columns=True) as w: self.whitespace(min=0, max=3)
+            with self.capture('code_indent'): self.capture(value=w)
+
             with self.capture('code_line'), self.repeat(min=1):
                 self.range("\n", invert=True)
             self.end_of_line()
@@ -267,15 +270,23 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                 self.start_of_line()
                 with self.choice():
                     with self.case():
+                        with self.count(columns=True) as w: self.whitespace(min=0, max=3)
+                        with self.capture('code_indent'): self.capture(value=w)
+
                         with self.capture('code_line'), self.repeat(min=1):
                             self.range("\n", invert=True)
                         self.end_of_line()
                     with self.case():
+                        with self.count(columns=True) as w: self.whitespace(min=0, max=3)
+                        with self.capture('code_indent'): self.capture(value=w)
+
                         with self.capture('code_line'):
                             self.whitespace()
                         self.newline()
                         with self.repeat():
                             self.start_of_line()
+                            with self.capture('code_indent'): self.capture(value=0)
+
                             with self.capture('code_line'):
                                 pass
                             self.newline()
@@ -304,7 +315,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     @rule()
     def backtick_code_block(self):
         fence = "`"
-        with self.count(fence) as c, self.repeat(min=3):
+        with self.count(char=fence) as c, self.repeat(min=3):
             self.accept(fence)
         with self.capture('info'), self.repeat(min=0):
             with self.reject(): # Example 115
@@ -324,15 +335,17 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             with self.case():
                 self.start_of_line()
                 self.whitespace(max=3)
-                with self.repeat(min=c, max=c):
+                with self.repeat(min=c):
+                    self.whitespace()
                     self.accept(fence)
+                self.whitespace()
                 self.line_end()
 
 
     @rule()
     def tilde_code_block(self):
         fence = "~"
-        with self.count(fence) as c, self.repeat(min=3):
+        with self.count(char=fence) as c, self.repeat(min=3):
             self.accept(fence)
         with self.capture('info'), self.repeat(min=0):
             self.range("\n", invert=True)
@@ -350,8 +363,10 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             with self.case():
                 self.start_of_line()
                 self.whitespace(max=3)
-                with self.repeat(min=c, max=c):
+                with self.repeat(min=c):
+                    self.whitespace()
                     self.accept(fence)
+                self.whitespace()
                 self.line_end()
 
     @rule()
@@ -394,7 +409,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     def start_list(self):
         self.whitespace(max=3)
         self.accept('-')
-        self.whitespace(min=1)
+        self.whitespace(min=1, max=1)
 
     @rule()
     def block_list(self):
@@ -426,6 +441,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     @rule()
     def list_item(self):
         with self.indented():
+
             self.block_element()
             with self.repeat():
                 self.start_of_line()
@@ -505,6 +521,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             with self.case(): self.start_fenced_block()
             with self.case(): self.start_list()
             with self.case(): self.start_blockquote()
+            with self.case(): self.setext_heading_line()
 
     @rule()
     def empty_lines(self):
@@ -534,7 +551,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     # html
     @rule()
     def code_span(self):
-        with self.count("`") as c, self.repeat(min=1):
+        with self.count(char="`") as c, self.repeat(min=1):
             self.accept("`")
         with self.capture('code_span'), self.repeat(min=1), self.choice():
             with self.case():
