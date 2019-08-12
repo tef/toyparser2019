@@ -128,6 +128,10 @@ def empty(buf, pos, end, children):
     return None
 
 @_builder
+def empty_line(buf, pos, end, children):
+    return None
+
+@_builder
 def para(buf, pos,end, children):
     return (make_para(children),)
 
@@ -377,6 +381,9 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
         with self.choice():
             with self.case():
                 self.start_blockquote()
+                with self.reject():
+                    self.whitespace()
+                    self.newline()
             with self.case():
                 with self.reject(), self.choice():
                     with self.case(): 
@@ -415,9 +422,6 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                     with self.choice():
                         with self.case():
                             self.block_element()
-                        with self.case():
-                            self.whitespace()
-                            self.newline()
 
     @rule()
     def start_list(self):
@@ -549,7 +553,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             self.start_of_line()
             self.whitespace()
             self.newline()
-        with self.capture("empty"):
+        with self.capture("empty_line"):
             pass
 
     @rule() # 2.1 line ends by newline or eof
