@@ -94,27 +94,35 @@ def blockquote(buf, pos, end, children):
     end = '\n' if text != '\n' else ''
     return f"<blockquote>\n{text}{end}</blockquote>"
 
+def loose(list_items):
+    idx = 0
+    while idx < len(list_items) and list_items[idx] is None: idx+=1
+    while idx < len(list_items) and list_items[idx] is not None: idx+=1
+    while idx < len(list_items) and list_items[idx] is None: idx+=1
+    return idx != len(list_items)
+
 @_builder
-def block_list(buf, pos,end, children):
+def block_list(buf, pos,end, list_items):
     out = ["<ul>\n"]
-    if None in children or any(None in c for c in children if c):
+
+    if loose(list_items) or any(loose(c) for c in list_items if c):
         def wrap(c):
             if isinstance(c, tuple):
                 return f"<p>{c[0]}</p>"
             return c
-        for item in children:
+        for item in list_items:
             if item == None: continue
             item = "\n".join(wrap(line) for line in item if line)
             out.append(f"<li>\n{item}\n</li>\n")
         out.extend("</ul>")
     else:
         def wrap(c):
+            if not c: return ""
             if isinstance(c, tuple):
                 return f"{c[0]}"
             return c+"\n"
-        for item in children:
+        for item in list_items:
             item = "\n".join(wrap(line) for line in item) 
-            if isinstance(item[0], tuple): item = f"\n{item}"
             out.append(f"<li>{item}</li>\n")
         out.extend("</ul>")
     return "".join(out)
@@ -164,14 +172,15 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     def document(self):
         with self.capture("document"), self.repeat(min=0):
             self.start_of_line()
-            self.block_element()
+            with self.choice():
+                with self.case(): self.block_element()
+                with self.case(): self.empty_lines()
         self.whitespace()
         self.eof()
 
     # 3. Block and Inline Elemnts
 
     block_element = rule(
-        empty_lines |
         indented_code_block | 
         fenced_code_block |
         blockquote | 
@@ -443,14 +452,25 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     def start_list(self):
         self.whitespace(max=3)
         self.accept('-')
-        self.whitespace(min=1, max=1)
+        with self.choice():
+            with self.case(), self.lookahead():
+                self.whitespace()
+                self.end_of_line()
+            with self.case():
+                self.whitespace(min=1, max=1, newline=True)
 
     @rule()
     def block_list(self):
         with self.capture("block_list"):
             self.start_list()
-            with self.capture("list_item"):
-                self.list_item()
+            with self.choice():
+                with self.case():
+                    with self.capture("list_item"):
+                        self.list_item()
+                with self.case():
+                    with self.capture("list_item"):
+                        self.whitespace()
+                    self.end_of_line()
             with self.repeat():
                 self.start_of_line()
                 with self.choice():
@@ -467,17 +487,37 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                             self.accept('-')
                     with self.case():
                         self.start_list()
-                        with self.capture("list_item"):
-                            self.list_item()
+                        with self.choice():
+                            with self.case():
+                                with self.capture("list_item"):
+                                    self.list_item()
+                            with self.case():
+                                with self.capture("list_item"):
+                                    self.whitespace()
+                                self.end_of_line()
 
     @rule()
     def list_item(self):
         with self.choice():
             with self.case():
                 with self.lookahead():
-                    self.whitespace(min=4)
+                    self.whitespace(min=4, max=4)
+                    with self.reject():
+                        self.line_end()
             with self.case():
-                self.whitespace(max=3)
+                self.whitespace()
+                with self.reject(): 
+                    self.newline()
+            with self.case():
+                with self.lookahead():
+                    self.whitespace()
+                    self.newline()
+                with self.indented():
+                    self.whitespace()
+                    self.newline()
+                    self.start_of_line()
+                    self.whitespace(min=1, max=1)
+
         with self.indented():
             self.block_element()
             with self.repeat():
@@ -491,8 +531,6 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                     with self.lookahead():
                         self.whitespace()
                         self.range("\n", invert=True)
-                with self.reject():
-                    self.empty_lines()
                 self.block_element()
 
     @rule()
@@ -846,15 +884,15 @@ for t in tests:
         #print(repr(markd))
         #print(repr(out))
     else:
-        print(t['example'], 'failed')
         failed +=1
         if '<' in markd: continue
         if '*' in markd: continue
         if '1.' in markd: continue
         if '`' in markd: continue
-        if '[foo]' in markd: continue
-        if '[FOO]' in markd: continue
+        if '[' in markd: continue
+        if '&' in markd: continue
         if out.replace('\n','') == t['html'].replace('\n',''): continue
+        print(t['example'])
         print(repr(markd))
         print('=', repr(t['html']))
         print('X', repr(out))

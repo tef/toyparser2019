@@ -1442,7 +1442,7 @@ def compile_python(grammar, builder=None, cython=False):
 
         elif rule.kind == PRINT:
             args = [values.get(a, repr(a)) for a in rule.args['args']]
-            steps.append(f"print('print', {', '.join(args)}, 'at' ,{offset}, repr(buf[{offset}:{offset}+15]), {prefix})")
+            steps.append(f"print('print', {', '.join(args)}, 'at' ,{offset},'col', {column}, repr(buf[{offset}:{offset}+15]), {prefix})")
         elif rule.kind == TRACE:
             steps.append(f"print('begin trace', 'at' ,{offset}, repr(buf[{offset}:{offset}+5]))")
             steps.append('while True:')
