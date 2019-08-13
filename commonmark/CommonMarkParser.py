@@ -1052,41 +1052,48 @@ class Parser:
             offset_1 = offset_0
             children_1 = []
             while True: # start capture
-                offset_1, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0 = self.parse_para_line(buf, offset_1, buf_eof, column_0, indent_column_0, prefix_0, children_1, partial_tab_offset_0, partial_tab_width_0)
-                if offset_1 == -1: break
+                prefix_0.append(self.parse_no_setext_heading_line)
+                indent_column_0 = column_0
+                while True:
+                    offset_1, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0 = self.parse_setext_para(buf, offset_1, buf_eof, column_0, indent_column_0, prefix_0, children_1, partial_tab_offset_0, partial_tab_width_0)
+                    if offset_1 == -1: break
 
 
-                count_0 = 0
-                while offset_1 < buf_eof:
-                    chr = buf[offset_1]
-                    if chr in ' \t':
-                        if chr == '\t':
-                            if offset_1 == partial_tab_offset_0 and partial_tab_width_0 > 0:
-                                width = partial_tab_width_0
+                    count_0 = 0
+                    while offset_1 < buf_eof:
+                        chr = buf[offset_1]
+                        if chr in ' \t':
+                            if chr == '\t':
+                                if offset_1 == partial_tab_offset_0 and partial_tab_width_0 > 0:
+                                    width = partial_tab_width_0
+                                else:
+                                    width  = (self.tabstop-(column_0%self.tabstop))
+                                count_0 += width
+                                column_0 += width
+                                offset_1 += 1
                             else:
-                                width  = (self.tabstop-(column_0%self.tabstop))
-                            count_0 += width
-                            column_0 += width
-                            offset_1 += 1
+                                count_0 += 1
+                                column_0 += 1
+                                offset_1 += 1
                         else:
-                            count_0 += 1
-                            column_0 += 1
-                            offset_1 += 1
-                    else:
-                        break
+                            break
 
-                if offset_1 < buf_eof:
-                    chr = buf[offset_1]
-                    if chr in '\n':
-                        offset_1 +=1
-                        column_0 = 0
-                        indent_column_0 = 0
+                    if offset_1 < buf_eof:
+                        chr = buf[offset_1]
+                        if chr in '\n':
+                            offset_1 +=1
+                            column_0 = 0
+                            indent_column_0 = 0
+                        else:
+                            offset_1 = -1
+                            break
                     else:
                         offset_1 = -1
                         break
-                else:
-                    offset_1 = -1
+
                     break
+                prefix_0.pop()
+                if offset_1 == -1: break
 
                 if not (column_0 == indent_column_0 == 0):
                     offset_1 = -1
@@ -1116,6 +1123,33 @@ class Parser:
             children_0.append(value_0)
             offset_0 = offset_1
 
+
+            break
+        return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
+
+    def parse_no_setext_heading_line(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
+        while True: # note: return at end of loop
+            while True: # start reject
+                children_1 = []
+                offset_1 = offset_0
+                column_1 = column_0
+                indent_column_1 = indent_column_0
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
+                if buf[offset_1:offset_1+1] == '=':
+                    offset_1 += 1
+                    column_1 += 1
+                elif buf[offset_1:offset_1+1] == '-':
+                    offset_1 += 1
+                    column_1 += 1
+                else:
+                    offset_1 = -1
+                    break
+
+                break
+            if offset_1 != -1:
+                offset_0 = -1
+                break
 
             break
         return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
@@ -3772,7 +3806,19 @@ class Parser:
                 else:
                     break
 
-            if buf[offset_0:offset_0+1] == '-':
+            if offset_0 == buf_eof:
+                offset_0 = -1
+                break
+
+            chr = ord(buf[offset_0])
+
+            if chr == 45:
+                offset_0 += 1
+                column_0 += 1
+            elif chr == 42:
+                offset_0 += 1
+                column_0 += 1
+            elif chr == 43:
                 offset_0 += 1
                 column_0 += 1
             else:
@@ -5355,29 +5401,6 @@ class Parser:
                                                                 children_6.extend(children_7)
                                                             break
                                                         # end case
-                                                        offset_7 = offset_6
-                                                        column_5 = column_4
-                                                        indent_column_5 = indent_column_4
-                                                        partial_tab_offset_5 = partial_tab_offset_4
-                                                        partial_tab_width_5 = partial_tab_width_4
-                                                        children_7 = [] if children_6 is not None else None
-                                                        while True: # case
-                                                            offset_7, column_5, indent_column_5, partial_tab_offset_5, partial_tab_width_5 = self.parse_setext_heading_line(buf, offset_7, buf_eof, column_5, indent_column_5, prefix_0, children_7, partial_tab_offset_5, partial_tab_width_5)
-                                                            if offset_7 == -1: break
-
-
-
-                                                            break
-                                                        if offset_7 != -1:
-                                                            offset_6 = offset_7
-                                                            column_4 = column_5
-                                                            indent_column_4 = indent_column_5
-                                                            partial_tab_offset_4 = partial_tab_offset_5
-                                                            partial_tab_width_4 = partial_tab_width_5
-                                                            if children_7 is not None and children_7 is not None:
-                                                                children_6.extend(children_7)
-                                                            break
-                                                        # end case
                                                         offset_6 = -1 # no more choices
                                                         break # end choice
                                                     if offset_6 == -1:
@@ -5584,29 +5607,6 @@ class Parser:
                                                         children_7 = [] if children_6 is not None else None
                                                         while True: # case
                                                             offset_7, column_5, indent_column_5, partial_tab_offset_5, partial_tab_width_5 = self.parse_start_blockquote(buf, offset_7, buf_eof, column_5, indent_column_5, prefix_0, children_7, partial_tab_offset_5, partial_tab_width_5)
-                                                            if offset_7 == -1: break
-
-
-
-                                                            break
-                                                        if offset_7 != -1:
-                                                            offset_6 = offset_7
-                                                            column_4 = column_5
-                                                            indent_column_4 = indent_column_5
-                                                            partial_tab_offset_4 = partial_tab_offset_5
-                                                            partial_tab_width_4 = partial_tab_width_5
-                                                            if children_7 is not None and children_7 is not None:
-                                                                children_6.extend(children_7)
-                                                            break
-                                                        # end case
-                                                        offset_7 = offset_6
-                                                        column_5 = column_4
-                                                        indent_column_5 = indent_column_4
-                                                        partial_tab_offset_5 = partial_tab_offset_4
-                                                        partial_tab_width_5 = partial_tab_width_4
-                                                        children_7 = [] if children_6 is not None else None
-                                                        while True: # case
-                                                            offset_7, column_5, indent_column_5, partial_tab_offset_5, partial_tab_width_5 = self.parse_setext_heading_line(buf, offset_7, buf_eof, column_5, indent_column_5, prefix_0, children_7, partial_tab_offset_5, partial_tab_width_5)
                                                             if offset_7 == -1: break
 
 
@@ -5942,7 +5942,7 @@ class Parser:
             break
         return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
-    def parse_para_line(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
+    def parse_setext_para(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
         while True: # note: return at end of loop
             offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0 = self.parse_inline_element(buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0)
             if offset_0 == -1: break
@@ -6299,33 +6299,26 @@ class Parser:
                                                     children_4.extend(children_5)
                                                 break
                                             # end case
-                                            offset_5 = offset_4
-                                            column_5 = column_4
-                                            indent_column_5 = indent_column_4
-                                            partial_tab_offset_5 = partial_tab_offset_4
-                                            partial_tab_width_5 = partial_tab_width_4
-                                            children_5 = [] if children_4 is not None else None
-                                            while True: # case
-                                                offset_5, column_5, indent_column_5, partial_tab_offset_5, partial_tab_width_5 = self.parse_setext_heading_line(buf, offset_5, buf_eof, column_5, indent_column_5, prefix_0, children_5, partial_tab_offset_5, partial_tab_width_5)
-                                                if offset_5 == -1: break
-
-
-
-                                                break
-                                            if offset_5 != -1:
-                                                offset_4 = offset_5
-                                                column_4 = column_5
-                                                indent_column_4 = indent_column_5
-                                                partial_tab_offset_4 = partial_tab_offset_5
-                                                partial_tab_width_4 = partial_tab_width_5
-                                                if children_5 is not None and children_5 is not None:
-                                                    children_4.extend(children_5)
-                                                break
-                                            # end case
                                             offset_4 = -1 # no more choices
                                             break # end choice
                                         if offset_4 == -1:
                                             break
+
+                                        break
+                                    if offset_4 != -1:
+                                        offset_3 = -1
+                                        break
+
+                                    while True: # start reject
+                                        children_4 = []
+                                        offset_4 = offset_3
+                                        column_4 = column_3
+                                        indent_column_4 = indent_column_3
+                                        partial_tab_offset_4 = partial_tab_offset_3
+                                        partial_tab_width_4 = partial_tab_width_3
+                                        offset_4, column_4, indent_column_4, partial_tab_offset_4, partial_tab_width_4 = self.parse_setext_heading_line(buf, offset_4, buf_eof, column_4, indent_column_4, prefix_0, children_4, partial_tab_offset_4, partial_tab_width_4)
+                                        if offset_4 == -1: break
+
 
                                         break
                                     if offset_4 != -1:
@@ -6543,33 +6536,26 @@ class Parser:
                                                     children_4.extend(children_5)
                                                 break
                                             # end case
-                                            offset_5 = offset_4
-                                            column_5 = column_4
-                                            indent_column_5 = indent_column_4
-                                            partial_tab_offset_5 = partial_tab_offset_4
-                                            partial_tab_width_5 = partial_tab_width_4
-                                            children_5 = [] if children_4 is not None else None
-                                            while True: # case
-                                                offset_5, column_5, indent_column_5, partial_tab_offset_5, partial_tab_width_5 = self.parse_setext_heading_line(buf, offset_5, buf_eof, column_5, indent_column_5, prefix_0, children_5, partial_tab_offset_5, partial_tab_width_5)
-                                                if offset_5 == -1: break
-
-
-
-                                                break
-                                            if offset_5 != -1:
-                                                offset_4 = offset_5
-                                                column_4 = column_5
-                                                indent_column_4 = indent_column_5
-                                                partial_tab_offset_4 = partial_tab_offset_5
-                                                partial_tab_width_4 = partial_tab_width_5
-                                                if children_5 is not None and children_5 is not None:
-                                                    children_4.extend(children_5)
-                                                break
-                                            # end case
                                             offset_4 = -1 # no more choices
                                             break # end choice
                                         if offset_4 == -1:
                                             break
+
+                                        break
+                                    if offset_4 != -1:
+                                        offset_3 = -1
+                                        break
+
+                                    while True: # start reject
+                                        children_4 = []
+                                        offset_4 = offset_3
+                                        column_4 = column_3
+                                        indent_column_4 = indent_column_3
+                                        partial_tab_offset_4 = partial_tab_offset_3
+                                        partial_tab_width_4 = partial_tab_width_3
+                                        offset_4, column_4, indent_column_4, partial_tab_offset_4, partial_tab_width_4 = self.parse_setext_heading_line(buf, offset_4, buf_eof, column_4, indent_column_4, prefix_0, children_4, partial_tab_offset_4, partial_tab_width_4)
+                                        if offset_4 == -1: break
+
 
                                         break
                                     if offset_4 != -1:
@@ -6795,7 +6781,6 @@ class Parser:
                 count_0 += 1
             if offset_0 == -1:
                 break
-
 
             count_0 = 0
             while offset_0 < buf_eof:

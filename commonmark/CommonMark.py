@@ -92,7 +92,8 @@ def info(buf, pos,end, children):
 def blockquote(buf, pos, end, children):
     text = join_blocks(children)
     end = '\n' if text != '\n' else ''
-    return f"<blockquote>\n{text}{end}</blockquote>"
+    start = '\n' if text and text != '\n' else ''
+    return f"<blockquote>{start}{text}{end}</blockquote>"
 
 def loose(list_items):
     idx = 0
@@ -123,7 +124,7 @@ def block_list(buf, pos,end, list_items):
             return c+"\n"
         for item in list_items:
             text = "\n".join(wrap(line) for line in item) 
-            if item and not isinstance(item[0], tuple): text=f"\n{text}"
+            if item and text and not isinstance(item[0], tuple): text=f"\n{text}"
             out.append(f"<li>{text}</li>\n")
         out.extend("</ul>")
     return "".join(out)
@@ -251,11 +252,17 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
         # ATX heading, block quote, thematic break, list item, or HTML block.
         self.whitespace(max=3)
         with self.capture('setext_heading'):
-            self.para_line()
-            self.whitespace()
-            self.newline()
+            with self.no_setext_heading_line.as_line_prefix():
+                self.setext_para()
+                self.whitespace()
+                self.newline()
             self.start_of_line()
             self.setext_heading_line()
+
+    @rule()
+    def no_setext_heading_line(self):
+        with self.reject():
+            self.accept('=','-')
 
     @rule()
     def setext_heading_line(self):
@@ -452,7 +459,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     @rule()
     def start_list(self):
         self.whitespace(max=3)
-        self.accept('-')
+        self.range('-', '*', '+')
         with self.choice():
             with self.case(), self.lookahead():
                 self.whitespace()
@@ -546,8 +553,56 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             self.end_of_line()
             
     @rule()
-    def para_line(self):
-        self.inline_para.inline()
+    def setext_para(self):
+        self.inline_element()
+        with self.repeat():
+            with self.choice():
+                with self.case():
+                    # newline ?
+                    with self.choice():
+                        with self.case():
+                            with self.choice():
+                                with self.case(): self.whitespace(min=2)
+                                with self.case(): self.accept("\\")
+                            with self.capture("hardbreak"):
+                                self.newline()
+                        with self.case():
+                            self.whitespace()
+                            with self.capture("softbreak"):
+                                self.newline()
+
+                    with self.choice():
+                        with self.case():
+                            self.start_of_line()
+                            with self.reject():
+                                self.para_interrupt.inline()
+                            with self.reject():
+                                self.setext_heading_line()
+                            self.whitespace()
+                            with self.reject():
+                                self.newline()
+                        with self.case():
+                            # lazy continuation
+                            with self.reject():
+                                self.start_of_line()
+                            with self.reject():
+                                self.para_interrupt.inline()
+                            with self.reject():
+                                self.setext_heading_line()
+                            self.whitespace()
+                            with self.reject():
+                                self.newline()
+                with self.case():
+                    with self.capture("whitespace"):
+                        self.whitespace()
+                    with self.optional():
+                        with self.capture('text'):
+                            self.accept("\\")
+                        with self.lookahead():
+                            self.newline()
+
+            # 4.1 Ex 27, 28. Thematic Breaks can interrupt a paragraph
+            self.inline_element()
         self.whitespace()
         with self.optional():
             self.accept("\\")
@@ -609,7 +664,6 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             with self.case(): self.start_fenced_block()
             with self.case(): self.start_list()
             with self.case(): self.start_blockquote()
-            with self.case(): self.setext_heading_line()
 
     @rule()
     def empty_lines(self):
@@ -907,7 +961,23 @@ for t in tests:
         print()
 print(count, worked, failed)
 
-_markup("""
-\\
-a
+_markup("""\
+> a
+> b
+> ===
+""")
+_markup("""\
+- a
+  b
+  ===
+""")
+_markup("""\
+> a
+b
+===
+""")
+_markup("""\
+- a
+b
+===
 """)
