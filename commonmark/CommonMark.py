@@ -122,8 +122,9 @@ def block_list(buf, pos,end, list_items):
                 return f"{c[0]}"
             return c+"\n"
         for item in list_items:
-            item = "\n".join(wrap(line) for line in item) 
-            out.append(f"<li>{item}</li>\n")
+            text = "\n".join(wrap(line) for line in item) 
+            if item and not isinstance(item[0], tuple): text=f"\n{text}"
+            out.append(f"<li>{text}</li>\n")
         out.extend("</ul>")
     return "".join(out)
 
@@ -885,13 +886,13 @@ for t in tests:
         #print(repr(out))
     else:
         failed +=1
-        if '<' in markd: continue
-        if '*' in markd: continue
-        if '1.' in markd: continue
-        if '`' in markd: continue
-        if '[' in markd: continue
-        if '&' in markd: continue
-        if out.replace('\n','') == t['html'].replace('\n',''): continue
+        #if '<' in markd: continue
+        #if '*' in markd: continue
+        #if '1.' in markd: continue
+        #if '`' in markd: continue
+        #if '[' in markd: continue
+        #if '&' in markd: continue
+        #if out.replace('\n','') == t['html'].replace('\n',''): continue
         print(t['example'])
         print(repr(markd))
         print('=', repr(t['html']))
