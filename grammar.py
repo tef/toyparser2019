@@ -244,6 +244,7 @@ LITERAL = 'literal'
 RANGE = 'range'
 SEQUENCE = 'seq'
 CAPTURE = 'capture'
+BACKREF = 'backref'
 CHOICE = 'choice'
 REPEAT = 'repeat'
 MEMOIZE = 'memoize'
@@ -548,11 +549,25 @@ class FunctionBuilder:
         rules.append(counter)
         self.rules = rules
 
-    def capture(self, name=None, *, value=NULL, nested=True):
+    def backref(self):
         if self.block_mode: raise SyntaxError()
-        if value is not NULL:
-            self.rules.append(ValueNode(value))
-            return
+        
+        @contextmanager
+        def _capture():
+            rules = self.rules
+            self.rules = []
+            c= GrammarNode(BACKREF, rules=self.rules)
+            yield c.key
+            rules.append(c)
+            self.rules = rules
+
+        return _capture()
+
+    def capture_buffer(self, name):
+        return self.capture_node(name, nested=False)
+
+    def capture_node(self, name, nested=True):
+        if self.block_mode: raise SyntaxError()
         if name is None:
             raise Exception('missing name')
         
@@ -562,7 +577,7 @@ class FunctionBuilder:
             self.rules = []
             c= CaptureNode(name, args=dict(nested=nested), rules=self.rules)
             yield c.key
-            rules.append(
+            rules.append(c)
             self.rules = rules
 
         return _capture()
@@ -852,6 +867,27 @@ def compile_python(grammar, builder=None, cython=False):
             steps.append(f"    {children}.extend({children_0})")
             steps.append(f"if {offset} == -1:")
             steps.append(f"    break")
+
+        elif rule.kind == BACKREF:
+            children_0 = children.incr()
+            offset_0 = offset.incr()
+            steps.append(f"{offset_0} = {offset}")
+            if not rule.rules:
+                raise Exception('bad')
+            steps.append(f"while True: # start backref")
+            build_subrules(rule.rules, steps.add_indent(), offset_0, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children_0, count, values)
+            steps.append(f"    break")
+            steps.append(f"if {offset_0} == -1:")
+            steps.append(f"    {offset} = -1")
+            steps.append(f"    break")
+
+            value = VarBuilder('value', n=len(values))
+            values[rule.key] = value
+
+            steps.extend((
+                f"{value} = buf[{offset}:{offset_0}]",
+            ))
+            steps.append(f"{offset} = {offset_0}")
 
         elif rule.kind == CAPTURE:
             name = repr(rule.args['name'])
@@ -1258,7 +1294,7 @@ def compile_python(grammar, builder=None, cython=False):
 
                 if literal in values:
                     vliteral = values[literal]
-                    length = f"len({literal})"
+                    length = f"len({vliteral})"
                     cond = f"buf[{offset}:{offset}+{length}] == {(vliteral)}"
                 else:
                     length = len(literal)

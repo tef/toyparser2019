@@ -333,7 +333,7 @@ class Parser:
                     return
                     break
             char = rule.args['char']
-            key = rule.args['key']
+            key = rule.key
             buf = state.buf[start:state.offset]
             # print('count', char,'in',buf, '=',buf.count(char))
             state.values[key] = buf.count(char)
@@ -386,14 +386,14 @@ class Parser:
                     # print('rep+', repr(state.buf[state.offset:state.offset+5]), step, rule)
                     new = self.parse_rule(step, new)
                     if new is None:
-                        state.values[rule.args['key']] = c
+                        state.values[rule.key] = c
                         return state
                 if new.offset == state.offset:
-                    state.values[rule.args['key']] = c
+                    state.values[rule.key] = c
                     return state
                 state = state.merge_choice(new)
                 c+=1
-            state.values[rule.args['key']] = c
+            state.values[rule.key] = c
             return state
 
         elif rule.kind == LITERAL:

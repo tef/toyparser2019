@@ -26,7 +26,7 @@ class JSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n"]):
         self.whitespace()
         with self.lookahead():
             self.accept('[', '{')
-        with self.capture("document"), self.choice():
+        with self.capture_node("document"), self.choice():
             with self.case(): self.json_list.inline()
             with self.case(): self.json_object.inline()
 
@@ -43,20 +43,20 @@ class JSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n"]):
     
     @rule()
     def json_true(self):
-        with self.capture("bool", nested=False):
+        with self.capture_node("bool", nested=False):
             self.accept("true")
     @rule()
     def json_false(self):
-        with self.capture("bool", nested=False):
+        with self.capture_node("bool", nested=False):
             self.accept("false")
     @rule()
     def json_null(self):
-        with self.capture("bool", nested=False):
+        with self.capture_node("bool", nested=False):
             self.accept("null")
 
     @rule()
     def json_number(self):
-        with self.capture("number", nested=False):
+        with self.capture_node("number", nested=False):
             with self.optional():
                 self.accept("-")
             with self.choice():
@@ -80,7 +80,7 @@ class JSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n"]):
     @rule()
     def json_string(self):
         self.accept("\"")
-        with self.capture("string", nested=False), self.repeat(), self.choice():
+        with self.capture_node("string", nested=False), self.repeat(), self.choice():
             with self.case():
                 self.accept("\\u")
                 self.range("0-9", "a-f", "A-F")
@@ -101,7 +101,7 @@ class JSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n"]):
     def json_list(self):
         self.accept("[")
         self.whitespace()
-        with self.capture("list"), self.repeat(max=1):
+        with self.capture_node("list"), self.repeat(max=1):
             self.json_value()
             with self.repeat(min=0):
                 self.whitespace()
@@ -114,8 +114,8 @@ class JSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n"]):
     def json_object(self):
         self.accept("{")
         self.whitespace()
-        with self.capture("object"), self.optional():
-            with self.capture("pair"):
+        with self.capture_node("object"), self.optional():
+            with self.capture_node("pair"):
                 self.json_string.inline()
                 self.whitespace()
                 self.accept(":")
@@ -125,7 +125,7 @@ class JSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n"]):
             with self.repeat(min=0):
                 self.accept(",")
                 self.whitespace()
-                with self.capture("pair"):
+                with self.capture_node("pair"):
                     self.json_string()
                     self.whitespace()
                     self.accept(":")

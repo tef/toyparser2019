@@ -37,14 +37,14 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n", "\r
     @rule()
     def identifier(self):
         with self.choice():
-            with self.case(), self.capture('identifier'), self.repeat(min=1):
+            with self.case(), self.capture_node('identifier'), self.repeat(min=1):
                 self.range("a-z","A-Z","_")
             with self.case():
                 self.string_literal()
 
     @rule()
     def number_literal(self):
-        with self.capture("number"):
+        with self.capture_node("number"):
             with self.optional():
                 self.range("-", "+")
             with self.repeat(min=1):
@@ -63,7 +63,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n", "\r
     @rule()
     def string_literal(self):
         self.accept("\"")
-        with self.capture("string"), self.repeat(), self.choice():
+        with self.capture_node("string"), self.repeat(), self.choice():
             with self.case():
                 self.accept("\\u")
                 self.range("0-9", "a-f", "A-F")
@@ -84,7 +84,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n", "\r
     def list_literal(self):
         self.accept("[")
         self.whitespace(newline=True)
-        with self.capture("list"), self.repeat(max=1):
+        with self.capture_node("list"), self.repeat(max=1):
             self.literal()
             with self.repeat(min=0):
                 self.whitespace(newline=True)
@@ -101,7 +101,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n", "\r
     def object_literal(self):
         self.accept("{")
         self.whitespace(newline=True)
-        with self.capture("object"), self.optional():
+        with self.capture_node("object"), self.optional():
             self.string_literal()
             self.whitespace() # must be on same line as :
             self.accept(":")
@@ -138,7 +138,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n", "\r
     
     @rule()
     def indented_list(self):
-        with self.indented(), self.capture('list'):
+        with self.indented(), self.capture_node('list'):
             self.accept("-")
             with self.choice():
                 with self.case():
@@ -167,8 +167,8 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n", "\r
 
     @rule()
     def indented_object(self):
-        with self.indented(), self.capture('object'):
-            with self.capture("pair"):
+        with self.indented(), self.capture_node('object'):
+            with self.capture_node("pair"):
                 self.identifier()
                 self.whitespace()
                 self.accept(":")
@@ -182,7 +182,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n", "\r
                         self.whitespace()
                         self.indented_value()
 
-            with self.repeat(), self.capture("pair"):
+            with self.repeat(), self.capture_node("pair"):
                 self.yaml_eol()
                 self.start_of_line()
                 self.identifier()
@@ -214,7 +214,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n", "\r
         with self.repeat():
             self.whitespace()
             self.yaml_eol()
-        with self.capture("document"), self.choice():
+        with self.capture_node("document"), self.choice():
             with self.case():
                 self.indented_object()
             with self.case():

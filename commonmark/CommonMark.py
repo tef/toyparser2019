@@ -19,7 +19,7 @@ ast_builder = {
     'fenced_code': (lambda buf, pos, end, children: {"fenced_code":children}),
     'info': (lambda buf, pos, end, children: {"info":buf[pos:end]}),
     'blockquote': (lambda buf, pos, end, children: {"blockquote":children}),
-    'block_list': (lambda buf, pos, end, children: {"list":children}),
+    'unordered_list': (lambda buf, pos, end, children: {"list":children}),
     'list_item': (lambda buf, pos, end, children: {"item":children}),
     'para': (lambda buf, pos, end, children: {"para":children}),
     'text': (lambda buf, pos, end, children: buf[pos:end]),
@@ -103,7 +103,7 @@ def loose(list_items):
     return idx != len(list_items)
 
 @_builder
-def block_list(buf, pos,end, list_items):
+def unordered_list(buf, pos,end, list_items):
     out = ["<ul>\n"]
 
     if loose(list_items) or any(loose(c) for c in list_items if c):
@@ -172,7 +172,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     version = 0.29
     @rule()
     def document(self):
-        with self.capture("document"), self.repeat(min=0):
+        with self.capture_node("document"), self.repeat(min=0):
             self.start_of_line()
             with self.choice():
                 with self.case(): self.block_element()
@@ -192,7 +192,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             # 4.1 Ex 30. Thematic Breaks take precidence over lists
         # HTML Block
         # Link reference_definiton
-        block_list |
+        unordered_list |
         setext_heading |     
         para 
     )
@@ -200,7 +200,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     @rule() # 4.1
     def thematic_break(self):
         self.whitespace(min=0, max=3)
-        with self.capture('thematic_break'), self.choice():
+        with self.capture_node('thematic_break'), self.choice():
             with self.case(), self.repeat(min=3):
                 self.accept("-")
                 self.whitespace()
@@ -215,11 +215,11 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     @rule()
     def atx_heading(self):
         self.whitespace(max=3)
-        with self.capture("atx_heading"):
+        with self.capture_node("atx_heading"):
             with self.count(char='#') as level:
                 with self.repeat(min=1, max=6):
                     self.accept("#")
-            self.capture(value=level)
+            self.capture_value(level)
             with self.choice():
                 with self.case():
                     self.atx_heading_end()
@@ -229,12 +229,12 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                     with self.repeat():
                         with self.reject():
                             self.atx_heading_end()
-                        with self.capture("whitespace"):
+                        with self.capture_node("whitespace"):
                             self.whitespace()
                         self.inline_element()
                     with self.optional():
                         self.accept("\\")
-                        self.capture(value="\\")
+                        self.capture_value("\\")
                     self.atx_heading_end()
 
     @rule()
@@ -251,7 +251,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
         # 4.3 they cannot be interpretable as a code fence, 
         # ATX heading, block quote, thematic break, list item, or HTML block.
         self.whitespace(max=3)
-        with self.capture('setext_heading'):
+        with self.capture_node('setext_heading'):
             with self.no_setext_heading_line.as_line_prefix():
                 self.setext_para()
                 self.whitespace()
@@ -271,22 +271,22 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             with self.case():
                 with self.repeat(min=1):
                     self.accept('=')
-                self.capture(value=1)
+                self.capture_value(1)
             with self.case():
                 with self.repeat(min=1):
                     self.accept('-')
-                self.capture(value=2)
+                self.capture_value(2)
         self.line_end()
 
     @rule()
     def indented_code_block(self):
         self.whitespace(min=4, max=4)
-        with self.capture('indented_code'), self.indented():
+        with self.capture_node('indented_code'), self.indented():
 
             with self.count(columns=True) as w: self.partial_tab()
-            with self.capture('partial_indent'): self.capture(value=w)
+            with self.capture_node('partial_indent'): self.capture_value(w)
 
-            with self.capture('code_line'):
+            with self.capture_node('code_line'):
                 self.whitespace()
                 with self.repeat(min=1): self.range("\n", invert=True)
             self.end_of_line()
@@ -296,7 +296,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                     with self.case():
                         with self.repeat(min=1):
                             self.start_of_line()
-                            with self.capture('code_line'):
+                            with self.capture_node('code_line'):
                                 self.whitespace()
                             self.newline()
                         with self.lookahead():
@@ -307,9 +307,9 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                     with self.case():
                         self.start_of_line()
                         with self.count(columns=True) as w: self.partial_tab()
-                        with self.capture('partial_indent'): self.capture(value=w)
+                        with self.capture_node('partial_indent'): self.capture_value(w)
 
-                        with self.capture('code_line'):
+                        with self.capture_node('code_line'):
                             self.whitespace()
                             with self.repeat(min=1): self.range("\n", invert=True)
                         self.end_of_line()
@@ -318,7 +318,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     @rule()
     def fenced_code_block(self):
         self.whitespace(max=3)
-        with self.capture('fenced_code'):
+        with self.capture_node('fenced_code'):
             with self.choice():
                 with self.case():
                     self.tilde_code_block()
@@ -337,7 +337,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
         fence = "`"
         with self.count(char=fence) as c, self.repeat(min=3):
             self.accept(fence)
-        with self.capture('info'), self.repeat(min=0):
+        with self.capture_node('info'), self.repeat(min=0):
             with self.reject(): # Example 115
                 self.accept(fence)
             self.range("\n", invert=True)
@@ -349,7 +349,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                 with self.repeat(min=c):
                     self.accept(fence)
                     self.whitespace()
-            with self.capture('text'), self.repeat(min=0):
+            with self.capture_node('text'), self.repeat(min=0):
                 self.range("\n", invert=True)
             self.line_end()
         with self.choice():
@@ -369,7 +369,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
         fence = "~"
         with self.count(char=fence) as c, self.repeat(min=3):
             self.accept(fence)
-        with self.capture('info'), self.repeat(min=0):
+        with self.capture_node('info'), self.repeat(min=0):
             self.range("\n", invert=True)
         self.line_end()
         with self.repeat():
@@ -379,7 +379,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                 with self.repeat(min=c):
                     self.accept(fence)
                     self.whitespace()
-            with self.capture('text'), self.repeat(min=0):
+            with self.capture_node('text'), self.repeat(min=0):
                 self.range("\n", invert=True)
             self.line_end()
         with self.choice():
@@ -431,7 +431,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
 
     @rule()
     def blockquote(self):
-        with self.capture("blockquote"):
+        with self.capture_node("blockquote"):
             self.start_blockquote()
             with self.choice():
                 with self.case():
@@ -468,39 +468,60 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                 self.whitespace(min=1, max=1, newline=True)
 
     @rule()
-    def block_list(self):
-        with self.capture("block_list"):
-            self.start_list()
+    def unordered_list(self):
+        with self.capture_node("unordered_list"):
+            self.whitespace(max=3)
+            with self.backref() as delimiter:
+                self.range('-', '*', '+') 
+
+            with self.choice():
+                with self.case(), self.lookahead():
+                    self.whitespace()
+                    self.end_of_line()
+                with self.case():
+                    self.whitespace(min=1, max=1, newline=True)
+
             with self.choice():
                 with self.case():
-                    with self.capture("list_item"):
+                    with self.capture_node("list_item"):
                         self.list_item()
                 with self.case():
-                    with self.capture("list_item"):
+                    with self.capture_node("list_item"):
                         self.whitespace()
                     self.end_of_line()
+
             with self.repeat():
                 self.start_of_line()
                 with self.choice():
                     with self.case():
                         self.whitespace()
                         self.newline()
-                        with self.capture('empty'), self.repeat():
+                        with self.capture_node('empty'), self.repeat():
                             self.start_of_line()
                             self.whitespace()
                             self.newline()
                         with self.lookahead():
                             self.start_of_line()
                             self.whitespace(max=3)
-                            self.accept('-')
+                            self.accept(delimiter)
                     with self.case():
-                        self.start_list()
+                        self.whitespace(max=3)
+
+                        self.accept(delimiter)
+
+                        with self.choice():
+                            with self.case(), self.lookahead():
+                                self.whitespace()
+                                self.end_of_line()
+                            with self.case():
+                                self.whitespace(min=1, max=1, newline=True)
+
                         with self.choice():
                             with self.case():
-                                with self.capture("list_item"):
+                                with self.capture_node("list_item"):
                                     self.list_item()
                             with self.case():
-                                with self.capture("list_item"):
+                                with self.capture_node("list_item"):
                                     self.whitespace()
                                 self.end_of_line()
 
@@ -533,7 +554,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                 with self.optional():
                     with self.repeat():
                         self.whitespace()
-                        with self.capture("empty"):
+                        with self.capture_node("empty"):
                             self.newline()
                         self.start_of_line()
                     with self.lookahead():
@@ -544,12 +565,12 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     @rule()
     def para(self):
         self.whitespace(max=3)
-        with self.memoize(),self.capture("para"):
+        with self.memoize(),self.capture_node("para"):
             self.inline_para.inline()
             self.whitespace()
             with self.optional():
                 self.accept("\\")
-                self.capture(value="\\")
+                self.capture_value("\\")
             self.end_of_line()
             
     @rule()
@@ -564,11 +585,11 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                             with self.choice():
                                 with self.case(): self.whitespace(min=2)
                                 with self.case(): self.accept("\\")
-                            with self.capture("hardbreak"):
+                            with self.capture_node("hardbreak"):
                                 self.newline()
                         with self.case():
                             self.whitespace()
-                            with self.capture("softbreak"):
+                            with self.capture_node("softbreak"):
                                 self.newline()
 
                     with self.choice():
@@ -593,10 +614,10 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                             with self.reject():
                                 self.newline()
                 with self.case():
-                    with self.capture("whitespace"):
+                    with self.capture_node("whitespace"):
                         self.whitespace()
                     with self.optional():
-                        with self.capture('text'):
+                        with self.capture_node('text'):
                             self.accept("\\")
                         with self.lookahead():
                             self.newline()
@@ -606,7 +627,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
         self.whitespace()
         with self.optional():
             self.accept("\\")
-            self.capture(value="\\")
+            self.capture_value("\\")
 
     @rule()
     def inline_para(self):
@@ -620,11 +641,11 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                             with self.choice():
                                 with self.case(): self.whitespace(min=2)
                                 with self.case(): self.accept("\\")
-                            with self.capture("hardbreak"):
+                            with self.capture_node("hardbreak"):
                                 self.newline()
                         with self.case():
                             self.whitespace()
-                            with self.capture("softbreak"):
+                            with self.capture_node("softbreak"):
                                 self.newline()
 
                     with self.choice():
@@ -643,10 +664,10 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                             with self.reject():
                                 self.newline()
                 with self.case():
-                    with self.capture("whitespace"):
+                    with self.capture_node("whitespace"):
                         self.whitespace()
                     with self.optional():
-                        with self.capture('text'):
+                        with self.capture_node('text'):
                             self.accept("\\")
                         with self.lookahead():
                             self.newline()
@@ -671,7 +692,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             self.start_of_line()
             self.whitespace()
             self.newline()
-        with self.capture("empty_line"):
+        with self.capture_node("empty_line"):
             pass
 
     @rule() # 2.1 line ends by newline or eof
@@ -693,7 +714,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     def code_span(self):
         with self.count(char="`") as c, self.repeat(min=1):
             self.accept("`")
-        with self.capture('code_span'), self.repeat(min=1), self.choice():
+        with self.capture_node('code_span'), self.repeat(min=1), self.choice():
             with self.case():
                 self.range("`", invert=True)
             with self.case():
@@ -709,15 +730,15 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
         with self.reject():
             self.newline()
         with self.choice():
-            with self.case(), self.capture("text"):
+            with self.case(), self.capture_node("text"):
                 self.range("!-/",":-@","[-`","{-~")
             with self.case():
-                self.capture(value="\\")
+                self.capture_value("\\")
 
 
     @rule()
     def word(self):
-        with self.capture('text'):
+        with self.capture_node('text'):
             with self.repeat(min=1):
                 self.range(" ", "\n", "\\", invert=True)
 
