@@ -592,6 +592,11 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                 with self.case():
                     with self.capture("whitespace"):
                         self.whitespace()
+                    with self.optional():
+                        with self.capture('text'):
+                            self.accept("\\")
+                        with self.lookahead():
+                            self.newline()
 
             # 4.1 Ex 27, 28. Thematic Breaks can interrupt a paragraph
             self.inline_element()
@@ -623,7 +628,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
         self.end_of_line()
 
 
-    inline_element = rule(code_span | escaped | word)
+    inline_element = rule(code_span | escaped | word )
     # \ escapes
     # entity
     # code spans
@@ -886,12 +891,12 @@ for t in tests:
         #print(repr(out))
     else:
         failed +=1
-        #if '<' in markd: continue
-        #if '*' in markd: continue
-        #if '1.' in markd: continue
-        #if '`' in markd: continue
-        #if '[' in markd: continue
-        #if '&' in markd: continue
+        if '<' in markd: continue
+        if '*' in markd: continue
+        if '1.' in markd: continue
+        if '`' in markd: continue
+        if '[' in markd: continue
+        if '&' in markd: continue
         #if out.replace('\n','') == t['html'].replace('\n',''): continue
         print(t['example'])
         print(repr(markd))
