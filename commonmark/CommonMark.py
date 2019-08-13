@@ -459,7 +459,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     @rule()
     def start_list(self):
         self.whitespace(max=3)
-        self.range('-', '*', '+')
+        self.range('-', '*', '+') 
         with self.choice():
             with self.case(), self.lookahead():
                 self.whitespace()
@@ -630,11 +630,9 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                     with self.choice():
                         with self.case():
                             self.start_of_line()
-                            with self.reject():
-                                self.para_interrupt.inline()
+                            with self.reject(): self.para_interrupt.inline()
                             self.whitespace()
-                            with self.reject():
-                                self.newline()
+                            with self.reject(): self.newline()
                         with self.case():
                             # lazy continuation
                             with self.reject():
@@ -925,6 +923,27 @@ def
 butt
 """)
 
+_markup("""\
+> a
+> b
+> ===
+""")
+_markup("""\
+- a
+  b
+  ===
+""")
+_markup("""\
+> a
+b
+===
+""")
+_markup("""\
+- a
+b
+===
+""")
+print('spec')
 import json
 with open("commonmark_0_29.json") as fh:
     tests = json.load(fh)
@@ -932,7 +951,6 @@ failed = 0
 worked = 0
 count =0
 
-print('butt')
 parser = CommonMark.parser()
 for t in tests:
     markd = t['markdown']
@@ -961,23 +979,3 @@ for t in tests:
         print()
 print(count, worked, failed)
 
-_markup("""\
-> a
-> b
-> ===
-""")
-_markup("""\
-- a
-  b
-  ===
-""")
-_markup("""\
-> a
-b
-===
-""")
-_markup("""\
-- a
-b
-===
-""")

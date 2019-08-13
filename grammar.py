@@ -462,6 +462,13 @@ class FunctionBuilder:
             def _inline(min=0, max=None, *, rule=rule):
                 if self.block_mode: raise SyntaxError()
                 self.rule(GrammarNode(RULE, args=dict(name=rule.name, inline=True)))
+            def _lookahead(*, rule=rule):
+                if self.block_mode: raise SyntaxError()
+                self.rule(GrammarNode(LOOKAHEAD, rules=[rule]))
+            def _reject(*, rule=rule):
+                if self.block_mode: raise SyntaxError()
+                self.rule(GrammarNode(REJECT, rules=[rule]))
+
             @contextmanager
             def _as_prefix(*, rule=rule, name=name):
                 if self.block_mode: raise SyntaxError()
@@ -490,10 +497,6 @@ class FunctionBuilder:
         if self.block_mode: raise SyntaxError()
         self.rules.append(GrammarNode(PARTIAL_TAB))
 
-
-    def capture_value(self, value):
-        if self.block_mode: raise SyntaxError()
-        self.rules.append(ValueNode(value))
 
     def newline(self):
         if self.block_mode: raise SyntaxError()
@@ -557,11 +560,16 @@ class FunctionBuilder:
         def _capture():
             rules = self.rules
             self.rules = []
-            yield
-            rules.append(CaptureNode(name, args=dict(nested=nested), rules=self.rules))
+            c= CaptureNode(name, args=dict(nested=nested), rules=self.rules)
+            yield c.key
+            rules.append(
             self.rules = rules
 
         return _capture()
+
+    def capture_value(self, value):
+        if self.block_mode: raise SyntaxError()
+        self.rules.append(ValueNode(value))
 
     @contextmanager
     def memoize(self):
