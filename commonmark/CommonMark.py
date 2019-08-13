@@ -414,19 +414,30 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
 
     @rule()
     def blockquote(self):
-        with self.capture("blockquote"), self.repeat(min=1):
+        with self.capture("blockquote"):
             self.start_blockquote()
-            with self.blockquote_prefix.as_line_prefix():
-                self.block_element()
-                with self.repeat():
-                    self.start_of_line()
-                    with self.choice():
-                        with self.case():
-                            self.block_element()
+            with self.choice():
+                with self.case():
+                    self.whitespace()
+                    self.end_of_line()
+                with self.case():
+                    with self.blockquote_prefix.as_line_prefix():
+                        with self.reject():
+                            self.empty_lines()
+                        self.block_element()
             with self.repeat():
-                self.start_blockquote()
-                self.end_of_line()
                 self.start_of_line()
+                self.start_blockquote()
+                with self.choice():
+                    with self.case():
+                        self.whitespace()
+                        self.end_of_line()
+                    with self.case():
+                        with self.blockquote_prefix.as_line_prefix():
+                            with self.reject():
+                                self.empty_lines()
+                            self.block_element()
+                        
 
     @rule()
     def start_list(self):
@@ -455,25 +466,31 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                             self.whitespace(max=3)
                             self.accept('-')
                     with self.case():
-                        self.whitespace(max=3)
-                        self.accept('-')
-                        self.whitespace(min=1)
+                        self.start_list()
                         with self.capture("list_item"):
                             self.list_item()
 
     @rule()
     def list_item(self):
+        with self.choice():
+            with self.case():
+                with self.lookahead():
+                    self.whitespace(min=4)
+            with self.case():
+                self.whitespace(max=3)
         with self.indented():
             self.block_element()
             with self.repeat():
                 self.start_of_line()
                 with self.optional():
-                    self.empty_lines()
-                    with self.lookahead():
+                    with self.repeat():
+                        self.whitespace()
+                        with self.capture("empty"):
+                            self.newline()
                         self.start_of_line()
+                    with self.lookahead():
                         self.whitespace()
                         self.range("\n", invert=True)
-                    self.start_of_line()
                 with self.reject():
                     self.empty_lines()
                 self.block_element()
@@ -829,6 +846,7 @@ for t in tests:
         #print(repr(markd))
         #print(repr(out))
     else:
+        print(t['example'], 'failed')
         failed +=1
         if '<' in markd: continue
         if '*' in markd: continue
@@ -837,7 +855,6 @@ for t in tests:
         if '[foo]' in markd: continue
         if '[FOO]' in markd: continue
         if out.replace('\n','') == t['html'].replace('\n',''): continue
-        print(t['example'])
         print(repr(markd))
         print('=', repr(t['html']))
         print('X', repr(out))
