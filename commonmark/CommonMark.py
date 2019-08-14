@@ -102,36 +102,82 @@ def loose(list_items):
     while idx < len(list_items) and list_items[idx] is None: idx+=1
     return idx != len(list_items)
 
+def wrap_loose(list_items, out):
+    def wrap(c):
+        if not c: return None
+        if isinstance(c, tuple):
+            return f"<p>{c[0]}</p>"
+        return c
+    for item in list_items:
+        if item == None: continue
+        wrapped = [ wrap(line) for line in item]
+        _out = []
+        for line in item:
+            line = wrap(line)
+            if line is None:
+                if not _out[-1].endswith('\n'):
+                    _out.append('\n')
+            else:
+                _out.append(line)
+                if line[-1] != '\n':
+                    _out.append('\n')
+        if _out:
+            if not _out[0].startswith('\n'): 
+                _out.insert(0, '\n') 
+
+            if not _out[-1].endswith('\n'): 
+                _out.append('\n') 
+        
+        out.append(f"<li>{''.join(_out)}</li>\n")
+    return out
+
+def wrap_tight(list_items, out):
+    def wrap(c):
+        if not c: return ""
+        if isinstance(c, tuple):
+            return f"{c[0]}"
+        return c if c.endswith('\n') else c+"\n"
+    for item in list_items:
+        text = "\n".join(wrap(line) for line in item) 
+        if item and text and not isinstance(item[0], tuple): text=f"\n{text}"
+        out.append(f"<li>{text}</li>\n")
+    return out
+
 @_builder
 def unordered_list(buf, pos,end, list_items):
     out = ["<ul>\n"]
 
     if loose(list_items) or any(loose(c) for c in list_items if c):
-        def wrap(c):
-            if isinstance(c, tuple):
-                return f"<p>{c[0]}</p>"
-            return c
-        for item in list_items:
-            if item == None: continue
-            item = "\n".join(wrap(line) for line in item if line)
-            out.append(f"<li>\n{item}\n</li>\n")
-        out.extend("</ul>")
+        wrap_loose(list_items, out)
     else:
-        def wrap(c):
-            if not c: return ""
-            if isinstance(c, tuple):
-                return f"{c[0]}"
-            return c+"\n"
-        for item in list_items:
-            text = "\n".join(wrap(line) for line in item) 
-            if item and text and not isinstance(item[0], tuple): text=f"\n{text}"
-            out.append(f"<li>{text}</li>\n")
-        out.extend("</ul>")
+        wrap_tight(list_items, out)
+
+    out.extend("</ul>")
+    return "".join(out)
+
+@_builder
+def ordered_list(buf, pos,end, list_items):
+    start = list_items.pop(0)
+    if start != 1:
+        start = f' start="{start}"'
+    else:
+        start = ''
+    out = [f'<ol{start}>\n']
+
+    if loose(list_items) or any(loose(c) for c in list_items if c):
+        wrap_loose(list_items, out)
+    else:
+        wrap_tight(list_items, out)
+    out.extend("</ol>")
     return "".join(out)
 
 @_builder
 def list_item(buf, pos,end, children):
     return children
+
+@_builder
+def ordered_list_start(buf, pos,end, children):
+    return int(buf[pos:end])
 
 @_builder
 def empty(buf, pos, end, children):
@@ -192,6 +238,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             # 4.1 Ex 30. Thematic Breaks take precidence over lists
         # HTML Block
         # Link reference_definiton
+        ordered_list |
         unordered_list |
         setext_heading |     
         para 
@@ -279,9 +326,20 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
         self.line_end()
 
     @rule()
+
+    def code_block_indent(self):
+        with self.choice():
+            with self.case():
+                self.whitespace(min=4, max=4)
+            with self.case():
+                with self.lookahead():
+                    self.whitespace()
+                    self.newline()
+                self.whitespace()
+    @rule()
     def indented_code_block(self):
         self.whitespace(min=4, max=4)
-        with self.capture_node('indented_code'), self.indented():
+        with self.capture_node('indented_code'), self.code_block_indent.as_line_prefix():
 
             with self.count(columns=True) as w: self.partial_tab()
             with self.capture_node('partial_indent'): self.capture_value(w)
@@ -398,17 +456,17 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
         with self.choice():
             with self.case():
                 self.start_blockquote()
-                with self.reject():
-                    self.whitespace()
-                    self.newline()
+                # with self.reject():
+                #    self.whitespace()
+                #    self.newline()
             with self.case():
                 with self.reject(), self.choice():
                     with self.case(): 
                         self.whitespace()
                         self.newline()
-                    with self.case():
-                        self.whitespace(min=4, max=4)
-                        self.range(" ", "\t", "\n", invert=True)
+                    #with self.case():
+                    #    self.whitespace(min=4, max=4)
+                    #    self.range(" ", "\t", "\n", invert=True)
                     with self.case(): self.thematic_break()
                     with self.case(): self.atx_heading()
                     with self.case(): self.start_fenced_block()
@@ -459,14 +517,19 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     @rule()
     def start_list(self):
         self.whitespace(max=3)
-        self.range('-', '*', '+') 
+        with self.choice():
+            with self.case():
+                self.range('-', '*', '+') 
+            with self.case():
+                with self.repeat(min=1, max=9): self.range("0-9")
+                self.range(".", ")")
+
         with self.choice():
             with self.case(), self.lookahead():
                 self.whitespace()
                 self.end_of_line()
             with self.case():
                 self.whitespace(min=1, max=1, newline=True)
-
     @rule()
     def unordered_list(self):
         with self.capture_node("unordered_list"):
@@ -526,6 +589,72 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                                 self.end_of_line()
 
     @rule()
+    def ordered_list(self):
+        with self.capture_node("ordered_list"):
+            self.whitespace(max=3)
+            with self.capture_node('ordered_list_start'):
+                with self.repeat(min=1, max=9):
+                    self.range('0-9')
+            with self.backref() as delimiter:
+                self.range('.',')')
+
+            with self.choice():
+                with self.case(), self.lookahead():
+                    self.whitespace()
+                    self.end_of_line()
+                with self.case():
+                    self.whitespace(min=1, max=1, newline=True)
+
+            with self.choice():
+                with self.case():
+                    with self.capture_node("list_item"):
+                        self.list_item()
+                with self.case():
+                    with self.capture_node("list_item"):
+                        self.whitespace()
+                    self.end_of_line()
+
+            with self.repeat():
+                self.start_of_line()
+                with self.choice():
+                    with self.case():
+                        self.whitespace()
+                        self.newline()
+                        with self.capture_node('empty'), self.repeat():
+                            self.start_of_line()
+                            self.whitespace()
+                            self.newline()
+                        with self.lookahead():
+                            self.start_of_line()
+                            self.whitespace(max=3)
+                            with self.repeat(min=1, max=9):
+                                self.range('0-9')
+                            self.accept(delimiter)
+                    with self.case():
+                        self.whitespace(max=3)
+
+                        with self.repeat(min=1, max=9):
+                            self.range('0-9')
+
+                        self.accept(delimiter)
+
+                        with self.choice():
+                            with self.case(), self.lookahead():
+                                self.whitespace()
+                                self.end_of_line()
+                            with self.case():
+                                self.whitespace(min=1, max=1, newline=True)
+
+                        with self.choice():
+                            with self.case():
+                                with self.capture_node("list_item"):
+                                    self.list_item()
+                            with self.case():
+                                with self.capture_node("list_item"):
+                                    self.whitespace()
+                                self.end_of_line()
+
+    @rule()
     def list_item(self):
         with self.choice():
             with self.case():
@@ -547,10 +676,14 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                     self.start_of_line()
                     self.whitespace(min=1, max=1)
 
-        with self.indented():
+        c = self.column(from_prefix=True)
+        self.print(c)
+        with self.no_list_interrupts.when_missing_indent(count=c):
             self.block_element()
-            with self.repeat():
+        with self.repeat():
+            with self.indented(count=c):
                 self.start_of_line()
+                print('??')
                 with self.optional():
                     with self.repeat():
                         self.whitespace()
@@ -560,7 +693,18 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                     with self.lookahead():
                         self.whitespace()
                         self.range("\n", invert=True)
+            with self.no_list_interrupts.when_missing_indent(count=c):
                 self.block_element()
+
+    @rule()
+    def no_list_interrupts(self):
+        with self.reject():
+            self.para_interrupt()
+        with self.reject():
+            self.setext_heading_line()
+        with self.reject():
+            self.start_list()
+
 
     @rule()
     def para(self):
@@ -602,17 +746,17 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                             self.whitespace()
                             with self.reject():
                                 self.newline()
-                        with self.case():
-                            # lazy continuation
-                            with self.reject():
-                                self.start_of_line()
-                            with self.reject():
-                                self.para_interrupt.inline()
-                            with self.reject():
-                                self.setext_heading_line()
-                            self.whitespace()
-                            with self.reject():
-                                self.newline()
+                        #with self.case():
+                        #    # lazy continuation
+                        #    with self.reject():
+                        #        self.start_of_line()
+                        #    with self.reject():
+                        #        self.para_interrupt.inline()
+                        #    with self.reject():
+                        #        self.setext_heading_line()
+                        #    self.whitespace()
+                        #    with self.reject():
+                        #        self.newline()
                 with self.case():
                     with self.capture_node("whitespace"):
                         self.whitespace()
@@ -654,15 +798,15 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                             with self.reject(): self.para_interrupt.inline()
                             self.whitespace()
                             with self.reject(): self.newline()
-                        with self.case():
-                            # lazy continuation
-                            with self.reject():
-                                self.start_of_line()
-                            with self.reject():
-                                self.para_interrupt.inline()
-                            self.whitespace()
-                            with self.reject():
-                                self.newline()
+                        #with self.case():
+                        #    # lazy continuation
+                        #    with self.reject():
+                        #        self.start_of_line()
+                        #    with self.reject():
+                        #        self.para_interrupt.inline()
+                        #    self.whitespace()
+                        #    with self.reject():
+                        #        self.newline()
                 with self.case():
                     with self.capture_node("whitespace"):
                         self.whitespace()
@@ -681,8 +825,18 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             with self.case(): self.thematic_break()
             with self.case(): self.atx_heading()
             with self.case(): self.start_fenced_block()
-            with self.case(): self.start_list()
             with self.case(): self.start_blockquote()
+            with self.case():
+                self.whitespace(max=3)
+                with self.choice():
+                    with self.case():
+                        self.range('-', '*', '+') 
+                    with self.case():
+                        self.accept("1")
+                        self.range(".", ")")
+                with self.reject():
+                    self.whitespace()
+                    self.end_of_line()
 
     @rule()
     def empty_lines(self):
@@ -985,8 +1139,6 @@ for t in tests:
     else:
         failed +=1
         if '<' in markd: continue
-        if '*' in markd: continue
-        if '1.' in markd: continue
         if '`' in markd: continue
         if '[' in markd: continue
         if '&' in markd: continue

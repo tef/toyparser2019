@@ -72,7 +72,8 @@ def build_class_dict(attrs, start, whitespace, newline, tabstop):
                 seen.add(rule.args['name'])
             if rule.kind == SET_LINE_PREFIX:
                 prefix = rule.args['prefix']
-                if prefix: dont_pop.add(prefix)
+                alternative = rule.args.get('alternative')
+                if alternative: dont_pop.add(prefix)
             
         rule.visit(visits)
         rule_childs[name] = seen
@@ -116,6 +117,8 @@ def build_class_dict(attrs, start, whitespace, newline, tabstop):
                     if rule.kind == RULE and rule.args['name'] == n:
                         safe = False
                     if rule.kind == SET_LINE_PREFIX and rule.args['prefix'] == n:
+                        safe = False
+                    if rule.kind == SET_LINE_PREFIX and rule.args.get('alternative') == n:
                         safe = False
                 rule.visit(_visit)
                 if not safe: break
@@ -245,6 +248,7 @@ RANGE = 'range'
 SEQUENCE = 'seq'
 CAPTURE = 'capture'
 BACKREF = 'backref'
+COLUMN = 'column'
 CHOICE = 'choice'
 REPEAT = 'repeat'
 MEMOIZE = 'memoize'
@@ -477,8 +481,16 @@ class FunctionBuilder:
                 yield
                 rules.append(GrammarNode(SET_LINE_PREFIX, args=dict(prefix=name, count=None), rules=self.rules))
                 self.rules = rules
+            @contextmanager
+            def _as_prefix_alt(*, count=None, rule=rule, name=name):
+                if self.block_mode: raise SyntaxError()
+                rules, self.rules = self.rules, []
+                yield
+                rules.append(GrammarNode(SET_LINE_PREFIX, args=dict(prefix=None, count=count, alternative=name), rules=self.rules))
+                self.rules = rules
             callback.repeat = _repeat
             callback.as_line_prefix = _as_prefix
+            callback.when_missing_indent = _as_prefix_alt
             callback.inline = _inline
             setattr(self, name, callback)
 
@@ -548,6 +560,11 @@ class FunctionBuilder:
         yield counter.key
         rules.append(counter)
         self.rules = rules
+    def column(self, from_prefix=False):
+        if self.block_mode: raise SyntaxError()
+        o = GrammarNode(COLUMN, args=dict(from_prefix=from_prefix))
+        self.rules.append(o)
+        return o.key
 
     def backref(self):
         if self.block_mode: raise SyntaxError()
@@ -889,6 +906,15 @@ def compile_python(grammar, builder=None, cython=False):
             ))
             steps.append(f"{offset} = {offset_0}")
 
+        elif rule.kind == COLUMN:
+            value = VarBuilder('value', n=len(values))
+            values[rule.key] = value
+
+            if rule.args.get('from_prefix'):
+                steps.append( f"{value} = {column} - {indent_column}")
+            else:
+                steps.append( f"{value} = {column}")
+
         elif rule.kind == CAPTURE:
             name = repr(rule.args['name'])
             children_0 = children.incr()
@@ -1132,10 +1158,15 @@ def compile_python(grammar, builder=None, cython=False):
                     steps.extend((
                         f"{count} = {column} - {indent_column}",
                     ))
+
+                steps.append(f"# print({count}, 'indent')")
+
+                alternative = rule.args.get('alternative')
                     
                 steps.extend((
                         f"def _indent(buf, offset, buf_eof, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count={count}, allow_mixed_indent=self.allow_mixed_indent):",
                         f"    saw_tab, saw_not_tab = False, False",
+                        f"    start_column, start_offset = column, offset",
                         f"    while count > 0 and offset < buf_eof:",
                         f"        chr = buf[offset]",
                         f"        if {cond}:",
@@ -1171,9 +1202,19 @@ def compile_python(grammar, builder=None, cython=False):
                 steps.extend((
                         f"        elif {cond2}:",
                         f"            break",
+                ))
+                if alternative:
+                    steps.extend((
+                        f"        else:",
+                        f"            return self.parse_{rule.args['alternative']}(buf, start_offset, buf_eof, start_column, indent_column, prefix, children, partial_tab_offset, partial_tab_width)",
+                    ))
+                else:
+                    steps.extend((
                         f"        else:",
                         f"            offset = -1",
                         f"            break",
+                ))
+                steps.extend((
                 #        f"    print('nice', offset)",
                         f"    return offset, column, indent_column, partial_tab_offset, partial_tab_width",
                         f'{prefix}.append(_indent)',
@@ -1197,12 +1238,15 @@ def compile_python(grammar, builder=None, cython=False):
                 f"if not ({column} == {indent_column} == 0):",
                 f"    {offset} = -1",
                 f"    break",
+                f"# print('start')",
                 f"for indent in {prefix}:",
+                f"    # print(indent)",
                 f"    _children, _prefix = [], []",
                 f"    {offset}, {column}, {indent_column}, {partial_tab_offset}, {partial_tab_width} = indent(buf, {offset}, buf_eof, {column}, {indent_column}, _prefix, _children, {partial_tab_offset}, {partial_tab_width})",
                 f"    if _prefix or _children:",
                 f"       raise Exception('bar')",
-                f"    if {offset} == -1:"
+                f"    if {offset} == -1:",
+                f"        # print(indent, 'failed')",
                 f"        break",
                 f"    {indent_column} = {column}",
                 f"if {offset} == -1:",
@@ -1485,7 +1529,7 @@ def compile_python(grammar, builder=None, cython=False):
             ))
 
         elif rule.kind == PRINT:
-            args = [values.get(a, repr(a)) for a in rule.args['args']]
+            args = [str(values.get(a, repr(a))) for a in rule.args['args']]
             steps.append(f"print('print', {', '.join(args)}, 'at' ,{offset},'col', {column}, repr(buf[{offset}:{offset}+15]), {prefix})")
         elif rule.kind == TRACE:
             steps.append(f"print('begin trace', 'at' ,{offset}, repr(buf[{offset}:{offset}+5]))")
