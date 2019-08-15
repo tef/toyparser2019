@@ -6676,6 +6676,62 @@ class Parser:
                         else:
                             break
 
+                    count_0 = 0
+                    while count_0 < 1:
+                        offset_2 = offset_1
+                        column_1 = column_0
+                        indent_column_1 = indent_column_0
+                        partial_tab_offset_1 = partial_tab_offset_0
+                        partial_tab_width_1 = partial_tab_width_0
+                        children_2 = [] if children_1 is not None else None
+                        while True:
+                            if buf[offset_2:offset_2+1] == '\\':
+                                offset_2 += 1
+                                column_1 += 1
+                            else:
+                                offset_2 = -1
+                                break
+
+                            if self.builder is not None:
+                                children_2.append('\\')
+                            else:
+                                children_2.append(self.Node('value', offset_2, offset_2, (), '\\'))
+
+                            break
+                        if offset_2 == -1:
+                            break
+                        if offset_1 == offset_2: break
+                        if children_2 is not None and children_2 is not None:
+                            children_1.extend(children_2)
+                        offset_1 = offset_2
+                        column_0 = column_1
+                        indent_column_0 = indent_column_1
+                        partial_tab_offset_0 = partial_tab_offset_1
+                        partial_tab_width_0 = partial_tab_width_1
+                        count_0 += 1
+                        break
+                    if offset_1 == -1:
+                        break
+
+                    count_0 = 0
+                    while offset_1 < buf_eof:
+                        chr = buf[offset_1]
+                        if chr in ' \t':
+                            if chr == '\t':
+                                if offset_1 == partial_tab_offset_0 and partial_tab_width_0 > 0:
+                                    width = partial_tab_width_0
+                                else:
+                                    width  = (self.tabstop-(column_0%self.tabstop))
+                                count_0 += width
+                                column_0 += width
+                                offset_1 += 1
+                            else:
+                                count_0 += 1
+                                column_0 += 1
+                                offset_1 += 1
+                        else:
+                            break
+
                     if offset_1 < buf_eof:
                         chr = buf[offset_1]
                         if chr in '\n':
@@ -8341,62 +8397,6 @@ class Parser:
                 partial_tab_offset_0 = partial_tab_offset_1
                 partial_tab_width_0 = partial_tab_width_1
                 count_0 += 1
-            if offset_0 == -1:
-                break
-
-            count_0 = 0
-            while offset_0 < buf_eof:
-                chr = buf[offset_0]
-                if chr in ' \t':
-                    if chr == '\t':
-                        if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
-                            width = partial_tab_width_0
-                        else:
-                            width  = (self.tabstop-(column_0%self.tabstop))
-                        count_0 += width
-                        column_0 += width
-                        offset_0 += 1
-                    else:
-                        count_0 += 1
-                        column_0 += 1
-                        offset_0 += 1
-                else:
-                    break
-
-            count_0 = 0
-            while count_0 < 1:
-                offset_1 = offset_0
-                column_1 = column_0
-                indent_column_1 = indent_column_0
-                partial_tab_offset_1 = partial_tab_offset_0
-                partial_tab_width_1 = partial_tab_width_0
-                children_1 = [] if children_0 is not None else None
-                while True:
-                    if buf[offset_1:offset_1+1] == '\\':
-                        offset_1 += 1
-                        column_1 += 1
-                    else:
-                        offset_1 = -1
-                        break
-
-                    if self.builder is not None:
-                        children_1.append('\\')
-                    else:
-                        children_1.append(self.Node('value', offset_1, offset_1, (), '\\'))
-
-                    break
-                if offset_1 == -1:
-                    break
-                if offset_0 == offset_1: break
-                if children_1 is not None and children_1 is not None:
-                    children_0.extend(children_1)
-                offset_0 = offset_1
-                column_0 = column_1
-                indent_column_0 = indent_column_1
-                partial_tab_offset_0 = partial_tab_offset_1
-                partial_tab_width_0 = partial_tab_width_1
-                count_0 += 1
-                break
             if offset_0 == -1:
                 break
 

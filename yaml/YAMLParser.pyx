@@ -1913,7 +1913,42 @@ cdef class Parser:
                         offset = -1
                         break
                 return offset, column, indent_column, partial_tab_offset, partial_tab_width
-            prefix_0.append((_indent, None))
+            def _dedent(buf, offset, buf_eof, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
+                saw_tab, saw_not_tab = False, False
+                start_column, start_offset = column, offset
+                while count > 0 and offset < buf_eof:
+                    chr = buf[offset]
+                    if chr in ' \t':
+                        if not allow_mixed_indent:
+                            if chr == '\t': saw_tab = True
+                            else: saw_not_tab = True
+                            if saw_tab and saw_not_tab:
+                                offset = start_offset; break
+                        if chr != '\t':
+                            column += 1
+                            offset += 1
+                            count -=1
+                        else:
+                            if offset == partial_tab_offset and partial_tab_width > 0:
+                                width = partial_tab_width
+                            else:
+                                width  = (self.tabstop-(column%self.tabstop))
+                            if width <= count:
+                                column += width
+                                offset += 1
+                                count -= width
+                            else: # we have indent, so break
+                                offset = -1; break
+                    elif chr == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
+                        offset = -1; break
+                    elif chr in '\n\r':
+                        offset = -1; break
+                    else:
+                        offset = start_offset
+                if count == 0:
+                        offset = -1
+                return offset, column, indent_column, partial_tab_offset, partial_tab_width
+            prefix_0.append((_indent, _dedent))
             indent_column_0 = column_0
             while True:
                 offset_1 = offset_0
@@ -1987,12 +2022,14 @@ cdef class Parser:
                             for indent, dedent in prefix_0:
                                 # print(indent)
                                 _children, _prefix = [], []
-                                offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, offset_2, buf_eof, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
+                                offset_3 = offset_2
+                                offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, offset_3, buf_eof, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
                                 if _prefix or _children:
                                    raise Exception('bar')
-                                if offset_2 == -1:
-                                    # print(indent, 'failed')
+                                if offset_3 == -1:
+                                    offset_2 = -1
                                     break
+                                offset_2 = offset_3
                                 indent_column_1 = column_1
                             if offset_2 == -1:
                                 break
@@ -2060,12 +2097,14 @@ cdef class Parser:
                             for indent, dedent in prefix_0:
                                 # print(indent)
                                 _children, _prefix = [], []
-                                offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, offset_2, buf_eof, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
+                                offset_3 = offset_2
+                                offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, offset_3, buf_eof, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
                                 if _prefix or _children:
                                    raise Exception('bar')
-                                if offset_2 == -1:
-                                    # print(indent, 'failed')
+                                if offset_3 == -1:
+                                    offset_2 = -1
                                     break
+                                offset_2 = offset_3
                                 indent_column_1 = column_1
                             if offset_2 == -1:
                                 break
@@ -2160,12 +2199,14 @@ cdef class Parser:
                                     for indent, dedent in prefix_0:
                                         # print(indent)
                                         _children, _prefix = [], []
-                                        offset_3, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = indent(buf, offset_3, buf_eof, column_2, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
+                                        offset_4 = offset_3
+                                        offset_4, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = indent(buf, offset_4, buf_eof, column_2, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
                                         if _prefix or _children:
                                            raise Exception('bar')
-                                        if offset_3 == -1:
-                                            # print(indent, 'failed')
+                                        if offset_4 == -1:
+                                            offset_3 = -1
                                             break
+                                        offset_3 = offset_4
                                         indent_column_2 = column_2
                                     if offset_3 == -1:
                                         break
@@ -2293,7 +2334,42 @@ cdef class Parser:
                         offset = -1
                         break
                 return offset, column, indent_column, partial_tab_offset, partial_tab_width
-            prefix_0.append((_indent, None))
+            def _dedent(buf, offset, buf_eof, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
+                saw_tab, saw_not_tab = False, False
+                start_column, start_offset = column, offset
+                while count > 0 and offset < buf_eof:
+                    chr = buf[offset]
+                    if chr in ' \t':
+                        if not allow_mixed_indent:
+                            if chr == '\t': saw_tab = True
+                            else: saw_not_tab = True
+                            if saw_tab and saw_not_tab:
+                                offset = start_offset; break
+                        if chr != '\t':
+                            column += 1
+                            offset += 1
+                            count -=1
+                        else:
+                            if offset == partial_tab_offset and partial_tab_width > 0:
+                                width = partial_tab_width
+                            else:
+                                width  = (self.tabstop-(column%self.tabstop))
+                            if width <= count:
+                                column += width
+                                offset += 1
+                                count -= width
+                            else: # we have indent, so break
+                                offset = -1; break
+                    elif chr == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
+                        offset = -1; break
+                    elif chr in '\n\r':
+                        offset = -1; break
+                    else:
+                        offset = start_offset
+                if count == 0:
+                        offset = -1
+                return offset, column, indent_column, partial_tab_offset, partial_tab_width
+            prefix_0.append((_indent, _dedent))
             indent_column_0 = column_0
             while True:
                 offset_1 = offset_0
@@ -2351,12 +2427,14 @@ cdef class Parser:
                                 for indent, dedent in prefix_0:
                                     # print(indent)
                                     _children, _prefix = [], []
-                                    offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, offset_3, buf_eof, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
+                                    offset_4 = offset_3
+                                    offset_4, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, offset_4, buf_eof, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
                                     if _prefix or _children:
                                        raise Exception('bar')
-                                    if offset_3 == -1:
-                                        # print(indent, 'failed')
+                                    if offset_4 == -1:
+                                        offset_3 = -1
                                         break
+                                    offset_3 = offset_4
                                     indent_column_1 = column_1
                                 if offset_3 == -1:
                                     break
@@ -2480,12 +2558,14 @@ cdef class Parser:
                                 for indent, dedent in prefix_0:
                                     # print(indent)
                                     _children, _prefix = [], []
-                                    offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, offset_3, buf_eof, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
+                                    offset_4 = offset_3
+                                    offset_4, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, offset_4, buf_eof, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
                                     if _prefix or _children:
                                        raise Exception('bar')
-                                    if offset_3 == -1:
-                                        # print(indent, 'failed')
+                                    if offset_4 == -1:
+                                        offset_3 = -1
                                         break
+                                    offset_3 = offset_4
                                     indent_column_1 = column_1
                                 if offset_3 == -1:
                                     break
@@ -2586,12 +2666,14 @@ cdef class Parser:
                                         for indent, dedent in prefix_0:
                                             # print(indent)
                                             _children, _prefix = [], []
-                                            offset_4, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = indent(buf, offset_4, buf_eof, column_2, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
+                                            offset_5 = offset_4
+                                            offset_5, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = indent(buf, offset_5, buf_eof, column_2, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
                                             if _prefix or _children:
                                                raise Exception('bar')
-                                            if offset_4 == -1:
-                                                # print(indent, 'failed')
+                                            if offset_5 == -1:
+                                                offset_4 = -1
                                                 break
+                                            offset_4 = offset_5
                                             indent_column_2 = column_2
                                         if offset_4 == -1:
                                             break

@@ -493,6 +493,12 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
         with self.capture_node('setext_heading'):
             with self.no_setext_heading_line.as_indent():
                 self.strict_inline_para()
+                # ugh?
+                self.whitespace()
+                with self.optional():
+                    self.accept("\\")
+                    self.capture_value("\\")
+
                 self.whitespace()
                 self.newline()
             self.indent()
@@ -564,11 +570,6 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
 
             # 4.1 Ex 27, 28. Thematic Breaks can interrupt a paragraph
             self.inline_element()
-        # ugh?
-        self.whitespace()
-        with self.optional():
-            self.accept("\\")
-            self.capture_value("\\")
 
     @rule()
     def inline_para(self):
