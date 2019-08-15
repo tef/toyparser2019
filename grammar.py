@@ -71,9 +71,10 @@ def build_class_dict(attrs, start, whitespace, newline, tabstop):
             if rule.kind == RULE:
                 seen.add(rule.args['name'])
             if rule.kind == SET_LINE_PREFIX:
-                prefix = rule.args['prefix']
-                alternative = rule.args.get('alternative')
-                if alternative: dont_pop.add(prefix)
+                indent = rule.args['indent']
+                dedent = rule.args['dedent']
+                if indent: dont_pop.add(indent)
+                if dedent: dont_pop.add(dedent)
             
         rule.visit(visits)
         rule_childs[name] = seen
@@ -116,9 +117,9 @@ def build_class_dict(attrs, start, whitespace, newline, tabstop):
                     nonlocal safe
                     if rule.kind == RULE and rule.args['name'] == n:
                         safe = False
-                    if rule.kind == SET_LINE_PREFIX and rule.args['prefix'] == n:
+                    if rule.kind == SET_LINE_PREFIX and rule.args['indent'] == n:
                         safe = False
-                    if rule.kind == SET_LINE_PREFIX and rule.args.get('alternative') == n:
+                    if rule.kind == SET_LINE_PREFIX and rule.args.get('dedent') == n:
                         safe = False
                 rule.visit(_visit)
                 if not safe: break
@@ -479,18 +480,18 @@ class FunctionBuilder:
                 self.rule(GrammarNode(REJECT, rules=[inner.rule]))
 
             @contextmanager
-            def as_line_prefix(inner):
+            def as_indent(inner, dedent=None):
                 if self.block_mode: raise SyntaxError()
                 rules, self.rules = self.rules, []
                 yield
-                rules.append(GrammarNode(SET_LINE_PREFIX, args=dict(prefix=inner.name, count=None), rules=self.rules))
+                rules.append(GrammarNode(SET_LINE_PREFIX, args=dict(indent=inner.name, dedent=dedent, count=None), rules=self.rules))
                 self.rules = rules
             @contextmanager
-            def when_missing_indent(inner,count=None):
+            def as_dedent(inner, count=None):
                 if self.block_mode: raise SyntaxError()
                 rules, self.rules = self.rules, []
                 yield
-                rules.append(GrammarNode(SET_LINE_PREFIX, args=dict(prefix=None, count=count, alternative=inner.name), rules=self.rules))
+                rules.append(GrammarNode(SET_LINE_PREFIX, args=dict(indent=None, count=count, dedent=inner.name), rules=self.rules))
                 self.rules = rules
 
         for name, rule in names.items():
@@ -556,10 +557,12 @@ class FunctionBuilder:
 
     @contextmanager
     def indented(self, count=None, indent=None, dedent=None):
+        indent = indent.name if indent else None
+        dedent = dedent.name if dedent else None
         if self.block_mode: raise SyntaxError()
         rules, self.rules = self.rules, []
         yield
-        rules.append(GrammarNode(SET_LINE_PREFIX, args=dict(prefix=None, count=count), rules=self.rules))
+        rules.append(GrammarNode(SET_LINE_PREFIX, args=dict(indent=indent, dedent=dedent, count=count), rules=self.rules))
         self.rules = rules
 
     @contextmanager
@@ -1160,7 +1163,7 @@ def compile_python(grammar, builder=None, cython=False):
 
             cond2 =f"chr in {repr(''.join(grammar_newline))}"
 
-            if rule.args['prefix'] is None:
+            if rule.args['indent'] is None:
                 c = rule.args['count']
                 if c:
                     steps.append(f"{count} = {values.get(c, repr(c))}")
@@ -1171,8 +1174,6 @@ def compile_python(grammar, builder=None, cython=False):
                     ))
 
                 steps.append(f"# print({count}, 'indent')")
-
-                alternative = rule.args.get('alternative')
                     
                 steps.extend((
                         f"def _indent(buf, offset, buf_eof, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count={count}, allow_mixed_indent=self.allow_mixed_indent):",
@@ -1213,26 +1214,72 @@ def compile_python(grammar, builder=None, cython=False):
                 steps.extend((
                         f"        elif {cond2}:",
                         f"            break",
-                ))
-                if alternative:
-                    steps.extend((
-                        f"        else:",
-                        f"            return self.parse_{rule.args['alternative']}(buf, start_offset, buf_eof, start_column, indent_column, prefix, children, partial_tab_offset, partial_tab_width)",
-                    ))
-                else:
-                    steps.extend((
                         f"        else:",
                         f"            offset = -1",
                         f"            break",
-                ))
-                steps.extend((
-                #        f"    print('nice', offset)",
                         f"    return offset, column, indent_column, partial_tab_offset, partial_tab_width",
-                        f'{prefix}.append((_indent, None))',
                 ))
+
+
+                if not rule.args['dedent']:
+                    steps.extend((
+                        f"def _dedent(buf, offset, buf_eof, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count={count}, allow_mixed_indent=self.allow_mixed_indent):",
+                        f"    saw_tab, saw_not_tab = False, False",
+                        f"    start_column, start_offset = column, offset",
+                        f"    while count > 0 and offset < buf_eof:",
+                        f"        chr = buf[offset]",
+                        f"        if {cond}:",
+                        f"            if not allow_mixed_indent:",
+                        f"                if chr == '\\t': saw_tab = True",
+                        f"                else: saw_not_tab = True",
+                        f"                if saw_tab and saw_not_tab:",
+                        f"                    offset = start_offset; break",
+                        f"            if chr != '\\t':",
+                        f"                column += 1",
+                        f"                offset += 1",
+                        f"                count -=1",
+                        f"            else:",
+                        f"                if offset == partial_tab_offset and partial_tab_width > 0:",
+                        f"                    width = partial_tab_width",
+                        f"                else:",
+                        f"                    width  = (self.tabstop-(column%self.tabstop))",
+                        f"                if width <= count:",
+                        f"                    column += width",
+                        f"                    offset += 1",
+                        f"                    count -= width",
+                        f"                else: # we have indent, so break" ,
+                        f"                    offset = -1; break",
+                    ))
+                    if newline_rn:
+                        steps.extend((
+                        f"        elif chr == '\\r' and {offset} + 1 < buf_eof and buf[{offset}+1] == '\\n':", 
+                        f"            offset = -1; break",
+                        ))
+                    steps.extend((
+                        f"        elif {cond2}:",
+                        f"            offset = -1; break",
+                        f"        else:",
+                        f"            offset = start_offset",
+                        f"    if count == 0:",
+                        f"            offset = -1",
+                        f"    return offset, column, indent_column, partial_tab_offset, partial_tab_width",
+                    ))
+
+                    steps.extend((
+                        f'{prefix}.append((_indent, _dedent))',
+                    ))
+
+                else:
+                    dedent = rule.args['dedent']
+                    steps.extend((
+
+                            f'{prefix}.append((_indent, self.parse_{dedent}))',
+                    ))
             else:
-                prule = rule.args['prefix']
-                steps.append(f'{prefix}.append((self.parse_{prule}, None))')
+                prule = rule.args['indent']
+                dedent = rule.args['dedent']
+                dedent = f"self.parse_{dedent}" if dedent else repr(None)
+                steps.append(f'{prefix}.append((self.parse_{prule}, {dedent}))')
 
             steps.append(f'{indent_column} = {column}')
 
@@ -1250,7 +1297,10 @@ def compile_python(grammar, builder=None, cython=False):
                 f"    break",
             ))
         elif rule.kind == INDENT:
+            # if partial
+            # break to dedent
             offset_0 = offset.incr()
+            partial = rule.args['partial']
             steps.extend((
                 f"if not ({column} == {indent_column} == 0):",
                 f"    {offset} = -1",
@@ -1259,15 +1309,84 @@ def compile_python(grammar, builder=None, cython=False):
                 f"for indent, dedent in {prefix}:",
                 f"    # print(indent)",
                 f"    _children, _prefix = [], []",
-                f"    {offset}, {column}, {indent_column}, {partial_tab_offset}, {partial_tab_width} = indent(buf, {offset}, buf_eof, {column}, {indent_column}, _prefix, _children, {partial_tab_offset}, {partial_tab_width})",
+                f"    {offset_0} = {offset}",
+                f"    {offset_0}, {column}, {indent_column}, {partial_tab_offset}, {partial_tab_width} = indent(buf, {offset_0}, buf_eof, {column}, {indent_column}, _prefix, _children, {partial_tab_offset}, {partial_tab_width})",
                 f"    if _prefix or _children:",
                 f"       raise Exception('bar')",
-                f"    if {offset} == -1:",
-                f"        # print(indent, 'failed')",
+            ))
+
+            if partial: steps.extend((
+                f"    if {offset_0} == -1:",
+                f"        if dedent is None:",
+                f"            {offset} = -1",
+                f"            break",
+                f"        _children, _prefix = [], []",
+                f"        {offset_0} = {offset}",
+                f"        {offset_0}, _column, _indent_column, _partial_tab_offset, _partial_tab_width = dedent(buf, {offset_0}, buf_eof, {column}, {indent_column}, _prefix, _children, {partial_tab_offset}, {partial_tab_width})",
+                f"        if {offset_0} != -1:",
+                f"            {offset} = -1",
+                f"            break",
+                f"        else:",
+                f"            {offset_0} = {offset}",
+                ))
+            else:steps.extend((
+                f"    if {offset_0} == -1:",
+                f"        {offset} = -1",
                 f"        break",
+                ))
+
+            steps.extend((
+                f"    {offset} = {offset_0}",
                 f"    {indent_column} = {column}",
                 f"if {offset} == -1:",
                 f"    break",
+            ))
+        elif rule.kind == DEDENT:
+            # if partial
+            # break to dedent
+            # for each pair
+            # if indent matches or dedent doesnt, continue
+            # if not -1, fail
+            offset_0 = offset.incr()
+            offset_1 = offset_0.incr()
+            offset_2 = offset_2.incr()
+            column_1 = column.incr()
+            indent_column_1 = indent_column.incr()
+            partial_tab_offset_1 = partial_tab_offset.incr()
+            partial_tab_width_1 = partial_tab_width.incr()
+            steps.extend((
+                f"if not ({column} == {indent_column} == 0):",
+                f"    {offset} = -1",
+                f"    break",
+                f"{offset_0} = {offset}",
+                f"{column_1} = {column}",
+                f"{indent_column_1} = {indent_column}",
+                f"{partial_tab_offset_1} = {partial_tab_offset}",
+                f"{partial_tab_width_1} = {partial_tab_width}",
+                f"", # offet = start, offset_0 = current pos, offset_1 = next pos
+                f"for indent, dedent in {prefix}:",
+                f"    # print(indent)",
+                f"    _children, _prefix = [], []",
+                f"    {offset_1} = {offset_0}",
+                f"    {offset_1}, {column_1}, {indent_column_1}, {partial_tab_offset_1}, {partial_tab_width_1} = indent(buf, {offset_1}, buf_eof, {column_1}, {indent_column_1}, _prefix, _children, {partial_tab_offset_1}, {partial_tab_width_1})",
+                f"    if _prefix or _children:",
+                f"       raise Exception('bar')",
+                f"    if {offset_1} == -1:",
+                f"        if dedent is None:",
+                f"            {offset_0} = -1",
+                f"            break",
+                f"        _children, _prefix = [], []",
+                f"        {offset_1} = {offset_0}",
+                f"        {offset_1}, _column, _indent_column, _partial_tab_offset, _partial_tab_width = dedent(buf, {offset_1}, buf_eof, {column_1}, {indent_column_1}, _prefix, _children, {partial_tab_offset_1}, {partial_tab_width_1})",
+                f"        if {offset_1} != -1:",
+                f"            {offset_0} = -1", 
+                f"            break",
+                f"        else:",
+                f"            {offset_1} = {offset_0}",
+                f"    {offset_0} = {offset_1}",
+                f"    {indent_column} = {column}",
+                f"if {offset_0} != -1:",
+                f"    {offset} = 0; break",
             ))
 
         elif rule.kind == RULE:

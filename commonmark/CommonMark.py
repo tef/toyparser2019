@@ -119,7 +119,7 @@ def wrap_loose(list_items, out):
                     _out.append('\n')
             else:
                 _out.append(line)
-                if line[-1] != '\n':
+                if not line[-1].endswith('\n'):
                     _out.append('\n')
         if _out:
             if not _out[0].startswith('\n'): 
@@ -133,14 +133,22 @@ def wrap_loose(list_items, out):
 
 def wrap_tight(list_items, out):
     def wrap(c):
-        if not c: return ""
+        if not c: return None
         if isinstance(c, tuple):
             return f"{c[0]}"
         return c if c.endswith('\n') else c+"\n"
     for item in list_items:
-        text = "\n".join(wrap(line) for line in item) 
-        if item and text and not isinstance(item[0], tuple): text=f"\n{text}"
-        out.append(f"<li>{text}</li>\n")
+        out2=[]
+        a_block=False
+        for c in item:
+            if isinstance(c, tuple):
+                out2.append(f"{c[0]}")
+                a_block=False
+            elif c:
+                if not a_block: out2.append('\n')
+                out2.append(c)
+                out2.append("\n")
+        out.append(f"<li>{''.join(out2)}</li>\n")
     return out
 
 @_builder
@@ -299,7 +307,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
         # ATX heading, block quote, thematic break, list item, or HTML block.
         self.whitespace(max=3)
         with self.capture_node('setext_heading'):
-            with self.no_setext_heading_line.as_line_prefix():
+            with self.no_setext_heading_line.as_indent():
                 self.setext_para()
                 self.whitespace()
                 self.newline()
@@ -339,7 +347,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     @rule()
     def indented_code_block(self):
         self.whitespace(min=4, max=4)
-        with self.capture_node('indented_code'), self.code_block_indent.as_line_prefix():
+        with self.capture_node('indented_code'), self.code_block_indent.as_indent():
 
             with self.count(columns=True) as w: self.partial_tab()
             with self.capture_node('partial_indent'): self.capture_value(w)
@@ -452,27 +460,15 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                 self.line_end()
 
     @rule()
-    def blockquote_prefix(self):
+    def blockquote_interrupt(self):
         with self.choice():
-            with self.case():
-                self.start_blockquote()
-                # with self.reject():
-                #    self.whitespace()
-                #    self.newline()
-            with self.case():
-                with self.reject(), self.choice():
-                    with self.case(): 
-                        self.whitespace()
-                        self.newline()
-                    with self.case():
-                        self.whitespace(min=4, max=4)
-                        self.range(" ", "\t", "\n", invert=True)
-                    with self.case(): self.thematic_break()
-                    with self.case(): self.atx_heading()
-                    with self.case(): self.start_fenced_block()
-                    with self.case(): self.start_list()
-                    with self.case(): self.setext_heading_line()
-                    with self.case(): self.start_blockquote()
+            with self.case(): 
+                self.whitespace()
+                self.newline()
+            with self.case(): self.thematic_break()
+            with self.case(): self.atx_heading()
+            with self.case(): self.start_fenced_block()
+            with self.case(): self.start_list()
 
     @rule()
     def start_blockquote(self):
@@ -496,7 +492,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                     self.whitespace()
                     self.end_of_line()
                 with self.case():
-                    with self.blockquote_prefix.as_line_prefix():
+                    with self.indented(indent=self.start_blockquote, dedent=self.blockquote_interrupt):
                         with self.reject():
                             self.empty_lines()
                         self.block_element()
@@ -508,7 +504,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                         self.whitespace()
                         self.end_of_line()
                     with self.case():
-                        with self.blockquote_prefix.as_line_prefix():
+                        with self.indented(indent=self.start_blockquote, dedent=self.blockquote_interrupt):
                             with self.reject():
                                 self.empty_lines()
                             self.block_element()
@@ -532,6 +528,8 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                 self.whitespace(min=1, max=1, newline=True)
     @rule()
     def unordered_list(self):
+        with self.reject():
+            self.thematic_break()
         with self.capture_node("unordered_list"):
             self.whitespace(max=3)
             with self.backref() as delimiter:
@@ -568,6 +566,8 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                             self.whitespace(max=3)
                             self.accept(delimiter)
                     with self.case():
+                        with self.reject():
+                            self.thematic_break()
                         self.whitespace(max=3)
 
                         self.accept(delimiter)
@@ -677,12 +677,11 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                     self.whitespace(min=1, max=1)
 
         c = self.column(from_prefix=True)
-        self.print(c)
-        with self.no_list_interrupts.when_missing_indent(count=c):
+        with self.list_interrupts.as_dedent(count=c):
             self.block_element()
         with self.repeat():
-            with self.indented(count=c):
-                self.indent()
+            with self.list_interrupts.as_dedent(count=c):
+                self.indent(partial=True)
                 print('??')
                 with self.optional():
                     with self.repeat():
@@ -693,17 +692,16 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                     with self.lookahead():
                         self.whitespace()
                         self.range("\n", invert=True)
-            with self.no_list_interrupts.when_missing_indent(count=c):
+            with self.list_interrupts.as_dedent(count=c):
                 self.block_element()
 
     @rule()
-    def no_list_interrupts(self):
-        with self.reject():
-            self.para_interrupt()
-        with self.reject():
-            self.setext_heading_line()
-        with self.reject():
-            self.start_list()
+    def list_interrupts(self):
+        with self.choice():
+            with self.case():
+                self.para_interrupt()
+            with self.case():
+                self.start_list()
 
 
     @rule()
@@ -794,7 +792,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
 
                     with self.choice():
                         with self.case():
-                            self.indent()
+                            self.indent(partial=True)
                             with self.reject(): self.para_interrupt.inline()
                             self.whitespace()
                             with self.reject(): self.newline()
@@ -834,6 +832,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                     with self.case():
                         self.accept("1")
                         self.range(".", ")")
+                self.whitespace(min=1)
                 with self.reject():
                     self.whitespace()
                     self.end_of_line()
