@@ -457,42 +457,43 @@ class FunctionBuilder:
     def __init__(self, names):
         self.rules = None
         self.block_mode = "build"
-        for name, rule in names.items():
-            if hasattr(self, name): raise SyntaxError()
-            def callback(*, rule=rule):
-                self.rule(rule)
-            def _repeat(min=0, max=None, *, rule=rule):
+        class Rule:
+            def __init__(inner, name, rule):
+                inner.name, inner.rule = name, rule
+            def __call__(inner):
                 if self.block_mode: raise SyntaxError()
-                self.rule(RepeatNode([rule], min=min, max=max))
-            def _inline(min=0, max=None, *, rule=rule):
+                self.rules.append(inner.rule)
+            def repeat(inner, min=0, max=None):
                 if self.block_mode: raise SyntaxError()
-                self.rule(GrammarNode(RULE, args=dict(name=rule.name, inline=True)))
-            def _lookahead(*, rule=rule):
+                self.rule(RepeatNode([inner.rule], min=min, max=max))
+            def inline(inner):
                 if self.block_mode: raise SyntaxError()
-                self.rule(GrammarNode(LOOKAHEAD, rules=[rule]))
-            def _reject(*, rule=rule):
+                self.rule(GrammarNode(RULE, args=dict(name=inner.name, inline=True)))
+            def lookahead(inner):
                 if self.block_mode: raise SyntaxError()
-                self.rule(GrammarNode(REJECT, rules=[rule]))
+                self.rule(GrammarNode(LOOKAHEAD, rules=[inner.rule]))
+            def reject(inner):
+                if self.block_mode: raise SyntaxError()
+                self.rule(GrammarNode(REJECT, rules=[inner.rule]))
 
             @contextmanager
-            def _as_prefix(*, rule=rule, name=name):
+            def as_line_prefix(inner):
                 if self.block_mode: raise SyntaxError()
                 rules, self.rules = self.rules, []
                 yield
-                rules.append(GrammarNode(SET_LINE_PREFIX, args=dict(prefix=name, count=None), rules=self.rules))
+                rules.append(GrammarNode(SET_LINE_PREFIX, args=dict(prefix=inner.name, count=None), rules=self.rules))
                 self.rules = rules
             @contextmanager
-            def _as_prefix_alt(*, count=None, rule=rule, name=name):
+            def when_missing_indent(inner,count=None):
                 if self.block_mode: raise SyntaxError()
                 rules, self.rules = self.rules, []
                 yield
-                rules.append(GrammarNode(SET_LINE_PREFIX, args=dict(prefix=None, count=count, alternative=name), rules=self.rules))
+                rules.append(GrammarNode(SET_LINE_PREFIX, args=dict(prefix=None, count=count, alternative=inner.name), rules=self.rules))
                 self.rules = rules
-            callback.repeat = _repeat
-            callback.as_line_prefix = _as_prefix
-            callback.when_missing_indent = _as_prefix_alt
-            callback.inline = _inline
-            setattr(self, name, callback)
+
+        for name, rule in names.items():
+            if hasattr(self, name): raise SyntaxError()
+            setattr(self, name, Rule(name, rule))
 
     def rule(self, rule):
         if self.block_mode: raise SyntaxError()
