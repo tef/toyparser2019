@@ -3231,6 +3231,73 @@ class Parser:
                             partial_tab_width_3 = partial_tab_width_2
                             children_3 = [] if children_2 is not None else None
                             while True: # case
+                                count_0 = 0
+                                while offset_3 < buf_eof and count_0 < 4:
+                                    chr = buf[offset_3]
+                                    if chr in ' \t':
+                                        if chr == '\t':
+                                            if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
+                                                width = partial_tab_width_3
+                                            else:
+                                                width  = (self.tabstop-(column_3%self.tabstop))
+                                            if count_0 + width > 4:
+                                                new_width = 4 - count_0
+                                                count_0 += new_width
+                                                column_3 += new_width
+                                                partial_tab_offset_3 = offset_3
+                                                partial_tab_width_3 = width - new_width
+                                                break
+                                            count_0 += width
+                                            column_3 += width
+                                            offset_3 += 1
+                                        else:
+                                            count_0 += 1
+                                            column_3 += 1
+                                            offset_3 += 1
+                                    else:
+                                        break
+                                if count_0 < 4:
+                                    offset_3 = -1
+                                    break
+
+                                if offset_3 == buf_eof:
+                                    offset_3 = -1
+                                    break
+
+                                chr = ord(buf[offset_3])
+
+                                if chr == 32:
+                                    offset_3 = -1
+                                    break
+                                elif chr == 9:
+                                    offset_3 = -1
+                                    break
+                                elif chr == 10:
+                                    offset_3 = -1
+                                    break
+                                else:
+                                    offset_3 += 1
+                                    column_3 += 1
+
+
+                                break
+                            if offset_3 != -1:
+                                offset_2 = offset_3
+                                column_2 = column_3
+                                indent_column_2 = indent_column_3
+                                partial_tab_offset_2 = partial_tab_offset_3
+                                partial_tab_width_2 = partial_tab_width_3
+                                if children_3 is not None and children_3 is not None:
+                                    children_2.extend(children_3)
+                                break
+                            # end case
+                            offset_3 = offset_2
+                            column_3 = column_2
+                            indent_column_3 = indent_column_2
+                            partial_tab_offset_3 = partial_tab_offset_2
+                            partial_tab_width_3 = partial_tab_width_2
+                            children_3 = [] if children_2 is not None else None
+                            while True: # case
                                 offset_3, column_3, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = self.parse_thematic_break(buf, offset_3, buf_eof, column_3, indent_column_3, prefix_0, children_3, partial_tab_offset_3, partial_tab_width_3)
                                 if offset_3 == -1: break
 

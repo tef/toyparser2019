@@ -464,9 +464,9 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                     with self.case(): 
                         self.whitespace()
                         self.newline()
-                    #with self.case():
-                    #    self.whitespace(min=4, max=4)
-                    #    self.range(" ", "\t", "\n", invert=True)
+                    with self.case():
+                        self.whitespace(min=4, max=4)
+                        self.range(" ", "\t", "\n", invert=True)
                     with self.case(): self.thematic_break()
                     with self.case(): self.atx_heading()
                     with self.case(): self.start_fenced_block()
