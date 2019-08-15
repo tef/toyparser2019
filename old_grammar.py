@@ -1,4 +1,6 @@
 START_OF_LINE = 'start-of-line'
+INDENT = 'indent'
+DEDENT = 'dedent'
 END_OF_LINE = 'end-of-line'
 WHITESPACE = 'whitespace'
 NEWLINE = 'newline'
@@ -272,8 +274,12 @@ class Parser:
             _max = state.values.get(_max, _max)
             return state.advance_whitespace(self.grammar.whitespace, self.grammar.newline, _min, _max, _newline)
 
-        elif rule.kind == START_OF_LINE:
+        elif rule.kind == INDENT:
             return state.advance_prefix()
+        elif rule.kind == START_OF_LINE:
+            if self.offset != self.line_start:
+                return None
+            return state
 
         elif rule.kind == SET_LINE_PREFIX:
             if rule.args['prefix']: raise Exception('unfinished')
@@ -590,6 +596,13 @@ def compile(grammar, builder=None):
             ))
 
         elif rule.kind == START_OF_LINE:
+            steps.extend((
+                f"if {state}.line_start != {state}.offset:",
+                f"    break",
+                f"",
+            ))
+
+        elif rule.kind == INDENT:
             steps.extend((
                 f"{state} = {state}.advance_prefix()",
                 f"if {state} is None:",

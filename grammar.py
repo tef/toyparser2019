@@ -227,6 +227,8 @@ Then again to conver the GrammarNode tree into ParserNodes (make_rule())
 """
 
 START_OF_LINE = 'start-of-line'
+INDENT = 'indent'
+DEDENT = 'dedent'
 END_OF_LINE = 'end-of-line'
 WHITESPACE = 'whitespace'
 PARTIAL_TAB = 'partial_tab'
@@ -528,6 +530,14 @@ class FunctionBuilder:
         if self.block_mode: raise SyntaxError()
         self.rules.append(GrammarNode(START_OF_LINE))
 
+    def indent(self, partial=False):
+        if self.block_mode: raise SyntaxError()
+        self.rules.append(GrammarNode(INDENT, args=dict(partial=partial)))
+
+    def dedent(self):
+        if self.block_mode: raise SyntaxError()
+        self.rules.append(GrammarNode(DEDENT))
+
     def range(self, *args, invert=False):
         if self.block_mode: raise SyntaxError()
         self.rules.append(RangeNode(args, invert))
@@ -545,7 +555,7 @@ class FunctionBuilder:
         self.rules.append(GrammarNode(ACCEPT_IF, args=dict(cond=cond)))
 
     @contextmanager
-    def indented(self, count=None):
+    def indented(self, count=None, indent=None, dedent=None):
         if self.block_mode: raise SyntaxError()
         rules, self.rules = self.rules, []
         yield
@@ -1218,11 +1228,11 @@ def compile_python(grammar, builder=None, cython=False):
                 steps.extend((
                 #        f"    print('nice', offset)",
                         f"    return offset, column, indent_column, partial_tab_offset, partial_tab_width",
-                        f'{prefix}.append(_indent)',
+                        f'{prefix}.append((_indent, None))',
                 ))
             else:
                 prule = rule.args['prefix']
-                steps.append(f'{prefix}.append(self.parse_{prule})')
+                steps.append(f'{prefix}.append((self.parse_{prule}, None))')
 
             steps.append(f'{indent_column} = {column}')
 
@@ -1234,13 +1244,19 @@ def compile_python(grammar, builder=None, cython=False):
             steps.append(f'if {offset} == -1: break')
 
         elif rule.kind == START_OF_LINE:
+            steps.extend((
+                f"if not ({column} == {indent_column} == 0):",
+                f"    {offset} = -1",
+                f"    break",
+            ))
+        elif rule.kind == INDENT:
             offset_0 = offset.incr()
             steps.extend((
                 f"if not ({column} == {indent_column} == 0):",
                 f"    {offset} = -1",
                 f"    break",
                 f"# print('start')",
-                f"for indent in {prefix}:",
+                f"for indent, dedent in {prefix}:",
                 f"    # print(indent)",
                 f"    _children, _prefix = [], []",
                 f"    {offset}, {column}, {indent_column}, {partial_tab_offset}, {partial_tab_width} = indent(buf, {offset}, buf_eof, {column}, {indent_column}, _prefix, _children, {partial_tab_offset}, {partial_tab_width})",

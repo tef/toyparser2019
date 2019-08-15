@@ -48,7 +48,7 @@ class Parser:
                             offset_2 = -1
                             break
                         # print('start')
-                        for indent in prefix_0:
+                        for indent, dedent in prefix_0:
                             # print(indent)
                             _children, _prefix = [], []
                             offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, offset_2, buf_eof, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
@@ -1078,7 +1078,7 @@ class Parser:
             offset_1 = offset_0
             children_1 = []
             while True: # start capture
-                prefix_0.append(self.parse_no_setext_heading_line)
+                prefix_0.append((self.parse_no_setext_heading_line, None))
                 indent_column_0 = column_0
                 while True:
                     offset_1, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0 = self.parse_setext_para(buf, offset_1, buf_eof, column_0, indent_column_0, prefix_0, children_1, partial_tab_offset_0, partial_tab_width_0)
@@ -1125,7 +1125,7 @@ class Parser:
                     offset_1 = -1
                     break
                 # print('start')
-                for indent in prefix_0:
+                for indent, dedent in prefix_0:
                     # print(indent)
                     _children, _prefix = [], []
                     offset_1, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0 = indent(buf, offset_1, buf_eof, column_0, indent_column_0, _prefix, _children, partial_tab_offset_0, partial_tab_width_0)
@@ -1517,7 +1517,7 @@ class Parser:
             offset_1 = offset_0
             children_1 = []
             while True: # start capture
-                prefix_0.append(self.parse_code_block_indent)
+                prefix_0.append((self.parse_code_block_indent, None))
                 indent_column_0 = column_0
                 while True:
                     offset_2 = offset_1
@@ -1666,7 +1666,7 @@ class Parser:
                                                 offset_4 = -1
                                                 break
                                             # print('start')
-                                            for indent in prefix_0:
+                                            for indent, dedent in prefix_0:
                                                 # print(indent)
                                                 _children, _prefix = [], []
                                                 offset_4, column_3, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = indent(buf, offset_4, buf_eof, column_3, indent_column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
@@ -1754,7 +1754,7 @@ class Parser:
                                             offset_4 = -1
                                             break
                                         # print('start')
-                                        for indent in prefix_0:
+                                        for indent, dedent in prefix_0:
                                             # print(indent)
                                             _children, _prefix = [], []
                                             offset_4, column_3, column_3, partial_tab_offset_3, partial_tab_width_3 = indent(buf, offset_4, buf_eof, column_3, column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
@@ -1827,7 +1827,7 @@ class Parser:
                                         offset_3 = -1
                                         break
                                     # print('start')
-                                    for indent in prefix_0:
+                                    for indent, dedent in prefix_0:
                                         # print(indent)
                                         _children, _prefix = [], []
                                         offset_3, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = indent(buf, offset_3, buf_eof, column_2, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
@@ -2328,7 +2328,7 @@ class Parser:
                         offset_1 = -1
                         break
                     # print('start')
-                    for indent in prefix_0:
+                    for indent, dedent in prefix_0:
                         # print(indent)
                         _children, _prefix = [], []
                         offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, offset_1, buf_eof, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
@@ -2537,7 +2537,7 @@ class Parser:
                         offset_1 = -1
                         break
                     # print('start')
-                    for indent in prefix_0:
+                    for indent, dedent in prefix_0:
                         # print(indent)
                         _children, _prefix = [], []
                         offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, offset_1, buf_eof, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
@@ -2787,7 +2787,7 @@ class Parser:
                         offset_1 = -1
                         break
                     # print('start')
-                    for indent in prefix_0:
+                    for indent, dedent in prefix_0:
                         # print(indent)
                         _children, _prefix = [], []
                         offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, offset_1, buf_eof, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
@@ -2996,7 +2996,7 @@ class Parser:
                         offset_1 = -1
                         break
                     # print('start')
-                    for indent in prefix_0:
+                    for indent, dedent in prefix_0:
                         # print(indent)
                         _children, _prefix = [], []
                         offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, offset_1, buf_eof, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
@@ -3699,7 +3699,7 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True: # case
-                        prefix_0.append(self.parse_blockquote_prefix)
+                        prefix_0.append((self.parse_blockquote_prefix, None))
                         indent_column_1 = column_1
                         while True:
                             while True: # start reject
@@ -3756,7 +3756,7 @@ class Parser:
                             offset_2 = -1
                             break
                         # print('start')
-                        for indent in prefix_0:
+                        for indent, dedent in prefix_0:
                             # print(indent)
                             _children, _prefix = [], []
                             offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, offset_2, buf_eof, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
@@ -3829,7 +3829,7 @@ class Parser:
                             partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True: # case
-                                prefix_0.append(self.parse_blockquote_prefix)
+                                prefix_0.append((self.parse_blockquote_prefix, None))
                                 indent_column_2 = column_2
                                 while True:
                                     while True: # start reject
@@ -4468,7 +4468,7 @@ class Parser:
                             offset_2 = -1
                             break
                         # print('start')
-                        for indent in prefix_0:
+                        for indent, dedent in prefix_0:
                             # print(indent)
                             _children, _prefix = [], []
                             offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, offset_2, buf_eof, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
@@ -4537,7 +4537,7 @@ class Parser:
                                                 offset_5 = -1
                                                 break
                                             # print('start')
-                                            for indent in prefix_0:
+                                            for indent, dedent in prefix_0:
                                                 # print(indent)
                                                 _children, _prefix = [], []
                                                 offset_5, column_3, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = indent(buf, offset_5, buf_eof, column_3, indent_column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
@@ -4619,7 +4619,7 @@ class Parser:
                                         offset_4 = -1
                                         break
                                     # print('start')
-                                    for indent in prefix_0:
+                                    for indent, dedent in prefix_0:
                                         # print(indent)
                                         _children, _prefix = [], []
                                         offset_4, column_3, column_3, partial_tab_offset_3, partial_tab_width_3 = indent(buf, offset_4, buf_eof, column_3, column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
@@ -5339,7 +5339,7 @@ class Parser:
                             offset_2 = -1
                             break
                         # print('start')
-                        for indent in prefix_0:
+                        for indent, dedent in prefix_0:
                             # print(indent)
                             _children, _prefix = [], []
                             offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, offset_2, buf_eof, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
@@ -5408,7 +5408,7 @@ class Parser:
                                                 offset_5 = -1
                                                 break
                                             # print('start')
-                                            for indent in prefix_0:
+                                            for indent, dedent in prefix_0:
                                                 # print(indent)
                                                 _children, _prefix = [], []
                                                 offset_5, column_3, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = indent(buf, offset_5, buf_eof, column_3, indent_column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
@@ -5490,7 +5490,7 @@ class Parser:
                                         offset_4 = -1
                                         break
                                     # print('start')
-                                    for indent in prefix_0:
+                                    for indent, dedent in prefix_0:
                                         # print(indent)
                                         _children, _prefix = [], []
                                         offset_4, column_3, column_3, partial_tab_offset_3, partial_tab_width_3 = indent(buf, offset_4, buf_eof, column_3, column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
@@ -6173,7 +6173,7 @@ class Parser:
                                 offset = -1
                                 break
                         return offset, column, indent_column, partial_tab_offset, partial_tab_width
-                    prefix_0.append(_indent)
+                    prefix_0.append((_indent, None))
                     indent_column_1 = column_1
                     while True:
                         count_0 = 0
@@ -6212,7 +6212,7 @@ class Parser:
                             offset_1 = -1
                             break
                         # print('start')
-                        for indent in prefix_0:
+                        for indent, dedent in prefix_0:
                             # print(indent)
                             _children, _prefix = [], []
                             offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, offset_1, buf_eof, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
@@ -6315,7 +6315,7 @@ class Parser:
                     else:
                         return self.parse_no_list_interrupts(buf, start_offset, buf_eof, start_column, indent_column, prefix, children, partial_tab_offset, partial_tab_width)
                 return offset, column, indent_column, partial_tab_offset, partial_tab_width
-            prefix_0.append(_indent)
+            prefix_0.append((_indent, None))
             indent_column_0 = column_0
             while True:
                 offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0 = self.parse_block_element(buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0)
@@ -6372,14 +6372,14 @@ class Parser:
                                 offset = -1
                                 break
                         return offset, column, indent_column, partial_tab_offset, partial_tab_width
-                    prefix_0.append(_indent)
+                    prefix_0.append((_indent, None))
                     indent_column_1 = column_1
                     while True:
                         if not (column_1 == indent_column_1 == 0):
                             offset_1 = -1
                             break
                         # print('start')
-                        for indent in prefix_0:
+                        for indent, dedent in prefix_0:
                             # print(indent)
                             _children, _prefix = [], []
                             offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, offset_1, buf_eof, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
@@ -6460,7 +6460,7 @@ class Parser:
                                             offset_3 = -1
                                             break
                                         # print('start')
-                                        for indent in prefix_0:
+                                        for indent, dedent in prefix_0:
                                             # print(indent)
                                             _children, _prefix = [], []
                                             offset_3, column_3, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = indent(buf, offset_3, buf_eof, column_3, indent_column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
@@ -6588,7 +6588,7 @@ class Parser:
                             else:
                                 return self.parse_no_list_interrupts(buf, start_offset, buf_eof, start_column, indent_column, prefix, children, partial_tab_offset, partial_tab_width)
                         return offset, column, indent_column, partial_tab_offset, partial_tab_width
-                    prefix_0.append(_indent)
+                    prefix_0.append((_indent, None))
                     indent_column_1 = column_1
                     while True:
                         offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_block_element(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
@@ -6933,7 +6933,7 @@ class Parser:
                                                     offset_5 = -1
                                                     break
                                                 # print('start')
-                                                for indent in prefix_0:
+                                                for indent, dedent in prefix_0:
                                                     # print(indent)
                                                     _children, _prefix = [], []
                                                     offset_5, column_3, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = indent(buf, offset_5, buf_eof, column_3, indent_column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
@@ -7763,7 +7763,7 @@ class Parser:
                                         offset_3 = -1
                                         break
                                     # print('start')
-                                    for indent in prefix_0:
+                                    for indent, dedent in prefix_0:
                                         # print(indent)
                                         _children, _prefix = [], []
                                         offset_3, column_3, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = indent(buf, offset_3, buf_eof, column_3, indent_column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
@@ -8676,7 +8676,7 @@ class Parser:
                         offset_1 = -1
                         break
                     # print('start')
-                    for indent in prefix_0:
+                    for indent, dedent in prefix_0:
                         # print(indent)
                         _children, _prefix = [], []
                         offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, offset_1, buf_eof, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)

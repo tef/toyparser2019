@@ -146,13 +146,13 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n", "\r
                     self.indented_value()
                 with self.case():
                     self.yaml_eol()
-                    self.start_of_line()
+                    self.indent()
                     self.whitespace(min=1)
                     self.indented_value()
 
             with self.repeat():
                 self.yaml_eol()
-                self.start_of_line()
+                self.indent()
                 self.accept("-")
                 self.whitespace(min=1)
                 with self.choice():
@@ -161,7 +161,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n", "\r
                         self.indented_value()
                     with self.case():
                         self.yaml_eol()
-                        self.start_of_line()
+                        self.indent()
                         self.whitespace()
                         self.indented_value()
 
@@ -175,7 +175,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n", "\r
                 with self.choice():
                     with self.case():
                         self.yaml_eol()
-                        self.start_of_line()
+                        self.indent()
                         self.whitespace(min=1)
                         self.indented_value()
                     with self.case():
@@ -184,7 +184,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n", "\r
 
             with self.repeat(), self.capture_node("pair"):
                 self.yaml_eol()
-                self.start_of_line()
+                self.indent()
                 self.identifier()
                 self.whitespace()
                 self.accept(":")
@@ -195,7 +195,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n", "\r
                         self.indented_value()
                     with self.case():
                         self.yaml_eol()
-                        self.start_of_line()
+                        self.indent()
                         self.whitespace(min=1)
                         self.indented_value()
 
