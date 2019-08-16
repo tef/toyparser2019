@@ -20,7 +20,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                 with self.case(): self.block_element()
                 with self.case(): self.empty_lines()
         self.whitespace()
-        self.eof()
+        self.end_of_file()
 
     @rule()
     def empty_lines(self):
@@ -33,7 +33,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
         with self.capture_node("empty_line"):
             pass
 
-    @rule() # 2.1 line ends by newline or eof
+    @rule() # 2.1 line ends by newline or end_of_file
     def line_end(self):
         self.whitespace()
         self.end_of_line()
@@ -180,7 +180,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                 self.range("\n", invert=True)
             self.line_end()
         with self.choice():
-            with self.case(): self.eof()
+            with self.case(): self.end_of_file()
             with self.case():
                 self.indent()
                 self.whitespace(max=3)
@@ -210,7 +210,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                 self.range("\n", invert=True)
             self.line_end()
         with self.choice():
-            with self.case(): self.eof()
+            with self.case(): self.end_of_file()
             with self.case():
                 self.indent()
                 self.whitespace(max=3)

@@ -522,7 +522,7 @@ class FunctionBuilder:
         if self.block_mode: raise SyntaxError()
         self.rules.append(GrammarNode(NEWLINE, regular=True, nullable=False))
 
-    def eof(self):
+    def end_of_file(self):
         if self.block_mode: raise SyntaxError()
         self.rules.append(GrammarNode(END_OF_FILE, regular=False, nullable=True))
 
@@ -770,7 +770,7 @@ class Builtins:
     def partial_tab():
         return GrammarNode(PARTIAL_TAB)
     whitespace = GrammarNode(WHITESPACE, args={'min':0, 'max':None, 'newline': False})
-    eof = GrammarNode(END_OF_FILE)
+    end_of_file = GrammarNode(END_OF_FILE)
     end_of_line = GrammarNode(END_OF_LINE)
     start_of_line = GrammarNode(START_OF_LINE)
     newline = GrammarNode(NEWLINE)

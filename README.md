@@ -129,11 +129,11 @@ def quote(self):
 @rule()
 def blockquote(self):
     self.quote()
-    with self.quote.as_prefix():
+    with self.indented(indent=quote):
         self.line()
 	with self.repeat():
 	    self.newline()
-	    self.start_of_line() # include indent
+	    self.indent() # include indent
 	    self.line()
         self.end_of_line()
 ```
