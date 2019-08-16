@@ -282,7 +282,7 @@ class Parser:
             return state
 
         elif rule.kind == SET_LINE_PREFIX:
-            if rule.args['prefix']: raise Exception('unfinished')
+            if rule.args['indent']: raise Exception('unfinished')
             state = state.set_indent(self.grammar.tabstop, self.grammar.whitespace, self.grammar.newline)
             for step in rule.rules:
                 state = self.parse_rule(step, state)

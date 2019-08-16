@@ -469,6 +469,9 @@ class FunctionBuilder:
             def repeat(inner, min=0, max=None):
                 if self.block_mode: raise SyntaxError()
                 self.rule(RepeatNode([inner.rule], min=min, max=max))
+            def optional(inner):
+                if self.block_mode: raise SyntaxError()
+                self.rule(RepeatNode([inner.rule], min=0, max=1))
             def inline(inner):
                 if self.block_mode: raise SyntaxError()
                 self.rule(GrammarNode(RULE, args=dict(name=inner.name, inline=True)))
