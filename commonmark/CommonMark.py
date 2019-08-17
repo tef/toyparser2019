@@ -314,6 +314,10 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                     with self.reject():
                         self.line_end()
             with self.case():
+                with self.lookahead():
+                    self.start_fenced_block()
+            
+            with self.case():
                 self.whitespace()
                 with self.reject(): 
                     self.newline()
@@ -321,11 +325,12 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                 with self.lookahead():
                     self.whitespace()
                     self.newline()
+
                 with self.indented():
                     self.whitespace()
                     self.newline()
                     self.indent()
-                    self.whitespace(min=1, max=1)
+                self.whitespace(min=1, max=1)
 
         c = self.column(from_prefix=True)
         with self.list_interrupts.as_dedent(count=c):
@@ -642,7 +647,11 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
                     with self.repeat(min=c, max=c):
                         self.literal("`")
                 self.literal("`")
+                with self.reject():
+                    self.literal("`")
         with self.repeat(min=c, max=c):
+            self.literal("`")
+        with self.reject():
             self.literal("`")
 
 
@@ -672,6 +681,9 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
 ## HTML Builder
 
 import html
+
+def html_escape(text):
+    return text.replace("&", "&amp;").replace("\"", "&quot;").replace(">", "&gt;").replace("<","&lt;")
 
 builder = {}
 _builder = lambda fn:builder.__setitem__(fn.__name__,fn)
@@ -705,7 +717,7 @@ def setext_heading(buf, pos,end, children):
 
 @_builder
 def indented_code(buf, pos,end, children):
-    text = html.escape("".join(children))
+    text = html_escape("".join(children))
     return f"<pre><code>{text}</code></pre>"
 
 @_builder
@@ -847,13 +859,13 @@ def para(buf, pos,end, children):
 def code_span(buf, pos, end, children):
     text = buf[pos:end]
     text = text.replace('\n', ' ')
-    if text and text[0] == text[-1] == " ":
+    if len(text) > 2 and text[0] == text[-1] == " ":
         text = text[1:-1]
     return f"<code>{text}</code>"
 
 @_builder
 def text(buf, pos,end, children):
-    return html.escape(buf[pos:end])
+    return html_escape(buf[pos:end])
 
 @_builder
 def softbreak(buf, pos,end, children):

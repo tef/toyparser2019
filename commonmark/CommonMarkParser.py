@@ -23,7 +23,7 @@ class Parser:
     def parse(self, buf, offset=0, end=None, err=None):
         self.cache = dict()
         end = len(buf) if end is None else end
-        column, indent_column, eof = offset, offset, end
+        column, indent_column, eof = 0, (0, None), end
         prefix, children = [], []
         new_offset, column, indent_column, partial_tab_offset, partial_tab_width = self.parse_document(buf, offset, eof, column, indent_column, prefix, children, 0, 0)
         if children and new_offset == end: return children[-1]
@@ -44,7 +44,7 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
-                        if not (column_1 == indent_column_1 == 0):
+                        if not (column_1 == indent_column_1[0] == 0):
                             offset_2 = -1
                             break
                         # print('start')
@@ -59,7 +59,7 @@ class Parser:
                                 offset_2 = -1
                                 break
                             offset_2 = offset_3
-                            indent_column_1 = column_1
+                            indent_column_1 = (column_1, indent_column_1)
                         if offset_2 == -1:
                             break
 
@@ -194,7 +194,7 @@ class Parser:
                 if chr in '\n':
                     offset_0 +=1
                     column_0 = 0
-                    indent_column_0 = 0
+                    indent_column_0 = (0, None)
                 else:
                     offset_0 = -1
                     break
@@ -211,7 +211,7 @@ class Parser:
                 partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True:
-                    if not (column_1 == indent_column_1 == 0):
+                    if not (column_1 == indent_column_1[0] == 0):
                         offset_1 = -1
                         break
                     # print('start')
@@ -226,7 +226,7 @@ class Parser:
                             offset_1 = -1
                             break
                         offset_1 = offset_2
-                        indent_column_1 = column_1
+                        indent_column_1 = (column_1, indent_column_1)
                     if offset_1 == -1:
                         break
 
@@ -254,7 +254,7 @@ class Parser:
                         if chr in '\n':
                             offset_1 +=1
                             column_1 = 0
-                            indent_column_1 = 0
+                            indent_column_1 = (0, None)
                         else:
                             offset_1 = -1
                             break
@@ -315,7 +315,7 @@ class Parser:
                 if chr in '\n':
                     offset_0 +=1
                     column_0 = 0
-                    indent_column_0 = 0
+                    indent_column_0 = (0, None)
                 else:
                     offset_0 = -1
                     break
@@ -1218,7 +1218,7 @@ class Parser:
                 if chr in '\n':
                     offset_0 +=1
                     column_0 = 0
-                    indent_column_0 = 0
+                    indent_column_0 = (0, None)
                 else:
                     offset_0 = -1
                     break
@@ -1261,7 +1261,7 @@ class Parser:
             offset_1 = offset_0
             children_1 = []
             while True: # start capture
-                count_0 = column_0 - indent_column_0
+                count_0 = column_0 - indent_column_0[0]
                 # print(count_0, 'indent')
                 def _indent(buf, offset, buf_eof, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
                     saw_tab, saw_not_tab = False, False
@@ -1332,7 +1332,7 @@ class Parser:
                             offset = -1
                     return offset, column, indent_column, partial_tab_offset, partial_tab_width
                 prefix_0.append((_indent, _dedent))
-                indent_column_0 = column_0
+                indent_column_0 = (column_0, indent_column_0)
                 while True:
                     offset_2 = offset_1
                     column_1 = column_0
@@ -1445,7 +1445,7 @@ class Parser:
                         if chr in '\n':
                             offset_1 +=1
                             column_0 = 0
-                            indent_column_0 = 0
+                            indent_column_0 = (0, None)
                         else:
                             offset_1 = -1
                             break
@@ -1476,7 +1476,7 @@ class Parser:
                                         partial_tab_width_3 = partial_tab_width_2
                                         children_4 = [] if children_3 is not None else None
                                         while True:
-                                            if not (column_3 == indent_column_3 == 0):
+                                            if not (column_3 == indent_column_3[0] == 0):
                                                 offset_4 = -1
                                                 break
                                             # print('start')
@@ -1491,7 +1491,7 @@ class Parser:
                                                     offset_4 = -1
                                                     break
                                                 offset_4 = offset_5
-                                                indent_column_3 = column_3
+                                                indent_column_3 = (column_3, indent_column_3)
                                             if offset_4 == -1:
                                                 break
 
@@ -1533,7 +1533,7 @@ class Parser:
                                                 if chr in '\n':
                                                     offset_4 +=1
                                                     column_3 = 0
-                                                    indent_column_3 = 0
+                                                    indent_column_3 = (0, None)
                                                 else:
                                                     offset_4 = -1
                                                     break
@@ -1559,14 +1559,14 @@ class Parser:
                                     if offset_3 == -1:
                                         break
 
-                                    while True: # start reject
+                                    while True: # start lookahed
                                         children_4 = []
                                         offset_4 = offset_3
                                         column_3 = column_2
-                                        column_3 = indent_column_2
+                                        indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
-                                        if not (column_3 == column_3 == 0):
+                                        if not (column_3 == indent_column_3[0] == 0):
                                             offset_4 = -1
                                             break
                                         # print('start')
@@ -1574,14 +1574,14 @@ class Parser:
                                             # print(indent)
                                             _children, _prefix = [], []
                                             offset_5 = offset_4
-                                            offset_5, column_3, column_3, partial_tab_offset_3, partial_tab_width_3 = indent(buf, offset_5, buf_eof, column_3, column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
+                                            offset_5, column_3, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = indent(buf, offset_5, buf_eof, column_3, indent_column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
                                             if _prefix or _children:
                                                raise Exception('bar')
                                             if offset_5 == -1:
                                                 offset_4 = -1
                                                 break
                                             offset_4 = offset_5
-                                            column_3 = column_3
+                                            indent_column_3 = (column_3, indent_column_3)
                                         if offset_4 == -1:
                                             break
 
@@ -1641,7 +1641,7 @@ class Parser:
                                 partial_tab_width_2 = partial_tab_width_1
                                 children_3 = [] if children_2 is not None else None
                                 while True: # case
-                                    if not (column_2 == indent_column_2 == 0):
+                                    if not (column_2 == indent_column_2[0] == 0):
                                         offset_3 = -1
                                         break
                                     # print('start')
@@ -1656,7 +1656,7 @@ class Parser:
                                             offset_3 = -1
                                             break
                                         offset_3 = offset_4
-                                        indent_column_2 = column_2
+                                        indent_column_2 = (column_2, indent_column_2)
                                     if offset_3 == -1:
                                         break
 
@@ -1771,7 +1771,7 @@ class Parser:
                                         if chr in '\n':
                                             offset_3 +=1
                                             column_2 = 0
-                                            indent_column_2 = 0
+                                            indent_column_2 = (0, None)
                                         else:
                                             offset_3 = -1
                                             break
@@ -1810,6 +1810,7 @@ class Parser:
 
                     break
                 prefix_0.pop()
+                if indent_column_0 != (0, None): indent_column_0 = indent_column_0[1]
                 if offset_1 == -1: break
 
                 break
@@ -2085,7 +2086,7 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
-                        if not (column_1 == indent_column_1 == 0):
+                        if not (column_1 == indent_column_1[0] == 0):
                             offset_2 = -1
                             break
                         # print('start')
@@ -2100,7 +2101,7 @@ class Parser:
                                 offset_2 = -1
                                 break
                             offset_2 = offset_3
-                            indent_column_1 = column_1
+                            indent_column_1 = (column_1, indent_column_1)
                         if offset_2 == -1:
                             break
 
@@ -2195,7 +2196,7 @@ class Parser:
                                 if chr in '\n':
                                     offset_3 +=1
                                     column_2 = 0
-                                    indent_column_2 = 0
+                                    indent_column_2 = (0, None)
                                 else:
                                     offset_3 = -1
                                     break
@@ -2316,7 +2317,7 @@ class Parser:
                             indent_column_2 = indent_column_1
                             partial_tab_offset_2 = partial_tab_offset_1
                             partial_tab_width_2 = partial_tab_width_1
-                            if not (column_2 == indent_column_2 == 0):
+                            if not (column_2 == indent_column_2[0] == 0):
                                 offset_3 = -1
                                 break
                             # print('start')
@@ -2331,7 +2332,7 @@ class Parser:
                                     offset_3 = -1
                                     break
                                 offset_3 = offset_4
-                                indent_column_2 = column_2
+                                indent_column_2 = (column_2, indent_column_2)
                             if offset_3 == -1:
                                 break
 
@@ -2401,7 +2402,7 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True: # case
-                        if not (column_1 == indent_column_1 == 0):
+                        if not (column_1 == indent_column_1[0] == 0):
                             offset_2 = -1
                             break
                         # print('start')
@@ -2416,7 +2417,7 @@ class Parser:
                                 offset_2 = -1
                                 break
                             offset_2 = offset_3
-                            indent_column_1 = column_1
+                            indent_column_1 = (column_1, indent_column_1)
                         if offset_2 == -1:
                             break
 
@@ -2703,7 +2704,7 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
-                        if not (column_1 == indent_column_1 == 0):
+                        if not (column_1 == indent_column_1[0] == 0):
                             offset_2 = -1
                             break
                         # print('start')
@@ -2718,7 +2719,7 @@ class Parser:
                                 offset_2 = -1
                                 break
                             offset_2 = offset_3
-                            indent_column_1 = column_1
+                            indent_column_1 = (column_1, indent_column_1)
                         if offset_2 == -1:
                             break
 
@@ -2924,7 +2925,7 @@ class Parser:
                             indent_column_2 = indent_column_1
                             partial_tab_offset_2 = partial_tab_offset_1
                             partial_tab_width_2 = partial_tab_width_1
-                            if not (column_2 == indent_column_2 == 0):
+                            if not (column_2 == indent_column_2[0] == 0):
                                 offset_3 = -1
                                 break
                             # print('start')
@@ -2939,7 +2940,7 @@ class Parser:
                                     offset_3 = -1
                                     break
                                 offset_3 = offset_4
-                                indent_column_2 = column_2
+                                indent_column_2 = (column_2, indent_column_2)
                             if offset_3 == -1:
                                 break
 
@@ -3009,7 +3010,7 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True: # case
-                        if not (column_1 == indent_column_1 == 0):
+                        if not (column_1 == indent_column_1[0] == 0):
                             offset_2 = -1
                             break
                         # print('start')
@@ -3024,7 +3025,7 @@ class Parser:
                                 offset_2 = -1
                                 break
                             offset_2 = offset_3
-                            indent_column_1 = column_1
+                            indent_column_1 = (column_1, indent_column_1)
                         if offset_2 == -1:
                             break
 
@@ -3205,11 +3206,11 @@ class Parser:
                 partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    while True: # start reject
+                    while True: # start lookahed
                         children_2 = []
                         offset_2 = offset_1
                         column_2 = column_1
-                        column_2 = indent_column_1
+                        indent_column_2 = indent_column_1
                         partial_tab_offset_2 = partial_tab_offset_1
                         partial_tab_width_2 = partial_tab_width_1
                         count_0 = 0
@@ -3236,7 +3237,7 @@ class Parser:
                             if chr in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                column_2 = 0
+                                indent_column_2 = (0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -3291,11 +3292,11 @@ class Parser:
                         else:
                             break
 
-                    while True: # start reject
+                    while True: # start lookahed
                         children_2 = []
                         offset_2 = offset_1
                         column_2 = column_1
-                        column_2 = indent_column_1
+                        indent_column_2 = indent_column_1
                         partial_tab_offset_2 = partial_tab_offset_1
                         partial_tab_width_2 = partial_tab_width_1
                         if offset_2 == buf_eof:
@@ -3371,7 +3372,7 @@ class Parser:
                         if chr in '\n':
                             offset_1 +=1
                             column_1 = 0
-                            indent_column_1 = 0
+                            indent_column_1 = (0, None)
                         else:
                             offset_1 = -1
                             break
@@ -3532,7 +3533,7 @@ class Parser:
                             if chr in '\n':
                                 offset_2 +=1
                                 column_1 = 0
-                                indent_column_1 = 0
+                                indent_column_1 = (0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -3557,7 +3558,7 @@ class Parser:
                     children_2 = [] if children_1 is not None else None
                     while True: # case
                         prefix_0.append((self.parse_start_blockquote, self.parse_blockquote_interrupt))
-                        indent_column_1 = column_1
+                        indent_column_1 = (column_1, indent_column_1)
                         while True:
                             offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_block_element(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                             if offset_2 == -1: break
@@ -3565,6 +3566,7 @@ class Parser:
 
                             break
                         prefix_0.pop()
+                        if indent_column_1 != (0, None): indent_column_1 = indent_column_1[1]
                         if offset_2 == -1: break
 
 
@@ -3593,7 +3595,7 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
-                        if not (column_1 == indent_column_1 == 0):
+                        if not (column_1 == indent_column_1[0] == 0):
                             offset_2 = -1
                             break
                         # print('start')
@@ -3608,7 +3610,7 @@ class Parser:
                                 offset_2 = -1
                                 break
                             offset_2 = offset_3
-                            indent_column_1 = column_1
+                            indent_column_1 = (column_1, indent_column_1)
                         if offset_2 == -1:
                             break
 
@@ -3648,7 +3650,7 @@ class Parser:
                                     if chr in '\n':
                                         offset_3 +=1
                                         column_2 = 0
-                                        indent_column_2 = 0
+                                        indent_column_2 = (0, None)
                                     else:
                                         offset_3 = -1
                                         break
@@ -3673,7 +3675,7 @@ class Parser:
                             children_3 = [] if children_2 is not None else None
                             while True: # case
                                 prefix_0.append((self.parse_start_blockquote, self.parse_blockquote_interrupt))
-                                indent_column_2 = column_2
+                                indent_column_2 = (column_2, indent_column_2)
                                 while True:
                                     offset_3, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_block_element(buf, offset_3, buf_eof, column_2, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
                                     if offset_3 == -1: break
@@ -3681,6 +3683,7 @@ class Parser:
 
                                     break
                                 prefix_0.pop()
+                                if indent_column_2 != (0, None): indent_column_2 = indent_column_2[1]
                                 if offset_3 == -1: break
 
 
@@ -3884,11 +3887,11 @@ class Parser:
                 partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    while True: # start reject
+                    while True: # start lookahed
                         children_2 = []
                         offset_2 = offset_1
                         column_2 = column_1
-                        column_2 = indent_column_1
+                        indent_column_2 = indent_column_1
                         partial_tab_offset_2 = partial_tab_offset_1
                         partial_tab_width_2 = partial_tab_width_1
                         count_0 = 0
@@ -3915,7 +3918,7 @@ class Parser:
                             if chr in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                column_2 = 0
+                                indent_column_2 = (0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -3950,7 +3953,7 @@ class Parser:
                         if chr in '\n':
                             offset_1 +=1
                             column_1 = 0
-                            indent_column_1 = 0
+                            indent_column_1 = (0, None)
                             count_0 +=1
                         elif chr in ' \t':
                             if chr == '\t':
@@ -4135,11 +4138,11 @@ class Parser:
                 partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    while True: # start reject
+                    while True: # start lookahed
                         children_2 = []
                         offset_2 = offset_1
                         column_2 = column_1
-                        column_2 = indent_column_1
+                        indent_column_2 = indent_column_1
                         partial_tab_offset_2 = partial_tab_offset_1
                         partial_tab_width_2 = partial_tab_width_1
                         count_0 = 0
@@ -4175,10 +4178,10 @@ class Parser:
                             children_3 = []
                             offset_3 = offset_2
                             column_3 = column_2
-                            column_3 = column_2
+                            indent_column_3 = indent_column_2
                             partial_tab_offset_3 = partial_tab_offset_2
                             partial_tab_width_3 = partial_tab_width_2
-                            offset_3, column_3, column_3, partial_tab_offset_3, partial_tab_width_3 = self.parse_line_end(buf, offset_3, buf_eof, column_3, column_3, prefix_0, children_3, partial_tab_offset_3, partial_tab_width_3)
+                            offset_3, column_3, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = self.parse_line_end(buf, offset_3, buf_eof, column_3, indent_column_3, prefix_0, children_3, partial_tab_offset_3, partial_tab_width_3)
                             if offset_3 == -1: break
 
 
@@ -4186,6 +4189,41 @@ class Parser:
                         if offset_3 != -1:
                             offset_2 = -1
                             break
+
+                        break
+                    if offset_2 == -1:
+                        offset_1 = -1
+                        break
+
+
+                    break
+                if offset_1 != -1:
+                    offset_0 = offset_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
+                    if children_1 is not None and children_1 is not None:
+                        children_0.extend(children_1)
+                    break
+                # end case
+                offset_1 = offset_0
+                column_1 = column_0
+                indent_column_1 = indent_column_0
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
+                children_1 = [] if children_0 is not None else None
+                while True: # case
+                    while True: # start lookahed
+                        children_2 = []
+                        offset_2 = offset_1
+                        column_2 = column_1
+                        indent_column_2 = indent_column_1
+                        partial_tab_offset_2 = partial_tab_offset_1
+                        partial_tab_width_2 = partial_tab_width_1
+                        offset_2, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_start_fenced_block(buf, offset_2, buf_eof, column_2, indent_column_2, prefix_0, children_2, partial_tab_offset_2, partial_tab_width_2)
+                        if offset_2 == -1: break
+
 
                         break
                     if offset_2 == -1:
@@ -4242,7 +4280,7 @@ class Parser:
                             if chr in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_2 = 0
+                                indent_column_2 = (0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -4274,11 +4312,11 @@ class Parser:
                 partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    while True: # start reject
+                    while True: # start lookahed
                         children_2 = []
                         offset_2 = offset_1
                         column_2 = column_1
-                        column_2 = indent_column_1
+                        indent_column_2 = indent_column_1
                         partial_tab_offset_2 = partial_tab_offset_1
                         partial_tab_width_2 = partial_tab_width_1
                         count_0 = 0
@@ -4305,7 +4343,7 @@ class Parser:
                             if chr in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                column_2 = 0
+                                indent_column_2 = (0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -4318,7 +4356,7 @@ class Parser:
                         offset_1 = -1
                         break
 
-                    count_0 = column_1 - indent_column_1
+                    count_0 = column_1 - indent_column_1[0]
                     # print(count_0, 'indent')
                     def _indent(buf, offset, buf_eof, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
                         saw_tab, saw_not_tab = False, False
@@ -4389,7 +4427,7 @@ class Parser:
                                 offset = -1
                         return offset, column, indent_column, partial_tab_offset, partial_tab_width
                     prefix_0.append((_indent, _dedent))
-                    indent_column_1 = column_1
+                    indent_column_1 = (column_1, indent_column_1)
                     while True:
                         count_0 = 0
                         while offset_1 < buf_eof:
@@ -4415,7 +4453,7 @@ class Parser:
                             if chr in '\n':
                                 offset_1 +=1
                                 column_1 = 0
-                                indent_column_1 = 0
+                                indent_column_1 = (0, None)
                             else:
                                 offset_1 = -1
                                 break
@@ -4423,7 +4461,7 @@ class Parser:
                             offset_1 = -1
                             break
 
-                        if not (column_1 == indent_column_1 == 0):
+                        if not (column_1 == indent_column_1[0] == 0):
                             offset_1 = -1
                             break
                         # print('start')
@@ -4438,42 +4476,43 @@ class Parser:
                                 offset_1 = -1
                                 break
                             offset_1 = offset_2
-                            indent_column_1 = column_1
+                            indent_column_1 = (column_1, indent_column_1)
                         if offset_1 == -1:
-                            break
-
-                        count_0 = 0
-                        while offset_1 < buf_eof and count_0 < 1:
-                            chr = buf[offset_1]
-                            if chr in ' \t':
-                                if chr == '\t':
-                                    if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
-                                        width = partial_tab_width_1
-                                    else:
-                                        width  = (self.tabstop-(column_1%self.tabstop))
-                                    if count_0 + width > 1:
-                                        new_width = 1 - count_0
-                                        count_0 += new_width
-                                        column_1 += new_width
-                                        partial_tab_offset_1 = offset_1
-                                        partial_tab_width_1 = width - new_width
-                                        break
-                                    count_0 += width
-                                    column_1 += width
-                                    offset_1 += 1
-                                else:
-                                    count_0 += 1
-                                    column_1 += 1
-                                    offset_1 += 1
-                            else:
-                                break
-                        if count_0 < 1:
-                            offset_1 = -1
                             break
 
                         break
                     prefix_0.pop()
+                    if indent_column_1 != (0, None): indent_column_1 = indent_column_1[1]
                     if offset_1 == -1: break
+
+                    count_0 = 0
+                    while offset_1 < buf_eof and count_0 < 1:
+                        chr = buf[offset_1]
+                        if chr in ' \t':
+                            if chr == '\t':
+                                if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
+                                    width = partial_tab_width_1
+                                else:
+                                    width  = (self.tabstop-(column_1%self.tabstop))
+                                if count_0 + width > 1:
+                                    new_width = 1 - count_0
+                                    count_0 += new_width
+                                    column_1 += new_width
+                                    partial_tab_offset_1 = offset_1
+                                    partial_tab_width_1 = width - new_width
+                                    break
+                                count_0 += width
+                                column_1 += width
+                                offset_1 += 1
+                            else:
+                                count_0 += 1
+                                column_1 += 1
+                                offset_1 += 1
+                        else:
+                            break
+                    if count_0 < 1:
+                        offset_1 = -1
+                        break
 
 
                     break
@@ -4492,7 +4531,7 @@ class Parser:
             if offset_0 == -1:
                 break
 
-            value_0 = column_0 - indent_column_0
+            value_0 = column_0 - indent_column_0[0]
 
             count_0 = value_0
             # print(count_0, 'indent')
@@ -4532,7 +4571,7 @@ class Parser:
                         break
                 return offset, column, indent_column, partial_tab_offset, partial_tab_width
             prefix_0.append((_indent, self.parse_list_interrupts))
-            indent_column_0 = column_0
+            indent_column_0 = (column_0, indent_column_0)
             while True:
                 offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0 = self.parse_block_element(buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0)
                 if offset_0 == -1: break
@@ -4540,6 +4579,7 @@ class Parser:
 
                 break
             prefix_0.pop()
+            if indent_column_0 != (0, None): indent_column_0 = indent_column_0[1]
             if offset_0 == -1: break
 
             count_0 = 0
@@ -4589,9 +4629,9 @@ class Parser:
                                 break
                         return offset, column, indent_column, partial_tab_offset, partial_tab_width
                     prefix_0.append((_indent, self.parse_list_interrupts))
-                    indent_column_1 = column_1
+                    indent_column_1 = (column_1, indent_column_1)
                     while True:
-                        if not (column_1 == indent_column_1 == 0):
+                        if not (column_1 == indent_column_1[0] == 0):
                             offset_1 = -1
                             break
                         # print('start')
@@ -4615,7 +4655,7 @@ class Parser:
                                 else:
                                     offset_2 = offset_1
                             offset_1 = offset_2
-                            indent_column_1 = column_1
+                            indent_column_1 = (column_1, indent_column_1)
                         if offset_1 == -1:
                             break
 
@@ -4664,7 +4704,7 @@ class Parser:
                                                 if chr in '\n':
                                                     offset_4 +=1
                                                     column_3 = 0
-                                                    indent_column_3 = 0
+                                                    indent_column_3 = (0, None)
                                                 else:
                                                     offset_4 = -1
                                                     break
@@ -4683,7 +4723,7 @@ class Parser:
                                         children_3.append(value_1)
                                         offset_3 = offset_4
 
-                                        if not (column_3 == indent_column_3 == 0):
+                                        if not (column_3 == indent_column_3[0] == 0):
                                             offset_3 = -1
                                             break
                                         # print('start')
@@ -4698,7 +4738,7 @@ class Parser:
                                                 offset_3 = -1
                                                 break
                                             offset_3 = offset_4
-                                            indent_column_3 = column_3
+                                            indent_column_3 = (column_3, indent_column_3)
                                         if offset_3 == -1:
                                             break
 
@@ -4717,11 +4757,11 @@ class Parser:
                                 if offset_2 == -1:
                                     break
 
-                                while True: # start reject
+                                while True: # start lookahed
                                     children_3 = []
                                     offset_3 = offset_2
                                     column_3 = column_2
-                                    column_3 = indent_column_2
+                                    indent_column_3 = indent_column_2
                                     partial_tab_offset_3 = partial_tab_offset_2
                                     partial_tab_width_3 = partial_tab_width_2
                                     count_2 = 0
@@ -4779,6 +4819,7 @@ class Parser:
 
                         break
                     prefix_0.pop()
+                    if indent_column_1 != (0, None): indent_column_1 = indent_column_1[1]
                     if offset_1 == -1: break
 
                     count_1 = value_0
@@ -4819,7 +4860,7 @@ class Parser:
                                 break
                         return offset, column, indent_column, partial_tab_offset, partial_tab_width
                     prefix_0.append((_indent, self.parse_list_interrupts))
-                    indent_column_1 = column_1
+                    indent_column_1 = (column_1, indent_column_1)
                     while True:
                         offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_block_element(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                         if offset_1 == -1: break
@@ -4827,6 +4868,7 @@ class Parser:
 
                         break
                     prefix_0.pop()
+                    if indent_column_1 != (0, None): indent_column_1 = indent_column_1[1]
                     if offset_1 == -1: break
 
                     break
@@ -4931,11 +4973,11 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True: # case
-                        while True: # start reject
+                        while True: # start lookahed
                             children_3 = []
                             offset_3 = offset_2
                             column_2 = column_1
-                            column_2 = indent_column_1
+                            indent_column_2 = indent_column_1
                             partial_tab_offset_2 = partial_tab_offset_1
                             partial_tab_width_2 = partial_tab_width_1
                             count_0 = 0
@@ -4962,7 +5004,7 @@ class Parser:
                                 if chr in '\n':
                                     offset_3 +=1
                                     column_2 = 0
-                                    column_2 = 0
+                                    indent_column_2 = (0, None)
                                 else:
                                     offset_3 = -1
                                     break
@@ -4997,7 +5039,7 @@ class Parser:
                             if chr in '\n':
                                 offset_2 +=1
                                 column_1 = 0
-                                indent_column_1 = 0
+                                indent_column_1 = (0, None)
                                 count_0 +=1
                             elif chr in ' \t':
                                 if chr == '\t':
@@ -5125,7 +5167,7 @@ class Parser:
                             if chr in '\n':
                                 offset_2 +=1
                                 column_1 = 0
-                                indent_column_1 = 0
+                                indent_column_1 = (0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -5156,7 +5198,7 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
-                        if not (column_1 == indent_column_1 == 0):
+                        if not (column_1 == indent_column_1[0] == 0):
                             offset_2 = -1
                             break
                         # print('start')
@@ -5171,7 +5213,7 @@ class Parser:
                                 offset_2 = -1
                                 break
                             offset_2 = offset_3
-                            indent_column_1 = column_1
+                            indent_column_1 = (column_1, indent_column_1)
                         if offset_2 == -1:
                             break
 
@@ -5207,7 +5249,7 @@ class Parser:
                                     if chr in '\n':
                                         offset_3 +=1
                                         column_2 = 0
-                                        indent_column_2 = 0
+                                        indent_column_2 = (0, None)
                                     else:
                                         offset_3 = -1
                                         break
@@ -5227,7 +5269,7 @@ class Parser:
                                         partial_tab_width_3 = partial_tab_width_2
                                         children_5 = [] if children_4 is not None else None
                                         while True:
-                                            if not (column_3 == indent_column_3 == 0):
+                                            if not (column_3 == indent_column_3[0] == 0):
                                                 offset_5 = -1
                                                 break
                                             # print('start')
@@ -5242,7 +5284,7 @@ class Parser:
                                                     offset_5 = -1
                                                     break
                                                 offset_5 = offset_6
-                                                indent_column_3 = column_3
+                                                indent_column_3 = (column_3, indent_column_3)
                                             if offset_5 == -1:
                                                 break
 
@@ -5270,7 +5312,7 @@ class Parser:
                                                 if chr in '\n':
                                                     offset_5 +=1
                                                     column_3 = 0
-                                                    indent_column_3 = 0
+                                                    indent_column_3 = (0, None)
                                                 else:
                                                     offset_5 = -1
                                                     break
@@ -5304,14 +5346,14 @@ class Parser:
                                 children_3.append(value_3)
                                 offset_3 = offset_4
 
-                                while True: # start reject
+                                while True: # start lookahed
                                     children_4 = []
                                     offset_4 = offset_3
                                     column_3 = column_2
-                                    column_3 = indent_column_2
+                                    indent_column_3 = indent_column_2
                                     partial_tab_offset_3 = partial_tab_offset_2
                                     partial_tab_width_3 = partial_tab_width_2
-                                    if not (column_3 == column_3 == 0):
+                                    if not (column_3 == indent_column_3[0] == 0):
                                         offset_4 = -1
                                         break
                                     # print('start')
@@ -5319,14 +5361,14 @@ class Parser:
                                         # print(indent)
                                         _children, _prefix = [], []
                                         offset_5 = offset_4
-                                        offset_5, column_3, column_3, partial_tab_offset_3, partial_tab_width_3 = indent(buf, offset_5, buf_eof, column_3, column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
+                                        offset_5, column_3, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = indent(buf, offset_5, buf_eof, column_3, indent_column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
                                         if _prefix or _children:
                                            raise Exception('bar')
                                         if offset_5 == -1:
                                             offset_4 = -1
                                             break
                                         offset_4 = offset_5
-                                        column_3 = column_3
+                                        indent_column_3 = (column_3, indent_column_3)
                                     if offset_4 == -1:
                                         break
 
@@ -5444,11 +5486,11 @@ class Parser:
                                     partial_tab_width_3 = partial_tab_width_2
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
-                                        while True: # start reject
+                                        while True: # start lookahed
                                             children_5 = []
                                             offset_5 = offset_4
                                             column_4 = column_3
-                                            column_4 = indent_column_3
+                                            indent_column_4 = indent_column_3
                                             partial_tab_offset_4 = partial_tab_offset_3
                                             partial_tab_width_4 = partial_tab_width_3
                                             count_1 = 0
@@ -5475,7 +5517,7 @@ class Parser:
                                                 if chr in '\n':
                                                     offset_5 +=1
                                                     column_4 = 0
-                                                    column_4 = 0
+                                                    indent_column_4 = (0, None)
                                                 else:
                                                     offset_5 = -1
                                                     break
@@ -5510,7 +5552,7 @@ class Parser:
                                             if chr in '\n':
                                                 offset_4 +=1
                                                 column_3 = 0
-                                                indent_column_3 = 0
+                                                indent_column_3 = (0, None)
                                                 count_1 +=1
                                             elif chr in ' \t':
                                                 if chr == '\t':
@@ -5638,7 +5680,7 @@ class Parser:
                                             if chr in '\n':
                                                 offset_4 +=1
                                                 column_3 = 0
-                                                indent_column_3 = 0
+                                                indent_column_3 = (0, None)
                                             else:
                                                 offset_4 = -1
                                                 break
@@ -5825,11 +5867,11 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True: # case
-                        while True: # start reject
+                        while True: # start lookahed
                             children_3 = []
                             offset_3 = offset_2
                             column_2 = column_1
-                            column_2 = indent_column_1
+                            indent_column_2 = indent_column_1
                             partial_tab_offset_2 = partial_tab_offset_1
                             partial_tab_width_2 = partial_tab_width_1
                             count_0 = 0
@@ -5856,7 +5898,7 @@ class Parser:
                                 if chr in '\n':
                                     offset_3 +=1
                                     column_2 = 0
-                                    column_2 = 0
+                                    indent_column_2 = (0, None)
                                 else:
                                     offset_3 = -1
                                     break
@@ -5891,7 +5933,7 @@ class Parser:
                             if chr in '\n':
                                 offset_2 +=1
                                 column_1 = 0
-                                indent_column_1 = 0
+                                indent_column_1 = (0, None)
                                 count_0 +=1
                             elif chr in ' \t':
                                 if chr == '\t':
@@ -6019,7 +6061,7 @@ class Parser:
                             if chr in '\n':
                                 offset_2 +=1
                                 column_1 = 0
-                                indent_column_1 = 0
+                                indent_column_1 = (0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -6050,7 +6092,7 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
-                        if not (column_1 == indent_column_1 == 0):
+                        if not (column_1 == indent_column_1[0] == 0):
                             offset_2 = -1
                             break
                         # print('start')
@@ -6065,7 +6107,7 @@ class Parser:
                                 offset_2 = -1
                                 break
                             offset_2 = offset_3
-                            indent_column_1 = column_1
+                            indent_column_1 = (column_1, indent_column_1)
                         if offset_2 == -1:
                             break
 
@@ -6101,7 +6143,7 @@ class Parser:
                                     if chr in '\n':
                                         offset_3 +=1
                                         column_2 = 0
-                                        indent_column_2 = 0
+                                        indent_column_2 = (0, None)
                                     else:
                                         offset_3 = -1
                                         break
@@ -6121,7 +6163,7 @@ class Parser:
                                         partial_tab_width_3 = partial_tab_width_2
                                         children_5 = [] if children_4 is not None else None
                                         while True:
-                                            if not (column_3 == indent_column_3 == 0):
+                                            if not (column_3 == indent_column_3[0] == 0):
                                                 offset_5 = -1
                                                 break
                                             # print('start')
@@ -6136,7 +6178,7 @@ class Parser:
                                                     offset_5 = -1
                                                     break
                                                 offset_5 = offset_6
-                                                indent_column_3 = column_3
+                                                indent_column_3 = (column_3, indent_column_3)
                                             if offset_5 == -1:
                                                 break
 
@@ -6164,7 +6206,7 @@ class Parser:
                                                 if chr in '\n':
                                                     offset_5 +=1
                                                     column_3 = 0
-                                                    indent_column_3 = 0
+                                                    indent_column_3 = (0, None)
                                                 else:
                                                     offset_5 = -1
                                                     break
@@ -6198,14 +6240,14 @@ class Parser:
                                 children_3.append(value_4)
                                 offset_3 = offset_4
 
-                                while True: # start reject
+                                while True: # start lookahed
                                     children_4 = []
                                     offset_4 = offset_3
                                     column_3 = column_2
-                                    column_3 = indent_column_2
+                                    indent_column_3 = indent_column_2
                                     partial_tab_offset_3 = partial_tab_offset_2
                                     partial_tab_width_3 = partial_tab_width_2
-                                    if not (column_3 == column_3 == 0):
+                                    if not (column_3 == indent_column_3[0] == 0):
                                         offset_4 = -1
                                         break
                                     # print('start')
@@ -6213,14 +6255,14 @@ class Parser:
                                         # print(indent)
                                         _children, _prefix = [], []
                                         offset_5 = offset_4
-                                        offset_5, column_3, column_3, partial_tab_offset_3, partial_tab_width_3 = indent(buf, offset_5, buf_eof, column_3, column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
+                                        offset_5, column_3, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = indent(buf, offset_5, buf_eof, column_3, indent_column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
                                         if _prefix or _children:
                                            raise Exception('bar')
                                         if offset_5 == -1:
                                             offset_4 = -1
                                             break
                                         offset_4 = offset_5
-                                        column_3 = column_3
+                                        indent_column_3 = (column_3, indent_column_3)
                                     if offset_4 == -1:
                                         break
 
@@ -6254,7 +6296,7 @@ class Parser:
                                     while count_1 < 9:
                                         offset_5 = offset_4
                                         column_4 = column_3
-                                        column_4 = column_3
+                                        indent_column_4 = indent_column_3
                                         partial_tab_offset_4 = partial_tab_offset_3
                                         partial_tab_width_4 = partial_tab_width_3
                                         children_5 = [] if children_4 is not None else None
@@ -6280,7 +6322,7 @@ class Parser:
                                             children_4.extend(children_5)
                                         offset_4 = offset_5
                                         column_3 = column_4
-                                        column_3 = column_4
+                                        indent_column_3 = indent_column_4
                                         partial_tab_offset_3 = partial_tab_offset_4
                                         partial_tab_width_3 = partial_tab_width_4
                                         count_1 += 1
@@ -6402,11 +6444,11 @@ class Parser:
                                     partial_tab_width_3 = partial_tab_width_2
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
-                                        while True: # start reject
+                                        while True: # start lookahed
                                             children_5 = []
                                             offset_5 = offset_4
                                             column_4 = column_3
-                                            column_4 = indent_column_3
+                                            indent_column_4 = indent_column_3
                                             partial_tab_offset_4 = partial_tab_offset_3
                                             partial_tab_width_4 = partial_tab_width_3
                                             count_1 = 0
@@ -6433,7 +6475,7 @@ class Parser:
                                                 if chr in '\n':
                                                     offset_5 +=1
                                                     column_4 = 0
-                                                    column_4 = 0
+                                                    indent_column_4 = (0, None)
                                                 else:
                                                     offset_5 = -1
                                                     break
@@ -6468,7 +6510,7 @@ class Parser:
                                             if chr in '\n':
                                                 offset_4 +=1
                                                 column_3 = 0
-                                                indent_column_3 = 0
+                                                indent_column_3 = (0, None)
                                                 count_1 +=1
                                             elif chr in ' \t':
                                                 if chr == '\t':
@@ -6596,7 +6638,7 @@ class Parser:
                                             if chr in '\n':
                                                 offset_4 +=1
                                                 column_3 = 0
-                                                indent_column_3 = 0
+                                                indent_column_3 = (0, None)
                                             else:
                                                 offset_4 = -1
                                                 break
@@ -6875,7 +6917,7 @@ class Parser:
             children_1 = []
             while True: # start capture
                 prefix_0.append((self.parse_no_setext_heading_line, None))
-                indent_column_0 = column_0
+                indent_column_0 = (column_0, indent_column_0)
                 while True:
                     offset_1, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0 = self.parse_strict_inline_para(buf, offset_1, buf_eof, column_0, indent_column_0, prefix_0, children_1, partial_tab_offset_0, partial_tab_width_0)
                     if offset_1 == -1: break
@@ -6961,7 +7003,7 @@ class Parser:
                         if chr in '\n':
                             offset_1 +=1
                             column_0 = 0
-                            indent_column_0 = 0
+                            indent_column_0 = (0, None)
                         else:
                             offset_1 = -1
                             break
@@ -6971,9 +7013,10 @@ class Parser:
 
                     break
                 prefix_0.pop()
+                if indent_column_0 != (0, None): indent_column_0 = indent_column_0[1]
                 if offset_1 == -1: break
 
-                if not (column_0 == indent_column_0 == 0):
+                if not (column_0 == indent_column_0[0] == 0):
                     offset_1 = -1
                     break
                 # print('start')
@@ -6988,7 +7031,7 @@ class Parser:
                         offset_1 = -1
                         break
                     offset_1 = offset_2
-                    indent_column_0 = column_0
+                    indent_column_0 = (column_0, indent_column_0)
                 if offset_1 == -1:
                     break
 
@@ -7159,7 +7202,7 @@ class Parser:
                                                         if chr in '\n':
                                                             offset_6 +=1
                                                             column_3 = 0
-                                                            indent_column_3 = 0
+                                                            indent_column_3 = (0, None)
                                                         else:
                                                             offset_6 = -1
                                                             break
@@ -7224,7 +7267,7 @@ class Parser:
                                                         if chr in '\n':
                                                             offset_6 +=1
                                                             column_3 = 0
-                                                            indent_column_3 = 0
+                                                            indent_column_3 = (0, None)
                                                         else:
                                                             offset_6 = -1
                                                             break
@@ -7260,7 +7303,7 @@ class Parser:
                                         if offset_4 == -1:
                                             break
 
-                                        if not (column_2 == indent_column_2 == 0):
+                                        if not (column_2 == indent_column_2[0] == 0):
                                             offset_4 = -1
                                             break
                                         # print('start')
@@ -7284,7 +7327,7 @@ class Parser:
                                                 else:
                                                     offset_5 = offset_4
                                             offset_4 = offset_5
-                                            indent_column_2 = column_2
+                                            indent_column_2 = (column_2, indent_column_2)
                                         if offset_4 == -1:
                                             break
 
@@ -7560,7 +7603,7 @@ class Parser:
                                                             if chr in '\n':
                                                                 offset_7 +=1
                                                                 column_5 = 0
-                                                                indent_column_5 = 0
+                                                                indent_column_5 = (0, None)
                                                             else:
                                                                 offset_7 = -1
                                                                 break
@@ -7623,7 +7666,7 @@ class Parser:
                                                 if chr in '\n':
                                                     offset_5 +=1
                                                     column_3 = 0
-                                                    indent_column_3 = 0
+                                                    indent_column_3 = (0, None)
                                                 else:
                                                     offset_5 = -1
                                                     break
@@ -7718,11 +7761,11 @@ class Parser:
                                                 children_5.append(value_3)
                                                 offset_5 = offset_6
 
-                                                while True: # start reject
+                                                while True: # start lookahed
                                                     children_6 = []
                                                     offset_6 = offset_5
                                                     column_4 = column_3
-                                                    column_4 = indent_column_3
+                                                    indent_column_4 = indent_column_3
                                                     partial_tab_offset_4 = partial_tab_offset_3
                                                     partial_tab_width_4 = partial_tab_width_3
                                                     if offset_6 < buf_eof:
@@ -7730,7 +7773,7 @@ class Parser:
                                                         if chr in '\n':
                                                             offset_6 +=1
                                                             column_4 = 0
-                                                            column_4 = 0
+                                                            indent_column_4 = (0, None)
                                                         else:
                                                             offset_6 = -1
                                                             break
@@ -7857,7 +7900,7 @@ class Parser:
                             if chr in '\n':
                                 offset_2 +=1
                                 column_0 = 0
-                                indent_column_0 = 0
+                                indent_column_0 = (0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -7997,7 +8040,7 @@ class Parser:
                                             if chr in '\n':
                                                 offset_4 +=1
                                                 column_3 = 0
-                                                indent_column_3 = 0
+                                                indent_column_3 = (0, None)
                                             else:
                                                 offset_4 = -1
                                                 break
@@ -8062,7 +8105,7 @@ class Parser:
                                             if chr in '\n':
                                                 offset_4 +=1
                                                 column_3 = 0
-                                                indent_column_3 = 0
+                                                indent_column_3 = (0, None)
                                             else:
                                                 offset_4 = -1
                                                 break
@@ -8098,7 +8141,7 @@ class Parser:
                             if offset_2 == -1:
                                 break
 
-                            if not (column_2 == indent_column_2 == 0):
+                            if not (column_2 == indent_column_2[0] == 0):
                                 offset_2 = -1
                                 break
                             # print('start')
@@ -8113,7 +8156,7 @@ class Parser:
                                     offset_2 = -1
                                     break
                                 offset_2 = offset_3
-                                indent_column_2 = column_2
+                                indent_column_2 = (column_2, indent_column_2)
                             if offset_2 == -1:
                                 break
 
@@ -8389,7 +8432,7 @@ class Parser:
                                                 if chr in '\n':
                                                     offset_5 +=1
                                                     column_5 = 0
-                                                    indent_column_5 = 0
+                                                    indent_column_5 = (0, None)
                                                 else:
                                                     offset_5 = -1
                                                     break
@@ -8452,7 +8495,7 @@ class Parser:
                                     if chr in '\n':
                                         offset_3 +=1
                                         column_3 = 0
-                                        indent_column_3 = 0
+                                        indent_column_3 = (0, None)
                                     else:
                                         offset_3 = -1
                                         break
@@ -8547,11 +8590,11 @@ class Parser:
                                     children_3.append(value_3)
                                     offset_3 = offset_4
 
-                                    while True: # start reject
+                                    while True: # start lookahed
                                         children_4 = []
                                         offset_4 = offset_3
                                         column_4 = column_3
-                                        column_4 = indent_column_3
+                                        indent_column_4 = indent_column_3
                                         partial_tab_offset_4 = partial_tab_offset_3
                                         partial_tab_width_4 = partial_tab_width_3
                                         if offset_4 < buf_eof:
@@ -8559,7 +8602,7 @@ class Parser:
                                             if chr in '\n':
                                                 offset_4 +=1
                                                 column_4 = 0
-                                                column_4 = 0
+                                                indent_column_4 = (0, None)
                                             else:
                                                 offset_4 = -1
                                                 break
@@ -8811,7 +8854,7 @@ class Parser:
                                     if chr in '\n':
                                         offset_3 +=1
                                         column_2 = 0
-                                        indent_column_2 = 0
+                                        indent_column_2 = (0, None)
                                     else:
                                         offset_3 = -1
                                         break
@@ -8819,7 +8862,7 @@ class Parser:
                                     offset_3 = -1
                                     break
 
-                                if not (column_2 == indent_column_2 == 0):
+                                if not (column_2 == indent_column_2[0] == 0):
                                     offset_3 = -1
                                     break
                                 # print('start')
@@ -8843,7 +8886,7 @@ class Parser:
                                         else:
                                             offset_4 = offset_3
                                     offset_3 = offset_4
-                                    indent_column_2 = column_2
+                                    indent_column_2 = (column_2, indent_column_2)
                                 if offset_3 == -1:
                                     break
 
@@ -8916,6 +8959,25 @@ class Parser:
                                     offset_3 += 1
                                     column_2 += 1
                                 else:
+                                    offset_3 = -1
+                                    break
+
+                                while True: # start reject
+                                    children_4 = []
+                                    offset_4 = offset_3
+                                    column_3 = column_2
+                                    indent_column_3 = indent_column_2
+                                    partial_tab_offset_3 = partial_tab_offset_2
+                                    partial_tab_width_3 = partial_tab_width_2
+                                    if buf[offset_4:offset_4+1] == '`':
+                                        offset_4 += 1
+                                        column_3 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+
+                                    break
+                                if offset_4 != -1:
                                     offset_3 = -1
                                     break
 
@@ -8999,6 +9061,25 @@ class Parser:
             if offset_0 == -1:
                 break
 
+            while True: # start reject
+                children_1 = []
+                offset_1 = offset_0
+                column_1 = column_0
+                indent_column_1 = indent_column_0
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
+                if buf[offset_1:offset_1+1] == '`':
+                    offset_1 += 1
+                    column_1 += 1
+                else:
+                    offset_1 = -1
+                    break
+
+                break
+            if offset_1 != -1:
+                offset_0 = -1
+                break
+
 
             break
         return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
@@ -9024,7 +9105,7 @@ class Parser:
                     if chr in '\n':
                         offset_1 +=1
                         column_1 = 0
-                        indent_column_1 = 0
+                        indent_column_1 = (0, None)
                     else:
                         offset_1 = -1
                         break

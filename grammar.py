@@ -909,7 +909,7 @@ def compile_python(grammar, builder=None, cython=False):
             values[rule.key] = value
 
             if rule.args.get('from_prefix'):
-                steps.append( f"{value} = {column} - {indent_column}")
+                steps.append( f"{value} = {column} - {indent_column}[0]")
             else:
                 steps.append( f"{value} = {column}")
 
@@ -1056,10 +1056,10 @@ def compile_python(grammar, builder=None, cython=False):
             children_0 = children.incr()
             offset_0 = offset.incr()
             column_0 = column.incr()
-            indent_column_0 = column.incr()
+            indent_column_0 = indent_column.incr()
             partial_tab_offset_0 = partial_tab_offset.incr()
             partial_tab_width_0 = partial_tab_width.incr()
-            steps.append(f"while True: # start reject")
+            steps.append(f"while True: # start lookahed")
             steps_0.append(f"{children_0} = []")
             steps_0.append(f"{offset_0} = {offset}")
             steps_0.append(f"{column_0} = {column}")
@@ -1154,7 +1154,7 @@ def compile_python(grammar, builder=None, cython=False):
                 else:
                     c0 = count.incr()
                     steps.extend((
-                        f"{count} = {column} - {indent_column}",
+                        f"{count} = {column} - {indent_column}[0]",
                     ))
 
                 steps.append(f"# print({count}, 'indent')")
@@ -1265,18 +1265,19 @@ def compile_python(grammar, builder=None, cython=False):
                 dedent = f"self.parse_{dedent}" if dedent else repr(None)
                 steps.append(f'{prefix}.append((self.parse_{prule}, {dedent}))')
 
-            steps.append(f'{indent_column} = {column}')
+            steps.append(f'{indent_column} = ({column}, {indent_column})')
 
             steps.append('while True:')
             build_subrules(rule.rules, steps.add_indent(), offset, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children, count, values)
             steps.append('    break')
 
             steps.append(f'{prefix}.pop()')
+            steps.append(f'if {indent_column} != (0, None): {indent_column} = {indent_column}[1]')
             steps.append(f'if {offset} == -1: break')
 
         elif rule.kind == START_OF_LINE:
             steps.extend((
-                f"if not ({column} == {indent_column} == 0):",
+                f"if not ({column} == {indent_column}[0] == 0):",
                 f"    {offset} = -1",
                 f"    break",
             ))
@@ -1286,7 +1287,7 @@ def compile_python(grammar, builder=None, cython=False):
             offset_0 = offset.incr()
             partial = rule.args['partial']
             steps.extend((
-                f"if not ({column} == {indent_column} == 0):",
+                f"if not ({column} == {indent_column}[0] == 0):",
                 f"    {offset} = -1",
                 f"    break",
                 f"# print('start')",
@@ -1321,7 +1322,7 @@ def compile_python(grammar, builder=None, cython=False):
 
             steps.extend((
                 f"    {offset} = {offset_0}",
-                f"    {indent_column} = {column}",
+                f"    {indent_column} = ({column}, {indent_column})",
                 f"if {offset} == -1:",
                 f"    break",
             ))
@@ -1339,7 +1340,7 @@ def compile_python(grammar, builder=None, cython=False):
             partial_tab_offset_1 = partial_tab_offset.incr()
             partial_tab_width_1 = partial_tab_width.incr()
             steps.extend((
-                f"if not ({column} == {indent_column} == 0):",
+                f"if not ({column} == {indent_column}[0] == 0):",
                 f"    {offset} = -1",
                 f"    break",
                 f"{offset_0} = {offset}",
@@ -1362,13 +1363,13 @@ def compile_python(grammar, builder=None, cython=False):
                 f"        _children, _prefix = [], []",
                 f"        {offset_1} = {offset_0}",
                 f"        {offset_1}, _column, _indent_column, _partial_tab_offset, _partial_tab_width = dedent(buf, {offset_1}, buf_eof, {column_1}, {indent_column_1}, _prefix, _children, {partial_tab_offset_1}, {partial_tab_width_1})",
-                f"        if {offset_1} != -1:",
+                f"        if {offset_1} == -1:",
                 f"            {offset_0} = -1", 
                 f"            break",
                 f"        else:",
                 f"            {offset_1} = {offset_0}",
                 f"    {offset_0} = {offset_1}",
-                f"    {indent_column} = {column}",
+                f"    {indent_column} = ({column}, {indent_column})",
                 f"if {offset_0} != -1:",
                 f"    {offset} = 0; break",
             ))
@@ -1527,7 +1528,7 @@ def compile_python(grammar, builder=None, cython=False):
                         f"    if chr == '\\r' and {offset} + 1 < buf_eof and buf[{offset}+1] == '\\n':", 
                         f"        {offset} +=2",
                         f"        {column} = 0",
-                        f"        {indent_column} = 0",
+                        f"        {indent_column} = (0, None)",
                         f"    elif {cond3}:", # in newline
                     ))
                 else:
@@ -1537,7 +1538,7 @@ def compile_python(grammar, builder=None, cython=False):
                 steps.extend((
                         f"        {offset} +=1",
                         f"        {column} = 0",
-                        f"        {indent_column} = 0",
+                        f"        {indent_column} = (0, None)",
                         f"        {count} +=1",
                         f"    elif {cond2}:",
                 ))
@@ -1594,7 +1595,7 @@ def compile_python(grammar, builder=None, cython=False):
                     f"    if chr == '\\r' and {offset} + 1 < buf_eof and buf[{offset}+1] == '\\n':", 
                     f"        {offset} +=2",
                     f"        {column} = 0",
-                    f"        {indent_column} = 0",
+                    f"        {indent_column} = (0, None)",
                     f"    elif {cond}:",
                 ))
             else:
@@ -1604,7 +1605,7 @@ def compile_python(grammar, builder=None, cython=False):
             steps.extend((
                     f"        {offset} +=1",
                     f"        {column} = 0",
-                    f"        {indent_column} = 0",
+                    f"        {indent_column} = (0, None)",
                     f"    else:",
                     f"        {offset} = -1",
                     f"        break",
@@ -1625,7 +1626,7 @@ def compile_python(grammar, builder=None, cython=False):
                     f"    if chr == '\\r' and {offset} + 1 < buf_eof and buf[{offset}+1] == '\\n':", 
                     f"        {offset} +=2",
                     f"        {column} = 0",
-                    f"        {indent_column} = 0",
+                    f"        {indent_column} = (0, None)",
                     f"    elif {cond}:",
                 ))
             else:
@@ -1635,7 +1636,7 @@ def compile_python(grammar, builder=None, cython=False):
             steps.extend((
                     f"        {offset} +=1",
                     f"        {column} = 0",
-                    f"        {indent_column} = 0",
+                    f"        {indent_column} = (0, None)",
                     f"    else:",
                     f"        {offset} = -1",
                     f"        break",
@@ -1730,7 +1731,7 @@ def compile_python(grammar, builder=None, cython=False):
         f"def parse(self, buf, offset=0, end=None, err=None):",
         f"    self.cache = dict()",
         f"    end = len(buf) if end is None else end",
-        f"    column, indent_column, eof = offset, offset, end",
+        f"    column, indent_column, eof = 0, (0, None), end",
         f"    prefix, children = [], []",
         f"    new_offset, column, indent_column, partial_tab_offset, partial_tab_width = self.parse_{start_rule}(buf, offset, eof, column, indent_column, prefix, children, 0, 0)",
         f"    if children and new_offset == end: return children[-1]",
@@ -1741,12 +1742,12 @@ def compile_python(grammar, builder=None, cython=False):
 
     varnames = {
             "offset":"cdef int", "column":"cdef int", 
-            "prefix":"cdef list", "children":"cdef list", "count":"cdef int", "indent_column":"cdef int",
+            "prefix":"cdef list", "children":"cdef list", "count":"cdef int", "indent_column":"cdef tuple",
             "partial_tab_offset":"cdef int", "partial_tab_width": "cdef int"}
     for name, rule in grammar.rules.items():
         cdefs = {}
         if cython:
-            output.append(f"cdef (int, int, int, int, int) parse_{name}(self, str buf, int offset_0, int buf_eof, int column_0, int indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):")
+            output.append(f"cdef (int, int, int, int, int) parse_{name}(self, str buf, int offset_0, int buf_eof, int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):")
             output.append(f"    cdef Py_UCS4 chr")
             
             for v in varnames:
