@@ -228,7 +228,7 @@ class Parser:
             raise err(buf, offset, "no")
         if builder:
             return start.children[-1].build(builder)
-        return start.children[-1]
+        return ParseNode(self.grammar.capture, start.offset, end.offset, start.children, None)
 
     def parse_rule(self, rule, state):
         if rule.kind == PRINT:
@@ -728,7 +728,7 @@ def compile(grammar, builder=None):
         f"    end = self.parse_{start_rule}(start)",
         f"    if not end: return None",
         f"    if builder is not None: return start.children[-1].build(builder)",
-        f"    return start.children[-1] if end else None",
+        f"    return ParseNode({repr(grammar.capture)}, start.offset, end.offset, start.children, None) if end else None",
         f"",
     ))
 

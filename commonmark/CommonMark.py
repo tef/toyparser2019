@@ -10,11 +10,11 @@ def walk(node, indent="- "):
 def unescape(string):
     return codecs.decode(string, 'unicode_escape')
 
-class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"], tabstop=4):
+class CommonMark(Grammar, start="document", capture="document", whitespace=[" ", "\t"], newline=["\n"], tabstop=4):
     version = 0.29
     @rule()
     def document(self):
-        with self.capture_node("document"), self.repeat(min=0):
+        with self.repeat(min=0):
             self.indent()
             with self.choice():
                 with self.case(): self.block_element()

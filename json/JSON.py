@@ -26,7 +26,7 @@ class JSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n"]):
         self.whitespace()
         with self.lookahead():
             self.literal('[', '{')
-        with self.capture_node("document"), self.choice():
+        with self.choice():
             with self.case(): self.json_list.inline()
             with self.case(): self.json_object.inline()
 

@@ -214,7 +214,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n", "\r
         with self.repeat():
             self.whitespace()
             self.yaml_eol()
-        with self.capture_node("document"), self.choice():
+        with self.choice():
             with self.case():
                 self.indented_object()
             with self.case():

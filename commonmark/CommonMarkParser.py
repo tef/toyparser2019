@@ -26,118 +26,107 @@ class Parser:
         prefix, children = [], []
         new_offset, column, indent_column, partial_tab_offset, partial_tab_width = self.parse_document(buf, offset, eof, column, indent_column, prefix, children, 0, 0)
         if children and new_offset == end:
-             if builder is None: return children[-1]
+             if builder is None: return self.Node('document', offset, new_offset, children, None)
              return children[-1].build(buf, builder)
         print('no', offset, new_offset, end, buf[new_offset:])
         if err is not None: raise err(buf, new_offset, 'no')
 
     def parse_document(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
         while True: # note: return at end of loop
-            offset_1 = offset_0
-            children_1 = []
-            while True: # start capture
-                count_0 = 0
+            count_0 = 0
+            while True:
+                offset_1 = offset_0
+                column_1 = column_0
+                indent_column_1 = indent_column_0
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
+                children_1 = [] if children_0 is not None else None
                 while True:
-                    offset_2 = offset_1
-                    column_1 = column_0
-                    indent_column_1 = indent_column_0
-                    partial_tab_offset_1 = partial_tab_offset_0
-                    partial_tab_width_1 = partial_tab_width_0
-                    children_2 = [] if children_1 is not None else None
-                    while True:
-                        if not (column_1 == indent_column_1[0] == 0):
-                            offset_2 = -1
-                            break
-                        # print('start')
-                        for indent, dedent in prefix_0:
-                            # print(indent)
-                            _children, _prefix = [], []
-                            offset_3 = offset_2
-                            offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, offset_3, buf_eof, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
-                            if _prefix or _children:
-                               raise Exception('bar')
-                            if offset_3 == -1:
-                                offset_2 = -1
-                                break
-                            offset_2 = offset_3
-                            indent_column_1 = (column_1, indent_column_1)
-                        if offset_2 == -1:
-                            break
-
-                        while True: # start choice
-                            offset_3 = offset_2
-                            column_2 = column_1
-                            indent_column_2 = indent_column_1
-                            partial_tab_offset_2 = partial_tab_offset_1
-                            partial_tab_width_2 = partial_tab_width_1
-                            children_3 = [] if children_2 is not None else None
-                            while True: # case
-                                offset_3, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_block_element(buf, offset_3, buf_eof, column_2, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
-                                if offset_3 == -1: break
-
-
-
-                                break
-                            if offset_3 != -1:
-                                offset_2 = offset_3
-                                column_1 = column_2
-                                indent_column_1 = indent_column_2
-                                partial_tab_offset_1 = partial_tab_offset_2
-                                partial_tab_width_1 = partial_tab_width_2
-                                if children_3 is not None and children_3 is not None:
-                                    children_2.extend(children_3)
-                                break
-                            # end case
-                            offset_3 = offset_2
-                            column_2 = column_1
-                            indent_column_2 = indent_column_1
-                            partial_tab_offset_2 = partial_tab_offset_1
-                            partial_tab_width_2 = partial_tab_width_1
-                            children_3 = [] if children_2 is not None else None
-                            while True: # case
-                                offset_3, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_empty_lines(buf, offset_3, buf_eof, column_2, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
-                                if offset_3 == -1: break
-
-
-
-                                break
-                            if offset_3 != -1:
-                                offset_2 = offset_3
-                                column_1 = column_2
-                                indent_column_1 = indent_column_2
-                                partial_tab_offset_1 = partial_tab_offset_2
-                                partial_tab_width_1 = partial_tab_width_2
-                                if children_3 is not None and children_3 is not None:
-                                    children_2.extend(children_3)
-                                break
-                            # end case
-                            offset_2 = -1 # no more choices
-                            break # end choice
-                        if offset_2 == -1:
-                            break
-
+                    if not (column_1 == indent_column_1[0] == 0):
+                        offset_1 = -1
                         break
-                    if offset_2 == -1:
+                    # print('start')
+                    for indent, dedent in prefix_0:
+                        # print(indent)
+                        _children, _prefix = [], []
+                        offset_2 = offset_1
+                        offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, offset_2, buf_eof, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
+                        if _prefix or _children:
+                           raise Exception('bar')
+                        if offset_2 == -1:
+                            offset_1 = -1
+                            break
+                        offset_1 = offset_2
+                        indent_column_1 = (column_1, indent_column_1)
+                    if offset_1 == -1:
                         break
-                    if offset_1 == offset_2: break
-                    if children_2 is not None and children_2 is not None:
-                        children_1.extend(children_2)
-                    offset_1 = offset_2
-                    column_0 = column_1
-                    indent_column_0 = indent_column_1
-                    partial_tab_offset_0 = partial_tab_offset_1
-                    partial_tab_width_0 = partial_tab_width_1
-                    count_0 += 1
+
+                    while True: # start choice
+                        offset_2 = offset_1
+                        column_2 = column_1
+                        indent_column_2 = indent_column_1
+                        partial_tab_offset_2 = partial_tab_offset_1
+                        partial_tab_width_2 = partial_tab_width_1
+                        children_2 = [] if children_1 is not None else None
+                        while True: # case
+                            offset_2, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_block_element(buf, offset_2, buf_eof, column_2, indent_column_2, prefix_0, children_2, partial_tab_offset_2, partial_tab_width_2)
+                            if offset_2 == -1: break
+
+
+
+                            break
+                        if offset_2 != -1:
+                            offset_1 = offset_2
+                            column_1 = column_2
+                            indent_column_1 = indent_column_2
+                            partial_tab_offset_1 = partial_tab_offset_2
+                            partial_tab_width_1 = partial_tab_width_2
+                            if children_2 is not None and children_2 is not None:
+                                children_1.extend(children_2)
+                            break
+                        # end case
+                        offset_2 = offset_1
+                        column_2 = column_1
+                        indent_column_2 = indent_column_1
+                        partial_tab_offset_2 = partial_tab_offset_1
+                        partial_tab_width_2 = partial_tab_width_1
+                        children_2 = [] if children_1 is not None else None
+                        while True: # case
+                            offset_2, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_empty_lines(buf, offset_2, buf_eof, column_2, indent_column_2, prefix_0, children_2, partial_tab_offset_2, partial_tab_width_2)
+                            if offset_2 == -1: break
+
+
+
+                            break
+                        if offset_2 != -1:
+                            offset_1 = offset_2
+                            column_1 = column_2
+                            indent_column_1 = indent_column_2
+                            partial_tab_offset_1 = partial_tab_offset_2
+                            partial_tab_width_1 = partial_tab_width_2
+                            if children_2 is not None and children_2 is not None:
+                                children_1.extend(children_2)
+                            break
+                        # end case
+                        offset_1 = -1 # no more choices
+                        break # end choice
+                    if offset_1 == -1:
+                        break
+
+                    break
                 if offset_1 == -1:
                     break
-
+                if offset_0 == offset_1: break
+                if children_1 is not None and children_1 is not None:
+                    children_0.extend(children_1)
+                offset_0 = offset_1
+                column_0 = column_1
+                indent_column_0 = indent_column_1
+                partial_tab_offset_0 = partial_tab_offset_1
+                partial_tab_width_0 = partial_tab_width_1
+                count_0 += 1
+            if offset_0 == -1:
                 break
-            if offset_1 == -1:
-                offset_0 = -1
-                break
-            value_0 = self.Node('document', offset_0, offset_1, children_1, None)
-            children_0.append(value_0)
-            offset_0 = offset_1
 
             count_0 = 0
             while offset_0 < buf_eof:

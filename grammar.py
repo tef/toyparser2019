@@ -34,11 +34,11 @@ class Metaclass(type):
     @classmethod
     def __prepare__(metacls, name, bases, **args):
         return GrammarDict({k:v for k,v in Builtins.__dict__.items() if not k.startswith("_")})
-    def __new__(metacls, name, bases, attrs, start=None, whitespace=None, newline=None, tabstop=None, **args):
-        attrs = build_class_dict(attrs, start, whitespace, newline, tabstop)
+    def __new__(metacls, name, bases, attrs, start=None, whitespace=None, newline=None, tabstop=None, capture=None, **args):
+        attrs = build_class_dict(attrs, start, whitespace, newline, tabstop, capture)
         return super().__new__(metacls, name, bases, attrs)
 
-def build_class_dict(attrs, start, whitespace, newline, tabstop):
+def build_class_dict(attrs, start, whitespace, newline, tabstop, capture):
     for name in attrs.named_rules:
         if name not in attrs:
             raise BadGrammar('missing rule', name)
@@ -130,6 +130,7 @@ def build_class_dict(attrs, start, whitespace, newline, tabstop):
 
     new_attrs['rules'] = rules
     new_attrs['start'] = start
+    new_attrs['capture'] = capture or start
     new_attrs['whitespace'] = whitespace
     new_attrs['newline'] = newline
     new_attrs['tabstop'] = tabstop or 8
@@ -759,6 +760,10 @@ class VarBuilder:
 
 def compile_python(grammar, cython=False):
     memoized = {}
+    if cython:
+        node = "Node"
+    else:
+        node = "self.Node"
 
     def build_subrules(rules, steps, offset, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children, count, values):
         for subrule in rules:
@@ -844,10 +849,6 @@ def compile_python(grammar, cython=False):
                 steps.append(f"if {offset_0} == -1:")
                 steps.append(f"    {offset} = -1")
                 steps.append(f"    break")
-            if cython:
-                node = "Node"
-            else:
-                node = "self.Node"
 
             value = VarBuilder('value', n=len(values))
             values[rule.key] = value
@@ -1040,10 +1041,6 @@ def compile_python(grammar, cython=False):
 
 
         elif rule.kind == VALUE:
-            if cython:
-                node = "Node"
-            else:
-                node = "self.Node"
             value = rule.args['value']
             value = values.get(value, repr(value))
 
@@ -1642,7 +1639,7 @@ def compile_python(grammar, cython=False):
         f"    prefix, children = [], []",
         f"    new_offset, column, indent_column, partial_tab_offset, partial_tab_width = self.parse_{start_rule}(buf, offset, eof, column, indent_column, prefix, children, 0, 0)",
         f"    if children and new_offset == end:",
-        f"         if builder is None: return children[-1]",
+        f"         if builder is None: return {node}({repr(grammar.capture)}, offset, new_offset, children, None)",
         f"         return children[-1].build(buf, builder)",
         f"    print('no', offset, new_offset, end, buf[new_offset:])",
         f"    if err is not None: raise err(buf, new_offset, 'no')",

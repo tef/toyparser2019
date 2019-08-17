@@ -84,8 +84,7 @@ class RSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n", "\uFEFF
     @rule()
     def document(self):
         self.comment.inline()
-        with self.capture_node('document'):
-            self.rson_value()
+        self.rson_value()
         self.comment.inline()
 
     @rule()

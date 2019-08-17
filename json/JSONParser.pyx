@@ -31,17 +31,17 @@ cdef class Parser:
         prefix, children = [], []
         new_offset, column, indent_column, partial_tab_offset, partial_tab_width = self.parse_document(buf, offset, eof, column, indent_column, prefix, children, 0, 0)
         if children and new_offset == end:
-             if builder is None: return children[-1]
+             if builder is None: return Node('document', offset, new_offset, children, None)
              return children[-1].build(buf, builder)
         print('no', offset, new_offset, end, buf[new_offset:])
         if err is not None: raise err(buf, new_offset, 'no')
 
     cdef parse_document(self, str buf, int offset_0, int buf_eof, int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
         cdef Py_UCS4 chr
-        cdef int offset_1, offset_2
+        cdef int offset_1
         cdef int column_1
 
-        cdef list children_1, children_2
+        cdef list children_1
 
         cdef tuple indent_column_1
         cdef int partial_tab_offset_1
@@ -88,68 +88,57 @@ cdef class Parser:
                 offset_0 = -1
                 break
 
-            offset_1 = offset_0
-            children_1 = []
-            while True: # start capture
-                while True: # start choice
-                    offset_2 = offset_1
-                    column_1 = column_0
-                    indent_column_1 = indent_column_0
-                    partial_tab_offset_1 = partial_tab_offset_0
-                    partial_tab_width_1 = partial_tab_width_0
-                    children_2 = [] if children_1 is not None else None
-                    while True: # case
-                        offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_json_list(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
-                        if offset_2 == -1: break
+            while True: # start choice
+                offset_1 = offset_0
+                column_1 = column_0
+                indent_column_1 = indent_column_0
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
+                children_1 = [] if children_0 is not None else None
+                while True: # case
+                    offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_json_list(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
+                    if offset_1 == -1: break
 
 
 
-                        break
-                    if offset_2 != -1:
-                        offset_1 = offset_2
-                        column_0 = column_1
-                        indent_column_0 = indent_column_1
-                        partial_tab_offset_0 = partial_tab_offset_1
-                        partial_tab_width_0 = partial_tab_width_1
-                        if children_2 is not None and children_2 is not None:
-                            children_1.extend(children_2)
-                        break
-                    # end case
-                    offset_2 = offset_1
-                    column_1 = column_0
-                    indent_column_1 = indent_column_0
-                    partial_tab_offset_1 = partial_tab_offset_0
-                    partial_tab_width_1 = partial_tab_width_0
-                    children_2 = [] if children_1 is not None else None
-                    while True: # case
-                        offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_json_object(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
-                        if offset_2 == -1: break
-
-
-
-                        break
-                    if offset_2 != -1:
-                        offset_1 = offset_2
-                        column_0 = column_1
-                        indent_column_0 = indent_column_1
-                        partial_tab_offset_0 = partial_tab_offset_1
-                        partial_tab_width_0 = partial_tab_width_1
-                        if children_2 is not None and children_2 is not None:
-                            children_1.extend(children_2)
-                        break
-                    # end case
-                    offset_1 = -1 # no more choices
-                    break # end choice
-                if offset_1 == -1:
                     break
+                if offset_1 != -1:
+                    offset_0 = offset_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
+                    if children_1 is not None and children_1 is not None:
+                        children_0.extend(children_1)
+                    break
+                # end case
+                offset_1 = offset_0
+                column_1 = column_0
+                indent_column_1 = indent_column_0
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
+                children_1 = [] if children_0 is not None else None
+                while True: # case
+                    offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_json_object(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
+                    if offset_1 == -1: break
 
+
+
+                    break
+                if offset_1 != -1:
+                    offset_0 = offset_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
+                    if children_1 is not None and children_1 is not None:
+                        children_0.extend(children_1)
+                    break
+                # end case
+                offset_0 = -1 # no more choices
+                break # end choice
+            if offset_0 == -1:
                 break
-            if offset_1 == -1:
-                offset_0 = -1
-                break
-            value_0 = Node('document', offset_0, offset_1, children_1, None)
-            children_0.append(value_0)
-            offset_0 = offset_1
 
 
             break
