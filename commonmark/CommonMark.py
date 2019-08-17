@@ -42,7 +42,8 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
 
     block_element = rule(
         indented_code_block | 
-        fenced_code_block |
+        tilde_code_block |
+        backtick_code_block |
         blockquote | 
         atx_heading |  
             # 4.1 Ex 29. Headers take precidence over thematic breaks
@@ -150,75 +151,84 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             with self.case(): self.accept("~~~")
 
     @rule()
-    def fenced_code_block(self):
-        self.whitespace(max=3)
-        with self.capture_node('fenced_code'):
-            with self.choice():
-                with self.case():
-                    self.tilde_code_block()
-                with self.case():
-                    self.backtick_code_block()
-
-    @rule()
     def backtick_code_block(self):
-        fence = "`"
-        with self.count(char=fence) as c, self.repeat(min=3):
-            self.accept(fence)
-        with self.capture_node('info'), self.repeat(min=0):
-            with self.reject(): # Example 115
+        with self.count(columns=True) as w: 
+            self.whitespace(max=3)
+        with self.capture_node('fenced_code'):
+            fence = "`"
+            with self.count(char=fence) as c, self.repeat(min=3):
                 self.accept(fence)
-            self.range("\n", invert=True)
-        self.line_end()
-        with self.repeat():
-            self.indent()
-            with self.reject():
-                self.whitespace(max=3)
-                with self.repeat(min=c):
+            with self.capture_node('info'), self.repeat(min=0):
+                with self.reject(): # Example 115
                     self.accept(fence)
-                    self.whitespace()
-            with self.capture_node('text'), self.repeat(min=0):
                 self.range("\n", invert=True)
             self.line_end()
-        with self.choice():
-            with self.case(): self.end_of_file()
-            with self.case():
+            with self.repeat():
                 self.indent()
-                self.whitespace(max=3)
-                with self.repeat(min=c):
-                    self.whitespace()
-                    self.accept(fence)
-                self.whitespace()
+                with self.reject():
+                    self.whitespace(max=3)
+                    with self.repeat(min=c):
+                        self.accept(fence)
+                        self.whitespace()
+                    self.end_of_line()
+                self.whitespace(max=w)
+                with self.capture_node('text'), self.repeat(min=0):
+                    self.range("\n", invert=True)
                 self.line_end()
+            with self.choice():
+                with self.case():
+                    with self.reject():
+                        self.indent()
+                with self.case(): 
+                    self.whitespace()
+                    self.end_of_file()
+                with self.case():
+                    self.indent()
+                    self.whitespace(max=3)
+                    with self.repeat(min=c):
+                        self.whitespace()
+                        self.accept(fence)
+                    self.whitespace()
+                    self.line_end()
 
 
     @rule()
     def tilde_code_block(self):
-        fence = "~"
-        with self.count(char=fence) as c, self.repeat(min=3):
-            self.accept(fence)
-        with self.capture_node('info'), self.repeat(min=0):
-            self.range("\n", invert=True)
-        self.line_end()
-        with self.repeat():
-            self.indent()
-            with self.reject():
-                self.whitespace(max=3)
-                with self.repeat(min=c):
-                    self.accept(fence)
-                    self.whitespace()
-            with self.capture_node('text'), self.repeat(min=0):
+        with self.count(columns=True) as w: 
+            self.whitespace(max=3)
+        with self.capture_node('fenced_code'):
+            fence = "~"
+            with self.count(char=fence) as c, self.repeat(min=3):
+                self.accept(fence)
+            with self.capture_node('info'), self.repeat(min=0):
                 self.range("\n", invert=True)
             self.line_end()
-        with self.choice():
-            with self.case(): self.end_of_file()
-            with self.case():
+            with self.repeat():
                 self.indent()
-                self.whitespace(max=3)
-                with self.repeat(min=c):
-                    self.whitespace()
-                    self.accept(fence)
-                self.whitespace()
+                with self.reject():
+                    self.whitespace(max=3)
+                    with self.repeat(min=c):
+                        self.accept(fence)
+                        self.whitespace()
+                self.whitespace(max=w)
+                with self.capture_node('text'), self.repeat(min=0):
+                    self.range("\n", invert=True)
                 self.line_end()
+            with self.choice():
+                with self.case():
+                    with self.reject():
+                        self.indent()
+                with self.case(): 
+                    self.whitespace()
+                    self.end_of_file()
+                with self.case():
+                    self.indent()
+                    self.whitespace(max=3)
+                    with self.repeat(min=c):
+                        self.whitespace()
+                        self.accept(fence)
+                    self.whitespace()
+                    self.line_end()
 
     @rule()
     def start_blockquote(self):
@@ -621,15 +631,22 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     def code_span(self):
         with self.count(char="`") as c, self.repeat(min=1):
             self.accept("`")
-        with self.capture_node('code_span'), self.repeat(min=1), self.choice():
+        with self.capture_node('code_span') as span, self.repeat(min=1), self.choice():
             with self.case():
-                self.range("`", invert=True)
+                self.range("`", "\n", invert=True)
             with self.case():
-                with self.reject(), self.repeat(min=c, max=c):
-                    self.accept("`")
+                self.newline()
+                self.indent(partial=True) # needs to be inherited, ugh!
+            with self.case():
+                with self.reject():
+                    with self.repeat(min=c, max=c):
+                        self.accept("`")
                 self.accept("`")
         with self.repeat(min=c, max=c):
             self.accept("`")
+
+
+
 
     @rule()
     def escaped(self):
@@ -828,7 +845,8 @@ def para(buf, pos,end, children):
 
 @_builder
 def code_span(buf, pos, end, children):
-    text = " ".join(buf[pos:end].splitlines())
+    text = buf[pos:end]
+    text = text.replace('\n', ' ')
     if text and text[0] == text[-1] == " ":
         text = text[1:-1]
     return f"<code>{text}</code>"
@@ -1093,7 +1111,7 @@ for t in tests:
     else:
         failed +=1
         if '<' in markd: continue
-        if '`' in markd: continue
+        if '*' in markd: continue
         if '[' in markd: continue
         if '&' in markd: continue
         #if out.replace('\n','') == t['html'].replace('\n',''): continue

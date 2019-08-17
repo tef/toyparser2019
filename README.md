@@ -111,7 +111,7 @@ with self.indented(): # use offset from line start
 	self.accept("1")
 	with self.repeat():
 	    self.newline()
-	    self.start_of_line() # include indent
+	    self.indent() # include indent
 	    self.accept("1')
 	self.end_of_line()
 ```
