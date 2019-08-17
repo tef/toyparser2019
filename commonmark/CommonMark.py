@@ -201,6 +201,7 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
             with self.count(char=fence) as c, self.repeat(min=3):
                 self.literal(fence)
             with self.capture_node('info'), self.repeat(min=0):
+                # escapes?
                 self.range("\n", invert=True)
             self.line_end()
             with self.repeat():
@@ -634,26 +635,32 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     # html
     @rule()
     def code_span(self):
-        with self.count(char="`") as c, self.repeat(min=1):
-            self.literal("`")
-        with self.capture_node('code_span') as span, self.repeat(min=1), self.choice():
+        with self.choice():
             with self.case():
-                self.range("`", "\n", invert=True)
-            with self.case():
-                self.newline()
-                self.indent(partial=True) # needs to be inherited, ugh!
-            with self.case():
-                with self.reject():
-                    with self.repeat(min=c, max=c):
-                        self.literal("`")
-                self.literal("`")
+                with self.count(char="`") as c, self.repeat(min=1):
+                    self.literal("`")
+                with self.capture_node('code_span') as span, self.repeat(min=1), self.choice():
+                    with self.case():
+                        self.range("`", "\n", invert=True)
+                    with self.case():
+                        self.newline()
+                        self.indent(partial=True) # needs to be inherited, ugh!
+                    with self.case():
+                        with self.reject():
+                            with self.repeat(min=c, max=c):
+                                self.literal("`")
+                            with self.choice():
+                                with self.case(): self.range('`', invert=True)
+                                with self.case(): self.end_of_file()
+                        with self.repeat():
+                            self.literal("`")
+                with self.repeat(min=c, max=c):
+                    self.literal("`")
                 with self.reject():
                     self.literal("`")
-        with self.repeat(min=c, max=c):
-            self.literal("`")
-        with self.reject():
-            self.literal("`")
-
+            with self.case():
+                with self.capture_node('text'), self.repeat(min=1):
+                    self.literal("`")
 
 
 
@@ -675,8 +682,9 @@ class CommonMark(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n
     @rule()
     def word(self):
         with self.capture_node('text'):
-            with self.repeat(min=1):
-                self.range(" ", "\n", "\\", invert=True)
+            self.range(" ", "\n", "\\", invert=True)
+            with self.repeat(min=0):
+                self.range(" ", "\n", "\\", "<", "`", invert=True)
 
 ## HTML Builder
 
@@ -804,6 +812,7 @@ def wrap_tight(list_items, out):
                 if not a_block: out2.append('\n')
                 out2.append(c)
                 out2.append("\n")
+                a_block=True
         out.append(f"<li>{''.join(out2)}</li>\n")
     return out
 
