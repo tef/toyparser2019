@@ -22,6 +22,8 @@ Then you can turn GrammarNodes into ParseRules
 Then you can use them to parse
 
 """
+class BadGrammar(Exception):
+    pass
 
 class Metaclass(type):
     """
@@ -39,13 +41,13 @@ class Metaclass(type):
 def build_class_dict(attrs, start, whitespace, newline, tabstop):
     for name in attrs.named_rules:
         if name not in attrs:
-            raise SyntaxError('missing rule', name)
+            raise BadGrammar('missing rule', name)
     if whitespace:
         for x in whitespace:
-            if len(x) != 1: raise Exception('bad')
+            if len(x) != 1: raise BadGrammar('Whitespace characters must be exactly one codepoint.')
     if newline:
         for x in newline:
-            if len(x) != 1 and x != "\r\n": raise Exception('bad')
+            if len(x) != 1 and x != "\r\n": raise BadGrammar('Newline characters must be exactly one codepoint, or CRLF.')
     rules = {}
     new_attrs = {}
     for key, value in attrs.items():
@@ -151,14 +153,14 @@ class GrammarRuleSet:
 
     def append(self, value):
         rule = value.rule
-        if rule is self: raise Exception()
+        if rule is self: raise BadGrammar('recursive')
         if isinstance(rule, ChoiceNode):
             if self in rule.rules: raise Exception()
             self.rules.extend(rule.rules)
         elif isinstance(rule, GrammarNode):
             self.rules.append(rule)
         else:
-            raise SyntaxError('rule')
+            raise BadGrammar('Rule', value, 'is not a grammar definition')
 
     def canonical(self, rulebuilder):
         rules = []
@@ -207,8 +209,10 @@ class GrammarDict(dict):
                 ruleset.append(value)
             elif not is_ruleset and not is_rule:
                 dict.__setitem__(self,key, value)
+            elif is_ruleset and not is_rule:
+                raise BadGrammar('rule', key, 'reassigned')
             else:
-                raise SyntaxError('rule / non rule mismatch in assignments')
+                raise BadGrammar('non rule', key, 'reassigned with rule')
         elif isinstance(value, GrammarRule):
             rule = GrammarRuleSet([])
             rule.append(value)
@@ -291,7 +295,7 @@ class FunctionNode(GrammarNode):
         return self.wrapper(builder.from_function(self.fn))
 
     def make_rule(self):
-        raise Exception('Canonicalise first')
+        raise Exception('Canonicalise FunctionNodes first')
 
 class NamedNode(GrammarNode):
     def __init__(self, name):
@@ -351,18 +355,6 @@ class SequenceNode(GrammarNode):
         regular = all(r.regular for r in rules)
         return ParserRule(SEQUENCE, rules=rules, regular=regular, nullable=nullable)
 
-class ValueNode(GrammarNode):
-    def __init__(self, value):
-        self.value = value
-    def __str__(self):
-        return f"({self.value})"
-
-    def canonical(self, builder):
-        return self
-
-    def make_rule(self):
-        return ParserRule('value', args=dict(value=self.value))
-
 class CaptureNode(GrammarNode):
     def __init__(self, name, args, rules, *, key=None):
         self.rules = rules
@@ -419,24 +411,6 @@ class RepeatNode(GrammarNode):
         regular = all(r.regular for r in rules)
         return ParserRule(REPEAT, key=self.key, args=args, rules=rules, regular=regular, nullable=nullable)
 
-class LiteralNode(GrammarNode):
-    def __init__(self, args,invert=False):
-        if not args or "" in args:
-            raise Exception('bad')
-        self.args = args
-        self.invert = invert
-
-    def canonical(self, rulebuilder):
-        return self
-
-    def __str__(self):
-        if len(self.args) == 1:
-            return "{!r}".format(self.args[0])
-        return "|".join("{}".format(repr(a)) for a in self.args)
-
-    def make_rule(self):
-        return ParserRule(LITERAL, args={'invert': self.invert, 'literals': self.args}, nullable=False, regular=True)
-
 class RangeNode(GrammarNode):
     def __init__(self, args,invert):
         self.args = args
@@ -464,105 +438,108 @@ class FunctionBuilder:
             def __init__(inner, name, rule):
                 inner.name, inner.rule = name, rule
             def __call__(inner):
-                if self.block_mode: raise SyntaxError()
+                if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
                 self.rules.append(inner.rule)
             def repeat(inner, min=0, max=None):
-                if self.block_mode: raise SyntaxError()
+                if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
                 self.rule(RepeatNode([inner.rule], min=min, max=max))
             def optional(inner):
-                if self.block_mode: raise SyntaxError()
+                if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
                 self.rule(RepeatNode([inner.rule], min=0, max=1))
             def inline(inner):
-                if self.block_mode: raise SyntaxError()
+                if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
                 self.rule(GrammarNode(RULE, args=dict(name=inner.name, inline=True)))
             def lookahead(inner):
-                if self.block_mode: raise SyntaxError()
+                if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
                 self.rule(GrammarNode(LOOKAHEAD, rules=[inner.rule]))
             def reject(inner):
-                if self.block_mode: raise SyntaxError()
+                if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
                 self.rule(GrammarNode(REJECT, rules=[inner.rule]))
 
             @contextmanager
             def as_indent(inner, dedent=None):
-                if self.block_mode: raise SyntaxError()
+                if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
                 rules, self.rules = self.rules, []
                 yield
                 rules.append(GrammarNode(SET_LINE_PREFIX, args=dict(indent=inner.name, dedent=dedent, count=None), rules=self.rules))
                 self.rules = rules
             @contextmanager
             def as_dedent(inner, count=None):
-                if self.block_mode: raise SyntaxError()
+                if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
                 rules, self.rules = self.rules, []
                 yield
                 rules.append(GrammarNode(SET_LINE_PREFIX, args=dict(indent=None, count=count, dedent=inner.name), rules=self.rules))
                 self.rules = rules
 
         for name, rule in names.items():
-            if hasattr(self, name): raise SyntaxError()
+            if hasattr(self, name): raise BadGrammar('Can\'t override ',name,'with rule. Rename it')
             setattr(self, name, Rule(name, rule))
 
     def rule(self, rule):
-        if self.block_mode: raise SyntaxError()
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         self.rules.append(rule)
 
-    def accept(self, *args):
-        if self.block_mode: raise SyntaxError()
-        self.rules.append(LiteralNode(args))
+    def literal(self, *args):
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
+        if any(a == "" for a in args): raise BadGrammar("empty literal")
+        node = GrammarNode(LITERAL, args=dict(literals=args))
+        self.rules.append(node)
 
     def whitespace(self, min=0, max=None, newline=False):
-        if self.block_mode: raise SyntaxError()
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         self.rules.append(GrammarNode(WHITESPACE, args=dict(min=min, max=max, newline=newline), nullable=(not min), regular=True))
 
     def partial_tab(self,):
-        if self.block_mode: raise SyntaxError()
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         self.rules.append(GrammarNode(PARTIAL_TAB))
 
 
     def newline(self):
-        if self.block_mode: raise SyntaxError()
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         self.rules.append(GrammarNode(NEWLINE, regular=True, nullable=False))
 
     def end_of_file(self):
-        if self.block_mode: raise SyntaxError()
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         self.rules.append(GrammarNode(END_OF_FILE, regular=False, nullable=True))
 
     def end_of_line(self):
-        if self.block_mode: raise SyntaxError()
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         self.rules.append(GrammarNode(END_OF_LINE, regular=True, nullable=True))
 
     def start_of_line(self):
-        if self.block_mode: raise SyntaxError()
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         self.rules.append(GrammarNode(START_OF_LINE))
 
     def indent(self, partial=False):
-        if self.block_mode: raise SyntaxError()
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         self.rules.append(GrammarNode(INDENT, args=dict(partial=partial)))
 
     def dedent(self):
-        if self.block_mode: raise SyntaxError()
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         self.rules.append(GrammarNode(DEDENT))
 
     def range(self, *args, invert=False):
-        if self.block_mode: raise SyntaxError()
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         self.rules.append(RangeNode(args, invert))
 
     def print(self, *args):
         if self.block_mode: raise SyntaxError()
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         self.rules.append(GrammarNode(PRINT, args={'args':args}))
 
     def reject_if(self, cond):
-        if self.block_mode: raise SyntaxError()
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         self.rules.append(GrammarNode(REJECT_IF, args=dict(cond=cond)))
 
     def accept_if(self, cond):
-        if self.block_mode: raise SyntaxError()
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         self.rules.append(GrammarNode(ACCEPT_IF, args=dict(cond=cond)))
 
     @contextmanager
     def indented(self, count=None, indent=None, dedent=None):
         indent = indent.name if indent else None
         dedent = dedent.name if dedent else None
-        if self.block_mode: raise SyntaxError()
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         rules, self.rules = self.rules, []
         yield
         rules.append(GrammarNode(SET_LINE_PREFIX, args=dict(indent=indent, dedent=dedent, count=count), rules=self.rules))
@@ -570,21 +547,22 @@ class FunctionBuilder:
 
     @contextmanager
     def count(self, char=None, columns=None):
-        if self.block_mode: raise SyntaxError()
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         rules = self.rules
         self.rules = []
         counter = CountNode(dict(char=char, columns=columns), self.rules)
         yield counter.key
         rules.append(counter)
         self.rules = rules
+
     def column(self, from_prefix=False):
-        if self.block_mode: raise SyntaxError()
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         o = GrammarNode(COLUMN, args=dict(from_prefix=from_prefix))
         self.rules.append(o)
         return o.key
 
     def backref(self):
-        if self.block_mode: raise SyntaxError()
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         
         @contextmanager
         def _capture():
@@ -601,7 +579,7 @@ class FunctionBuilder:
         return self.capture_node(name, nested=False)
 
     def capture_node(self, name, nested=True):
-        if self.block_mode: raise SyntaxError()
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         if name is None:
             raise Exception('missing name')
         
@@ -617,12 +595,13 @@ class FunctionBuilder:
         return _capture()
 
     def capture_value(self, value):
-        if self.block_mode: raise SyntaxError()
-        self.rules.append(ValueNode(value))
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
+        node = GrammarNode(VALUE, args=dict(value=value))
+        self.rules.append(node)
 
     @contextmanager
     def memoize(self):
-        if self.block_mode: raise SyntaxError()
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         rules = self.rules
         self.rules = []
         yield
@@ -631,7 +610,7 @@ class FunctionBuilder:
 
     @contextmanager
     def trace(self, active=True):
-        if self.block_mode: raise SyntaxError()
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         rules = self.rules
         self.rules = []
         yield
@@ -643,7 +622,7 @@ class FunctionBuilder:
 
     @contextmanager
     def lookahead(self):
-        if self.block_mode: raise SyntaxError()
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         rules = self.rules
         self.rules = []
         yield
@@ -652,7 +631,7 @@ class FunctionBuilder:
 
     @contextmanager
     def reject(self):
-        if self.block_mode: raise SyntaxError()
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         rules = self.rules
         self.rules = []
         yield
@@ -661,19 +640,19 @@ class FunctionBuilder:
 
     @contextmanager
     def choice(self):
-        if self.block_mode: raise SyntaxError()
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         rules = self.rules
         self.rules = []
         self.block_mode = "choice"
         yield
-        if self.block_mode != "choice": raise SyntaxError()
+        if self.block_mode != "choice": raise Exception('Buggy code has wiped context')
         self.block_mode = None
         rules.append(ChoiceNode(self.rules))
         self.rules = rules
 
     @contextmanager
     def case(self):
-        if self.block_mode != "choice": raise SyntaxError()
+        if self.block_mode != "choice": raise BadGrammar('Case outside of choice')
         rules = self.rules
         self.rules = []
         self.block_mode = None
@@ -685,7 +664,7 @@ class FunctionBuilder:
 
     @contextmanager
     def repeat(self, min=0, max=None):
-        if self.block_mode: raise SyntaxError()
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         rules = self.rules
         self.rules = []
         r = RepeatNode(self.rules, min=min, max=max)
@@ -695,7 +674,7 @@ class FunctionBuilder:
 
     @contextmanager
     def optional(self):
-        if self.block_mode: raise SyntaxError()
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         rules = self.rules
         self.rules = []
         yield
@@ -750,9 +729,11 @@ class Builtins:
     def capture(name, *args):
         return CaptureNode(name,dict(nested=True), args)
     def capture_value(arg):
-        return ValueNode(arg)
-    def accept(*args):
-        return LiteralNode(args)
+        return GrammarNode(VALUE, args=dict(value=arg))
+    def literal(*args):
+        if any(a == "" for a in args): raise BadGrammar("empty literal")
+        node = GrammarNode(LITERAL, args=dict(literals=args))
+        return node
     def reject(*args):
         return GrammarNode(REJECT, rules=args)
     def lookahead(*args):
@@ -837,11 +818,11 @@ class ParserBuilder:
         self.output.append(f"{' ' * self.indent}{line}")
 
     def as_string(self):
-        if self.placeholders: raise Exception("no")
+        if self.placeholders: raise Exception("Codegen leftover placeholders in output")
         return "\n".join(o.rstrip() for o in self.output)
 
     def extend(self, lines):
-        if isinstance(lines, str): raise Exception('no')
+        if isinstance(lines, str): raise Exception('Dont use extend with strings, pal')
         for line in lines:
             self.output.append(f"{' ' * self.indent}{line}")
 
@@ -907,7 +888,7 @@ def compile_python(grammar, builder=None, cython=False):
             offset_0 = offset.incr()
             steps.append(f"{offset_0} = {offset}")
             if not rule.rules:
-                raise Exception('bad')
+                raise Exception('empty rules')
             steps.append(f"while True: # start backref")
             build_subrules(rule.rules, steps.add_indent(), offset_0, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children_0, count, values)
             steps.append(f"    break")
@@ -1140,7 +1121,7 @@ def compile_python(grammar, builder=None, cython=False):
             elif rule.args['char']:
                 value = f"buf[{offset}:{offset_0}].count({repr(rule.args['char'])})"
             else:
-                raise Exception('bad')
+                raise Exception('bad args to count rule')
             steps.append(f"{var_name} = {value}") 
             steps.append(f"{offset} = {offset_0}")
             steps.append(f"{column} = {column_0}")
@@ -1452,7 +1433,7 @@ def compile_python(grammar, builder=None, cython=False):
                             f"    {column} += 1",
                         ))
                 else:
-                    raise Exception('bad range')
+                    raise BadGrammar('bad range', repr(literal))
 
             if not invert:
                 steps.extend((

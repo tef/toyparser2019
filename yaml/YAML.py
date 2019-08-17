@@ -23,7 +23,7 @@ builder = {
 }
 
 class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n", "\r", "\r\n"]):
-    literal = rule( 
+    yaml_literal = rule( 
         list_literal | object_literal |
         string_literal | number_literal |
         true_literal | false_literal | 
@@ -50,77 +50,77 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n", "\r
             with self.repeat(min=1):
                 self.range("0-9")
             with self.optional():
-                self.accept(".")
+                self.literal(".")
                 with self.repeat():
                     self.range("0-9")
             with self.optional():
-                self.accept("e", "E")
+                self.literal("e", "E")
                 with self.optional():
-                    self.accept("+", "-")
+                    self.literal("+", "-")
                     with self.repeat():
                         self.range("0-9")
 
     @rule()
     def string_literal(self):
-        self.accept("\"")
+        self.literal("\"")
         with self.capture_node("string"), self.repeat(), self.choice():
             with self.case():
-                self.accept("\\u")
+                self.literal("\\u")
                 self.range("0-9", "a-f", "A-F")
                 self.range("0-9", "a-f", "A-F")
                 self.range("0-9", "a-f", "A-F")
                 self.range("0-9", "a-f", "A-F")
             with self.case():
-                self.accept("\\")
+                self.literal("\\")
                 self.range(
                     "\"", "\\", "/", "b", 
                     "f", "n", "r", "t",
                 )
             with self.case():
                 self.range("\\", "\"", invert=True)
-        self.accept("\"")
+        self.literal("\"")
 
     @rule()
     def list_literal(self):
-        self.accept("[")
+        self.literal("[")
         self.whitespace(newline=True)
         with self.capture_node("list"), self.repeat(max=1):
-            self.literal()
+            self.yaml_literal()
             with self.repeat(min=0):
                 self.whitespace(newline=True)
-                self.accept(",")
+                self.literal(",")
                 self.whitespace(newline=True)
-                self.literal()
+                self.yaml_literal()
             self.whitespace(newline=True)
             with self.optional():
-                self.accept(",")
+                self.literal(",")
                 self.whitespace(newline=True)
-        self.accept("]")
+        self.literal("]")
 
     @rule()
     def object_literal(self):
-        self.accept("{")
+        self.literal("{")
         self.whitespace(newline=True)
         with self.capture_node("object"), self.optional():
             self.string_literal()
             self.whitespace() # must be on same line as :
-            self.accept(":")
+            self.literal(":")
             self.whitespace(newline=True)
-            self.literal()
+            self.yaml_literal()
             with self.repeat(min=0):
                 self.whitespace(newline=True)
-                self.accept(",")
+                self.literal(",")
                 self.whitespace(newline=True)
                 self.string_literal()
                 self.whitespace() # must be on same line as #
-                self.accept(":")
+                self.literal(":")
                 self.whitespace(newline=True)
-                self.literal()
+                self.yaml_literal()
             self.whitespace(newline=True)
             with self.optional():
-                self.accept(",")
+                self.literal(",")
                 self.whitespace(newline=True)
-        self.accept("}")
+        self.literal("}")
 
     @rule()
     def yaml_eol(self):
@@ -130,7 +130,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n", "\r
                 self.newline()
             with self.case():
                 self.whitespace()
-                self.accept('#')
+                self.literal('#')
                 with self.repeat():
                     self.range("\n", invert=True)
                 self.newline()
@@ -139,7 +139,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n", "\r
     @rule()
     def indented_list(self):
         with self.indented(), self.capture_node('list'):
-            self.accept("-")
+            self.literal("-")
             with self.choice():
                 with self.case():
                     self.whitespace()
@@ -153,7 +153,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n", "\r
             with self.repeat():
                 self.yaml_eol()
                 self.indent()
-                self.accept("-")
+                self.literal("-")
                 self.whitespace(min=1)
                 with self.choice():
                     with self.case():
@@ -171,7 +171,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n", "\r
             with self.capture_node("pair"):
                 self.identifier()
                 self.whitespace()
-                self.accept(":")
+                self.literal(":")
                 with self.choice():
                     with self.case():
                         self.yaml_eol()
@@ -187,7 +187,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n", "\r
                 self.indent()
                 self.identifier()
                 self.whitespace()
-                self.accept(":")
+                self.literal(":")
                 self.capture_value("a")
                 with self.choice():
                     with self.case():
@@ -207,7 +207,7 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n", "\r
             with self.case():
                 self.indented_list()
             with self.case():
-                self.literal()
+                self.yaml_literal()
 
     @rule()
     def document(self):

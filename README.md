@@ -18,7 +18,7 @@ class MyGrammar(Grammar, whitespace=[" "], newline=["\n"], start="main"):
     @rule()                              # must be decorated
     def main(self): 			 # called, given a builder 
         with self.capture("name"):       # scoped rules
-            self.accept("yes")           # built in operators
+            self.literal("yes")           # built in operators
             self.newline()
 
 a = MyGrammar.parser()
@@ -68,7 +68,7 @@ print(a.parse("yes\n")) # and get "yes\n"
 
 ### terminal operators
 
-`self.whitespace()`, `self.whitespace(min=..., max=..., newline=True)`, `self.newline()`, `self.accept("string")`, `self.range("1", "a-b", invert=True)`,
+`self.whitespace()`, `self.whitespace(min=..., max=..., newline=True)`, `self.newline()`, `self.literal("string")`, `self.range("1", "a-b", invert=True)`,
 `self.end_of_line()` newline or eof, `self.end_of_file`, `self.start_of_line()`,
 
 
@@ -79,13 +79,13 @@ with self.capture("name"): # capture start, end, name and children
 	...
 
 with self.lookahead():
-	self.accept("+")
+	self.literal("+")
 
 with self.repeat(min=1, max=2):
-	self.accept(".")
+	self.literal(".")
 
 with self.reject():
-	self.accept("123")
+	self.literal("123")
 
 with self.memoize():
 	self.awful_rule()
@@ -95,10 +95,10 @@ with self.memoize():
 
 ```
 with self.count(".") as c:
-    with self.repeat(): self.accept(".")
+    with self.repeat(): self.literal(".")
 
 with self.repeat(min=c, max=c):
-    self.accept("+")
+    self.literal("+")
 
 self.capture_value(c)
 ```
@@ -108,11 +108,11 @@ self.capture_value(c)
 ```
 self.whitespace()
 with self.indented(): # use offset from line start
-	self.accept("1")
+	self.literal("1")
 	with self.repeat():
 	    self.newline()
 	    self.indent() # include indent
-	    self.accept("1')
+	    self.literal("1')
 	self.end_of_line()
 ```
 
@@ -123,7 +123,7 @@ def line(self):
 
 @rule()
 def quote(self):
-    self.accept(">")
+    self.literal(">")
     self.whitespace(max=1)
 
 @rule()

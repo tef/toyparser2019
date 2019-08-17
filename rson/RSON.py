@@ -92,7 +92,7 @@ class RSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n", "\uFEFF
     def comment(self):
         self.whitespace()
         with self.repeat(min=0):
-            self.accept("#")
+            self.literal("#")
             with self.repeat(min=0):
                 self.range("\n", invert=True)
             self.whitespace()
@@ -102,12 +102,12 @@ class RSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n", "\uFEFF
     def rson_value(self):
         with self.choice():
             with self.case(), self.capture_node('tagged'):
-                self.accept('@')
+                self.literal('@')
                 with self.capture_node('identifier', nested=False):
                     self.range("a-z", "a-Z")
                     with self.repeat():
                         self.range("0-9", "a-z","A-Z","_")
-                self.accept(' ')
+                self.literal(' ')
                 self.rson_literal()
             with self.case():
                 self.rson_literal()
@@ -132,21 +132,21 @@ class RSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n", "\uFEFF
             with self.case():
                 with self.optional():
                     self.range("-", "+")
-                self.accept("0x")
+                self.literal("0x")
                 self.range("0-9", "A-F", "a-f")
                 with self.repeat():
                     self.range("0-9","A-F","a-f","_")
             with self.case():
                 with self.optional():
                     self.range("-", "+")
-                self.accept("0o")
+                self.literal("0o")
                 self.range("0-8",)
                 with self.repeat():
                     self.range("0-8","_")
             with self.case():
                 with self.optional():
                     self.range("-", "+")
-                self.accept("0b")
+                self.literal("0b")
                 self.range("0-1",)
                 with self.repeat():
                     self.range("0-1","_")
@@ -155,19 +155,19 @@ class RSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n", "\uFEFF
                     self.range("-", "+")
                 with self.choice():
                     with self.case():
-                        self.accept("0")
+                        self.literal("0")
                     with self.case():
                         self.range("1-9")
                         with self.repeat():
                             self.range("0-9")
                 with self.optional():
-                    self.accept(".")
+                    self.literal(".")
                     with self.repeat():
                         self.range("0-9")
                 with self.optional():
-                    self.accept("e", "E")
+                    self.literal("e", "E")
                     with self.optional():
-                        self.accept("+", "-")
+                        self.literal("+", "-")
                         with self.repeat():
                             self.range("0-9")
 
@@ -175,36 +175,36 @@ class RSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n", "\uFEFF
     def rson_string(self):
         with self.choice():
             with self.case():
-                self.accept("\"")
+                self.literal("\"")
                 with self.capture_node("string", nested=False), self.repeat(), self.choice():
                     with self.case():
                         self.range("\x00-\x1f", "\\", "\"", "\uD800-\uDFFF", invert=True)
                     with self.case():
-                        self.accept("\\x")
+                        self.literal("\\x")
                         with self.reject():
                             self.range('0-1')
                         self.range("0-9", "a-f", "A-F")
                         self.range("0-9", "a-f", "A-F")
                     with self.case():
-                        self.accept("\\u")
+                        self.literal("\\u")
                         with self.reject():
-                            self.accept("000")
+                            self.literal("000")
                             self.range('0-1')
                         with self.reject():
-                            self.accept("D", "d")
+                            self.literal("D", "d")
                             self.range("8-9", "A-F")
                         self.range("0-9", "a-f", "A-F")
                         self.range("0-9", "a-f", "A-F")
                         self.range("0-9", "a-f", "A-F")
                         self.range("0-9", "a-f", "A-F")
                     with self.case():
-                        self.accept("\\U")
+                        self.literal("\\U")
                         with self.reject():
-                            self.accept("0000000")
+                            self.literal("0000000")
                             self.range('0-1')
                         with self.reject():
-                            self.accept("0000")
-                            self.accept("D", "d")
+                            self.literal("0000")
+                            self.literal("D", "d")
                             self.range("8-9", "A-F")
                         self.range("0-9", "a-f", "A-F")
                         self.range("0-9", "a-f", "A-F")
@@ -215,43 +215,43 @@ class RSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n", "\uFEFF
                         self.range("0-9", "a-f", "A-F")
                         self.range("0-9", "a-f", "A-F")
                     with self.case():
-                        self.accept("\\")
+                        self.literal("\\")
                         self.range(
                             "\"", "\\", "/", "b", 
                             "f", "n", "r", "t", "'", "\n",
                         )
-                self.accept("\"")
+                self.literal("\"")
             with self.case():
-                self.accept("\'")
+                self.literal("\'")
                 with self.capture_node("string", nested=False), self.repeat(), self.choice():
                     with self.case():
                         self.range("\x00-\x1f", "\\", "\'", "\uD800-\uDFFF", invert=True)
                     with self.case():
-                        self.accept("\\x")
+                        self.literal("\\x")
                         with self.reject():
                             self.range('0-1')
                         self.range("0-9", "a-f", "A-F")
                         self.range("0-9", "a-f", "A-F")
                     with self.case():
-                        self.accept("\\u")
+                        self.literal("\\u")
                         with self.reject():
-                            self.accept("00")
+                            self.literal("00")
                             self.range('0-1')
                         with self.reject():
-                            self.accept("D", "d")
+                            self.literal("D", "d")
                             self.range("8-9", "A-F")
                         self.range("0-9", "a-f", "A-F")
                         self.range("0-9", "a-f", "A-F")
                         self.range("0-9", "a-f", "A-F")
                         self.range("0-9", "a-f", "A-F")
                     with self.case():
-                        self.accept("\\U")
+                        self.literal("\\U")
                         with self.reject():
-                            self.accept("000000")
+                            self.literal("000000")
                             self.range('0-1')
                         with self.reject():
-                            self.accept("0000")
-                            self.accept("D", "d")
+                            self.literal("0000")
+                            self.literal("D", "d")
                             self.range("8-9", "A-F")
                         self.range("0-9", "a-f", "A-F")
                         self.range("0-9", "a-f", "A-F")
@@ -262,56 +262,56 @@ class RSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n", "\uFEFF
                         self.range("0-9", "a-f", "A-F")
                         self.range("0-9", "a-f", "A-F")
                     with self.case():
-                        self.accept("\\")
+                        self.literal("\\")
                         self.range(
                             "\"", "\\", "/", "b", 
                             "f", "n", "r", "t", "'", "\n",
                         )
-                self.accept("\'")
+                self.literal("\'")
 
     @rule()
     def rson_list(self):
-        self.accept("[")
+        self.literal("[")
         self.comment.inline()
         with self.capture_node("list"), self.repeat(max=1):
             self.rson_value()
             with self.repeat(min=0):
                 self.comment.inline()
-                self.accept(",")
+                self.literal(",")
                 self.comment.inline()
                 self.rson_value()
             self.comment.inline()
             with self.optional():
-                self.accept(",")
+                self.literal(",")
                 self.comment.inline()
-        self.accept("]")
+        self.literal("]")
 
     @rule()
     def rson_object(self):
-        self.accept("{")
+        self.literal("{")
         self.comment.inline()
         with self.capture_node("object"), self.optional():
             with self.capture_node("pair"):
                 self.rson_string()
                 self.comment.inline()
-                self.accept(":")
+                self.literal(":")
                 self.comment.inline()
                 self.rson_value()
             self.comment.inline()
             with self.repeat(min=0):
-                self.accept(",")
+                self.literal(",")
                 self.comment.inline()
                 with self.capture_node("pair"):
                     self.rson_string()
                     self.comment.inline()
-                    self.accept(":")
+                    self.literal(":")
                     self.comment.inline()
                     self.rson_value()
                 self.comment.inline()
             with self.optional():
-                self.accept(",")
+                self.literal(",")
                 self.comment.inline()
-        self.accept("}")
+        self.literal("}")
 
 if __name__ == "__main__":
     import subprocess, sys
