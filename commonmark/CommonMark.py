@@ -1124,6 +1124,6 @@ for t in tests:
         print()
 print(count, worked, failed)
 
-_markup("""
+markup("""
 \\
 """)

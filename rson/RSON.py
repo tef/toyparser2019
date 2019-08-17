@@ -122,9 +122,9 @@ class RSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n", "\uFEFF
             with self.case(): self.rson_false.inline()
             with self.case(): self.rson_null.inline()
 
-    rson_true = rule(accept("true"), capture="bool")
-    rson_false = rule(accept("false"), capture="bool")
-    rson_null = rule(accept("null"), capture="null")
+    rson_true = rule(literal("true"), capture="bool")
+    rson_false = rule(literal("false"), capture="bool")
+    rson_null = rule(literal("null"), capture="null")
 
     @rule()
     def rson_number(self):

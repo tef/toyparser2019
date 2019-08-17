@@ -404,16 +404,10 @@ class Parser:
 
         elif rule.kind == LITERAL:
             literals = rule.args['literals']
-            if rule.args['invert']:
-                for text in literals:
-                    if state.advance(text):
-                        return None
-                return state
-            else:
-                for text in literals:
-                    new_state = state.advance(text)
-                    if new_state:
-                        return new_state
+            for text in literals:
+                new_state = state.advance(text)
+                if new_state:
+                    return new_state
 
         elif rule.kind == RANGE:
             if state.offset == len(state.buf):

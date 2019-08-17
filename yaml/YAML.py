@@ -30,9 +30,9 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n", "\r
         null_literal
     )
 
-    true_literal = rule(accept("true"), capture="bool")
-    false_literal = rule(accept("false"), capture="bool")
-    null_literal = rule(accept("null"), capture="null")
+    true_literal = rule(literal("true"), capture="bool")
+    false_literal = rule(literal("false"), capture="bool")
+    null_literal = rule(literal("null"), capture="null")
 
     @rule()
     def identifier(self):
