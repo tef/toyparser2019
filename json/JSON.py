@@ -138,10 +138,10 @@ class JSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n"]):
 if __name__ == "__main__":
     import subprocess, sys
     if not sys.argv[1:] or sys.argv[1] != "--skip":
-        code = compile_python(JSON, builder, cython=False)
+        code = compile_python(JSON, cython=False)
         with open("JSONParser.py", "w") as fh:
             fh.write(code)
-        code = compile_python(JSON, builder, cython=True)
+        code = compile_python(JSON, cython=True)
         with open("JSONParser.pyx", "w") as fh:
             fh.write(code)
 
@@ -152,7 +152,7 @@ if __name__ == "__main__":
     print()
 
     print()
-    parser = JSON.parser(None)
+    parser = JSON.parser()
     buf = '[1, 2, 3, "fooo"]'
     node = parser.parse(buf)
 
@@ -168,10 +168,10 @@ if __name__ == "__main__":
 
     import time, json
 
-    inter_parser = Parser(JSON, builder)
-    python_parser = JSON.parser(builder)
-    old_python_parser = compile(JSON, builder)
-    cython_parser = JSONParser(builder)
+    inter_parser = Parser(JSON)
+    python_parser = JSON.parser()
+    old_python_parser = compile(JSON)
+    cython_parser = JSONParser()
 
     n= 80_000
     import random
@@ -189,8 +189,8 @@ if __name__ == "__main__":
         return t
 
     json_t = timeit("json", json.loads, s)
-    cython_t = timeit("cython compiled", cython_parser.parse, s)
-    python_t = timeit("python", python_parser.parse, s)
+    cython_t = timeit("cython compiled", (lambda b: cython_parser.parse(b, builder=builder)), s)
+    python_t = timeit("python", (lambda b: python_parser.parse(b, builder=builder)), s)
     print("cython is",cython_t/json_t, "times slower than handrolled C",  python_t/cython_t, "times faster than python")
 
 #    t2 = timeit("python-compiled-old", old_python_parser.parse, s)

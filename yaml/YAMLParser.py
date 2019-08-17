@@ -1,6 +1,5 @@
 class Parser:
-    def __init__(self, builder=None, tabstop=None, allow_mixed_indent=False):
-         self.builder = builder
+    def __init__(self, tabstop=None, allow_mixed_indent=False):
          self.tabstop = tabstop or 8
          self.cache = None
          self.allow_mixed_indent = allow_mixed_indent
@@ -20,13 +19,15 @@ class Parser:
             return builder[self.name](buf, self.start, self.end, children)
 
 
-    def parse(self, buf, offset=0, end=None, err=None):
+    def parse(self, buf, offset=0, end=None, err=None, builder=None):
         self.cache = dict()
         end = len(buf) if end is None else end
-        column, indent_column, eof = offset, offset, end
+        column, indent_column, eof = 0, (0, None), end
         prefix, children = [], []
         new_offset, column, indent_column, partial_tab_offset, partial_tab_width = self.parse_document(buf, offset, eof, column, indent_column, prefix, children, 0, 0)
-        if children and new_offset == end: return children[-1]
+        if children and new_offset == end:
+             if builder is None: return children[-1]
+             return children[-1].build(buf, builder)
         print('no', offset, new_offset, end, buf[new_offset:])
         if err is not None: raise err(buf, new_offset, 'no')
 
@@ -211,10 +212,7 @@ class Parser:
             if offset_1 == -1:
                 offset_0 = -1
                 break
-            if self.builder is not None:
-                value_0 = self.builder['bool'](buf, offset_0, offset_1, children_1)
-            else:
-                value_0 = self.Node('bool', offset_0, offset_1, children_1, None)
+            value_0 = self.Node('bool', offset_0, offset_1, children_1, None)
             children_0.append(value_0)
             offset_0 = offset_1
 
@@ -237,10 +235,7 @@ class Parser:
             if offset_1 == -1:
                 offset_0 = -1
                 break
-            if self.builder is not None:
-                value_0 = self.builder['bool'](buf, offset_0, offset_1, children_1)
-            else:
-                value_0 = self.Node('bool', offset_0, offset_1, children_1, None)
+            value_0 = self.Node('bool', offset_0, offset_1, children_1, None)
             children_0.append(value_0)
             offset_0 = offset_1
 
@@ -263,10 +258,7 @@ class Parser:
             if offset_1 == -1:
                 offset_0 = -1
                 break
-            if self.builder is not None:
-                value_0 = self.builder['null'](buf, offset_0, offset_1, children_1)
-            else:
-                value_0 = self.Node('null', offset_0, offset_1, children_1, None)
+            value_0 = self.Node('null', offset_0, offset_1, children_1, None)
             children_0.append(value_0)
             offset_0 = offset_1
 
@@ -336,10 +328,7 @@ class Parser:
                     if offset_2 == -1:
                         offset_1 = -1
                         break
-                    if self.builder is not None:
-                        value_0 = self.builder['identifier'](buf, offset_1, offset_2, children_2)
-                    else:
-                        value_0 = self.Node('identifier', offset_1, offset_2, children_2, None)
+                    value_0 = self.Node('identifier', offset_1, offset_2, children_2, None)
                     children_1.append(value_0)
                     offset_1 = offset_2
 
@@ -652,10 +641,7 @@ class Parser:
             if offset_1 == -1:
                 offset_0 = -1
                 break
-            if self.builder is not None:
-                value_0 = self.builder['number'](buf, offset_0, offset_1, children_1)
-            else:
-                value_0 = self.Node('number', offset_0, offset_1, children_1, None)
+            value_0 = self.Node('number', offset_0, offset_1, children_1, None)
             children_0.append(value_0)
             offset_0 = offset_1
 
@@ -905,10 +891,7 @@ class Parser:
             if offset_1 == -1:
                 offset_0 = -1
                 break
-            if self.builder is not None:
-                value_0 = self.builder['string'](buf, offset_0, offset_1, children_1)
-            else:
-                value_0 = self.Node('string', offset_0, offset_1, children_1, None)
+            value_0 = self.Node('string', offset_0, offset_1, children_1, None)
             children_0.append(value_0)
             offset_0 = offset_1
 
@@ -938,11 +921,11 @@ class Parser:
                 if chr == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
                     offset_0 +=2
                     column_0 = 0
-                    indent_column_0 = 0
+                    indent_column_0 = (0, None)
                 elif chr in '\n\r':
                     offset_0 +=1
                     column_0 = 0
-                    indent_column_0 = 0
+                    indent_column_0 = (0, None)
                     count_0 +=1
                 elif chr in ' \t':
                     if chr == '\t':
@@ -991,11 +974,11 @@ class Parser:
                                     if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
                                         offset_3 +=2
                                         column_2 = 0
-                                        indent_column_2 = 0
+                                        indent_column_2 = (0, None)
                                     elif chr in '\n\r':
                                         offset_3 +=1
                                         column_2 = 0
-                                        indent_column_2 = 0
+                                        indent_column_2 = (0, None)
                                         count_2 +=1
                                     elif chr in ' \t':
                                         if chr == '\t':
@@ -1026,11 +1009,11 @@ class Parser:
                                     if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
                                         offset_3 +=2
                                         column_2 = 0
-                                        indent_column_2 = 0
+                                        indent_column_2 = (0, None)
                                     elif chr in '\n\r':
                                         offset_3 +=1
                                         column_2 = 0
-                                        indent_column_2 = 0
+                                        indent_column_2 = (0, None)
                                         count_2 +=1
                                     elif chr in ' \t':
                                         if chr == '\t':
@@ -1073,11 +1056,11 @@ class Parser:
                             if chr == '\r' and offset_2 + 1 < buf_eof and buf[offset_2+1] == '\n':
                                 offset_2 +=2
                                 column_1 = 0
-                                indent_column_1 = 0
+                                indent_column_1 = (0, None)
                             elif chr in '\n\r':
                                 offset_2 +=1
                                 column_1 = 0
-                                indent_column_1 = 0
+                                indent_column_1 = (0, None)
                                 count_1 +=1
                             elif chr in ' \t':
                                 if chr == '\t':
@@ -1117,11 +1100,11 @@ class Parser:
                                     if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
                                         offset_3 +=2
                                         column_2 = 0
-                                        indent_column_2 = 0
+                                        indent_column_2 = (0, None)
                                     elif chr in '\n\r':
                                         offset_3 +=1
                                         column_2 = 0
-                                        indent_column_2 = 0
+                                        indent_column_2 = (0, None)
                                         count_2 +=1
                                     elif chr in ' \t':
                                         if chr == '\t':
@@ -1175,10 +1158,7 @@ class Parser:
             if offset_1 == -1:
                 offset_0 = -1
                 break
-            if self.builder is not None:
-                value_0 = self.builder['list'](buf, offset_0, offset_1, children_1)
-            else:
-                value_0 = self.Node('list', offset_0, offset_1, children_1, None)
+            value_0 = self.Node('list', offset_0, offset_1, children_1, None)
             children_0.append(value_0)
             offset_0 = offset_1
 
@@ -1208,11 +1188,11 @@ class Parser:
                 if chr == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
                     offset_0 +=2
                     column_0 = 0
-                    indent_column_0 = 0
+                    indent_column_0 = (0, None)
                 elif chr in '\n\r':
                     offset_0 +=1
                     column_0 = 0
-                    indent_column_0 = 0
+                    indent_column_0 = (0, None)
                     count_0 +=1
                 elif chr in ' \t':
                     if chr == '\t':
@@ -1278,11 +1258,11 @@ class Parser:
                             if chr == '\r' and offset_2 + 1 < buf_eof and buf[offset_2+1] == '\n':
                                 offset_2 +=2
                                 column_1 = 0
-                                indent_column_1 = 0
+                                indent_column_1 = (0, None)
                             elif chr in '\n\r':
                                 offset_2 +=1
                                 column_1 = 0
-                                indent_column_1 = 0
+                                indent_column_1 = (0, None)
                                 count_1 +=1
                             elif chr in ' \t':
                                 if chr == '\t':
@@ -1319,11 +1299,11 @@ class Parser:
                                     if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
                                         offset_3 +=2
                                         column_2 = 0
-                                        indent_column_2 = 0
+                                        indent_column_2 = (0, None)
                                     elif chr in '\n\r':
                                         offset_3 +=1
                                         column_2 = 0
-                                        indent_column_2 = 0
+                                        indent_column_2 = (0, None)
                                         count_2 +=1
                                     elif chr in ' \t':
                                         if chr == '\t':
@@ -1354,11 +1334,11 @@ class Parser:
                                     if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
                                         offset_3 +=2
                                         column_2 = 0
-                                        indent_column_2 = 0
+                                        indent_column_2 = (0, None)
                                     elif chr in '\n\r':
                                         offset_3 +=1
                                         column_2 = 0
-                                        indent_column_2 = 0
+                                        indent_column_2 = (0, None)
                                         count_2 +=1
                                     elif chr in ' \t':
                                         if chr == '\t':
@@ -1412,11 +1392,11 @@ class Parser:
                                     if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
                                         offset_3 +=2
                                         column_2 = 0
-                                        indent_column_2 = 0
+                                        indent_column_2 = (0, None)
                                     elif chr in '\n\r':
                                         offset_3 +=1
                                         column_2 = 0
-                                        indent_column_2 = 0
+                                        indent_column_2 = (0, None)
                                         count_2 +=1
                                     elif chr in ' \t':
                                         if chr == '\t':
@@ -1459,11 +1439,11 @@ class Parser:
                             if chr == '\r' and offset_2 + 1 < buf_eof and buf[offset_2+1] == '\n':
                                 offset_2 +=2
                                 column_1 = 0
-                                indent_column_1 = 0
+                                indent_column_1 = (0, None)
                             elif chr in '\n\r':
                                 offset_2 +=1
                                 column_1 = 0
-                                indent_column_1 = 0
+                                indent_column_1 = (0, None)
                                 count_1 +=1
                             elif chr in ' \t':
                                 if chr == '\t':
@@ -1503,11 +1483,11 @@ class Parser:
                                     if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
                                         offset_3 +=2
                                         column_2 = 0
-                                        indent_column_2 = 0
+                                        indent_column_2 = (0, None)
                                     elif chr in '\n\r':
                                         offset_3 +=1
                                         column_2 = 0
-                                        indent_column_2 = 0
+                                        indent_column_2 = (0, None)
                                         count_2 +=1
                                     elif chr in ' \t':
                                         if chr == '\t':
@@ -1561,10 +1541,7 @@ class Parser:
             if offset_1 == -1:
                 offset_0 = -1
                 break
-            if self.builder is not None:
-                value_0 = self.builder['object'](buf, offset_0, offset_1, children_1)
-            else:
-                value_0 = self.Node('object', offset_0, offset_1, children_1, None)
+            value_0 = self.Node('object', offset_0, offset_1, children_1, None)
             children_0.append(value_0)
             offset_0 = offset_1
 
@@ -1622,11 +1599,11 @@ class Parser:
                                 if chr == '\r' and offset_2 + 1 < buf_eof and buf[offset_2+1] == '\n':
                                     offset_2 +=2
                                     column_2 = 0
-                                    indent_column_2 = 0
+                                    indent_column_2 = (0, None)
                                 elif chr in '\n\r':
                                     offset_2 +=1
                                     column_2 = 0
-                                    indent_column_2 = 0
+                                    indent_column_2 = (0, None)
                                 else:
                                     offset_2 = -1
                                     break
@@ -1721,11 +1698,11 @@ class Parser:
                                 if chr == '\r' and offset_2 + 1 < buf_eof and buf[offset_2+1] == '\n':
                                     offset_2 +=2
                                     column_2 = 0
-                                    indent_column_2 = 0
+                                    indent_column_2 = (0, None)
                                 elif chr in '\n\r':
                                     offset_2 +=1
                                     column_2 = 0
-                                    indent_column_2 = 0
+                                    indent_column_2 = (0, None)
                                 else:
                                     offset_2 = -1
                                     break
@@ -1770,7 +1747,7 @@ class Parser:
 
     def parse_indented_list(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
         while True: # note: return at end of loop
-            count_0 = column_0 - indent_column_0
+            count_0 = column_0 - indent_column_0[0]
             # print(count_0, 'indent')
             def _indent(buf, offset, buf_eof, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
                 saw_tab, saw_not_tab = False, False
@@ -1845,7 +1822,7 @@ class Parser:
                         offset = -1
                 return offset, column, indent_column, partial_tab_offset, partial_tab_width
             prefix_0.append((_indent, _dedent))
-            indent_column_0 = column_0
+            indent_column_0 = (column_0, indent_column_0)
             while True:
                 offset_1 = offset_0
                 children_1 = []
@@ -1911,7 +1888,7 @@ class Parser:
                             if offset_2 == -1: break
 
 
-                            if not (column_1 == indent_column_1 == 0):
+                            if not (column_1 == indent_column_1[0] == 0):
                                 offset_2 = -1
                                 break
                             # print('start')
@@ -1926,7 +1903,7 @@ class Parser:
                                     offset_2 = -1
                                     break
                                 offset_2 = offset_3
-                                indent_column_1 = column_1
+                                indent_column_1 = (column_1, indent_column_1)
                             if offset_2 == -1:
                                 break
 
@@ -1986,7 +1963,7 @@ class Parser:
                             if offset_2 == -1: break
 
 
-                            if not (column_1 == indent_column_1 == 0):
+                            if not (column_1 == indent_column_1[0] == 0):
                                 offset_2 = -1
                                 break
                             # print('start')
@@ -2001,7 +1978,7 @@ class Parser:
                                     offset_2 = -1
                                     break
                                 offset_2 = offset_3
-                                indent_column_1 = column_1
+                                indent_column_1 = (column_1, indent_column_1)
                             if offset_2 == -1:
                                 break
 
@@ -2088,7 +2065,7 @@ class Parser:
                                     if offset_3 == -1: break
 
 
-                                    if not (column_2 == indent_column_2 == 0):
+                                    if not (column_2 == indent_column_2[0] == 0):
                                         offset_3 = -1
                                         break
                                     # print('start')
@@ -2103,7 +2080,7 @@ class Parser:
                                             offset_3 = -1
                                             break
                                         offset_3 = offset_4
-                                        indent_column_2 = column_2
+                                        indent_column_2 = (column_2, indent_column_2)
                                     if offset_3 == -1:
                                         break
 
@@ -2166,15 +2143,13 @@ class Parser:
                 if offset_1 == -1:
                     offset_0 = -1
                     break
-                if self.builder is not None:
-                    value_0 = self.builder['list'](buf, offset_0, offset_1, children_1)
-                else:
-                    value_0 = self.Node('list', offset_0, offset_1, children_1, None)
+                value_0 = self.Node('list', offset_0, offset_1, children_1, None)
                 children_0.append(value_0)
                 offset_0 = offset_1
 
                 break
             prefix_0.pop()
+            if indent_column_0 != (0, None): indent_column_0 = indent_column_0[1]
             if offset_0 == -1: break
 
             break
@@ -2182,7 +2157,7 @@ class Parser:
 
     def parse_indented_object(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
         while True: # note: return at end of loop
-            count_0 = column_0 - indent_column_0
+            count_0 = column_0 - indent_column_0[0]
             # print(count_0, 'indent')
             def _indent(buf, offset, buf_eof, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
                 saw_tab, saw_not_tab = False, False
@@ -2257,7 +2232,7 @@ class Parser:
                         offset = -1
                 return offset, column, indent_column, partial_tab_offset, partial_tab_width
             prefix_0.append((_indent, _dedent))
-            indent_column_0 = column_0
+            indent_column_0 = (column_0, indent_column_0)
             while True:
                 offset_1 = offset_0
                 children_1 = []
@@ -2307,7 +2282,7 @@ class Parser:
                                 if offset_3 == -1: break
 
 
-                                if not (column_1 == indent_column_1 == 0):
+                                if not (column_1 == indent_column_1[0] == 0):
                                     offset_3 = -1
                                     break
                                 # print('start')
@@ -2322,7 +2297,7 @@ class Parser:
                                         offset_3 = -1
                                         break
                                     offset_3 = offset_4
-                                    indent_column_1 = column_1
+                                    indent_column_1 = (column_1, indent_column_1)
                                 if offset_3 == -1:
                                     break
 
@@ -2415,10 +2390,7 @@ class Parser:
                     if offset_2 == -1:
                         offset_1 = -1
                         break
-                    if self.builder is not None:
-                        value_0 = self.builder['pair'](buf, offset_1, offset_2, children_2)
-                    else:
-                        value_0 = self.Node('pair', offset_1, offset_2, children_2, None)
+                    value_0 = self.Node('pair', offset_1, offset_2, children_2, None)
                     children_1.append(value_0)
                     offset_1 = offset_2
 
@@ -2438,7 +2410,7 @@ class Parser:
                                 if offset_3 == -1: break
 
 
-                                if not (column_1 == indent_column_1 == 0):
+                                if not (column_1 == indent_column_1[0] == 0):
                                     offset_3 = -1
                                     break
                                 # print('start')
@@ -2453,7 +2425,7 @@ class Parser:
                                         offset_3 = -1
                                         break
                                     offset_3 = offset_4
-                                    indent_column_1 = column_1
+                                    indent_column_1 = (column_1, indent_column_1)
                                 if offset_3 == -1:
                                     break
 
@@ -2487,10 +2459,7 @@ class Parser:
                                     offset_3 = -1
                                     break
 
-                                if self.builder is not None:
-                                    children_3.append('a')
-                                else:
-                                    children_3.append(self.Node('value', offset_3, offset_3, (), 'a'))
+                                children_3.append(self.Node('value', offset_3, offset_3, (), 'a'))
 
                                 while True: # start choice
                                     offset_4 = offset_3
@@ -2546,7 +2515,7 @@ class Parser:
                                         if offset_4 == -1: break
 
 
-                                        if not (column_2 == indent_column_2 == 0):
+                                        if not (column_2 == indent_column_2[0] == 0):
                                             offset_4 = -1
                                             break
                                         # print('start')
@@ -2561,7 +2530,7 @@ class Parser:
                                                 offset_4 = -1
                                                 break
                                             offset_4 = offset_5
-                                            indent_column_2 = column_2
+                                            indent_column_2 = (column_2, indent_column_2)
                                         if offset_4 == -1:
                                             break
 
@@ -2612,10 +2581,7 @@ class Parser:
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            if self.builder is not None:
-                                value_1 = self.builder['pair'](buf, offset_2, offset_3, children_3)
-                            else:
-                                value_1 = self.Node('pair', offset_2, offset_3, children_3, None)
+                            value_1 = self.Node('pair', offset_2, offset_3, children_3, None)
                             children_2.append(value_1)
                             offset_2 = offset_3
 
@@ -2638,15 +2604,13 @@ class Parser:
                 if offset_1 == -1:
                     offset_0 = -1
                     break
-                if self.builder is not None:
-                    value_2 = self.builder['object'](buf, offset_0, offset_1, children_1)
-                else:
-                    value_2 = self.Node('object', offset_0, offset_1, children_1, None)
+                value_2 = self.Node('object', offset_0, offset_1, children_1, None)
                 children_0.append(value_2)
                 offset_0 = offset_1
 
                 break
             prefix_0.pop()
+            if indent_column_0 != (0, None): indent_column_0 = indent_column_0[1]
             if offset_0 == -1: break
 
             break
@@ -2886,10 +2850,7 @@ class Parser:
             if offset_1 == -1:
                 offset_0 = -1
                 break
-            if self.builder is not None:
-                value_0 = self.builder['document'](buf, offset_0, offset_1, children_1)
-            else:
-                value_0 = self.Node('document', offset_0, offset_1, children_1, None)
+            value_0 = self.Node('document', offset_0, offset_1, children_1, None)
             children_0.append(value_0)
             offset_0 = offset_1
 
@@ -2973,11 +2934,11 @@ class Parser:
                         if chr == '\r' and offset_1 + 1 < buf_eof and buf[offset_1+1] == '\n':
                             offset_1 +=2
                             column_1 = 0
-                            indent_column_1 = 0
+                            indent_column_1 = (0, None)
                         elif chr in '\n\r':
                             offset_1 +=1
                             column_1 = 0
-                            indent_column_1 = 0
+                            indent_column_1 = (0, None)
                         else:
                             offset_1 = -1
                             break

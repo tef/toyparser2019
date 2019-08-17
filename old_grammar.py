@@ -211,12 +211,12 @@ class ParseNode:
         return "{}[{}:{}]".format(self.name, self.start, self.end)
 
 class Parser:
-    def __init__(self, grammar, builder):
+    def __init__(self, grammar):
         self.grammar = grammar
-        self.builder = builder
+        self.builder = None
         self.tabstop = 8
 
-    def parse(self, buf, offset=0, err=None):
+    def parse(self, buf, offset=0, err=None, builder=None):
         name = self.grammar.start
         rule = self.grammar.rules[name]
 
@@ -226,7 +226,8 @@ class Parser:
         if end is None:
             if err is None: return
             raise err(buf, offset, "no")
-
+        if builder:
+            return start.children[-1].build(builder)
         return start.children[-1]
 
     def parse_rule(self, rule, state):
@@ -708,8 +709,8 @@ def compile(grammar, builder=None):
     output = output.add_indent(4)
     output.extend((
         f"class Parser:",
-        f"    def __init__(self, builder):",
-        f"         self.builder = builder",
+        f"    def __init__(self, builder=None):",
+        f"         self.builder = None",
         f"         self.tabstop = self.TABSTOP",
         "",
         f"    NEWLINE = {newline}",
@@ -722,9 +723,11 @@ def compile(grammar, builder=None):
 
     start_rule = grammar.start
     output.extend((
-        f"def parse(self, buf, offset=0):",
+        f"def parse(self, buf, offset=0, builder=None):",
         f"    start = ParserState.init(buf, offset)",
         f"    end = self.parse_{start_rule}(start)",
+        f"    if not end: return None",
+        f"    if builder is not None: return start.children[-1].build(builder)",
         f"    return start.children[-1] if end else None",
         f"",
     ))

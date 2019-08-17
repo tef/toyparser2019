@@ -235,10 +235,10 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n", "\r
 if __name__ == '__main__':
     import subprocess, sys
     if not sys.argv[1:] or sys.argv[1] != "--skip":
-        code = compile_python(YAML, builder, cython=False)
+        code = compile_python(YAML, cython=False)
         with open("YAMLParser.py", "w") as fh:
             fh.write(code)
-        code = compile_python(YAML, builder, cython=True)
+        code = compile_python(YAML, cython=True)
         with open("YAMLParser.pyx", "w") as fh:
             fh.write(code)
 
@@ -250,7 +250,7 @@ if __name__ == '__main__':
         parser2 = YAML.parser()
     from old_grammar import compile, Parser
 
-    parser = Parser(YAML, None)
+    parser = Parser(YAML)
     import time
 
     def yaml(buf):

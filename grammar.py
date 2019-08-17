@@ -278,6 +278,9 @@ class GrammarNode:
 
         return f"{self.kind} ({rules or args})"
 
+    def __or__(self, right):
+        return ChoiceNode([self, right])
+
     def canonical(self, builder):
         rules = [r.canonical(builder) for r in self.rules] if self.rules else None
         return GrammarNode(self.kind, key=self.key, rules=rules, args=self.args, regular=self.regular, nullable=self.nullable)
@@ -305,9 +308,6 @@ class NamedNode(GrammarNode):
 
     def __str__(self):
         return self.name
-
-    def __or__(self, right):
-        return ChoiceNode([self, right])
 
     def canonical(self, builder):
         return self
@@ -757,7 +757,7 @@ class VarBuilder:
         return VarBuilder(self.name, maxes=self.maxes, n=self.n+1)
 
 
-def compile_python(grammar, builder=None, cython=False):
+def compile_python(grammar, cython=False):
     memoized = {}
 
     def build_subrules(rules, steps, offset, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children, count, values):
@@ -854,10 +854,7 @@ def compile_python(grammar, builder=None, cython=False):
 
             steps.extend((
                 # f"print(len(buf), {offset}, {offset_0}, {children})",
-                f"if self.builder is not None:",
-                f"    {value} = self.builder[{name}](buf, {offset}, {offset_0}, {children_0})",
-                f"else:",
-                f"    {value} = {node}({name}, {offset}, {offset_0}, {children_0}, None)",
+                f"{value} = {node}({name}, {offset}, {offset_0}, {children_0}, None)",
                 f"{children}.append({value})",
             ))
             steps.append(f"{offset} = {offset_0}")
@@ -1051,10 +1048,7 @@ def compile_python(grammar, builder=None, cython=False):
             value = values.get(value, repr(value))
 
             steps.extend((
-                f"if self.builder is not None:",
-                f"    {children}.append({value})",
-                f"else:",
-                f"    {children}.append({node}('value', {offset}, {offset}, (), {value}))",
+                f"{children}.append({node}('value', {offset}, {offset}, (), {value}))",
             ))
 
         elif rule.kind == SET_LINE_PREFIX:
@@ -1614,12 +1608,11 @@ def compile_python(grammar, builder=None, cython=False):
         output.extend(parse_node)
         output.extend((
             f"cdef class Parser:",
-            f"    cdef dict builder, cache",
+            f"    cdef dict cache",
             f"    cdef int tabstop",
             f"    cdef int allow_mixed_indent ",
             f"",
-            f"    def __init__(self, builder=None, tabstop=None, allow_mixed_indent=True):",
-            f"         self.builder = builder",
+            f"    def __init__(self, tabstop=None, allow_mixed_indent=True):",
             f"         self.tabstop = tabstop or {grammar.tabstop}",
             f"         self.cache = None",
             f"         self.allow_mixed_indent = allow_mixed_indent",
@@ -1630,8 +1623,7 @@ def compile_python(grammar, builder=None, cython=False):
     else:
         output.extend((
             f"class Parser:",
-            f"    def __init__(self, builder=None, tabstop=None, allow_mixed_indent=False):",
-            f"         self.builder = builder",
+            f"    def __init__(self, tabstop=None, allow_mixed_indent=False):",
             f"         self.tabstop = tabstop or {grammar.tabstop}",
             f"         self.cache = None",
             f"         self.allow_mixed_indent = allow_mixed_indent",
@@ -1643,13 +1635,15 @@ def compile_python(grammar, builder=None, cython=False):
 
     start_rule = grammar.start
     output.extend((
-        f"def parse(self, buf, offset=0, end=None, err=None):",
+        f"def parse(self, buf, offset=0, end=None, err=None, builder=None):",
         f"    self.cache = dict()",
         f"    end = len(buf) if end is None else end",
         f"    column, indent_column, eof = 0, (0, None), end",
         f"    prefix, children = [], []",
         f"    new_offset, column, indent_column, partial_tab_offset, partial_tab_width = self.parse_{start_rule}(buf, offset, eof, column, indent_column, prefix, children, 0, 0)",
-        f"    if children and new_offset == end: return children[-1]",
+        f"    if children and new_offset == end:",
+        f"         if builder is None: return children[-1]",
+        f"         return children[-1].build(buf, builder)",
         f"    print('no', offset, new_offset, end, buf[new_offset:])",
         f"    if err is not None: raise err(buf, new_offset, 'no')",
         f"",
@@ -1662,7 +1656,7 @@ def compile_python(grammar, builder=None, cython=False):
     for name, rule in grammar.rules.items():
         cdefs = {}
         if cython:
-            output.append(f"cdef (int, int, int, int, int) parse_{name}(self, str buf, int offset_0, int buf_eof, int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):")
+            output.append(f"cdef parse_{name}(self, str buf, int offset_0, int buf_eof, int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):")
             output.append(f"    cdef Py_UCS4 chr")
             
             for v in varnames:
@@ -1698,11 +1692,11 @@ def compile_python(grammar, builder=None, cython=False):
     return output.as_string()
 
 
-def parser(grammar, builder=None):
-    output = compile_python(grammar, builder)
+def parser(grammar):
+    output = compile_python(grammar)
     glob, loc = {}, {}
     exec(output, glob, loc)
-    return loc['Parser'](builder)
+    return loc['Parser']()
 
 class Grammar(metaclass=Metaclass):
     pass

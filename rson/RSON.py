@@ -316,10 +316,10 @@ class RSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n", "\uFEFF
 if __name__ == "__main__":
     import subprocess, sys
     if not sys.argv[1:] or sys.argv[1] != "--skip":
-        code = compile_python(RSON, builder, cython=False)
+        code = compile_python(RSON, cython=False)
         with open("RSONParser.py", "w") as fh:
             fh.write(code)
-        code = compile_python(RSON, builder, cython=True)
+        code = compile_python(RSON, cython=True)
         with open("RSONParser.pyx", "w") as fh:
             fh.write(code)
 
@@ -331,13 +331,13 @@ if __name__ == "__main__":
 
     from old_grammar import compile, Parser
 
-    arser = Parser(RSON, builder)
-    cython_parser = RSONParser(builder)
-    python_parser = RSON.parser(builder)
-    old_python_parser = compile(RSON, builder)
+    parser = Parser(RSON)
+    cython_parser = RSONParser()
+    python_parser = RSON.parser()
+    old_python_parser = compile(RSON)
 
     def p(buf):
-        return cython_parser.parse(buf, err=rsonlib.ParserErr)
+        return cython_parser.parse(buf, err=rsonlib.ParserErr, builder=builder)
 
     rsonlib.run_tests(p, rsonlib.dump)
 
@@ -354,8 +354,8 @@ if __name__ == "__main__":
         return t
 
     rson_t = timeit("rson", rsonlib.parse, s)
-    cython_t = timeit("cython", cython_parser.parse, s)
-    python_t = timeit("python-compiled", python_parser.parse, s)
+    cython_t = timeit("cython", (lambda b: cython_parser.parse(b, builder=builder), s)
+    python_t = timeit("python-compiled", (lambda b: python_parser.parse(b, builder=builder), s)
     print("rson is",rson_t/cython_t, "times faster than handrolled python",  python_t/cython_t, "times faster than python")
 
 #    t2 = timeit("python-compiled-old", old_python_parser.parse, s)
