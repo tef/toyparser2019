@@ -284,6 +284,8 @@ class GrammarNode:
 
     def make_rule(self):
         rules = [r.make_rule() for r in self.rules] if self.rules else None
+        nullable = self.nullable or (self.rules and any(r.nullable for r in rules))
+        regular = self.regular and (not self.rules or all(r.regular for r in rules))
         return ParserRule(self.kind, key=self.key, rules=rules, args=self.args, regular=self.regular, nullable=self.nullable)
 
 class FunctionNode(GrammarNode):
@@ -315,7 +317,7 @@ class NamedNode(GrammarNode):
 
 class ChoiceNode(GrammarNode):
     def __init__(self, rules):
-        self.rules = rules
+        GrammarNode.__init__(self, CHOICE, rules=rules)
 
     def __str__(self):
         return f"({' | '.join(str(x) for x in self.rules)})"
@@ -355,78 +357,6 @@ class SequenceNode(GrammarNode):
         regular = all(r.regular for r in rules)
         return ParserRule(SEQUENCE, rules=rules, regular=regular, nullable=nullable)
 
-class CaptureNode(GrammarNode):
-    def __init__(self, name, args, rules, *, key=None):
-        self.rules = rules
-        self.name = name
-        self.args = args
-        self.key = key or object()
-
-    def __str__(self):
-        return f"({' '.join(str(x) for x in self.rules)})"
-
-    def canonical(self, builder):
-        rules = [r.canonical(builder) for r in self.rules]
-        return CaptureNode(self.name, self.args, rules, key=self.key)
-    def make_rule(self):
-        args = dict()
-        args['name'] = self.name
-        args['nested'] = self.args['nested']
-        rules=[r.make_rule() for r in self.rules]
-        nullable = any(r.nullable for r in rules)
-        regular = all(r.regular for r in rules)
-        return ParserRule(CAPTURE, key=self.key, args=args, rules=rules, regular=regular, nullable=nullable)
-
-class MemoizeNode(GrammarNode):
-    def __init__(self, rules, *, key=None):
-        self.rules = rules
-        self.key = key or object()
-
-    def __str__(self):
-        return f"({' '.join(str(x) for x in self.rules)})"
-
-    def canonical(self, builder):
-        rules = [r.canonical(builder) for r in self.rules]
-        return MemoizeNode(rules, key=self.key)
-
-    def make_rule(self):
-        args = dict()
-        return ParserRule(MEMOIZE, key=self.key, args=args, rules=[r.make_rule() for r in self.rules])
-
-class RepeatNode(GrammarNode):
-    def __init__(self, rules, min=0, max=None, key=None):
-        self.min = min
-        self.max = max
-        self.rules = rules
-        self.key = key if key is not None else object()
-
-    def canonical(self, builder):
-        rules = [r.canonical(builder) for r in self.rules]
-        return RepeatNode(rules, self.min, self.max, self.key)
-
-    def make_rule(self):
-        args=dict(min=self.min, max=self.max, )
-        rules=[r.make_rule() for r in self.rules]
-        nullable = any(r.nullable for r in rules)
-        regular = all(r.regular for r in rules)
-        return ParserRule(REPEAT, key=self.key, args=args, rules=rules, regular=regular, nullable=nullable)
-
-class RangeNode(GrammarNode):
-    def __init__(self, args,invert):
-        self.args = args
-        self.invert = invert
-
-    def canonical(self, rulebuilder):
-        return self
-
-    def __str__(self):
-        invert = "^" if self.invert else ""
-        if len(self.args) == 1:
-            return "[{}{}]".format(invert, self.args[0])
-        return "[{}{}]".format(invert, "".join(repr(a)[1:-1] for a in self.args))
-    def make_rule(self):
-        return ParserRule(RANGE, args=dict(invert=self.invert, range=self.args), nullable=False, regular=True)
-
 # Builders
 NULL = object()
 
@@ -442,19 +372,19 @@ class FunctionBuilder:
                 self.rules.append(inner.rule)
             def repeat(inner, min=0, max=None):
                 if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
-                self.rule(RepeatNode([inner.rule], min=min, max=max))
+                self.rules.append(GrammarNode(REPEAT, rules=[inner.rule], args=dict(min=min, max=max)))
             def optional(inner):
                 if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
-                self.rule(RepeatNode([inner.rule], min=0, max=1))
+                self.rules.append(GrammarNode(REPEAT, rules=[inner.rule], args=dict(min=0, max=1)))
             def inline(inner):
                 if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
-                self.rule(GrammarNode(RULE, args=dict(name=inner.name, inline=True)))
+                self.rules.append(GrammarNode(RULE, args=dict(name=inner.name, inline=True)))
             def lookahead(inner):
                 if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
-                self.rule(GrammarNode(LOOKAHEAD, rules=[inner.rule]))
+                self.rules.append(GrammarNode(LOOKAHEAD, rules=[inner.rule]))
             def reject(inner):
                 if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
-                self.rule(GrammarNode(REJECT, rules=[inner.rule]))
+                self.rules.append(GrammarNode(REJECT, rules=[inner.rule]))
 
             @contextmanager
             def as_indent(inner, dedent=None):
@@ -463,6 +393,7 @@ class FunctionBuilder:
                 yield
                 rules.append(GrammarNode(SET_LINE_PREFIX, args=dict(indent=inner.name, dedent=dedent, count=None), rules=self.rules))
                 self.rules = rules
+
             @contextmanager
             def as_dedent(inner, count=None):
                 if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
@@ -475,9 +406,22 @@ class FunctionBuilder:
             if hasattr(self, name): raise BadGrammar('Can\'t override ',name,'with rule. Rename it')
             setattr(self, name, Rule(name, rule))
 
+    def from_function(self, fn):
+        if self.block_mode != "build": raise SyntaxError()
+        self.block_mode = None
+        self.rules = []
+
+        fn(self)
+
+        if self.block_mode: raise SyntaxError()
+        self.block_mode = "build"
+        rules, self.rules = self.rules, None
+
+        return rules
+
     def rule(self, rule):
         if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
-        self.rules.append(rule)
+        self.rules.append(rule.rule)
 
     def literal(self, *args):
         if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
@@ -492,7 +436,6 @@ class FunctionBuilder:
     def partial_tab(self,):
         if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         self.rules.append(GrammarNode(PARTIAL_TAB))
-
 
     def newline(self):
         if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
@@ -520,7 +463,7 @@ class FunctionBuilder:
 
     def range(self, *args, invert=False):
         if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
-        self.rules.append(RangeNode(args, invert))
+        self.rules.append(GrammarNode(RANGE, args=dict(range=args, invert=invert)))
 
     def print(self, *args):
         if self.block_mode: raise SyntaxError()
@@ -550,7 +493,7 @@ class FunctionBuilder:
         if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         rules = self.rules
         self.rules = []
-        counter = CountNode(dict(char=char, columns=columns), self.rules)
+        counter = GrammarNode(COUNT, args=dict(char=char, columns=columns), rules=self.rules)
         yield counter.key
         rules.append(counter)
         self.rules = rules
@@ -587,7 +530,7 @@ class FunctionBuilder:
         def _capture():
             rules = self.rules
             self.rules = []
-            c= CaptureNode(name, args=dict(nested=nested), rules=self.rules)
+            c= GrammarNode(CAPTURE, args=dict(name=name, nested=nested), rules=self.rules)
             yield c.key
             rules.append(c)
             self.rules = rules
@@ -605,7 +548,7 @@ class FunctionBuilder:
         rules = self.rules
         self.rules = []
         yield
-        rules.append(MemoizeNode(self.rules))
+        rules.append(GrammarNode(MEMOIZE, rules=self.rules))
         self.rules = rules
 
     @contextmanager
@@ -667,7 +610,7 @@ class FunctionBuilder:
         if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         rules = self.rules
         self.rules = []
-        r = RepeatNode(self.rules, min=min, max=max)
+        r = GrammarNode(REPEAT, rules=self.rules, args=dict(min=min, max=max))
         yield r.key
         rules.append(r)
         self.rules = rules
@@ -678,43 +621,15 @@ class FunctionBuilder:
         rules = self.rules
         self.rules = []
         yield
-        rules.append(RepeatNode(self.rules, min=0, max=1))
+        rules.append(GrammarNode(REPEAT, rules=self.rules, args=dict(min=0, max=1)))
         self.rules = rules
-
-    def from_function(self, fn):
-        if self.block_mode != "build": raise SyntaxError()
-        self.block_mode = None
-        self.rules = []
-
-        fn(self)
-
-        if self.block_mode: raise SyntaxError()
-        self.block_mode = "build"
-        rules, self.rules = self.rules, None
-
-        return rules
-
-class CountNode(GrammarNode):
-    def __init__(self, args, rules, key=None):
-        self.args = args
-        self.rules = rules
-        self.key = object() if key is None else key
-    def __str__(self):
-        return f"'count {self.args}' in ({' '.join(str(x) for x in self.rules)})"
-
-    def canonical(self, builder):
-        rules = [r.canonical(builder) for r in self.rules]
-        return CountNode(self.name, self.args, rules, self.key)
-    def make_rule(self):
-        args = dict(self.args)
-        return ParserRule(COUNT, key=self.key, args=args, rules=[r.make_rule() for r in self.rules])
 
 class Builtins:
     """ These methods are exported as functions inside the class defintion """
     def rule(*args, inline=False, capture=None):
         def _wrapper(rules):
             if capture:
-                return CaptureNode(capture, dict(nested=True), rules)
+                return GrammarNode(CAPTURE,args=dict(name=capture, nested=True), rules=rules)
             elif len(rules) > 1:
                 return SequenceNode(rules)
             else:
@@ -727,7 +642,7 @@ class Builtins:
             return _decorator
 
     def capture(name, *args):
-        return CaptureNode(name,dict(nested=True), args)
+        return GrammarRoad(CAPURE, dict(name=capture, nested=True), rules=args)
     def capture_value(arg):
         return GrammarNode(VALUE, args=dict(value=arg))
     def literal(*args):
@@ -740,12 +655,12 @@ class Builtins:
         return GrammarNode(LOOKAHEAD, rules=args)
     def trace(*args):
         return GrammarNode(TRACE, rules=args)
-    def range(*args, exclude=None):
-        return RangeNode(args, exclude)
+    def range(*args, invert=False):
+        return GrammarNode(RANGE, args=dict(range=args, invert=invert))
     def repeat(*args, min=0, max=None):
-        return RepeatNode(args, min=min, max=max)
+        return GrammarNode(REPEAT, rules=args, args=dict(min=min, max=max))
     def optional(*args):
-        return RepeatNode(args, min=0, max=1)
+        return GrammarNode(REPEAT, rules=args, args=dict(min=0, max=1))
     def choice(*args):
         return ChoiceNode(args)
     def partial_tab():
