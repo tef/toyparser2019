@@ -1343,8 +1343,6 @@ def compile_python(grammar, builder=None, cython=False):
                 f"if not ({column} == {indent_column}[0] == 0):",
                 f"    {offset} = -1",
                 f"    break",
-                f"indent_matched = False",
-                f"last_match_was_dedent = True",
                 f"{offset_0} = {offset}",
                 f"{column_1} = {column}",
                 f"{indent_column_1} = {indent_column}",
