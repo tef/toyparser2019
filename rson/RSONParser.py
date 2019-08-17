@@ -1,6 +1,5 @@
 class Parser:
-    def __init__(self, builder=None, tabstop=None, allow_mixed_indent=False):
-         self.builder = builder
+    def __init__(self, tabstop=None, allow_mixed_indent=False):
          self.tabstop = tabstop or 8
          self.cache = None
          self.allow_mixed_indent = allow_mixed_indent
@@ -20,13 +19,15 @@ class Parser:
             return builder[self.name](buf, self.start, self.end, children)
 
 
-    def parse(self, buf, offset=0, end=None, err=None):
+    def parse(self, buf, offset=0, end=None, err=None, builder=None):
         self.cache = dict()
         end = len(buf) if end is None else end
-        column, indent_column, eof = offset, offset, end
+        column, indent_column, eof = 0, (0, None), end
         prefix, children = [], []
         new_offset, column, indent_column, partial_tab_offset, partial_tab_width = self.parse_document(buf, offset, eof, column, indent_column, prefix, children, 0, 0)
-        if children and new_offset == end: return children[-1]
+        if children and new_offset == end:
+             if builder is None: return children[-1]
+             return children[-1].build(buf, builder)
         print('no', offset, new_offset, end, buf[new_offset:])
         if err is not None: raise err(buf, new_offset, 'no')
 
@@ -169,10 +170,7 @@ class Parser:
             if offset_1 == -1:
                 offset_0 = -1
                 break
-            if self.builder is not None:
-                value_0 = self.builder['document'](buf, offset_0, offset_1, children_1)
-            else:
-                value_0 = self.Node('document', offset_0, offset_1, children_1, None)
+            value_0 = self.Node('document', offset_0, offset_1, children_1, None)
             children_0.append(value_0)
             offset_0 = offset_1
 
@@ -395,10 +393,7 @@ class Parser:
                         if offset_3 == -1:
                             offset_2 = -1
                             break
-                        if self.builder is not None:
-                            value_0 = self.builder['identifier'](buf, offset_2, offset_3, children_3)
-                        else:
-                            value_0 = self.Node('identifier', offset_2, offset_3, children_3, None)
+                        value_0 = self.Node('identifier', offset_2, offset_3, children_3, None)
                         children_2.append(value_0)
                         offset_2 = offset_3
 
@@ -417,10 +412,7 @@ class Parser:
                     if offset_2 == -1:
                         offset_1 = -1
                         break
-                    if self.builder is not None:
-                        value_1 = self.builder['tagged'](buf, offset_1, offset_2, children_2)
-                    else:
-                        value_1 = self.Node('tagged', offset_1, offset_2, children_2, None)
+                    value_1 = self.Node('tagged', offset_1, offset_2, children_2, None)
                     children_1.append(value_1)
                     offset_1 = offset_2
 
@@ -1198,10 +1190,7 @@ class Parser:
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            if self.builder is not None:
-                                value_0 = self.builder['string'](buf, offset_2, offset_3, children_3)
-                            else:
-                                value_0 = self.Node('string', offset_2, offset_3, children_3, None)
+                            value_0 = self.Node('string', offset_2, offset_3, children_3, None)
                             children_2.append(value_0)
                             offset_2 = offset_3
 
@@ -1898,10 +1887,7 @@ class Parser:
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            if self.builder is not None:
-                                value_1 = self.builder['string'](buf, offset_2, offset_3, children_3)
-                            else:
-                                value_1 = self.Node('string', offset_2, offset_3, children_3, None)
+                            value_1 = self.Node('string', offset_2, offset_3, children_3, None)
                             children_2.append(value_1)
                             offset_2 = offset_3
 
@@ -2670,10 +2656,7 @@ class Parser:
                     if offset_2 == -1:
                         offset_1 = -1
                         break
-                    if self.builder is not None:
-                        value_2 = self.builder['number'](buf, offset_1, offset_2, children_2)
-                    else:
-                        value_2 = self.Node('number', offset_1, offset_2, children_2, None)
+                    value_2 = self.Node('number', offset_1, offset_2, children_2, None)
                     children_1.append(value_2)
                     offset_1 = offset_2
 
@@ -2710,10 +2693,7 @@ class Parser:
                     if offset_2 == -1:
                         offset_1 = -1
                         break
-                    if self.builder is not None:
-                        value_3 = self.builder['bool'](buf, offset_1, offset_2, children_2)
-                    else:
-                        value_3 = self.Node('bool', offset_1, offset_2, children_2, None)
+                    value_3 = self.Node('bool', offset_1, offset_2, children_2, None)
                     children_1.append(value_3)
                     offset_1 = offset_2
 
@@ -2750,10 +2730,7 @@ class Parser:
                     if offset_2 == -1:
                         offset_1 = -1
                         break
-                    if self.builder is not None:
-                        value_4 = self.builder['bool'](buf, offset_1, offset_2, children_2)
-                    else:
-                        value_4 = self.Node('bool', offset_1, offset_2, children_2, None)
+                    value_4 = self.Node('bool', offset_1, offset_2, children_2, None)
                     children_1.append(value_4)
                     offset_1 = offset_2
 
@@ -2790,10 +2767,7 @@ class Parser:
                     if offset_2 == -1:
                         offset_1 = -1
                         break
-                    if self.builder is not None:
-                        value_5 = self.builder['null'](buf, offset_1, offset_2, children_2)
-                    else:
-                        value_5 = self.Node('null', offset_1, offset_2, children_2, None)
+                    value_5 = self.Node('null', offset_1, offset_2, children_2, None)
                     children_1.append(value_5)
                     offset_1 = offset_2
 
@@ -3494,10 +3468,7 @@ class Parser:
                     if offset_2 == -1:
                         offset_1 = -1
                         break
-                    if self.builder is not None:
-                        value_0 = self.builder['string'](buf, offset_1, offset_2, children_2)
-                    else:
-                        value_0 = self.Node('string', offset_1, offset_2, children_2, None)
+                    value_0 = self.Node('string', offset_1, offset_2, children_2, None)
                     children_1.append(value_0)
                     offset_1 = offset_2
 
@@ -4194,10 +4165,7 @@ class Parser:
                     if offset_2 == -1:
                         offset_1 = -1
                         break
-                    if self.builder is not None:
-                        value_1 = self.builder['string'](buf, offset_1, offset_2, children_2)
-                    else:
-                        value_1 = self.Node('string', offset_1, offset_2, children_2, None)
+                    value_1 = self.Node('string', offset_1, offset_2, children_2, None)
                     children_1.append(value_1)
                     offset_1 = offset_2
 
@@ -4970,10 +4938,7 @@ class Parser:
             if offset_1 == -1:
                 offset_0 = -1
                 break
-            if self.builder is not None:
-                value_0 = self.builder['list'](buf, offset_0, offset_1, children_1)
-            else:
-                value_0 = self.Node('list', offset_0, offset_1, children_1, None)
+            value_0 = self.Node('list', offset_0, offset_1, children_1, None)
             children_0.append(value_0)
             offset_0 = offset_1
 
@@ -5409,10 +5374,7 @@ class Parser:
                         if offset_3 == -1:
                             offset_2 = -1
                             break
-                        if self.builder is not None:
-                            value_0 = self.builder['pair'](buf, offset_2, offset_3, children_3)
-                        else:
-                            value_0 = self.Node('pair', offset_2, offset_3, children_3, None)
+                        value_0 = self.Node('pair', offset_2, offset_3, children_3, None)
                         children_2.append(value_0)
                         offset_2 = offset_3
 
@@ -5958,10 +5920,7 @@ class Parser:
                                 if offset_4 == -1:
                                     offset_3 = -1
                                     break
-                                if self.builder is not None:
-                                    value_1 = self.builder['pair'](buf, offset_3, offset_4, children_4)
-                                else:
-                                    value_1 = self.Node('pair', offset_3, offset_4, children_4, None)
+                                value_1 = self.Node('pair', offset_3, offset_4, children_4, None)
                                 children_3.append(value_1)
                                 offset_3 = offset_4
 
@@ -6284,10 +6243,7 @@ class Parser:
             if offset_1 == -1:
                 offset_0 = -1
                 break
-            if self.builder is not None:
-                value_2 = self.builder['object'](buf, offset_0, offset_1, children_1)
-            else:
-                value_2 = self.Node('object', offset_0, offset_1, children_1, None)
+            value_2 = self.Node('object', offset_0, offset_1, children_1, None)
             children_0.append(value_2)
             offset_0 = offset_1
 

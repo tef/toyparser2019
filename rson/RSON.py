@@ -354,8 +354,8 @@ if __name__ == "__main__":
         return t
 
     rson_t = timeit("rson", rsonlib.parse, s)
-    cython_t = timeit("cython", (lambda b: cython_parser.parse(b, builder=builder), s)
-    python_t = timeit("python-compiled", (lambda b: python_parser.parse(b, builder=builder), s)
+    cython_t = timeit("cython", (lambda b: cython_parser.parse(b, builder=builder)), s)
+    python_t = timeit("python-compiled", (lambda b: python_parser.parse(b, builder=builder)), s)
     print("rson is",rson_t/cython_t, "times faster than handrolled python",  python_t/cython_t, "times faster than python")
 
 #    t2 = timeit("python-compiled-old", old_python_parser.parse, s)
