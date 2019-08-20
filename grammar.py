@@ -1689,6 +1689,130 @@ def compile_python(grammar, cython=False):
     return output.as_string()
 
 
+def compile2(grammar, language="python"):
+    if language not in ('python', 'cython'): raise Exception('not yet')
+
+    newline = tuple(n for n in grammar.newline if n!='\r\n') if grammar.newline else ()
+    newline_crlf = bool(grammar.newline) and '\r\n' in grammar.newline
+    whitespace_tab = bool(grammar.whitespace) and '\t' in grammar.whitespace
+    whitespace = tuple(grammar.whitespace) if grammar.whitespace else '()'
+
+
+
+    node_class = (
+        f"class Node:",
+        f"    def __init__(self, name, start_offset, end_offset, children):",
+        f"        self.name = name",
+        f"        self.start_offset = start_offset",
+        f"        self.end_offset = end_offset",
+        f"        self.children = children if children is not None else ()",
+        f"    def __str__(self):",
+        "        return '{}[{}:{}]'.format(self.name, self.start, self.end)",
+        f'    def build(self, buf, builder):',
+        f'        children = [child.build(buf, builder) for child in self.children]',
+        f'        if self.name == "value": return self.value',
+        f'        return builder[self.name](buf, self.start, self.end, children)',
+        f'',
+        f"",
+    )
+
+    parse_class = (
+        f"class Parser:",
+        f"    def __init__(self, buf, buf_eof, offset, column, indent_column, indent ",
+    )
+    if cython:
+        output.append('# cython: language_level=3, bounds_check=False')
+        output.extend(parse_node)
+        output.extend((
+            f"cdef class Parser:",
+            f"    cdef dict cache",
+            f"    cdef int tabstop",
+            f"    cdef int allow_mixed_indent ",
+            f"",
+            f"    def __init__(self, tabstop=None, allow_mixed_indent=True):",
+            f"         self.tabstop = tabstop or {grammar.tabstop}",
+            f"         self.cache = None",
+            f"         self.allow_mixed_indent = allow_mixed_indent",
+            "",
+        ))
+        output = output.add_indent(4)
+
+    else:
+        output.extend((
+            f"class Parser:",
+            f"    def __init__(self, tabstop=None, allow_mixed_indent=False):",
+            f"         self.tabstop = tabstop or {grammar.tabstop}",
+            f"         self.cache = None",
+            f"         self.allow_mixed_indent = allow_mixed_indent",
+            "",
+        ))
+
+        output = output.add_indent(4)
+        output.extend(parse_node)
+
+    output = ParserBuilder([], 0, {})
+
+    start_rule = grammar.start
+    output.extend((
+        f"def parse(self, buf, offset=0, end=None, err=None, builder=None):",
+        f"    self.cache = dict()",
+        f"    end = len(buf) if end is None else end",
+        f"    column, indent_column, eof = 0, (0, None), end",
+        f"    prefix, children = [], []",
+        f"    new_offset, column, indent_column, partial_tab_offset, partial_tab_width = self.parse_{start_rule}(buf, offset, eof, column, indent_column, prefix, children, 0, 0)",
+        f"    if children and new_offset == end:",
+        f"         if builder is None: return {node}({repr(grammar.capture)}, offset, new_offset, children, None)",
+        f"         return children[-1].build(buf, builder)",
+        f"    print('no', offset, new_offset, end, buf[new_offset:])",
+        f"    if err is not None: raise err(buf, new_offset, 'no')",
+        f"",
+    ))
+
+    varnames = {
+            "offset":"cdef int", "column":"cdef int", 
+            "prefix":"cdef list", "children":"cdef list", "count":"cdef int", "indent_column":"cdef tuple",
+            "partial_tab_offset":"cdef int", "partial_tab_width": "cdef int"}
+    for name, rule in grammar.rules.items():
+        cdefs = {}
+        if cython:
+            output.append(f"cdef parse_{name}(self, str buf, int offset_0, int buf_eof, int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):")
+            output.append(f"    cdef Py_UCS4 chr")
+            
+            for v in varnames:
+                cdefs[v] = output.add_indent(4).append_placeholder()
+        else:
+            output.append(f"def parse_{name}(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):")
+   #     output.append(f"    print('enter {name},',offset_0,column_0,prefix_0, repr(buf[offset_0:offset_0+10]))")
+        output.append(f"    while True: # note: return at end of loop")
+
+        values = {}
+        maxes = {}
+        build_steps(rule,
+                output.add_indent(8),
+                VarBuilder("offset", maxes=maxes),
+                VarBuilder('column', maxes=maxes),
+                VarBuilder('indent_column', maxes=maxes),
+                VarBuilder('partial_tab_offset', maxes=maxes),
+                VarBuilder('partial_tab_width', maxes=maxes),
+                VarBuilder('prefix', maxes=maxes),
+                VarBuilder('children', maxes=maxes),
+                VarBuilder("count", maxes=maxes), values, )
+        if cdefs:
+            for v,p in cdefs.items():
+                line = ", ".join(f"{v}_{n}" for n in range(1, maxes[v]+1))
+                line = f"{varnames[v]} {line}" if line else ""
+                output.replace_placeholder(p, line)
+        output.append(f"        break")
+    #     output.append(f"    print(('exit' if offset_0 != -1 else 'fail'), '{name}', offset_0, column_0, repr(buf[offset_0: offset_0+10]))")
+        output.append(f"    return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0")
+        output.append("")
+    # for lineno, line in enumerate(output.output):
+    #    print(lineno, '\t', line)
+    return output.as_string()
+
+
+
+
 def parser(grammar):
     output = compile_python(grammar)
     glob, loc = {}, {}

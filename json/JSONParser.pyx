@@ -13,7 +13,6 @@ class Node:
         if self.name == "value": return self.value
         return builder[self.name](buf, self.start, self.end, children)
 
-
 cdef class Parser:
     cdef dict cache
     cdef int tabstop
@@ -23,6 +22,9 @@ cdef class Parser:
          self.tabstop = tabstop or 8
          self.cache = None
          self.allow_mixed_indent = allow_mixed_indent
+
+    cdef (Parser) me(self):
+        return self
 
     def parse(self, buf, offset=0, end=None, err=None, builder=None):
         self.cache = dict()

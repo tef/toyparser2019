@@ -480,6 +480,67 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                                     self.whitespace()
                                 self.end_of_line()
 
+    @rule()
+    def para_interrupt(self):
+        with self.choice():
+            with self.case(): self.thematic_break()
+            with self.case(): self.atx_heading()
+            with self.case(): self.start_fenced_block()
+            with self.case(): self.start_blockquote()
+            with self.case():
+                self.whitespace(max=3)
+                with self.choice():
+                    with self.case():
+                        self.range('-', '*', '+') 
+                    with self.case():
+                        self.literal("1")
+                        self.range(".", ")")
+                self.whitespace(min=1)
+                with self.reject():
+                    self.whitespace()
+                    self.end_of_line()
+            
+    @rule()
+    def linebreak_and_indent(self):
+        with self.choice():
+            with self.case():
+                with self.choice():
+                    with self.case(): self.whitespace(min=2)
+                    with self.case(): self.literal("\\")
+                with self.capture_node("hardbreak"):
+                    self.newline()
+            with self.case():
+                self.whitespace()
+                with self.capture_node("softbreak"):
+                    self.newline()
+
+        self.indent(partial=False)
+        with self.reject(): 
+            self.para_interrupt.inline()
+        self.whitespace()
+        with self.reject():
+            self.newline()
+
+    @rule()
+    def linebreak_no_dedent(self):
+        with self.choice():
+            with self.case():
+                with self.choice():
+                    with self.case(): self.whitespace(min=2)
+                    with self.case(): self.literal("\\")
+                with self.capture_node("hardbreak"):
+                    self.newline()
+            with self.case():
+                self.whitespace()
+                with self.capture_node("softbreak"):
+                    self.newline()
+
+        self.indent(partial=True)
+        with self.reject(): 
+            self.para_interrupt.inline()
+        self.whitespace()
+        with self.reject(): 
+            self.newline()
     # setext
 
     @rule()
@@ -519,6 +580,7 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                 self.newline()
             self.indent()
             self.setext_heading_line()
+
     @rule()
     def para(self):
         self.whitespace(max=3)
@@ -531,50 +593,12 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
             self.end_of_line()
 
     @rule()
-    def para_interrupt(self):
-        with self.choice():
-            with self.case(): self.thematic_break()
-            with self.case(): self.atx_heading()
-            with self.case(): self.start_fenced_block()
-            with self.case(): self.start_blockquote()
-            with self.case():
-                self.whitespace(max=3)
-                with self.choice():
-                    with self.case():
-                        self.range('-', '*', '+') 
-                    with self.case():
-                        self.literal("1")
-                        self.range(".", ")")
-                self.whitespace(min=1)
-                with self.reject():
-                    self.whitespace()
-                    self.end_of_line()
-            
-    @rule()
     def strict_inline_para(self):
         self.inline_element()
         with self.repeat():
             with self.choice():
                 with self.case():
-                    # newline ?
-                    with self.choice():
-                        with self.case():
-                            with self.choice():
-                                with self.case(): self.whitespace(min=2)
-                                with self.case(): self.literal("\\")
-                            with self.capture_node("hardbreak"):
-                                self.newline()
-                        with self.case():
-                            self.whitespace()
-                            with self.capture_node("softbreak"):
-                                self.newline()
-
-                    self.indent(partial=False)
-                    with self.reject():
-                        self.para_interrupt.inline()
-                    self.whitespace()
-                    with self.reject():
-                        self.newline()
+                    self.linebreak_and_indent.inline()
                 with self.case():
                     with self.capture_node("whitespace"):
                         self.whitespace()
@@ -593,24 +617,7 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
         with self.repeat():
             with self.choice():
                 with self.case():
-                    # newline ?
-                    with self.choice():
-                        with self.case():
-                            with self.choice():
-                                with self.case(): self.whitespace(min=2)
-                                with self.case(): self.literal("\\")
-                            with self.capture_node("hardbreak"):
-                                self.newline()
-                        with self.case():
-                            self.whitespace()
-                            with self.capture_node("softbreak"):
-                                self.newline()
-
-                    self.indent(partial=True)
-                    with self.reject(): 
-                        self.para_interrupt.inline()
-                    self.whitespace()
-                    with self.reject(): self.newline()
+                    self.linebreak_no_dedent.inline()
                 with self.case():
                     with self.capture_node("whitespace"):
                         self.whitespace()

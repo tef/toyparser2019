@@ -7544,6 +7544,7 @@ class Parser:
                                             break
 
 
+
                                         break
                                     if offset_4 != -1:
                                         offset_3 = offset_4
@@ -8353,6 +8354,7 @@ class Parser:
                             if offset_3 != -1:
                                 offset_2 = -1
                                 break
+
 
 
                             break
