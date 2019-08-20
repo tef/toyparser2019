@@ -538,9 +538,9 @@ class FunctionBuilder:
 
         return _capture()
 
-    def capture_value(self, value):
+    def capture_value(self, value, name=None):
         if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
-        node = GrammarNode(VALUE, args=dict(value=value))
+        node = GrammarNode(VALUE, args=dict(name=name, value=value))
         self.rules.append(node)
 
     @contextmanager
