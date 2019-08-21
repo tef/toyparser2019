@@ -2340,29 +2340,6 @@ def _build(unicodedata):
                                             partial_tab_width_3 = partial_tab_width_2
                                             children_5 = [] if children_4 is not None else None
                                             while True: # case
-                                                offset_5, column_3, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = self.parse_html_entity(buf, offset_5, buf_eof, column_3, indent_column_3, prefix_0, children_5, partial_tab_offset_3, partial_tab_width_3)
-                                                if offset_5 == -1: break
-
-
-
-                                                break
-                                            if offset_5 != -1:
-                                                offset_4 = offset_5
-                                                column_2 = column_3
-                                                indent_column_2 = indent_column_3
-                                                partial_tab_offset_2 = partial_tab_offset_3
-                                                partial_tab_width_2 = partial_tab_width_3
-                                                if children_5 is not None and children_5 is not None:
-                                                    children_4.extend(children_5)
-                                                break
-                                            # end case
-                                            offset_5 = offset_4
-                                            column_3 = column_2
-                                            indent_column_3 = indent_column_2
-                                            partial_tab_offset_3 = partial_tab_offset_2
-                                            partial_tab_width_3 = partial_tab_width_2
-                                            children_5 = [] if children_4 is not None else None
-                                            while True: # case
                                                 offset_6 = offset_5
                                                 children_6 = []
                                                 while True: # start capture
@@ -2398,9 +2375,6 @@ def _build(unicodedata):
                                                                 offset_7 = -1
                                                                 break
                                                             elif _chr == 92:
-                                                                offset_7 = -1
-                                                                break
-                                                            elif _chr == 38:
                                                                 offset_7 = -1
                                                                 break
                                                             else:
@@ -10215,29 +10189,6 @@ def _build(unicodedata):
                                         partial_tab_width_3 = partial_tab_width_2
                                         children_4 = [] if children_3 is not None else None
                                         while True: # case
-                                            offset_4, column_3, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = self.parse_html_entity(buf, offset_4, buf_eof, column_3, indent_column_3, prefix_0, children_4, partial_tab_offset_3, partial_tab_width_3)
-                                            if offset_4 == -1: break
-
-
-
-                                            break
-                                        if offset_4 != -1:
-                                            offset_3 = offset_4
-                                            column_2 = column_3
-                                            indent_column_2 = indent_column_3
-                                            partial_tab_offset_2 = partial_tab_offset_3
-                                            partial_tab_width_2 = partial_tab_width_3
-                                            if children_4 is not None and children_4 is not None:
-                                                children_3.extend(children_4)
-                                            break
-                                        # end case
-                                        offset_4 = offset_3
-                                        column_3 = column_2
-                                        indent_column_3 = indent_column_2
-                                        partial_tab_offset_3 = partial_tab_offset_2
-                                        partial_tab_width_3 = partial_tab_width_2
-                                        children_4 = [] if children_3 is not None else None
-                                        while True: # case
                                             offset_5 = offset_4
                                             children_5 = []
                                             while True: # start capture
@@ -10276,9 +10227,6 @@ def _build(unicodedata):
                                                             offset_6 = -1
                                                             break
                                                         elif _chr == 92:
-                                                            offset_6 = -1
-                                                            break
-                                                        elif _chr == 38:
                                                             offset_6 = -1
                                                             break
                                                         elif _chr == 96:
