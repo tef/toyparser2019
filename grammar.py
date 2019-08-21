@@ -579,12 +579,12 @@ class FunctionBuilder:
         self.rules = rules
 
     @contextmanager
-    def reject(self):
+    def reject(self, offset=0):
         if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         rules = self.rules
         self.rules = []
         yield
-        rules.append(GrammarNode(REJECT, rules=self.rules))
+        rules.append(GrammarNode(REJECT, rules=self.rules, args=dict(offset=offset)))
         self.rules = rules
 
     @contextmanager
@@ -1001,7 +1001,7 @@ def compile_python(grammar, cython=False):
             partial_tab_width_0 = partial_tab_width.incr()
             steps.append(f"while True: # start reject")
             steps_0.append(f"{children_0} = []")
-            steps_0.append(f"{offset_0} = {offset}")
+            steps_0.append(f"{offset_0} = {offset} + {rule.args['offset']}")
             steps_0.append(f"{column_0} = {column}")
             steps_0.append(f"{indent_column_0} = {indent_column}")
             steps_0.append(f"{partial_tab_offset_0} = {partial_tab_offset}")

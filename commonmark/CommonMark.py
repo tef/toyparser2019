@@ -114,7 +114,7 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
             with self.count(columns=True) as w: self.partial_tab()
             with self.capture_node('partial_indent'): self.capture_value(w)
 
-            with self.capture_node('code_line'):
+            with self.capture_node('indented_code_line'):
                 self.whitespace()
                 with self.repeat(min=1): self.range("\n", invert=True)
             self.end_of_line()
@@ -124,7 +124,7 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                     with self.case():
                         with self.repeat(min=1):
                             self.indent()
-                            with self.capture_node('code_line'):
+                            with self.capture_node('indented_code_line'):
                                 self.whitespace()
                             self.newline()
                         with self.lookahead():
@@ -137,7 +137,7 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                         with self.count(columns=True) as w: self.partial_tab()
                         with self.capture_node('partial_indent'): self.capture_value(w)
 
-                        with self.capture_node('code_line'):
+                        with self.capture_node('indented_code_line'):
                             self.whitespace()
                             with self.repeat(min=1): self.range("\n", invert=True)
                         self.end_of_line()
@@ -160,7 +160,16 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
             with self.capture_node('info'), self.repeat(min=0):
                 with self.reject(): # Example 115
                     self.literal(fence)
-                self.range("\n", invert=True)
+                with self.choice():
+                    with self.case(): self.escaped_text()
+                    with self.case(): self.html_entity()
+                    with self.case():
+                        with self.capture_node('text'):
+                            with self.repeat(min=0):
+                                self.range("\n", invert=True)
+                                with self.reject(): # Example 115
+                                    self.literal(fence)
+                                self.range("\n", "\\", "&", invert=True)
             self.line_end()
             with self.repeat():
                 self.indent()
@@ -171,8 +180,14 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                         self.whitespace()
                     self.end_of_line()
                 self.whitespace(max=w)
-                with self.capture_node('text'), self.repeat(min=0):
-                    self.range("\n", invert=True)
+                with self.capture_node('text'), self.repeat(min=0), self.choice():
+                    with self.case(): self.escaped_text()
+                    with self.case(): self.html_entity()
+                    with self.case():
+                        with self.capture_node('text'):
+                            self.range("\n", invert=True)
+                            with self.repeat(min=0):
+                                self.range("\n", "\\", "&", invert=True)
                 self.line_end()
             with self.choice():
                 with self.case():
@@ -200,8 +215,14 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
             with self.count(char=fence) as c, self.repeat(min=3):
                 self.literal(fence)
             with self.capture_node('info'), self.repeat(min=0):
-                # escapes?
-                self.range("\n", invert=True)
+                with self.choice():
+                    with self.case(): self.escaped_text()
+                    with self.case(): self.html_entity()
+                    with self.case():
+                        with self.capture_node('text'):
+                            self.range("\n", invert=True)
+                            with self.repeat(min=0):
+                                self.range("\n", "\\", "&", invert=True)
             self.line_end()
             with self.repeat():
                 self.indent()
@@ -211,8 +232,14 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                         self.literal(fence)
                         self.whitespace()
                 self.whitespace(max=w)
-                with self.capture_node('text'), self.repeat(min=0):
-                    self.range("\n", invert=True)
+                with self.capture_node('text'), self.repeat(min=0), self.choice():
+                    with self.case(): self.escaped_text()
+                    with self.case(): self.html_entity()
+                    with self.case():
+                        with self.capture_node('text'):
+                            self.range("\n", invert=True)
+                            with self.repeat(min=0):
+                                self.range("\n", "\\", "&", invert=True)
                 self.line_end()
             with self.choice():
                 with self.case():
@@ -599,24 +626,52 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
             with self.case():
                 self.right_flank()
             with self.case():
-                self.literal("\\")
-                with self.reject(): # hardbreaks
-                    self.newline()
-                    self.whitespace()
-                    self.range('\n', invert=True)
-
-                with self.choice():
-                    with self.case(), self.capture_node("text"):
-                        self.range("!-/",":-@","[-`","{-~")
-                    with self.case():
-                        self.capture_value("\\")
-
-
+                self.html_entity()
+            with self.case():
+                self.escaped_text()
             with self.case():
                 with self.capture_node('text'):
                     self.range(" ", "\n", "\\", invert=True)
                     with self.repeat(min=0):
-                        self.range(" ", "\n", "\\", "<", "`", invert=True)
+                        self.range(" ", "\n", "\\", "<", "`", "*", "_", "&", "[", invert=True)
+
+    @rule()
+    def escaped_text(self):
+        self.literal("\\")
+        with self.reject(): # hardbreaks
+            self.newline()
+            self.whitespace()
+            self.range('\n', invert=True)
+
+        with self.choice():
+            with self.case(), self.capture_node("text"):
+                self.range("!-/",":-@","[-`","{-~")
+            with self.case():
+                self.capture_value("\\")
+
+    @rule()
+    def html_entity(self):
+        self.literal("&");
+        with self.choice():
+            with self.case():
+                self.literal("#")
+                with self.capture_node("dec_entity"), self.repeat(min=1, max=7):
+                    self.range("0-9")
+                self.literal(";")
+            with self.case():
+                self.literal("#")
+                self.range("x","X")
+                with self.capture_node("hex_entity"):
+                    self.range("0-9", "a-f","A-F")
+                    with self.repeat(min=0, max=6):
+                        self.range("0-9", "a-f","A-F")
+                self.literal(";")
+            with self.case():
+                with self.capture_node("named_entity"):
+                    self.range("a-z","A-Z")
+                    with self.repeat(min=1):
+                        self.range("0-9","a-z","A-Z")
+                self.literal(";")
 
     @rule()
     def left_flank(self):
@@ -647,7 +702,7 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
     def right_flank(self):
         with self.capture_node("right_flank"), self.choice():
             with self.case():
-                with self.lookahead(-1):
+                with self.reject(-1):
                     self.range(unicode_whitespace=True, unicode_newline=True, unicode_punctuation=True)
                 with self.count(columns=True) as n:
                     with self.backref() as chr:
@@ -658,7 +713,7 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                 self.capture_value(n)
 
             with self.case():
-                with self.lookahead(-1):
+                with self.reject(-1):
                     self.range(unicode_whitespace=True, unicode_newline=True)
                 with self.count(columns=True) as n:
                     with self.backref() as chr:
@@ -675,10 +730,16 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                 with self.count(char="`") as c, self.repeat(min=1):
                     self.literal("`")
                 with self.capture_node('code_span') as span, self.repeat(min=1), self.choice():
+                    with self.case(): self.escaped_text()
+                    with self.case(): self.html_entity()
                     with self.case():
-                        self.range("`", "\n", invert=True)
+                        with self.capture_node('text'):
+                            self.range("\n", "`", invert=True)
+                            with self.repeat(min=0):
+                                self.range("\n", "\\", "&", "`", invert=True)
                     with self.case():
-                        self.newline()
+                        with self.capture_node("text"):
+                            self.newline()
                         self.indent(partial=True)
                     with self.case():
                         with self.reject():
@@ -687,7 +748,7 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                             with self.choice():
                                 with self.case(): self.range('`', invert=True)
                                 with self.case(): self.end_of_file()
-                        with self.repeat():
+                        with self.capture_node("text"), self.repeat():
                             self.literal("`")
                 with self.repeat(min=c, max=c):
                     self.literal("`")
@@ -702,9 +763,10 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
 ## HTML Builder
 
 import html
+import html.entities
 
 def html_escape(text):
-    return text.replace("&", "&amp;").replace("\"", "&quot;").replace(">", "&gt;").replace("<","&lt;")
+    return text.replace("&", "&amp;").replace("\"", "&quot;").replace(">", "&gt;").replace("<","&lt;").replace("\x00", "\uFFFD")
 
 builder = {}
 _builder = lambda fn:builder.__setitem__(fn.__name__,fn)
@@ -743,7 +805,7 @@ def partial_indent(buf, pos, end, children):
     return " "*width
 
 @_builder
-def code_line(buf, pos, end, children):
+def indented_code_line(buf, pos, end, children):
     return buf[pos:end]+"\n"
 
 @_builder
@@ -758,7 +820,8 @@ def fenced_code(buf, pos,end, children):
 
 @_builder
 def info(buf, pos,end, children):
-    text = buf[pos:end].lstrip().split(' ',1)
+    text = "".join(children)
+    text = text.lstrip().split(' ',1)
     if text: return text[0]
 
 @_builder
@@ -888,7 +951,7 @@ def para(buf, pos,end, children):
 
 @_builder
 def code_span(buf, pos, end, children):
-    text = buf[pos:end]
+    text = "".join(children)
     text = text.replace('\n', ' ')
     if len(text) > 2 and text[0] == text[-1] == " ":
         text = text[1:-1]
@@ -897,6 +960,24 @@ def code_span(buf, pos, end, children):
 @_builder
 def text(buf, pos,end, children):
     return html_escape(buf[pos:end])
+
+@_builder
+def named_entity(buf, pos,end, children):
+    text = buf[pos:end+1] # + ;
+    if text in html.entities.html5:
+        return html_escape(html.entities.html5[text])
+    else:
+        return f"&amp;{html_escape(text)}"
+
+@_builder
+def hex_entity(buf, pos,end, children):
+    text = buf[pos:end]
+    return html_escape(chr(int(text,16)))
+
+@_builder
+def dec_entity(buf, pos,end, children):
+    text = buf[pos:end]
+    return html_escape(chr(int(text)))
 
 @_builder
 def softbreak(buf, pos,end, children):
@@ -1156,7 +1237,7 @@ for t in tests:
         if '<' in markd: continue
         if '*' in markd: continue
         if '[' in markd: continue
-        if '&' in markd: continue
+        if '_' in markd: continue
         #if out.replace('\n','') == t['html'].replace('\n',''): continue
         print(t['example'])
         print(repr(markd))
