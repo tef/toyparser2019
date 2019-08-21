@@ -165,11 +165,9 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                     with self.case(): self.html_entity()
                     with self.case():
                         with self.capture_node('text'):
+                            self.range("\n", invert=True)
                             with self.repeat(min=0):
-                                self.range("\n", invert=True)
-                                with self.reject(): # Example 115
-                                    self.literal(fence)
-                                self.range("\n", "\\", "&", invert=True)
+                                self.range("\n", "\\", "&", "`", invert=True)
             self.line_end()
             with self.repeat():
                 self.indent()
