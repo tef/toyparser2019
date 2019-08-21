@@ -179,12 +179,11 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                     self.end_of_line()
                 self.whitespace(max=w)
                 with self.capture_node('text'), self.repeat(min=0), self.choice():
-                    with self.case(): self.escaped_text()
                     with self.case():
                         with self.capture_node('text'):
                             self.range("\n", invert=True)
                             with self.repeat(min=0):
-                                self.range("\n", "\\", invert=True)
+                                self.range("\n", invert=True)
                 self.line_end()
             with self.choice():
                 with self.case():
@@ -230,13 +229,11 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                         self.whitespace()
                 self.whitespace(max=w)
                 with self.capture_node('text'), self.repeat(min=0), self.choice():
-                    with self.case(): self.escaped_text()
-                    with self.case(): self.html_entity()
                     with self.case():
                         with self.capture_node('text'):
                             self.range("\n", invert=True)
                             with self.repeat(min=0):
-                                self.range("\n", "\\", "&", invert=True)
+                               self.range("\n", "\\", invert=True)
                 self.line_end()
             with self.choice():
                 with self.case():
@@ -727,12 +724,11 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                 with self.count(char="`") as c, self.repeat(min=1):
                     self.literal("`")
                 with self.capture_node('code_span') as span, self.repeat(min=1), self.choice():
-                    with self.case(): self.escaped_text()
                     with self.case():
                         with self.capture_node('text'):
                             self.range("\n", "`", invert=True)
                             with self.repeat(min=0):
-                                self.range("\n", "\\", "`", invert=True)
+                                self.range("\n", "`", invert=True)
                     with self.case():
                         with self.capture_node("text"):
                             self.newline()
