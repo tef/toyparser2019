@@ -1,4 +1,5 @@
 # cython: language_level=3, bounds_check=False
+import unicodedata
 class Node:
     def __init__(self, name, start, end, children, value):
         self.name = name
@@ -37,7 +38,7 @@ cdef class Parser:
         if err is not None: raise err(buf, new_offset, 'no')
 
     cdef parse_yaml_literal(self, str buf, int offset_0, int buf_eof, int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
-        cdef Py_UCS4 chr
+        cdef Py_UCS4 codepoint
         cdef int offset_1
         cdef int column_1
 
@@ -211,7 +212,7 @@ cdef class Parser:
         return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
     cdef parse_true_literal(self, str buf, int offset_0, int buf_eof, int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
-        cdef Py_UCS4 chr
+        cdef Py_UCS4 codepoint
         cdef int offset_1
 
 
@@ -243,7 +244,7 @@ cdef class Parser:
         return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
     cdef parse_false_literal(self, str buf, int offset_0, int buf_eof, int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
-        cdef Py_UCS4 chr
+        cdef Py_UCS4 codepoint
         cdef int offset_1
 
 
@@ -275,7 +276,7 @@ cdef class Parser:
         return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
     cdef parse_null_literal(self, str buf, int offset_0, int buf_eof, int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
-        cdef Py_UCS4 chr
+        cdef Py_UCS4 codepoint
         cdef int offset_1
 
 
@@ -307,7 +308,7 @@ cdef class Parser:
         return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
     cdef parse_identifier(self, str buf, int offset_0, int buf_eof, int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
-        cdef Py_UCS4 chr
+        cdef Py_UCS4 codepoint
         cdef int offset_1, offset_2, offset_3
         cdef int column_1, column_2
 
@@ -341,15 +342,15 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
 
-                                chr = (buf[offset_3])
+                                codepoint = (buf[offset_3])
 
-                                if 97 <= chr <= 122:
+                                if 97 <= codepoint <= 122:
                                     offset_3 += 1
                                     column_2 += 1
-                                elif 65 <= chr <= 90:
+                                elif 65 <= codepoint <= 90:
                                     offset_3 += 1
                                     column_2 += 1
-                                elif chr == 95:
+                                elif codepoint == 95:
                                     offset_3 += 1
                                     column_2 += 1
                                 else:
@@ -426,7 +427,7 @@ cdef class Parser:
         return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
     cdef parse_number_literal(self, str buf, int offset_0, int buf_eof, int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
-        cdef Py_UCS4 chr
+        cdef Py_UCS4 codepoint
         cdef int offset_1, offset_2, offset_3, offset_4
         cdef int column_1, column_2, column_3
 
@@ -452,12 +453,12 @@ cdef class Parser:
                             offset_2 = -1
                             break
 
-                        chr = (buf[offset_2])
+                        codepoint = (buf[offset_2])
 
-                        if chr == 45:
+                        if codepoint == 45:
                             offset_2 += 1
                             column_1 += 1
-                        elif chr == 43:
+                        elif codepoint == 43:
                             offset_2 += 1
                             column_1 += 1
                         else:
@@ -493,9 +494,9 @@ cdef class Parser:
                             offset_2 = -1
                             break
 
-                        chr = (buf[offset_2])
+                        codepoint = (buf[offset_2])
 
-                        if 48 <= chr <= 57:
+                        if 48 <= codepoint <= 57:
                             offset_2 += 1
                             column_1 += 1
                         else:
@@ -549,9 +550,9 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
 
-                                chr = (buf[offset_3])
+                                codepoint = (buf[offset_3])
 
-                                if 48 <= chr <= 57:
+                                if 48 <= codepoint <= 57:
                                     offset_3 += 1
                                     column_2 += 1
                                 else:
@@ -640,9 +641,9 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if 48 <= chr <= 57:
+                                        if 48 <= codepoint <= 57:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -708,7 +709,7 @@ cdef class Parser:
         return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
     cdef parse_string_literal(self, str buf, int offset_0, int buf_eof, int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
-        cdef Py_UCS4 chr
+        cdef Py_UCS4 codepoint
         cdef int offset_1, offset_2, offset_3
         cdef int column_1, column_2
 
@@ -756,15 +757,15 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
 
-                                chr = (buf[offset_3])
+                                codepoint = (buf[offset_3])
 
-                                if 48 <= chr <= 57:
+                                if 48 <= codepoint <= 57:
                                     offset_3 += 1
                                     column_2 += 1
-                                elif 97 <= chr <= 102:
+                                elif 97 <= codepoint <= 102:
                                     offset_3 += 1
                                     column_2 += 1
-                                elif 65 <= chr <= 70:
+                                elif 65 <= codepoint <= 70:
                                     offset_3 += 1
                                     column_2 += 1
                                 else:
@@ -775,15 +776,15 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
 
-                                chr = (buf[offset_3])
+                                codepoint = (buf[offset_3])
 
-                                if 48 <= chr <= 57:
+                                if 48 <= codepoint <= 57:
                                     offset_3 += 1
                                     column_2 += 1
-                                elif 97 <= chr <= 102:
+                                elif 97 <= codepoint <= 102:
                                     offset_3 += 1
                                     column_2 += 1
-                                elif 65 <= chr <= 70:
+                                elif 65 <= codepoint <= 70:
                                     offset_3 += 1
                                     column_2 += 1
                                 else:
@@ -794,15 +795,15 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
 
-                                chr = (buf[offset_3])
+                                codepoint = (buf[offset_3])
 
-                                if 48 <= chr <= 57:
+                                if 48 <= codepoint <= 57:
                                     offset_3 += 1
                                     column_2 += 1
-                                elif 97 <= chr <= 102:
+                                elif 97 <= codepoint <= 102:
                                     offset_3 += 1
                                     column_2 += 1
-                                elif 65 <= chr <= 70:
+                                elif 65 <= codepoint <= 70:
                                     offset_3 += 1
                                     column_2 += 1
                                 else:
@@ -813,15 +814,15 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
 
-                                chr = (buf[offset_3])
+                                codepoint = (buf[offset_3])
 
-                                if 48 <= chr <= 57:
+                                if 48 <= codepoint <= 57:
                                     offset_3 += 1
                                     column_2 += 1
-                                elif 97 <= chr <= 102:
+                                elif 97 <= codepoint <= 102:
                                     offset_3 += 1
                                     column_2 += 1
-                                elif 65 <= chr <= 70:
+                                elif 65 <= codepoint <= 70:
                                     offset_3 += 1
                                     column_2 += 1
                                 else:
@@ -858,30 +859,30 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
 
-                                chr = (buf[offset_3])
+                                codepoint = (buf[offset_3])
 
-                                if chr == 34:
+                                if codepoint == 34:
                                     offset_3 += 1
                                     column_2 += 1
-                                elif chr == 92:
+                                elif codepoint == 92:
                                     offset_3 += 1
                                     column_2 += 1
-                                elif chr == 47:
+                                elif codepoint == 47:
                                     offset_3 += 1
                                     column_2 += 1
-                                elif chr == 98:
+                                elif codepoint == 98:
                                     offset_3 += 1
                                     column_2 += 1
-                                elif chr == 102:
+                                elif codepoint == 102:
                                     offset_3 += 1
                                     column_2 += 1
-                                elif chr == 110:
+                                elif codepoint == 110:
                                     offset_3 += 1
                                     column_2 += 1
-                                elif chr == 114:
+                                elif codepoint == 114:
                                     offset_3 += 1
                                     column_2 += 1
-                                elif chr == 116:
+                                elif codepoint == 116:
                                     offset_3 += 1
                                     column_2 += 1
                                 else:
@@ -911,12 +912,12 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
 
-                                chr = (buf[offset_3])
+                                codepoint = (buf[offset_3])
 
-                                if chr == 92:
+                                if codepoint == 92:
                                     offset_3 = -1
                                     break
-                                elif chr == 34:
+                                elif codepoint == 34:
                                     offset_3 = -1
                                     break
                                 else:
@@ -975,7 +976,7 @@ cdef class Parser:
         return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
     cdef parse_list_literal(self, str buf, int offset_0, int buf_eof, int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
-        cdef Py_UCS4 chr
+        cdef Py_UCS4 codepoint
         cdef int offset_1, offset_2, offset_3
         cdef int column_1, column_2
 
@@ -994,18 +995,18 @@ cdef class Parser:
 
             count_0 = 0
             while offset_0 < buf_eof:
-                chr = buf[offset_0]
-                if chr == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
+                codepoint = buf[offset_0]
+                if codepoint == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
                     offset_0 +=2
                     column_0 = 0
                     indent_column_0 = (0, None)
-                elif chr in '\n\r':
+                elif codepoint in '\n\r':
                     offset_0 +=1
                     column_0 = 0
                     indent_column_0 = (0, None)
                     count_0 +=1
-                elif chr in ' \t':
-                    if chr == '\t':
+                elif codepoint in ' \t':
+                    if codepoint == '\t':
                         if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                             width = partial_tab_width_0
                         else:
@@ -1047,18 +1048,18 @@ cdef class Parser:
                             while True:
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
-                                    if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
+                                    codepoint = buf[offset_3]
+                                    if codepoint == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
                                         offset_3 +=2
                                         column_2 = 0
                                         indent_column_2 = (0, None)
-                                    elif chr in '\n\r':
+                                    elif codepoint in '\n\r':
                                         offset_3 +=1
                                         column_2 = 0
                                         indent_column_2 = (0, None)
                                         count_2 +=1
-                                    elif chr in ' \t':
-                                        if chr == '\t':
+                                    elif codepoint in ' \t':
+                                        if codepoint == '\t':
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
@@ -1082,18 +1083,18 @@ cdef class Parser:
 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
-                                    if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
+                                    codepoint = buf[offset_3]
+                                    if codepoint == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
                                         offset_3 +=2
                                         column_2 = 0
                                         indent_column_2 = (0, None)
-                                    elif chr in '\n\r':
+                                    elif codepoint in '\n\r':
                                         offset_3 +=1
                                         column_2 = 0
                                         indent_column_2 = (0, None)
                                         count_2 +=1
-                                    elif chr in ' \t':
-                                        if chr == '\t':
+                                    elif codepoint in ' \t':
+                                        if codepoint == '\t':
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
@@ -1129,18 +1130,18 @@ cdef class Parser:
 
                         count_1 = 0
                         while offset_2 < buf_eof:
-                            chr = buf[offset_2]
-                            if chr == '\r' and offset_2 + 1 < buf_eof and buf[offset_2+1] == '\n':
+                            codepoint = buf[offset_2]
+                            if codepoint == '\r' and offset_2 + 1 < buf_eof and buf[offset_2+1] == '\n':
                                 offset_2 +=2
                                 column_1 = 0
                                 indent_column_1 = (0, None)
-                            elif chr in '\n\r':
+                            elif codepoint in '\n\r':
                                 offset_2 +=1
                                 column_1 = 0
                                 indent_column_1 = (0, None)
                                 count_1 +=1
-                            elif chr in ' \t':
-                                if chr == '\t':
+                            elif codepoint in ' \t':
+                                if codepoint == '\t':
                                     if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
@@ -1173,18 +1174,18 @@ cdef class Parser:
 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
-                                    if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
+                                    codepoint = buf[offset_3]
+                                    if codepoint == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
                                         offset_3 +=2
                                         column_2 = 0
                                         indent_column_2 = (0, None)
-                                    elif chr in '\n\r':
+                                    elif codepoint in '\n\r':
                                         offset_3 +=1
                                         column_2 = 0
                                         indent_column_2 = (0, None)
                                         count_2 +=1
-                                    elif chr in ' \t':
-                                        if chr == '\t':
+                                    elif codepoint in ' \t':
+                                        if codepoint == '\t':
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
@@ -1251,7 +1252,7 @@ cdef class Parser:
         return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
     cdef parse_object_literal(self, str buf, int offset_0, int buf_eof, int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
-        cdef Py_UCS4 chr
+        cdef Py_UCS4 codepoint
         cdef int offset_1, offset_2, offset_3
         cdef int column_1, column_2
 
@@ -1270,18 +1271,18 @@ cdef class Parser:
 
             count_0 = 0
             while offset_0 < buf_eof:
-                chr = buf[offset_0]
-                if chr == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
+                codepoint = buf[offset_0]
+                if codepoint == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
                     offset_0 +=2
                     column_0 = 0
                     indent_column_0 = (0, None)
-                elif chr in '\n\r':
+                elif codepoint in '\n\r':
                     offset_0 +=1
                     column_0 = 0
                     indent_column_0 = (0, None)
                     count_0 +=1
-                elif chr in ' \t':
-                    if chr == '\t':
+                elif codepoint in ' \t':
+                    if codepoint == '\t':
                         if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                             width = partial_tab_width_0
                         else:
@@ -1314,9 +1315,9 @@ cdef class Parser:
 
                         count_1 = 0
                         while offset_2 < buf_eof:
-                            chr = buf[offset_2]
-                            if chr in ' \t':
-                                if chr == '\t':
+                            codepoint = buf[offset_2]
+                            if codepoint in ' \t':
+                                if codepoint == '\t':
                                     if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
@@ -1340,18 +1341,18 @@ cdef class Parser:
 
                         count_1 = 0
                         while offset_2 < buf_eof:
-                            chr = buf[offset_2]
-                            if chr == '\r' and offset_2 + 1 < buf_eof and buf[offset_2+1] == '\n':
+                            codepoint = buf[offset_2]
+                            if codepoint == '\r' and offset_2 + 1 < buf_eof and buf[offset_2+1] == '\n':
                                 offset_2 +=2
                                 column_1 = 0
                                 indent_column_1 = (0, None)
-                            elif chr in '\n\r':
+                            elif codepoint in '\n\r':
                                 offset_2 +=1
                                 column_1 = 0
                                 indent_column_1 = (0, None)
                                 count_1 +=1
-                            elif chr in ' \t':
-                                if chr == '\t':
+                            elif codepoint in ' \t':
+                                if codepoint == '\t':
                                     if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
@@ -1381,18 +1382,18 @@ cdef class Parser:
                             while True:
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
-                                    if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
+                                    codepoint = buf[offset_3]
+                                    if codepoint == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
                                         offset_3 +=2
                                         column_2 = 0
                                         indent_column_2 = (0, None)
-                                    elif chr in '\n\r':
+                                    elif codepoint in '\n\r':
                                         offset_3 +=1
                                         column_2 = 0
                                         indent_column_2 = (0, None)
                                         count_2 +=1
-                                    elif chr in ' \t':
-                                        if chr == '\t':
+                                    elif codepoint in ' \t':
+                                        if codepoint == '\t':
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
@@ -1416,18 +1417,18 @@ cdef class Parser:
 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
-                                    if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
+                                    codepoint = buf[offset_3]
+                                    if codepoint == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
                                         offset_3 +=2
                                         column_2 = 0
                                         indent_column_2 = (0, None)
-                                    elif chr in '\n\r':
+                                    elif codepoint in '\n\r':
                                         offset_3 +=1
                                         column_2 = 0
                                         indent_column_2 = (0, None)
                                         count_2 +=1
-                                    elif chr in ' \t':
-                                        if chr == '\t':
+                                    elif codepoint in ' \t':
+                                        if codepoint == '\t':
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
@@ -1448,9 +1449,9 @@ cdef class Parser:
 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
-                                    if chr in ' \t':
-                                        if chr == '\t':
+                                    codepoint = buf[offset_3]
+                                    if codepoint in ' \t':
+                                        if codepoint == '\t':
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
@@ -1474,18 +1475,18 @@ cdef class Parser:
 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
-                                    if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
+                                    codepoint = buf[offset_3]
+                                    if codepoint == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
                                         offset_3 +=2
                                         column_2 = 0
                                         indent_column_2 = (0, None)
-                                    elif chr in '\n\r':
+                                    elif codepoint in '\n\r':
                                         offset_3 +=1
                                         column_2 = 0
                                         indent_column_2 = (0, None)
                                         count_2 +=1
-                                    elif chr in ' \t':
-                                        if chr == '\t':
+                                    elif codepoint in ' \t':
+                                        if codepoint == '\t':
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
@@ -1521,18 +1522,18 @@ cdef class Parser:
 
                         count_1 = 0
                         while offset_2 < buf_eof:
-                            chr = buf[offset_2]
-                            if chr == '\r' and offset_2 + 1 < buf_eof and buf[offset_2+1] == '\n':
+                            codepoint = buf[offset_2]
+                            if codepoint == '\r' and offset_2 + 1 < buf_eof and buf[offset_2+1] == '\n':
                                 offset_2 +=2
                                 column_1 = 0
                                 indent_column_1 = (0, None)
-                            elif chr in '\n\r':
+                            elif codepoint in '\n\r':
                                 offset_2 +=1
                                 column_1 = 0
                                 indent_column_1 = (0, None)
                                 count_1 +=1
-                            elif chr in ' \t':
-                                if chr == '\t':
+                            elif codepoint in ' \t':
+                                if codepoint == '\t':
                                     if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
@@ -1565,18 +1566,18 @@ cdef class Parser:
 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
-                                    if chr == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
+                                    codepoint = buf[offset_3]
+                                    if codepoint == '\r' and offset_3 + 1 < buf_eof and buf[offset_3+1] == '\n':
                                         offset_3 +=2
                                         column_2 = 0
                                         indent_column_2 = (0, None)
-                                    elif chr in '\n\r':
+                                    elif codepoint in '\n\r':
                                         offset_3 +=1
                                         column_2 = 0
                                         indent_column_2 = (0, None)
                                         count_2 +=1
-                                    elif chr in ' \t':
-                                        if chr == '\t':
+                                    elif codepoint in ' \t':
+                                        if codepoint == '\t':
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
@@ -1643,7 +1644,7 @@ cdef class Parser:
         return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
     cdef parse_yaml_eol(self, str buf, int offset_0, int buf_eof, int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
-        cdef Py_UCS4 chr
+        cdef Py_UCS4 codepoint
         cdef int offset_1, offset_2, offset_3
         cdef int column_1, column_2, column_3
 
@@ -1672,9 +1673,9 @@ cdef class Parser:
                         while True: # case
                             count_1 = 0
                             while offset_2 < buf_eof:
-                                chr = buf[offset_2]
-                                if chr in ' \t':
-                                    if chr == '\t':
+                                codepoint = buf[offset_2]
+                                if codepoint in ' \t':
+                                    if codepoint == '\t':
                                         if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                             width = partial_tab_width_2
                                         else:
@@ -1690,12 +1691,12 @@ cdef class Parser:
                                     break
 
                             if offset_2 < buf_eof:
-                                chr = buf[offset_2]
-                                if chr == '\r' and offset_2 + 1 < buf_eof and buf[offset_2+1] == '\n':
+                                codepoint = buf[offset_2]
+                                if codepoint == '\r' and offset_2 + 1 < buf_eof and buf[offset_2+1] == '\n':
                                     offset_2 +=2
                                     column_2 = 0
                                     indent_column_2 = (0, None)
-                                elif chr in '\n\r':
+                                elif codepoint in '\n\r':
                                     offset_2 +=1
                                     column_2 = 0
                                     indent_column_2 = (0, None)
@@ -1727,9 +1728,9 @@ cdef class Parser:
                         while True: # case
                             count_1 = 0
                             while offset_2 < buf_eof:
-                                chr = buf[offset_2]
-                                if chr in ' \t':
-                                    if chr == '\t':
+                                codepoint = buf[offset_2]
+                                if codepoint in ' \t':
+                                    if codepoint == '\t':
                                         if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                             width = partial_tab_width_2
                                         else:
@@ -1764,9 +1765,9 @@ cdef class Parser:
                                         offset_3 = -1
                                         break
 
-                                    chr = (buf[offset_3])
+                                    codepoint = (buf[offset_3])
 
-                                    if chr == 10:
+                                    if codepoint == 10:
                                         offset_3 = -1
                                         break
                                     else:
@@ -1789,12 +1790,12 @@ cdef class Parser:
                                 break
 
                             if offset_2 < buf_eof:
-                                chr = buf[offset_2]
-                                if chr == '\r' and offset_2 + 1 < buf_eof and buf[offset_2+1] == '\n':
+                                codepoint = buf[offset_2]
+                                if codepoint == '\r' and offset_2 + 1 < buf_eof and buf[offset_2+1] == '\n':
                                     offset_2 +=2
                                     column_2 = 0
                                     indent_column_2 = (0, None)
-                                elif chr in '\n\r':
+                                elif codepoint in '\n\r':
                                     offset_2 +=1
                                     column_2 = 0
                                     indent_column_2 = (0, None)
@@ -1841,7 +1842,7 @@ cdef class Parser:
         return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
     cdef parse_indented_list(self, str buf, int offset_0, int buf_eof, int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
-        cdef Py_UCS4 chr
+        cdef Py_UCS4 codepoint
         cdef int offset_1, offset_2, offset_3, offset_4
         cdef int column_1, column_2
 
@@ -1857,14 +1858,14 @@ cdef class Parser:
                 saw_tab, saw_not_tab = False, False
                 start_column, start_offset = column, offset
                 while count > 0 and offset < buf_eof:
-                    chr = buf[offset]
-                    if chr in ' \t':
+                    codepoint = buf[offset]
+                    if codepoint in ' \t':
                         if not allow_mixed_indent:
-                            if chr == '\t': saw_tab = True
+                            if codepoint == '\t': saw_tab = True
                             else: saw_not_tab = True
                             if saw_tab and saw_not_tab:
                                  offset -1; break
-                        if chr != '\t':
+                        if codepoint != '\t':
                             column += 1
                             offset += 1
                             count -=1
@@ -1882,9 +1883,9 @@ cdef class Parser:
                                 partial_tab_offset = offset
                                 partial_tab_width = width-count
                                 break
-                    elif chr == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
+                    elif codepoint == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
                         break
-                    elif chr in '\n\r':
+                    elif codepoint in '\n\r':
                         break
                     else:
                         offset = -1
@@ -1894,14 +1895,14 @@ cdef class Parser:
                 saw_tab, saw_not_tab = False, False
                 start_column, start_offset = column, offset
                 while count > 0 and offset < buf_eof:
-                    chr = buf[offset]
-                    if chr in ' \t':
+                    codepoint = buf[offset]
+                    if codepoint in ' \t':
                         if not allow_mixed_indent:
-                            if chr == '\t': saw_tab = True
+                            if codepoint == '\t': saw_tab = True
                             else: saw_not_tab = True
                             if saw_tab and saw_not_tab:
                                 offset = start_offset; break
-                        if chr != '\t':
+                        if codepoint != '\t':
                             column += 1
                             offset += 1
                             count -=1
@@ -1916,9 +1917,9 @@ cdef class Parser:
                                 count -= width
                             else: # we have indent, so break
                                 offset = -1; break
-                    elif chr == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
+                    elif codepoint == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
                         offset = -1; break
-                    elif chr in '\n\r':
+                    elif codepoint in '\n\r':
                         offset = -1; break
                     else:
                         offset = start_offset
@@ -1948,9 +1949,9 @@ cdef class Parser:
                         while True: # case
                             count_0 = 0
                             while offset_2 < buf_eof:
-                                chr = buf[offset_2]
-                                if chr in ' \t':
-                                    if chr == '\t':
+                                codepoint = buf[offset_2]
+                                if codepoint in ' \t':
+                                    if codepoint == '\t':
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
@@ -2013,9 +2014,9 @@ cdef class Parser:
 
                             count_0 = 0
                             while offset_2 < buf_eof:
-                                chr = buf[offset_2]
-                                if chr in ' \t':
-                                    if chr == '\t':
+                                codepoint = buf[offset_2]
+                                if codepoint in ' \t':
+                                    if codepoint == '\t':
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
@@ -2095,9 +2096,9 @@ cdef class Parser:
 
                             count_1 = 0
                             while offset_2 < buf_eof:
-                                chr = buf[offset_2]
-                                if chr in ' \t':
-                                    if chr == '\t':
+                                codepoint = buf[offset_2]
+                                if codepoint in ' \t':
+                                    if codepoint == '\t':
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
@@ -2125,9 +2126,9 @@ cdef class Parser:
                                 while True: # case
                                     count_1 = 0
                                     while offset_3 < buf_eof:
-                                        chr = buf[offset_3]
-                                        if chr in ' \t':
-                                            if chr == '\t':
+                                        codepoint = buf[offset_3]
+                                        if codepoint in ' \t':
+                                            if codepoint == '\t':
                                                 if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
@@ -2190,9 +2191,9 @@ cdef class Parser:
 
                                     count_1 = 0
                                     while offset_3 < buf_eof:
-                                        chr = buf[offset_3]
-                                        if chr in ' \t':
-                                            if chr == '\t':
+                                        codepoint = buf[offset_3]
+                                        if codepoint in ' \t':
+                                            if codepoint == '\t':
                                                 if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
@@ -2260,7 +2261,7 @@ cdef class Parser:
         return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
     cdef parse_indented_object(self, str buf, int offset_0, int buf_eof, int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
-        cdef Py_UCS4 chr
+        cdef Py_UCS4 codepoint
         cdef int offset_1, offset_2, offset_3, offset_4, offset_5
         cdef int column_1, column_2
 
@@ -2276,14 +2277,14 @@ cdef class Parser:
                 saw_tab, saw_not_tab = False, False
                 start_column, start_offset = column, offset
                 while count > 0 and offset < buf_eof:
-                    chr = buf[offset]
-                    if chr in ' \t':
+                    codepoint = buf[offset]
+                    if codepoint in ' \t':
                         if not allow_mixed_indent:
-                            if chr == '\t': saw_tab = True
+                            if codepoint == '\t': saw_tab = True
                             else: saw_not_tab = True
                             if saw_tab and saw_not_tab:
                                  offset -1; break
-                        if chr != '\t':
+                        if codepoint != '\t':
                             column += 1
                             offset += 1
                             count -=1
@@ -2301,9 +2302,9 @@ cdef class Parser:
                                 partial_tab_offset = offset
                                 partial_tab_width = width-count
                                 break
-                    elif chr == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
+                    elif codepoint == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
                         break
-                    elif chr in '\n\r':
+                    elif codepoint in '\n\r':
                         break
                     else:
                         offset = -1
@@ -2313,14 +2314,14 @@ cdef class Parser:
                 saw_tab, saw_not_tab = False, False
                 start_column, start_offset = column, offset
                 while count > 0 and offset < buf_eof:
-                    chr = buf[offset]
-                    if chr in ' \t':
+                    codepoint = buf[offset]
+                    if codepoint in ' \t':
                         if not allow_mixed_indent:
-                            if chr == '\t': saw_tab = True
+                            if codepoint == '\t': saw_tab = True
                             else: saw_not_tab = True
                             if saw_tab and saw_not_tab:
                                 offset = start_offset; break
-                        if chr != '\t':
+                        if codepoint != '\t':
                             column += 1
                             offset += 1
                             count -=1
@@ -2335,9 +2336,9 @@ cdef class Parser:
                                 count -= width
                             else: # we have indent, so break
                                 offset = -1; break
-                    elif chr == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
+                    elif codepoint == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
                         offset = -1; break
-                    elif chr in '\n\r':
+                    elif codepoint in '\n\r':
                         offset = -1; break
                     else:
                         offset = start_offset
@@ -2359,9 +2360,9 @@ cdef class Parser:
 
                         count_0 = 0
                         while offset_2 < buf_eof:
-                            chr = buf[offset_2]
-                            if chr in ' \t':
-                                if chr == '\t':
+                            codepoint = buf[offset_2]
+                            if codepoint in ' \t':
+                                if codepoint == '\t':
                                     if offset_2 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                         width = partial_tab_width_0
                                     else:
@@ -2416,9 +2417,9 @@ cdef class Parser:
 
                                 count_0 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
-                                    if chr in ' \t':
-                                        if chr == '\t':
+                                    codepoint = buf[offset_3]
+                                    if codepoint in ' \t':
+                                        if codepoint == '\t':
                                             if offset_3 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                                 width = partial_tab_width_1
                                             else:
@@ -2461,9 +2462,9 @@ cdef class Parser:
                             while True: # case
                                 count_0 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
-                                    if chr in ' \t':
-                                        if chr == '\t':
+                                    codepoint = buf[offset_3]
+                                    if codepoint in ' \t':
+                                        if codepoint == '\t':
                                             if offset_3 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                                 width = partial_tab_width_1
                                             else:
@@ -2548,9 +2549,9 @@ cdef class Parser:
 
                                 count_1 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
-                                    if chr in ' \t':
-                                        if chr == '\t':
+                                    codepoint = buf[offset_3]
+                                    if codepoint in ' \t':
+                                        if codepoint == '\t':
                                             if offset_3 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                                 width = partial_tab_width_1
                                             else:
@@ -2584,9 +2585,9 @@ cdef class Parser:
                                     while True: # case
                                         count_1 = 0
                                         while offset_4 < buf_eof:
-                                            chr = buf[offset_4]
-                                            if chr in ' \t':
-                                                if chr == '\t':
+                                            codepoint = buf[offset_4]
+                                            if codepoint in ' \t':
+                                                if codepoint == '\t':
                                                     if offset_4 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                         width = partial_tab_width_2
                                                     else:
@@ -2649,9 +2650,9 @@ cdef class Parser:
 
                                         count_1 = 0
                                         while offset_4 < buf_eof:
-                                            chr = buf[offset_4]
-                                            if chr in ' \t':
-                                                if chr == '\t':
+                                            codepoint = buf[offset_4]
+                                            if codepoint in ' \t':
+                                                if codepoint == '\t':
                                                     if offset_4 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                         width = partial_tab_width_2
                                                     else:
@@ -2730,7 +2731,7 @@ cdef class Parser:
         return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
     cdef parse_indented_value(self, str buf, int offset_0, int buf_eof, int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
-        cdef Py_UCS4 chr
+        cdef Py_UCS4 codepoint
         cdef int offset_1
         cdef int column_1
 
@@ -2819,7 +2820,7 @@ cdef class Parser:
         return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
     cdef parse_document(self, str buf, int offset_0, int buf_eof, int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
-        cdef Py_UCS4 chr
+        cdef Py_UCS4 codepoint
         cdef int offset_1
         cdef int column_1
 
@@ -2840,9 +2841,9 @@ cdef class Parser:
                 while True:
                     count_1 = 0
                     while offset_1 < buf_eof:
-                        chr = buf[offset_1]
-                        if chr in ' \t':
-                            if chr == '\t':
+                        codepoint = buf[offset_1]
+                        if codepoint in ' \t':
+                            if codepoint == '\t':
                                 if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                     width = partial_tab_width_1
                                 else:
@@ -2976,9 +2977,9 @@ cdef class Parser:
 
             count_0 = 0
             while offset_0 < buf_eof:
-                chr = buf[offset_0]
-                if chr in ' \t':
-                    if chr == '\t':
+                codepoint = buf[offset_0]
+                if codepoint in ' \t':
+                    if codepoint == '\t':
                         if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                             width = partial_tab_width_0
                         else:
@@ -3008,9 +3009,9 @@ cdef class Parser:
 
                     count_1 = 0
                     while offset_1 < buf_eof:
-                        chr = buf[offset_1]
-                        if chr in ' \t':
-                            if chr == '\t':
+                        codepoint = buf[offset_1]
+                        if codepoint in ' \t':
+                            if codepoint == '\t':
                                 if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                     width = partial_tab_width_1
                                 else:
@@ -3050,12 +3051,12 @@ cdef class Parser:
                 children_1 = [] if children_0 is not None else None
                 while True:
                     if offset_1 < buf_eof:
-                        chr = buf[offset_1]
-                        if chr == '\r' and offset_1 + 1 < buf_eof and buf[offset_1+1] == '\n':
+                        codepoint = buf[offset_1]
+                        if codepoint == '\r' and offset_1 + 1 < buf_eof and buf[offset_1+1] == '\n':
                             offset_1 +=2
                             column_1 = 0
                             indent_column_1 = (0, None)
-                        elif chr in '\n\r':
+                        elif codepoint in '\n\r':
                             offset_1 +=1
                             column_1 = 0
                             indent_column_1 = (0, None)
@@ -3065,9 +3066,9 @@ cdef class Parser:
 
                     count_1 = 0
                     while offset_1 < buf_eof:
-                        chr = buf[offset_1]
-                        if chr in ' \t':
-                            if chr == '\t':
+                        codepoint = buf[offset_1]
+                        if codepoint in ' \t':
+                            if codepoint == '\t':
                                 if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                     width = partial_tab_width_1
                                 else:

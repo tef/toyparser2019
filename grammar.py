@@ -1057,9 +1057,9 @@ def compile_python(grammar, cython=False):
             ))
 
         elif rule.kind == SET_LINE_PREFIX:
-            cond =f"_chr in {repr(''.join(grammar.whitespace))}"
+            cond =f"codepoint in {repr(''.join(grammar.whitespace))}"
 
-            cond2 =f"_chr in {repr(''.join(grammar_newline))}"
+            cond2 =f"codepoint in {repr(''.join(grammar_newline))}"
 
             if rule.args['indent'] is None:
                 c = rule.args['count']
@@ -1078,14 +1078,14 @@ def compile_python(grammar, cython=False):
                         f"    saw_tab, saw_not_tab = False, False",
                         f"    start_column, start_offset = column, offset",
                         f"    while count > 0 and offset < buf_eof:",
-                        f"        _chr = buf[offset]",
+                        f"        codepoint = buf[offset]",
                         f"        if {cond}:",
                         f"            if not allow_mixed_indent:",
-                        f"                if _chr == '\\t': saw_tab = True",
+                        f"                if codepoint == '\\t': saw_tab = True",
                         f"                else: saw_not_tab = True",
                         f"                if saw_tab and saw_not_tab:",
                         f"                     offset -1; break",
-                        f"            if _chr != '\\t':",
+                        f"            if codepoint != '\\t':",
                         f"                column += 1",
                         f"                offset += 1",
                         f"                count -=1",
@@ -1106,7 +1106,7 @@ def compile_python(grammar, cython=False):
                 ))
                 if newline_rn:
                     steps.extend((
-                        f"        elif _chr == '\\r' and {offset} + 1 < buf_eof and buf[{offset}+1] == '\\n':", 
+                        f"        elif codepoint == '\\r' and {offset} + 1 < buf_eof and buf[{offset}+1] == '\\n':", 
                         f"            break",
                     ))
                 steps.extend((
@@ -1125,14 +1125,14 @@ def compile_python(grammar, cython=False):
                         f"    saw_tab, saw_not_tab = False, False",
                         f"    start_column, start_offset = column, offset",
                         f"    while count > 0 and offset < buf_eof:",
-                        f"        _chr = buf[offset]",
+                        f"        codepoint = buf[offset]",
                         f"        if {cond}:",
                         f"            if not allow_mixed_indent:",
-                        f"                if _chr == '\\t': saw_tab = True",
+                        f"                if codepoint == '\\t': saw_tab = True",
                         f"                else: saw_not_tab = True",
                         f"                if saw_tab and saw_not_tab:",
                         f"                    offset = start_offset; break",
-                        f"            if _chr != '\\t':",
+                        f"            if codepoint != '\\t':",
                         f"                column += 1",
                         f"                offset += 1",
                         f"                count -=1",
@@ -1150,7 +1150,7 @@ def compile_python(grammar, cython=False):
                     ))
                     if newline_rn:
                         steps.extend((
-                        f"        elif _chr == '\\r' and {offset} + 1 < buf_eof and buf[{offset}+1] == '\\n':", 
+                        f"        elif codepoint == '\\r' and {offset} + 1 < buf_eof and buf[{offset}+1] == '\\n':", 
                         f"            offset = -1; break",
                         ))
                     steps.extend((
@@ -1303,7 +1303,7 @@ def compile_python(grammar, cython=False):
                 f"    {offset} = -1",
                 f"    break",
                 f"",
-                f"_chr = {_ord}(buf[{offset}])",
+                f"codepoint = {_ord}(buf[{offset}])",
                 f"",
             ))
 
@@ -1323,13 +1323,13 @@ def compile_python(grammar, cython=False):
 
                     if invert:
                         steps.extend((
-                            f"{_if} {start}_chr <= {end}:",
+                            f"{_if} {start}codepoint <= {end}:",
                             f"    {offset} = -1",
                             f"    break",
                         ))
                     else:
                         steps.extend((
-                            f"{_if} {start}_chr <= {end}:",
+                            f"{_if} {start}codepoint <= {end}:",
                             f"    {offset} += 1",
                             f"    {column} += 1",
                         ))
@@ -1338,13 +1338,13 @@ def compile_python(grammar, cython=False):
                     literal = repr(ord(literal))
                     if invert:
                         steps.extend((
-                            f"{_if} _chr == {literal}:",
+                            f"{_if} codepoint == {literal}:",
                             f"    {offset} = -1",
                             f"    break",
                         ))
                     else:
                         steps.extend((
-                            f"{_if} _chr == {literal}:",
+                            f"{_if} codepoint == {literal}:",
                             f"    {offset} += 1",
                             f"    {column} += 1",
                         ))
@@ -1357,7 +1357,7 @@ def compile_python(grammar, cython=False):
                 idx +=1 
                 if name == "unicode_punctuation":
                     steps.extend((
-                        f"{_if} unicodedata.category(chr(_chr)).startswith('P'):",
+                        f"{_if} unicodedata.category(chr(codepoint)).startswith('P'):",
                     ))
                     if invert: steps.extend ((
                         f"    {offset} = -1",
@@ -1369,7 +1369,7 @@ def compile_python(grammar, cython=False):
                     ))
                 elif name == "unicode_whitespace":
                     steps.extend((
-                        f"{_if} unicodedata.category(chr(_chr)) == 'Zs':",
+                        f"{_if} unicodedata.category(chr(codepoint)) == 'Zs':",
                     ))
                     if invert: steps.extend ((
                         f"    {offset} = -1",
@@ -1381,7 +1381,7 @@ def compile_python(grammar, cython=False):
                     ))
                 elif name == "unicode_newline": # crlf ugh
                     steps.extend((
-                        f"{_if} unicodedata.category(chr(_chr)) in ('Zl', 'Zp', 'Cc'):",
+                        f"{_if} unicodedata.category(chr(codepoint)) in ('Zl', 'Zp', 'Cc'):",
                     ))
                     if invert: steps.extend ((
                         f"    {offset} = -1",
@@ -1471,19 +1471,19 @@ def compile_python(grammar, cython=False):
             if _max:
                 cond.append(f"{count} < {_maxv}")
 
-            cond2 =f"_chr in {repr(''.join(grammar.whitespace))}"
-            cond3 =f"_chr in {repr(''.join(grammar_newline))}"
+            cond2 =f"codepoint in {repr(''.join(grammar.whitespace))}"
+            cond3 =f"codepoint in {repr(''.join(grammar_newline))}"
 
             steps.extend((
                         f"{count} = 0",
                         f"while {' and '.join(cond)}:",
-                        f"    _chr = buf[{offset}]",
+                        f"    codepoint = buf[{offset}]",
             ))
 
             if _newline:
                 if newline_rn:
                     steps.extend((
-                        f"    if _chr == '\\r' and {offset} + 1 < buf_eof and buf[{offset}+1] == '\\n':", 
+                        f"    if codepoint == '\\r' and {offset} + 1 < buf_eof and buf[{offset}+1] == '\\n':", 
                         f"        {offset} +=2",
                         f"        {column} = 0",
                         f"        {indent_column} = (0, None)",
@@ -1506,7 +1506,7 @@ def compile_python(grammar, cython=False):
                 ))
 
             steps.extend((
-                        f"        if _chr == '\\t':",
+                        f"        if codepoint == '\\t':",
                         f"            if {offset} == {partial_tab_offset} and {partial_tab_width} > 0:",
                         f"                width = {partial_tab_width}",
                         f"            else:",
@@ -1543,14 +1543,14 @@ def compile_python(grammar, cython=False):
                     
 
         elif rule.kind == NEWLINE:
-            cond =f"_chr in {repr(''.join(grammar_newline))}"
+            cond =f"codepoint in {repr(''.join(grammar_newline))}"
             steps.extend((
                 f"if {offset} < buf_eof:",
-                f"    _chr = buf[{offset}]",
+                f"    codepoint = buf[{offset}]",
             ))
             if newline_rn:
                 steps.extend((
-                    f"    if _chr == '\\r' and {offset} + 1 < buf_eof and buf[{offset}+1] == '\\n':", 
+                    f"    if codepoint == '\\r' and {offset} + 1 < buf_eof and buf[{offset}+1] == '\\n':", 
                     f"        {offset} +=2",
                     f"        {column} = 0",
                     f"        {indent_column} = (0, None)",
@@ -1573,15 +1573,15 @@ def compile_python(grammar, cython=False):
             ))
 
         elif rule.kind == END_OF_LINE:
-            cond =f"_chr in {repr(''.join(grammar_newline))}"
+            cond =f"codepoint in {repr(''.join(grammar_newline))}"
 
             steps.extend((
                 f"if {offset} < buf_eof:",
-                f"    _chr = buf[{offset}]",
+                f"    codepoint = buf[{offset}]",
             ))
             if newline_rn:
                 steps.extend((
-                    f"    if _chr == '\\r' and {offset} + 1 < buf_eof and buf[{offset}+1] == '\\n':", 
+                    f"    if codepoint == '\\r' and {offset} + 1 < buf_eof and buf[{offset}+1] == '\\n':", 
                     f"        {offset} +=2",
                     f"        {column} = 0",
                     f"        {indent_column} = (0, None)",
@@ -1633,9 +1633,7 @@ def compile_python(grammar, cython=False):
     whitespace = repr(tuple(grammar.whitespace)) if grammar.whitespace else '()'
     whitespace_tab = bool(grammar.whitespace) and '\t' in grammar.whitespace
 
-    if cython:
-        output.append("import unicodedata")
-    else:
+    if not cython:
         output.append("def _build(unicodedata):")
         output = output.add_indent()
 
@@ -1659,6 +1657,7 @@ def compile_python(grammar, cython=False):
     )
     if cython:
         output.append('# cython: language_level=3, bounds_check=False')
+        output.append("import unicodedata")
         output.extend(parse_node)
         output.extend((
             f"cdef class Parser:",
@@ -1711,7 +1710,7 @@ def compile_python(grammar, cython=False):
         cdefs = {}
         if cython:
             output.append(f"cdef parse_{name}(self, str buf, int offset_0, int buf_eof, int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):")
-            output.append(f"    cdef Py_UCS4 _chr")
+            output.append(f"    cdef Py_UCS4 codepoint")
             
             for v in varnames:
                 cdefs[v] = output.add_indent(4).append_placeholder()

@@ -1,4 +1,5 @@
 # cython: language_level=3, bounds_check=False
+import unicodedata
 class Node:
     def __init__(self, name, start, end, children, value):
         self.name = name
@@ -37,7 +38,7 @@ cdef class Parser:
         if err is not None: raise err(buf, new_offset, 'no')
 
     cdef parse_document(self, str buf, int offset_0, int buf_eof, int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
-        cdef Py_UCS4 chr
+        cdef Py_UCS4 codepoint
         cdef int offset_1, offset_2
         cdef int column_1, column_2
 
@@ -49,9 +50,9 @@ cdef class Parser:
         while True: # note: return at end of loop
             count_0 = 0
             while offset_0 < buf_eof:
-                chr = buf[offset_0]
-                if chr in ' \t\r\n\ufeff':
-                    if chr == '\t':
+                codepoint = buf[offset_0]
+                if codepoint in ' \t\r\n\ufeff':
+                    if codepoint == '\t':
                         if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                             width = partial_tab_width_0
                         else:
@@ -95,9 +96,9 @@ cdef class Parser:
                                 offset_2 = -1
                                 break
 
-                            chr = (buf[offset_2])
+                            codepoint = (buf[offset_2])
 
-                            if chr == 10:
+                            if codepoint == 10:
                                 offset_2 = -1
                                 break
                             else:
@@ -121,9 +122,9 @@ cdef class Parser:
 
                     count_1 = 0
                     while offset_1 < buf_eof:
-                        chr = buf[offset_1]
-                        if chr in ' \t\r\n\ufeff':
-                            if chr == '\t':
+                        codepoint = buf[offset_1]
+                        if codepoint in ' \t\r\n\ufeff':
+                            if codepoint == '\t':
                                 if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                     width = partial_tab_width_1
                                 else:
@@ -155,9 +156,9 @@ cdef class Parser:
 
             count_0 = 0
             while offset_0 < buf_eof:
-                chr = buf[offset_0]
-                if chr in ' \t\r\n\ufeff':
-                    if chr == '\t':
+                codepoint = buf[offset_0]
+                if codepoint in ' \t\r\n\ufeff':
+                    if codepoint == '\t':
                         if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                             width = partial_tab_width_0
                         else:
@@ -179,9 +180,9 @@ cdef class Parser:
 
             count_0 = 0
             while offset_0 < buf_eof:
-                chr = buf[offset_0]
-                if chr in ' \t\r\n\ufeff':
-                    if chr == '\t':
+                codepoint = buf[offset_0]
+                if codepoint in ' \t\r\n\ufeff':
+                    if codepoint == '\t':
                         if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                             width = partial_tab_width_0
                         else:
@@ -225,9 +226,9 @@ cdef class Parser:
                                 offset_2 = -1
                                 break
 
-                            chr = (buf[offset_2])
+                            codepoint = (buf[offset_2])
 
-                            if chr == 10:
+                            if codepoint == 10:
                                 offset_2 = -1
                                 break
                             else:
@@ -251,9 +252,9 @@ cdef class Parser:
 
                     count_1 = 0
                     while offset_1 < buf_eof:
-                        chr = buf[offset_1]
-                        if chr in ' \t\r\n\ufeff':
-                            if chr == '\t':
+                        codepoint = buf[offset_1]
+                        if codepoint in ' \t\r\n\ufeff':
+                            if codepoint == '\t':
                                 if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                     width = partial_tab_width_1
                                 else:
@@ -285,9 +286,9 @@ cdef class Parser:
 
             count_0 = 0
             while offset_0 < buf_eof:
-                chr = buf[offset_0]
-                if chr in ' \t\r\n\ufeff':
-                    if chr == '\t':
+                codepoint = buf[offset_0]
+                if codepoint in ' \t\r\n\ufeff':
+                    if codepoint == '\t':
                         if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                             width = partial_tab_width_0
                         else:
@@ -308,7 +309,7 @@ cdef class Parser:
         return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
     cdef parse_rson_value(self, str buf, int offset_0, int buf_eof, int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
-        cdef Py_UCS4 chr
+        cdef Py_UCS4 codepoint
         cdef int offset_1, offset_2, offset_3, offset_4
         cdef int column_1, column_2
 
@@ -343,12 +344,12 @@ cdef class Parser:
                                 offset_3 = -1
                                 break
 
-                            chr = (buf[offset_3])
+                            codepoint = (buf[offset_3])
 
-                            if 97 <= chr <= 122:
+                            if 97 <= codepoint <= 122:
                                 offset_3 += 1
                                 column_1 += 1
-                            elif 97 <= chr <= 90:
+                            elif 97 <= codepoint <= 90:
                                 offset_3 += 1
                                 column_1 += 1
                             else:
@@ -368,18 +369,18 @@ cdef class Parser:
                                         offset_4 = -1
                                         break
 
-                                    chr = (buf[offset_4])
+                                    codepoint = (buf[offset_4])
 
-                                    if 48 <= chr <= 57:
+                                    if 48 <= codepoint <= 57:
                                         offset_4 += 1
                                         column_2 += 1
-                                    elif 97 <= chr <= 122:
+                                    elif 97 <= codepoint <= 122:
                                         offset_4 += 1
                                         column_2 += 1
-                                    elif 65 <= chr <= 90:
+                                    elif 65 <= codepoint <= 90:
                                         offset_4 += 1
                                         column_2 += 1
-                                    elif chr == 95:
+                                    elif codepoint == 95:
                                         offset_4 += 1
                                         column_2 += 1
                                     else:
@@ -472,7 +473,7 @@ cdef class Parser:
         return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
     cdef parse_rson_literal(self, str buf, int offset_0, int buf_eof, int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
-        cdef Py_UCS4 chr
+        cdef Py_UCS4 codepoint
         cdef int offset_1, offset_2, offset_3, offset_4, offset_5, offset_6
         cdef int column_1, column_2, column_3, column_4, column_5
 
@@ -575,18 +576,18 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if chr <= 31:
+                                                if codepoint <= 31:
                                                     offset_5 = -1
                                                     break
-                                                elif chr == 92:
+                                                elif codepoint == 92:
                                                     offset_5 = -1
                                                     break
-                                                elif chr == 34:
+                                                elif codepoint == 34:
                                                     offset_5 = -1
                                                     break
-                                                elif 55296 <= chr <= 57343:
+                                                elif 55296 <= codepoint <= 57343:
                                                     offset_5 = -1
                                                     break
                                                 else:
@@ -621,7 +622,7 @@ cdef class Parser:
 
                                                 while True: # start reject
                                                     children_6 = []
-                                                    offset_6 = offset_5
+                                                    offset_6 = offset_5 + 0
                                                     column_5 = column_4
                                                     indent_column_5 = indent_column_4
                                                     partial_tab_offset_5 = partial_tab_offset_4
@@ -630,9 +631,9 @@ cdef class Parser:
                                                         offset_6 = -1
                                                         break
 
-                                                    chr = (buf[offset_6])
+                                                    codepoint = (buf[offset_6])
 
-                                                    if 48 <= chr <= 49:
+                                                    if 48 <= codepoint <= 49:
                                                         offset_6 += 1
                                                         column_5 += 1
                                                     else:
@@ -648,15 +649,15 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if 48 <= chr <= 57:
+                                                if 48 <= codepoint <= 57:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 97 <= chr <= 102:
+                                                elif 97 <= codepoint <= 102:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 65 <= chr <= 70:
+                                                elif 65 <= codepoint <= 70:
                                                     offset_5 += 1
                                                     column_4 += 1
                                                 else:
@@ -667,15 +668,15 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if 48 <= chr <= 57:
+                                                if 48 <= codepoint <= 57:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 97 <= chr <= 102:
+                                                elif 97 <= codepoint <= 102:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 65 <= chr <= 70:
+                                                elif 65 <= codepoint <= 70:
                                                     offset_5 += 1
                                                     column_4 += 1
                                                 else:
@@ -710,7 +711,7 @@ cdef class Parser:
 
                                                 while True: # start reject
                                                     children_6 = []
-                                                    offset_6 = offset_5
+                                                    offset_6 = offset_5 + 0
                                                     column_5 = column_4
                                                     indent_column_5 = indent_column_4
                                                     partial_tab_offset_5 = partial_tab_offset_4
@@ -726,9 +727,9 @@ cdef class Parser:
                                                         offset_6 = -1
                                                         break
 
-                                                    chr = (buf[offset_6])
+                                                    codepoint = (buf[offset_6])
 
-                                                    if 48 <= chr <= 49:
+                                                    if 48 <= codepoint <= 49:
                                                         offset_6 += 1
                                                         column_5 += 1
                                                     else:
@@ -742,7 +743,7 @@ cdef class Parser:
 
                                                 while True: # start reject
                                                     children_6 = []
-                                                    offset_6 = offset_5
+                                                    offset_6 = offset_5 + 0
                                                     column_5 = column_4
                                                     indent_column_5 = indent_column_4
                                                     partial_tab_offset_5 = partial_tab_offset_4
@@ -761,12 +762,12 @@ cdef class Parser:
                                                         offset_6 = -1
                                                         break
 
-                                                    chr = (buf[offset_6])
+                                                    codepoint = (buf[offset_6])
 
-                                                    if 56 <= chr <= 57:
+                                                    if 56 <= codepoint <= 57:
                                                         offset_6 += 1
                                                         column_5 += 1
-                                                    elif 65 <= chr <= 70:
+                                                    elif 65 <= codepoint <= 70:
                                                         offset_6 += 1
                                                         column_5 += 1
                                                     else:
@@ -782,15 +783,15 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if 48 <= chr <= 57:
+                                                if 48 <= codepoint <= 57:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 97 <= chr <= 102:
+                                                elif 97 <= codepoint <= 102:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 65 <= chr <= 70:
+                                                elif 65 <= codepoint <= 70:
                                                     offset_5 += 1
                                                     column_4 += 1
                                                 else:
@@ -801,15 +802,15 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if 48 <= chr <= 57:
+                                                if 48 <= codepoint <= 57:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 97 <= chr <= 102:
+                                                elif 97 <= codepoint <= 102:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 65 <= chr <= 70:
+                                                elif 65 <= codepoint <= 70:
                                                     offset_5 += 1
                                                     column_4 += 1
                                                 else:
@@ -820,15 +821,15 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if 48 <= chr <= 57:
+                                                if 48 <= codepoint <= 57:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 97 <= chr <= 102:
+                                                elif 97 <= codepoint <= 102:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 65 <= chr <= 70:
+                                                elif 65 <= codepoint <= 70:
                                                     offset_5 += 1
                                                     column_4 += 1
                                                 else:
@@ -839,15 +840,15 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if 48 <= chr <= 57:
+                                                if 48 <= codepoint <= 57:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 97 <= chr <= 102:
+                                                elif 97 <= codepoint <= 102:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 65 <= chr <= 70:
+                                                elif 65 <= codepoint <= 70:
                                                     offset_5 += 1
                                                     column_4 += 1
                                                 else:
@@ -882,7 +883,7 @@ cdef class Parser:
 
                                                 while True: # start reject
                                                     children_6 = []
-                                                    offset_6 = offset_5
+                                                    offset_6 = offset_5 + 0
                                                     column_5 = column_4
                                                     indent_column_5 = indent_column_4
                                                     partial_tab_offset_5 = partial_tab_offset_4
@@ -898,9 +899,9 @@ cdef class Parser:
                                                         offset_6 = -1
                                                         break
 
-                                                    chr = (buf[offset_6])
+                                                    codepoint = (buf[offset_6])
 
-                                                    if 48 <= chr <= 49:
+                                                    if 48 <= codepoint <= 49:
                                                         offset_6 += 1
                                                         column_5 += 1
                                                     else:
@@ -914,7 +915,7 @@ cdef class Parser:
 
                                                 while True: # start reject
                                                     children_6 = []
-                                                    offset_6 = offset_5
+                                                    offset_6 = offset_5 + 0
                                                     column_5 = column_4
                                                     indent_column_5 = indent_column_4
                                                     partial_tab_offset_5 = partial_tab_offset_4
@@ -940,12 +941,12 @@ cdef class Parser:
                                                         offset_6 = -1
                                                         break
 
-                                                    chr = (buf[offset_6])
+                                                    codepoint = (buf[offset_6])
 
-                                                    if 56 <= chr <= 57:
+                                                    if 56 <= codepoint <= 57:
                                                         offset_6 += 1
                                                         column_5 += 1
-                                                    elif 65 <= chr <= 70:
+                                                    elif 65 <= codepoint <= 70:
                                                         offset_6 += 1
                                                         column_5 += 1
                                                     else:
@@ -961,15 +962,15 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if 48 <= chr <= 57:
+                                                if 48 <= codepoint <= 57:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 97 <= chr <= 102:
+                                                elif 97 <= codepoint <= 102:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 65 <= chr <= 70:
+                                                elif 65 <= codepoint <= 70:
                                                     offset_5 += 1
                                                     column_4 += 1
                                                 else:
@@ -980,15 +981,15 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if 48 <= chr <= 57:
+                                                if 48 <= codepoint <= 57:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 97 <= chr <= 102:
+                                                elif 97 <= codepoint <= 102:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 65 <= chr <= 70:
+                                                elif 65 <= codepoint <= 70:
                                                     offset_5 += 1
                                                     column_4 += 1
                                                 else:
@@ -999,15 +1000,15 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if 48 <= chr <= 57:
+                                                if 48 <= codepoint <= 57:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 97 <= chr <= 102:
+                                                elif 97 <= codepoint <= 102:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 65 <= chr <= 70:
+                                                elif 65 <= codepoint <= 70:
                                                     offset_5 += 1
                                                     column_4 += 1
                                                 else:
@@ -1018,15 +1019,15 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if 48 <= chr <= 57:
+                                                if 48 <= codepoint <= 57:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 97 <= chr <= 102:
+                                                elif 97 <= codepoint <= 102:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 65 <= chr <= 70:
+                                                elif 65 <= codepoint <= 70:
                                                     offset_5 += 1
                                                     column_4 += 1
                                                 else:
@@ -1037,15 +1038,15 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if 48 <= chr <= 57:
+                                                if 48 <= codepoint <= 57:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 97 <= chr <= 102:
+                                                elif 97 <= codepoint <= 102:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 65 <= chr <= 70:
+                                                elif 65 <= codepoint <= 70:
                                                     offset_5 += 1
                                                     column_4 += 1
                                                 else:
@@ -1056,15 +1057,15 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if 48 <= chr <= 57:
+                                                if 48 <= codepoint <= 57:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 97 <= chr <= 102:
+                                                elif 97 <= codepoint <= 102:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 65 <= chr <= 70:
+                                                elif 65 <= codepoint <= 70:
                                                     offset_5 += 1
                                                     column_4 += 1
                                                 else:
@@ -1075,15 +1076,15 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if 48 <= chr <= 57:
+                                                if 48 <= codepoint <= 57:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 97 <= chr <= 102:
+                                                elif 97 <= codepoint <= 102:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 65 <= chr <= 70:
+                                                elif 65 <= codepoint <= 70:
                                                     offset_5 += 1
                                                     column_4 += 1
                                                 else:
@@ -1094,15 +1095,15 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if 48 <= chr <= 57:
+                                                if 48 <= codepoint <= 57:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 97 <= chr <= 102:
+                                                elif 97 <= codepoint <= 102:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 65 <= chr <= 70:
+                                                elif 65 <= codepoint <= 70:
                                                     offset_5 += 1
                                                     column_4 += 1
                                                 else:
@@ -1139,36 +1140,36 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if chr == 34:
+                                                if codepoint == 34:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif chr == 92:
+                                                elif codepoint == 92:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif chr == 47:
+                                                elif codepoint == 47:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif chr == 98:
+                                                elif codepoint == 98:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif chr == 102:
+                                                elif codepoint == 102:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif chr == 110:
+                                                elif codepoint == 110:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif chr == 114:
+                                                elif codepoint == 114:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif chr == 116:
+                                                elif codepoint == 116:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif chr == 39:
+                                                elif codepoint == 39:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif chr == 10:
+                                                elif codepoint == 10:
                                                     offset_5 += 1
                                                     column_4 += 1
                                                 else:
@@ -1272,18 +1273,18 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if chr <= 31:
+                                                if codepoint <= 31:
                                                     offset_5 = -1
                                                     break
-                                                elif chr == 92:
+                                                elif codepoint == 92:
                                                     offset_5 = -1
                                                     break
-                                                elif chr == 39:
+                                                elif codepoint == 39:
                                                     offset_5 = -1
                                                     break
-                                                elif 55296 <= chr <= 57343:
+                                                elif 55296 <= codepoint <= 57343:
                                                     offset_5 = -1
                                                     break
                                                 else:
@@ -1318,7 +1319,7 @@ cdef class Parser:
 
                                                 while True: # start reject
                                                     children_6 = []
-                                                    offset_6 = offset_5
+                                                    offset_6 = offset_5 + 0
                                                     column_5 = column_4
                                                     indent_column_5 = indent_column_4
                                                     partial_tab_offset_5 = partial_tab_offset_4
@@ -1327,9 +1328,9 @@ cdef class Parser:
                                                         offset_6 = -1
                                                         break
 
-                                                    chr = (buf[offset_6])
+                                                    codepoint = (buf[offset_6])
 
-                                                    if 48 <= chr <= 49:
+                                                    if 48 <= codepoint <= 49:
                                                         offset_6 += 1
                                                         column_5 += 1
                                                     else:
@@ -1345,15 +1346,15 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if 48 <= chr <= 57:
+                                                if 48 <= codepoint <= 57:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 97 <= chr <= 102:
+                                                elif 97 <= codepoint <= 102:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 65 <= chr <= 70:
+                                                elif 65 <= codepoint <= 70:
                                                     offset_5 += 1
                                                     column_4 += 1
                                                 else:
@@ -1364,15 +1365,15 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if 48 <= chr <= 57:
+                                                if 48 <= codepoint <= 57:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 97 <= chr <= 102:
+                                                elif 97 <= codepoint <= 102:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 65 <= chr <= 70:
+                                                elif 65 <= codepoint <= 70:
                                                     offset_5 += 1
                                                     column_4 += 1
                                                 else:
@@ -1407,7 +1408,7 @@ cdef class Parser:
 
                                                 while True: # start reject
                                                     children_6 = []
-                                                    offset_6 = offset_5
+                                                    offset_6 = offset_5 + 0
                                                     column_5 = column_4
                                                     indent_column_5 = indent_column_4
                                                     partial_tab_offset_5 = partial_tab_offset_4
@@ -1423,9 +1424,9 @@ cdef class Parser:
                                                         offset_6 = -1
                                                         break
 
-                                                    chr = (buf[offset_6])
+                                                    codepoint = (buf[offset_6])
 
-                                                    if 48 <= chr <= 49:
+                                                    if 48 <= codepoint <= 49:
                                                         offset_6 += 1
                                                         column_5 += 1
                                                     else:
@@ -1439,7 +1440,7 @@ cdef class Parser:
 
                                                 while True: # start reject
                                                     children_6 = []
-                                                    offset_6 = offset_5
+                                                    offset_6 = offset_5 + 0
                                                     column_5 = column_4
                                                     indent_column_5 = indent_column_4
                                                     partial_tab_offset_5 = partial_tab_offset_4
@@ -1458,12 +1459,12 @@ cdef class Parser:
                                                         offset_6 = -1
                                                         break
 
-                                                    chr = (buf[offset_6])
+                                                    codepoint = (buf[offset_6])
 
-                                                    if 56 <= chr <= 57:
+                                                    if 56 <= codepoint <= 57:
                                                         offset_6 += 1
                                                         column_5 += 1
-                                                    elif 65 <= chr <= 70:
+                                                    elif 65 <= codepoint <= 70:
                                                         offset_6 += 1
                                                         column_5 += 1
                                                     else:
@@ -1479,15 +1480,15 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if 48 <= chr <= 57:
+                                                if 48 <= codepoint <= 57:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 97 <= chr <= 102:
+                                                elif 97 <= codepoint <= 102:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 65 <= chr <= 70:
+                                                elif 65 <= codepoint <= 70:
                                                     offset_5 += 1
                                                     column_4 += 1
                                                 else:
@@ -1498,15 +1499,15 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if 48 <= chr <= 57:
+                                                if 48 <= codepoint <= 57:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 97 <= chr <= 102:
+                                                elif 97 <= codepoint <= 102:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 65 <= chr <= 70:
+                                                elif 65 <= codepoint <= 70:
                                                     offset_5 += 1
                                                     column_4 += 1
                                                 else:
@@ -1517,15 +1518,15 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if 48 <= chr <= 57:
+                                                if 48 <= codepoint <= 57:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 97 <= chr <= 102:
+                                                elif 97 <= codepoint <= 102:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 65 <= chr <= 70:
+                                                elif 65 <= codepoint <= 70:
                                                     offset_5 += 1
                                                     column_4 += 1
                                                 else:
@@ -1536,15 +1537,15 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if 48 <= chr <= 57:
+                                                if 48 <= codepoint <= 57:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 97 <= chr <= 102:
+                                                elif 97 <= codepoint <= 102:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 65 <= chr <= 70:
+                                                elif 65 <= codepoint <= 70:
                                                     offset_5 += 1
                                                     column_4 += 1
                                                 else:
@@ -1579,7 +1580,7 @@ cdef class Parser:
 
                                                 while True: # start reject
                                                     children_6 = []
-                                                    offset_6 = offset_5
+                                                    offset_6 = offset_5 + 0
                                                     column_5 = column_4
                                                     indent_column_5 = indent_column_4
                                                     partial_tab_offset_5 = partial_tab_offset_4
@@ -1595,9 +1596,9 @@ cdef class Parser:
                                                         offset_6 = -1
                                                         break
 
-                                                    chr = (buf[offset_6])
+                                                    codepoint = (buf[offset_6])
 
-                                                    if 48 <= chr <= 49:
+                                                    if 48 <= codepoint <= 49:
                                                         offset_6 += 1
                                                         column_5 += 1
                                                     else:
@@ -1611,7 +1612,7 @@ cdef class Parser:
 
                                                 while True: # start reject
                                                     children_6 = []
-                                                    offset_6 = offset_5
+                                                    offset_6 = offset_5 + 0
                                                     column_5 = column_4
                                                     indent_column_5 = indent_column_4
                                                     partial_tab_offset_5 = partial_tab_offset_4
@@ -1637,12 +1638,12 @@ cdef class Parser:
                                                         offset_6 = -1
                                                         break
 
-                                                    chr = (buf[offset_6])
+                                                    codepoint = (buf[offset_6])
 
-                                                    if 56 <= chr <= 57:
+                                                    if 56 <= codepoint <= 57:
                                                         offset_6 += 1
                                                         column_5 += 1
-                                                    elif 65 <= chr <= 70:
+                                                    elif 65 <= codepoint <= 70:
                                                         offset_6 += 1
                                                         column_5 += 1
                                                     else:
@@ -1658,15 +1659,15 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if 48 <= chr <= 57:
+                                                if 48 <= codepoint <= 57:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 97 <= chr <= 102:
+                                                elif 97 <= codepoint <= 102:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 65 <= chr <= 70:
+                                                elif 65 <= codepoint <= 70:
                                                     offset_5 += 1
                                                     column_4 += 1
                                                 else:
@@ -1677,15 +1678,15 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if 48 <= chr <= 57:
+                                                if 48 <= codepoint <= 57:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 97 <= chr <= 102:
+                                                elif 97 <= codepoint <= 102:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 65 <= chr <= 70:
+                                                elif 65 <= codepoint <= 70:
                                                     offset_5 += 1
                                                     column_4 += 1
                                                 else:
@@ -1696,15 +1697,15 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if 48 <= chr <= 57:
+                                                if 48 <= codepoint <= 57:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 97 <= chr <= 102:
+                                                elif 97 <= codepoint <= 102:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 65 <= chr <= 70:
+                                                elif 65 <= codepoint <= 70:
                                                     offset_5 += 1
                                                     column_4 += 1
                                                 else:
@@ -1715,15 +1716,15 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if 48 <= chr <= 57:
+                                                if 48 <= codepoint <= 57:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 97 <= chr <= 102:
+                                                elif 97 <= codepoint <= 102:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 65 <= chr <= 70:
+                                                elif 65 <= codepoint <= 70:
                                                     offset_5 += 1
                                                     column_4 += 1
                                                 else:
@@ -1734,15 +1735,15 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if 48 <= chr <= 57:
+                                                if 48 <= codepoint <= 57:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 97 <= chr <= 102:
+                                                elif 97 <= codepoint <= 102:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 65 <= chr <= 70:
+                                                elif 65 <= codepoint <= 70:
                                                     offset_5 += 1
                                                     column_4 += 1
                                                 else:
@@ -1753,15 +1754,15 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if 48 <= chr <= 57:
+                                                if 48 <= codepoint <= 57:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 97 <= chr <= 102:
+                                                elif 97 <= codepoint <= 102:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 65 <= chr <= 70:
+                                                elif 65 <= codepoint <= 70:
                                                     offset_5 += 1
                                                     column_4 += 1
                                                 else:
@@ -1772,15 +1773,15 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if 48 <= chr <= 57:
+                                                if 48 <= codepoint <= 57:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 97 <= chr <= 102:
+                                                elif 97 <= codepoint <= 102:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 65 <= chr <= 70:
+                                                elif 65 <= codepoint <= 70:
                                                     offset_5 += 1
                                                     column_4 += 1
                                                 else:
@@ -1791,15 +1792,15 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if 48 <= chr <= 57:
+                                                if 48 <= codepoint <= 57:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 97 <= chr <= 102:
+                                                elif 97 <= codepoint <= 102:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif 65 <= chr <= 70:
+                                                elif 65 <= codepoint <= 70:
                                                     offset_5 += 1
                                                     column_4 += 1
                                                 else:
@@ -1836,36 +1837,36 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if chr == 34:
+                                                if codepoint == 34:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif chr == 92:
+                                                elif codepoint == 92:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif chr == 47:
+                                                elif codepoint == 47:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif chr == 98:
+                                                elif codepoint == 98:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif chr == 102:
+                                                elif codepoint == 102:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif chr == 110:
+                                                elif codepoint == 110:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif chr == 114:
+                                                elif codepoint == 114:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif chr == 116:
+                                                elif codepoint == 116:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif chr == 39:
+                                                elif codepoint == 39:
                                                     offset_5 += 1
                                                     column_4 += 1
-                                                elif chr == 10:
+                                                elif codepoint == 10:
                                                     offset_5 += 1
                                                     column_4 += 1
                                                 else:
@@ -1979,12 +1980,12 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if chr == 45:
+                                        if codepoint == 45:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif chr == 43:
+                                        elif codepoint == 43:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -2018,15 +2019,15 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
 
-                                chr = (buf[offset_3])
+                                codepoint = (buf[offset_3])
 
-                                if 48 <= chr <= 57:
+                                if 48 <= codepoint <= 57:
                                     offset_3 += 1
                                     column_2 += 1
-                                elif 65 <= chr <= 70:
+                                elif 65 <= codepoint <= 70:
                                     offset_3 += 1
                                     column_2 += 1
-                                elif 97 <= chr <= 102:
+                                elif 97 <= codepoint <= 102:
                                     offset_3 += 1
                                     column_2 += 1
                                 else:
@@ -2046,18 +2047,18 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if 48 <= chr <= 57:
+                                        if 48 <= codepoint <= 57:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 65 <= chr <= 70:
+                                        elif 65 <= codepoint <= 70:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 97 <= chr <= 102:
+                                        elif 97 <= codepoint <= 102:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif chr == 95:
+                                        elif codepoint == 95:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -2111,12 +2112,12 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if chr == 45:
+                                        if codepoint == 45:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif chr == 43:
+                                        elif codepoint == 43:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -2150,9 +2151,9 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
 
-                                chr = (buf[offset_3])
+                                codepoint = (buf[offset_3])
 
-                                if 48 <= chr <= 56:
+                                if 48 <= codepoint <= 56:
                                     offset_3 += 1
                                     column_2 += 1
                                 else:
@@ -2172,12 +2173,12 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if 48 <= chr <= 56:
+                                        if 48 <= codepoint <= 56:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif chr == 95:
+                                        elif codepoint == 95:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -2231,12 +2232,12 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if chr == 45:
+                                        if codepoint == 45:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif chr == 43:
+                                        elif codepoint == 43:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -2270,9 +2271,9 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
 
-                                chr = (buf[offset_3])
+                                codepoint = (buf[offset_3])
 
-                                if 48 <= chr <= 49:
+                                if 48 <= codepoint <= 49:
                                     offset_3 += 1
                                     column_2 += 1
                                 else:
@@ -2292,12 +2293,12 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if 48 <= chr <= 49:
+                                        if 48 <= codepoint <= 49:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif chr == 95:
+                                        elif codepoint == 95:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -2351,12 +2352,12 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if chr == 45:
+                                        if codepoint == 45:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif chr == 43:
+                                        elif codepoint == 43:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -2417,9 +2418,9 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if 49 <= chr <= 57:
+                                        if 49 <= codepoint <= 57:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -2439,9 +2440,9 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if 48 <= chr <= 57:
+                                                if 48 <= codepoint <= 57:
                                                     offset_5 += 1
                                                     column_4 += 1
                                                 else:
@@ -2509,9 +2510,9 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if 48 <= chr <= 57:
+                                                if 48 <= codepoint <= 57:
                                                     offset_5 += 1
                                                     column_4 += 1
                                                 else:
@@ -2600,9 +2601,9 @@ cdef class Parser:
                                                             offset_6 = -1
                                                             break
 
-                                                        chr = (buf[offset_6])
+                                                        codepoint = (buf[offset_6])
 
-                                                        if 48 <= chr <= 57:
+                                                        if 48 <= codepoint <= 57:
                                                             offset_6 += 1
                                                             column_5 += 1
                                                         else:
@@ -2813,7 +2814,7 @@ cdef class Parser:
         return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
     cdef parse_rson_string(self, str buf, int offset_0, int buf_eof, int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
-        cdef Py_UCS4 chr
+        cdef Py_UCS4 codepoint
         cdef int offset_1, offset_2, offset_3, offset_4, offset_5
         cdef int column_1, column_2, column_3, column_4
 
@@ -2862,18 +2863,18 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if chr <= 31:
+                                        if codepoint <= 31:
                                             offset_4 = -1
                                             break
-                                        elif chr == 92:
+                                        elif codepoint == 92:
                                             offset_4 = -1
                                             break
-                                        elif chr == 34:
+                                        elif codepoint == 34:
                                             offset_4 = -1
                                             break
-                                        elif 55296 <= chr <= 57343:
+                                        elif 55296 <= codepoint <= 57343:
                                             offset_4 = -1
                                             break
                                         else:
@@ -2908,7 +2909,7 @@ cdef class Parser:
 
                                         while True: # start reject
                                             children_5 = []
-                                            offset_5 = offset_4
+                                            offset_5 = offset_4 + 0
                                             column_4 = column_3
                                             indent_column_4 = indent_column_3
                                             partial_tab_offset_4 = partial_tab_offset_3
@@ -2917,9 +2918,9 @@ cdef class Parser:
                                                 offset_5 = -1
                                                 break
 
-                                            chr = (buf[offset_5])
+                                            codepoint = (buf[offset_5])
 
-                                            if 48 <= chr <= 49:
+                                            if 48 <= codepoint <= 49:
                                                 offset_5 += 1
                                                 column_4 += 1
                                             else:
@@ -2935,15 +2936,15 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if 48 <= chr <= 57:
+                                        if 48 <= codepoint <= 57:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 97 <= chr <= 102:
+                                        elif 97 <= codepoint <= 102:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 65 <= chr <= 70:
+                                        elif 65 <= codepoint <= 70:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -2954,15 +2955,15 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if 48 <= chr <= 57:
+                                        if 48 <= codepoint <= 57:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 97 <= chr <= 102:
+                                        elif 97 <= codepoint <= 102:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 65 <= chr <= 70:
+                                        elif 65 <= codepoint <= 70:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -2997,7 +2998,7 @@ cdef class Parser:
 
                                         while True: # start reject
                                             children_5 = []
-                                            offset_5 = offset_4
+                                            offset_5 = offset_4 + 0
                                             column_4 = column_3
                                             indent_column_4 = indent_column_3
                                             partial_tab_offset_4 = partial_tab_offset_3
@@ -3013,9 +3014,9 @@ cdef class Parser:
                                                 offset_5 = -1
                                                 break
 
-                                            chr = (buf[offset_5])
+                                            codepoint = (buf[offset_5])
 
-                                            if 48 <= chr <= 49:
+                                            if 48 <= codepoint <= 49:
                                                 offset_5 += 1
                                                 column_4 += 1
                                             else:
@@ -3029,7 +3030,7 @@ cdef class Parser:
 
                                         while True: # start reject
                                             children_5 = []
-                                            offset_5 = offset_4
+                                            offset_5 = offset_4 + 0
                                             column_4 = column_3
                                             indent_column_4 = indent_column_3
                                             partial_tab_offset_4 = partial_tab_offset_3
@@ -3048,12 +3049,12 @@ cdef class Parser:
                                                 offset_5 = -1
                                                 break
 
-                                            chr = (buf[offset_5])
+                                            codepoint = (buf[offset_5])
 
-                                            if 56 <= chr <= 57:
+                                            if 56 <= codepoint <= 57:
                                                 offset_5 += 1
                                                 column_4 += 1
-                                            elif 65 <= chr <= 70:
+                                            elif 65 <= codepoint <= 70:
                                                 offset_5 += 1
                                                 column_4 += 1
                                             else:
@@ -3069,15 +3070,15 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if 48 <= chr <= 57:
+                                        if 48 <= codepoint <= 57:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 97 <= chr <= 102:
+                                        elif 97 <= codepoint <= 102:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 65 <= chr <= 70:
+                                        elif 65 <= codepoint <= 70:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -3088,15 +3089,15 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if 48 <= chr <= 57:
+                                        if 48 <= codepoint <= 57:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 97 <= chr <= 102:
+                                        elif 97 <= codepoint <= 102:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 65 <= chr <= 70:
+                                        elif 65 <= codepoint <= 70:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -3107,15 +3108,15 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if 48 <= chr <= 57:
+                                        if 48 <= codepoint <= 57:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 97 <= chr <= 102:
+                                        elif 97 <= codepoint <= 102:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 65 <= chr <= 70:
+                                        elif 65 <= codepoint <= 70:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -3126,15 +3127,15 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if 48 <= chr <= 57:
+                                        if 48 <= codepoint <= 57:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 97 <= chr <= 102:
+                                        elif 97 <= codepoint <= 102:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 65 <= chr <= 70:
+                                        elif 65 <= codepoint <= 70:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -3169,7 +3170,7 @@ cdef class Parser:
 
                                         while True: # start reject
                                             children_5 = []
-                                            offset_5 = offset_4
+                                            offset_5 = offset_4 + 0
                                             column_4 = column_3
                                             indent_column_4 = indent_column_3
                                             partial_tab_offset_4 = partial_tab_offset_3
@@ -3185,9 +3186,9 @@ cdef class Parser:
                                                 offset_5 = -1
                                                 break
 
-                                            chr = (buf[offset_5])
+                                            codepoint = (buf[offset_5])
 
-                                            if 48 <= chr <= 49:
+                                            if 48 <= codepoint <= 49:
                                                 offset_5 += 1
                                                 column_4 += 1
                                             else:
@@ -3201,7 +3202,7 @@ cdef class Parser:
 
                                         while True: # start reject
                                             children_5 = []
-                                            offset_5 = offset_4
+                                            offset_5 = offset_4 + 0
                                             column_4 = column_3
                                             indent_column_4 = indent_column_3
                                             partial_tab_offset_4 = partial_tab_offset_3
@@ -3227,12 +3228,12 @@ cdef class Parser:
                                                 offset_5 = -1
                                                 break
 
-                                            chr = (buf[offset_5])
+                                            codepoint = (buf[offset_5])
 
-                                            if 56 <= chr <= 57:
+                                            if 56 <= codepoint <= 57:
                                                 offset_5 += 1
                                                 column_4 += 1
-                                            elif 65 <= chr <= 70:
+                                            elif 65 <= codepoint <= 70:
                                                 offset_5 += 1
                                                 column_4 += 1
                                             else:
@@ -3248,15 +3249,15 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if 48 <= chr <= 57:
+                                        if 48 <= codepoint <= 57:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 97 <= chr <= 102:
+                                        elif 97 <= codepoint <= 102:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 65 <= chr <= 70:
+                                        elif 65 <= codepoint <= 70:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -3267,15 +3268,15 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if 48 <= chr <= 57:
+                                        if 48 <= codepoint <= 57:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 97 <= chr <= 102:
+                                        elif 97 <= codepoint <= 102:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 65 <= chr <= 70:
+                                        elif 65 <= codepoint <= 70:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -3286,15 +3287,15 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if 48 <= chr <= 57:
+                                        if 48 <= codepoint <= 57:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 97 <= chr <= 102:
+                                        elif 97 <= codepoint <= 102:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 65 <= chr <= 70:
+                                        elif 65 <= codepoint <= 70:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -3305,15 +3306,15 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if 48 <= chr <= 57:
+                                        if 48 <= codepoint <= 57:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 97 <= chr <= 102:
+                                        elif 97 <= codepoint <= 102:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 65 <= chr <= 70:
+                                        elif 65 <= codepoint <= 70:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -3324,15 +3325,15 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if 48 <= chr <= 57:
+                                        if 48 <= codepoint <= 57:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 97 <= chr <= 102:
+                                        elif 97 <= codepoint <= 102:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 65 <= chr <= 70:
+                                        elif 65 <= codepoint <= 70:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -3343,15 +3344,15 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if 48 <= chr <= 57:
+                                        if 48 <= codepoint <= 57:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 97 <= chr <= 102:
+                                        elif 97 <= codepoint <= 102:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 65 <= chr <= 70:
+                                        elif 65 <= codepoint <= 70:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -3362,15 +3363,15 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if 48 <= chr <= 57:
+                                        if 48 <= codepoint <= 57:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 97 <= chr <= 102:
+                                        elif 97 <= codepoint <= 102:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 65 <= chr <= 70:
+                                        elif 65 <= codepoint <= 70:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -3381,15 +3382,15 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if 48 <= chr <= 57:
+                                        if 48 <= codepoint <= 57:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 97 <= chr <= 102:
+                                        elif 97 <= codepoint <= 102:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 65 <= chr <= 70:
+                                        elif 65 <= codepoint <= 70:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -3426,36 +3427,36 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if chr == 34:
+                                        if codepoint == 34:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif chr == 92:
+                                        elif codepoint == 92:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif chr == 47:
+                                        elif codepoint == 47:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif chr == 98:
+                                        elif codepoint == 98:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif chr == 102:
+                                        elif codepoint == 102:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif chr == 110:
+                                        elif codepoint == 110:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif chr == 114:
+                                        elif codepoint == 114:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif chr == 116:
+                                        elif codepoint == 116:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif chr == 39:
+                                        elif codepoint == 39:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif chr == 10:
+                                        elif codepoint == 10:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -3559,18 +3560,18 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if chr <= 31:
+                                        if codepoint <= 31:
                                             offset_4 = -1
                                             break
-                                        elif chr == 92:
+                                        elif codepoint == 92:
                                             offset_4 = -1
                                             break
-                                        elif chr == 39:
+                                        elif codepoint == 39:
                                             offset_4 = -1
                                             break
-                                        elif 55296 <= chr <= 57343:
+                                        elif 55296 <= codepoint <= 57343:
                                             offset_4 = -1
                                             break
                                         else:
@@ -3605,7 +3606,7 @@ cdef class Parser:
 
                                         while True: # start reject
                                             children_5 = []
-                                            offset_5 = offset_4
+                                            offset_5 = offset_4 + 0
                                             column_4 = column_3
                                             indent_column_4 = indent_column_3
                                             partial_tab_offset_4 = partial_tab_offset_3
@@ -3614,9 +3615,9 @@ cdef class Parser:
                                                 offset_5 = -1
                                                 break
 
-                                            chr = (buf[offset_5])
+                                            codepoint = (buf[offset_5])
 
-                                            if 48 <= chr <= 49:
+                                            if 48 <= codepoint <= 49:
                                                 offset_5 += 1
                                                 column_4 += 1
                                             else:
@@ -3632,15 +3633,15 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if 48 <= chr <= 57:
+                                        if 48 <= codepoint <= 57:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 97 <= chr <= 102:
+                                        elif 97 <= codepoint <= 102:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 65 <= chr <= 70:
+                                        elif 65 <= codepoint <= 70:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -3651,15 +3652,15 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if 48 <= chr <= 57:
+                                        if 48 <= codepoint <= 57:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 97 <= chr <= 102:
+                                        elif 97 <= codepoint <= 102:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 65 <= chr <= 70:
+                                        elif 65 <= codepoint <= 70:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -3694,7 +3695,7 @@ cdef class Parser:
 
                                         while True: # start reject
                                             children_5 = []
-                                            offset_5 = offset_4
+                                            offset_5 = offset_4 + 0
                                             column_4 = column_3
                                             indent_column_4 = indent_column_3
                                             partial_tab_offset_4 = partial_tab_offset_3
@@ -3710,9 +3711,9 @@ cdef class Parser:
                                                 offset_5 = -1
                                                 break
 
-                                            chr = (buf[offset_5])
+                                            codepoint = (buf[offset_5])
 
-                                            if 48 <= chr <= 49:
+                                            if 48 <= codepoint <= 49:
                                                 offset_5 += 1
                                                 column_4 += 1
                                             else:
@@ -3726,7 +3727,7 @@ cdef class Parser:
 
                                         while True: # start reject
                                             children_5 = []
-                                            offset_5 = offset_4
+                                            offset_5 = offset_4 + 0
                                             column_4 = column_3
                                             indent_column_4 = indent_column_3
                                             partial_tab_offset_4 = partial_tab_offset_3
@@ -3745,12 +3746,12 @@ cdef class Parser:
                                                 offset_5 = -1
                                                 break
 
-                                            chr = (buf[offset_5])
+                                            codepoint = (buf[offset_5])
 
-                                            if 56 <= chr <= 57:
+                                            if 56 <= codepoint <= 57:
                                                 offset_5 += 1
                                                 column_4 += 1
-                                            elif 65 <= chr <= 70:
+                                            elif 65 <= codepoint <= 70:
                                                 offset_5 += 1
                                                 column_4 += 1
                                             else:
@@ -3766,15 +3767,15 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if 48 <= chr <= 57:
+                                        if 48 <= codepoint <= 57:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 97 <= chr <= 102:
+                                        elif 97 <= codepoint <= 102:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 65 <= chr <= 70:
+                                        elif 65 <= codepoint <= 70:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -3785,15 +3786,15 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if 48 <= chr <= 57:
+                                        if 48 <= codepoint <= 57:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 97 <= chr <= 102:
+                                        elif 97 <= codepoint <= 102:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 65 <= chr <= 70:
+                                        elif 65 <= codepoint <= 70:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -3804,15 +3805,15 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if 48 <= chr <= 57:
+                                        if 48 <= codepoint <= 57:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 97 <= chr <= 102:
+                                        elif 97 <= codepoint <= 102:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 65 <= chr <= 70:
+                                        elif 65 <= codepoint <= 70:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -3823,15 +3824,15 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if 48 <= chr <= 57:
+                                        if 48 <= codepoint <= 57:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 97 <= chr <= 102:
+                                        elif 97 <= codepoint <= 102:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 65 <= chr <= 70:
+                                        elif 65 <= codepoint <= 70:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -3866,7 +3867,7 @@ cdef class Parser:
 
                                         while True: # start reject
                                             children_5 = []
-                                            offset_5 = offset_4
+                                            offset_5 = offset_4 + 0
                                             column_4 = column_3
                                             indent_column_4 = indent_column_3
                                             partial_tab_offset_4 = partial_tab_offset_3
@@ -3882,9 +3883,9 @@ cdef class Parser:
                                                 offset_5 = -1
                                                 break
 
-                                            chr = (buf[offset_5])
+                                            codepoint = (buf[offset_5])
 
-                                            if 48 <= chr <= 49:
+                                            if 48 <= codepoint <= 49:
                                                 offset_5 += 1
                                                 column_4 += 1
                                             else:
@@ -3898,7 +3899,7 @@ cdef class Parser:
 
                                         while True: # start reject
                                             children_5 = []
-                                            offset_5 = offset_4
+                                            offset_5 = offset_4 + 0
                                             column_4 = column_3
                                             indent_column_4 = indent_column_3
                                             partial_tab_offset_4 = partial_tab_offset_3
@@ -3924,12 +3925,12 @@ cdef class Parser:
                                                 offset_5 = -1
                                                 break
 
-                                            chr = (buf[offset_5])
+                                            codepoint = (buf[offset_5])
 
-                                            if 56 <= chr <= 57:
+                                            if 56 <= codepoint <= 57:
                                                 offset_5 += 1
                                                 column_4 += 1
-                                            elif 65 <= chr <= 70:
+                                            elif 65 <= codepoint <= 70:
                                                 offset_5 += 1
                                                 column_4 += 1
                                             else:
@@ -3945,15 +3946,15 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if 48 <= chr <= 57:
+                                        if 48 <= codepoint <= 57:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 97 <= chr <= 102:
+                                        elif 97 <= codepoint <= 102:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 65 <= chr <= 70:
+                                        elif 65 <= codepoint <= 70:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -3964,15 +3965,15 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if 48 <= chr <= 57:
+                                        if 48 <= codepoint <= 57:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 97 <= chr <= 102:
+                                        elif 97 <= codepoint <= 102:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 65 <= chr <= 70:
+                                        elif 65 <= codepoint <= 70:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -3983,15 +3984,15 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if 48 <= chr <= 57:
+                                        if 48 <= codepoint <= 57:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 97 <= chr <= 102:
+                                        elif 97 <= codepoint <= 102:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 65 <= chr <= 70:
+                                        elif 65 <= codepoint <= 70:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -4002,15 +4003,15 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if 48 <= chr <= 57:
+                                        if 48 <= codepoint <= 57:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 97 <= chr <= 102:
+                                        elif 97 <= codepoint <= 102:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 65 <= chr <= 70:
+                                        elif 65 <= codepoint <= 70:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -4021,15 +4022,15 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if 48 <= chr <= 57:
+                                        if 48 <= codepoint <= 57:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 97 <= chr <= 102:
+                                        elif 97 <= codepoint <= 102:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 65 <= chr <= 70:
+                                        elif 65 <= codepoint <= 70:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -4040,15 +4041,15 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if 48 <= chr <= 57:
+                                        if 48 <= codepoint <= 57:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 97 <= chr <= 102:
+                                        elif 97 <= codepoint <= 102:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 65 <= chr <= 70:
+                                        elif 65 <= codepoint <= 70:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -4059,15 +4060,15 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if 48 <= chr <= 57:
+                                        if 48 <= codepoint <= 57:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 97 <= chr <= 102:
+                                        elif 97 <= codepoint <= 102:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 65 <= chr <= 70:
+                                        elif 65 <= codepoint <= 70:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -4078,15 +4079,15 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if 48 <= chr <= 57:
+                                        if 48 <= codepoint <= 57:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 97 <= chr <= 102:
+                                        elif 97 <= codepoint <= 102:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif 65 <= chr <= 70:
+                                        elif 65 <= codepoint <= 70:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -4123,36 +4124,36 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if chr == 34:
+                                        if codepoint == 34:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif chr == 92:
+                                        elif codepoint == 92:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif chr == 47:
+                                        elif codepoint == 47:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif chr == 98:
+                                        elif codepoint == 98:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif chr == 102:
+                                        elif codepoint == 102:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif chr == 110:
+                                        elif codepoint == 110:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif chr == 114:
+                                        elif codepoint == 114:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif chr == 116:
+                                        elif codepoint == 116:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif chr == 39:
+                                        elif codepoint == 39:
                                             offset_4 += 1
                                             column_3 += 1
-                                        elif chr == 10:
+                                        elif codepoint == 10:
                                             offset_4 += 1
                                             column_3 += 1
                                         else:
@@ -4227,7 +4228,7 @@ cdef class Parser:
         return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
     cdef parse_rson_list(self, str buf, int offset_0, int buf_eof, int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
-        cdef Py_UCS4 chr
+        cdef Py_UCS4 codepoint
         cdef int offset_1, offset_2, offset_3, offset_4, offset_5
         cdef int column_1, column_2, column_3, column_4
 
@@ -4246,9 +4247,9 @@ cdef class Parser:
 
             count_0 = 0
             while offset_0 < buf_eof:
-                chr = buf[offset_0]
-                if chr in ' \t\r\n\ufeff':
-                    if chr == '\t':
+                codepoint = buf[offset_0]
+                if codepoint in ' \t\r\n\ufeff':
+                    if codepoint == '\t':
                         if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                             width = partial_tab_width_0
                         else:
@@ -4292,9 +4293,9 @@ cdef class Parser:
                                 offset_2 = -1
                                 break
 
-                            chr = (buf[offset_2])
+                            codepoint = (buf[offset_2])
 
-                            if chr == 10:
+                            if codepoint == 10:
                                 offset_2 = -1
                                 break
                             else:
@@ -4318,9 +4319,9 @@ cdef class Parser:
 
                     count_1 = 0
                     while offset_1 < buf_eof:
-                        chr = buf[offset_1]
-                        if chr in ' \t\r\n\ufeff':
-                            if chr == '\t':
+                        codepoint = buf[offset_1]
+                        if codepoint in ' \t\r\n\ufeff':
+                            if codepoint == '\t':
                                 if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                     width = partial_tab_width_1
                                 else:
@@ -4352,9 +4353,9 @@ cdef class Parser:
 
             count_0 = 0
             while offset_0 < buf_eof:
-                chr = buf[offset_0]
-                if chr in ' \t\r\n\ufeff':
-                    if chr == '\t':
+                codepoint = buf[offset_0]
+                if codepoint in ' \t\r\n\ufeff':
+                    if codepoint == '\t':
                         if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                             width = partial_tab_width_0
                         else:
@@ -4397,9 +4398,9 @@ cdef class Parser:
                             while True:
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
-                                    if chr in ' \t\r\n\ufeff':
-                                        if chr == '\t':
+                                    codepoint = buf[offset_3]
+                                    if codepoint in ' \t\r\n\ufeff':
+                                        if codepoint == '\t':
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
@@ -4443,9 +4444,9 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if chr == 10:
+                                                if codepoint == 10:
                                                     offset_5 = -1
                                                     break
                                                 else:
@@ -4469,9 +4470,9 @@ cdef class Parser:
 
                                         count_3 = 0
                                         while offset_4 < buf_eof:
-                                            chr = buf[offset_4]
-                                            if chr in ' \t\r\n\ufeff':
-                                                if chr == '\t':
+                                            codepoint = buf[offset_4]
+                                            if codepoint in ' \t\r\n\ufeff':
+                                                if codepoint == '\t':
                                                     if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                         width = partial_tab_width_3
                                                     else:
@@ -4503,9 +4504,9 @@ cdef class Parser:
 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
-                                    if chr in ' \t\r\n\ufeff':
-                                        if chr == '\t':
+                                    codepoint = buf[offset_3]
+                                    if codepoint in ' \t\r\n\ufeff':
+                                        if codepoint == '\t':
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
@@ -4530,9 +4531,9 @@ cdef class Parser:
 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
-                                    if chr in ' \t\r\n\ufeff':
-                                        if chr == '\t':
+                                    codepoint = buf[offset_3]
+                                    if codepoint in ' \t\r\n\ufeff':
+                                        if codepoint == '\t':
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
@@ -4576,9 +4577,9 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if chr == 10:
+                                                if codepoint == 10:
                                                     offset_5 = -1
                                                     break
                                                 else:
@@ -4602,9 +4603,9 @@ cdef class Parser:
 
                                         count_3 = 0
                                         while offset_4 < buf_eof:
-                                            chr = buf[offset_4]
-                                            if chr in ' \t\r\n\ufeff':
-                                                if chr == '\t':
+                                            codepoint = buf[offset_4]
+                                            if codepoint in ' \t\r\n\ufeff':
+                                                if codepoint == '\t':
                                                     if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                         width = partial_tab_width_3
                                                     else:
@@ -4636,9 +4637,9 @@ cdef class Parser:
 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
-                                    if chr in ' \t\r\n\ufeff':
-                                        if chr == '\t':
+                                    codepoint = buf[offset_3]
+                                    if codepoint in ' \t\r\n\ufeff':
+                                        if codepoint == '\t':
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
@@ -4675,9 +4676,9 @@ cdef class Parser:
 
                         count_1 = 0
                         while offset_2 < buf_eof:
-                            chr = buf[offset_2]
-                            if chr in ' \t\r\n\ufeff':
-                                if chr == '\t':
+                            codepoint = buf[offset_2]
+                            if codepoint in ' \t\r\n\ufeff':
+                                if codepoint == '\t':
                                     if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
@@ -4721,9 +4722,9 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if chr == 10:
+                                        if codepoint == 10:
                                             offset_4 = -1
                                             break
                                         else:
@@ -4747,9 +4748,9 @@ cdef class Parser:
 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
-                                    if chr in ' \t\r\n\ufeff':
-                                        if chr == '\t':
+                                    codepoint = buf[offset_3]
+                                    if codepoint in ' \t\r\n\ufeff':
+                                        if codepoint == '\t':
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
@@ -4781,9 +4782,9 @@ cdef class Parser:
 
                         count_1 = 0
                         while offset_2 < buf_eof:
-                            chr = buf[offset_2]
-                            if chr in ' \t\r\n\ufeff':
-                                if chr == '\t':
+                            codepoint = buf[offset_2]
+                            if codepoint in ' \t\r\n\ufeff':
+                                if codepoint == '\t':
                                     if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
@@ -4817,9 +4818,9 @@ cdef class Parser:
 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
-                                    if chr in ' \t\r\n\ufeff':
-                                        if chr == '\t':
+                                    codepoint = buf[offset_3]
+                                    if codepoint in ' \t\r\n\ufeff':
+                                        if codepoint == '\t':
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
@@ -4863,9 +4864,9 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if chr == 10:
+                                                if codepoint == 10:
                                                     offset_5 = -1
                                                     break
                                                 else:
@@ -4889,9 +4890,9 @@ cdef class Parser:
 
                                         count_3 = 0
                                         while offset_4 < buf_eof:
-                                            chr = buf[offset_4]
-                                            if chr in ' \t\r\n\ufeff':
-                                                if chr == '\t':
+                                            codepoint = buf[offset_4]
+                                            if codepoint in ' \t\r\n\ufeff':
+                                                if codepoint == '\t':
                                                     if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                         width = partial_tab_width_3
                                                     else:
@@ -4923,9 +4924,9 @@ cdef class Parser:
 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
-                                    if chr in ' \t\r\n\ufeff':
-                                        if chr == '\t':
+                                    codepoint = buf[offset_3]
+                                    if codepoint in ' \t\r\n\ufeff':
+                                        if codepoint == '\t':
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
@@ -4993,7 +4994,7 @@ cdef class Parser:
         return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
     cdef parse_rson_object(self, str buf, int offset_0, int buf_eof, int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
-        cdef Py_UCS4 chr
+        cdef Py_UCS4 codepoint
         cdef int offset_1, offset_2, offset_3, offset_4, offset_5, offset_6
         cdef int column_1, column_2, column_3, column_4
 
@@ -5012,9 +5013,9 @@ cdef class Parser:
 
             count_0 = 0
             while offset_0 < buf_eof:
-                chr = buf[offset_0]
-                if chr in ' \t\r\n\ufeff':
-                    if chr == '\t':
+                codepoint = buf[offset_0]
+                if codepoint in ' \t\r\n\ufeff':
+                    if codepoint == '\t':
                         if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                             width = partial_tab_width_0
                         else:
@@ -5058,9 +5059,9 @@ cdef class Parser:
                                 offset_2 = -1
                                 break
 
-                            chr = (buf[offset_2])
+                            codepoint = (buf[offset_2])
 
-                            if chr == 10:
+                            if codepoint == 10:
                                 offset_2 = -1
                                 break
                             else:
@@ -5084,9 +5085,9 @@ cdef class Parser:
 
                     count_1 = 0
                     while offset_1 < buf_eof:
-                        chr = buf[offset_1]
-                        if chr in ' \t\r\n\ufeff':
-                            if chr == '\t':
+                        codepoint = buf[offset_1]
+                        if codepoint in ' \t\r\n\ufeff':
+                            if codepoint == '\t':
                                 if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                     width = partial_tab_width_1
                                 else:
@@ -5118,9 +5119,9 @@ cdef class Parser:
 
             count_0 = 0
             while offset_0 < buf_eof:
-                chr = buf[offset_0]
-                if chr in ' \t\r\n\ufeff':
-                    if chr == '\t':
+                codepoint = buf[offset_0]
+                if codepoint in ' \t\r\n\ufeff':
+                    if codepoint == '\t':
                         if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                             width = partial_tab_width_0
                         else:
@@ -5157,9 +5158,9 @@ cdef class Parser:
 
                             count_1 = 0
                             while offset_3 < buf_eof:
-                                chr = buf[offset_3]
-                                if chr in ' \t\r\n\ufeff':
-                                    if chr == '\t':
+                                codepoint = buf[offset_3]
+                                if codepoint in ' \t\r\n\ufeff':
+                                    if codepoint == '\t':
                                         if offset_3 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
@@ -5203,9 +5204,9 @@ cdef class Parser:
                                                 offset_5 = -1
                                                 break
 
-                                            chr = (buf[offset_5])
+                                            codepoint = (buf[offset_5])
 
-                                            if chr == 10:
+                                            if codepoint == 10:
                                                 offset_5 = -1
                                                 break
                                             else:
@@ -5229,9 +5230,9 @@ cdef class Parser:
 
                                     count_2 = 0
                                     while offset_4 < buf_eof:
-                                        chr = buf[offset_4]
-                                        if chr in ' \t\r\n\ufeff':
-                                            if chr == '\t':
+                                        codepoint = buf[offset_4]
+                                        if codepoint in ' \t\r\n\ufeff':
+                                            if codepoint == '\t':
                                                 if offset_4 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
@@ -5263,9 +5264,9 @@ cdef class Parser:
 
                             count_1 = 0
                             while offset_3 < buf_eof:
-                                chr = buf[offset_3]
-                                if chr in ' \t\r\n\ufeff':
-                                    if chr == '\t':
+                                codepoint = buf[offset_3]
+                                if codepoint in ' \t\r\n\ufeff':
+                                    if codepoint == '\t':
                                         if offset_3 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
@@ -5290,9 +5291,9 @@ cdef class Parser:
 
                             count_1 = 0
                             while offset_3 < buf_eof:
-                                chr = buf[offset_3]
-                                if chr in ' \t\r\n\ufeff':
-                                    if chr == '\t':
+                                codepoint = buf[offset_3]
+                                if codepoint in ' \t\r\n\ufeff':
+                                    if codepoint == '\t':
                                         if offset_3 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
@@ -5336,9 +5337,9 @@ cdef class Parser:
                                                 offset_5 = -1
                                                 break
 
-                                            chr = (buf[offset_5])
+                                            codepoint = (buf[offset_5])
 
-                                            if chr == 10:
+                                            if codepoint == 10:
                                                 offset_5 = -1
                                                 break
                                             else:
@@ -5362,9 +5363,9 @@ cdef class Parser:
 
                                     count_2 = 0
                                     while offset_4 < buf_eof:
-                                        chr = buf[offset_4]
-                                        if chr in ' \t\r\n\ufeff':
-                                            if chr == '\t':
+                                        codepoint = buf[offset_4]
+                                        if codepoint in ' \t\r\n\ufeff':
+                                            if codepoint == '\t':
                                                 if offset_4 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
@@ -5396,9 +5397,9 @@ cdef class Parser:
 
                             count_1 = 0
                             while offset_3 < buf_eof:
-                                chr = buf[offset_3]
-                                if chr in ' \t\r\n\ufeff':
-                                    if chr == '\t':
+                                codepoint = buf[offset_3]
+                                if codepoint in ' \t\r\n\ufeff':
+                                    if codepoint == '\t':
                                         if offset_3 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
@@ -5428,9 +5429,9 @@ cdef class Parser:
 
                         count_1 = 0
                         while offset_2 < buf_eof:
-                            chr = buf[offset_2]
-                            if chr in ' \t\r\n\ufeff':
-                                if chr == '\t':
+                            codepoint = buf[offset_2]
+                            if codepoint in ' \t\r\n\ufeff':
+                                if codepoint == '\t':
                                     if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
@@ -5474,9 +5475,9 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-                                        chr = (buf[offset_4])
+                                        codepoint = (buf[offset_4])
 
-                                        if chr == 10:
+                                        if codepoint == 10:
                                             offset_4 = -1
                                             break
                                         else:
@@ -5500,9 +5501,9 @@ cdef class Parser:
 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
-                                    if chr in ' \t\r\n\ufeff':
-                                        if chr == '\t':
+                                    codepoint = buf[offset_3]
+                                    if codepoint in ' \t\r\n\ufeff':
+                                        if codepoint == '\t':
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
@@ -5534,9 +5535,9 @@ cdef class Parser:
 
                         count_1 = 0
                         while offset_2 < buf_eof:
-                            chr = buf[offset_2]
-                            if chr in ' \t\r\n\ufeff':
-                                if chr == '\t':
+                            codepoint = buf[offset_2]
+                            if codepoint in ' \t\r\n\ufeff':
+                                if codepoint == '\t':
                                     if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
@@ -5570,9 +5571,9 @@ cdef class Parser:
 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
-                                    if chr in ' \t\r\n\ufeff':
-                                        if chr == '\t':
+                                    codepoint = buf[offset_3]
+                                    if codepoint in ' \t\r\n\ufeff':
+                                        if codepoint == '\t':
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
@@ -5616,9 +5617,9 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if chr == 10:
+                                                if codepoint == 10:
                                                     offset_5 = -1
                                                     break
                                                 else:
@@ -5642,9 +5643,9 @@ cdef class Parser:
 
                                         count_3 = 0
                                         while offset_4 < buf_eof:
-                                            chr = buf[offset_4]
-                                            if chr in ' \t\r\n\ufeff':
-                                                if chr == '\t':
+                                            codepoint = buf[offset_4]
+                                            if codepoint in ' \t\r\n\ufeff':
+                                                if codepoint == '\t':
                                                     if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                         width = partial_tab_width_3
                                                     else:
@@ -5676,9 +5677,9 @@ cdef class Parser:
 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
-                                    if chr in ' \t\r\n\ufeff':
-                                        if chr == '\t':
+                                    codepoint = buf[offset_3]
+                                    if codepoint in ' \t\r\n\ufeff':
+                                        if codepoint == '\t':
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
@@ -5703,9 +5704,9 @@ cdef class Parser:
 
                                     count_2 = 0
                                     while offset_4 < buf_eof:
-                                        chr = buf[offset_4]
-                                        if chr in ' \t\r\n\ufeff':
-                                            if chr == '\t':
+                                        codepoint = buf[offset_4]
+                                        if codepoint in ' \t\r\n\ufeff':
+                                            if codepoint == '\t':
                                                 if offset_4 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
@@ -5749,9 +5750,9 @@ cdef class Parser:
                                                         offset_6 = -1
                                                         break
 
-                                                    chr = (buf[offset_6])
+                                                    codepoint = (buf[offset_6])
 
-                                                    if chr == 10:
+                                                    if codepoint == 10:
                                                         offset_6 = -1
                                                         break
                                                     else:
@@ -5775,9 +5776,9 @@ cdef class Parser:
 
                                             count_3 = 0
                                             while offset_5 < buf_eof:
-                                                chr = buf[offset_5]
-                                                if chr in ' \t\r\n\ufeff':
-                                                    if chr == '\t':
+                                                codepoint = buf[offset_5]
+                                                if codepoint in ' \t\r\n\ufeff':
+                                                    if codepoint == '\t':
                                                         if offset_5 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                             width = partial_tab_width_3
                                                         else:
@@ -5809,9 +5810,9 @@ cdef class Parser:
 
                                     count_2 = 0
                                     while offset_4 < buf_eof:
-                                        chr = buf[offset_4]
-                                        if chr in ' \t\r\n\ufeff':
-                                            if chr == '\t':
+                                        codepoint = buf[offset_4]
+                                        if codepoint in ' \t\r\n\ufeff':
+                                            if codepoint == '\t':
                                                 if offset_4 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
@@ -5836,9 +5837,9 @@ cdef class Parser:
 
                                     count_2 = 0
                                     while offset_4 < buf_eof:
-                                        chr = buf[offset_4]
-                                        if chr in ' \t\r\n\ufeff':
-                                            if chr == '\t':
+                                        codepoint = buf[offset_4]
+                                        if codepoint in ' \t\r\n\ufeff':
+                                            if codepoint == '\t':
                                                 if offset_4 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
@@ -5882,9 +5883,9 @@ cdef class Parser:
                                                         offset_6 = -1
                                                         break
 
-                                                    chr = (buf[offset_6])
+                                                    codepoint = (buf[offset_6])
 
-                                                    if chr == 10:
+                                                    if codepoint == 10:
                                                         offset_6 = -1
                                                         break
                                                     else:
@@ -5908,9 +5909,9 @@ cdef class Parser:
 
                                             count_3 = 0
                                             while offset_5 < buf_eof:
-                                                chr = buf[offset_5]
-                                                if chr in ' \t\r\n\ufeff':
-                                                    if chr == '\t':
+                                                codepoint = buf[offset_5]
+                                                if codepoint in ' \t\r\n\ufeff':
+                                                    if codepoint == '\t':
                                                         if offset_5 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                             width = partial_tab_width_3
                                                         else:
@@ -5942,9 +5943,9 @@ cdef class Parser:
 
                                     count_2 = 0
                                     while offset_4 < buf_eof:
-                                        chr = buf[offset_4]
-                                        if chr in ' \t\r\n\ufeff':
-                                            if chr == '\t':
+                                        codepoint = buf[offset_4]
+                                        if codepoint in ' \t\r\n\ufeff':
+                                            if codepoint == '\t':
                                                 if offset_4 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
@@ -5974,9 +5975,9 @@ cdef class Parser:
 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
-                                    if chr in ' \t\r\n\ufeff':
-                                        if chr == '\t':
+                                    codepoint = buf[offset_3]
+                                    if codepoint in ' \t\r\n\ufeff':
+                                        if codepoint == '\t':
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
@@ -6020,9 +6021,9 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if chr == 10:
+                                                if codepoint == 10:
                                                     offset_5 = -1
                                                     break
                                                 else:
@@ -6046,9 +6047,9 @@ cdef class Parser:
 
                                         count_3 = 0
                                         while offset_4 < buf_eof:
-                                            chr = buf[offset_4]
-                                            if chr in ' \t\r\n\ufeff':
-                                                if chr == '\t':
+                                            codepoint = buf[offset_4]
+                                            if codepoint in ' \t\r\n\ufeff':
+                                                if codepoint == '\t':
                                                     if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                         width = partial_tab_width_3
                                                     else:
@@ -6080,9 +6081,9 @@ cdef class Parser:
 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
-                                    if chr in ' \t\r\n\ufeff':
-                                        if chr == '\t':
+                                    codepoint = buf[offset_3]
+                                    if codepoint in ' \t\r\n\ufeff':
+                                        if codepoint == '\t':
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
@@ -6131,9 +6132,9 @@ cdef class Parser:
 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
-                                    if chr in ' \t\r\n\ufeff':
-                                        if chr == '\t':
+                                    codepoint = buf[offset_3]
+                                    if codepoint in ' \t\r\n\ufeff':
+                                        if codepoint == '\t':
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
@@ -6177,9 +6178,9 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-                                                chr = (buf[offset_5])
+                                                codepoint = (buf[offset_5])
 
-                                                if chr == 10:
+                                                if codepoint == 10:
                                                     offset_5 = -1
                                                     break
                                                 else:
@@ -6203,9 +6204,9 @@ cdef class Parser:
 
                                         count_3 = 0
                                         while offset_4 < buf_eof:
-                                            chr = buf[offset_4]
-                                            if chr in ' \t\r\n\ufeff':
-                                                if chr == '\t':
+                                            codepoint = buf[offset_4]
+                                            if codepoint in ' \t\r\n\ufeff':
+                                                if codepoint == '\t':
                                                     if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                         width = partial_tab_width_3
                                                     else:
@@ -6237,9 +6238,9 @@ cdef class Parser:
 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
-                                    chr = buf[offset_3]
-                                    if chr in ' \t\r\n\ufeff':
-                                        if chr == '\t':
+                                    codepoint = buf[offset_3]
+                                    if codepoint in ' \t\r\n\ufeff':
+                                        if codepoint == '\t':
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
