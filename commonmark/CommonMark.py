@@ -53,7 +53,6 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
         # Link reference_definiton
         ordered_list |
         unordered_list |
-        setext_heading |     
         para 
     )
 
@@ -480,6 +479,8 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                                     self.whitespace()
                                 self.end_of_line()
 
+    # para 
+
     @rule()
     def para_interrupt(self):
         with self.choice():
@@ -501,28 +502,7 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                     self.end_of_line()
             
     @rule()
-    def linebreak_and_indent(self):
-        with self.choice():
-            with self.case():
-                with self.choice():
-                    with self.case(): self.whitespace(min=2)
-                    with self.case(): self.literal("\\")
-                with self.capture_node("hardbreak"):
-                    self.newline()
-            with self.case():
-                self.whitespace()
-                with self.capture_node("softbreak"):
-                    self.newline()
-
-        self.indent(partial=False)
-        with self.reject(): 
-            self.para_interrupt.inline()
-        self.whitespace()
-        with self.reject():
-            self.newline()
-
-    @rule()
-    def linebreak_no_dedent(self):
+    def linebreak(self):
         with self.choice():
             with self.case():
                 with self.choice():
@@ -563,83 +543,104 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
             self.setext_heading_line()
 
     @rule()
-    def setext_heading(self):
-        # 4.3 they cannot be interpretable as a code fence, 
-        # ATX heading, block quote, thematic break, list item, or HTML block.
-        self.whitespace(max=3)
-        with self.capture_node('setext_heading'):
-            with self.no_setext_heading_line.as_indent():
-                self.strict_inline_para()
-                # ugh?
-                self.whitespace()
-                with self.optional():
-                    self.literal("\\")
-                    self.capture_value("\\")
-
-                self.whitespace()
-                self.newline()
-            self.indent()
-            self.setext_heading_line()
-
-    @rule()
     def para(self):
         self.whitespace(max=3)
-        with self.memoize(),self.capture_node("para"):
-            self.inline_para.inline()
-            self.whitespace()
-            with self.optional():
+        with self.capture_node("para"):
+            with self.no_setext_heading_line.as_indent():
+                self.inline_element()
+
+                with self.repeat():
+                    with self.choice():
+                        with self.case():
+                            self.linebreak.inline()
+                        with self.case():
+                            with self.capture_node("whitespace"):
+                                self.whitespace()
+
+                    self.inline_element()
+            with self.choice():
+                with self.case():
+                    with self.optional():
+                        self.literal("\\")
+                        self.capture_value("\\")
+
+                    self.whitespace()
+                    self.newline()
+                    self.indent(partial=False)
+                    self.setext_heading_line()
+                    self.capture_value('setext')
+                with self.case():
+                    with self.repeat():
+                        with self.choice():
+                            with self.case():
+                                self.linebreak.inline()
+                            with self.case():
+                                with self.capture_node("whitespace"):
+                                    self.whitespace()
+
+                        # 4.1 Ex 27, 28. Thematic Breaks can interrupt a paragraph
+                        self.inline_element()
+
+                    self.whitespace()
+                    with self.optional():
+                        self.literal("\\")
+                        self.capture_value("\\")
+                    self.end_of_line()
+                    self.capture_value('para')
+
+    @rule()
+    def inline_element(self):
+        with self.choice():
+            with self.case():
+                self.code_span()
+
+            with self.case():
+                self.left_flank()
+            with self.case():
                 self.literal("\\")
-                self.capture_value("\\")
-            self.end_of_line()
+                with self.reject(): # hardbreaks
+                    self.newline()
+                    self.whitespace()
+                    self.range('\n', invert=True)
+
+                with self.choice():
+                    with self.case(), self.capture_node("text"):
+                        self.range("!-/",":-@","[-`","{-~")
+                    with self.case():
+                        self.capture_value("\\")
+
+
+            with self.case():
+                with self.capture_node('text'):
+                    self.range(" ", "\n", "\\", invert=True)
+                    with self.repeat(min=0):
+                        self.range(" ", "\n", "\\", "<", "`", invert=True)
 
     @rule()
-    def strict_inline_para(self):
-        self.inline_element()
-        with self.repeat():
-            with self.choice():
-                with self.case():
-                    self.linebreak_and_indent.inline()
-                with self.case():
-                    with self.capture_node("whitespace"):
-                        self.whitespace()
-                    with self.optional():
-                        with self.capture_node('text'):
-                            self.literal("\\")
-                        with self.lookahead():
-                            self.newline()
+    def left_flank(self):
+        with self.capture_node("left_flank"), self.choice():
+            with self.case():
+                with self.lookahead(-1):
+                    self.range(unicode_whitespace=True, unicode_newline=True, unicode_punctuation=True)
+                with self.count(columns=True) as n:
+                    with self.backref() as chr:
+                        self.range("_", "*")
+                    with self.repeat(min=0):
+                        self.literal(chr)
+                with self.reject():
+                    self.range(unicode_whitespace=True)
+                self.capture_value(chr)
+                self.capture_value(n)
 
-            # 4.1 Ex 27, 28. Thematic Breaks can interrupt a paragraph
-            self.inline_element()
-
-    @rule()
-    def inline_para(self):
-        self.inline_element()
-        with self.repeat():
-            with self.choice():
-                with self.case():
-                    self.linebreak_no_dedent.inline()
-                with self.case():
-                    with self.capture_node("whitespace"):
-                        self.whitespace()
-                    with self.optional():
-                        with self.capture_node('text'):
-                            self.literal("\\")
-                        with self.lookahead():
-                            self.newline()
-
-            # 4.1 Ex 27, 28. Thematic Breaks can interrupt a paragraph
-            self.inline_element()
-
-
-    inline_element = rule(code_span | escaped | word )
-    # \ escapes
-    # entity
-    # code spans
-    # emph
-    # links
-    # images
-    # autolinks
-    # html
+            with self.case():
+                with self.count(columns=True) as n:
+                    with self.backref() as chr:
+                        self.range("_", "*")
+                    with self.repeat(min=0):
+                        self.literal(chr)
+                with self.reject():
+                    self.range(unicode_whitespace=True, unicode_newline=True, unicode_punctuation=True)
+                
     @rule()
     def code_span(self):
         with self.choice():
@@ -651,7 +652,7 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                         self.range("`", "\n", invert=True)
                     with self.case():
                         self.newline()
-                        self.indent(partial=True) # needs to be inherited, ugh!
+                        self.indent(partial=True)
                     with self.case():
                         with self.reject():
                             with self.repeat(min=c, max=c):
@@ -670,28 +671,6 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                     self.literal("`")
 
 
-
-    @rule()
-    def escaped(self):
-        self.literal("\\")
-        with self.reject(): # hardbreaks
-            self.newline()
-            self.whitespace()
-            self.range('\n', invert=True)
-
-        with self.choice():
-            with self.case(), self.capture_node("text"):
-                self.range("!-/",":-@","[-`","{-~")
-            with self.case():
-                self.capture_value("\\")
-
-
-    @rule()
-    def word(self):
-        with self.capture_node('text'):
-            self.range(" ", "\n", "\\", invert=True)
-            with self.repeat(min=0):
-                self.range(" ", "\n", "\\", "<", "`", invert=True)
 
 ## HTML Builder
 
@@ -725,10 +704,6 @@ def thematic_break(buf, pos,end, children):
 @_builder
 def atx_heading(buf, pos,end, children):
     return f"<h{children[0]}>{make_para(children[1:])}</h{children[0]}>"
-
-@_builder
-def setext_heading(buf, pos,end, children):
-    return f"<h{children[-1]}>{make_para(children[:-1])}</h{children[-1]}>"
 
 @_builder
 def indented_code(buf, pos,end, children):
@@ -868,8 +843,16 @@ def empty_line(buf, pos, end, children):
     return None
 
 @_builder
+def left_flank(buf, pos, end, children):
+    return buf[pos:end]
+
+@_builder
 def para(buf, pos,end, children):
-    return (make_para(children),)
+    kind = children.pop()
+    if kind == "setext":
+        return f"<h{children[-1]}>{make_para(children[:-1])}</h{children[-1]}>"
+    else:
+        return (make_para(children),)
 
 @_builder
 def code_span(buf, pos, end, children):

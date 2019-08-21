@@ -462,9 +462,14 @@ class FunctionBuilder:
         if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         self.rules.append(GrammarNode(DEDENT))
 
-    def range(self, *args, invert=False):
+    def range(self, *args, invert=False, unicode_whitespace=None, unicode_punctuation=None, unicode_newline=None):
         if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
-        self.rules.append(GrammarNode(RANGE, args=dict(range=args, invert=invert)))
+        named_ranges = dict(
+                unicode_whitespace=unicode_whitespace,
+                unicode_newline=unicode_newline,
+                unicode_punctuation=unicode_punctuation,
+        )
+        self.rules.append(GrammarNode(RANGE, args=dict(range=args, invert=invert, named_ranges=named_ranges)))
 
     def print(self, *args):
         if self.block_mode: raise SyntaxError()
@@ -565,12 +570,12 @@ class FunctionBuilder:
         self.rules = rules
 
     @contextmanager
-    def lookahead(self):
+    def lookahead(self, offset=0):
         if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         rules = self.rules
         self.rules = []
         yield
-        rules.append(GrammarNode(LOOKAHEAD, rules=self.rules))
+        rules.append(GrammarNode(LOOKAHEAD, rules=self.rules, args=dict(offset=offset)))
         self.rules = rules
 
     @contextmanager
@@ -657,7 +662,7 @@ class Builtins:
     def trace(*args):
         return GrammarNode(TRACE, rules=args)
     def range(*args, invert=False):
-        return GrammarNode(RANGE, args=dict(range=args, invert=invert))
+        return GrammarNode(RANGE, args=dict(range=args, invert=invert, named_ranges={}))
     def repeat(*args, min=0, max=None):
         return GrammarNode(REPEAT, rules=args, args=dict(min=min, max=max))
     def optional(*args):
@@ -974,7 +979,7 @@ def compile_python(grammar, cython=False):
             partial_tab_width_0 = partial_tab_width.incr()
             steps.append(f"while True: # start lookahed")
             steps_0.append(f"{children_0} = []")
-            steps_0.append(f"{offset_0} = {offset}")
+            steps_0.append(f"{offset_0} = {offset} + {rule.args['offset']}")
             steps_0.append(f"{column_0} = {column}")
             steps_0.append(f"{indent_column_0} = {indent_column}")
             steps_0.append(f"{partial_tab_offset_0} = {partial_tab_offset}")
@@ -1029,10 +1034,13 @@ def compile_python(grammar, cython=False):
             # find var name
             var_name = VarBuilder('value',n=len(values))
             values[rule.key] = var_name
+
             if rule.args['columns']:
                 value = f"{column_0} - {column}"
             elif rule.args['char']:
-                value = f"buf[{offset}:{offset_0}].count({repr(rule.args['char'])})"
+                char = rule.args['char']
+                char = values.get(char, repr(char))
+                value = f"buf[{offset}:{offset_0}].count({char})"
             else:
                 raise Exception('bad args to count rule')
             steps.append(f"{var_name} = {value}") 
@@ -1049,9 +1057,9 @@ def compile_python(grammar, cython=False):
             ))
 
         elif rule.kind == SET_LINE_PREFIX:
-            cond =f"chr in {repr(''.join(grammar.whitespace))}"
+            cond =f"_chr in {repr(''.join(grammar.whitespace))}"
 
-            cond2 =f"chr in {repr(''.join(grammar_newline))}"
+            cond2 =f"_chr in {repr(''.join(grammar_newline))}"
 
             if rule.args['indent'] is None:
                 c = rule.args['count']
@@ -1070,14 +1078,14 @@ def compile_python(grammar, cython=False):
                         f"    saw_tab, saw_not_tab = False, False",
                         f"    start_column, start_offset = column, offset",
                         f"    while count > 0 and offset < buf_eof:",
-                        f"        chr = buf[offset]",
+                        f"        _chr = buf[offset]",
                         f"        if {cond}:",
                         f"            if not allow_mixed_indent:",
-                        f"                if chr == '\\t': saw_tab = True",
+                        f"                if _chr == '\\t': saw_tab = True",
                         f"                else: saw_not_tab = True",
                         f"                if saw_tab and saw_not_tab:",
                         f"                     offset -1; break",
-                        f"            if chr != '\\t':",
+                        f"            if _chr != '\\t':",
                         f"                column += 1",
                         f"                offset += 1",
                         f"                count -=1",
@@ -1098,7 +1106,7 @@ def compile_python(grammar, cython=False):
                 ))
                 if newline_rn:
                     steps.extend((
-                        f"        elif chr == '\\r' and {offset} + 1 < buf_eof and buf[{offset}+1] == '\\n':", 
+                        f"        elif _chr == '\\r' and {offset} + 1 < buf_eof and buf[{offset}+1] == '\\n':", 
                         f"            break",
                     ))
                 steps.extend((
@@ -1117,14 +1125,14 @@ def compile_python(grammar, cython=False):
                         f"    saw_tab, saw_not_tab = False, False",
                         f"    start_column, start_offset = column, offset",
                         f"    while count > 0 and offset < buf_eof:",
-                        f"        chr = buf[offset]",
+                        f"        _chr = buf[offset]",
                         f"        if {cond}:",
                         f"            if not allow_mixed_indent:",
-                        f"                if chr == '\\t': saw_tab = True",
+                        f"                if _chr == '\\t': saw_tab = True",
                         f"                else: saw_not_tab = True",
                         f"                if saw_tab and saw_not_tab:",
                         f"                    offset = start_offset; break",
-                        f"            if chr != '\\t':",
+                        f"            if _chr != '\\t':",
                         f"                column += 1",
                         f"                offset += 1",
                         f"                count -=1",
@@ -1142,7 +1150,7 @@ def compile_python(grammar, cython=False):
                     ))
                     if newline_rn:
                         steps.extend((
-                        f"        elif chr == '\\r' and {offset} + 1 < buf_eof and buf[{offset}+1] == '\\n':", 
+                        f"        elif _chr == '\\r' and {offset} + 1 < buf_eof and buf[{offset}+1] == '\\n':", 
                         f"            offset = -1; break",
                         ))
                     steps.extend((
@@ -1295,12 +1303,13 @@ def compile_python(grammar, cython=False):
                 f"    {offset} = -1",
                 f"    break",
                 f"",
-                f"chr = {_ord}(buf[{offset}])",
+                f"_chr = {_ord}(buf[{offset}])",
                 f"",
             ))
 
             literals = rule.args['range']
 
+            idx = 0
             for idx, literal in enumerate(rule.args['range']):
                 _if = {0:"if"}.get(idx, "elif")
                 if '-' in literal and len(literal) == 3:
@@ -1314,13 +1323,13 @@ def compile_python(grammar, cython=False):
 
                     if invert:
                         steps.extend((
-                            f"{_if} {start}chr <= {end}:",
+                            f"{_if} {start}_chr <= {end}:",
                             f"    {offset} = -1",
                             f"    break",
                         ))
                     else:
                         steps.extend((
-                            f"{_if} {start}chr <= {end}:",
+                            f"{_if} {start}_chr <= {end}:",
                             f"    {offset} += 1",
                             f"    {column} += 1",
                         ))
@@ -1329,18 +1338,61 @@ def compile_python(grammar, cython=False):
                     literal = repr(ord(literal))
                     if invert:
                         steps.extend((
-                            f"{_if} chr == {literal}:",
+                            f"{_if} _chr == {literal}:",
                             f"    {offset} = -1",
                             f"    break",
                         ))
                     else:
                         steps.extend((
-                            f"{_if} chr == {literal}:",
+                            f"{_if} _chr == {literal}:",
                             f"    {offset} += 1",
                             f"    {column} += 1",
                         ))
                 else:
                     raise BadGrammar('bad range', repr(literal))
+
+            for name, active in rule.args['named_ranges'].items():
+                if not active: continue
+                _if = {0:"if"}.get(idx, "elif")
+                idx +=1 
+                if name == "unicode_punctuation":
+                    steps.extend((
+                        f"{_if} unicodedata.category(chr(_chr)).startswith('P'):",
+                    ))
+                    if invert: steps.extend ((
+                        f"    {offset} = -1",
+                        f"    break",
+                    ))
+                    else: steps.extend((
+                        f"    {offset} += 1",
+                        f"    {column} += 1",
+                    ))
+                elif name == "unicode_whitespace":
+                    steps.extend((
+                        f"{_if} unicodedata.category(chr(_chr)) == 'Zs':",
+                    ))
+                    if invert: steps.extend ((
+                        f"    {offset} = -1",
+                        f"    break",
+                    ))
+                    else: steps.extend((
+                        f"    {offset} += 1",
+                        f"    {column} += 1",
+                    ))
+                elif name == "unicode_newline": # crlf ugh
+                    steps.extend((
+                        f"{_if} unicodedata.category(chr(_chr)) in ('Zl', 'Zp', 'Cc'):",
+                    ))
+                    if invert: steps.extend ((
+                        f"    {offset} = -1",
+                        f"    break",
+                    ))
+                    else: steps.extend((
+                        f"    {offset} += 1",
+                        f"    {column} += 1",
+                    ))
+                else:
+                    raise Exception(name)
 
             if not invert:
                 steps.extend((
@@ -1419,19 +1471,19 @@ def compile_python(grammar, cython=False):
             if _max:
                 cond.append(f"{count} < {_maxv}")
 
-            cond2 =f"chr in {repr(''.join(grammar.whitespace))}"
-            cond3 =f"chr in {repr(''.join(grammar_newline))}"
+            cond2 =f"_chr in {repr(''.join(grammar.whitespace))}"
+            cond3 =f"_chr in {repr(''.join(grammar_newline))}"
 
             steps.extend((
                         f"{count} = 0",
                         f"while {' and '.join(cond)}:",
-                        f"    chr = buf[{offset}]",
+                        f"    _chr = buf[{offset}]",
             ))
 
             if _newline:
                 if newline_rn:
                     steps.extend((
-                        f"    if chr == '\\r' and {offset} + 1 < buf_eof and buf[{offset}+1] == '\\n':", 
+                        f"    if _chr == '\\r' and {offset} + 1 < buf_eof and buf[{offset}+1] == '\\n':", 
                         f"        {offset} +=2",
                         f"        {column} = 0",
                         f"        {indent_column} = (0, None)",
@@ -1454,7 +1506,7 @@ def compile_python(grammar, cython=False):
                 ))
 
             steps.extend((
-                        f"        if chr == '\\t':",
+                        f"        if _chr == '\\t':",
                         f"            if {offset} == {partial_tab_offset} and {partial_tab_width} > 0:",
                         f"                width = {partial_tab_width}",
                         f"            else:",
@@ -1491,14 +1543,14 @@ def compile_python(grammar, cython=False):
                     
 
         elif rule.kind == NEWLINE:
-            cond =f"chr in {repr(''.join(grammar_newline))}"
+            cond =f"_chr in {repr(''.join(grammar_newline))}"
             steps.extend((
                 f"if {offset} < buf_eof:",
-                f"    chr = buf[{offset}]",
+                f"    _chr = buf[{offset}]",
             ))
             if newline_rn:
                 steps.extend((
-                    f"    if chr == '\\r' and {offset} + 1 < buf_eof and buf[{offset}+1] == '\\n':", 
+                    f"    if _chr == '\\r' and {offset} + 1 < buf_eof and buf[{offset}+1] == '\\n':", 
                     f"        {offset} +=2",
                     f"        {column} = 0",
                     f"        {indent_column} = (0, None)",
@@ -1521,15 +1573,15 @@ def compile_python(grammar, cython=False):
             ))
 
         elif rule.kind == END_OF_LINE:
-            cond =f"chr in {repr(''.join(grammar_newline))}"
+            cond =f"_chr in {repr(''.join(grammar_newline))}"
 
             steps.extend((
                 f"if {offset} < buf_eof:",
-                f"    chr = buf[{offset}]",
+                f"    _chr = buf[{offset}]",
             ))
             if newline_rn:
                 steps.extend((
-                    f"    if chr == '\\r' and {offset} + 1 < buf_eof and buf[{offset}+1] == '\\n':", 
+                    f"    if _chr == '\\r' and {offset} + 1 < buf_eof and buf[{offset}+1] == '\\n':", 
                     f"        {offset} +=2",
                     f"        {column} = 0",
                     f"        {indent_column} = (0, None)",
@@ -1581,8 +1633,13 @@ def compile_python(grammar, cython=False):
     whitespace = repr(tuple(grammar.whitespace)) if grammar.whitespace else '()'
     whitespace_tab = bool(grammar.whitespace) and '\t' in grammar.whitespace
 
+    if cython:
+        output.append("import unicodedata")
+    else:
+        output.append("def _build(unicodedata):")
+        output = output.add_indent()
 
-
+    old_output = output
     parse_node = (
         f"class Node:",
         f"    def __init__(self, name, start, end, children, value):",
@@ -1654,7 +1711,7 @@ def compile_python(grammar, cython=False):
         cdefs = {}
         if cython:
             output.append(f"cdef parse_{name}(self, str buf, int offset_0, int buf_eof, int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):")
-            output.append(f"    cdef Py_UCS4 chr")
+            output.append(f"    cdef Py_UCS4 _chr")
             
             for v in varnames:
                 cdefs[v] = output.add_indent(4).append_placeholder()
@@ -1684,131 +1741,13 @@ def compile_python(grammar, cython=False):
     #     output.append(f"    print(('exit' if offset_0 != -1 else 'fail'), '{name}', offset_0, column_0, repr(buf[offset_0: offset_0+10]))")
         output.append(f"    return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0")
         output.append("")
+    if not cython:
+        old_output.append("return Parser")
     # for lineno, line in enumerate(output.output):
-    #    print(lineno, '\t', line)
+    #   print(lineno, '\t', line)
     return output.as_string()
 
 
-def compile2(grammar, language="python"):
-    if language not in ('python', 'cython'): raise Exception('not yet')
-
-    newline = tuple(n for n in grammar.newline if n!='\r\n') if grammar.newline else ()
-    newline_crlf = bool(grammar.newline) and '\r\n' in grammar.newline
-    whitespace_tab = bool(grammar.whitespace) and '\t' in grammar.whitespace
-    whitespace = tuple(grammar.whitespace) if grammar.whitespace else '()'
-
-
-
-    node_class = (
-        f"class Node:",
-        f"    def __init__(self, name, start_offset, end_offset, children):",
-        f"        self.name = name",
-        f"        self.start_offset = start_offset",
-        f"        self.end_offset = end_offset",
-        f"        self.children = children if children is not None else ()",
-        f"    def __str__(self):",
-        "        return '{}[{}:{}]'.format(self.name, self.start, self.end)",
-        f'    def build(self, buf, builder):',
-        f'        children = [child.build(buf, builder) for child in self.children]',
-        f'        if self.name == "value": return self.value',
-        f'        return builder[self.name](buf, self.start, self.end, children)',
-        f'',
-        f"",
-    )
-
-    parse_class = (
-        f"class Parser:",
-        f"    def __init__(self, buf, buf_eof, offset, column, indent_column, indent ",
-    )
-    if cython:
-        output.append('# cython: language_level=3, bounds_check=False')
-        output.extend(parse_node)
-        output.extend((
-            f"cdef class Parser:",
-            f"    cdef dict cache",
-            f"    cdef int tabstop",
-            f"    cdef int allow_mixed_indent ",
-            f"",
-            f"    def __init__(self, tabstop=None, allow_mixed_indent=True):",
-            f"         self.tabstop = tabstop or {grammar.tabstop}",
-            f"         self.cache = None",
-            f"         self.allow_mixed_indent = allow_mixed_indent",
-            "",
-        ))
-        output = output.add_indent(4)
-
-    else:
-        output.extend((
-            f"class Parser:",
-            f"    def __init__(self, tabstop=None, allow_mixed_indent=False):",
-            f"         self.tabstop = tabstop or {grammar.tabstop}",
-            f"         self.cache = None",
-            f"         self.allow_mixed_indent = allow_mixed_indent",
-            "",
-        ))
-
-        output = output.add_indent(4)
-        output.extend(parse_node)
-
-    output = ParserBuilder([], 0, {})
-
-    start_rule = grammar.start
-    output.extend((
-        f"def parse(self, buf, offset=0, end=None, err=None, builder=None):",
-        f"    self.cache = dict()",
-        f"    end = len(buf) if end is None else end",
-        f"    column, indent_column, eof = 0, (0, None), end",
-        f"    prefix, children = [], []",
-        f"    new_offset, column, indent_column, partial_tab_offset, partial_tab_width = self.parse_{start_rule}(buf, offset, eof, column, indent_column, prefix, children, 0, 0)",
-        f"    if children and new_offset == end:",
-        f"         if builder is None: return {node}({repr(grammar.capture)}, offset, new_offset, children, None)",
-        f"         return children[-1].build(buf, builder)",
-        f"    print('no', offset, new_offset, end, buf[new_offset:])",
-        f"    if err is not None: raise err(buf, new_offset, 'no')",
-        f"",
-    ))
-
-    varnames = {
-            "offset":"cdef int", "column":"cdef int", 
-            "prefix":"cdef list", "children":"cdef list", "count":"cdef int", "indent_column":"cdef tuple",
-            "partial_tab_offset":"cdef int", "partial_tab_width": "cdef int"}
-    for name, rule in grammar.rules.items():
-        cdefs = {}
-        if cython:
-            output.append(f"cdef parse_{name}(self, str buf, int offset_0, int buf_eof, int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):")
-            output.append(f"    cdef Py_UCS4 chr")
-            
-            for v in varnames:
-                cdefs[v] = output.add_indent(4).append_placeholder()
-        else:
-            output.append(f"def parse_{name}(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):")
-   #     output.append(f"    print('enter {name},',offset_0,column_0,prefix_0, repr(buf[offset_0:offset_0+10]))")
-        output.append(f"    while True: # note: return at end of loop")
-
-        values = {}
-        maxes = {}
-        build_steps(rule,
-                output.add_indent(8),
-                VarBuilder("offset", maxes=maxes),
-                VarBuilder('column', maxes=maxes),
-                VarBuilder('indent_column', maxes=maxes),
-                VarBuilder('partial_tab_offset', maxes=maxes),
-                VarBuilder('partial_tab_width', maxes=maxes),
-                VarBuilder('prefix', maxes=maxes),
-                VarBuilder('children', maxes=maxes),
-                VarBuilder("count", maxes=maxes), values, )
-        if cdefs:
-            for v,p in cdefs.items():
-                line = ", ".join(f"{v}_{n}" for n in range(1, maxes[v]+1))
-                line = f"{varnames[v]} {line}" if line else ""
-                output.replace_placeholder(p, line)
-        output.append(f"        break")
-    #     output.append(f"    print(('exit' if offset_0 != -1 else 'fail'), '{name}', offset_0, column_0, repr(buf[offset_0: offset_0+10]))")
-        output.append(f"    return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0")
-        output.append("")
-    # for lineno, line in enumerate(output.output):
-    #    print(lineno, '\t', line)
-    return output.as_string()
 
 
 
@@ -1817,7 +1756,8 @@ def parser(grammar):
     output = compile_python(grammar)
     glob, loc = {}, {}
     exec(output, glob, loc)
-    return loc['Parser']()
+    import unicodedata
+    return loc['_build'](unicodedata)()
 
 class Grammar(metaclass=Metaclass):
     pass
