@@ -608,9 +608,9 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                 self.code_span()
 
             with self.case():
-                self.left_flank()
-            with self.case():
                 self.right_flank()
+            with self.case():
+                self.left_flank()
             with self.case():
                 self.html_entity()
             with self.case():
@@ -672,6 +672,7 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                         self.literal(chr)
                 with self.reject():
                     self.range(unicode_whitespace=True)
+                self.capture_value("left")
                 self.capture_value(chr)
                 self.capture_value(n)
 
@@ -683,6 +684,7 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                         self.literal(chr)
                 with self.reject():
                     self.range(unicode_whitespace=True, unicode_newline=True, unicode_punctuation=True)
+                self.capture_value('left')
                 self.capture_value(chr)
                 self.capture_value(n)
                     
@@ -697,6 +699,7 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                         self.range("_", "*")
                     with self.repeat(min=0):
                         self.literal(chr)
+                self.capture_value("right")
                 self.capture_value(chr)
                 self.capture_value(n)
 
@@ -710,6 +713,7 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                         self.literal(chr)
                 with self.lookahead():
                     self.range(unicode_whitespace=True, unicode_newline=True, unicode_punctuation=True)
+                self.capture_value("right")
                 self.capture_value(chr)
                 self.capture_value(n)
                 
@@ -760,14 +764,70 @@ builder = {}
 _builder = lambda fn:builder.__setitem__(fn.__name__,fn)
 
 def make_para(children):
-    out = []
-    for child in children:
-        if isinstance(child, tuple):
-            out.append(child[0] * child[1])
-        else:
-            out.append(child)
+    operators =[idx for idx, o in enumerate(children) if isinstance(o, tuple)]
 
-    return "".join(out)
+    replacement = {}
+
+    for op_idx, idx in reversed(list(enumerate(operators))):
+        kind, chr, n = children[idx]
+        if kind == "right":
+            left_op = op_idx -1
+            while n >0 and left_op >=0:
+                found = False
+                while left_op >= 0:
+                    c = children[operators[left_op]]
+                    if c[0] == "left" and c[1] == chr and c[2] > 0:
+                        found = True
+                        break
+                    left_op -=1
+                if found:
+                    left_idx = operators[left_op]
+                    left = children[left_idx]
+                    _, _, count = left
+                    if count  <= n:
+                        children[left_idx] = ("left", chr, 0)
+                        n = n - count
+                    else:
+                        count = count -n
+                        n = 0
+                        children[left_idx] = ("left", chr, count)
+                        
+                    if left_idx not in replacement:
+                        replacement[left_idx] = []
+                    if idx not in replacement:
+                        replacement[idx] = []
+                    
+                    replacement[left_idx].append(count)
+                    replacement[idx].append(count)
+                left_op -= 1
+
+            children[idx] = (kind, chr, n)
+
+    for idx in operators:
+        kind, chr, count = children[idx]
+        if kind == "left": # replacements in left to right order
+            out = []
+            for _ in range(count):
+                out.append(chr)
+            if idx in replacement:
+                for c in replacement[idx]:
+                    while c > 0:
+                        out.append(["<em><strong>", "<em>", "<strong>"][c%3])
+                        c -=3
+            children[idx] = "".join(out)
+        elif kind == "right":
+            out = []
+            if idx in replacement:
+                for c in reversed(replacement[idx]): 
+                    while c > 0:
+                        out.append(["</strong></em>", "</em>", "</strong>"][c%3])
+                        c -=3
+            for _ in range(count):
+                out.append(chr)
+            children[idx] = "".join(out)
+
+
+    return "".join(children)
 
 def join_blocks(children):
     def wrap(c):
@@ -1230,9 +1290,9 @@ for t in tests:
     else:
         failed +=1
         if '<' in markd: continue
-        if '*' in markd: continue
+        #if '*' in markd: continue
         if '[' in markd: continue
-        if '_' in markd: continue
+        #if '_' in markd: continue
         #if out.replace('\n','') == t['html'].replace('\n',''): continue
         print(t['example'])
         print(repr(markd))
@@ -1244,5 +1304,6 @@ for t in tests:
 print(count, worked, failed)
 
 markup("""
-\\
+> This is _a_ paragraph continuation text
+2. because the line starts with `2`, not `1`.
 """)

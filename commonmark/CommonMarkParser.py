@@ -131,9 +131,9 @@ def _build(unicodedata):
 
                 count_0 = 0
                 while offset_0 < buf_eof:
-                    _chr = buf[offset_0]
-                    if _chr in ' \t':
-                        if _chr == '\t':
+                    codepoint = buf[offset_0]
+                    if codepoint in ' \t':
+                        if codepoint == '\t':
                             if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                 width = partial_tab_width_0
                             else:
@@ -160,9 +160,9 @@ def _build(unicodedata):
             while True: # note: return at end of loop
                 count_0 = 0
                 while offset_0 < buf_eof:
-                    _chr = buf[offset_0]
-                    if _chr in ' \t':
-                        if _chr == '\t':
+                    codepoint = buf[offset_0]
+                    if codepoint in ' \t':
+                        if codepoint == '\t':
                             if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                 width = partial_tab_width_0
                             else:
@@ -178,8 +178,8 @@ def _build(unicodedata):
                         break
 
                 if offset_0 < buf_eof:
-                    _chr = buf[offset_0]
-                    if _chr in '\n':
+                    codepoint = buf[offset_0]
+                    if codepoint in '\n':
                         offset_0 +=1
                         column_0 = 0
                         indent_column_0 = (0, None)
@@ -220,9 +220,9 @@ def _build(unicodedata):
 
                         count_1 = 0
                         while offset_1 < buf_eof:
-                            _chr = buf[offset_1]
-                            if _chr in ' \t':
-                                if _chr == '\t':
+                            codepoint = buf[offset_1]
+                            if codepoint in ' \t':
+                                if codepoint == '\t':
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
@@ -238,8 +238,8 @@ def _build(unicodedata):
                                 break
 
                         if offset_1 < buf_eof:
-                            _chr = buf[offset_1]
-                            if _chr in '\n':
+                            codepoint = buf[offset_1]
+                            if codepoint in '\n':
                                 offset_1 +=1
                                 column_1 = 0
                                 indent_column_1 = (0, None)
@@ -278,9 +278,9 @@ def _build(unicodedata):
             while True: # note: return at end of loop
                 count_0 = 0
                 while offset_0 < buf_eof:
-                    _chr = buf[offset_0]
-                    if _chr in ' \t':
-                        if _chr == '\t':
+                    codepoint = buf[offset_0]
+                    if codepoint in ' \t':
+                        if codepoint == '\t':
                             if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                 width = partial_tab_width_0
                             else:
@@ -296,8 +296,8 @@ def _build(unicodedata):
                         break
 
                 if offset_0 < buf_eof:
-                    _chr = buf[offset_0]
-                    if _chr in '\n':
+                    codepoint = buf[offset_0]
+                    if codepoint in '\n':
                         offset_0 +=1
                         column_0 = 0
                         indent_column_0 = (0, None)
@@ -522,9 +522,9 @@ def _build(unicodedata):
             while True: # note: return at end of loop
                 count_0 = 0
                 while offset_0 < buf_eof and count_0 < 3:
-                    _chr = buf[offset_0]
-                    if _chr in ' \t':
-                        if _chr == '\t':
+                    codepoint = buf[offset_0]
+                    if codepoint in ' \t':
+                        if codepoint == '\t':
                             if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                 width = partial_tab_width_0
                             else:
@@ -575,9 +575,9 @@ def _build(unicodedata):
 
                                     count_1 = 0
                                     while offset_3 < buf_eof:
-                                        _chr = buf[offset_3]
-                                        if _chr in ' \t':
-                                            if _chr == '\t':
+                                        codepoint = buf[offset_3]
+                                        if codepoint in ' \t':
+                                            if codepoint == '\t':
                                                 if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
@@ -647,9 +647,9 @@ def _build(unicodedata):
 
                                     count_1 = 0
                                     while offset_3 < buf_eof:
-                                        _chr = buf[offset_3]
-                                        if _chr in ' \t':
-                                            if _chr == '\t':
+                                        codepoint = buf[offset_3]
+                                        if codepoint in ' \t':
+                                            if codepoint == '\t':
                                                 if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
@@ -719,9 +719,9 @@ def _build(unicodedata):
 
                                     count_1 = 0
                                     while offset_3 < buf_eof:
-                                        _chr = buf[offset_3]
-                                        if _chr in ' \t':
-                                            if _chr == '\t':
+                                        codepoint = buf[offset_3]
+                                        if codepoint in ' \t':
+                                            if codepoint == '\t':
                                                 if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
@@ -791,9 +791,9 @@ def _build(unicodedata):
             while True: # note: return at end of loop
                 count_0 = 0
                 while offset_0 < buf_eof and count_0 < 3:
-                    _chr = buf[offset_0]
-                    if _chr in ' \t':
-                        if _chr == '\t':
+                    codepoint = buf[offset_0]
+                    if codepoint in ' \t':
+                        if codepoint == '\t':
                             if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                 width = partial_tab_width_0
                             else:
@@ -897,9 +897,9 @@ def _build(unicodedata):
                         while True: # case
                             count_0 = 0
                             while offset_2 < buf_eof:
-                                _chr = buf[offset_2]
-                                if _chr in ' \t':
-                                    if _chr == '\t':
+                                codepoint = buf[offset_2]
+                                if codepoint in ' \t':
+                                    if codepoint == '\t':
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
@@ -951,9 +951,9 @@ def _build(unicodedata):
                                     while True: # start capture
                                         count_1 = 0
                                         while offset_4 < buf_eof:
-                                            _chr = buf[offset_4]
-                                            if _chr in ' \t':
-                                                if _chr == '\t':
+                                            codepoint = buf[offset_4]
+                                            if codepoint in ' \t':
+                                                if codepoint == '\t':
                                                     if offset_4 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                         width = partial_tab_width_2
                                                     else:
@@ -1075,9 +1075,9 @@ def _build(unicodedata):
                     while True:
                         count_1 = 0
                         while offset_1 < buf_eof:
-                            _chr = buf[offset_1]
-                            if _chr in ' \t':
-                                if _chr == '\t':
+                            codepoint = buf[offset_1]
+                            if codepoint in ' \t':
+                                if codepoint == '\t':
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
@@ -1144,9 +1144,9 @@ def _build(unicodedata):
 
                 count_0 = 0
                 while offset_0 < buf_eof:
-                    _chr = buf[offset_0]
-                    if _chr in ' \t':
-                        if _chr == '\t':
+                    codepoint = buf[offset_0]
+                    if codepoint in ' \t':
+                        if codepoint == '\t':
                             if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                 width = partial_tab_width_0
                             else:
@@ -1162,8 +1162,8 @@ def _build(unicodedata):
                         break
 
                 if offset_0 < buf_eof:
-                    _chr = buf[offset_0]
-                    if _chr in '\n':
+                    codepoint = buf[offset_0]
+                    if codepoint in '\n':
                         offset_0 +=1
                         column_0 = 0
                         indent_column_0 = (0, None)
@@ -1179,9 +1179,9 @@ def _build(unicodedata):
             while True: # note: return at end of loop
                 count_0 = 0
                 while offset_0 < buf_eof and count_0 < 4:
-                    _chr = buf[offset_0]
-                    if _chr in ' \t':
-                        if _chr == '\t':
+                    codepoint = buf[offset_0]
+                    if codepoint in ' \t':
+                        if codepoint == '\t':
                             if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                 width = partial_tab_width_0
                             else:
@@ -1215,14 +1215,14 @@ def _build(unicodedata):
                         saw_tab, saw_not_tab = False, False
                         start_column, start_offset = column, offset
                         while count > 0 and offset < buf_eof:
-                            _chr = buf[offset]
-                            if _chr in ' \t':
+                            codepoint = buf[offset]
+                            if codepoint in ' \t':
                                 if not allow_mixed_indent:
-                                    if _chr == '\t': saw_tab = True
+                                    if codepoint == '\t': saw_tab = True
                                     else: saw_not_tab = True
                                     if saw_tab and saw_not_tab:
                                          offset -1; break
-                                if _chr != '\t':
+                                if codepoint != '\t':
                                     column += 1
                                     offset += 1
                                     count -=1
@@ -1240,7 +1240,7 @@ def _build(unicodedata):
                                         partial_tab_offset = offset
                                         partial_tab_width = width-count
                                         break
-                            elif _chr in '\n':
+                            elif codepoint in '\n':
                                 break
                             else:
                                 offset = -1
@@ -1250,14 +1250,14 @@ def _build(unicodedata):
                         saw_tab, saw_not_tab = False, False
                         start_column, start_offset = column, offset
                         while count > 0 and offset < buf_eof:
-                            _chr = buf[offset]
-                            if _chr in ' \t':
+                            codepoint = buf[offset]
+                            if codepoint in ' \t':
                                 if not allow_mixed_indent:
-                                    if _chr == '\t': saw_tab = True
+                                    if codepoint == '\t': saw_tab = True
                                     else: saw_not_tab = True
                                     if saw_tab and saw_not_tab:
                                         offset = start_offset; break
-                                if _chr != '\t':
+                                if codepoint != '\t':
                                     column += 1
                                     offset += 1
                                     count -=1
@@ -1272,7 +1272,7 @@ def _build(unicodedata):
                                         count -= width
                                     else: # we have indent, so break
                                         offset = -1; break
-                            elif _chr in '\n':
+                            elif codepoint in '\n':
                                 offset = -1; break
                             else:
                                 offset = start_offset
@@ -1314,9 +1314,9 @@ def _build(unicodedata):
                         while True: # start capture
                             count_0 = 0
                             while offset_2 < buf_eof:
-                                _chr = buf[offset_2]
-                                if _chr in ' \t':
-                                    if _chr == '\t':
+                                codepoint = buf[offset_2]
+                                if codepoint in ' \t':
+                                    if codepoint == '\t':
                                         if offset_2 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                             width = partial_tab_width_0
                                         else:
@@ -1344,9 +1344,9 @@ def _build(unicodedata):
                                         offset_3 = -1
                                         break
 
-                                    _chr = ord(buf[offset_3])
+                                    codepoint = ord(buf[offset_3])
 
-                                    if _chr == 10:
+                                    if codepoint == 10:
                                         offset_3 = -1
                                         break
                                     else:
@@ -1380,8 +1380,8 @@ def _build(unicodedata):
                         offset_1 = offset_2
 
                         if offset_1 < buf_eof:
-                            _chr = buf[offset_1]
-                            if _chr in '\n':
+                            codepoint = buf[offset_1]
+                            if codepoint in '\n':
                                 offset_1 +=1
                                 column_0 = 0
                                 indent_column_0 = (0, None)
@@ -1439,9 +1439,9 @@ def _build(unicodedata):
                                                 while True: # start capture
                                                     count_2 = 0
                                                     while offset_5 < buf_eof:
-                                                        _chr = buf[offset_5]
-                                                        if _chr in ' \t':
-                                                            if _chr == '\t':
+                                                        codepoint = buf[offset_5]
+                                                        if codepoint in ' \t':
+                                                            if codepoint == '\t':
                                                                 if offset_5 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                                     width = partial_tab_width_3
                                                                 else:
@@ -1465,8 +1465,8 @@ def _build(unicodedata):
                                                 offset_4 = offset_5
 
                                                 if offset_4 < buf_eof:
-                                                    _chr = buf[offset_4]
-                                                    if _chr in '\n':
+                                                    codepoint = buf[offset_4]
+                                                    if codepoint in '\n':
                                                         offset_4 +=1
                                                         column_3 = 0
                                                         indent_column_3 = (0, None)
@@ -1523,9 +1523,9 @@ def _build(unicodedata):
 
                                             count_1 = 0
                                             while offset_4 < buf_eof:
-                                                _chr = buf[offset_4]
-                                                if _chr in ' \t':
-                                                    if _chr == '\t':
+                                                codepoint = buf[offset_4]
+                                                if codepoint in ' \t':
+                                                    if codepoint == '\t':
                                                         if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                             width = partial_tab_width_3
                                                         else:
@@ -1544,9 +1544,9 @@ def _build(unicodedata):
                                                 offset_4 = -1
                                                 break
 
-                                            _chr = ord(buf[offset_4])
+                                            codepoint = ord(buf[offset_4])
 
-                                            if _chr == 10:
+                                            if codepoint == 10:
                                                 offset_4 = -1
                                                 break
                                             else:
@@ -1628,9 +1628,9 @@ def _build(unicodedata):
                                         while True: # start capture
                                             count_1 = 0
                                             while offset_4 < buf_eof:
-                                                _chr = buf[offset_4]
-                                                if _chr in ' \t':
-                                                    if _chr == '\t':
+                                                codepoint = buf[offset_4]
+                                                if codepoint in ' \t':
+                                                    if codepoint == '\t':
                                                         if offset_4 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                             width = partial_tab_width_2
                                                         else:
@@ -1658,9 +1658,9 @@ def _build(unicodedata):
                                                         offset_5 = -1
                                                         break
 
-                                                    _chr = ord(buf[offset_5])
+                                                    codepoint = ord(buf[offset_5])
 
-                                                    if _chr == 10:
+                                                    if codepoint == 10:
                                                         offset_5 = -1
                                                         break
                                                     else:
@@ -1694,8 +1694,8 @@ def _build(unicodedata):
                                         offset_3 = offset_4
 
                                         if offset_3 < buf_eof:
-                                            _chr = buf[offset_3]
-                                            if _chr in '\n':
+                                            codepoint = buf[offset_3]
+                                            if codepoint in '\n':
                                                 offset_3 +=1
                                                 column_2 = 0
                                                 indent_column_2 = (0, None)
@@ -1756,9 +1756,9 @@ def _build(unicodedata):
             while True: # note: return at end of loop
                 count_0 = 0
                 while offset_0 < buf_eof and count_0 < 3:
-                    _chr = buf[offset_0]
-                    if _chr in ' \t':
-                        if _chr == '\t':
+                    codepoint = buf[offset_0]
+                    if codepoint in ' \t':
+                        if codepoint == '\t':
                             if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                 width = partial_tab_width_0
                             else:
@@ -1849,9 +1849,9 @@ def _build(unicodedata):
                 while True: # start count
                     count_0 = 0
                     while offset_1 < buf_eof and count_0 < 3:
-                        _chr = buf[offset_1]
-                        if _chr in ' \t':
-                            if _chr == '\t':
+                        codepoint = buf[offset_1]
+                        if codepoint in ' \t':
+                            if codepoint == '\t':
                                 if offset_1 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                     width = partial_tab_width_0
                                 else:
@@ -2019,9 +2019,9 @@ def _build(unicodedata):
                                                 offset_5 = -1
                                                 break
 
-                                            _chr = ord(buf[offset_5])
+                                            codepoint = ord(buf[offset_5])
 
-                                            if _chr == 10:
+                                            if codepoint == 10:
                                                 offset_5 = -1
                                                 break
                                             else:
@@ -2041,18 +2041,18 @@ def _build(unicodedata):
                                                         offset_6 = -1
                                                         break
 
-                                                    _chr = ord(buf[offset_6])
+                                                    codepoint = ord(buf[offset_6])
 
-                                                    if _chr == 10:
+                                                    if codepoint == 10:
                                                         offset_6 = -1
                                                         break
-                                                    elif _chr == 92:
+                                                    elif codepoint == 92:
                                                         offset_6 = -1
                                                         break
-                                                    elif _chr == 38:
+                                                    elif codepoint == 38:
                                                         offset_6 = -1
                                                         break
-                                                    elif _chr == 96:
+                                                    elif codepoint == 96:
                                                         offset_6 = -1
                                                         break
                                                     else:
@@ -2163,9 +2163,9 @@ def _build(unicodedata):
                                 partial_tab_width_2 = partial_tab_width_1
                                 count_1 = 0
                                 while offset_3 < buf_eof and count_1 < 3:
-                                    _chr = buf[offset_3]
-                                    if _chr in ' \t':
-                                        if _chr == '\t':
+                                    codepoint = buf[offset_3]
+                                    if codepoint in ' \t':
+                                        if codepoint == '\t':
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
@@ -2205,9 +2205,9 @@ def _build(unicodedata):
 
                                         count_2 = 0
                                         while offset_4 < buf_eof:
-                                            _chr = buf[offset_4]
-                                            if _chr in ' \t':
-                                                if _chr == '\t':
+                                            codepoint = buf[offset_4]
+                                            if codepoint in ' \t':
+                                                if codepoint == '\t':
                                                     if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                         width = partial_tab_width_3
                                                     else:
@@ -2241,8 +2241,8 @@ def _build(unicodedata):
                                     break
 
                                 if offset_3 < buf_eof:
-                                    _chr = buf[offset_3]
-                                    if _chr in '\n':
+                                    codepoint = buf[offset_3]
+                                    if codepoint in '\n':
                                         offset_3 +=1
                                         column_2 = 0
                                         indent_column_2 = (0, None)
@@ -2257,9 +2257,9 @@ def _build(unicodedata):
 
                             count_1 = 0
                             while offset_2 < buf_eof and count_1 < value_0:
-                                _chr = buf[offset_2]
-                                if _chr in ' \t':
-                                    if _chr == '\t':
+                                codepoint = buf[offset_2]
+                                if codepoint in ' \t':
+                                    if codepoint == '\t':
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
@@ -2297,9 +2297,9 @@ def _build(unicodedata):
                                             offset_4 = -1
                                             break
 
-                                        _chr = ord(buf[offset_4])
+                                        codepoint = ord(buf[offset_4])
 
-                                        if _chr == 10:
+                                        if codepoint == 10:
                                             offset_4 = -1
                                             break
                                         else:
@@ -2408,9 +2408,9 @@ def _build(unicodedata):
                         while True: # case
                             count_0 = 0
                             while offset_2 < buf_eof:
-                                _chr = buf[offset_2]
-                                if _chr in ' \t':
-                                    if _chr == '\t':
+                                codepoint = buf[offset_2]
+                                if codepoint in ' \t':
+                                    if codepoint == '\t':
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
@@ -2469,9 +2469,9 @@ def _build(unicodedata):
 
                             count_0 = 0
                             while offset_2 < buf_eof and count_0 < 3:
-                                _chr = buf[offset_2]
-                                if _chr in ' \t':
-                                    if _chr == '\t':
+                                codepoint = buf[offset_2]
+                                if codepoint in ' \t':
+                                    if codepoint == '\t':
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
@@ -2504,9 +2504,9 @@ def _build(unicodedata):
                                 while True:
                                     count_1 = 0
                                     while offset_3 < buf_eof:
-                                        _chr = buf[offset_3]
-                                        if _chr in ' \t':
-                                            if _chr == '\t':
+                                        codepoint = buf[offset_3]
+                                        if codepoint in ' \t':
+                                            if codepoint == '\t':
                                                 if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
@@ -2548,9 +2548,9 @@ def _build(unicodedata):
 
                             count_0 = 0
                             while offset_2 < buf_eof:
-                                _chr = buf[offset_2]
-                                if _chr in ' \t':
-                                    if _chr == '\t':
+                                codepoint = buf[offset_2]
+                                if codepoint in ' \t':
+                                    if codepoint == '\t':
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
@@ -2605,9 +2605,9 @@ def _build(unicodedata):
                 while True: # start count
                     count_0 = 0
                     while offset_1 < buf_eof and count_0 < 3:
-                        _chr = buf[offset_1]
-                        if _chr in ' \t':
-                            if _chr == '\t':
+                        codepoint = buf[offset_1]
+                        if codepoint in ' \t':
+                            if codepoint == '\t':
                                 if offset_1 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                     width = partial_tab_width_0
                                 else:
@@ -2756,9 +2756,9 @@ def _build(unicodedata):
                                                 offset_5 = -1
                                                 break
 
-                                            _chr = ord(buf[offset_5])
+                                            codepoint = ord(buf[offset_5])
 
-                                            if _chr == 10:
+                                            if codepoint == 10:
                                                 offset_5 = -1
                                                 break
                                             else:
@@ -2778,15 +2778,15 @@ def _build(unicodedata):
                                                         offset_6 = -1
                                                         break
 
-                                                    _chr = ord(buf[offset_6])
+                                                    codepoint = ord(buf[offset_6])
 
-                                                    if _chr == 10:
+                                                    if codepoint == 10:
                                                         offset_6 = -1
                                                         break
-                                                    elif _chr == 92:
+                                                    elif codepoint == 92:
                                                         offset_6 = -1
                                                         break
-                                                    elif _chr == 38:
+                                                    elif codepoint == 38:
                                                         offset_6 = -1
                                                         break
                                                     else:
@@ -2897,9 +2897,9 @@ def _build(unicodedata):
                                 partial_tab_width_2 = partial_tab_width_1
                                 count_1 = 0
                                 while offset_3 < buf_eof and count_1 < 3:
-                                    _chr = buf[offset_3]
-                                    if _chr in ' \t':
-                                        if _chr == '\t':
+                                    codepoint = buf[offset_3]
+                                    if codepoint in ' \t':
+                                        if codepoint == '\t':
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
@@ -2939,9 +2939,9 @@ def _build(unicodedata):
 
                                         count_2 = 0
                                         while offset_4 < buf_eof:
-                                            _chr = buf[offset_4]
-                                            if _chr in ' \t':
-                                                if _chr == '\t':
+                                            codepoint = buf[offset_4]
+                                            if codepoint in ' \t':
+                                                if codepoint == '\t':
                                                     if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                         width = partial_tab_width_3
                                                     else:
@@ -2981,9 +2981,9 @@ def _build(unicodedata):
 
                             count_1 = 0
                             while offset_2 < buf_eof and count_1 < value_0:
-                                _chr = buf[offset_2]
-                                if _chr in ' \t':
-                                    if _chr == '\t':
+                                codepoint = buf[offset_2]
+                                if codepoint in ' \t':
+                                    if codepoint == '\t':
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
@@ -3021,9 +3021,9 @@ def _build(unicodedata):
                                             offset_4 = -1
                                             break
 
-                                        _chr = ord(buf[offset_4])
+                                        codepoint = ord(buf[offset_4])
 
-                                        if _chr == 10:
+                                        if codepoint == 10:
                                             offset_4 = -1
                                             break
                                         else:
@@ -3132,9 +3132,9 @@ def _build(unicodedata):
                         while True: # case
                             count_0 = 0
                             while offset_2 < buf_eof:
-                                _chr = buf[offset_2]
-                                if _chr in ' \t':
-                                    if _chr == '\t':
+                                codepoint = buf[offset_2]
+                                if codepoint in ' \t':
+                                    if codepoint == '\t':
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
@@ -3193,9 +3193,9 @@ def _build(unicodedata):
 
                             count_0 = 0
                             while offset_2 < buf_eof and count_0 < 3:
-                                _chr = buf[offset_2]
-                                if _chr in ' \t':
-                                    if _chr == '\t':
+                                codepoint = buf[offset_2]
+                                if codepoint in ' \t':
+                                    if codepoint == '\t':
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
@@ -3228,9 +3228,9 @@ def _build(unicodedata):
                                 while True:
                                     count_1 = 0
                                     while offset_3 < buf_eof:
-                                        _chr = buf[offset_3]
-                                        if _chr in ' \t':
-                                            if _chr == '\t':
+                                        codepoint = buf[offset_3]
+                                        if codepoint in ' \t':
+                                            if codepoint == '\t':
                                                 if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
@@ -3272,9 +3272,9 @@ def _build(unicodedata):
 
                             count_0 = 0
                             while offset_2 < buf_eof:
-                                _chr = buf[offset_2]
-                                if _chr in ' \t':
-                                    if _chr == '\t':
+                                codepoint = buf[offset_2]
+                                if codepoint in ' \t':
+                                    if codepoint == '\t':
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
@@ -3326,9 +3326,9 @@ def _build(unicodedata):
             while True: # note: return at end of loop
                 count_0 = 0
                 while offset_0 < buf_eof and count_0 < 3:
-                    _chr = buf[offset_0]
-                    if _chr in ' \t':
-                        if _chr == '\t':
+                    codepoint = buf[offset_0]
+                    if codepoint in ' \t':
+                        if codepoint == '\t':
                             if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                 width = partial_tab_width_0
                             else:
@@ -3374,9 +3374,9 @@ def _build(unicodedata):
                             partial_tab_width_2 = partial_tab_width_1
                             count_0 = 0
                             while offset_2 < buf_eof:
-                                _chr = buf[offset_2]
-                                if _chr in ' \t':
-                                    if _chr == '\t':
+                                codepoint = buf[offset_2]
+                                if codepoint in ' \t':
+                                    if codepoint == '\t':
                                         if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                             width = partial_tab_width_2
                                         else:
@@ -3392,8 +3392,8 @@ def _build(unicodedata):
                                     break
 
                             if offset_2 < buf_eof:
-                                _chr = buf[offset_2]
-                                if _chr in '\n':
+                                codepoint = buf[offset_2]
+                                if codepoint in '\n':
                                     offset_2 +=1
                                     column_2 = 0
                                     indent_column_2 = (0, None)
@@ -3427,9 +3427,9 @@ def _build(unicodedata):
                     while True: # case
                         count_0 = 0
                         while offset_1 < buf_eof and count_0 < 1:
-                            _chr = buf[offset_1]
-                            if _chr in ' \t':
-                                if _chr == '\t':
+                            codepoint = buf[offset_1]
+                            if codepoint in ' \t':
+                                if codepoint == '\t':
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
@@ -3462,9 +3462,9 @@ def _build(unicodedata):
                                 offset_2 = -1
                                 break
 
-                            _chr = ord(buf[offset_2])
+                            codepoint = ord(buf[offset_2])
 
-                            if _chr == 10:
+                            if codepoint == 10:
                                 offset_2 = -1
                                 break
                             else:
@@ -3509,9 +3509,9 @@ def _build(unicodedata):
                     while True: # case
                         count_0 = 0
                         while offset_1 < buf_eof:
-                            _chr = buf[offset_1]
-                            if _chr in ' \t':
-                                if _chr == '\t':
+                            codepoint = buf[offset_1]
+                            if codepoint in ' \t':
+                                if codepoint == '\t':
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
@@ -3527,8 +3527,8 @@ def _build(unicodedata):
                                 break
 
                         if offset_1 < buf_eof:
-                            _chr = buf[offset_1]
-                            if _chr in '\n':
+                            codepoint = buf[offset_1]
+                            if codepoint in '\n':
                                 offset_1 +=1
                                 column_1 = 0
                                 indent_column_1 = (0, None)
@@ -3670,9 +3670,9 @@ def _build(unicodedata):
                         while True: # case
                             count_0 = 0
                             while offset_2 < buf_eof:
-                                _chr = buf[offset_2]
-                                if _chr in ' \t':
-                                    if _chr == '\t':
+                                codepoint = buf[offset_2]
+                                if codepoint in ' \t':
+                                    if codepoint == '\t':
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
@@ -3688,8 +3688,8 @@ def _build(unicodedata):
                                     break
 
                             if offset_2 < buf_eof:
-                                _chr = buf[offset_2]
-                                if _chr in '\n':
+                                codepoint = buf[offset_2]
+                                if codepoint in '\n':
                                     offset_2 +=1
                                     column_1 = 0
                                     indent_column_1 = (0, None)
@@ -3787,9 +3787,9 @@ def _build(unicodedata):
                                 while True: # case
                                     count_1 = 0
                                     while offset_3 < buf_eof:
-                                        _chr = buf[offset_3]
-                                        if _chr in ' \t':
-                                            if _chr == '\t':
+                                        codepoint = buf[offset_3]
+                                        if codepoint in ' \t':
+                                            if codepoint == '\t':
                                                 if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
@@ -3805,8 +3805,8 @@ def _build(unicodedata):
                                             break
 
                                     if offset_3 < buf_eof:
-                                        _chr = buf[offset_3]
-                                        if _chr in '\n':
+                                        codepoint = buf[offset_3]
+                                        if codepoint in '\n':
                                             offset_3 +=1
                                             column_2 = 0
                                             indent_column_2 = (0, None)
@@ -3892,9 +3892,9 @@ def _build(unicodedata):
             while True: # note: return at end of loop
                 count_0 = 0
                 while offset_0 < buf_eof and count_0 < 3:
-                    _chr = buf[offset_0]
-                    if _chr in ' \t':
-                        if _chr == '\t':
+                    codepoint = buf[offset_0]
+                    if codepoint in ' \t':
+                        if codepoint == '\t':
                             if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                 width = partial_tab_width_0
                             else:
@@ -3928,15 +3928,15 @@ def _build(unicodedata):
                             offset_1 = -1
                             break
 
-                        _chr = ord(buf[offset_1])
+                        codepoint = ord(buf[offset_1])
 
-                        if _chr == 45:
+                        if codepoint == 45:
                             offset_1 += 1
                             column_1 += 1
-                        elif _chr == 42:
+                        elif codepoint == 42:
                             offset_1 += 1
                             column_1 += 1
-                        elif _chr == 43:
+                        elif codepoint == 43:
                             offset_1 += 1
                             column_1 += 1
                         else:
@@ -3975,9 +3975,9 @@ def _build(unicodedata):
                                     offset_2 = -1
                                     break
 
-                                _chr = ord(buf[offset_2])
+                                codepoint = ord(buf[offset_2])
 
-                                if 48 <= _chr <= 57:
+                                if 48 <= codepoint <= 57:
                                     offset_2 += 1
                                     column_2 += 1
                                 else:
@@ -4006,12 +4006,12 @@ def _build(unicodedata):
                             offset_1 = -1
                             break
 
-                        _chr = ord(buf[offset_1])
+                        codepoint = ord(buf[offset_1])
 
-                        if _chr == 46:
+                        if codepoint == 46:
                             offset_1 += 1
                             column_1 += 1
-                        elif _chr == 41:
+                        elif codepoint == 41:
                             offset_1 += 1
                             column_1 += 1
                         else:
@@ -4052,9 +4052,9 @@ def _build(unicodedata):
                             partial_tab_width_2 = partial_tab_width_1
                             count_0 = 0
                             while offset_2 < buf_eof:
-                                _chr = buf[offset_2]
-                                if _chr in ' \t':
-                                    if _chr == '\t':
+                                codepoint = buf[offset_2]
+                                if codepoint in ' \t':
+                                    if codepoint == '\t':
                                         if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                             width = partial_tab_width_2
                                         else:
@@ -4070,8 +4070,8 @@ def _build(unicodedata):
                                     break
 
                             if offset_2 < buf_eof:
-                                _chr = buf[offset_2]
-                                if _chr in '\n':
+                                codepoint = buf[offset_2]
+                                if codepoint in '\n':
                                     offset_2 +=1
                                     column_2 = 0
                                     indent_column_2 = (0, None)
@@ -4105,14 +4105,14 @@ def _build(unicodedata):
                     while True: # case
                         count_0 = 0
                         while offset_1 < buf_eof and count_0 < 1:
-                            _chr = buf[offset_1]
-                            if _chr in '\n':
+                            codepoint = buf[offset_1]
+                            if codepoint in '\n':
                                 offset_1 +=1
                                 column_1 = 0
                                 indent_column_1 = (0, None)
                                 count_0 +=1
-                            elif _chr in ' \t':
-                                if _chr == '\t':
+                            elif codepoint in ' \t':
+                                if codepoint == '\t':
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
@@ -4303,9 +4303,9 @@ def _build(unicodedata):
                             partial_tab_width_2 = partial_tab_width_1
                             count_0 = 0
                             while offset_2 < buf_eof and count_0 < 4:
-                                _chr = buf[offset_2]
-                                if _chr in ' \t':
-                                    if _chr == '\t':
+                                codepoint = buf[offset_2]
+                                if codepoint in ' \t':
+                                    if codepoint == '\t':
                                         if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                             width = partial_tab_width_2
                                         else:
@@ -4407,9 +4407,9 @@ def _build(unicodedata):
                     while True: # case
                         count_0 = 0
                         while offset_1 < buf_eof:
-                            _chr = buf[offset_1]
-                            if _chr in ' \t':
-                                if _chr == '\t':
+                            codepoint = buf[offset_1]
+                            if codepoint in ' \t':
+                                if codepoint == '\t':
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
@@ -4432,8 +4432,8 @@ def _build(unicodedata):
                             partial_tab_offset_2 = partial_tab_offset_1
                             partial_tab_width_2 = partial_tab_width_1
                             if offset_2 < buf_eof:
-                                _chr = buf[offset_2]
-                                if _chr in '\n':
+                                codepoint = buf[offset_2]
+                                if codepoint in '\n':
                                     offset_2 +=1
                                     column_2 = 0
                                     indent_column_2 = (0, None)
@@ -4477,9 +4477,9 @@ def _build(unicodedata):
                             partial_tab_width_2 = partial_tab_width_1
                             count_0 = 0
                             while offset_2 < buf_eof:
-                                _chr = buf[offset_2]
-                                if _chr in ' \t':
-                                    if _chr == '\t':
+                                codepoint = buf[offset_2]
+                                if codepoint in ' \t':
+                                    if codepoint == '\t':
                                         if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                             width = partial_tab_width_2
                                         else:
@@ -4495,8 +4495,8 @@ def _build(unicodedata):
                                     break
 
                             if offset_2 < buf_eof:
-                                _chr = buf[offset_2]
-                                if _chr in '\n':
+                                codepoint = buf[offset_2]
+                                if codepoint in '\n':
                                     offset_2 +=1
                                     column_2 = 0
                                     indent_column_2 = (0, None)
@@ -4518,14 +4518,14 @@ def _build(unicodedata):
                             saw_tab, saw_not_tab = False, False
                             start_column, start_offset = column, offset
                             while count > 0 and offset < buf_eof:
-                                _chr = buf[offset]
-                                if _chr in ' \t':
+                                codepoint = buf[offset]
+                                if codepoint in ' \t':
                                     if not allow_mixed_indent:
-                                        if _chr == '\t': saw_tab = True
+                                        if codepoint == '\t': saw_tab = True
                                         else: saw_not_tab = True
                                         if saw_tab and saw_not_tab:
                                              offset -1; break
-                                    if _chr != '\t':
+                                    if codepoint != '\t':
                                         column += 1
                                         offset += 1
                                         count -=1
@@ -4543,7 +4543,7 @@ def _build(unicodedata):
                                             partial_tab_offset = offset
                                             partial_tab_width = width-count
                                             break
-                                elif _chr in '\n':
+                                elif codepoint in '\n':
                                     break
                                 else:
                                     offset = -1
@@ -4553,14 +4553,14 @@ def _build(unicodedata):
                             saw_tab, saw_not_tab = False, False
                             start_column, start_offset = column, offset
                             while count > 0 and offset < buf_eof:
-                                _chr = buf[offset]
-                                if _chr in ' \t':
+                                codepoint = buf[offset]
+                                if codepoint in ' \t':
                                     if not allow_mixed_indent:
-                                        if _chr == '\t': saw_tab = True
+                                        if codepoint == '\t': saw_tab = True
                                         else: saw_not_tab = True
                                         if saw_tab and saw_not_tab:
                                             offset = start_offset; break
-                                    if _chr != '\t':
+                                    if codepoint != '\t':
                                         column += 1
                                         offset += 1
                                         count -=1
@@ -4575,7 +4575,7 @@ def _build(unicodedata):
                                             count -= width
                                         else: # we have indent, so break
                                             offset = -1; break
-                                elif _chr in '\n':
+                                elif codepoint in '\n':
                                     offset = -1; break
                                 else:
                                     offset = start_offset
@@ -4587,9 +4587,9 @@ def _build(unicodedata):
                         while True:
                             count_0 = 0
                             while offset_1 < buf_eof:
-                                _chr = buf[offset_1]
-                                if _chr in ' \t':
-                                    if _chr == '\t':
+                                codepoint = buf[offset_1]
+                                if codepoint in ' \t':
+                                    if codepoint == '\t':
                                         if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
@@ -4605,8 +4605,8 @@ def _build(unicodedata):
                                     break
 
                             if offset_1 < buf_eof:
-                                _chr = buf[offset_1]
-                                if _chr in '\n':
+                                codepoint = buf[offset_1]
+                                if codepoint in '\n':
                                     offset_1 +=1
                                     column_1 = 0
                                     indent_column_1 = (0, None)
@@ -4643,9 +4643,9 @@ def _build(unicodedata):
 
                         count_0 = 0
                         while offset_1 < buf_eof and count_0 < 1:
-                            _chr = buf[offset_1]
-                            if _chr in ' \t':
-                                if _chr == '\t':
+                            codepoint = buf[offset_1]
+                            if codepoint in ' \t':
+                                if codepoint == '\t':
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
@@ -4695,14 +4695,14 @@ def _build(unicodedata):
                     saw_tab, saw_not_tab = False, False
                     start_column, start_offset = column, offset
                     while count > 0 and offset < buf_eof:
-                        _chr = buf[offset]
-                        if _chr in ' \t':
+                        codepoint = buf[offset]
+                        if codepoint in ' \t':
                             if not allow_mixed_indent:
-                                if _chr == '\t': saw_tab = True
+                                if codepoint == '\t': saw_tab = True
                                 else: saw_not_tab = True
                                 if saw_tab and saw_not_tab:
                                      offset -1; break
-                            if _chr != '\t':
+                            if codepoint != '\t':
                                 column += 1
                                 offset += 1
                                 count -=1
@@ -4720,7 +4720,7 @@ def _build(unicodedata):
                                     partial_tab_offset = offset
                                     partial_tab_width = width-count
                                     break
-                        elif _chr in '\n':
+                        elif codepoint in '\n':
                             break
                         else:
                             offset = -1
@@ -4753,14 +4753,14 @@ def _build(unicodedata):
                             saw_tab, saw_not_tab = False, False
                             start_column, start_offset = column, offset
                             while count > 0 and offset < buf_eof:
-                                _chr = buf[offset]
-                                if _chr in ' \t':
+                                codepoint = buf[offset]
+                                if codepoint in ' \t':
                                     if not allow_mixed_indent:
-                                        if _chr == '\t': saw_tab = True
+                                        if codepoint == '\t': saw_tab = True
                                         else: saw_not_tab = True
                                         if saw_tab and saw_not_tab:
                                              offset -1; break
-                                    if _chr != '\t':
+                                    if codepoint != '\t':
                                         column += 1
                                         offset += 1
                                         count -=1
@@ -4778,7 +4778,7 @@ def _build(unicodedata):
                                             partial_tab_offset = offset
                                             partial_tab_width = width-count
                                             break
-                                elif _chr in '\n':
+                                elif codepoint in '\n':
                                     break
                                 else:
                                     offset = -1
@@ -4835,9 +4835,9 @@ def _build(unicodedata):
                                         while True:
                                             count_3 = 0
                                             while offset_3 < buf_eof:
-                                                _chr = buf[offset_3]
-                                                if _chr in ' \t':
-                                                    if _chr == '\t':
+                                                codepoint = buf[offset_3]
+                                                if codepoint in ' \t':
+                                                    if codepoint == '\t':
                                                         if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                             width = partial_tab_width_3
                                                         else:
@@ -4856,8 +4856,8 @@ def _build(unicodedata):
                                             children_4 = []
                                             while True: # start capture
                                                 if offset_4 < buf_eof:
-                                                    _chr = buf[offset_4]
-                                                    if _chr in '\n':
+                                                    codepoint = buf[offset_4]
+                                                    if codepoint in '\n':
                                                         offset_4 +=1
                                                         column_3 = 0
                                                         indent_column_3 = (0, None)
@@ -4919,9 +4919,9 @@ def _build(unicodedata):
                                         partial_tab_width_3 = partial_tab_width_2
                                         count_2 = 0
                                         while offset_3 < buf_eof:
-                                            _chr = buf[offset_3]
-                                            if _chr in ' \t':
-                                                if _chr == '\t':
+                                            codepoint = buf[offset_3]
+                                            if codepoint in ' \t':
+                                                if codepoint == '\t':
                                                     if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                         width = partial_tab_width_3
                                                     else:
@@ -4940,9 +4940,9 @@ def _build(unicodedata):
                                             offset_3 = -1
                                             break
 
-                                        _chr = ord(buf[offset_3])
+                                        codepoint = ord(buf[offset_3])
 
-                                        if _chr == 10:
+                                        if codepoint == 10:
                                             offset_3 = -1
                                             break
                                         else:
@@ -4981,14 +4981,14 @@ def _build(unicodedata):
                             saw_tab, saw_not_tab = False, False
                             start_column, start_offset = column, offset
                             while count > 0 and offset < buf_eof:
-                                _chr = buf[offset]
-                                if _chr in ' \t':
+                                codepoint = buf[offset]
+                                if codepoint in ' \t':
                                     if not allow_mixed_indent:
-                                        if _chr == '\t': saw_tab = True
+                                        if codepoint == '\t': saw_tab = True
                                         else: saw_not_tab = True
                                         if saw_tab and saw_not_tab:
                                              offset -1; break
-                                    if _chr != '\t':
+                                    if codepoint != '\t':
                                         column += 1
                                         offset += 1
                                         count -=1
@@ -5006,7 +5006,7 @@ def _build(unicodedata):
                                             partial_tab_offset = offset
                                             partial_tab_width = width-count
                                             break
-                                elif _chr in '\n':
+                                elif codepoint in '\n':
                                     break
                                 else:
                                     offset = -1
@@ -5066,9 +5066,9 @@ def _build(unicodedata):
                 while True: # start capture
                     count_0 = 0
                     while offset_1 < buf_eof and count_0 < 3:
-                        _chr = buf[offset_1]
-                        if _chr in ' \t':
-                            if _chr == '\t':
+                        codepoint = buf[offset_1]
+                        if codepoint in ' \t':
+                            if codepoint == '\t':
                                 if offset_1 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                     width = partial_tab_width_0
                                 else:
@@ -5096,15 +5096,15 @@ def _build(unicodedata):
                             offset_2 = -1
                             break
 
-                        _chr = ord(buf[offset_2])
+                        codepoint = ord(buf[offset_2])
 
-                        if _chr == 45:
+                        if codepoint == 45:
                             offset_2 += 1
                             column_0 += 1
-                        elif _chr == 42:
+                        elif codepoint == 42:
                             offset_2 += 1
                             column_0 += 1
-                        elif _chr == 43:
+                        elif codepoint == 43:
                             offset_2 += 1
                             column_0 += 1
                         else:
@@ -5135,9 +5135,9 @@ def _build(unicodedata):
                                 partial_tab_width_2 = partial_tab_width_1
                                 count_0 = 0
                                 while offset_3 < buf_eof:
-                                    _chr = buf[offset_3]
-                                    if _chr in ' \t':
-                                        if _chr == '\t':
+                                    codepoint = buf[offset_3]
+                                    if codepoint in ' \t':
+                                        if codepoint == '\t':
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
@@ -5153,8 +5153,8 @@ def _build(unicodedata):
                                         break
 
                                 if offset_3 < buf_eof:
-                                    _chr = buf[offset_3]
-                                    if _chr in '\n':
+                                    codepoint = buf[offset_3]
+                                    if codepoint in '\n':
                                         offset_3 +=1
                                         column_2 = 0
                                         indent_column_2 = (0, None)
@@ -5188,14 +5188,14 @@ def _build(unicodedata):
                         while True: # case
                             count_0 = 0
                             while offset_2 < buf_eof and count_0 < 1:
-                                _chr = buf[offset_2]
-                                if _chr in '\n':
+                                codepoint = buf[offset_2]
+                                if codepoint in '\n':
                                     offset_2 +=1
                                     column_1 = 0
                                     indent_column_1 = (0, None)
                                     count_0 +=1
-                                elif _chr in ' \t':
-                                    if _chr == '\t':
+                                elif codepoint in ' \t':
+                                    if codepoint == '\t':
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
@@ -5284,9 +5284,9 @@ def _build(unicodedata):
                             while True: # start capture
                                 count_0 = 0
                                 while offset_3 < buf_eof:
-                                    _chr = buf[offset_3]
-                                    if _chr in ' \t':
-                                        if _chr == '\t':
+                                    codepoint = buf[offset_3]
+                                    if codepoint in ' \t':
+                                        if codepoint == '\t':
                                             if offset_3 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                                 width = partial_tab_width_1
                                             else:
@@ -5310,8 +5310,8 @@ def _build(unicodedata):
                             offset_2 = offset_3
 
                             if offset_2 < buf_eof:
-                                _chr = buf[offset_2]
-                                if _chr in '\n':
+                                codepoint = buf[offset_2]
+                                if codepoint in '\n':
                                     offset_2 +=1
                                     column_1 = 0
                                     indent_column_1 = (0, None)
@@ -5374,9 +5374,9 @@ def _build(unicodedata):
                                 while True: # case
                                     count_1 = 0
                                     while offset_3 < buf_eof:
-                                        _chr = buf[offset_3]
-                                        if _chr in ' \t':
-                                            if _chr == '\t':
+                                        codepoint = buf[offset_3]
+                                        if codepoint in ' \t':
+                                            if codepoint == '\t':
                                                 if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
@@ -5392,8 +5392,8 @@ def _build(unicodedata):
                                             break
 
                                     if offset_3 < buf_eof:
-                                        _chr = buf[offset_3]
-                                        if _chr in '\n':
+                                        codepoint = buf[offset_3]
+                                        if codepoint in '\n':
                                             offset_3 +=1
                                             column_2 = 0
                                             indent_column_2 = (0, None)
@@ -5437,9 +5437,9 @@ def _build(unicodedata):
 
                                                 count_2 = 0
                                                 while offset_5 < buf_eof:
-                                                    _chr = buf[offset_5]
-                                                    if _chr in ' \t':
-                                                        if _chr == '\t':
+                                                    codepoint = buf[offset_5]
+                                                    if codepoint in ' \t':
+                                                        if codepoint == '\t':
                                                             if offset_5 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                                 width = partial_tab_width_3
                                                             else:
@@ -5455,8 +5455,8 @@ def _build(unicodedata):
                                                         break
 
                                                 if offset_5 < buf_eof:
-                                                    _chr = buf[offset_5]
-                                                    if _chr in '\n':
+                                                    codepoint = buf[offset_5]
+                                                    if codepoint in '\n':
                                                         offset_5 +=1
                                                         column_3 = 0
                                                         indent_column_3 = (0, None)
@@ -5518,9 +5518,9 @@ def _build(unicodedata):
 
                                         count_1 = 0
                                         while offset_4 < buf_eof and count_1 < 3:
-                                            _chr = buf[offset_4]
-                                            if _chr in ' \t':
-                                                if _chr == '\t':
+                                            codepoint = buf[offset_4]
+                                            if codepoint in ' \t':
+                                                if codepoint == '\t':
                                                     if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                         width = partial_tab_width_3
                                                     else:
@@ -5591,9 +5591,9 @@ def _build(unicodedata):
 
                                     count_1 = 0
                                     while offset_3 < buf_eof and count_1 < 3:
-                                        _chr = buf[offset_3]
-                                        if _chr in ' \t':
-                                            if _chr == '\t':
+                                        codepoint = buf[offset_3]
+                                        if codepoint in ' \t':
+                                            if codepoint == '\t':
                                                 if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
@@ -5639,9 +5639,9 @@ def _build(unicodedata):
                                                 partial_tab_width_4 = partial_tab_width_3
                                                 count_1 = 0
                                                 while offset_5 < buf_eof:
-                                                    _chr = buf[offset_5]
-                                                    if _chr in ' \t':
-                                                        if _chr == '\t':
+                                                    codepoint = buf[offset_5]
+                                                    if codepoint in ' \t':
+                                                        if codepoint == '\t':
                                                             if offset_5 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                                 width = partial_tab_width_4
                                                             else:
@@ -5657,8 +5657,8 @@ def _build(unicodedata):
                                                         break
 
                                                 if offset_5 < buf_eof:
-                                                    _chr = buf[offset_5]
-                                                    if _chr in '\n':
+                                                    codepoint = buf[offset_5]
+                                                    if codepoint in '\n':
                                                         offset_5 +=1
                                                         column_4 = 0
                                                         indent_column_4 = (0, None)
@@ -5692,14 +5692,14 @@ def _build(unicodedata):
                                         while True: # case
                                             count_1 = 0
                                             while offset_4 < buf_eof and count_1 < 1:
-                                                _chr = buf[offset_4]
-                                                if _chr in '\n':
+                                                codepoint = buf[offset_4]
+                                                if codepoint in '\n':
                                                     offset_4 +=1
                                                     column_3 = 0
                                                     indent_column_3 = (0, None)
                                                     count_1 +=1
-                                                elif _chr in ' \t':
-                                                    if _chr == '\t':
+                                                elif codepoint in ' \t':
+                                                    if codepoint == '\t':
                                                         if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                             width = partial_tab_width_3
                                                         else:
@@ -5788,9 +5788,9 @@ def _build(unicodedata):
                                             while True: # start capture
                                                 count_1 = 0
                                                 while offset_5 < buf_eof:
-                                                    _chr = buf[offset_5]
-                                                    if _chr in ' \t':
-                                                        if _chr == '\t':
+                                                    codepoint = buf[offset_5]
+                                                    if codepoint in ' \t':
+                                                        if codepoint == '\t':
                                                             if offset_5 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                                 width = partial_tab_width_3
                                                             else:
@@ -5814,8 +5814,8 @@ def _build(unicodedata):
                                             offset_4 = offset_5
 
                                             if offset_4 < buf_eof:
-                                                _chr = buf[offset_4]
-                                                if _chr in '\n':
+                                                codepoint = buf[offset_4]
+                                                if codepoint in '\n':
                                                     offset_4 +=1
                                                     column_3 = 0
                                                     indent_column_3 = (0, None)
@@ -5891,9 +5891,9 @@ def _build(unicodedata):
                 while True: # start capture
                     count_0 = 0
                     while offset_1 < buf_eof and count_0 < 3:
-                        _chr = buf[offset_1]
-                        if _chr in ' \t':
-                            if _chr == '\t':
+                        codepoint = buf[offset_1]
+                        if codepoint in ' \t':
+                            if codepoint == '\t':
                                 if offset_1 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                     width = partial_tab_width_0
                                 else:
@@ -5931,9 +5931,9 @@ def _build(unicodedata):
                                     offset_3 = -1
                                     break
 
-                                _chr = ord(buf[offset_3])
+                                codepoint = ord(buf[offset_3])
 
-                                if 48 <= _chr <= 57:
+                                if 48 <= codepoint <= 57:
                                     offset_3 += 1
                                     column_1 += 1
                                 else:
@@ -5972,12 +5972,12 @@ def _build(unicodedata):
                             offset_2 = -1
                             break
 
-                        _chr = ord(buf[offset_2])
+                        codepoint = ord(buf[offset_2])
 
-                        if _chr == 46:
+                        if codepoint == 46:
                             offset_2 += 1
                             column_0 += 1
-                        elif _chr == 41:
+                        elif codepoint == 41:
                             offset_2 += 1
                             column_0 += 1
                         else:
@@ -6008,9 +6008,9 @@ def _build(unicodedata):
                                 partial_tab_width_2 = partial_tab_width_1
                                 count_0 = 0
                                 while offset_3 < buf_eof:
-                                    _chr = buf[offset_3]
-                                    if _chr in ' \t':
-                                        if _chr == '\t':
+                                    codepoint = buf[offset_3]
+                                    if codepoint in ' \t':
+                                        if codepoint == '\t':
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
@@ -6026,8 +6026,8 @@ def _build(unicodedata):
                                         break
 
                                 if offset_3 < buf_eof:
-                                    _chr = buf[offset_3]
-                                    if _chr in '\n':
+                                    codepoint = buf[offset_3]
+                                    if codepoint in '\n':
                                         offset_3 +=1
                                         column_2 = 0
                                         indent_column_2 = (0, None)
@@ -6061,14 +6061,14 @@ def _build(unicodedata):
                         while True: # case
                             count_0 = 0
                             while offset_2 < buf_eof and count_0 < 1:
-                                _chr = buf[offset_2]
-                                if _chr in '\n':
+                                codepoint = buf[offset_2]
+                                if codepoint in '\n':
                                     offset_2 +=1
                                     column_1 = 0
                                     indent_column_1 = (0, None)
                                     count_0 +=1
-                                elif _chr in ' \t':
-                                    if _chr == '\t':
+                                elif codepoint in ' \t':
+                                    if codepoint == '\t':
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
@@ -6157,9 +6157,9 @@ def _build(unicodedata):
                             while True: # start capture
                                 count_0 = 0
                                 while offset_3 < buf_eof:
-                                    _chr = buf[offset_3]
-                                    if _chr in ' \t':
-                                        if _chr == '\t':
+                                    codepoint = buf[offset_3]
+                                    if codepoint in ' \t':
+                                        if codepoint == '\t':
                                             if offset_3 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                                 width = partial_tab_width_1
                                             else:
@@ -6183,8 +6183,8 @@ def _build(unicodedata):
                             offset_2 = offset_3
 
                             if offset_2 < buf_eof:
-                                _chr = buf[offset_2]
-                                if _chr in '\n':
+                                codepoint = buf[offset_2]
+                                if codepoint in '\n':
                                     offset_2 +=1
                                     column_1 = 0
                                     indent_column_1 = (0, None)
@@ -6247,9 +6247,9 @@ def _build(unicodedata):
                                 while True: # case
                                     count_1 = 0
                                     while offset_3 < buf_eof:
-                                        _chr = buf[offset_3]
-                                        if _chr in ' \t':
-                                            if _chr == '\t':
+                                        codepoint = buf[offset_3]
+                                        if codepoint in ' \t':
+                                            if codepoint == '\t':
                                                 if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
@@ -6265,8 +6265,8 @@ def _build(unicodedata):
                                             break
 
                                     if offset_3 < buf_eof:
-                                        _chr = buf[offset_3]
-                                        if _chr in '\n':
+                                        codepoint = buf[offset_3]
+                                        if codepoint in '\n':
                                             offset_3 +=1
                                             column_2 = 0
                                             indent_column_2 = (0, None)
@@ -6310,9 +6310,9 @@ def _build(unicodedata):
 
                                                 count_2 = 0
                                                 while offset_5 < buf_eof:
-                                                    _chr = buf[offset_5]
-                                                    if _chr in ' \t':
-                                                        if _chr == '\t':
+                                                    codepoint = buf[offset_5]
+                                                    if codepoint in ' \t':
+                                                        if codepoint == '\t':
                                                             if offset_5 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                                 width = partial_tab_width_3
                                                             else:
@@ -6328,8 +6328,8 @@ def _build(unicodedata):
                                                         break
 
                                                 if offset_5 < buf_eof:
-                                                    _chr = buf[offset_5]
-                                                    if _chr in '\n':
+                                                    codepoint = buf[offset_5]
+                                                    if codepoint in '\n':
                                                         offset_5 +=1
                                                         column_3 = 0
                                                         indent_column_3 = (0, None)
@@ -6391,9 +6391,9 @@ def _build(unicodedata):
 
                                         count_1 = 0
                                         while offset_4 < buf_eof and count_1 < 3:
-                                            _chr = buf[offset_4]
-                                            if _chr in ' \t':
-                                                if _chr == '\t':
+                                            codepoint = buf[offset_4]
+                                            if codepoint in ' \t':
+                                                if codepoint == '\t':
                                                     if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                         width = partial_tab_width_3
                                                     else:
@@ -6428,9 +6428,9 @@ def _build(unicodedata):
                                                     offset_5 = -1
                                                     break
 
-                                                _chr = ord(buf[offset_5])
+                                                codepoint = ord(buf[offset_5])
 
-                                                if 48 <= _chr <= 57:
+                                                if 48 <= codepoint <= 57:
                                                     offset_5 += 1
                                                     column_4 += 1
                                                 else:
@@ -6488,9 +6488,9 @@ def _build(unicodedata):
                                 while True: # case
                                     count_1 = 0
                                     while offset_3 < buf_eof and count_1 < 3:
-                                        _chr = buf[offset_3]
-                                        if _chr in ' \t':
-                                            if _chr == '\t':
+                                        codepoint = buf[offset_3]
+                                        if codepoint in ' \t':
+                                            if codepoint == '\t':
                                                 if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
@@ -6525,9 +6525,9 @@ def _build(unicodedata):
                                                 offset_4 = -1
                                                 break
 
-                                            _chr = ord(buf[offset_4])
+                                            codepoint = ord(buf[offset_4])
 
-                                            if 48 <= _chr <= 57:
+                                            if 48 <= codepoint <= 57:
                                                 offset_4 += 1
                                                 column_3 += 1
                                             else:
@@ -6576,9 +6576,9 @@ def _build(unicodedata):
                                                 partial_tab_width_4 = partial_tab_width_3
                                                 count_1 = 0
                                                 while offset_5 < buf_eof:
-                                                    _chr = buf[offset_5]
-                                                    if _chr in ' \t':
-                                                        if _chr == '\t':
+                                                    codepoint = buf[offset_5]
+                                                    if codepoint in ' \t':
+                                                        if codepoint == '\t':
                                                             if offset_5 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                                 width = partial_tab_width_4
                                                             else:
@@ -6594,8 +6594,8 @@ def _build(unicodedata):
                                                         break
 
                                                 if offset_5 < buf_eof:
-                                                    _chr = buf[offset_5]
-                                                    if _chr in '\n':
+                                                    codepoint = buf[offset_5]
+                                                    if codepoint in '\n':
                                                         offset_5 +=1
                                                         column_4 = 0
                                                         indent_column_4 = (0, None)
@@ -6629,14 +6629,14 @@ def _build(unicodedata):
                                         while True: # case
                                             count_1 = 0
                                             while offset_4 < buf_eof and count_1 < 1:
-                                                _chr = buf[offset_4]
-                                                if _chr in '\n':
+                                                codepoint = buf[offset_4]
+                                                if codepoint in '\n':
                                                     offset_4 +=1
                                                     column_3 = 0
                                                     indent_column_3 = (0, None)
                                                     count_1 +=1
-                                                elif _chr in ' \t':
-                                                    if _chr == '\t':
+                                                elif codepoint in ' \t':
+                                                    if codepoint == '\t':
                                                         if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                             width = partial_tab_width_3
                                                         else:
@@ -6725,9 +6725,9 @@ def _build(unicodedata):
                                             while True: # start capture
                                                 count_1 = 0
                                                 while offset_5 < buf_eof:
-                                                    _chr = buf[offset_5]
-                                                    if _chr in ' \t':
-                                                        if _chr == '\t':
+                                                    codepoint = buf[offset_5]
+                                                    if codepoint in ' \t':
+                                                        if codepoint == '\t':
                                                             if offset_5 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                                 width = partial_tab_width_3
                                                             else:
@@ -6751,8 +6751,8 @@ def _build(unicodedata):
                                             offset_4 = offset_5
 
                                             if offset_4 < buf_eof:
-                                                _chr = buf[offset_4]
-                                                if _chr in '\n':
+                                                codepoint = buf[offset_4]
+                                                if codepoint in '\n':
                                                     offset_4 +=1
                                                     column_3 = 0
                                                     indent_column_3 = (0, None)
@@ -6824,9 +6824,9 @@ def _build(unicodedata):
             while True: # note: return at end of loop
                 count_0 = 0
                 while offset_0 < buf_eof and count_0 < 3:
-                    _chr = buf[offset_0]
-                    if _chr in ' \t':
-                        if _chr == '\t':
+                    codepoint = buf[offset_0]
+                    if codepoint in ' \t':
+                        if codepoint == '\t':
                             if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                 width = partial_tab_width_0
                             else:
@@ -6997,9 +6997,9 @@ def _build(unicodedata):
             while True: # note: return at end of loop
                 count_0 = 0
                 while offset_0 < buf_eof and count_0 < 3:
-                    _chr = buf[offset_0]
-                    if _chr in ' \t':
-                        if _chr == '\t':
+                    codepoint = buf[offset_0]
+                    if codepoint in ' \t':
+                        if codepoint == '\t':
                             if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                 width = partial_tab_width_0
                             else:
@@ -7066,9 +7066,9 @@ def _build(unicodedata):
                                                     while True: # case
                                                         count_1 = 0
                                                         while offset_5 < buf_eof:
-                                                            _chr = buf[offset_5]
-                                                            if _chr in ' \t':
-                                                                if _chr == '\t':
+                                                            codepoint = buf[offset_5]
+                                                            if codepoint in ' \t':
+                                                                if codepoint == '\t':
                                                                     if offset_5 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                                         width = partial_tab_width_4
                                                                     else:
@@ -7133,8 +7133,8 @@ def _build(unicodedata):
                                                 children_5 = []
                                                 while True: # start capture
                                                     if offset_5 < buf_eof:
-                                                        _chr = buf[offset_5]
-                                                        if _chr in '\n':
+                                                        codepoint = buf[offset_5]
+                                                        if codepoint in '\n':
                                                             offset_5 +=1
                                                             column_3 = 0
                                                             indent_column_3 = (0, None)
@@ -7174,9 +7174,9 @@ def _build(unicodedata):
                                             while True: # case
                                                 count_1 = 0
                                                 while offset_4 < buf_eof:
-                                                    _chr = buf[offset_4]
-                                                    if _chr in ' \t':
-                                                        if _chr == '\t':
+                                                    codepoint = buf[offset_4]
+                                                    if codepoint in ' \t':
+                                                        if codepoint == '\t':
                                                             if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                                 width = partial_tab_width_3
                                                             else:
@@ -7195,8 +7195,8 @@ def _build(unicodedata):
                                                 children_5 = []
                                                 while True: # start capture
                                                     if offset_5 < buf_eof:
-                                                        _chr = buf[offset_5]
-                                                        if _chr in '\n':
+                                                        codepoint = buf[offset_5]
+                                                        if codepoint in '\n':
                                                             offset_5 +=1
                                                             column_3 = 0
                                                             indent_column_3 = (0, None)
@@ -7369,9 +7369,9 @@ def _build(unicodedata):
                                                 while True: # case
                                                     count_1 = 0
                                                     while offset_5 < buf_eof and count_1 < 3:
-                                                        _chr = buf[offset_5]
-                                                        if _chr in ' \t':
-                                                            if _chr == '\t':
+                                                        codepoint = buf[offset_5]
+                                                        if codepoint in ' \t':
+                                                            if codepoint == '\t':
                                                                 if offset_5 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                                     width = partial_tab_width_4
                                                                 else:
@@ -7405,15 +7405,15 @@ def _build(unicodedata):
                                                                 offset_6 = -1
                                                                 break
 
-                                                            _chr = ord(buf[offset_6])
+                                                            codepoint = ord(buf[offset_6])
 
-                                                            if _chr == 45:
+                                                            if codepoint == 45:
                                                                 offset_6 += 1
                                                                 column_5 += 1
-                                                            elif _chr == 42:
+                                                            elif codepoint == 42:
                                                                 offset_6 += 1
                                                                 column_5 += 1
-                                                            elif _chr == 43:
+                                                            elif codepoint == 43:
                                                                 offset_6 += 1
                                                                 column_5 += 1
                                                             else:
@@ -7450,12 +7450,12 @@ def _build(unicodedata):
                                                                 offset_6 = -1
                                                                 break
 
-                                                            _chr = ord(buf[offset_6])
+                                                            codepoint = ord(buf[offset_6])
 
-                                                            if _chr == 46:
+                                                            if codepoint == 46:
                                                                 offset_6 += 1
                                                                 column_5 += 1
-                                                            elif _chr == 41:
+                                                            elif codepoint == 41:
                                                                 offset_6 += 1
                                                                 column_5 += 1
                                                             else:
@@ -7481,9 +7481,9 @@ def _build(unicodedata):
 
                                                     count_1 = 0
                                                     while offset_5 < buf_eof:
-                                                        _chr = buf[offset_5]
-                                                        if _chr in ' \t':
-                                                            if _chr == '\t':
+                                                        codepoint = buf[offset_5]
+                                                        if codepoint in ' \t':
+                                                            if codepoint == '\t':
                                                                 if offset_5 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                                     width = partial_tab_width_4
                                                                 else:
@@ -7510,9 +7510,9 @@ def _build(unicodedata):
                                                         partial_tab_width_5 = partial_tab_width_4
                                                         count_1 = 0
                                                         while offset_6 < buf_eof:
-                                                            _chr = buf[offset_6]
-                                                            if _chr in ' \t':
-                                                                if _chr == '\t':
+                                                            codepoint = buf[offset_6]
+                                                            if codepoint in ' \t':
+                                                                if codepoint == '\t':
                                                                     if offset_6 == partial_tab_offset_5 and partial_tab_width_5 > 0:
                                                                         width = partial_tab_width_5
                                                                     else:
@@ -7528,8 +7528,8 @@ def _build(unicodedata):
                                                                 break
 
                                                         if offset_6 < buf_eof:
-                                                            _chr = buf[offset_6]
-                                                            if _chr in '\n':
+                                                            codepoint = buf[offset_6]
+                                                            if codepoint in '\n':
                                                                 offset_6 +=1
                                                                 column_5 = 0
                                                                 indent_column_5 = (0, None)
@@ -7566,9 +7566,9 @@ def _build(unicodedata):
 
                                         count_1 = 0
                                         while offset_3 < buf_eof:
-                                            _chr = buf[offset_3]
-                                            if _chr in ' \t':
-                                                if _chr == '\t':
+                                            codepoint = buf[offset_3]
+                                            if codepoint in ' \t':
+                                                if codepoint == '\t':
                                                     if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                         width = partial_tab_width_2
                                                     else:
@@ -7591,8 +7591,8 @@ def _build(unicodedata):
                                             partial_tab_offset_3 = partial_tab_offset_2
                                             partial_tab_width_3 = partial_tab_width_2
                                             if offset_4 < buf_eof:
-                                                _chr = buf[offset_4]
-                                                if _chr in '\n':
+                                                codepoint = buf[offset_4]
+                                                if codepoint in '\n':
                                                     offset_4 +=1
                                                     column_3 = 0
                                                     indent_column_3 = (0, None)
@@ -7633,9 +7633,9 @@ def _build(unicodedata):
                                         while True: # start capture
                                             count_1 = 0
                                             while offset_4 < buf_eof:
-                                                _chr = buf[offset_4]
-                                                if _chr in ' \t':
-                                                    if _chr == '\t':
+                                                codepoint = buf[offset_4]
+                                                if codepoint in ' \t':
+                                                    if codepoint == '\t':
                                                         if offset_4 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                             width = partial_tab_width_2
                                                         else:
@@ -7743,9 +7743,9 @@ def _build(unicodedata):
 
                             count_0 = 0
                             while offset_2 < buf_eof:
-                                _chr = buf[offset_2]
-                                if _chr in ' \t':
-                                    if _chr == '\t':
+                                codepoint = buf[offset_2]
+                                if codepoint in ' \t':
+                                    if codepoint == '\t':
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
@@ -7761,8 +7761,8 @@ def _build(unicodedata):
                                     break
 
                             if offset_2 < buf_eof:
-                                _chr = buf[offset_2]
-                                if _chr in '\n':
+                                codepoint = buf[offset_2]
+                                if codepoint in '\n':
                                     offset_2 +=1
                                     column_1 = 0
                                     indent_column_1 = (0, None)
@@ -7852,9 +7852,9 @@ def _build(unicodedata):
                                                         while True: # case
                                                             count_1 = 0
                                                             while offset_6 < buf_eof:
-                                                                _chr = buf[offset_6]
-                                                                if _chr in ' \t':
-                                                                    if _chr == '\t':
+                                                                codepoint = buf[offset_6]
+                                                                if codepoint in ' \t':
+                                                                    if codepoint == '\t':
                                                                         if offset_6 == partial_tab_offset_5 and partial_tab_width_5 > 0:
                                                                             width = partial_tab_width_5
                                                                         else:
@@ -7919,8 +7919,8 @@ def _build(unicodedata):
                                                     children_6 = []
                                                     while True: # start capture
                                                         if offset_6 < buf_eof:
-                                                            _chr = buf[offset_6]
-                                                            if _chr in '\n':
+                                                            codepoint = buf[offset_6]
+                                                            if codepoint in '\n':
                                                                 offset_6 +=1
                                                                 column_4 = 0
                                                                 indent_column_4 = (0, None)
@@ -7960,9 +7960,9 @@ def _build(unicodedata):
                                                 while True: # case
                                                     count_1 = 0
                                                     while offset_5 < buf_eof:
-                                                        _chr = buf[offset_5]
-                                                        if _chr in ' \t':
-                                                            if _chr == '\t':
+                                                        codepoint = buf[offset_5]
+                                                        if codepoint in ' \t':
+                                                            if codepoint == '\t':
                                                                 if offset_5 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                                     width = partial_tab_width_4
                                                                 else:
@@ -7981,8 +7981,8 @@ def _build(unicodedata):
                                                     children_6 = []
                                                     while True: # start capture
                                                         if offset_6 < buf_eof:
-                                                            _chr = buf[offset_6]
-                                                            if _chr in '\n':
+                                                            codepoint = buf[offset_6]
+                                                            if codepoint in '\n':
                                                                 offset_6 +=1
                                                                 column_4 = 0
                                                                 indent_column_4 = (0, None)
@@ -8155,9 +8155,9 @@ def _build(unicodedata):
                                                     while True: # case
                                                         count_1 = 0
                                                         while offset_6 < buf_eof and count_1 < 3:
-                                                            _chr = buf[offset_6]
-                                                            if _chr in ' \t':
-                                                                if _chr == '\t':
+                                                            codepoint = buf[offset_6]
+                                                            if codepoint in ' \t':
+                                                                if codepoint == '\t':
                                                                     if offset_6 == partial_tab_offset_5 and partial_tab_width_5 > 0:
                                                                         width = partial_tab_width_5
                                                                     else:
@@ -8191,15 +8191,15 @@ def _build(unicodedata):
                                                                     offset_7 = -1
                                                                     break
 
-                                                                _chr = ord(buf[offset_7])
+                                                                codepoint = ord(buf[offset_7])
 
-                                                                if _chr == 45:
+                                                                if codepoint == 45:
                                                                     offset_7 += 1
                                                                     column_6 += 1
-                                                                elif _chr == 42:
+                                                                elif codepoint == 42:
                                                                     offset_7 += 1
                                                                     column_6 += 1
-                                                                elif _chr == 43:
+                                                                elif codepoint == 43:
                                                                     offset_7 += 1
                                                                     column_6 += 1
                                                                 else:
@@ -8236,12 +8236,12 @@ def _build(unicodedata):
                                                                     offset_7 = -1
                                                                     break
 
-                                                                _chr = ord(buf[offset_7])
+                                                                codepoint = ord(buf[offset_7])
 
-                                                                if _chr == 46:
+                                                                if codepoint == 46:
                                                                     offset_7 += 1
                                                                     column_6 += 1
-                                                                elif _chr == 41:
+                                                                elif codepoint == 41:
                                                                     offset_7 += 1
                                                                     column_6 += 1
                                                                 else:
@@ -8267,9 +8267,9 @@ def _build(unicodedata):
 
                                                         count_1 = 0
                                                         while offset_6 < buf_eof:
-                                                            _chr = buf[offset_6]
-                                                            if _chr in ' \t':
-                                                                if _chr == '\t':
+                                                            codepoint = buf[offset_6]
+                                                            if codepoint in ' \t':
+                                                                if codepoint == '\t':
                                                                     if offset_6 == partial_tab_offset_5 and partial_tab_width_5 > 0:
                                                                         width = partial_tab_width_5
                                                                     else:
@@ -8296,9 +8296,9 @@ def _build(unicodedata):
                                                             partial_tab_width_6 = partial_tab_width_5
                                                             count_1 = 0
                                                             while offset_7 < buf_eof:
-                                                                _chr = buf[offset_7]
-                                                                if _chr in ' \t':
-                                                                    if _chr == '\t':
+                                                                codepoint = buf[offset_7]
+                                                                if codepoint in ' \t':
+                                                                    if codepoint == '\t':
                                                                         if offset_7 == partial_tab_offset_6 and partial_tab_width_6 > 0:
                                                                             width = partial_tab_width_6
                                                                         else:
@@ -8314,8 +8314,8 @@ def _build(unicodedata):
                                                                     break
 
                                                             if offset_7 < buf_eof:
-                                                                _chr = buf[offset_7]
-                                                                if _chr in '\n':
+                                                                codepoint = buf[offset_7]
+                                                                if codepoint in '\n':
                                                                     offset_7 +=1
                                                                     column_6 = 0
                                                                     indent_column_6 = (0, None)
@@ -8352,9 +8352,9 @@ def _build(unicodedata):
 
                                             count_1 = 0
                                             while offset_4 < buf_eof:
-                                                _chr = buf[offset_4]
-                                                if _chr in ' \t':
-                                                    if _chr == '\t':
+                                                codepoint = buf[offset_4]
+                                                if codepoint in ' \t':
+                                                    if codepoint == '\t':
                                                         if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                             width = partial_tab_width_3
                                                         else:
@@ -8377,8 +8377,8 @@ def _build(unicodedata):
                                                 partial_tab_offset_4 = partial_tab_offset_3
                                                 partial_tab_width_4 = partial_tab_width_3
                                                 if offset_5 < buf_eof:
-                                                    _chr = buf[offset_5]
-                                                    if _chr in '\n':
+                                                    codepoint = buf[offset_5]
+                                                    if codepoint in '\n':
                                                         offset_5 +=1
                                                         column_4 = 0
                                                         indent_column_4 = (0, None)
@@ -8419,9 +8419,9 @@ def _build(unicodedata):
                                             while True: # start capture
                                                 count_1 = 0
                                                 while offset_5 < buf_eof:
-                                                    _chr = buf[offset_5]
-                                                    if _chr in ' \t':
-                                                        if _chr == '\t':
+                                                    codepoint = buf[offset_5]
+                                                    if codepoint in ' \t':
+                                                        if codepoint == '\t':
                                                             if offset_5 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                                 width = partial_tab_width_3
                                                             else:
@@ -8482,9 +8482,9 @@ def _build(unicodedata):
 
                             count_0 = 0
                             while offset_2 < buf_eof:
-                                _chr = buf[offset_2]
-                                if _chr in ' \t':
-                                    if _chr == '\t':
+                                codepoint = buf[offset_2]
+                                if codepoint in ' \t':
+                                    if codepoint == '\t':
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
@@ -8534,8 +8534,8 @@ def _build(unicodedata):
                                 break
 
                             if offset_2 < buf_eof:
-                                _chr = buf[offset_2]
-                                if _chr in '\n':
+                                codepoint = buf[offset_2]
+                                if codepoint in '\n':
                                     offset_2 +=1
                                     column_1 = 0
                                     indent_column_1 = (0, None)
@@ -8607,7 +8607,7 @@ def _build(unicodedata):
                     partial_tab_width_1 = partial_tab_width_0
                     children_1 = [] if children_0 is not None else None
                     while True: # case
-                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_left_flank(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
+                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_right_flank(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                         if offset_1 == -1: break
 
 
@@ -8630,7 +8630,7 @@ def _build(unicodedata):
                     partial_tab_width_1 = partial_tab_width_0
                     children_1 = [] if children_0 is not None else None
                     while True: # case
-                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_right_flank(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
+                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_left_flank(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                         if offset_1 == -1: break
 
 
@@ -8706,15 +8706,15 @@ def _build(unicodedata):
                                 offset_2 = -1
                                 break
 
-                            _chr = ord(buf[offset_2])
+                            codepoint = ord(buf[offset_2])
 
-                            if _chr == 32:
+                            if codepoint == 32:
                                 offset_2 = -1
                                 break
-                            elif _chr == 10:
+                            elif codepoint == 10:
                                 offset_2 = -1
                                 break
-                            elif _chr == 92:
+                            elif codepoint == 92:
                                 offset_2 = -1
                                 break
                             else:
@@ -8734,33 +8734,33 @@ def _build(unicodedata):
                                         offset_3 = -1
                                         break
 
-                                    _chr = ord(buf[offset_3])
+                                    codepoint = ord(buf[offset_3])
 
-                                    if _chr == 32:
+                                    if codepoint == 32:
                                         offset_3 = -1
                                         break
-                                    elif _chr == 10:
+                                    elif codepoint == 10:
                                         offset_3 = -1
                                         break
-                                    elif _chr == 92:
+                                    elif codepoint == 92:
                                         offset_3 = -1
                                         break
-                                    elif _chr == 60:
+                                    elif codepoint == 60:
                                         offset_3 = -1
                                         break
-                                    elif _chr == 96:
+                                    elif codepoint == 96:
                                         offset_3 = -1
                                         break
-                                    elif _chr == 42:
+                                    elif codepoint == 42:
                                         offset_3 = -1
                                         break
-                                    elif _chr == 95:
+                                    elif codepoint == 95:
                                         offset_3 = -1
                                         break
-                                    elif _chr == 38:
+                                    elif codepoint == 38:
                                         offset_3 = -1
                                         break
-                                    elif _chr == 91:
+                                    elif codepoint == 91:
                                         offset_3 = -1
                                         break
                                     else:
@@ -8827,8 +8827,8 @@ def _build(unicodedata):
                     partial_tab_offset_1 = partial_tab_offset_0
                     partial_tab_width_1 = partial_tab_width_0
                     if offset_1 < buf_eof:
-                        _chr = buf[offset_1]
-                        if _chr in '\n':
+                        codepoint = buf[offset_1]
+                        if codepoint in '\n':
                             offset_1 +=1
                             column_1 = 0
                             indent_column_1 = (0, None)
@@ -8841,9 +8841,9 @@ def _build(unicodedata):
 
                     count_0 = 0
                     while offset_1 < buf_eof:
-                        _chr = buf[offset_1]
-                        if _chr in ' \t':
-                            if _chr == '\t':
+                        codepoint = buf[offset_1]
+                        if codepoint in ' \t':
+                            if codepoint == '\t':
                                 if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                     width = partial_tab_width_1
                                 else:
@@ -8862,9 +8862,9 @@ def _build(unicodedata):
                         offset_1 = -1
                         break
 
-                    _chr = ord(buf[offset_1])
+                    codepoint = ord(buf[offset_1])
 
-                    if _chr == 10:
+                    if codepoint == 10:
                         offset_1 = -1
                         break
                     else:
@@ -8891,18 +8891,18 @@ def _build(unicodedata):
                                 offset_2 = -1
                                 break
 
-                            _chr = ord(buf[offset_2])
+                            codepoint = ord(buf[offset_2])
 
-                            if 33 <= _chr <= 47:
+                            if 33 <= codepoint <= 47:
                                 offset_2 += 1
                                 column_1 += 1
-                            elif 58 <= _chr <= 64:
+                            elif 58 <= codepoint <= 64:
                                 offset_2 += 1
                                 column_1 += 1
-                            elif 91 <= _chr <= 96:
+                            elif 91 <= codepoint <= 96:
                                 offset_2 += 1
                                 column_1 += 1
-                            elif 123 <= _chr <= 126:
+                            elif 123 <= codepoint <= 126:
                                 offset_2 += 1
                                 column_1 += 1
                             else:
@@ -8999,9 +8999,9 @@ def _build(unicodedata):
                                         offset_3 = -1
                                         break
 
-                                    _chr = ord(buf[offset_3])
+                                    codepoint = ord(buf[offset_3])
 
-                                    if 48 <= _chr <= 57:
+                                    if 48 <= codepoint <= 57:
                                         offset_3 += 1
                                         column_2 += 1
                                     else:
@@ -9071,12 +9071,12 @@ def _build(unicodedata):
                             offset_1 = -1
                             break
 
-                        _chr = ord(buf[offset_1])
+                        codepoint = ord(buf[offset_1])
 
-                        if _chr == 120:
+                        if codepoint == 120:
                             offset_1 += 1
                             column_1 += 1
-                        elif _chr == 88:
+                        elif codepoint == 88:
                             offset_1 += 1
                             column_1 += 1
                         else:
@@ -9090,15 +9090,15 @@ def _build(unicodedata):
                                 offset_2 = -1
                                 break
 
-                            _chr = ord(buf[offset_2])
+                            codepoint = ord(buf[offset_2])
 
-                            if 48 <= _chr <= 57:
+                            if 48 <= codepoint <= 57:
                                 offset_2 += 1
                                 column_1 += 1
-                            elif 97 <= _chr <= 102:
+                            elif 97 <= codepoint <= 102:
                                 offset_2 += 1
                                 column_1 += 1
-                            elif 65 <= _chr <= 70:
+                            elif 65 <= codepoint <= 70:
                                 offset_2 += 1
                                 column_1 += 1
                             else:
@@ -9118,15 +9118,15 @@ def _build(unicodedata):
                                         offset_3 = -1
                                         break
 
-                                    _chr = ord(buf[offset_3])
+                                    codepoint = ord(buf[offset_3])
 
-                                    if 48 <= _chr <= 57:
+                                    if 48 <= codepoint <= 57:
                                         offset_3 += 1
                                         column_2 += 1
-                                    elif 97 <= _chr <= 102:
+                                    elif 97 <= codepoint <= 102:
                                         offset_3 += 1
                                         column_2 += 1
-                                    elif 65 <= _chr <= 70:
+                                    elif 65 <= codepoint <= 70:
                                         offset_3 += 1
                                         column_2 += 1
                                     else:
@@ -9189,12 +9189,12 @@ def _build(unicodedata):
                                 offset_2 = -1
                                 break
 
-                            _chr = ord(buf[offset_2])
+                            codepoint = ord(buf[offset_2])
 
-                            if 97 <= _chr <= 122:
+                            if 97 <= codepoint <= 122:
                                 offset_2 += 1
                                 column_1 += 1
-                            elif 65 <= _chr <= 90:
+                            elif 65 <= codepoint <= 90:
                                 offset_2 += 1
                                 column_1 += 1
                             else:
@@ -9214,15 +9214,15 @@ def _build(unicodedata):
                                         offset_3 = -1
                                         break
 
-                                    _chr = ord(buf[offset_3])
+                                    codepoint = ord(buf[offset_3])
 
-                                    if 48 <= _chr <= 57:
+                                    if 48 <= codepoint <= 57:
                                         offset_3 += 1
                                         column_2 += 1
-                                    elif 97 <= _chr <= 122:
+                                    elif 97 <= codepoint <= 122:
                                         offset_3 += 1
                                         column_2 += 1
-                                    elif 65 <= _chr <= 90:
+                                    elif 65 <= codepoint <= 90:
                                         offset_3 += 1
                                         column_2 += 1
                                     else:
@@ -9307,15 +9307,15 @@ def _build(unicodedata):
                                     offset_3 = -1
                                     break
 
-                                _chr = ord(buf[offset_3])
+                                codepoint = ord(buf[offset_3])
 
-                                if unicodedata.category(chr(_chr)) == 'Zs':
+                                if unicodedata.category(chr(codepoint)) == 'Zs':
                                     offset_3 += 1
                                     column_2 += 1
-                                elif unicodedata.category(chr(_chr)) in ('Zl', 'Zp', 'Cc'):
+                                elif unicodedata.category(chr(codepoint)) in ('Zl', 'Zp', 'Cc'):
                                     offset_3 += 1
                                     column_2 += 1
-                                elif unicodedata.category(chr(_chr)).startswith('P'):
+                                elif unicodedata.category(chr(codepoint)).startswith('P'):
                                     offset_3 += 1
                                     column_2 += 1
                                 else:
@@ -9336,12 +9336,12 @@ def _build(unicodedata):
                                         offset_4 = -1
                                         break
 
-                                    _chr = ord(buf[offset_4])
+                                    codepoint = ord(buf[offset_4])
 
-                                    if _chr == 95:
+                                    if codepoint == 95:
                                         offset_4 += 1
                                         column_2 += 1
-                                    elif _chr == 42:
+                                    elif codepoint == 42:
                                         offset_4 += 1
                                         column_2 += 1
                                     else:
@@ -9404,9 +9404,12 @@ def _build(unicodedata):
                                     offset_3 = -1
                                     break
 
-                                _chr = ord(buf[offset_3])
+                                codepoint = ord(buf[offset_3])
 
-                                if unicodedata.category(chr(_chr)) == 'Zs':
+                                if unicodedata.category(chr(codepoint)) == 'Zs':
+                                    offset_3 += 1
+                                    column_2 += 1
+                                elif unicodedata.category(chr(codepoint)) in ('Zl', 'Zp', 'Cc'):
                                     offset_3 += 1
                                     column_2 += 1
                                 else:
@@ -9417,6 +9420,8 @@ def _build(unicodedata):
                             if offset_3 != -1:
                                 offset_2 = -1
                                 break
+
+                            children_2.append(self.Node('value', offset_2, offset_2, (), 'left'))
 
                             children_2.append(self.Node('value', offset_2, offset_2, (), value_0))
 
@@ -9450,12 +9455,12 @@ def _build(unicodedata):
                                         offset_4 = -1
                                         break
 
-                                    _chr = ord(buf[offset_4])
+                                    codepoint = ord(buf[offset_4])
 
-                                    if _chr == 95:
+                                    if codepoint == 95:
                                         offset_4 += 1
                                         column_2 += 1
-                                    elif _chr == 42:
+                                    elif codepoint == 42:
                                         offset_4 += 1
                                         column_2 += 1
                                     else:
@@ -9518,15 +9523,15 @@ def _build(unicodedata):
                                     offset_3 = -1
                                     break
 
-                                _chr = ord(buf[offset_3])
+                                codepoint = ord(buf[offset_3])
 
-                                if unicodedata.category(chr(_chr)) == 'Zs':
+                                if unicodedata.category(chr(codepoint)) == 'Zs':
                                     offset_3 += 1
                                     column_2 += 1
-                                elif unicodedata.category(chr(_chr)) in ('Zl', 'Zp', 'Cc'):
+                                elif unicodedata.category(chr(codepoint)) in ('Zl', 'Zp', 'Cc'):
                                     offset_3 += 1
                                     column_2 += 1
-                                elif unicodedata.category(chr(_chr)).startswith('P'):
+                                elif unicodedata.category(chr(codepoint)).startswith('P'):
                                     offset_3 += 1
                                     column_2 += 1
                                 else:
@@ -9537,6 +9542,8 @@ def _build(unicodedata):
                             if offset_3 != -1:
                                 offset_2 = -1
                                 break
+
+                            children_2.append(self.Node('value', offset_2, offset_2, (), 'left'))
 
                             children_2.append(self.Node('value', offset_2, offset_2, (), value_2))
 
@@ -9594,15 +9601,15 @@ def _build(unicodedata):
                                     offset_3 = -1
                                     break
 
-                                _chr = ord(buf[offset_3])
+                                codepoint = ord(buf[offset_3])
 
-                                if unicodedata.category(chr(_chr)) == 'Zs':
+                                if unicodedata.category(chr(codepoint)) == 'Zs':
                                     offset_3 += 1
                                     column_2 += 1
-                                elif unicodedata.category(chr(_chr)) in ('Zl', 'Zp', 'Cc'):
+                                elif unicodedata.category(chr(codepoint)) in ('Zl', 'Zp', 'Cc'):
                                     offset_3 += 1
                                     column_2 += 1
-                                elif unicodedata.category(chr(_chr)).startswith('P'):
+                                elif unicodedata.category(chr(codepoint)).startswith('P'):
                                     offset_3 += 1
                                     column_2 += 1
                                 else:
@@ -9623,12 +9630,12 @@ def _build(unicodedata):
                                         offset_4 = -1
                                         break
 
-                                    _chr = ord(buf[offset_4])
+                                    codepoint = ord(buf[offset_4])
 
-                                    if _chr == 95:
+                                    if codepoint == 95:
                                         offset_4 += 1
                                         column_2 += 1
-                                    elif _chr == 42:
+                                    elif codepoint == 42:
                                         offset_4 += 1
                                         column_2 += 1
                                     else:
@@ -9680,6 +9687,8 @@ def _build(unicodedata):
                             offset_2 = offset_3
                             column_1 = column_2
 
+                            children_2.append(self.Node('value', offset_2, offset_2, (), 'right'))
+
                             children_2.append(self.Node('value', offset_2, offset_2, (), value_0))
 
                             children_2.append(self.Node('value', offset_2, offset_2, (), value_1))
@@ -9714,12 +9723,12 @@ def _build(unicodedata):
                                     offset_3 = -1
                                     break
 
-                                _chr = ord(buf[offset_3])
+                                codepoint = ord(buf[offset_3])
 
-                                if unicodedata.category(chr(_chr)) == 'Zs':
+                                if unicodedata.category(chr(codepoint)) == 'Zs':
                                     offset_3 += 1
                                     column_2 += 1
-                                elif unicodedata.category(chr(_chr)) in ('Zl', 'Zp', 'Cc'):
+                                elif unicodedata.category(chr(codepoint)) in ('Zl', 'Zp', 'Cc'):
                                     offset_3 += 1
                                     column_2 += 1
                                 else:
@@ -9740,12 +9749,12 @@ def _build(unicodedata):
                                         offset_4 = -1
                                         break
 
-                                    _chr = ord(buf[offset_4])
+                                    codepoint = ord(buf[offset_4])
 
-                                    if _chr == 95:
+                                    if codepoint == 95:
                                         offset_4 += 1
                                         column_2 += 1
-                                    elif _chr == 42:
+                                    elif codepoint == 42:
                                         offset_4 += 1
                                         column_2 += 1
                                     else:
@@ -9808,15 +9817,15 @@ def _build(unicodedata):
                                     offset_3 = -1
                                     break
 
-                                _chr = ord(buf[offset_3])
+                                codepoint = ord(buf[offset_3])
 
-                                if unicodedata.category(chr(_chr)) == 'Zs':
+                                if unicodedata.category(chr(codepoint)) == 'Zs':
                                     offset_3 += 1
                                     column_2 += 1
-                                elif unicodedata.category(chr(_chr)) in ('Zl', 'Zp', 'Cc'):
+                                elif unicodedata.category(chr(codepoint)) in ('Zl', 'Zp', 'Cc'):
                                     offset_3 += 1
                                     column_2 += 1
-                                elif unicodedata.category(chr(_chr)).startswith('P'):
+                                elif unicodedata.category(chr(codepoint)).startswith('P'):
                                     offset_3 += 1
                                     column_2 += 1
                                 else:
@@ -9827,6 +9836,8 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
+
+                            children_2.append(self.Node('value', offset_2, offset_2, (), 'right'))
 
                             children_2.append(self.Node('value', offset_2, offset_2, (), value_2))
 
@@ -9941,12 +9952,12 @@ def _build(unicodedata):
                                                     offset_5 = -1
                                                     break
 
-                                                _chr = ord(buf[offset_5])
+                                                codepoint = ord(buf[offset_5])
 
-                                                if _chr == 10:
+                                                if codepoint == 10:
                                                     offset_5 = -1
                                                     break
-                                                elif _chr == 96:
+                                                elif codepoint == 96:
                                                     offset_5 = -1
                                                     break
                                                 else:
@@ -9966,12 +9977,12 @@ def _build(unicodedata):
                                                             offset_6 = -1
                                                             break
 
-                                                        _chr = ord(buf[offset_6])
+                                                        codepoint = ord(buf[offset_6])
 
-                                                        if _chr == 10:
+                                                        if codepoint == 10:
                                                             offset_6 = -1
                                                             break
-                                                        elif _chr == 96:
+                                                        elif codepoint == 96:
                                                             offset_6 = -1
                                                             break
                                                         else:
@@ -10024,8 +10035,8 @@ def _build(unicodedata):
                                             children_5 = []
                                             while True: # start capture
                                                 if offset_5 < buf_eof:
-                                                    _chr = buf[offset_5]
-                                                    if _chr in '\n':
+                                                    codepoint = buf[offset_5]
+                                                    if codepoint in '\n':
                                                         offset_5 +=1
                                                         column_3 = 0
                                                         indent_column_3 = (0, None)
@@ -10144,9 +10155,9 @@ def _build(unicodedata):
                                                             offset_6 = -1
                                                             break
 
-                                                        _chr = ord(buf[offset_6])
+                                                        codepoint = ord(buf[offset_6])
 
-                                                        if _chr == 96:
+                                                        if codepoint == 96:
                                                             offset_6 = -1
                                                             break
                                                         else:

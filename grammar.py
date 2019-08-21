@@ -249,6 +249,7 @@ ACCEPT_IF = 'accept-if'
 REJECT_IF = 'reject-if'
 COUNT = 'count'
 VALUE = 'value'
+SHUNT = 'shunt'
 
 RULE = 'rule'
 LITERAL = 'literal'
