@@ -2293,91 +2293,18 @@ def _build(unicodedata):
                                     partial_tab_width_2 = partial_tab_width_1
                                     children_4 = [] if children_3 is not None else None
                                     while True:
-                                        while True: # start choice
-                                            offset_5 = offset_4
-                                            column_3 = column_2
-                                            indent_column_3 = indent_column_2
-                                            partial_tab_offset_3 = partial_tab_offset_2
-                                            partial_tab_width_3 = partial_tab_width_2
-                                            children_5 = [] if children_4 is not None else None
-                                            while True: # case
-                                                offset_6 = offset_5
-                                                children_6 = []
-                                                while True: # start capture
-                                                    if offset_6 == buf_eof:
-                                                        offset_6 = -1
-                                                        break
-
-                                                    _chr = ord(buf[offset_6])
-
-                                                    if _chr == 10:
-                                                        offset_6 = -1
-                                                        break
-                                                    else:
-                                                        offset_6 += 1
-                                                        column_3 += 1
-
-                                                    count_2 = 0
-                                                    while True:
-                                                        offset_7 = offset_6
-                                                        column_4 = column_3
-                                                        indent_column_4 = indent_column_3
-                                                        partial_tab_offset_4 = partial_tab_offset_3
-                                                        partial_tab_width_4 = partial_tab_width_3
-                                                        children_7 = [] if children_6 is not None else None
-                                                        while True:
-                                                            if offset_7 == buf_eof:
-                                                                offset_7 = -1
-                                                                break
-
-                                                            _chr = ord(buf[offset_7])
-
-                                                            if _chr == 10:
-                                                                offset_7 = -1
-                                                                break
-                                                            else:
-                                                                offset_7 += 1
-                                                                column_4 += 1
-
-                                                            break
-                                                        if offset_7 == -1:
-                                                            break
-                                                        if offset_6 == offset_7: break
-                                                        if children_7 is not None and children_7 is not None:
-                                                            children_6.extend(children_7)
-                                                        offset_6 = offset_7
-                                                        column_3 = column_4
-                                                        indent_column_3 = indent_column_4
-                                                        partial_tab_offset_3 = partial_tab_offset_4
-                                                        partial_tab_width_3 = partial_tab_width_4
-                                                        count_2 += 1
-                                                    if offset_6 == -1:
-                                                        break
-
-                                                    break
-                                                if offset_6 == -1:
-                                                    offset_5 = -1
-                                                    break
-                                                value_4 = self.Node('text', offset_5, offset_6, children_6, None)
-                                                children_5.append(value_4)
-                                                offset_5 = offset_6
-
-
-                                                break
-                                            if offset_5 != -1:
-                                                offset_4 = offset_5
-                                                column_2 = column_3
-                                                indent_column_2 = indent_column_3
-                                                partial_tab_offset_2 = partial_tab_offset_3
-                                                partial_tab_width_2 = partial_tab_width_3
-                                                if children_5 is not None and children_5 is not None:
-                                                    children_4.extend(children_5)
-                                                break
-                                            # end case
-                                            offset_4 = -1 # no more choices
-                                            break # end choice
-                                        if offset_4 == -1:
+                                        if offset_4 == buf_eof:
+                                            offset_4 = -1
                                             break
+
+                                        _chr = ord(buf[offset_4])
+
+                                        if _chr == 10:
+                                            offset_4 = -1
+                                            break
+                                        else:
+                                            offset_4 += 1
+                                            column_2 += 1
 
                                         break
                                     if offset_4 == -1:
@@ -2398,8 +2325,8 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_5 = self.Node('text', offset_2, offset_3, children_3, None)
-                            children_2.append(value_5)
+                            value_4 = self.Node('text', offset_2, offset_3, children_3, None)
+                            children_2.append(value_4)
                             offset_2 = offset_3
 
                             offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_line_end(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
@@ -2663,8 +2590,8 @@ def _build(unicodedata):
                 if offset_1 == -1:
                     offset_0 = -1
                     break
-                value_6 = self.Node('fenced_code', offset_0, offset_1, children_1, None)
-                children_0.append(value_6)
+                value_5 = self.Node('fenced_code', offset_0, offset_1, children_1, None)
+                children_0.append(value_5)
                 offset_0 = offset_1
 
 
@@ -3090,94 +3017,18 @@ def _build(unicodedata):
                                     partial_tab_width_2 = partial_tab_width_1
                                     children_4 = [] if children_3 is not None else None
                                     while True:
-                                        while True: # start choice
-                                            offset_5 = offset_4
-                                            column_3 = column_2
-                                            indent_column_3 = indent_column_2
-                                            partial_tab_offset_3 = partial_tab_offset_2
-                                            partial_tab_width_3 = partial_tab_width_2
-                                            children_5 = [] if children_4 is not None else None
-                                            while True: # case
-                                                offset_6 = offset_5
-                                                children_6 = []
-                                                while True: # start capture
-                                                    if offset_6 == buf_eof:
-                                                        offset_6 = -1
-                                                        break
-
-                                                    _chr = ord(buf[offset_6])
-
-                                                    if _chr == 10:
-                                                        offset_6 = -1
-                                                        break
-                                                    else:
-                                                        offset_6 += 1
-                                                        column_3 += 1
-
-                                                    count_2 = 0
-                                                    while True:
-                                                        offset_7 = offset_6
-                                                        column_4 = column_3
-                                                        indent_column_4 = indent_column_3
-                                                        partial_tab_offset_4 = partial_tab_offset_3
-                                                        partial_tab_width_4 = partial_tab_width_3
-                                                        children_7 = [] if children_6 is not None else None
-                                                        while True:
-                                                            if offset_7 == buf_eof:
-                                                                offset_7 = -1
-                                                                break
-
-                                                            _chr = ord(buf[offset_7])
-
-                                                            if _chr == 10:
-                                                                offset_7 = -1
-                                                                break
-                                                            elif _chr == 92:
-                                                                offset_7 = -1
-                                                                break
-                                                            else:
-                                                                offset_7 += 1
-                                                                column_4 += 1
-
-                                                            break
-                                                        if offset_7 == -1:
-                                                            break
-                                                        if offset_6 == offset_7: break
-                                                        if children_7 is not None and children_7 is not None:
-                                                            children_6.extend(children_7)
-                                                        offset_6 = offset_7
-                                                        column_3 = column_4
-                                                        indent_column_3 = indent_column_4
-                                                        partial_tab_offset_3 = partial_tab_offset_4
-                                                        partial_tab_width_3 = partial_tab_width_4
-                                                        count_2 += 1
-                                                    if offset_6 == -1:
-                                                        break
-
-                                                    break
-                                                if offset_6 == -1:
-                                                    offset_5 = -1
-                                                    break
-                                                value_4 = self.Node('text', offset_5, offset_6, children_6, None)
-                                                children_5.append(value_4)
-                                                offset_5 = offset_6
-
-
-                                                break
-                                            if offset_5 != -1:
-                                                offset_4 = offset_5
-                                                column_2 = column_3
-                                                indent_column_2 = indent_column_3
-                                                partial_tab_offset_2 = partial_tab_offset_3
-                                                partial_tab_width_2 = partial_tab_width_3
-                                                if children_5 is not None and children_5 is not None:
-                                                    children_4.extend(children_5)
-                                                break
-                                            # end case
-                                            offset_4 = -1 # no more choices
-                                            break # end choice
-                                        if offset_4 == -1:
+                                        if offset_4 == buf_eof:
+                                            offset_4 = -1
                                             break
+
+                                        _chr = ord(buf[offset_4])
+
+                                        if _chr == 10:
+                                            offset_4 = -1
+                                            break
+                                        else:
+                                            offset_4 += 1
+                                            column_2 += 1
 
                                         break
                                     if offset_4 == -1:
@@ -3198,8 +3049,8 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_5 = self.Node('text', offset_2, offset_3, children_3, None)
-                            children_2.append(value_5)
+                            value_4 = self.Node('text', offset_2, offset_3, children_3, None)
+                            children_2.append(value_4)
                             offset_2 = offset_3
 
                             offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_line_end(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
@@ -3463,8 +3314,8 @@ def _build(unicodedata):
                 if offset_1 == -1:
                     offset_0 = -1
                     break
-                value_6 = self.Node('fenced_code', offset_0, offset_1, children_1, None)
-                children_0.append(value_6)
+                value_5 = self.Node('fenced_code', offset_0, offset_1, children_1, None)
+                children_0.append(value_5)
                 offset_0 = offset_1
 
 
@@ -9687,6 +9538,10 @@ def _build(unicodedata):
                                 offset_2 = -1
                                 break
 
+                            children_2.append(self.Node('value', offset_2, offset_2, (), value_2))
+
+                            children_2.append(self.Node('value', offset_2, offset_2, (), value_3))
+
 
                             break
                         if offset_2 != -1:
@@ -9972,6 +9827,10 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
+
+                            children_2.append(self.Node('value', offset_2, offset_2, (), value_2))
+
+                            children_2.append(self.Node('value', offset_2, offset_2, (), value_3))
 
 
                             break

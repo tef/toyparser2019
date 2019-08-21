@@ -178,12 +178,8 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                         self.whitespace()
                     self.end_of_line()
                 self.whitespace(max=w)
-                with self.capture_node('text'), self.repeat(min=0), self.choice():
-                    with self.case():
-                        with self.capture_node('text'):
-                            self.range("\n", invert=True)
-                            with self.repeat(min=0):
-                                self.range("\n", invert=True)
+                with self.capture_node('text'), self.repeat(min=0):
+                    self.range("\n", invert=True)
                 self.line_end()
             with self.choice():
                 with self.case():
@@ -228,12 +224,8 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                         self.literal(fence)
                         self.whitespace()
                 self.whitespace(max=w)
-                with self.capture_node('text'), self.repeat(min=0), self.choice():
-                    with self.case():
-                        with self.capture_node('text'):
-                            self.range("\n", invert=True)
-                            with self.repeat(min=0):
-                               self.range("\n", "\\", invert=True)
+                with self.capture_node('text'), self.repeat(min=0):
+                    self.range("\n", invert=True)
                 self.line_end()
             with self.choice():
                 with self.case():
@@ -691,6 +683,8 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                         self.literal(chr)
                 with self.reject():
                     self.range(unicode_whitespace=True, unicode_newline=True, unicode_punctuation=True)
+                self.capture_value(chr)
+                self.capture_value(n)
                     
     @rule()
     def right_flank(self):
@@ -716,6 +710,8 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                         self.literal(chr)
                 with self.lookahead():
                     self.range(unicode_whitespace=True, unicode_newline=True, unicode_punctuation=True)
+                self.capture_value(chr)
+                self.capture_value(n)
                 
     @rule()
     def code_span(self):
@@ -764,7 +760,14 @@ builder = {}
 _builder = lambda fn:builder.__setitem__(fn.__name__,fn)
 
 def make_para(children):
-    return "".join(children)
+    out = []
+    for child in children:
+        if isinstance(child, tuple):
+            out.append(child[0] * child[1])
+        else:
+            out.append(child)
+
+    return "".join(out)
 
 def join_blocks(children):
     def wrap(c):
@@ -926,11 +929,11 @@ def empty_line(buf, pos, end, children):
 
 @_builder
 def left_flank(buf, pos, end, children):
-    return buf[pos:end]
+    return tuple(children)
 
 @_builder
 def right_flank(buf, pos, end, children):
-    return buf[pos:end]
+    return tuple(children)
 
 
 @_builder
