@@ -9409,9 +9409,6 @@ def _build(unicodedata):
                                 if unicodedata.category(chr(codepoint)) == 'Zs':
                                     offset_3 += 1
                                     column_2 += 1
-                                elif unicodedata.category(chr(codepoint)) in ('Zl', 'Zp', 'Cc'):
-                                    offset_3 += 1
-                                    column_2 += 1
                                 else:
                                     offset_3 = -1
                                     break

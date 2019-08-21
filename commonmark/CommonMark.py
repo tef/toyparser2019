@@ -788,9 +788,9 @@ def make_para(children):
                         children[left_idx] = ("left", chr, 0)
                         n = n - count
                     else:
-                        count = count -n
+                        children[left_idx] = ("left", chr, count-n)
+                        count = n
                         n = 0
-                        children[left_idx] = ("left", chr, count)
                         
                     if left_idx not in replacement:
                         replacement[left_idx] = []
@@ -811,17 +811,17 @@ def make_para(children):
                 out.append(chr)
             if idx in replacement:
                 for c in replacement[idx]:
-                    while c > 0:
-                        out.append(["<em><strong>", "<em>", "<strong>"][c%3])
-                        c -=3
+                    out.append(["<strong><strong>", "<em>", "<strong>", "<em><strong>"][c%4])
+                    for _ in range(c//4):
+                        out.append("<strong><strong>")
             children[idx] = "".join(out)
         elif kind == "right":
             out = []
             if idx in replacement:
                 for c in reversed(replacement[idx]): 
-                    while c > 0:
-                        out.append(["</strong></em>", "</em>", "</strong>"][c%3])
-                        c -=3
+                    for _ in range(c//4):
+                        out.append("</strong></strong>")
+                    out.append(["</strong></strong>", "</em>", "</strong>", "</strong></em>"][c%4])
             for _ in range(count):
                 out.append(chr)
             children[idx] = "".join(out)
