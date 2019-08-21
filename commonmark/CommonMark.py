@@ -597,6 +597,8 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
             with self.case():
                 self.left_flank()
             with self.case():
+                self.right_flank()
+            with self.case():
                 self.literal("\\")
                 with self.reject(): # hardbreaks
                     self.newline()
@@ -639,6 +641,31 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                     with self.repeat(min=0):
                         self.literal(chr)
                 with self.reject():
+                    self.range(unicode_whitespace=True, unicode_newline=True, unicode_punctuation=True)
+                    
+    @rule()
+    def right_flank(self):
+        with self.capture_node("right_flank"), self.choice():
+            with self.case():
+                with self.lookahead(-1):
+                    self.range(unicode_whitespace=True, unicode_newline=True, unicode_punctuation=True)
+                with self.count(columns=True) as n:
+                    with self.backref() as chr:
+                        self.range("_", "*")
+                    with self.repeat(min=0):
+                        self.literal(chr)
+                self.capture_value(chr)
+                self.capture_value(n)
+
+            with self.case():
+                with self.lookahead(-1):
+                    self.range(unicode_whitespace=True, unicode_newline=True)
+                with self.count(columns=True) as n:
+                    with self.backref() as chr:
+                        self.range("_", "*")
+                    with self.repeat(min=0):
+                        self.literal(chr)
+                with self.lookahead():
                     self.range(unicode_whitespace=True, unicode_newline=True, unicode_punctuation=True)
                 
     @rule()
@@ -845,6 +872,11 @@ def empty_line(buf, pos, end, children):
 @_builder
 def left_flank(buf, pos, end, children):
     return buf[pos:end]
+
+@_builder
+def right_flank(buf, pos, end, children):
+    return buf[pos:end]
+
 
 @_builder
 def para(buf, pos,end, children):
