@@ -608,8 +608,10 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                 self.code_span()
 
             with self.case():
+                with self.reject(): self.left_flank()
                 self.right_flank()
             with self.case():
+                with self.reject(): self.right_flank()
                 self.left_flank()
             with self.case():
                 self.html_entity()
@@ -671,12 +673,14 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                     with self.repeat(min=0):
                         self.literal(chr)
                 with self.reject():
-                    self.range(unicode_whitespace=True)
+                    self.range(unicode_whitespace=True, unicode_newline=True)
                 self.capture_value("left")
                 self.capture_value(chr)
                 self.capture_value(n)
 
             with self.case():
+                with self.reject(-1):
+                    self.range(unicode_punctuation=True)
                 with self.count(columns=True) as n:
                     with self.backref() as chr:
                         self.range("_", "*")
@@ -768,7 +772,7 @@ def make_para(children):
 
     replacement = {}
 
-    for op_idx, idx in reversed(list(enumerate(operators))):
+    for op_idx, idx in list(enumerate(operators)):
         kind, chr, n = children[idx]
         if kind == "right":
             left_op = op_idx -1
