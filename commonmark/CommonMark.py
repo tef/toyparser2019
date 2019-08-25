@@ -3,7 +3,10 @@ from grammar import Grammar, compile_python
 import codecs
 
 def walk(node, indent="- "):
-    print(indent, node)
+    if (node.name == "value"):
+        print(indent, node, node.value)
+    else:
+        print(indent, node)
     for child in node.children:
         walk(child, indent+ "  ")
 
@@ -614,6 +617,8 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                 with self.reject(): self.right_flank()
                 self.left_flank()
             with self.case():
+                self.dual_flank()
+            with self.case():
                 self.html_entity()
             with self.case():
                 self.escaped_text()
@@ -722,6 +727,36 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                 self.capture_value(n)
                 
     @rule()
+    def dual_flank(self):
+        with self.capture_node("dual_flank"), self.choice():
+            with self.case():
+                with self.lookahead(offset=-1):
+                    self.range(unicode_punctuation=True)
+                with self.count(columns=True) as n:
+                    with self.backref() as chr:
+                        self.range("_", "*")
+                    with self.repeat(min=0):
+                        self.literal(chr)
+                with self.lookahead():
+                    self.range(unicode_punctuation=True)
+                self.capture_value("dual")
+                self.capture_value(chr)
+                self.capture_value(n)
+
+            with self.case():
+                with self.reject(offset=-1):
+                    self.range(unicode_whitespace=True, unicode_newline=True, unicode_punctuation=True)
+                with self.count(columns=True) as n:
+                    with self.backref() as chr:
+                        self.range("_", "*")
+                    with self.repeat(min=0):
+                        self.literal(chr)
+                with self.reject():
+                    self.range(unicode_whitespace=True, unicode_newline=True, unicode_punctuation=True)
+                self.capture_value('dual')
+                self.capture_value(chr)
+                self.capture_value(n)
+    @rule()
     def code_span(self):
         with self.choice():
             with self.case():
@@ -829,6 +864,8 @@ def make_para(children):
             for _ in range(count):
                 out.append(chr)
             children[idx] = "".join(out)
+        elif kind == "dual":
+            children[idx] = chr * count 
 
 
     return "".join(children)
@@ -997,6 +1034,10 @@ def left_flank(buf, node, children):
 
 @_builder
 def right_flank(buf, node, children):
+    return tuple(children)
+
+@_builder
+def dual_flank(buf, node, children):
     return tuple(children)
 
 
