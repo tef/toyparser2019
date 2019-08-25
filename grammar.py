@@ -1075,7 +1075,7 @@ def compile_python(grammar, cython=False):
                 steps.append(f"# print({count}, 'indent')")
                     
                 steps.extend((
-                        f"def _indent(buf, offset, buf_eof, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count={count}, allow_mixed_indent=self.allow_mixed_indent):",
+                        f"def _indent(buf, buf_start, buf_eof, offset, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count={count}, allow_mixed_indent=self.allow_mixed_indent):",
                         f"    saw_tab, saw_not_tab = False, False",
                         f"    start_column, start_offset = column, offset",
                         f"    while count > 0 and offset < buf_eof:",
@@ -1122,7 +1122,7 @@ def compile_python(grammar, cython=False):
 
                 if not rule.args['dedent']:
                     steps.extend((
-                        f"def _dedent(buf, offset, buf_eof, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count={count}, allow_mixed_indent=self.allow_mixed_indent):",
+                        f"def _dedent(buf, buf_start, buf_eof, offset, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count={count}, allow_mixed_indent=self.allow_mixed_indent):",
                         f"    saw_tab, saw_not_tab = False, False",
                         f"    start_column, start_offset = column, offset",
                         f"    while count > 0 and offset < buf_eof:",
@@ -1210,7 +1210,7 @@ def compile_python(grammar, cython=False):
                 f"    # print(indent)",
                 f"    _children, _prefix = [], []",
                 f"    {offset_0} = {offset}",
-                f"    {offset_0}, {column}, {indent_column}, {partial_tab_offset}, {partial_tab_width} = indent(buf, {offset_0}, buf_eof, {column}, {indent_column}, _prefix, _children, {partial_tab_offset}, {partial_tab_width})",
+                f"    {offset_0}, {column}, {indent_column}, {partial_tab_offset}, {partial_tab_width} = indent(buf, buf_start, buf_eof, {offset_0}, {column}, {indent_column}, _prefix, _children, {partial_tab_offset}, {partial_tab_width})",
                 f"    if _prefix or _children:",
                 f"       raise Exception('bar')",
             ))
@@ -1222,7 +1222,7 @@ def compile_python(grammar, cython=False):
                 f"            break",
                 f"        _children, _prefix = [], []",
                 f"        {offset_0} = {offset}",
-                f"        {offset_0}, _column, _indent_column, _partial_tab_offset, _partial_tab_width = dedent(buf, {offset_0}, buf_eof, {column}, {indent_column}, _prefix, _children, {partial_tab_offset}, {partial_tab_width})",
+                f"        {offset_0}, _column, _indent_column, _partial_tab_offset, _partial_tab_width = dedent(buf, buf_start, buf_eof, {offset_0}, {column}, {indent_column}, _prefix, _children, {partial_tab_offset}, {partial_tab_width})",
                 f"        if {offset_0} != -1:",
                 f"            {offset} = -1",
                 f"            break",
@@ -1268,7 +1268,7 @@ def compile_python(grammar, cython=False):
                 f"    # print(indent)",
                 f"    _children, _prefix = [], []",
                 f"    {offset_1} = {offset_0}",
-                f"    {offset_1}, {column_1}, {indent_column_1}, {partial_tab_offset_1}, {partial_tab_width_1} = indent(buf, {offset_1}, buf_eof, {column_1}, {indent_column_1}, _prefix, _children, {partial_tab_offset_1}, {partial_tab_width_1})",
+                f"    {offset_1}, {column_1}, {indent_column_1}, {partial_tab_offset_1}, {partial_tab_width_1} = indent(buf, buf_start, buf_eof, {offset_1}, {column_1}, {indent_column_1}, _prefix, _children, {partial_tab_offset_1}, {partial_tab_width_1})",
                 f"    if _prefix or _children:",
                 f"       raise Exception('bar')",
                 f"    if {offset_1} == -1:",
@@ -1277,7 +1277,7 @@ def compile_python(grammar, cython=False):
                 f"            break",
                 f"        _children, _prefix = [], []",
                 f"        {offset_1} = {offset_0}",
-                f"        {offset_1}, _column, _indent_column, _partial_tab_offset, _partial_tab_width = dedent(buf, {offset_1}, buf_eof, {column_1}, {indent_column_1}, _prefix, _children, {partial_tab_offset_1}, {partial_tab_width_1})",
+                f"        {offset_1}, _column, _indent_column, _partial_tab_offset, _partial_tab_width = dedent(buf, buf_start, buf_eof, {offset_1}, {column_1}, {indent_column_1}, _prefix, _children, {partial_tab_offset_1}, {partial_tab_width_1})",
                 f"        if {offset_1} != -1:",
                 f"            {offset_0} = -1", 
                 f"            break",
@@ -1291,7 +1291,7 @@ def compile_python(grammar, cython=False):
 
         elif rule.kind == RULE:
             steps.extend((
-                f"{offset}, {column}, {indent_column}, {partial_tab_offset}, {partial_tab_width} = self.parse_{rule.args['name']}(buf, {offset}, buf_eof, {column}, {indent_column}, {prefix}, {children}, {partial_tab_offset}, {partial_tab_width})",
+                f"{offset}, {column}, {indent_column}, {partial_tab_offset}, {partial_tab_width} = self.parse_{rule.args['name']}(buf, buf_start, buf_eof, {offset}, {column}, {indent_column}, {prefix}, {children}, {partial_tab_offset}, {partial_tab_width})",
                 f"if {offset} == -1: break",
                 f"",
             ))
@@ -1692,9 +1692,10 @@ def compile_python(grammar, cython=False):
         f"def parse(self, buf, offset=0, end=None, err=None, builder=None):",
         f"    self.cache = dict()",
         f"    end = len(buf) if end is None else end",
-        f"    column, indent_column, eof = 0, (0, None), end",
+        f"    start, eof = offset, end",
+        f"    column, indent_column = 0, (0, None)",
         f"    prefix, children = [], []",
-        f"    new_offset, column, indent_column, partial_tab_offset, partial_tab_width = self.parse_{start_rule}(buf, offset, eof, column, indent_column, prefix, children, 0, 0)",
+        f"    new_offset, column, indent_column, partial_tab_offset, partial_tab_width = self.parse_{start_rule}(buf, start, end, offset, column, indent_column, prefix, children, 0, 0)",
         f"    if children and new_offset == end:",
         f"         if builder is None: return {node}({repr(grammar.capture)}, offset, new_offset, children, None)",
         f"         return children[-1].build(buf, builder)",
@@ -1710,13 +1711,13 @@ def compile_python(grammar, cython=False):
     for name, rule in grammar.rules.items():
         cdefs = {}
         if cython:
-            output.append(f"cdef parse_{name}(self, str buf, int offset_0, int buf_eof, int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):")
+            output.append(f"cdef parse_{name}(self, str buf, int buf_start, int buf_eof, int offset_0,  int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):")
             output.append(f"    cdef Py_UCS4 codepoint")
             
             for v in varnames:
                 cdefs[v] = output.add_indent(4).append_placeholder()
         else:
-            output.append(f"def parse_{name}(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):")
+            output.append(f"def parse_{name}(self, buf, buf_start, buf_eof, offset_0, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):")
    #     output.append(f"    print('enter {name},',offset_0,column_0,prefix_0, repr(buf[offset_0:offset_0+10]))")
         output.append(f"    while True: # note: return at end of loop")
 
