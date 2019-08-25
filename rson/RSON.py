@@ -22,18 +22,18 @@ def parse_datetime(v):
 
 bools = {'false': False, 'true':True}
 builder = {
-    'number': (lambda buf, start, end, children: eval(buf[start:end])),
-    'string': (lambda buf, start, end, children: unescape(buf[start:end])),
-    'list': (lambda buf, start, end, children: children),
-    'object': (lambda buf, start, end, children: dict(children)),
-    'pair': (lambda buf, start, end, children: children),
-    'document': (lambda buf, start, end, children: children[0]),
-    'bool': (lambda buf, start, end, children: bools[buf[start:end]]),
-    'null': (lambda buf, start, end, children: None),
-    'identifier': (lambda buf, start, end, children: buf[start:end]),
+    'number': (lambda buf, node, children: eval(buf[node.start:node.end])),
+    'string': (lambda buf, node, children: unescape(buf[node.start:node.end])),
+    'list': (lambda buf, node, children: children),
+    'object': (lambda buf, node, children: dict(children)),
+    'pair': (lambda buf, node, children: children),
+    'document': (lambda buf, node, children: children[0]),
+    'bool': (lambda buf, node, children: bools[buf[node.start:node.end]]),
+    'null': (lambda buf, node, children: None),
+    'identifier': (lambda buf, node, children: buf[node.start:node.end]),
 }
 
-def untag(buf, start, end, children):
+def untag(buf, node, children):
     identifier, literal = children
     if identifier == "object":
        return literal

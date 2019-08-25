@@ -841,34 +841,34 @@ def join_blocks(children):
     return '\n'.join(wrap(c) for c in children if c)
 
 @_builder
-def document(buf, pos,end, children):
+def document(buf, node, children):
     o=join_blocks(children)
     return o+"\n"
 
 @_builder
-def thematic_break(buf, pos,end, children):
+def thematic_break(buf, node, children):
     return "<hr />"
 
 @_builder
-def atx_heading(buf, pos,end, children):
+def atx_heading(buf, node, children):
     return f"<h{children[0]}>{make_para(children[1:])}</h{children[0]}>"
 
 @_builder
-def indented_code(buf, pos,end, children):
+def indented_code(buf, node, children):
     text = html_escape("".join(children))
     return f"<pre><code>{text}</code></pre>"
 
 @_builder
-def partial_indent(buf, pos, end, children):
+def partial_indent(buf, node, children):
     width = children[0]
     return " "*width
 
 @_builder
-def indented_code_line(buf, pos, end, children):
-    return buf[pos:end]+"\n"
+def indented_code_line(buf, node, children):
+    return buf[node.start:node.end]+"\n"
 
 @_builder
-def fenced_code(buf, pos,end, children):
+def fenced_code(buf, node, children):
     info = children[0]
     language = ""
     if info:
@@ -878,13 +878,13 @@ def fenced_code(buf, pos,end, children):
     return f"<pre><code{language}>{text}</code></pre>"
 
 @_builder
-def info(buf, pos,end, children):
+def info(buf, node, children):
     text = "".join(children)
     text = text.lstrip().split(' ',1)
     if text: return text[0]
 
 @_builder
-def blockquote(buf, pos, end, children):
+def blockquote(buf, node, children):
     text = join_blocks(children)
     end = '\n' if text != '\n' else ''
     start = '\n' if text and text != '\n' else ''
@@ -948,7 +948,7 @@ def wrap_tight(list_items, out):
     return out
 
 @_builder
-def unordered_list(buf, pos,end, list_items):
+def unordered_list(buf, node, list_items):
     out = ["<ul>\n"]
 
     if loose(list_items) or any(loose(c) for c in list_items if c):
@@ -960,7 +960,7 @@ def unordered_list(buf, pos,end, list_items):
     return "".join(out)
 
 @_builder
-def ordered_list(buf, pos,end, list_items):
+def ordered_list(buf, node, list_items):
     start = list_items.pop(0)
     if start != 1:
         start = f' start="{start}"'
@@ -976,32 +976,32 @@ def ordered_list(buf, pos,end, list_items):
     return "".join(out)
 
 @_builder
-def list_item(buf, pos,end, children):
+def list_item(buf, node, children):
     return children
 
 @_builder
-def ordered_list_start(buf, pos,end, children):
-    return int(buf[pos:end])
+def ordered_list_start(buf, node, children):
+    return int(buf[node.start:node.end])
 
 @_builder
-def empty(buf, pos, end, children):
+def empty(buf, node, children):
     return None
 
 @_builder
-def empty_line(buf, pos, end, children):
+def empty_line(buf, node, children):
     return None
 
 @_builder
-def left_flank(buf, pos, end, children):
+def left_flank(buf, node, children):
     return tuple(children)
 
 @_builder
-def right_flank(buf, pos, end, children):
+def right_flank(buf, node, children):
     return tuple(children)
 
 
 @_builder
-def para(buf, pos,end, children):
+def para(buf, node,  children):
     kind = children.pop()
     if kind == "setext":
         return f"<h{children[-1]}>{make_para(children[:-1])}</h{children[-1]}>"
@@ -1009,7 +1009,7 @@ def para(buf, pos,end, children):
         return (make_para(children),)
 
 @_builder
-def code_span(buf, pos, end, children):
+def code_span(buf, node, children):
     text = "".join(children)
     text = text.replace('\n', ' ')
     if len(text) > 2 and text[0] == text[-1] == " ":
@@ -1017,38 +1017,38 @@ def code_span(buf, pos, end, children):
     return f"<code>{text}</code>"
 
 @_builder
-def text(buf, pos,end, children):
-    return html_escape(buf[pos:end])
+def text(buf, node, children):
+    return html_escape(buf[node.start: node.end])
 
 @_builder
-def named_entity(buf, pos,end, children):
-    text = buf[pos:end+1] # + ;
+def named_entity(buf, node, children):
+    text = buf[node.start:node.end+1] # + ;
     if text in html.entities.html5:
         return html_escape(html.entities.html5[text])
     else:
         return f"&amp;{html_escape(text)}"
 
 @_builder
-def hex_entity(buf, pos,end, children):
-    text = buf[pos:end]
+def hex_entity(buf, node, children):
+    text = buf[node.start:node.end]
     return html_escape(chr(int(text,16)))
 
 @_builder
-def dec_entity(buf, pos,end, children):
-    text = buf[pos:end]
+def dec_entity(buf, node, children):
+    text = buf[node.start:node.end]
     return html_escape(chr(int(text)))
 
 @_builder
-def softbreak(buf, pos,end, children):
+def softbreak(buf, node, children):
     return "\n"
 
 @_builder
-def hardbreak(buf, pos,end, children):
+def hardbreak(buf,  node, children):
     return f"<br />\n"
 
 @_builder
-def whitespace(buf, pos, end, children):
-    return buf[pos:end]
+def whitespace(buf, node,  children):
+    return buf[node.start:node.end]
 
 if __name__ == "__main__":
     with open('CommonMarkParser.py', 'w') as fh:

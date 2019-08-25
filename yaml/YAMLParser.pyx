@@ -12,7 +12,7 @@ class Node:
     def build(self, buf, builder):
         children = [child.build(buf, builder) for child in self.children]
         if self.name == "value": return self.value
-        return builder[self.name](buf, self.start, self.end, children)
+        return builder[self.name](buf, self, children)
 
 
 cdef class Parser:

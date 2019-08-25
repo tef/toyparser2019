@@ -1652,7 +1652,7 @@ def compile_python(grammar, cython=False):
         f'    def build(self, buf, builder):',
         f'        children = [child.build(buf, builder) for child in self.children]',
         f'        if self.name == "value": return self.value',
-        f'        return builder[self.name](buf, self.start, self.end, children)',
+        f'        return builder[self.name](buf, self, children)',
         f'',
         f"",
     )

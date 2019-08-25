@@ -10,14 +10,14 @@ def unescape(string):
     return codecs.decode(string, 'unicode_escape')
 
 builder = {
-    'number': (lambda buf, start, end, children: int(buf[start:end])),
-    'string': (lambda buf, start, end, children: unescape(buf[start:end])),
-    'list': (lambda buf, start, end, children: children),
-    'object': (lambda buf, start, end, children: dict(children)),
-    'pair': (lambda buf, start, end, children: children),
-    'document': (lambda buf, start, end, children: children[0]),
-    'bool': (lambda buf, start, end, children: bool(buf[start:end])),
-    'null': (lambda buf, start, end, children: None),
+    'number': (lambda buf, node, children: int(buf[node.start:node.end])),
+    'string': (lambda buf, node, children: unescape(buf[node.start:node.end])),
+    'list': (lambda buf, node, children: children),
+    'object': (lambda buf, node, children: dict(children)),
+    'pair': (lambda buf, node, children: children),
+    'document': (lambda buf, node, children: children[0]),
+    'bool': (lambda buf, node, children: bool(buf[node.start:node.end])),
+    'null': (lambda buf, node, children: None),
 }
 
 class JSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n"]):
