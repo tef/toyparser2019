@@ -665,7 +665,7 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
     def left_flank(self):
         with self.capture_node("left_flank"), self.choice():
             with self.case():
-                with self.lookahead(-1):
+                with self.lookahead(offset=-1):
                     self.range(unicode_whitespace=True, unicode_newline=True, unicode_punctuation=True)
                 with self.count(columns=True) as n:
                     with self.backref() as chr:
@@ -679,7 +679,7 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                 self.capture_value(n)
 
             with self.case():
-                with self.reject(-1):
+                with self.reject(offset=-1):
                     self.range(unicode_punctuation=True)
                 with self.count(columns=True) as n:
                     with self.backref() as chr:
@@ -696,7 +696,7 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
     def right_flank(self):
         with self.capture_node("right_flank"), self.choice():
             with self.case():
-                with self.reject(-1):
+                with self.reject(offset=-1):
                     self.range(unicode_whitespace=True, unicode_newline=True, unicode_punctuation=True)
                 with self.count(columns=True) as n:
                     with self.backref() as chr:
@@ -708,7 +708,7 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                 self.capture_value(n)
 
             with self.case():
-                with self.reject(-1):
+                with self.reject(offset=-1):
                     self.range(unicode_whitespace=True, unicode_newline=True)
                 with self.count(columns=True) as n:
                     with self.backref() as chr:

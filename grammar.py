@@ -571,7 +571,7 @@ class FunctionBuilder:
         self.rules = rules
 
     @contextmanager
-    def lookahead(self, offset=0):
+    def lookahead(self, *, offset=0):
         if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         rules = self.rules
         self.rules = []
@@ -580,7 +580,7 @@ class FunctionBuilder:
         self.rules = rules
 
     @contextmanager
-    def reject(self, offset=0):
+    def reject(self, *, offset=0):
         if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         rules = self.rules
         self.rules = []
@@ -657,9 +657,9 @@ class Builtins:
         node = GrammarNode(LITERAL, args=dict(literals=args))
         return node
     def reject(*args):
-        return GrammarNode(REJECT, rules=args)
+        return GrammarNode(REJECT, rules=args, args=dict(offset=0))
     def lookahead(*args):
-        return GrammarNode(LOOKAHEAD, rules=args)
+        return GrammarNode(LOOKAHEAD, rules=args, args=dict(offset=0))
     def trace(*args):
         return GrammarNode(TRACE, rules=args)
     def range(*args, invert=False):
