@@ -17744,9 +17744,9 @@ def _build(unicodedata):
                         offset_2 = offset_1
                         children_2 = []
                         while True: # start capture
-                            if buf[offset_2:offset_2+8] == '<[CDATA[':
-                                offset_2 += 8
-                                column_1 += 8
+                            if buf[offset_2:offset_2+9] == '<![CDATA[':
+                                offset_2 += 9
+                                column_1 += 9
                             else:
                                 offset_2 = -1
                                 break

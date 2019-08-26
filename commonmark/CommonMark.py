@@ -1218,7 +1218,7 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                     self.literal(">")
             with self.case():
                 with self.capture_node('raw'):
-                    self.literal("<[CDATA[")
+                    self.literal("<![CDATA[")
                     with self.repeat():
                         with self.reject():
                             self.literal("]]>")
@@ -1337,10 +1337,10 @@ from urllib.parse import quote as percent_encode
 def html_escape(text):
     return text.replace("&", "&amp;").replace("\"", "&quot;").replace(">", "&gt;").replace("<","&lt;").replace("\x00", "\uFFFD")
 
-builder = {}
-_builder = lambda fn:builder.__setitem__(fn.__name__,fn)
-
 def make_para(children):
+    return process_emphasis(children)
+
+def process_emphasis(children):
     operators =[(idx, o[0], o[1], o[2], o[2]) for idx, o in enumerate(children) if isinstance(o, tuple)]
     active = {k:True for k in range(len(operators))}
 
@@ -1433,56 +1433,6 @@ def join_blocks(children):
         return c
     return '\n'.join(wrap(c) for c in children if c)
 
-@_builder
-def document(buf, node, children):
-    o=join_blocks(children)
-    return o+"\n"
-
-@_builder
-def thematic_break(buf, node, children):
-    return "<hr />"
-
-@_builder
-def atx_heading(buf, node, children):
-    return f"<h{children[0]}>{make_para(children[1:])}</h{children[0]}>"
-
-@_builder
-def indented_code(buf, node, children):
-    text = html_escape("".join(children))
-    return f"<pre><code>{text}</code></pre>"
-
-@_builder
-def partial_indent(buf, node, children):
-    width = children[0]
-    return " "*width
-
-@_builder
-def indented_code_line(buf, node, children):
-    return buf[node.start:node.end]+"\n"
-
-@_builder
-def fenced_code(buf, node, children):
-    info = children[0]
-    language = ""
-    if info:
-        language = f' class="language-{info}"'
-    text = "\n".join(children[1:])
-    if text: text = text+"\n"
-    return f"<pre><code{language}>{text}</code></pre>"
-
-@_builder
-def info(buf, node, children):
-    text = "".join(children)
-    text = text.lstrip().split(' ',1)
-    if text: return text[0]
-
-@_builder
-def blockquote(buf, node, children):
-    text = join_blocks(children)
-    end = '\n' if text != '\n' else ''
-    start = '\n' if text and text != '\n' else ''
-    return f"<blockquote>{start}{text}{end}</blockquote>"
-
 def loose(list_items):
     idx = 0
     while idx < len(list_items) and list_items[idx] is None: idx+=1
@@ -1539,6 +1489,59 @@ def wrap_tight(list_items, out):
                 a_block=True
         out.append(f"<li>{''.join(out2)}</li>\n")
     return out
+
+builder = {}
+_builder = lambda fn:builder.__setitem__(fn.__name__,fn)
+
+@_builder
+def document(buf, node, children):
+    o=join_blocks(children)
+    return o+"\n"
+
+@_builder
+def thematic_break(buf, node, children):
+    return "<hr />"
+
+@_builder
+def atx_heading(buf, node, children):
+    return f"<h{children[0]}>{make_para(children[1:])}</h{children[0]}>"
+
+@_builder
+def indented_code(buf, node, children):
+    text = html_escape("".join(children))
+    return f"<pre><code>{text}</code></pre>"
+
+@_builder
+def partial_indent(buf, node, children):
+    width = children[0]
+    return " "*width
+
+@_builder
+def indented_code_line(buf, node, children):
+    return buf[node.start:node.end]+"\n"
+
+@_builder
+def fenced_code(buf, node, children):
+    info = children[0]
+    language = ""
+    if info:
+        language = f' class="language-{info}"'
+    text = "\n".join(children[1:])
+    if text: text = text+"\n"
+    return f"<pre><code{language}>{text}</code></pre>"
+
+@_builder
+def info(buf, node, children):
+    text = "".join(children)
+    text = text.lstrip().split(' ',1)
+    if text: return text[0]
+
+@_builder
+def blockquote(buf, node, children):
+    text = join_blocks(children)
+    end = '\n' if text != '\n' else ''
+    start = '\n' if text and text != '\n' else ''
+    return f"<blockquote>{start}{text}{end}</blockquote>"
 
 @_builder
 def unordered_list(buf, node, list_items):
@@ -1664,16 +1667,10 @@ def hardbreak(buf,  node, children):
 def whitespace(buf, node,  children):
     return buf[node.start:node.end]
 
-if __name__ == "__main__":
-    with open('CommonMarkParser.py', 'w') as fh:
-        fh.write(compile_python(CommonMark))
-            
-    #for name, value in CommonMark.rules.items():
-    #    print(name, '<--', value,'.')
+### 
 
-    print(CommonMark.version)
 
-def _markup(buf):
+def markup(buf):
     parser = CommonMark.parser()
     node = parser.parse(buf)
     if node:
@@ -1685,240 +1682,46 @@ def _markup(buf):
         print()
         print(node.build(buf, builder))
 
-if __name__ != '__main__': markup = lambda x:x
+if __name__ == "__main__":
+    with open('CommonMarkParser.py', 'w') as fh:
+        fh.write(compile_python(CommonMark))
+            
+    #for name, value in CommonMark.rules.items():
+    #    print(name, '<--', value,'.')
 
-markup = lambda x:x
-markup("# butt")
-markup("""a b c\n\n""")
-markup("""a b c\n""")
-markup("""a b c""")
-markup("""
-d e f
-
-g h i
-j l k
-
-b r b
-"""
-)
-markup("---\n")
-markup("# butt\n")
-markup("   ##### butt #####\n")
-markup("   ##### butt ##### a\n")
-markup("""
-aaaa
-====
-
-1 2 3 4
-
-bbbb
-cccc
-dddd
-----
-
-1 2 3 4
-
-""")
+    print(CommonMark.version)
+    with open("../README.md") as readme:
+        markup(readme.read())
 
 
-markup("""\
-    buttt
-    ubtt
+    print('spec')
+    import json
+    with open("commonmark_0_29.json") as fh:
+        tests = json.load(fh)
+    failed = 0
+    worked = 0
+    count =0
 
-    uttt
+    parser = CommonMark.parser()
+    for t in tests:
+        markd = t['markdown']
+        out1 = parser.parse(markd)
+        out = out1.build(markd, builder)
+        count +=1
+        if out == t['html']: 
+            worked +=1
+            #print(repr(markd))
+            #print(repr(out))
+        else:
+            failed +=1
+            # if '<' in markd: continue
+            # if '[' in markd: continue
+            print(t['example'])
+            print(repr(markd))
+            print('=', repr(t['html']))
+            print('X', repr(out))
+            print()
+            walk(out1)
+            print()
+    print(count, worked, failed)
 
-
-    buttt
-
-butt
-
-    butt
-    butt
-
-    butt
-""")
-markup("""\
-```
-    buttt
-    ubtt
-
-    uttt
-```
-
-    buttt
-
-butt
-
-~~~ nice
-    butt
-    butt
-~~~
-
-butt
-""")
-markup("""
-aaa bbb  
-ddd eee
-fff
-
-ggg
-
-```
-butt
-""")
-markup("# butt\n")
-markup("   ##### butt #####\n")
-markup("   ##### butt ##### a\n")
-markup("""
-ab
-c
-
-> a
-b c d
-
-a b c
-""")
-markup("""
-ab
-c
-
->> a
->b c d
-
-a b c
-""")
-markup("---")
-markup("   ---   \n")
-markup("""
-d1 e2 f3
-----
-
-g h i
-j l k
-
-----
-
-b r b
-"""
-)
-markup("""\
-> a 
-> > b
-
-ddff
-""")
-markup("""\
-- 1
-- 2
-- 3
-
-four
-
-- a
-
-- c
-
-  - d 
-
-  - e
-
-- f
-
-""")
-markup("""\
-
-    a
-
-    v
-
->     t
->      
->     u
-
-    b
-     
-    t
-""")
-
-with open("../README.md") as readme:
-    markup(readme.read())
-
-
-markup("""\
-- a  
-  b
-- c
-
-def
-
-- c
-  ```
-  d
-  ```
-- foo
-
-def
-
-- c
- 
-  d
-- e
-
-butt
-""")
-
-markup("""\
-> a
-> b
-> ===
-""")
-markup("""\
-- a
-  b
-  ===
-""")
-markup("""\
-> a
-b
-===
-""")
-markup("""\
-- a
-b
-===
-""")
-print('spec')
-import json
-with open("commonmark_0_29.json") as fh:
-    tests = json.load(fh)
-failed = 0
-worked = 0
-count =0
-
-parser = CommonMark.parser()
-for t in tests:
-    markd = t['markdown']
-    out1 = parser.parse(markd)
-    out = out1.build(markd, builder)
-    count +=1
-    if out == t['html']: 
-        worked +=1
-        #print(repr(markd))
-        #print(repr(out))
-    else:
-        failed +=1
-        # if '<' in markd: continue
-        if '[' in markd: continue
-        print(t['example'])
-        print(repr(markd))
-        print('=', repr(t['html']))
-        print('X', repr(out))
-        print()
-        walk(out1)
-        print()
-print(count, worked, failed)
-
-markup("""
-> This is _a_ paragraph continuation text
-2. because the line starts with `2`, not `1`.
-""")
