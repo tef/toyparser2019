@@ -425,10 +425,10 @@ class FunctionBuilder:
         if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         self.rules.append(rule.rule)
 
-    def literal(self, *args):
+    def literal(self, *args, transform=None):
         if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         if any(a == "" for a in args): raise BadGrammar("empty literal")
-        node = GrammarNode(LITERAL, args=dict(literals=args))
+        node = GrammarNode(LITERAL, args=dict(literals=args, transform=transform))
         self.rules.append(node)
 
     def whitespace(self, min=0, max=None, newline=False):
@@ -654,7 +654,7 @@ class Builtins:
         return GrammarNode(VALUE, args=dict(value=arg))
     def literal(*args):
         if any(a == "" for a in args): raise BadGrammar("empty literal")
-        node = GrammarNode(LITERAL, args=dict(literals=args))
+        node = GrammarNode(LITERAL, args=dict(literals=args, transform=None))
         return node
     def reject(*args):
         return GrammarNode(REJECT, rules=args, args=dict(offset=0))
