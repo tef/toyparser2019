@@ -23,16 +23,17 @@ def _build(unicodedata):
         def parse(self, buf, offset=0, end=None, err=None, builder=None):
             self.cache = dict()
             end = len(buf) if end is None else end
-            column, indent_column, eof = 0, (0, None), end
+            start, eof = offset, end
+            column, indent_column = 0, (0, None)
             prefix, children = [], []
-            new_offset, column, indent_column, partial_tab_offset, partial_tab_width = self.parse_document(buf, offset, eof, column, indent_column, prefix, children, 0, 0)
+            new_offset, column, indent_column, partial_tab_offset, partial_tab_width = self.parse_document(buf, start, end, offset, column, indent_column, prefix, children, 0, 0)
             if children and new_offset == end:
                  if builder is None: return self.Node('document', offset, new_offset, children, None)
                  return children[-1].build(buf, builder)
             print('no', offset, new_offset, end, buf[new_offset:])
             if err is not None: raise err(buf, new_offset, 'no')
 
-        def parse_yaml_literal(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
+        def parse_yaml_literal(self, buf, buf_start, buf_eof, offset_0, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
             while True: # note: return at end of loop
                 while True: # start choice
                     offset_1 = offset_0
@@ -42,7 +43,7 @@ def _build(unicodedata):
                     partial_tab_width_1 = partial_tab_width_0
                     children_1 = [] if children_0 is not None else None
                     while True: # case
-                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_list_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
+                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_list_literal(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                         if offset_1 == -1: break
 
 
@@ -64,7 +65,7 @@ def _build(unicodedata):
                     partial_tab_width_1 = partial_tab_width_0
                     children_1 = [] if children_0 is not None else None
                     while True: # case
-                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_object_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
+                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_object_literal(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                         if offset_1 == -1: break
 
 
@@ -86,7 +87,7 @@ def _build(unicodedata):
                     partial_tab_width_1 = partial_tab_width_0
                     children_1 = [] if children_0 is not None else None
                     while True: # case
-                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_string_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
+                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_string_literal(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                         if offset_1 == -1: break
 
 
@@ -108,7 +109,7 @@ def _build(unicodedata):
                     partial_tab_width_1 = partial_tab_width_0
                     children_1 = [] if children_0 is not None else None
                     while True: # case
-                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_number_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
+                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_number_literal(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                         if offset_1 == -1: break
 
 
@@ -130,7 +131,7 @@ def _build(unicodedata):
                     partial_tab_width_1 = partial_tab_width_0
                     children_1 = [] if children_0 is not None else None
                     while True: # case
-                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_true_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
+                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_true_literal(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                         if offset_1 == -1: break
 
 
@@ -152,7 +153,7 @@ def _build(unicodedata):
                     partial_tab_width_1 = partial_tab_width_0
                     children_1 = [] if children_0 is not None else None
                     while True: # case
-                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_false_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
+                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_false_literal(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                         if offset_1 == -1: break
 
 
@@ -174,7 +175,7 @@ def _build(unicodedata):
                     partial_tab_width_1 = partial_tab_width_0
                     children_1 = [] if children_0 is not None else None
                     while True: # case
-                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_null_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
+                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_null_literal(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                         if offset_1 == -1: break
 
 
@@ -197,7 +198,7 @@ def _build(unicodedata):
                 break
             return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
-        def parse_true_literal(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
+        def parse_true_literal(self, buf, buf_start, buf_eof, offset_0, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
             while True: # note: return at end of loop
                 offset_1 = offset_0
                 children_1 = []
@@ -220,7 +221,7 @@ def _build(unicodedata):
                 break
             return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
-        def parse_false_literal(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
+        def parse_false_literal(self, buf, buf_start, buf_eof, offset_0, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
             while True: # note: return at end of loop
                 offset_1 = offset_0
                 children_1 = []
@@ -243,7 +244,7 @@ def _build(unicodedata):
                 break
             return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
-        def parse_null_literal(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
+        def parse_null_literal(self, buf, buf_start, buf_eof, offset_0, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
             while True: # note: return at end of loop
                 offset_1 = offset_0
                 children_1 = []
@@ -266,7 +267,7 @@ def _build(unicodedata):
                 break
             return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
-        def parse_identifier(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
+        def parse_identifier(self, buf, buf_start, buf_eof, offset_0, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
             while True: # note: return at end of loop
                 while True: # start choice
                     offset_1 = offset_0
@@ -352,7 +353,7 @@ def _build(unicodedata):
                     partial_tab_width_1 = partial_tab_width_0
                     children_1 = [] if children_0 is not None else None
                     while True: # case
-                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_string_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
+                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_string_literal(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                         if offset_1 == -1: break
 
 
@@ -376,7 +377,7 @@ def _build(unicodedata):
                 break
             return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
-        def parse_number_literal(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
+        def parse_number_literal(self, buf, buf_start, buf_eof, offset_0, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
             while True: # note: return at end of loop
                 offset_1 = offset_0
                 children_1 = []
@@ -649,7 +650,7 @@ def _build(unicodedata):
                 break
             return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
-        def parse_string_literal(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
+        def parse_string_literal(self, buf, buf_start, buf_eof, offset_0, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
             while True: # note: return at end of loop
                 if buf[offset_0:offset_0+1] == '"':
                     offset_0 += 1
@@ -907,7 +908,7 @@ def _build(unicodedata):
                 break
             return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
-        def parse_list_literal(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
+        def parse_list_literal(self, buf, buf_start, buf_eof, offset_0, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
             while True: # note: return at end of loop
                 if buf[offset_0:offset_0+1] == '[':
                     offset_0 += 1
@@ -956,7 +957,7 @@ def _build(unicodedata):
                         partial_tab_width_1 = partial_tab_width_0
                         children_2 = [] if children_1 is not None else None
                         while True:
-                            offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_yaml_literal(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
+                            offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_yaml_literal(buf, buf_start, buf_eof, offset_2, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                             if offset_2 == -1: break
 
 
@@ -1032,7 +1033,7 @@ def _build(unicodedata):
                                         else:
                                             break
 
-                                    offset_3, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_yaml_literal(buf, offset_3, buf_eof, column_2, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
+                                    offset_3, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_yaml_literal(buf, buf_start, buf_eof, offset_3, column_2, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
                                     if offset_3 == -1: break
 
 
@@ -1174,7 +1175,7 @@ def _build(unicodedata):
                 break
             return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
-        def parse_object_literal(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
+        def parse_object_literal(self, buf, buf_start, buf_eof, offset_0, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
             while True: # note: return at end of loop
                 if buf[offset_0:offset_0+1] == '{':
                     offset_0 += 1
@@ -1223,7 +1224,7 @@ def _build(unicodedata):
                         partial_tab_width_1 = partial_tab_width_0
                         children_2 = [] if children_1 is not None else None
                         while True:
-                            offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_string_literal(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
+                            offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_string_literal(buf, buf_start, buf_eof, offset_2, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                             if offset_2 == -1: break
 
 
@@ -1281,7 +1282,7 @@ def _build(unicodedata):
                                 else:
                                     break
 
-                            offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_yaml_literal(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
+                            offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_yaml_literal(buf, buf_start, buf_eof, offset_2, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                             if offset_2 == -1: break
 
 
@@ -1357,7 +1358,7 @@ def _build(unicodedata):
                                         else:
                                             break
 
-                                    offset_3, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_string_literal(buf, offset_3, buf_eof, column_2, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
+                                    offset_3, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_string_literal(buf, buf_start, buf_eof, offset_3, column_2, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
                                     if offset_3 == -1: break
 
 
@@ -1415,7 +1416,7 @@ def _build(unicodedata):
                                         else:
                                             break
 
-                                    offset_3, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_yaml_literal(buf, offset_3, buf_eof, column_2, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
+                                    offset_3, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_yaml_literal(buf, buf_start, buf_eof, offset_3, column_2, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
                                     if offset_3 == -1: break
 
 
@@ -1557,7 +1558,7 @@ def _build(unicodedata):
                 break
             return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
-        def parse_yaml_eol(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
+        def parse_yaml_eol(self, buf, buf_start, buf_eof, offset_0, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
             while True: # note: return at end of loop
                 count_0 = 0
                 while True:
@@ -1746,11 +1747,11 @@ def _build(unicodedata):
                 break
             return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
-        def parse_indented_list(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
+        def parse_indented_list(self, buf, buf_start, buf_eof, offset_0, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
             while True: # note: return at end of loop
                 count_0 = column_0 - indent_column_0[0]
                 # print(count_0, 'indent')
-                def _indent(buf, offset, buf_eof, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
+                def _indent(buf, buf_start, buf_eof, offset, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
                     saw_tab, saw_not_tab = False, False
                     start_column, start_offset = column, offset
                     while count > 0 and offset < buf_eof:
@@ -1787,7 +1788,7 @@ def _build(unicodedata):
                             offset = -1
                             break
                     return offset, column, indent_column, partial_tab_offset, partial_tab_width
-                def _dedent(buf, offset, buf_eof, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
+                def _dedent(buf, buf_start, buf_eof, offset, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
                     saw_tab, saw_not_tab = False, False
                     start_column, start_offset = column, offset
                     while count > 0 and offset < buf_eof:
@@ -1862,7 +1863,7 @@ def _build(unicodedata):
                                     else:
                                         break
 
-                                offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_indented_value(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
+                                offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_indented_value(buf, buf_start, buf_eof, offset_2, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                                 if offset_2 == -1: break
 
 
@@ -1885,7 +1886,7 @@ def _build(unicodedata):
                             partial_tab_width_1 = partial_tab_width_0
                             children_2 = [] if children_1 is not None else None
                             while True: # case
-                                offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_yaml_eol(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
+                                offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_yaml_eol(buf, buf_start, buf_eof, offset_2, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                                 if offset_2 == -1: break
 
 
@@ -1897,7 +1898,7 @@ def _build(unicodedata):
                                     # print(indent)
                                     _children, _prefix = [], []
                                     offset_3 = offset_2
-                                    offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, offset_3, buf_eof, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
+                                    offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
                                     if _prefix or _children:
                                        raise Exception('bar')
                                     if offset_3 == -1:
@@ -1930,7 +1931,7 @@ def _build(unicodedata):
                                     offset_2 = -1
                                     break
 
-                                offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_indented_value(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
+                                offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_indented_value(buf, buf_start, buf_eof, offset_2, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                                 if offset_2 == -1: break
 
 
@@ -1960,7 +1961,7 @@ def _build(unicodedata):
                             partial_tab_width_1 = partial_tab_width_0
                             children_2 = [] if children_1 is not None else None
                             while True:
-                                offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_yaml_eol(buf, offset_2, buf_eof, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
+                                offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_yaml_eol(buf, buf_start, buf_eof, offset_2, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                                 if offset_2 == -1: break
 
 
@@ -1972,7 +1973,7 @@ def _build(unicodedata):
                                     # print(indent)
                                     _children, _prefix = [], []
                                     offset_3 = offset_2
-                                    offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, offset_3, buf_eof, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
+                                    offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
                                     if _prefix or _children:
                                        raise Exception('bar')
                                     if offset_3 == -1:
@@ -2039,7 +2040,7 @@ def _build(unicodedata):
                                             else:
                                                 break
 
-                                        offset_3, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_indented_value(buf, offset_3, buf_eof, column_2, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
+                                        offset_3, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_indented_value(buf, buf_start, buf_eof, offset_3, column_2, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
                                         if offset_3 == -1: break
 
 
@@ -2062,7 +2063,7 @@ def _build(unicodedata):
                                     partial_tab_width_2 = partial_tab_width_1
                                     children_3 = [] if children_2 is not None else None
                                     while True: # case
-                                        offset_3, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_yaml_eol(buf, offset_3, buf_eof, column_2, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
+                                        offset_3, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_yaml_eol(buf, buf_start, buf_eof, offset_3, column_2, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
                                         if offset_3 == -1: break
 
 
@@ -2074,7 +2075,7 @@ def _build(unicodedata):
                                             # print(indent)
                                             _children, _prefix = [], []
                                             offset_4 = offset_3
-                                            offset_4, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = indent(buf, offset_4, buf_eof, column_2, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
+                                            offset_4, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = indent(buf, buf_start, buf_eof, offset_4, column_2, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
                                             if _prefix or _children:
                                                raise Exception('bar')
                                             if offset_4 == -1:
@@ -2104,7 +2105,7 @@ def _build(unicodedata):
                                             else:
                                                 break
 
-                                        offset_3, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_indented_value(buf, offset_3, buf_eof, column_2, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
+                                        offset_3, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_indented_value(buf, buf_start, buf_eof, offset_3, column_2, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
                                         if offset_3 == -1: break
 
 
@@ -2156,11 +2157,11 @@ def _build(unicodedata):
                 break
             return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
-        def parse_indented_object(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
+        def parse_indented_object(self, buf, buf_start, buf_eof, offset_0, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
             while True: # note: return at end of loop
                 count_0 = column_0 - indent_column_0[0]
                 # print(count_0, 'indent')
-                def _indent(buf, offset, buf_eof, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
+                def _indent(buf, buf_start, buf_eof, offset, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
                     saw_tab, saw_not_tab = False, False
                     start_column, start_offset = column, offset
                     while count > 0 and offset < buf_eof:
@@ -2197,7 +2198,7 @@ def _build(unicodedata):
                             offset = -1
                             break
                     return offset, column, indent_column, partial_tab_offset, partial_tab_width
-                def _dedent(buf, offset, buf_eof, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
+                def _dedent(buf, buf_start, buf_eof, offset, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
                     saw_tab, saw_not_tab = False, False
                     start_column, start_offset = column, offset
                     while count > 0 and offset < buf_eof:
@@ -2241,7 +2242,7 @@ def _build(unicodedata):
                         offset_2 = offset_1
                         children_2 = []
                         while True: # start capture
-                            offset_2, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0 = self.parse_identifier(buf, offset_2, buf_eof, column_0, indent_column_0, prefix_0, children_2, partial_tab_offset_0, partial_tab_width_0)
+                            offset_2, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0 = self.parse_identifier(buf, buf_start, buf_eof, offset_2, column_0, indent_column_0, prefix_0, children_2, partial_tab_offset_0, partial_tab_width_0)
                             if offset_2 == -1: break
 
 
@@ -2279,7 +2280,7 @@ def _build(unicodedata):
                                 partial_tab_width_1 = partial_tab_width_0
                                 children_3 = [] if children_2 is not None else None
                                 while True: # case
-                                    offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_yaml_eol(buf, offset_3, buf_eof, column_1, indent_column_1, prefix_0, children_3, partial_tab_offset_1, partial_tab_width_1)
+                                    offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_yaml_eol(buf, buf_start, buf_eof, offset_3, column_1, indent_column_1, prefix_0, children_3, partial_tab_offset_1, partial_tab_width_1)
                                     if offset_3 == -1: break
 
 
@@ -2291,7 +2292,7 @@ def _build(unicodedata):
                                         # print(indent)
                                         _children, _prefix = [], []
                                         offset_4 = offset_3
-                                        offset_4, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, offset_4, buf_eof, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
+                                        offset_4, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_4, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
                                         if _prefix or _children:
                                            raise Exception('bar')
                                         if offset_4 == -1:
@@ -2324,7 +2325,7 @@ def _build(unicodedata):
                                         offset_3 = -1
                                         break
 
-                                    offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_indented_value(buf, offset_3, buf_eof, column_1, indent_column_1, prefix_0, children_3, partial_tab_offset_1, partial_tab_width_1)
+                                    offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_indented_value(buf, buf_start, buf_eof, offset_3, column_1, indent_column_1, prefix_0, children_3, partial_tab_offset_1, partial_tab_width_1)
                                     if offset_3 == -1: break
 
 
@@ -2366,7 +2367,7 @@ def _build(unicodedata):
                                         else:
                                             break
 
-                                    offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_indented_value(buf, offset_3, buf_eof, column_1, indent_column_1, prefix_0, children_3, partial_tab_offset_1, partial_tab_width_1)
+                                    offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_indented_value(buf, buf_start, buf_eof, offset_3, column_1, indent_column_1, prefix_0, children_3, partial_tab_offset_1, partial_tab_width_1)
                                     if offset_3 == -1: break
 
 
@@ -2407,7 +2408,7 @@ def _build(unicodedata):
                                 offset_3 = offset_2
                                 children_3 = []
                                 while True: # start capture
-                                    offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_yaml_eol(buf, offset_3, buf_eof, column_1, indent_column_1, prefix_0, children_3, partial_tab_offset_1, partial_tab_width_1)
+                                    offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_yaml_eol(buf, buf_start, buf_eof, offset_3, column_1, indent_column_1, prefix_0, children_3, partial_tab_offset_1, partial_tab_width_1)
                                     if offset_3 == -1: break
 
 
@@ -2419,7 +2420,7 @@ def _build(unicodedata):
                                         # print(indent)
                                         _children, _prefix = [], []
                                         offset_4 = offset_3
-                                        offset_4, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, offset_4, buf_eof, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
+                                        offset_4, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_4, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
                                         if _prefix or _children:
                                            raise Exception('bar')
                                         if offset_4 == -1:
@@ -2430,7 +2431,7 @@ def _build(unicodedata):
                                     if offset_3 == -1:
                                         break
 
-                                    offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_identifier(buf, offset_3, buf_eof, column_1, indent_column_1, prefix_0, children_3, partial_tab_offset_1, partial_tab_width_1)
+                                    offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_identifier(buf, buf_start, buf_eof, offset_3, column_1, indent_column_1, prefix_0, children_3, partial_tab_offset_1, partial_tab_width_1)
                                     if offset_3 == -1: break
 
 
@@ -2489,7 +2490,7 @@ def _build(unicodedata):
                                                 else:
                                                     break
 
-                                            offset_4, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_indented_value(buf, offset_4, buf_eof, column_2, indent_column_2, prefix_0, children_4, partial_tab_offset_2, partial_tab_width_2)
+                                            offset_4, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_indented_value(buf, buf_start, buf_eof, offset_4, column_2, indent_column_2, prefix_0, children_4, partial_tab_offset_2, partial_tab_width_2)
                                             if offset_4 == -1: break
 
 
@@ -2512,7 +2513,7 @@ def _build(unicodedata):
                                         partial_tab_width_2 = partial_tab_width_1
                                         children_4 = [] if children_3 is not None else None
                                         while True: # case
-                                            offset_4, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_yaml_eol(buf, offset_4, buf_eof, column_2, indent_column_2, prefix_0, children_4, partial_tab_offset_2, partial_tab_width_2)
+                                            offset_4, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_yaml_eol(buf, buf_start, buf_eof, offset_4, column_2, indent_column_2, prefix_0, children_4, partial_tab_offset_2, partial_tab_width_2)
                                             if offset_4 == -1: break
 
 
@@ -2524,7 +2525,7 @@ def _build(unicodedata):
                                                 # print(indent)
                                                 _children, _prefix = [], []
                                                 offset_5 = offset_4
-                                                offset_5, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = indent(buf, offset_5, buf_eof, column_2, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
+                                                offset_5, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = indent(buf, buf_start, buf_eof, offset_5, column_2, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
                                                 if _prefix or _children:
                                                    raise Exception('bar')
                                                 if offset_5 == -1:
@@ -2557,7 +2558,7 @@ def _build(unicodedata):
                                                 offset_4 = -1
                                                 break
 
-                                            offset_4, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_indented_value(buf, offset_4, buf_eof, column_2, indent_column_2, prefix_0, children_4, partial_tab_offset_2, partial_tab_width_2)
+                                            offset_4, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_indented_value(buf, buf_start, buf_eof, offset_4, column_2, indent_column_2, prefix_0, children_4, partial_tab_offset_2, partial_tab_width_2)
                                             if offset_4 == -1: break
 
 
@@ -2617,7 +2618,7 @@ def _build(unicodedata):
                 break
             return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
-        def parse_indented_value(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
+        def parse_indented_value(self, buf, buf_start, buf_eof, offset_0, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
             while True: # note: return at end of loop
                 while True: # start choice
                     offset_1 = offset_0
@@ -2627,7 +2628,7 @@ def _build(unicodedata):
                     partial_tab_width_1 = partial_tab_width_0
                     children_1 = [] if children_0 is not None else None
                     while True: # case
-                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_indented_object(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
+                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_indented_object(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                         if offset_1 == -1: break
 
 
@@ -2650,7 +2651,7 @@ def _build(unicodedata):
                     partial_tab_width_1 = partial_tab_width_0
                     children_1 = [] if children_0 is not None else None
                     while True: # case
-                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_indented_list(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
+                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_indented_list(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                         if offset_1 == -1: break
 
 
@@ -2673,7 +2674,7 @@ def _build(unicodedata):
                     partial_tab_width_1 = partial_tab_width_0
                     children_1 = [] if children_0 is not None else None
                     while True: # case
-                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_yaml_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
+                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_yaml_literal(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                         if offset_1 == -1: break
 
 
@@ -2697,7 +2698,7 @@ def _build(unicodedata):
                 break
             return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
-        def parse_document(self, buf, offset_0, buf_eof, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
+        def parse_document(self, buf, buf_start, buf_eof, offset_0, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
             while True: # note: return at end of loop
                 count_0 = 0
                 while True:
@@ -2727,7 +2728,7 @@ def _build(unicodedata):
                             else:
                                 break
 
-                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_yaml_eol(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
+                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_yaml_eol(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                         if offset_1 == -1: break
 
 
@@ -2754,7 +2755,7 @@ def _build(unicodedata):
                     partial_tab_width_1 = partial_tab_width_0
                     children_1 = [] if children_0 is not None else None
                     while True: # case
-                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_indented_object(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
+                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_indented_object(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                         if offset_1 == -1: break
 
 
@@ -2777,7 +2778,7 @@ def _build(unicodedata):
                     partial_tab_width_1 = partial_tab_width_0
                     children_1 = [] if children_0 is not None else None
                     while True: # case
-                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_indented_list(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
+                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_indented_list(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                         if offset_1 == -1: break
 
 
@@ -2800,7 +2801,7 @@ def _build(unicodedata):
                     partial_tab_width_1 = partial_tab_width_0
                     children_1 = [] if children_0 is not None else None
                     while True: # case
-                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_list_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
+                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_list_literal(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                         if offset_1 == -1: break
 
 
@@ -2823,7 +2824,7 @@ def _build(unicodedata):
                     partial_tab_width_1 = partial_tab_width_0
                     children_1 = [] if children_0 is not None else None
                     while True: # case
-                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_object_literal(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
+                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_object_literal(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                         if offset_1 == -1: break
 
 
@@ -2872,7 +2873,7 @@ def _build(unicodedata):
                     partial_tab_width_1 = partial_tab_width_0
                     children_1 = [] if children_0 is not None else None
                     while True:
-                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_yaml_eol(buf, offset_1, buf_eof, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
+                        offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_yaml_eol(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                         if offset_1 == -1: break
 
 
