@@ -1424,7 +1424,13 @@ def compile_python(grammar, cython=False):
                 else:
                     length = len(literal)
                     vliteral = repr(literal)
-                    if cython:
+                    if rule.args['transform'] is not None:
+                        if rule.args['transform'] == "lower":
+                            cond = f"buf[{offset}:{offset}+{length}].lower() == {(vliteral)}"
+                        else:
+                            raise Exception('bad')
+
+                    elif cython:
                         cond = [f"{offset} + {length} <= buf_eof"]
                         for i, c in enumerate(literal):
                              cond.append(f"buf[{offset}+{i}] == {repr(c)}")

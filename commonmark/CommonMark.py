@@ -547,6 +547,9 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
             with self.repeat():
                 with self.capture_node('raw'): self.newline()
                 self.indent(partial=False)
+                with self.reject():
+                    self.whitespace()
+                    self.end_of_file()
                 with self.capture_node('raw'):
                     with self.repeat():
                         with self.reject(): self.literal("</script>", "</pre>", "</style>", transform="lower")
@@ -564,8 +567,6 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                             with self.reject(): self.literal("</script>", "</pre>", "</style>", transform="lower")
                             self.range("\n", invert=True)
                     self.end_of_line()
-                    with self.reject():
-                        self.start_of_line()
     @rule()
     def html_block_type_2(self):
         with self.capture_node('html_block'):
@@ -579,6 +580,9 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
             with self.repeat():
                 with self.capture_node('raw'): self.newline()
                 self.indent(partial=False)
+                with self.reject():
+                    self.whitespace()
+                    self.end_of_file()
                 with self.capture_node('raw'):
                     with self.repeat():
                         with self.reject(): self.literal("-->")
@@ -596,8 +600,6 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                             with self.reject(): self.literal("-->")
                             self.range("\n", invert=True)
                     self.end_of_line()
-                    with self.reject():
-                        self.start_of_line()
     @rule()
     def html_block_type_3(self):
         with self.capture_node('html_block'):
@@ -611,6 +613,9 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
             with self.repeat():
                 with self.capture_node('raw'): self.newline()
                 self.indent(partial=False)
+                with self.reject():
+                    self.whitespace()
+                    self.end_of_file()
                 with self.capture_node('raw'):
                     with self.repeat():
                         with self.reject(): self.literal("?>")
@@ -628,8 +633,6 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                             with self.reject(): self.literal("?>")
                             self.range("\n", invert=True)
                     self.end_of_line()
-                    with self.reject():
-                        self.start_of_line()
     @rule()
     def html_block_type_4(self):
         with self.capture_node('html_block'):
@@ -644,6 +647,9 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
             with self.repeat():
                 with self.capture_node('raw'): self.newline()
                 self.indent(partial=False)
+                with self.reject():
+                    self.whitespace()
+                    self.end_of_file()
                 with self.capture_node('raw'):
                     with self.repeat():
                         with self.reject(): self.literal(">")
@@ -661,8 +667,6 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                             with self.reject(): self.literal(">")
                             self.range("\n", invert=True)
                     self.end_of_line()
-                    with self.reject():
-                        self.start_of_line()
     @rule()
     def html_block_type_5(self):
         with self.capture_node('html_block'):
@@ -676,6 +680,9 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
             with self.repeat():
                 with self.capture_node('raw'): self.newline()
                 self.indent(partial=False)
+                with self.reject():
+                    self.whitespace()
+                    self.end_of_file()
                 with self.capture_node('raw'):
                     with self.repeat():
                         with self.reject(): self.literal("]]>")
@@ -693,8 +700,6 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                             with self.reject(): self.literal("]]>")
                             self.range("\n", invert=True)
                     self.end_of_line()
-                    with self.reject():
-                        self.start_of_line()
     @rule()
     def html_block_type_6(self):
         with self.capture_node('html_block'):
@@ -714,7 +719,7 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                 self.indent(partial=False)
                 with self.reject():
                     self.whitespace()
-                    self.newline()
+                    self.end_of_line()
                 with self.capture_node('raw'):
                     with self.repeat():
                         self.range("\n", invert=True)
@@ -730,6 +735,7 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                     with self.reject():
                         self.indent(partial=False)
                 with self.case():
+                    self.end_of_line()
                     self.end_of_file()
     @rule()
     def html_block_type_7(self):
@@ -758,23 +764,23 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                                     self.range("\"", "'", "=", "<", ">", "`", "\t", " ", "\n", "\r", invert=True)
                             with self.case():
                                 self.literal("\"")
-                                with self.repeat(): self.range('"', invert=True)
+                                with self.repeat(): self.range('"',"\n",  invert=True)
                                 self.literal("\"")
                             with self.case():
                                 self.literal('\'')
-                                with self.repeat(): self.range("'", invert=True)
+                                with self.repeat(): self.range("'","\n", invert=True)
                                 self.literal('\'')
                 self.whitespace()
                 self.literal(">")
-                with self.repeat():
-                    self.range("\n", invert=True)
+                self.whitespace()
+                
 
             with self.repeat():
                 with self.capture_node('raw'): self.newline()
                 self.indent(partial=False)
                 with self.reject():
                     self.whitespace()
-                    self.newline()
+                    self.end_of_line()
                 with self.capture_node('raw'):
                     with self.repeat():
                         self.range("\n", invert=True)
@@ -790,6 +796,7 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                     with self.reject():
                         self.indent(partial=False)
                 with self.case():
+                    self.end_of_line()
                     self.end_of_file()
 
     @rule()
@@ -801,15 +808,61 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
         with self.capture_node('raw'), self.choice():
             with self.case():
                 self.literal("<?")
+                with self.repeat():
+                    with self.reject():
+                        self.literal("?>")
+                    self.range("\n", invert=True)
+                self.literal("?>")
             with self.case():
                 self.literal("<!--")
+                with self.repeat():
+                    with self.reject():
+                        self.literal("--", "->", ">", "---")
+                    self.range("\n", invert=True)
+                self.literal("-->")
             with self.case():
                 self.literal("<!")
                 self.range("A-Z")
+                with self.repeat():
+                    self.range(">", invert=True)
+                self.literal(">")
             with self.case():
                 self.literal("<[CDATA[")
+                with self.repeat():
+                    with self.reject():
+                        self.literal("]]>")
+                    self.range("\n", invert=True)
+                self.literal("]]>")
             with self.case():
-                self.literal("</","<")
+                self.literal("<")
+                self.range("a-z", "A-Z")
+                with self.repeat():
+                    self.range("a-z", "A-Z", "-", "0-9")
+                with self.repeat():
+                    self.whitespace(min=1)
+                    self.range("a-z", "A-Z", ":", "_")
+                    with self.repeat(min=1):
+                        self.range("a-z", "A-Z", ":", "_", "0-9", "-")
+                    with self.optional():
+                        self.whitespace()
+                        self.literal("=")
+                        self.whitespace()
+                        with self.choice():
+                            with self.case():
+                                with self.repeat(min=1):
+                                    self.range("\"", "'", "=", "<", ">", "`", "\t", " ", "\n", "\r", invert=True)
+                            with self.case():
+                                self.literal("\"")
+                                with self.repeat(): self.range('"', invert=True)
+                                self.literal("\"")
+                            with self.case():
+                                self.literal('\'')
+                                with self.repeat(): self.range("'", invert=True)
+                                self.literal('\'')
+                self.whitespace()
+                self.literal("/>", ">")
+            with self.case():
+                self.literal("</")
                 self.range("a-z", "A-Z")
                 with self.repeat():
                     self.range("a-z", "A-Z", "-", "0-9")
@@ -1724,7 +1777,7 @@ for t in tests:
     else:
         failed +=1
         # if '<' in markd: continue
-        # if '[' in markd: continue
+        if '[' in markd: continue
         print(t['example'])
         print(repr(markd))
         print('=', repr(t['html']))

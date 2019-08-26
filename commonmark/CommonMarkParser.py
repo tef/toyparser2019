@@ -7090,13 +7090,13 @@ def _build(unicodedata):
                     partial_tab_width_1 = partial_tab_width_0
                     children_1 = [] if children_0 is not None else None
                     while True: # case
-                        if buf[offset_1:offset_1+7] == '<script':
+                        if buf[offset_1:offset_1+7].lower() == '<script':
                             offset_1 += 7
                             column_1 += 7
-                        elif buf[offset_1:offset_1+4] == '<pre':
+                        elif buf[offset_1:offset_1+4].lower() == '<pre':
                             offset_1 += 4
                             column_1 += 4
-                        elif buf[offset_1:offset_1+6] == '<style':
+                        elif buf[offset_1:offset_1+6].lower() == '<style':
                             offset_1 += 6
                             column_1 += 6
                         else:
@@ -7200,190 +7200,190 @@ def _build(unicodedata):
                             offset_1 = -1
                             break
 
-                        if buf[offset_1:offset_1+7] == 'address':
+                        if buf[offset_1:offset_1+7].lower() == 'address':
                             offset_1 += 7
                             column_1 += 7
-                        elif buf[offset_1:offset_1+7] == 'article':
+                        elif buf[offset_1:offset_1+7].lower() == 'article':
                             offset_1 += 7
                             column_1 += 7
-                        elif buf[offset_1:offset_1+5] == 'aside':
+                        elif buf[offset_1:offset_1+5].lower() == 'aside':
                             offset_1 += 5
                             column_1 += 5
-                        elif buf[offset_1:offset_1+4] == 'base':
+                        elif buf[offset_1:offset_1+4].lower() == 'base':
                             offset_1 += 4
                             column_1 += 4
-                        elif buf[offset_1:offset_1+8] == 'basefont':
+                        elif buf[offset_1:offset_1+8].lower() == 'basefont':
                             offset_1 += 8
                             column_1 += 8
-                        elif buf[offset_1:offset_1+10] == 'blockquote':
+                        elif buf[offset_1:offset_1+10].lower() == 'blockquote':
                             offset_1 += 10
                             column_1 += 10
-                        elif buf[offset_1:offset_1+4] == 'body':
+                        elif buf[offset_1:offset_1+4].lower() == 'body':
                             offset_1 += 4
                             column_1 += 4
-                        elif buf[offset_1:offset_1+7] == 'caption':
+                        elif buf[offset_1:offset_1+7].lower() == 'caption':
                             offset_1 += 7
                             column_1 += 7
-                        elif buf[offset_1:offset_1+6] == 'center':
+                        elif buf[offset_1:offset_1+6].lower() == 'center':
                             offset_1 += 6
                             column_1 += 6
-                        elif buf[offset_1:offset_1+3] == 'col':
+                        elif buf[offset_1:offset_1+3].lower() == 'col':
                             offset_1 += 3
                             column_1 += 3
-                        elif buf[offset_1:offset_1+8] == 'colgroup':
+                        elif buf[offset_1:offset_1+8].lower() == 'colgroup':
                             offset_1 += 8
                             column_1 += 8
-                        elif buf[offset_1:offset_1+2] == 'dd':
+                        elif buf[offset_1:offset_1+2].lower() == 'dd':
                             offset_1 += 2
                             column_1 += 2
-                        elif buf[offset_1:offset_1+7] == 'details':
+                        elif buf[offset_1:offset_1+7].lower() == 'details':
                             offset_1 += 7
                             column_1 += 7
-                        elif buf[offset_1:offset_1+6] == 'dialog':
+                        elif buf[offset_1:offset_1+6].lower() == 'dialog':
                             offset_1 += 6
                             column_1 += 6
-                        elif buf[offset_1:offset_1+3] == 'dir':
+                        elif buf[offset_1:offset_1+3].lower() == 'dir':
                             offset_1 += 3
                             column_1 += 3
-                        elif buf[offset_1:offset_1+3] == 'div':
+                        elif buf[offset_1:offset_1+3].lower() == 'div':
                             offset_1 += 3
                             column_1 += 3
-                        elif buf[offset_1:offset_1+2] == 'dl':
+                        elif buf[offset_1:offset_1+2].lower() == 'dl':
                             offset_1 += 2
                             column_1 += 2
-                        elif buf[offset_1:offset_1+2] == 'dt':
+                        elif buf[offset_1:offset_1+2].lower() == 'dt':
                             offset_1 += 2
                             column_1 += 2
-                        elif buf[offset_1:offset_1+8] == 'fieldset':
+                        elif buf[offset_1:offset_1+8].lower() == 'fieldset':
                             offset_1 += 8
                             column_1 += 8
-                        elif buf[offset_1:offset_1+10] == 'figcaption':
+                        elif buf[offset_1:offset_1+10].lower() == 'figcaption':
                             offset_1 += 10
                             column_1 += 10
-                        elif buf[offset_1:offset_1+6] == 'figure':
+                        elif buf[offset_1:offset_1+6].lower() == 'figure':
                             offset_1 += 6
                             column_1 += 6
-                        elif buf[offset_1:offset_1+6] == 'footer':
+                        elif buf[offset_1:offset_1+6].lower() == 'footer':
                             offset_1 += 6
                             column_1 += 6
-                        elif buf[offset_1:offset_1+4] == 'form':
+                        elif buf[offset_1:offset_1+4].lower() == 'form':
                             offset_1 += 4
                             column_1 += 4
-                        elif buf[offset_1:offset_1+5] == 'frame':
+                        elif buf[offset_1:offset_1+5].lower() == 'frame':
                             offset_1 += 5
                             column_1 += 5
-                        elif buf[offset_1:offset_1+8] == 'frameset':
+                        elif buf[offset_1:offset_1+8].lower() == 'frameset':
                             offset_1 += 8
                             column_1 += 8
-                        elif buf[offset_1:offset_1+2] == 'h1':
+                        elif buf[offset_1:offset_1+2].lower() == 'h1':
                             offset_1 += 2
                             column_1 += 2
-                        elif buf[offset_1:offset_1+2] == 'h2':
+                        elif buf[offset_1:offset_1+2].lower() == 'h2':
                             offset_1 += 2
                             column_1 += 2
-                        elif buf[offset_1:offset_1+2] == 'h3':
+                        elif buf[offset_1:offset_1+2].lower() == 'h3':
                             offset_1 += 2
                             column_1 += 2
-                        elif buf[offset_1:offset_1+2] == 'h4':
+                        elif buf[offset_1:offset_1+2].lower() == 'h4':
                             offset_1 += 2
                             column_1 += 2
-                        elif buf[offset_1:offset_1+2] == 'h5':
+                        elif buf[offset_1:offset_1+2].lower() == 'h5':
                             offset_1 += 2
                             column_1 += 2
-                        elif buf[offset_1:offset_1+2] == 'h6':
+                        elif buf[offset_1:offset_1+2].lower() == 'h6':
                             offset_1 += 2
                             column_1 += 2
-                        elif buf[offset_1:offset_1+4] == 'head':
+                        elif buf[offset_1:offset_1+4].lower() == 'head':
                             offset_1 += 4
                             column_1 += 4
-                        elif buf[offset_1:offset_1+6] == 'header':
+                        elif buf[offset_1:offset_1+6].lower() == 'header':
                             offset_1 += 6
                             column_1 += 6
-                        elif buf[offset_1:offset_1+2] == 'hr':
+                        elif buf[offset_1:offset_1+2].lower() == 'hr':
                             offset_1 += 2
                             column_1 += 2
-                        elif buf[offset_1:offset_1+4] == 'html':
+                        elif buf[offset_1:offset_1+4].lower() == 'html':
                             offset_1 += 4
                             column_1 += 4
-                        elif buf[offset_1:offset_1+6] == 'iframe':
+                        elif buf[offset_1:offset_1+6].lower() == 'iframe':
                             offset_1 += 6
                             column_1 += 6
-                        elif buf[offset_1:offset_1+6] == 'legend':
+                        elif buf[offset_1:offset_1+6].lower() == 'legend':
                             offset_1 += 6
                             column_1 += 6
-                        elif buf[offset_1:offset_1+2] == 'li':
+                        elif buf[offset_1:offset_1+2].lower() == 'li':
                             offset_1 += 2
                             column_1 += 2
-                        elif buf[offset_1:offset_1+4] == 'link':
+                        elif buf[offset_1:offset_1+4].lower() == 'link':
                             offset_1 += 4
                             column_1 += 4
-                        elif buf[offset_1:offset_1+4] == 'main':
+                        elif buf[offset_1:offset_1+4].lower() == 'main':
                             offset_1 += 4
                             column_1 += 4
-                        elif buf[offset_1:offset_1+4] == 'menu':
+                        elif buf[offset_1:offset_1+4].lower() == 'menu':
                             offset_1 += 4
                             column_1 += 4
-                        elif buf[offset_1:offset_1+8] == 'menuitem':
+                        elif buf[offset_1:offset_1+8].lower() == 'menuitem':
                             offset_1 += 8
                             column_1 += 8
-                        elif buf[offset_1:offset_1+3] == 'nav':
+                        elif buf[offset_1:offset_1+3].lower() == 'nav':
                             offset_1 += 3
                             column_1 += 3
-                        elif buf[offset_1:offset_1+8] == 'noframes':
+                        elif buf[offset_1:offset_1+8].lower() == 'noframes':
                             offset_1 += 8
                             column_1 += 8
-                        elif buf[offset_1:offset_1+2] == 'ol':
+                        elif buf[offset_1:offset_1+2].lower() == 'ol':
                             offset_1 += 2
                             column_1 += 2
-                        elif buf[offset_1:offset_1+8] == 'optgroup':
+                        elif buf[offset_1:offset_1+8].lower() == 'optgroup':
                             offset_1 += 8
                             column_1 += 8
-                        elif buf[offset_1:offset_1+6] == 'option':
+                        elif buf[offset_1:offset_1+6].lower() == 'option':
                             offset_1 += 6
                             column_1 += 6
-                        elif buf[offset_1:offset_1+1] == 'p':
+                        elif buf[offset_1:offset_1+1].lower() == 'p':
                             offset_1 += 1
                             column_1 += 1
-                        elif buf[offset_1:offset_1+5] == 'param':
+                        elif buf[offset_1:offset_1+5].lower() == 'param':
                             offset_1 += 5
                             column_1 += 5
-                        elif buf[offset_1:offset_1+7] == 'section':
+                        elif buf[offset_1:offset_1+7].lower() == 'section':
                             offset_1 += 7
                             column_1 += 7
-                        elif buf[offset_1:offset_1+6] == 'source':
+                        elif buf[offset_1:offset_1+6].lower() == 'source':
                             offset_1 += 6
                             column_1 += 6
-                        elif buf[offset_1:offset_1+7] == 'summary':
+                        elif buf[offset_1:offset_1+7].lower() == 'summary':
                             offset_1 += 7
                             column_1 += 7
-                        elif buf[offset_1:offset_1+5] == 'table':
+                        elif buf[offset_1:offset_1+5].lower() == 'table':
                             offset_1 += 5
                             column_1 += 5
-                        elif buf[offset_1:offset_1+5] == 'tbody':
+                        elif buf[offset_1:offset_1+5].lower() == 'tbody':
                             offset_1 += 5
                             column_1 += 5
-                        elif buf[offset_1:offset_1+2] == 'td':
+                        elif buf[offset_1:offset_1+2].lower() == 'td':
                             offset_1 += 2
                             column_1 += 2
-                        elif buf[offset_1:offset_1+5] == 'tfoot':
+                        elif buf[offset_1:offset_1+5].lower() == 'tfoot':
                             offset_1 += 5
                             column_1 += 5
-                        elif buf[offset_1:offset_1+2] == 'th':
+                        elif buf[offset_1:offset_1+2].lower() == 'th':
                             offset_1 += 2
                             column_1 += 2
-                        elif buf[offset_1:offset_1+5] == 'thead':
+                        elif buf[offset_1:offset_1+5].lower() == 'thead':
                             offset_1 += 5
                             column_1 += 5
-                        elif buf[offset_1:offset_1+5] == 'title':
+                        elif buf[offset_1:offset_1+5].lower() == 'title':
                             offset_1 += 5
                             column_1 += 5
-                        elif buf[offset_1:offset_1+2] == 'tr':
+                        elif buf[offset_1:offset_1+2].lower() == 'tr':
                             offset_1 += 2
                             column_1 += 2
-                        elif buf[offset_1:offset_1+5] == 'track':
+                        elif buf[offset_1:offset_1+5].lower() == 'track':
                             offset_1 += 5
                             column_1 += 5
-                        elif buf[offset_1:offset_1+2] == 'ul':
+                        elif buf[offset_1:offset_1+2].lower() == 'ul':
                             offset_1 += 2
                             column_1 += 2
                         else:
@@ -7559,13 +7559,13 @@ def _build(unicodedata):
                             else:
                                 break
 
-                        if buf[offset_2:offset_2+7] == '<script':
+                        if buf[offset_2:offset_2+7].lower() == '<script':
                             offset_2 += 7
                             column_0 += 7
-                        elif buf[offset_2:offset_2+4] == '<pre':
+                        elif buf[offset_2:offset_2+4].lower() == '<pre':
                             offset_2 += 4
                             column_0 += 4
-                        elif buf[offset_2:offset_2+6] == '<style':
+                        elif buf[offset_2:offset_2+6].lower() == '<style':
                             offset_2 += 6
                             column_0 += 6
                         else:
@@ -7702,13 +7702,13 @@ def _build(unicodedata):
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
-                                    if buf[offset_4:offset_4+9] == '</script>':
+                                    if buf[offset_4:offset_4+9].lower() == '</script>':
                                         offset_4 += 9
                                         column_2 += 9
-                                    elif buf[offset_4:offset_4+6] == '</pre>':
+                                    elif buf[offset_4:offset_4+6].lower() == '</pre>':
                                         offset_4 += 6
                                         column_2 += 6
-                                    elif buf[offset_4:offset_4+8] == '</style>':
+                                    elif buf[offset_4:offset_4+8].lower() == '</style>':
                                         offset_4 += 8
                                         column_2 += 8
                                     else:
@@ -7808,6 +7808,41 @@ def _build(unicodedata):
                             if offset_2 == -1:
                                 break
 
+                            while True: # start reject
+                                children_3 = []
+                                offset_3 = offset_2 + 0
+                                column_2 = column_1
+                                indent_column_2 = indent_column_1
+                                partial_tab_offset_2 = partial_tab_offset_1
+                                partial_tab_width_2 = partial_tab_width_1
+                                count_1 = 0
+                                while offset_3 < buf_eof:
+                                    codepoint = buf[offset_3]
+                                    if codepoint in ' \t':
+                                        if codepoint == '\t':
+                                            if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
+                                                width = partial_tab_width_2
+                                            else:
+                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                            count_1 += width
+                                            column_2 += width
+                                            offset_3 += 1
+                                        else:
+                                            count_1 += 1
+                                            column_2 += 1
+                                            offset_3 += 1
+                                    else:
+                                        break
+
+                                if offset_3 != buf_eof:
+                                    offset_3 = -1
+                                    break
+
+                                break
+                            if offset_3 != -1:
+                                offset_2 = -1
+                                break
+
                             offset_3 = offset_2
                             children_3 = []
                             while True: # start capture
@@ -7827,13 +7862,13 @@ def _build(unicodedata):
                                             indent_column_3 = indent_column_2
                                             partial_tab_offset_3 = partial_tab_offset_2
                                             partial_tab_width_3 = partial_tab_width_2
-                                            if buf[offset_5:offset_5+9] == '</script>':
+                                            if buf[offset_5:offset_5+9].lower() == '</script>':
                                                 offset_5 += 9
                                                 column_3 += 9
-                                            elif buf[offset_5:offset_5+6] == '</pre>':
+                                            elif buf[offset_5:offset_5+6].lower() == '</pre>':
                                                 offset_5 += 6
                                                 column_3 += 6
-                                            elif buf[offset_5:offset_5+8] == '</style>':
+                                            elif buf[offset_5:offset_5+8].lower() == '</style>':
                                                 offset_5 += 8
                                                 column_3 += 8
                                             else:
@@ -7907,13 +7942,13 @@ def _build(unicodedata):
                             offset_3 = offset_2
                             children_3 = []
                             while True: # start capture
-                                if buf[offset_3:offset_3+9] == '</script>':
+                                if buf[offset_3:offset_3+9].lower() == '</script>':
                                     offset_3 += 9
                                     column_1 += 9
-                                elif buf[offset_3:offset_3+6] == '</pre>':
+                                elif buf[offset_3:offset_3+6].lower() == '</pre>':
                                     offset_3 += 6
                                     column_1 += 6
-                                elif buf[offset_3:offset_3+8] == '</style>':
+                                elif buf[offset_3:offset_3+8].lower() == '</style>':
                                     offset_3 += 8
                                     column_1 += 8
                                 else:
@@ -8016,13 +8051,13 @@ def _build(unicodedata):
                                             indent_column_3 = indent_column_2
                                             partial_tab_offset_3 = partial_tab_offset_2
                                             partial_tab_width_3 = partial_tab_width_2
-                                            if buf[offset_5:offset_5+9] == '</script>':
+                                            if buf[offset_5:offset_5+9].lower() == '</script>':
                                                 offset_5 += 9
                                                 column_3 += 9
-                                            elif buf[offset_5:offset_5+6] == '</pre>':
+                                            elif buf[offset_5:offset_5+6].lower() == '</pre>':
                                                 offset_5 += 6
                                                 column_3 += 6
-                                            elif buf[offset_5:offset_5+8] == '</style>':
+                                            elif buf[offset_5:offset_5+8].lower() == '</style>':
                                                 offset_5 += 8
                                                 column_3 += 8
                                             else:
@@ -8079,22 +8114,6 @@ def _build(unicodedata):
                                 else:
                                     offset_2 = -1
                                     break
-
-                            while True: # start reject
-                                children_3 = []
-                                offset_3 = offset_2 + 0
-                                column_2 = column_1
-                                indent_column_2 = indent_column_1
-                                partial_tab_offset_2 = partial_tab_offset_1
-                                partial_tab_width_2 = partial_tab_width_1
-                                if not (column_2 == indent_column_2[0] == 0):
-                                    offset_3 = -1
-                                    break
-
-                                break
-                            if offset_3 != -1:
-                                offset_2 = -1
-                                break
 
 
                             break
@@ -8279,6 +8298,41 @@ def _build(unicodedata):
                                 offset_2 = offset_3
                                 indent_column_1 = (column_1, indent_column_1)
                             if offset_2 == -1:
+                                break
+
+                            while True: # start reject
+                                children_3 = []
+                                offset_3 = offset_2 + 0
+                                column_2 = column_1
+                                indent_column_2 = indent_column_1
+                                partial_tab_offset_2 = partial_tab_offset_1
+                                partial_tab_width_2 = partial_tab_width_1
+                                count_1 = 0
+                                while offset_3 < buf_eof:
+                                    codepoint = buf[offset_3]
+                                    if codepoint in ' \t':
+                                        if codepoint == '\t':
+                                            if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
+                                                width = partial_tab_width_2
+                                            else:
+                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                            count_1 += width
+                                            column_2 += width
+                                            offset_3 += 1
+                                        else:
+                                            count_1 += 1
+                                            column_2 += 1
+                                            offset_3 += 1
+                                    else:
+                                        break
+
+                                if offset_3 != buf_eof:
+                                    offset_3 = -1
+                                    break
+
+                                break
+                            if offset_3 != -1:
+                                offset_2 = -1
                                 break
 
                             offset_3 = offset_2
@@ -8535,22 +8589,6 @@ def _build(unicodedata):
                                     offset_2 = -1
                                     break
 
-                            while True: # start reject
-                                children_3 = []
-                                offset_3 = offset_2 + 0
-                                column_2 = column_1
-                                indent_column_2 = indent_column_1
-                                partial_tab_offset_2 = partial_tab_offset_1
-                                partial_tab_width_2 = partial_tab_width_1
-                                if not (column_2 == indent_column_2[0] == 0):
-                                    offset_3 = -1
-                                    break
-
-                                break
-                            if offset_3 != -1:
-                                offset_2 = -1
-                                break
-
 
                             break
                         if offset_2 != -1:
@@ -8734,6 +8772,41 @@ def _build(unicodedata):
                                 offset_2 = offset_3
                                 indent_column_1 = (column_1, indent_column_1)
                             if offset_2 == -1:
+                                break
+
+                            while True: # start reject
+                                children_3 = []
+                                offset_3 = offset_2 + 0
+                                column_2 = column_1
+                                indent_column_2 = indent_column_1
+                                partial_tab_offset_2 = partial_tab_offset_1
+                                partial_tab_width_2 = partial_tab_width_1
+                                count_1 = 0
+                                while offset_3 < buf_eof:
+                                    codepoint = buf[offset_3]
+                                    if codepoint in ' \t':
+                                        if codepoint == '\t':
+                                            if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
+                                                width = partial_tab_width_2
+                                            else:
+                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                            count_1 += width
+                                            column_2 += width
+                                            offset_3 += 1
+                                        else:
+                                            count_1 += 1
+                                            column_2 += 1
+                                            offset_3 += 1
+                                    else:
+                                        break
+
+                                if offset_3 != buf_eof:
+                                    offset_3 = -1
+                                    break
+
+                                break
+                            if offset_3 != -1:
+                                offset_2 = -1
                                 break
 
                             offset_3 = offset_2
@@ -8990,22 +9063,6 @@ def _build(unicodedata):
                                     offset_2 = -1
                                     break
 
-                            while True: # start reject
-                                children_3 = []
-                                offset_3 = offset_2 + 0
-                                column_2 = column_1
-                                indent_column_2 = indent_column_1
-                                partial_tab_offset_2 = partial_tab_offset_1
-                                partial_tab_width_2 = partial_tab_width_1
-                                if not (column_2 == indent_column_2[0] == 0):
-                                    offset_3 = -1
-                                    break
-
-                                break
-                            if offset_3 != -1:
-                                offset_2 = -1
-                                break
-
 
                             break
                         if offset_2 != -1:
@@ -9202,6 +9259,41 @@ def _build(unicodedata):
                                 offset_2 = offset_3
                                 indent_column_1 = (column_1, indent_column_1)
                             if offset_2 == -1:
+                                break
+
+                            while True: # start reject
+                                children_3 = []
+                                offset_3 = offset_2 + 0
+                                column_2 = column_1
+                                indent_column_2 = indent_column_1
+                                partial_tab_offset_2 = partial_tab_offset_1
+                                partial_tab_width_2 = partial_tab_width_1
+                                count_1 = 0
+                                while offset_3 < buf_eof:
+                                    codepoint = buf[offset_3]
+                                    if codepoint in ' \t':
+                                        if codepoint == '\t':
+                                            if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
+                                                width = partial_tab_width_2
+                                            else:
+                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                            count_1 += width
+                                            column_2 += width
+                                            offset_3 += 1
+                                        else:
+                                            count_1 += 1
+                                            column_2 += 1
+                                            offset_3 += 1
+                                    else:
+                                        break
+
+                                if offset_3 != buf_eof:
+                                    offset_3 = -1
+                                    break
+
+                                break
+                            if offset_3 != -1:
+                                offset_2 = -1
                                 break
 
                             offset_3 = offset_2
@@ -9458,22 +9550,6 @@ def _build(unicodedata):
                                     offset_2 = -1
                                     break
 
-                            while True: # start reject
-                                children_3 = []
-                                offset_3 = offset_2 + 0
-                                column_2 = column_1
-                                indent_column_2 = indent_column_1
-                                partial_tab_offset_2 = partial_tab_offset_1
-                                partial_tab_width_2 = partial_tab_width_1
-                                if not (column_2 == indent_column_2[0] == 0):
-                                    offset_3 = -1
-                                    break
-
-                                break
-                            if offset_3 != -1:
-                                offset_2 = -1
-                                break
-
 
                             break
                         if offset_2 != -1:
@@ -9657,6 +9733,41 @@ def _build(unicodedata):
                                 offset_2 = offset_3
                                 indent_column_1 = (column_1, indent_column_1)
                             if offset_2 == -1:
+                                break
+
+                            while True: # start reject
+                                children_3 = []
+                                offset_3 = offset_2 + 0
+                                column_2 = column_1
+                                indent_column_2 = indent_column_1
+                                partial_tab_offset_2 = partial_tab_offset_1
+                                partial_tab_width_2 = partial_tab_width_1
+                                count_1 = 0
+                                while offset_3 < buf_eof:
+                                    codepoint = buf[offset_3]
+                                    if codepoint in ' \t':
+                                        if codepoint == '\t':
+                                            if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
+                                                width = partial_tab_width_2
+                                            else:
+                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                            count_1 += width
+                                            column_2 += width
+                                            offset_3 += 1
+                                        else:
+                                            count_1 += 1
+                                            column_2 += 1
+                                            offset_3 += 1
+                                    else:
+                                        break
+
+                                if offset_3 != buf_eof:
+                                    offset_3 = -1
+                                    break
+
+                                break
+                            if offset_3 != -1:
+                                offset_2 = -1
                                 break
 
                             offset_3 = offset_2
@@ -9913,22 +10024,6 @@ def _build(unicodedata):
                                     offset_2 = -1
                                     break
 
-                            while True: # start reject
-                                children_3 = []
-                                offset_3 = offset_2 + 0
-                                column_2 = column_1
-                                indent_column_2 = indent_column_1
-                                partial_tab_offset_2 = partial_tab_offset_1
-                                partial_tab_width_2 = partial_tab_width_1
-                                if not (column_2 == indent_column_2[0] == 0):
-                                    offset_3 = -1
-                                    break
-
-                                break
-                            if offset_3 != -1:
-                                offset_2 = -1
-                                break
-
 
                             break
                         if offset_2 != -1:
@@ -10001,190 +10096,190 @@ def _build(unicodedata):
                             offset_2 = -1
                             break
 
-                        if buf[offset_2:offset_2+7] == 'address':
+                        if buf[offset_2:offset_2+7].lower() == 'address':
                             offset_2 += 7
                             column_0 += 7
-                        elif buf[offset_2:offset_2+7] == 'article':
+                        elif buf[offset_2:offset_2+7].lower() == 'article':
                             offset_2 += 7
                             column_0 += 7
-                        elif buf[offset_2:offset_2+5] == 'aside':
+                        elif buf[offset_2:offset_2+5].lower() == 'aside':
                             offset_2 += 5
                             column_0 += 5
-                        elif buf[offset_2:offset_2+4] == 'base':
+                        elif buf[offset_2:offset_2+4].lower() == 'base':
                             offset_2 += 4
                             column_0 += 4
-                        elif buf[offset_2:offset_2+8] == 'basefont':
+                        elif buf[offset_2:offset_2+8].lower() == 'basefont':
                             offset_2 += 8
                             column_0 += 8
-                        elif buf[offset_2:offset_2+10] == 'blockquote':
+                        elif buf[offset_2:offset_2+10].lower() == 'blockquote':
                             offset_2 += 10
                             column_0 += 10
-                        elif buf[offset_2:offset_2+4] == 'body':
+                        elif buf[offset_2:offset_2+4].lower() == 'body':
                             offset_2 += 4
                             column_0 += 4
-                        elif buf[offset_2:offset_2+7] == 'caption':
+                        elif buf[offset_2:offset_2+7].lower() == 'caption':
                             offset_2 += 7
                             column_0 += 7
-                        elif buf[offset_2:offset_2+6] == 'center':
+                        elif buf[offset_2:offset_2+6].lower() == 'center':
                             offset_2 += 6
                             column_0 += 6
-                        elif buf[offset_2:offset_2+3] == 'col':
+                        elif buf[offset_2:offset_2+3].lower() == 'col':
                             offset_2 += 3
                             column_0 += 3
-                        elif buf[offset_2:offset_2+8] == 'colgroup':
+                        elif buf[offset_2:offset_2+8].lower() == 'colgroup':
                             offset_2 += 8
                             column_0 += 8
-                        elif buf[offset_2:offset_2+2] == 'dd':
+                        elif buf[offset_2:offset_2+2].lower() == 'dd':
                             offset_2 += 2
                             column_0 += 2
-                        elif buf[offset_2:offset_2+7] == 'details':
+                        elif buf[offset_2:offset_2+7].lower() == 'details':
                             offset_2 += 7
                             column_0 += 7
-                        elif buf[offset_2:offset_2+6] == 'dialog':
+                        elif buf[offset_2:offset_2+6].lower() == 'dialog':
                             offset_2 += 6
                             column_0 += 6
-                        elif buf[offset_2:offset_2+3] == 'dir':
+                        elif buf[offset_2:offset_2+3].lower() == 'dir':
                             offset_2 += 3
                             column_0 += 3
-                        elif buf[offset_2:offset_2+3] == 'div':
+                        elif buf[offset_2:offset_2+3].lower() == 'div':
                             offset_2 += 3
                             column_0 += 3
-                        elif buf[offset_2:offset_2+2] == 'dl':
+                        elif buf[offset_2:offset_2+2].lower() == 'dl':
                             offset_2 += 2
                             column_0 += 2
-                        elif buf[offset_2:offset_2+2] == 'dt':
+                        elif buf[offset_2:offset_2+2].lower() == 'dt':
                             offset_2 += 2
                             column_0 += 2
-                        elif buf[offset_2:offset_2+8] == 'fieldset':
+                        elif buf[offset_2:offset_2+8].lower() == 'fieldset':
                             offset_2 += 8
                             column_0 += 8
-                        elif buf[offset_2:offset_2+10] == 'figcaption':
+                        elif buf[offset_2:offset_2+10].lower() == 'figcaption':
                             offset_2 += 10
                             column_0 += 10
-                        elif buf[offset_2:offset_2+6] == 'figure':
+                        elif buf[offset_2:offset_2+6].lower() == 'figure':
                             offset_2 += 6
                             column_0 += 6
-                        elif buf[offset_2:offset_2+6] == 'footer':
+                        elif buf[offset_2:offset_2+6].lower() == 'footer':
                             offset_2 += 6
                             column_0 += 6
-                        elif buf[offset_2:offset_2+4] == 'form':
+                        elif buf[offset_2:offset_2+4].lower() == 'form':
                             offset_2 += 4
                             column_0 += 4
-                        elif buf[offset_2:offset_2+5] == 'frame':
+                        elif buf[offset_2:offset_2+5].lower() == 'frame':
                             offset_2 += 5
                             column_0 += 5
-                        elif buf[offset_2:offset_2+8] == 'frameset':
+                        elif buf[offset_2:offset_2+8].lower() == 'frameset':
                             offset_2 += 8
                             column_0 += 8
-                        elif buf[offset_2:offset_2+2] == 'h1':
+                        elif buf[offset_2:offset_2+2].lower() == 'h1':
                             offset_2 += 2
                             column_0 += 2
-                        elif buf[offset_2:offset_2+2] == 'h2':
+                        elif buf[offset_2:offset_2+2].lower() == 'h2':
                             offset_2 += 2
                             column_0 += 2
-                        elif buf[offset_2:offset_2+2] == 'h3':
+                        elif buf[offset_2:offset_2+2].lower() == 'h3':
                             offset_2 += 2
                             column_0 += 2
-                        elif buf[offset_2:offset_2+2] == 'h4':
+                        elif buf[offset_2:offset_2+2].lower() == 'h4':
                             offset_2 += 2
                             column_0 += 2
-                        elif buf[offset_2:offset_2+2] == 'h5':
+                        elif buf[offset_2:offset_2+2].lower() == 'h5':
                             offset_2 += 2
                             column_0 += 2
-                        elif buf[offset_2:offset_2+2] == 'h6':
+                        elif buf[offset_2:offset_2+2].lower() == 'h6':
                             offset_2 += 2
                             column_0 += 2
-                        elif buf[offset_2:offset_2+4] == 'head':
+                        elif buf[offset_2:offset_2+4].lower() == 'head':
                             offset_2 += 4
                             column_0 += 4
-                        elif buf[offset_2:offset_2+6] == 'header':
+                        elif buf[offset_2:offset_2+6].lower() == 'header':
                             offset_2 += 6
                             column_0 += 6
-                        elif buf[offset_2:offset_2+2] == 'hr':
+                        elif buf[offset_2:offset_2+2].lower() == 'hr':
                             offset_2 += 2
                             column_0 += 2
-                        elif buf[offset_2:offset_2+4] == 'html':
+                        elif buf[offset_2:offset_2+4].lower() == 'html':
                             offset_2 += 4
                             column_0 += 4
-                        elif buf[offset_2:offset_2+6] == 'iframe':
+                        elif buf[offset_2:offset_2+6].lower() == 'iframe':
                             offset_2 += 6
                             column_0 += 6
-                        elif buf[offset_2:offset_2+6] == 'legend':
+                        elif buf[offset_2:offset_2+6].lower() == 'legend':
                             offset_2 += 6
                             column_0 += 6
-                        elif buf[offset_2:offset_2+2] == 'li':
+                        elif buf[offset_2:offset_2+2].lower() == 'li':
                             offset_2 += 2
                             column_0 += 2
-                        elif buf[offset_2:offset_2+4] == 'link':
+                        elif buf[offset_2:offset_2+4].lower() == 'link':
                             offset_2 += 4
                             column_0 += 4
-                        elif buf[offset_2:offset_2+4] == 'main':
+                        elif buf[offset_2:offset_2+4].lower() == 'main':
                             offset_2 += 4
                             column_0 += 4
-                        elif buf[offset_2:offset_2+4] == 'menu':
+                        elif buf[offset_2:offset_2+4].lower() == 'menu':
                             offset_2 += 4
                             column_0 += 4
-                        elif buf[offset_2:offset_2+8] == 'menuitem':
+                        elif buf[offset_2:offset_2+8].lower() == 'menuitem':
                             offset_2 += 8
                             column_0 += 8
-                        elif buf[offset_2:offset_2+3] == 'nav':
+                        elif buf[offset_2:offset_2+3].lower() == 'nav':
                             offset_2 += 3
                             column_0 += 3
-                        elif buf[offset_2:offset_2+8] == 'noframes':
+                        elif buf[offset_2:offset_2+8].lower() == 'noframes':
                             offset_2 += 8
                             column_0 += 8
-                        elif buf[offset_2:offset_2+2] == 'ol':
+                        elif buf[offset_2:offset_2+2].lower() == 'ol':
                             offset_2 += 2
                             column_0 += 2
-                        elif buf[offset_2:offset_2+8] == 'optgroup':
+                        elif buf[offset_2:offset_2+8].lower() == 'optgroup':
                             offset_2 += 8
                             column_0 += 8
-                        elif buf[offset_2:offset_2+6] == 'option':
+                        elif buf[offset_2:offset_2+6].lower() == 'option':
                             offset_2 += 6
                             column_0 += 6
-                        elif buf[offset_2:offset_2+1] == 'p':
+                        elif buf[offset_2:offset_2+1].lower() == 'p':
                             offset_2 += 1
                             column_0 += 1
-                        elif buf[offset_2:offset_2+5] == 'param':
+                        elif buf[offset_2:offset_2+5].lower() == 'param':
                             offset_2 += 5
                             column_0 += 5
-                        elif buf[offset_2:offset_2+7] == 'section':
+                        elif buf[offset_2:offset_2+7].lower() == 'section':
                             offset_2 += 7
                             column_0 += 7
-                        elif buf[offset_2:offset_2+6] == 'source':
+                        elif buf[offset_2:offset_2+6].lower() == 'source':
                             offset_2 += 6
                             column_0 += 6
-                        elif buf[offset_2:offset_2+7] == 'summary':
+                        elif buf[offset_2:offset_2+7].lower() == 'summary':
                             offset_2 += 7
                             column_0 += 7
-                        elif buf[offset_2:offset_2+5] == 'table':
+                        elif buf[offset_2:offset_2+5].lower() == 'table':
                             offset_2 += 5
                             column_0 += 5
-                        elif buf[offset_2:offset_2+5] == 'tbody':
+                        elif buf[offset_2:offset_2+5].lower() == 'tbody':
                             offset_2 += 5
                             column_0 += 5
-                        elif buf[offset_2:offset_2+2] == 'td':
+                        elif buf[offset_2:offset_2+2].lower() == 'td':
                             offset_2 += 2
                             column_0 += 2
-                        elif buf[offset_2:offset_2+5] == 'tfoot':
+                        elif buf[offset_2:offset_2+5].lower() == 'tfoot':
                             offset_2 += 5
                             column_0 += 5
-                        elif buf[offset_2:offset_2+2] == 'th':
+                        elif buf[offset_2:offset_2+2].lower() == 'th':
                             offset_2 += 2
                             column_0 += 2
-                        elif buf[offset_2:offset_2+5] == 'thead':
+                        elif buf[offset_2:offset_2+5].lower() == 'thead':
                             offset_2 += 5
                             column_0 += 5
-                        elif buf[offset_2:offset_2+5] == 'title':
+                        elif buf[offset_2:offset_2+5].lower() == 'title':
                             offset_2 += 5
                             column_0 += 5
-                        elif buf[offset_2:offset_2+2] == 'tr':
+                        elif buf[offset_2:offset_2+2].lower() == 'tr':
                             offset_2 += 2
                             column_0 += 2
-                        elif buf[offset_2:offset_2+5] == 'track':
+                        elif buf[offset_2:offset_2+5].lower() == 'track':
                             offset_2 += 5
                             column_0 += 5
-                        elif buf[offset_2:offset_2+2] == 'ul':
+                        elif buf[offset_2:offset_2+2].lower() == 'ul':
                             offset_2 += 2
                             column_0 += 2
                         else:
@@ -10437,9 +10532,6 @@ def _build(unicodedata):
                                     else:
                                         offset_3 = -1
                                         break
-                                else:
-                                    offset_3 = -1
-                                    break
 
                                 break
                             if offset_3 != -1:
@@ -10657,6 +10749,16 @@ def _build(unicodedata):
                         partial_tab_width_1 = partial_tab_width_0
                         children_2 = [] if children_1 is not None else None
                         while True: # case
+                            if offset_2 < buf_eof:
+                                codepoint = buf[offset_2]
+                                if codepoint in '\n':
+                                    offset_2 +=1
+                                    column_1 = 0
+                                    indent_column_1 = (0, None)
+                                else:
+                                    offset_2 = -1
+                                    break
+
                             if offset_2 != buf_eof:
                                 offset_2 = -1
                                 break
@@ -10737,13 +10839,13 @@ def _build(unicodedata):
                             indent_column_1 = indent_column_0
                             partial_tab_offset_1 = partial_tab_offset_0
                             partial_tab_width_1 = partial_tab_width_0
-                            if buf[offset_3:offset_3+3] == 'pre':
+                            if buf[offset_3:offset_3+3].lower() == 'pre':
                                 offset_3 += 3
                                 column_1 += 3
-                            elif buf[offset_3:offset_3+6] == 'script':
+                            elif buf[offset_3:offset_3+6].lower() == 'script':
                                 offset_3 += 6
                                 column_1 += 6
-                            elif buf[offset_3:offset_3+5] == 'style':
+                            elif buf[offset_3:offset_3+5].lower() == 'style':
                                 offset_3 += 5
                                 column_1 += 5
                             else:
@@ -11130,6 +11232,9 @@ def _build(unicodedata):
                                                         if codepoint == 34:
                                                             offset_6 = -1
                                                             break
+                                                        elif codepoint == 10:
+                                                            offset_6 = -1
+                                                            break
                                                         else:
                                                             offset_6 += 1
                                                             column_4 += 1
@@ -11198,6 +11303,9 @@ def _build(unicodedata):
                                                         codepoint = ord(buf[offset_6])
 
                                                         if codepoint == 39:
+                                                            offset_6 = -1
+                                                            break
+                                                        elif codepoint == 10:
                                                             offset_6 = -1
                                                             break
                                                         else:
@@ -11301,41 +11409,23 @@ def _build(unicodedata):
                             break
 
                         count_0 = 0
-                        while True:
-                            offset_3 = offset_2
-                            column_1 = column_0
-                            indent_column_1 = indent_column_0
-                            partial_tab_offset_1 = partial_tab_offset_0
-                            partial_tab_width_1 = partial_tab_width_0
-                            children_3 = [] if children_2 is not None else None
-                            while True:
-                                if offset_3 == buf_eof:
-                                    offset_3 = -1
-                                    break
-
-                                codepoint = ord(buf[offset_3])
-
-                                if codepoint == 10:
-                                    offset_3 = -1
-                                    break
+                        while offset_2 < buf_eof:
+                            codepoint = buf[offset_2]
+                            if codepoint in ' \t':
+                                if codepoint == '\t':
+                                    if offset_2 == partial_tab_offset_0 and partial_tab_width_0 > 0:
+                                        width = partial_tab_width_0
+                                    else:
+                                        width  = (self.tabstop-(column_0%self.tabstop))
+                                    count_0 += width
+                                    column_0 += width
+                                    offset_2 += 1
                                 else:
-                                    offset_3 += 1
-                                    column_1 += 1
-
+                                    count_0 += 1
+                                    column_0 += 1
+                                    offset_2 += 1
+                            else:
                                 break
-                            if offset_3 == -1:
-                                break
-                            if offset_2 == offset_3: break
-                            if children_3 is not None and children_3 is not None:
-                                children_2.extend(children_3)
-                            offset_2 = offset_3
-                            column_0 = column_1
-                            indent_column_0 = indent_column_1
-                            partial_tab_offset_0 = partial_tab_offset_1
-                            partial_tab_width_0 = partial_tab_width_1
-                            count_0 += 1
-                        if offset_2 == -1:
-                            break
 
                         break
                     if offset_2 == -1:
@@ -11432,9 +11522,6 @@ def _build(unicodedata):
                                     else:
                                         offset_3 = -1
                                         break
-                                else:
-                                    offset_3 = -1
-                                    break
 
                                 break
                             if offset_3 != -1:
@@ -11655,6 +11742,16 @@ def _build(unicodedata):
                         partial_tab_width_1 = partial_tab_width_0
                         children_2 = [] if children_1 is not None else None
                         while True: # case
+                            if offset_2 < buf_eof:
+                                codepoint = buf[offset_2]
+                                if codepoint in '\n':
+                                    offset_2 +=1
+                                    column_1 = 0
+                                    indent_column_1 = (0, None)
+                                else:
+                                    offset_2 = -1
+                                    break
+
                             if offset_2 != buf_eof:
                                 offset_2 = -1
                                 break
@@ -11707,6 +11804,69 @@ def _build(unicodedata):
                                 offset_2 = -1
                                 break
 
+                            count_0 = 0
+                            while True:
+                                offset_3 = offset_2
+                                column_2 = column_1
+                                indent_column_2 = indent_column_1
+                                partial_tab_offset_2 = partial_tab_offset_1
+                                partial_tab_width_2 = partial_tab_width_1
+                                children_3 = [] if children_2 is not None else None
+                                while True:
+                                    while True: # start reject
+                                        children_4 = []
+                                        offset_4 = offset_3 + 0
+                                        column_3 = column_2
+                                        indent_column_3 = indent_column_2
+                                        partial_tab_offset_3 = partial_tab_offset_2
+                                        partial_tab_width_3 = partial_tab_width_2
+                                        if buf[offset_4:offset_4+2] == '?>':
+                                            offset_4 += 2
+                                            column_3 += 2
+                                        else:
+                                            offset_4 = -1
+                                            break
+
+                                        break
+                                    if offset_4 != -1:
+                                        offset_3 = -1
+                                        break
+
+                                    if offset_3 == buf_eof:
+                                        offset_3 = -1
+                                        break
+
+                                    codepoint = ord(buf[offset_3])
+
+                                    if codepoint == 10:
+                                        offset_3 = -1
+                                        break
+                                    else:
+                                        offset_3 += 1
+                                        column_2 += 1
+
+                                    break
+                                if offset_3 == -1:
+                                    break
+                                if offset_2 == offset_3: break
+                                if children_3 is not None and children_3 is not None:
+                                    children_2.extend(children_3)
+                                offset_2 = offset_3
+                                column_1 = column_2
+                                indent_column_1 = indent_column_2
+                                partial_tab_offset_1 = partial_tab_offset_2
+                                partial_tab_width_1 = partial_tab_width_2
+                                count_0 += 1
+                            if offset_2 == -1:
+                                break
+
+                            if buf[offset_2:offset_2+2] == '?>':
+                                offset_2 += 2
+                                column_1 += 2
+                            else:
+                                offset_2 = -1
+                                break
+
 
                             break
                         if offset_2 != -1:
@@ -11729,6 +11889,78 @@ def _build(unicodedata):
                             if buf[offset_2:offset_2+4] == '<!--':
                                 offset_2 += 4
                                 column_1 += 4
+                            else:
+                                offset_2 = -1
+                                break
+
+                            count_0 = 0
+                            while True:
+                                offset_3 = offset_2
+                                column_2 = column_1
+                                indent_column_2 = indent_column_1
+                                partial_tab_offset_2 = partial_tab_offset_1
+                                partial_tab_width_2 = partial_tab_width_1
+                                children_3 = [] if children_2 is not None else None
+                                while True:
+                                    while True: # start reject
+                                        children_4 = []
+                                        offset_4 = offset_3 + 0
+                                        column_3 = column_2
+                                        indent_column_3 = indent_column_2
+                                        partial_tab_offset_3 = partial_tab_offset_2
+                                        partial_tab_width_3 = partial_tab_width_2
+                                        if buf[offset_4:offset_4+2] == '--':
+                                            offset_4 += 2
+                                            column_3 += 2
+                                        elif buf[offset_4:offset_4+2] == '->':
+                                            offset_4 += 2
+                                            column_3 += 2
+                                        elif buf[offset_4:offset_4+1] == '>':
+                                            offset_4 += 1
+                                            column_3 += 1
+                                        elif buf[offset_4:offset_4+3] == '---':
+                                            offset_4 += 3
+                                            column_3 += 3
+                                        else:
+                                            offset_4 = -1
+                                            break
+
+                                        break
+                                    if offset_4 != -1:
+                                        offset_3 = -1
+                                        break
+
+                                    if offset_3 == buf_eof:
+                                        offset_3 = -1
+                                        break
+
+                                    codepoint = ord(buf[offset_3])
+
+                                    if codepoint == 10:
+                                        offset_3 = -1
+                                        break
+                                    else:
+                                        offset_3 += 1
+                                        column_2 += 1
+
+                                    break
+                                if offset_3 == -1:
+                                    break
+                                if offset_2 == offset_3: break
+                                if children_3 is not None and children_3 is not None:
+                                    children_2.extend(children_3)
+                                offset_2 = offset_3
+                                column_1 = column_2
+                                indent_column_1 = indent_column_2
+                                partial_tab_offset_1 = partial_tab_offset_2
+                                partial_tab_width_1 = partial_tab_width_2
+                                count_0 += 1
+                            if offset_2 == -1:
+                                break
+
+                            if buf[offset_2:offset_2+3] == '-->':
+                                offset_2 += 3
+                                column_1 += 3
                             else:
                                 offset_2 = -1
                                 break
@@ -11772,6 +12004,50 @@ def _build(unicodedata):
                                 offset_2 = -1
                                 break
 
+                            count_0 = 0
+                            while True:
+                                offset_3 = offset_2
+                                column_2 = column_1
+                                indent_column_2 = indent_column_1
+                                partial_tab_offset_2 = partial_tab_offset_1
+                                partial_tab_width_2 = partial_tab_width_1
+                                children_3 = [] if children_2 is not None else None
+                                while True:
+                                    if offset_3 == buf_eof:
+                                        offset_3 = -1
+                                        break
+
+                                    codepoint = ord(buf[offset_3])
+
+                                    if codepoint == 62:
+                                        offset_3 = -1
+                                        break
+                                    else:
+                                        offset_3 += 1
+                                        column_2 += 1
+
+                                    break
+                                if offset_3 == -1:
+                                    break
+                                if offset_2 == offset_3: break
+                                if children_3 is not None and children_3 is not None:
+                                    children_2.extend(children_3)
+                                offset_2 = offset_3
+                                column_1 = column_2
+                                indent_column_1 = indent_column_2
+                                partial_tab_offset_1 = partial_tab_offset_2
+                                partial_tab_width_1 = partial_tab_width_2
+                                count_0 += 1
+                            if offset_2 == -1:
+                                break
+
+                            if buf[offset_2:offset_2+1] == '>':
+                                offset_2 += 1
+                                column_1 += 1
+                            else:
+                                offset_2 = -1
+                                break
+
 
                             break
                         if offset_2 != -1:
@@ -11798,6 +12074,611 @@ def _build(unicodedata):
                                 offset_2 = -1
                                 break
 
+                            count_0 = 0
+                            while True:
+                                offset_3 = offset_2
+                                column_2 = column_1
+                                indent_column_2 = indent_column_1
+                                partial_tab_offset_2 = partial_tab_offset_1
+                                partial_tab_width_2 = partial_tab_width_1
+                                children_3 = [] if children_2 is not None else None
+                                while True:
+                                    while True: # start reject
+                                        children_4 = []
+                                        offset_4 = offset_3 + 0
+                                        column_3 = column_2
+                                        indent_column_3 = indent_column_2
+                                        partial_tab_offset_3 = partial_tab_offset_2
+                                        partial_tab_width_3 = partial_tab_width_2
+                                        if buf[offset_4:offset_4+3] == ']]>':
+                                            offset_4 += 3
+                                            column_3 += 3
+                                        else:
+                                            offset_4 = -1
+                                            break
+
+                                        break
+                                    if offset_4 != -1:
+                                        offset_3 = -1
+                                        break
+
+                                    if offset_3 == buf_eof:
+                                        offset_3 = -1
+                                        break
+
+                                    codepoint = ord(buf[offset_3])
+
+                                    if codepoint == 10:
+                                        offset_3 = -1
+                                        break
+                                    else:
+                                        offset_3 += 1
+                                        column_2 += 1
+
+                                    break
+                                if offset_3 == -1:
+                                    break
+                                if offset_2 == offset_3: break
+                                if children_3 is not None and children_3 is not None:
+                                    children_2.extend(children_3)
+                                offset_2 = offset_3
+                                column_1 = column_2
+                                indent_column_1 = indent_column_2
+                                partial_tab_offset_1 = partial_tab_offset_2
+                                partial_tab_width_1 = partial_tab_width_2
+                                count_0 += 1
+                            if offset_2 == -1:
+                                break
+
+                            if buf[offset_2:offset_2+3] == ']]>':
+                                offset_2 += 3
+                                column_1 += 3
+                            else:
+                                offset_2 = -1
+                                break
+
+
+                            break
+                        if offset_2 != -1:
+                            offset_1 = offset_2
+                            column_0 = column_1
+                            indent_column_0 = indent_column_1
+                            partial_tab_offset_0 = partial_tab_offset_1
+                            partial_tab_width_0 = partial_tab_width_1
+                            if children_2 is not None and children_2 is not None:
+                                children_1.extend(children_2)
+                            break
+                        # end case
+                        offset_2 = offset_1
+                        column_1 = column_0
+                        indent_column_1 = indent_column_0
+                        partial_tab_offset_1 = partial_tab_offset_0
+                        partial_tab_width_1 = partial_tab_width_0
+                        children_2 = [] if children_1 is not None else None
+                        while True: # case
+                            if buf[offset_2:offset_2+1] == '<':
+                                offset_2 += 1
+                                column_1 += 1
+                            else:
+                                offset_2 = -1
+                                break
+
+                            if offset_2 == buf_eof:
+                                offset_2 = -1
+                                break
+
+                            codepoint = ord(buf[offset_2])
+
+                            if 97 <= codepoint <= 122:
+                                offset_2 += 1
+                                column_1 += 1
+                            elif 65 <= codepoint <= 90:
+                                offset_2 += 1
+                                column_1 += 1
+                            else:
+                                offset_2 = -1
+                                break
+
+                            count_0 = 0
+                            while True:
+                                offset_3 = offset_2
+                                column_2 = column_1
+                                indent_column_2 = indent_column_1
+                                partial_tab_offset_2 = partial_tab_offset_1
+                                partial_tab_width_2 = partial_tab_width_1
+                                children_3 = [] if children_2 is not None else None
+                                while True:
+                                    if offset_3 == buf_eof:
+                                        offset_3 = -1
+                                        break
+
+                                    codepoint = ord(buf[offset_3])
+
+                                    if 97 <= codepoint <= 122:
+                                        offset_3 += 1
+                                        column_2 += 1
+                                    elif 65 <= codepoint <= 90:
+                                        offset_3 += 1
+                                        column_2 += 1
+                                    elif codepoint == 45:
+                                        offset_3 += 1
+                                        column_2 += 1
+                                    elif 48 <= codepoint <= 57:
+                                        offset_3 += 1
+                                        column_2 += 1
+                                    else:
+                                        offset_3 = -1
+                                        break
+
+                                    break
+                                if offset_3 == -1:
+                                    break
+                                if offset_2 == offset_3: break
+                                if children_3 is not None and children_3 is not None:
+                                    children_2.extend(children_3)
+                                offset_2 = offset_3
+                                column_1 = column_2
+                                indent_column_1 = indent_column_2
+                                partial_tab_offset_1 = partial_tab_offset_2
+                                partial_tab_width_1 = partial_tab_width_2
+                                count_0 += 1
+                            if offset_2 == -1:
+                                break
+
+                            count_0 = 0
+                            while True:
+                                offset_3 = offset_2
+                                column_2 = column_1
+                                indent_column_2 = indent_column_1
+                                partial_tab_offset_2 = partial_tab_offset_1
+                                partial_tab_width_2 = partial_tab_width_1
+                                children_3 = [] if children_2 is not None else None
+                                while True:
+                                    count_1 = 0
+                                    while offset_3 < buf_eof:
+                                        codepoint = buf[offset_3]
+                                        if codepoint in ' \t':
+                                            if codepoint == '\t':
+                                                if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
+                                                    width = partial_tab_width_2
+                                                else:
+                                                    width  = (self.tabstop-(column_2%self.tabstop))
+                                                count_1 += width
+                                                column_2 += width
+                                                offset_3 += 1
+                                            else:
+                                                count_1 += 1
+                                                column_2 += 1
+                                                offset_3 += 1
+                                        else:
+                                            break
+                                    if count_1 < 1:
+                                        offset_3 = -1
+                                        break
+
+                                    if offset_3 == buf_eof:
+                                        offset_3 = -1
+                                        break
+
+                                    codepoint = ord(buf[offset_3])
+
+                                    if 97 <= codepoint <= 122:
+                                        offset_3 += 1
+                                        column_2 += 1
+                                    elif 65 <= codepoint <= 90:
+                                        offset_3 += 1
+                                        column_2 += 1
+                                    elif codepoint == 58:
+                                        offset_3 += 1
+                                        column_2 += 1
+                                    elif codepoint == 95:
+                                        offset_3 += 1
+                                        column_2 += 1
+                                    else:
+                                        offset_3 = -1
+                                        break
+
+                                    count_1 = 0
+                                    while True:
+                                        offset_4 = offset_3
+                                        column_3 = column_2
+                                        indent_column_3 = indent_column_2
+                                        partial_tab_offset_3 = partial_tab_offset_2
+                                        partial_tab_width_3 = partial_tab_width_2
+                                        children_4 = [] if children_3 is not None else None
+                                        while True:
+                                            if offset_4 == buf_eof:
+                                                offset_4 = -1
+                                                break
+
+                                            codepoint = ord(buf[offset_4])
+
+                                            if 97 <= codepoint <= 122:
+                                                offset_4 += 1
+                                                column_3 += 1
+                                            elif 65 <= codepoint <= 90:
+                                                offset_4 += 1
+                                                column_3 += 1
+                                            elif codepoint == 58:
+                                                offset_4 += 1
+                                                column_3 += 1
+                                            elif codepoint == 95:
+                                                offset_4 += 1
+                                                column_3 += 1
+                                            elif 48 <= codepoint <= 57:
+                                                offset_4 += 1
+                                                column_3 += 1
+                                            elif codepoint == 45:
+                                                offset_4 += 1
+                                                column_3 += 1
+                                            else:
+                                                offset_4 = -1
+                                                break
+
+                                            break
+                                        if offset_4 == -1:
+                                            break
+                                        if offset_3 == offset_4: break
+                                        if children_4 is not None and children_4 is not None:
+                                            children_3.extend(children_4)
+                                        offset_3 = offset_4
+                                        column_2 = column_3
+                                        indent_column_2 = indent_column_3
+                                        partial_tab_offset_2 = partial_tab_offset_3
+                                        partial_tab_width_2 = partial_tab_width_3
+                                        count_1 += 1
+                                    if count_1 < 1:
+                                        offset_3 = -1
+                                        break
+                                    if offset_3 == -1:
+                                        break
+
+                                    count_1 = 0
+                                    while count_1 < 1:
+                                        offset_4 = offset_3
+                                        column_3 = column_2
+                                        indent_column_3 = indent_column_2
+                                        partial_tab_offset_3 = partial_tab_offset_2
+                                        partial_tab_width_3 = partial_tab_width_2
+                                        children_4 = [] if children_3 is not None else None
+                                        while True:
+                                            count_2 = 0
+                                            while offset_4 < buf_eof:
+                                                codepoint = buf[offset_4]
+                                                if codepoint in ' \t':
+                                                    if codepoint == '\t':
+                                                        if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
+                                                            width = partial_tab_width_3
+                                                        else:
+                                                            width  = (self.tabstop-(column_3%self.tabstop))
+                                                        count_2 += width
+                                                        column_3 += width
+                                                        offset_4 += 1
+                                                    else:
+                                                        count_2 += 1
+                                                        column_3 += 1
+                                                        offset_4 += 1
+                                                else:
+                                                    break
+
+                                            if buf[offset_4:offset_4+1] == '=':
+                                                offset_4 += 1
+                                                column_3 += 1
+                                            else:
+                                                offset_4 = -1
+                                                break
+
+                                            count_2 = 0
+                                            while offset_4 < buf_eof:
+                                                codepoint = buf[offset_4]
+                                                if codepoint in ' \t':
+                                                    if codepoint == '\t':
+                                                        if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
+                                                            width = partial_tab_width_3
+                                                        else:
+                                                            width  = (self.tabstop-(column_3%self.tabstop))
+                                                        count_2 += width
+                                                        column_3 += width
+                                                        offset_4 += 1
+                                                    else:
+                                                        count_2 += 1
+                                                        column_3 += 1
+                                                        offset_4 += 1
+                                                else:
+                                                    break
+
+                                            while True: # start choice
+                                                offset_5 = offset_4
+                                                column_4 = column_3
+                                                indent_column_4 = indent_column_3
+                                                partial_tab_offset_4 = partial_tab_offset_3
+                                                partial_tab_width_4 = partial_tab_width_3
+                                                children_5 = [] if children_4 is not None else None
+                                                while True: # case
+                                                    count_2 = 0
+                                                    while True:
+                                                        offset_6 = offset_5
+                                                        column_5 = column_4
+                                                        indent_column_5 = indent_column_4
+                                                        partial_tab_offset_5 = partial_tab_offset_4
+                                                        partial_tab_width_5 = partial_tab_width_4
+                                                        children_6 = [] if children_5 is not None else None
+                                                        while True:
+                                                            if offset_6 == buf_eof:
+                                                                offset_6 = -1
+                                                                break
+
+                                                            codepoint = ord(buf[offset_6])
+
+                                                            if codepoint == 34:
+                                                                offset_6 = -1
+                                                                break
+                                                            elif codepoint == 39:
+                                                                offset_6 = -1
+                                                                break
+                                                            elif codepoint == 61:
+                                                                offset_6 = -1
+                                                                break
+                                                            elif codepoint == 60:
+                                                                offset_6 = -1
+                                                                break
+                                                            elif codepoint == 62:
+                                                                offset_6 = -1
+                                                                break
+                                                            elif codepoint == 96:
+                                                                offset_6 = -1
+                                                                break
+                                                            elif codepoint == 9:
+                                                                offset_6 = -1
+                                                                break
+                                                            elif codepoint == 32:
+                                                                offset_6 = -1
+                                                                break
+                                                            elif codepoint == 10:
+                                                                offset_6 = -1
+                                                                break
+                                                            elif codepoint == 13:
+                                                                offset_6 = -1
+                                                                break
+                                                            else:
+                                                                offset_6 += 1
+                                                                column_5 += 1
+
+                                                            break
+                                                        if offset_6 == -1:
+                                                            break
+                                                        if offset_5 == offset_6: break
+                                                        if children_6 is not None and children_6 is not None:
+                                                            children_5.extend(children_6)
+                                                        offset_5 = offset_6
+                                                        column_4 = column_5
+                                                        indent_column_4 = indent_column_5
+                                                        partial_tab_offset_4 = partial_tab_offset_5
+                                                        partial_tab_width_4 = partial_tab_width_5
+                                                        count_2 += 1
+                                                    if count_2 < 1:
+                                                        offset_5 = -1
+                                                        break
+                                                    if offset_5 == -1:
+                                                        break
+
+
+                                                    break
+                                                if offset_5 != -1:
+                                                    offset_4 = offset_5
+                                                    column_3 = column_4
+                                                    indent_column_3 = indent_column_4
+                                                    partial_tab_offset_3 = partial_tab_offset_4
+                                                    partial_tab_width_3 = partial_tab_width_4
+                                                    if children_5 is not None and children_5 is not None:
+                                                        children_4.extend(children_5)
+                                                    break
+                                                # end case
+                                                offset_5 = offset_4
+                                                column_4 = column_3
+                                                indent_column_4 = indent_column_3
+                                                partial_tab_offset_4 = partial_tab_offset_3
+                                                partial_tab_width_4 = partial_tab_width_3
+                                                children_5 = [] if children_4 is not None else None
+                                                while True: # case
+                                                    if buf[offset_5:offset_5+1] == '"':
+                                                        offset_5 += 1
+                                                        column_4 += 1
+                                                    else:
+                                                        offset_5 = -1
+                                                        break
+
+                                                    count_2 = 0
+                                                    while True:
+                                                        offset_6 = offset_5
+                                                        column_5 = column_4
+                                                        indent_column_5 = indent_column_4
+                                                        partial_tab_offset_5 = partial_tab_offset_4
+                                                        partial_tab_width_5 = partial_tab_width_4
+                                                        children_6 = [] if children_5 is not None else None
+                                                        while True:
+                                                            if offset_6 == buf_eof:
+                                                                offset_6 = -1
+                                                                break
+
+                                                            codepoint = ord(buf[offset_6])
+
+                                                            if codepoint == 34:
+                                                                offset_6 = -1
+                                                                break
+                                                            else:
+                                                                offset_6 += 1
+                                                                column_5 += 1
+
+                                                            break
+                                                        if offset_6 == -1:
+                                                            break
+                                                        if offset_5 == offset_6: break
+                                                        if children_6 is not None and children_6 is not None:
+                                                            children_5.extend(children_6)
+                                                        offset_5 = offset_6
+                                                        column_4 = column_5
+                                                        indent_column_4 = indent_column_5
+                                                        partial_tab_offset_4 = partial_tab_offset_5
+                                                        partial_tab_width_4 = partial_tab_width_5
+                                                        count_2 += 1
+                                                    if offset_5 == -1:
+                                                        break
+
+                                                    if buf[offset_5:offset_5+1] == '"':
+                                                        offset_5 += 1
+                                                        column_4 += 1
+                                                    else:
+                                                        offset_5 = -1
+                                                        break
+
+
+                                                    break
+                                                if offset_5 != -1:
+                                                    offset_4 = offset_5
+                                                    column_3 = column_4
+                                                    indent_column_3 = indent_column_4
+                                                    partial_tab_offset_3 = partial_tab_offset_4
+                                                    partial_tab_width_3 = partial_tab_width_4
+                                                    if children_5 is not None and children_5 is not None:
+                                                        children_4.extend(children_5)
+                                                    break
+                                                # end case
+                                                offset_5 = offset_4
+                                                column_4 = column_3
+                                                indent_column_4 = indent_column_3
+                                                partial_tab_offset_4 = partial_tab_offset_3
+                                                partial_tab_width_4 = partial_tab_width_3
+                                                children_5 = [] if children_4 is not None else None
+                                                while True: # case
+                                                    if buf[offset_5:offset_5+1] == "'":
+                                                        offset_5 += 1
+                                                        column_4 += 1
+                                                    else:
+                                                        offset_5 = -1
+                                                        break
+
+                                                    count_2 = 0
+                                                    while True:
+                                                        offset_6 = offset_5
+                                                        column_5 = column_4
+                                                        indent_column_5 = indent_column_4
+                                                        partial_tab_offset_5 = partial_tab_offset_4
+                                                        partial_tab_width_5 = partial_tab_width_4
+                                                        children_6 = [] if children_5 is not None else None
+                                                        while True:
+                                                            if offset_6 == buf_eof:
+                                                                offset_6 = -1
+                                                                break
+
+                                                            codepoint = ord(buf[offset_6])
+
+                                                            if codepoint == 39:
+                                                                offset_6 = -1
+                                                                break
+                                                            else:
+                                                                offset_6 += 1
+                                                                column_5 += 1
+
+                                                            break
+                                                        if offset_6 == -1:
+                                                            break
+                                                        if offset_5 == offset_6: break
+                                                        if children_6 is not None and children_6 is not None:
+                                                            children_5.extend(children_6)
+                                                        offset_5 = offset_6
+                                                        column_4 = column_5
+                                                        indent_column_4 = indent_column_5
+                                                        partial_tab_offset_4 = partial_tab_offset_5
+                                                        partial_tab_width_4 = partial_tab_width_5
+                                                        count_2 += 1
+                                                    if offset_5 == -1:
+                                                        break
+
+                                                    if buf[offset_5:offset_5+1] == "'":
+                                                        offset_5 += 1
+                                                        column_4 += 1
+                                                    else:
+                                                        offset_5 = -1
+                                                        break
+
+
+                                                    break
+                                                if offset_5 != -1:
+                                                    offset_4 = offset_5
+                                                    column_3 = column_4
+                                                    indent_column_3 = indent_column_4
+                                                    partial_tab_offset_3 = partial_tab_offset_4
+                                                    partial_tab_width_3 = partial_tab_width_4
+                                                    if children_5 is not None and children_5 is not None:
+                                                        children_4.extend(children_5)
+                                                    break
+                                                # end case
+                                                offset_4 = -1 # no more choices
+                                                break # end choice
+                                            if offset_4 == -1:
+                                                break
+
+                                            break
+                                        if offset_4 == -1:
+                                            break
+                                        if offset_3 == offset_4: break
+                                        if children_4 is not None and children_4 is not None:
+                                            children_3.extend(children_4)
+                                        offset_3 = offset_4
+                                        column_2 = column_3
+                                        indent_column_2 = indent_column_3
+                                        partial_tab_offset_2 = partial_tab_offset_3
+                                        partial_tab_width_2 = partial_tab_width_3
+                                        count_1 += 1
+                                        break
+                                    if offset_3 == -1:
+                                        break
+
+                                    break
+                                if offset_3 == -1:
+                                    break
+                                if offset_2 == offset_3: break
+                                if children_3 is not None and children_3 is not None:
+                                    children_2.extend(children_3)
+                                offset_2 = offset_3
+                                column_1 = column_2
+                                indent_column_1 = indent_column_2
+                                partial_tab_offset_1 = partial_tab_offset_2
+                                partial_tab_width_1 = partial_tab_width_2
+                                count_0 += 1
+                            if offset_2 == -1:
+                                break
+
+                            count_0 = 0
+                            while offset_2 < buf_eof:
+                                codepoint = buf[offset_2]
+                                if codepoint in ' \t':
+                                    if codepoint == '\t':
+                                        if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
+                                            width = partial_tab_width_1
+                                        else:
+                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                        count_0 += width
+                                        column_1 += width
+                                        offset_2 += 1
+                                    else:
+                                        count_0 += 1
+                                        column_1 += 1
+                                        offset_2 += 1
+                                else:
+                                    break
+
+                            if buf[offset_2:offset_2+2] == '/>':
+                                offset_2 += 2
+                                column_1 += 2
+                            elif buf[offset_2:offset_2+1] == '>':
+                                offset_2 += 1
+                                column_1 += 1
+                            else:
+                                offset_2 = -1
+                                break
+
 
                             break
                         if offset_2 != -1:
@@ -11820,9 +12701,6 @@ def _build(unicodedata):
                             if buf[offset_2:offset_2+2] == '</':
                                 offset_2 += 2
                                 column_1 += 2
-                            elif buf[offset_2:offset_2+1] == '<':
-                                offset_2 += 1
-                                column_1 += 1
                             else:
                                 offset_2 = -1
                                 break
