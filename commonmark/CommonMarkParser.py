@@ -8786,6 +8786,38 @@ def _build(unicodedata):
                                 partial_tab_width_2 = partial_tab_width_1
                                 children_3 = [] if children_2 is not None else None
                                 while True:
+                                    while True: # start reject
+                                        children_4 = []
+                                        offset_4 = offset_3 + 0
+                                        column_3 = column_2
+                                        indent_column_3 = indent_column_2
+                                        partial_tab_offset_3 = partial_tab_offset_2
+                                        partial_tab_width_3 = partial_tab_width_2
+                                        offset_4, column_3, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = self.parse_right_flank(buf, buf_start, buf_eof, offset_4, column_3, indent_column_3, prefix_0, children_4, partial_tab_offset_3, partial_tab_width_3)
+                                        if offset_4 == -1: break
+
+
+                                        break
+                                    if offset_4 != -1:
+                                        offset_3 = -1
+                                        break
+
+                                    while True: # start reject
+                                        children_4 = []
+                                        offset_4 = offset_3 + 0
+                                        column_3 = column_2
+                                        indent_column_3 = indent_column_2
+                                        partial_tab_offset_3 = partial_tab_offset_2
+                                        partial_tab_width_3 = partial_tab_width_2
+                                        offset_4, column_3, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = self.parse_dual_flank(buf, buf_start, buf_eof, offset_4, column_3, indent_column_3, prefix_0, children_4, partial_tab_offset_3, partial_tab_width_3)
+                                        if offset_4 == -1: break
+
+
+                                        break
+                                    if offset_4 != -1:
+                                        offset_3 = -1
+                                        break
+
                                     if offset_3 == buf_eof:
                                         offset_3 = -1
                                         break
@@ -8807,13 +8839,10 @@ def _build(unicodedata):
                                     elif codepoint == 96:
                                         offset_3 = -1
                                         break
-                                    elif codepoint == 42:
-                                        offset_3 = -1
-                                        break
-                                    elif codepoint == 95:
-                                        offset_3 = -1
-                                        break
                                     elif codepoint == 38:
+                                        offset_3 = -1
+                                        break
+                                    elif codepoint == 42:
                                         offset_3 = -1
                                         break
                                     elif codepoint == 91:
@@ -10148,10 +10177,7 @@ def _build(unicodedata):
 
                                     codepoint = ord(buf[offset_4])
 
-                                    if codepoint == 95:
-                                        offset_4 += 1
-                                        column_2 += 1
-                                    elif codepoint == 42:
+                                    if codepoint == 42:
                                         offset_4 += 1
                                         column_2 += 1
                                     else:

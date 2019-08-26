@@ -626,7 +626,11 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                 with self.capture_node('text'):
                     self.range(" ", "\n", "\\", invert=True)
                     with self.repeat(min=0):
-                        self.range(" ", "\n", "\\", "<", "`", "*", "_", "&", "[", invert=True)
+                        with self.reject():
+                            self.right_flank()
+                        with self.reject():
+                            self.dual_flank()
+                        self.range(" ", "\n", "\\", "<", "`", "&", "*", "[", invert=True)
 
     @rule()
     def escaped_text(self):
@@ -748,7 +752,7 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                     self.range(unicode_whitespace=True, unicode_newline=True, unicode_punctuation=True)
                 with self.count(columns=True) as n:
                     with self.backref() as chr:
-                        self.range("_", "*")
+                        self.range( "*")
                     with self.repeat(min=0):
                         self.literal(chr)
                 with self.reject():
@@ -803,61 +807,61 @@ builder = {}
 _builder = lambda fn:builder.__setitem__(fn.__name__,fn)
 
 def make_para(children):
-    operators =[idx for idx, o in enumerate(children) if isinstance(o, tuple)]
+    operators =[(idx, o[0], o[1], o[2], o[2]) for idx, o in enumerate(children) if isinstance(o, tuple)]
 
-    replacement = {}
+    left_replacement = {}
+    right_replacement = {}
+    op_idx = 0
 
-    for op_idx, idx in list(enumerate(operators)):
-        kind, chr, n = children[idx]
-        if kind == "right":
+    while op_idx < len(operators):
+        idx, kind, chr, N, n = operators[op_idx]
+        if kind == "right" or kind == "dual":
             left_op = op_idx -1
+            limit = 3 - (N%3)
             while n >0 and left_op >=0:
                 found = False
                 while left_op >= 0:
-                    c = children[operators[left_op]]
-                    if c[0] == "left" and c[1] == chr and c[2] > 0:
-                        found = True
-                        break
+                    left_idx, left_kind, left_chr, left_N, left_n = operators[left_op]
+                    if left_chr == chr and left_n > 0 and (kind != "dual" or left_N%3 < limit):
+                        if left_kind == "left" or (left_kind == "dual" and left_N%3 < limit):
+                            found = True
+                            break
                     left_op -=1
                 if found:
-                    left_idx = operators[left_op]
-                    left = children[left_idx]
-                    _, _, count = left
-                    if count  <= n:
-                        children[left_idx] = ("left", chr, 0)
-                        n = n - count
+                    if left_n  <= n:
+                        operators[left_op] = (left_idx, left_kind, left_chr, left_N, 0)
+                        n = n - left_n
                     else:
-                        children[left_idx] = ("left", chr, count-n)
-                        count = n
+                        operators[left_op] = (left_idx, left_kind, left_chr, left_N, left_n -n)
+                        left_n = n
                         n = 0
                         
-                    if left_idx not in replacement:
-                        replacement[left_idx] = []
-                    if idx not in replacement:
-                        replacement[idx] = []
+                    if left_idx not in left_replacement:
+                        left_replacement[left_idx] = []
+                    if idx not in right_replacement:
+                        right_replacement[idx] = []
                     
-                    replacement[left_idx].append(count)
-                    replacement[idx].append(count)
+                    left_replacement[left_idx].append(left_n)
+                    right_replacement[idx].append(left_n)
                 left_op -= 1
+            operators[op_idx] = (idx, kind, chr, N, n)
+        op_idx +=1
 
-            children[idx] = (kind, chr, n)
-
-    for idx in operators:
-        kind, chr, count = children[idx]
+    for idx, kind, chr, N, count in operators:
         if kind == "left": # replacements in left to right order
             out = []
             for _ in range(count):
                 out.append(chr)
-            if idx in replacement:
-                for c in replacement[idx]:
+            if idx in left_replacement:
+                for c in left_replacement[idx]:
                     out.append(["<strong><strong>", "<em>", "<strong>", "<em><strong>"][c%4])
                     for _ in range(c//4):
                         out.append("<strong><strong>")
             children[idx] = "".join(out)
         elif kind == "right":
             out = []
-            if idx in replacement:
-                for c in reversed(replacement[idx]): 
+            if idx in right_replacement:
+                for c in reversed(right_replacement[idx]): 
                     for _ in range(c//4):
                         out.append("</strong></strong>")
                     out.append(["</strong></strong>", "</em>", "</strong>", "</strong></em>"][c%4])
@@ -865,7 +869,20 @@ def make_para(children):
                 out.append(chr)
             children[idx] = "".join(out)
         elif kind == "dual":
-            children[idx] = chr * count 
+            out = []
+            if idx in right_replacement:
+                for c in reversed(right_replacement[idx]): 
+                    for _ in range(c//4):
+                        out.append("</strong></strong>")
+                    out.append(["</strong></strong>", "</em>", "</strong>", "</strong></em>"][c%4])
+            for _ in range(count):
+                out.append(chr)
+            if idx in left_replacement:
+                for c in left_replacement[idx]:
+                    out.append(["<strong><strong>", "<em>", "<strong>", "<em><strong>"][c%4])
+                    for _ in range(c//4):
+                        out.append("<strong><strong>")
+            children[idx] = "".join(out)
 
 
     return "".join(children)
@@ -1294,22 +1311,22 @@ def
 butt
 """)
 
-_markup("""\
+markup("""\
 > a
 > b
 > ===
 """)
-_markup("""\
+markup("""\
 - a
   b
   ===
 """)
-_markup("""\
+markup("""\
 > a
 b
 ===
 """)
-_markup("""\
+markup("""\
 - a
 b
 ===
