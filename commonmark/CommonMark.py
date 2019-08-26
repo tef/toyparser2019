@@ -807,167 +807,6 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                     self.end_of_line()
                     self.end_of_file()
 
-    @rule()
-    def inline_html(self):
-        with self.choice():
-            with self.case():
-                with self.capture_node('raw'):
-                    self.literal("<?")
-                    with self.repeat():
-                        with self.reject():
-                            self.literal("?>")
-                        self.range("\n", invert=True)
-                with self.repeat():
-                    with self.capture_node('raw'):self.newline()
-                    self.indent(partial=True)
-                    with self.capture_node('raw'), self.repeat():
-                        with self.reject():
-                            self.literal("?>")
-                        self.range("\n", invert=True)
-                with self.capture_node('raw'): self.literal("?>")
-            with self.case():
-                with self.capture_node('raw'):
-                    self.literal("<!--")
-                    with self.repeat():
-                        with self.reject():
-                            self.literal("--", "->", ">", "---")
-                        self.range("\n", invert=True)
-                with self.repeat():
-                    with self.capture_node('raw'):
-                        self.newline()
-                    self.indent(partial=True)
-                    with self.capture_node('raw'):
-                        with self.repeat():
-                            with self.reject():
-                                self.literal("--", "->", ">", "---")
-                            self.range("\n", invert=True)
-                with self.capture_node('raw'):
-                    self.literal("-->")
-            with self.case():
-                with self.capture_node('raw'):
-                    self.literal("<!")
-                    self.range("A-Z")
-                    with self.repeat():
-                        self.range(">", "\n", invert=True)
-                with self.repeat():
-                    with self.capture_node('raw'):
-                        self.newline()
-                    self.indent(partial=True)
-                    with self.capture_node('raw'):
-                        with self.repeat():
-                            self.range(">", "\n", invert=True)
-                with self.capture_node('raw'):
-                    self.literal(">")
-            with self.case():
-                with self.capture_node('raw'):
-                    self.literal("<[CDATA[")
-                    with self.repeat():
-                        with self.reject():
-                            self.literal("]]>")
-                        self.range("\n", invert=True)
-                with self.repeat():
-                    with self.capture_node('raw'):
-                        self.newline()
-                    self.indent(partial=True)
-                    with self.capture_node('raw'):
-                        with self.repeat():
-                            with self.reject():
-                                self.literal("]]>")
-                            self.range("\n", invert=True)
-                with self.capture_node('raw'):
-                    self.literal("]]>")
-            with self.case():
-                with self.capture_node('raw'):
-                    self.literal("<")
-                    self.range("a-z", "A-Z")
-                    with self.repeat():
-                        self.range("a-z", "A-Z", "-", "0-9")
-                with self.repeat():
-                    with self.choice():
-                        with self.case(), self.capture_node('raw'):
-                            self.whitespace(min=1)  # allow newline
-                        with self.case(), self.repeat(min=1):
-                            with self.capture_node('raw'): 
-                                self.whitespace()
-                                self.newline()
-                            self.indent(partial=True)
-                            with self.capture_node('raw'): self.whitespace()
-
-                    with self.capture_node('raw'):
-                        self.range("a-z", "A-Z", ":", "_")
-                        with self.repeat(min=1):
-                            self.range("a-z", "A-Z", ":", "_", "0-9", "-")
-                    with self.optional():
-                        with self.capture_node('raw'):
-                            self.whitespace()
-                            self.literal("=")
-                        with self.choice():
-                            with self.case(), self.capture_node('raw'):
-                                self.whitespace() # allow newline
-                            with self.case(), self.repeat(min=0):
-                                with self.capture_node('raw'):
-                                    self.whitespace()
-                                    self.newline()
-                                self.indent(partial=True)
-                                with self.capture_node('raw'): self.whitespace()
-
-                        with self.choice():
-                            with self.case():
-                                with self.capture_node('raw'):
-                                    with self.repeat(min=1):
-                                        self.range("\"", "'", "=", "<", ">", "`", "\t", " ", "\n", "\r", invert=True)
-                            with self.case():
-                                with self.capture_node('raw'):
-                                    self.literal("\"")
-                                    with self.repeat(): 
-                                        self.range('"', "\n", invert=True)
-                                with self.repeat():
-                                    with self.capture_node('raw'):
-                                        self.newline()
-                                    self.indent(partial=True)
-                                    with self.capture_node('raw'), self.repeat(): 
-                                        self.range('"', "\n", invert=True)
-
-                                with self.capture_node('raw'): 
-                                    self.literal("\"")
-                            with self.case():
-                                with self.capture_node('raw'):
-                                    self.literal('\'')
-                                    with self.repeat(): 
-                                        self.range("'", "\n",invert=True)
-                                with self.repeat():
-                                    with self.capture_node('raw'):
-                                        self.newline()
-                                    self.indent(partial=True)
-                                    with self.capture_node('raw'), self.repeat(): 
-                                        self.range('\'', "\n", invert=True)
-                                with self.capture_node('raw'):
-                                    self.literal('\'')
-                with self.choice():
-                    with self.case():
-                        with self.capture_node('raw'):
-                            self.whitespace()
-                            self.literal("/>", ">")
-                    with self.case():
-                        with self.choice():
-                            with self.case(), self.capture_node('raw'):
-                                self.whitespace() # allow newline
-                            with self.case(), self.repeat():
-                                with self.capture_node('raw'):
-                                    self.whitespace()
-                                    self.newline()
-                                self.indent(partial=True)
-                                with self.capture_node('raw'): self.whitespace()
-                        with self.capture_node('raw'):
-                            self.literal("/>")
-            with self.case():
-                with self.capture_node('raw'):
-                    self.literal("</")
-                    self.range("a-z", "A-Z")
-                    with self.repeat():
-                        self.range("a-z", "A-Z", "-", "0-9")
-                    self.whitespace()
-                    self.literal(">")
 
     @rule()
     def para_interrupt(self):
@@ -1082,6 +921,47 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
         with self.choice():
             with self.case():
                 self.inline_html()
+            with self.case():
+                self.literal("<")
+                with self.capture_node('auto_link'):
+                    self.range("a-z","A-Z")
+                    with self.repeat(min=1):
+                        self.range("a-z","A-Z", "0-9","+",".","-")
+                    self.literal(":")
+                    with self.repeat():
+                        self.range("\x00- ", ">", "<", invert=True)
+                self.literal(">")
+            with self.case():
+                self.literal("<")
+                with self.capture_node("mailto_auto_link"):
+                    with self.repeat(min=1):
+                        self.range(
+                            "a-z", "A-Z", "0-9", ".","!",
+                            "#", "$", "%", "&", "'", 
+                            "*", "+", "/", "=", "?", 
+                            "^", "_", "`", "{", "|", "}",
+                            "~", "-",
+                        )
+                    self.literal("@")
+                    self.range("a-z", "A-Z", "0-9")
+                    with self.optional():
+                        with self.repeat(max=62):
+                            with self.choice():
+                                with self.case(): self.range("a-z", "A-Z", "0-9")
+                                with self.case(): 
+                                    with self.repeat(min=1): self.literal("-")
+                                    self.range("a-z", "A-Z", "0-9")
+                    with self.repeat():
+                        self.literal(".")
+                        self.range("a-z", "A-Z", "0-9")
+                        with self.optional():
+                            with self.repeat(max=61):
+                                with self.choice():
+                                    with self.case(): self.range("a-z", "A-Z", "0-9")
+                                    with self.case(): 
+                                        with self.repeat(min=1): self.literal("-")
+                                        self.range("a-z", "A-Z", "0-9")
+                self.literal(">")
             with self.case():
                 self.code_span()
 
@@ -1285,12 +1165,174 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                 with self.capture_node('text'), self.repeat(min=1):
                     self.literal("`")
 
+    @rule()
+    def inline_html(self):
+        with self.choice():
+            with self.case():
+                with self.capture_node('raw'):
+                    self.literal("<?")
+                    with self.repeat():
+                        with self.reject():
+                            self.literal("?>")
+                        self.range("\n", invert=True)
+                with self.repeat():
+                    with self.capture_node('raw'):self.newline()
+                    self.indent(partial=True)
+                    with self.capture_node('raw'), self.repeat():
+                        with self.reject():
+                            self.literal("?>")
+                        self.range("\n", invert=True)
+                with self.capture_node('raw'): self.literal("?>")
+            with self.case():
+                with self.capture_node('raw'):
+                    self.literal("<!--")
+                    with self.repeat():
+                        with self.reject():
+                            self.literal("--", "->", ">", "---")
+                        self.range("\n", invert=True)
+                with self.repeat():
+                    with self.capture_node('raw'):
+                        self.newline()
+                    self.indent(partial=True)
+                    with self.capture_node('raw'):
+                        with self.repeat():
+                            with self.reject():
+                                self.literal("--", "->", ">", "---")
+                            self.range("\n", invert=True)
+                with self.capture_node('raw'):
+                    self.literal("-->")
+            with self.case():
+                with self.capture_node('raw'):
+                    self.literal("<!")
+                    self.range("A-Z")
+                    with self.repeat():
+                        self.range(">", "\n", invert=True)
+                with self.repeat():
+                    with self.capture_node('raw'):
+                        self.newline()
+                    self.indent(partial=True)
+                    with self.capture_node('raw'):
+                        with self.repeat():
+                            self.range(">", "\n", invert=True)
+                with self.capture_node('raw'):
+                    self.literal(">")
+            with self.case():
+                with self.capture_node('raw'):
+                    self.literal("<[CDATA[")
+                    with self.repeat():
+                        with self.reject():
+                            self.literal("]]>")
+                        self.range("\n", invert=True)
+                with self.repeat():
+                    with self.capture_node('raw'):
+                        self.newline()
+                    self.indent(partial=True)
+                    with self.capture_node('raw'):
+                        with self.repeat():
+                            with self.reject():
+                                self.literal("]]>")
+                            self.range("\n", invert=True)
+                with self.capture_node('raw'):
+                    self.literal("]]>")
+            with self.case():
+                with self.capture_node('raw'):
+                    self.literal("<")
+                    self.range("a-z", "A-Z")
+                    with self.repeat():
+                        self.range("a-z", "A-Z", "-", "0-9")
+                with self.repeat():
+                    with self.choice():
+                        with self.case(), self.capture_node('raw'):
+                            self.whitespace(min=1)  # allow newline
+                        with self.case(), self.repeat(min=1):
+                            with self.capture_node('raw'): 
+                                self.whitespace()
+                                self.newline()
+                            self.indent(partial=True)
+                            with self.capture_node('raw'): self.whitespace()
+
+                    with self.capture_node('raw'):
+                        self.range("a-z", "A-Z", ":", "_")
+                        with self.repeat(min=1):
+                            self.range("a-z", "A-Z", ":", "_", "0-9", "-")
+                    with self.optional():
+                        with self.capture_node('raw'):
+                            self.whitespace()
+                            self.literal("=")
+                        with self.choice():
+                            with self.case(), self.capture_node('raw'):
+                                self.whitespace() # allow newline
+                            with self.case(), self.repeat(min=0):
+                                with self.capture_node('raw'):
+                                    self.whitespace()
+                                    self.newline()
+                                self.indent(partial=True)
+                                with self.capture_node('raw'): self.whitespace()
+
+                        with self.choice():
+                            with self.case():
+                                with self.capture_node('raw'):
+                                    with self.repeat(min=1):
+                                        self.range("\"", "'", "=", "<", ">", "`", "\t", " ", "\n", "\r", invert=True)
+                            with self.case():
+                                with self.capture_node('raw'):
+                                    self.literal("\"")
+                                    with self.repeat(): 
+                                        self.range('"', "\n", invert=True)
+                                with self.repeat():
+                                    with self.capture_node('raw'):
+                                        self.newline()
+                                    self.indent(partial=True)
+                                    with self.capture_node('raw'), self.repeat(): 
+                                        self.range('"', "\n", invert=True)
+
+                                with self.capture_node('raw'): 
+                                    self.literal("\"")
+                            with self.case():
+                                with self.capture_node('raw'):
+                                    self.literal('\'')
+                                    with self.repeat(): 
+                                        self.range("'", "\n",invert=True)
+                                with self.repeat():
+                                    with self.capture_node('raw'):
+                                        self.newline()
+                                    self.indent(partial=True)
+                                    with self.capture_node('raw'), self.repeat(): 
+                                        self.range('\'', "\n", invert=True)
+                                with self.capture_node('raw'):
+                                    self.literal('\'')
+                with self.choice():
+                    with self.case():
+                        with self.capture_node('raw'):
+                            self.whitespace()
+                            self.literal("/>", ">")
+                    with self.case():
+                        with self.choice():
+                            with self.case(), self.capture_node('raw'):
+                                self.whitespace() # allow newline
+                            with self.case(), self.repeat():
+                                with self.capture_node('raw'):
+                                    self.whitespace()
+                                    self.newline()
+                                self.indent(partial=True)
+                                with self.capture_node('raw'): self.whitespace()
+                        with self.capture_node('raw'):
+                            self.literal("/>")
+            with self.case():
+                with self.capture_node('raw'):
+                    self.literal("</")
+                    self.range("a-z", "A-Z")
+                    with self.repeat():
+                        self.range("a-z", "A-Z", "-", "0-9")
+                    self.whitespace()
+                    self.literal(">")
 
 
 ## HTML Builder
 
 import html
 import html.entities
+from urllib.parse import quote as percent_encode
 
 def html_escape(text):
     return text.replace("&", "&amp;").replace("\"", "&quot;").replace(">", "&gt;").replace("<","&lt;").replace("\x00", "\uFFFD")
@@ -1561,6 +1603,16 @@ def html_block(buf, node, children):
 @_builder
 def raw(buf, node, children):
     return buf[node.start:node.end]
+
+@_builder
+def auto_link(buf, node, children): 
+    text = buf[node.start:node.end]
+    return f'<a href="{percent_encode(html_escape(text), safe="/:?=&+*;@,")}">{html_escape(text)}</a>'
+
+@_builder
+def mailto_auto_link(buf, node, children): 
+    text = buf[node.start:node.end]
+    return f'<a href="mailto:{percent_encode(html_escape(text), safe="/:?=&+*;@,")}">{html_escape(text)}</a>'
 
 @_builder
 def para(buf, node,  children):
