@@ -745,34 +745,43 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                 self.literal("<")
                 with self.reject():
                     self.literal("pre", "script", "style", transform="lower")
-                with self.optional(): self.literal("/")
-                self.range("a-z", "A-Z")
-                with self.repeat():
-                    self.range("a-z", "A-Z", "-", "0-9")
-                with self.repeat():
-                    self.whitespace(min=1)
-                    self.range("a-z", "A-Z", ":", "_")
-                    with self.repeat(min=1):
-                        self.range("a-z", "A-Z", ":", "_", "0-9", "-")
-                    with self.optional():
+                with self.choice():
+                    with self.case():
+                        self.literal("/")
+                        self.range("a-z", "A-Z")
+                        with self.repeat():
+                            self.range("a-z", "A-Z", "-", "0-9")
                         self.whitespace()
-                        self.literal("=")
+                        self.literal(">")
                         self.whitespace()
-                        with self.choice():
-                            with self.case():
-                                with self.repeat(min=1):
-                                    self.range("\"", "'", "=", "<", ">", "`", "\t", " ", "\n", "\r", invert=True)
-                            with self.case():
-                                self.literal("\"")
-                                with self.repeat(): self.range('"',"\n",  invert=True)
-                                self.literal("\"")
-                            with self.case():
-                                self.literal('\'')
-                                with self.repeat(): self.range("'","\n", invert=True)
-                                self.literal('\'')
-                self.whitespace()
-                self.literal(">")
-                self.whitespace()
+                    with self.case():
+                        self.range("a-z", "A-Z")
+                        with self.repeat():
+                            self.range("a-z", "A-Z", "-", "0-9")
+                        with self.repeat():
+                            self.whitespace(min=1)
+                            self.range("a-z", "A-Z", ":", "_")
+                            with self.repeat(min=1):
+                                self.range("a-z", "A-Z", ":", "_", "0-9", "-")
+                            with self.optional():
+                                self.whitespace()
+                                self.literal("=")
+                                self.whitespace()
+                                with self.choice():
+                                    with self.case():
+                                        with self.repeat(min=1):
+                                            self.range("\"", "'", "=", "<", ">", "`", "\t", " ", "\n", "\r", invert=True)
+                                    with self.case():
+                                        self.literal("\"")
+                                        with self.repeat(): self.range('"',"\n",  invert=True)
+                                        self.literal("\"")
+                                    with self.case():
+                                        self.literal('\'')
+                                        with self.repeat(): self.range("'","\n", invert=True)
+                                        self.literal('\'')
+                        self.whitespace()
+                        self.literal(">", "/>")
+                        self.whitespace()
                 
 
             with self.repeat():
@@ -853,11 +862,11 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                                     self.range("\"", "'", "=", "<", ">", "`", "\t", " ", "\n", "\r", invert=True)
                             with self.case():
                                 self.literal("\"")
-                                with self.repeat(): self.range('"', invert=True)
+                                with self.repeat(): self.range('"', "\n", invert=True)
                                 self.literal("\"")
                             with self.case():
                                 self.literal('\'')
-                                with self.repeat(): self.range("'", invert=True)
+                                with self.repeat(): self.range("'", "\n",invert=True)
                                 self.literal('\'')
                 self.whitespace()
                 self.literal("/>", ">")
@@ -866,27 +875,6 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                 self.range("a-z", "A-Z")
                 with self.repeat():
                     self.range("a-z", "A-Z", "-", "0-9")
-                with self.repeat():
-                    self.whitespace(min=1)
-                    self.range("a-z", "A-Z", ":", "_")
-                    with self.repeat(min=1):
-                        self.range("a-z", "A-Z", ":", "_", "0-9", "-")
-                    with self.optional():
-                        self.whitespace()
-                        self.literal("=")
-                        self.whitespace()
-                        with self.choice():
-                            with self.case():
-                                with self.repeat(min=1):
-                                    self.range("\"", "'", "=", "<", ">", "`", "\t", " ", "\n", "\r", invert=True)
-                            with self.case():
-                                self.literal("\"")
-                                with self.repeat(): self.range('"', invert=True)
-                                self.literal("\"")
-                            with self.case():
-                                self.literal('\'')
-                                with self.repeat(): self.range("'", invert=True)
-                                self.literal('\'')
                 self.whitespace()
                 self.literal(">")
 
