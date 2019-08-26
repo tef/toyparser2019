@@ -624,13 +624,30 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                 self.escaped_text()
             with self.case():
                 with self.capture_node('text'):
+                    with self.repeat(min=1): 
+                        self.literal("_") 
+            with self.case():
+                with self.capture_node('text'):
+                    with self.repeat(min=1): 
+                        self.literal("*") 
+
+            with self.case():
+                with self.capture_node('text'):
                     self.range(" ", "\n", "\\", invert=True)
                     with self.repeat(min=0):
-                        with self.reject():
-                            self.right_flank()
-                        with self.reject():
-                            self.dual_flank()
-                        self.range(" ", "\n", "\\", "<", "`", "&", "*", "[", invert=True)
+                        with self.choice():
+                            with self.case():
+                                self.range(" ", "\n", "\\", "<", "`", "&", "*", "_", "[", invert=True)
+                            with self.case():
+                                with self.reject(offset=-1):
+                                    self.range(unicode_punctuation=True)
+                                with self.reject():
+                                    with self.reject():
+                                        self.left_flank()
+                                    self.right_flank()
+                                with self.repeat(min=1): 
+                                    self.literal("_") 
+
 
     @rule()
     def escaped_text(self):
@@ -808,6 +825,7 @@ _builder = lambda fn:builder.__setitem__(fn.__name__,fn)
 
 def make_para(children):
     operators =[(idx, o[0], o[1], o[2], o[2]) for idx, o in enumerate(children) if isinstance(o, tuple)]
+    active = {k:True for k in range(len(operators))}
 
     left_replacement = {}
     right_replacement = {}
@@ -817,15 +835,15 @@ def make_para(children):
         idx, kind, chr, N, n = operators[op_idx]
         if kind == "right" or kind == "dual":
             left_op = op_idx -1
-            limit = 3 - (N%3)
             while n >0 and left_op >=0:
                 found = False
                 while left_op >= 0:
-                    left_idx, left_kind, left_chr, left_N, left_n = operators[left_op]
-                    if left_chr == chr and left_n > 0 and (kind != "dual" or left_N%3 < limit):
-                        if left_kind == "left" or (left_kind == "dual" and left_N%3 < limit):
-                            found = True
-                            break
+                    if active[left_op]:
+                        left_idx, left_kind, left_chr, left_N, left_n = operators[left_op]
+                        if left_chr == chr and left_n > 0 and (kind != "dual" or  left_N%3 == 0 or N%3 == 0 or (left_N + N)%3 != 0):
+                            if left_kind == "left" or (left_kind == "dual" and( left_N%3 == 0 or N%3 == 0 or (left_N + N)%3 != 0)):
+                                found = True
+                                break
                     left_op -=1
                 if found:
                     if left_n  <= n:
@@ -841,8 +859,12 @@ def make_para(children):
                     if idx not in right_replacement:
                         right_replacement[idx] = []
                     
-                    left_replacement[left_idx].append(left_n)
+                    left_replacement[left_idx].insert(0, left_n)
                     right_replacement[idx].append(left_n)
+
+                    for i in range(left_op+1, op_idx):
+                        active[i] = False
+
                 left_op -= 1
             operators[op_idx] = (idx, kind, chr, N, n)
         op_idx +=1
@@ -854,17 +876,17 @@ def make_para(children):
                 out.append(chr)
             if idx in left_replacement:
                 for c in left_replacement[idx]:
-                    out.append(["<strong><strong>", "<em>", "<strong>", "<em><strong>"][c%4])
+                    if c%4: out.append(["<strong><strong>", "<em>", "<strong>", "<em><strong>"][c%4])
                     for _ in range(c//4):
                         out.append("<strong><strong>")
             children[idx] = "".join(out)
         elif kind == "right":
             out = []
             if idx in right_replacement:
-                for c in reversed(right_replacement[idx]): 
+                for c in right_replacement[idx]: 
                     for _ in range(c//4):
                         out.append("</strong></strong>")
-                    out.append(["</strong></strong>", "</em>", "</strong>", "</strong></em>"][c%4])
+                    if c%4: out.append(["</strong></strong>", "</em>", "</strong>", "</strong></em>"][c%4])
             for _ in range(count):
                 out.append(chr)
             children[idx] = "".join(out)
@@ -874,12 +896,12 @@ def make_para(children):
                 for c in reversed(right_replacement[idx]): 
                     for _ in range(c//4):
                         out.append("</strong></strong>")
-                    out.append(["</strong></strong>", "</em>", "</strong>", "</strong></em>"][c%4])
+                    if c%4: out.append(["</strong></strong>", "</em>", "</strong>", "</strong></em>"][c%4])
             for _ in range(count):
                 out.append(chr)
             if idx in left_replacement:
                 for c in left_replacement[idx]:
-                    out.append(["<strong><strong>", "<em>", "<strong>", "<em><strong>"][c%4])
+                    if c%4: out.append(["<strong><strong>", "<em>", "<strong>", "<em><strong>"][c%4])
                     for _ in range(c//4):
                         out.append("<strong><strong>")
             children[idx] = "".join(out)
@@ -1352,10 +1374,7 @@ for t in tests:
     else:
         failed +=1
         if '<' in markd: continue
-        #if '*' in markd: continue
         if '[' in markd: continue
-        #if '_' in markd: continue
-        #if out.replace('\n','') == t['html'].replace('\n',''): continue
         print(t['example'])
         print(repr(markd))
         print('=', repr(t['html']))

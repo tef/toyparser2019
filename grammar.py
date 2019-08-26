@@ -1395,6 +1395,7 @@ def compile_python(grammar, cython=False):
                 else:
                     raise Exception(name)
 
+            # if idx == 0: raise Exception("empty range", rule.args)
             if not invert:
                 steps.extend((
                     f"else:",
