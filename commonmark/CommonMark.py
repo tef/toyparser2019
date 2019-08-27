@@ -2362,6 +2362,20 @@ if __name__ == "__main__":
                     if name in backrefs:
                         node.children = children[:1] + backrefs[name]
                         node.value = "inline"
+                    else:
+                        node.value = None
+            if "maybe" in (c.name for c in children):
+                new_children = []
+                for c in children:
+                    if c.name != "maybe":
+                        new_children.append(c)
+                    else:
+                        if c.children[0].value is None:
+                            for c2 in c.children[1].children:
+                                new_children.append(c2)
+                        else:
+                            new_children.append(c.children[0])
+                node.children = new_children
 
             return node
 
@@ -2382,7 +2396,7 @@ if __name__ == "__main__":
             print('=', repr(t['html']))
             print('X', repr(out))
             print()
-            walk(out1)
+            # walk(out1)
             print()
     print(count, worked, failed)
 
