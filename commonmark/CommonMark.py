@@ -1041,9 +1041,9 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
     def inline_element(self):
         with self.choice():
             with self.case():
-                self.image_operator()
+                self.image()
             with self.case():
-                self.link_operator()
+                self.inline_link()
             with self.case():
                 self.inline_html()
             with self.case():
@@ -1117,7 +1117,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                     with self.repeat(min=0):
                         with self.choice():
                             with self.case():
-                                self.range(" ", "\n", "\\", "<", "`", "&", "*", "_", "[", "]", invert=True)
+                                self.range(" ", "\n", "\\", "<", "`", "&", "*", "_", "[", "]", "(", ")", "!", invert=True)
                             with self.case():
                                 with self.reject(offset=-1):
                                     self.range(unicode_punctuation=True)
@@ -1128,66 +1128,55 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                                 with self.repeat(min=1): 
                                     self.literal("_") 
     @rule()
-    def image_operator(self):
-        with self.variable('reference') as style, self.capture_node("image", value=style) as cap:
-            self.literal("!")
-            self.literal("[")
-            with self.reject():
-                self.whitespace(newline=True)
-                self.literal("]")
+    def image(self):
+        with self.capture_node('maybe'):
+            with self.parseahead() as end, self.variable('reference') as style, self.capture_node("image", value=style) as cap:
+                self.literal("!")
+                self.literal("[")
                 with self.reject():
-                    self.literal("(")
-            with self.capture_node('link_para'), self.backref() as raw:
-                with self.optional():
+                    self.whitespace(newline=True)
+                    self.literal("]")
                     with self.reject():
-                        self.literal("]")
-
-                    self.inline_element()
-
-                    with self.repeat():
-                        with self.choice():
-                            with self.case():
-                                self.linebreak.inline()
-                            with self.case():
-                                with self.capture_node("whitespace"):
-                                    self.whitespace()
-
+                        self.literal("(")
+                with self.capture_node('link_para'), self.backref() as raw:
+                    with self.optional():
                         with self.reject():
                             self.literal("]")
+
                         self.inline_element()
 
-                with self.capture_node("whitespace"):
-                    self.whitespace()
-            self.literal("]")
+                        with self.repeat():
+                            with self.choice():
+                                with self.case():
+                                    self.linebreak.inline()
+                                with self.case():
+                                    with self.capture_node("whitespace"):
+                                        self.whitespace()
 
-            with self.choice():
-                with self.case():
-                    self.literal("[")
-                    self.whitespace()
-                    with self.capture_node("link_label"):
-                        with self.repeat(min=1), self.choice():
-                            with self.case():
-                                self.literal("\\[", "\\]")
-                            with self.case():
-                                self.range("[", "]", "\n", invert=True)
-                    self.literal("]")
-                    with self.reject(): self.literal("[")
-                    self.set_variable(style, "reference")
-
-                with self.case():
-                    self.literal("(")
-                    with self.choice():
-                        with self.case():
-                            self.whitespace()
-                            self.newline()
-                            self.whitespace()
                             with self.reject():
-                                self.newline()
-                        with self.case(): 
-                            self.whitespace()
-                    self.link_url()
+                                self.literal("]")
+                            self.inline_element()
 
-                    with self.optional():
+                    with self.capture_node("whitespace"):
+                        self.whitespace()
+                self.literal("]")
+
+                with self.choice():
+                    with self.case():
+                        self.literal("[")
+                        self.whitespace()
+                        with self.capture_node("link_label"):
+                            with self.repeat(min=1), self.choice():
+                                with self.case():
+                                    self.literal("\\[", "\\]")
+                                with self.case():
+                                    self.range("[", "]", "\n", invert=True)
+                        self.literal("]")
+                        with self.reject(): self.literal("[")
+                        self.set_variable(style, "reference")
+
+                    with self.case():
+                        self.literal("(")
                         with self.choice():
                             with self.case():
                                 self.whitespace()
@@ -1197,31 +1186,161 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                                     self.newline()
                             with self.case(): 
                                 self.whitespace()
-                        self.link_title()
-                    self.whitespace()
-                    self.literal(")")
-                    self.set_variable(style, "inline")
-                with self.case():
-                    with self.capture_node('text'):
-                        self.literal('[]', '()')
-                    self.set_variable(style, "shortcut")
-                with self.case():
-                    self.set_variable(style, "shortcut")
+                        self.link_url()
+
+                        with self.optional():
+                            with self.choice():
+                                with self.case():
+                                    self.whitespace()
+                                    self.newline()
+                                    self.whitespace()
+                                    with self.reject():
+                                        self.newline()
+                                with self.case(): 
+                                    self.whitespace()
+                            self.link_title()
+                        self.whitespace()
+                        self.literal(")")
+                        self.set_variable(style, "inline")
+                    with self.case():
+                        with self.capture_node('text'):
+                            self.literal('[]', '()')
+                        self.set_variable(style, "shortcut")
+                    with self.case():
+                        self.set_variable(style, "shortcut")
+
+            with self.until(offset=end), self.capture_node('maybe_para'):
+                with self.capture_node('text'):
+                    self.literal("!")
+                self.inline_link_as_para()
 
 
     @rule()
-    def link_operator(self):
-        with self.variable('reference') as style, self.capture_node("link", value=style) as cap:
-            self.literal("[")
-            with self.reject():
-                self.whitespace(newline=True)
-                self.literal("]")
+    def inline_link(self):
+        with self.capture_node('maybe'):
+            with self.parseahead() as end, self.variable('reference') as style, self.capture_node("link", value=style) as cap:
+                self.literal("[")
                 with self.reject():
-                    self.literal("(")
-            with self.capture_node('link_para'), self.backref() as raw:
-                with self.capture_node("whitespace"):
+                    self.whitespace(newline=True)
+                    self.literal("]")
+                    with self.reject():
+                        self.literal("(")
+                with self.capture_node('link_para'), self.backref() as raw:
+                    with self.capture_node("whitespace"):
+                        self.whitespace()
+                    
+                    with self.optional():
+                        with self.reject():
+                            self.literal("]")
+
+                        self.inline_element()
+
+                        with self.repeat():
+                            with self.choice():
+                                with self.case():
+                                    self.linebreak.inline()
+                                with self.case():
+                                    with self.capture_node("whitespace"):
+                                        self.whitespace()
+
+                            with self.reject():
+                                self.literal("]")
+                            self.inline_element()
+
+                    with self.capture_node("whitespace"):
+                        self.whitespace()
+                self.literal("]")
+
+                with self.choice():
+                    with self.case():
+                        self.literal("[")
+                        self.whitespace()
+                        with self.capture_node("link_label"):
+                            with self.repeat(min=1), self.choice():
+                                with self.case():
+                                    self.literal("\\[", "\\]")
+                                with self.case():
+                                    self.range("[", "]", "\n", invert=True)
+                        self.literal("]")
+                        with self.reject(): self.literal("[")
+                        self.set_variable(style, "reference")
+
+                    with self.case():
+                        self.literal("(")
+                        with self.choice():
+                            with self.case():
+                                self.whitespace()
+                                self.newline()
+                                self.whitespace()
+                                with self.reject():
+                                    self.newline()
+                            with self.case(): 
+                                self.whitespace()
+                        self.link_url()
+
+                        with self.optional():
+                            with self.choice():
+                                with self.case():
+                                    self.whitespace()
+                                    self.newline()
+                                    self.whitespace()
+                                    with self.reject():
+                                        self.newline()
+                                with self.case(): 
+                                    self.whitespace()
+                            self.link_title()
+                        self.whitespace()
+                        self.literal(")")
+                        self.set_variable(style, "inline")
+                    with self.case():
+                        with self.capture_node('text'):
+                            self.literal('[]', '()')
+                        self.set_variable(style, "shortcut")
+                    with self.case():
+                        self.set_variable(style, "shortcut")
+
+            with self.until(offset=end), self.capture_node('maybe_para'):
+                self.inline_link_as_para()
+
+
+    @rule()
+    def inline_link_as_para(self):
+        with self.capture_node('text'):
+            self.literal('[')
+
+        with self.capture_node('whitespace'):
+            self.whitespace()
+
+        with self.optional():
+            with self.reject():
+                self.literal("]")
+
+            self.inline_element()
+
+            with self.repeat():
+                with self.choice():
+                    with self.case():
+                        self.linebreak.inline()
+                    with self.case():
+                        with self.capture_node("whitespace"):
+                            self.whitespace()
+
+                with self.reject():
+                    self.literal("]")
+                self.inline_element()
+        with self.capture_node('text'):
+            self.literal(']')
+
+        with self.choice():
+            with self.case():
+                self.end_of_file()
+            with self.case():
+                with self.capture_node('text'):
+                    self.literal('[')
+
+                with self.capture_node('whitespace'):
                     self.whitespace()
-                
+
                 with self.optional():
                     with self.reject():
                         self.literal("]")
@@ -1240,57 +1359,45 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                             self.literal("]")
                         self.inline_element()
 
-                with self.capture_node("whitespace"):
+                    with self.capture_node('whitespace'):
+                        self.whitespace()
+
+                with self.capture_node('text'):
+                    self.literal(']')
+                
+            with self.case():
+                with self.capture_node('text'):
+                    self.literal('(')
+
+                with self.capture_node('whitespace'):
                     self.whitespace()
-            self.literal("]")
 
-            with self.choice():
-                with self.case():
-                    self.literal("[")
-                    self.whitespace()
-                    with self.capture_node("link_label"):
-                        with self.repeat(min=1), self.choice():
-                            with self.case():
-                                self.literal("\\[", "\\]")
-                            with self.case():
-                                self.range("[", "]", "\n", invert=True)
-                    self.literal("]")
-                    with self.reject(): self.literal("[")
-                    self.set_variable(style, "reference")
+                with self.optional():
+                    with self.reject():
+                        self.literal(")")
+                        self.end_of_file()
 
-                with self.case():
-                    self.literal("(")
-                    with self.choice():
-                        with self.case():
-                            self.whitespace()
-                            self.newline()
-                            self.whitespace()
-                            with self.reject():
-                                self.newline()
-                        with self.case(): 
-                            self.whitespace()
-                    self.link_url()
+                    self.inline_element()
 
-                    with self.optional():
+                    with self.repeat():
                         with self.choice():
                             with self.case():
-                                self.whitespace()
-                                self.newline()
-                                self.whitespace()
-                                with self.reject():
-                                    self.newline()
-                            with self.case(): 
-                                self.whitespace()
-                        self.link_title()
-                    self.whitespace()
-                    self.literal(")")
-                    self.set_variable(style, "inline")
-                with self.case():
-                    with self.capture_node('text'):
-                        self.literal('[]', '()')
-                    self.set_variable(style, "shortcut")
-                with self.case():
-                    self.set_variable(style, "shortcut")
+                                self.linebreak.inline()
+                            with self.case():
+                                with self.capture_node("whitespace"):
+                                    self.whitespace()
+
+                        with self.reject():
+                            self.literal(")")
+                            self.end_of_file()
+                        self.inline_element()
+
+                    with self.capture_node('whitespace'):
+                        self.whitespace()
+
+                with self.capture_node('text'):
+                    self.literal(')')
+
 
             
     @rule(inline=True)
@@ -2044,6 +2151,16 @@ def link_name(buf, node, children):
     return "".join(children)
 
 @_builder
+def maybe(buf, node, children):
+    if children[0] is not None:
+        return children[0]
+    return make_para(children[1])
+
+@_builder
+def maybe_para(buf, node, children):
+    return children
+
+@_builder
 def image(buf, node, children):
     if node.value == "inline":
         if len(children) == 3 and children[2]:
@@ -2051,12 +2168,7 @@ def image(buf, node, children):
 
         if len(children) >= 2 and children[1] is not None:
             return f'<img src="{link_encode(children[1])}" alt="{children[0]}" />'
-    elif node.value == "reference":
-        return f"![{children[0]}][{html_escape(children[1])}]"
-    elif node.value == "shortcut":
-        if len(children) > 1:
-            return f"![{children[0]}]{children[1]}"
-        return f"![{children[0]}]"
+    return None
 
 @_builder
 def link(buf, node, children):
@@ -2066,13 +2178,7 @@ def link(buf, node, children):
 
         if len(children) >= 2 and children[1] is not None:
             return f'<a href="{link_encode(children[1])}">{children[0]}</a>'
-
-    elif node.value == "reference":
-        return f"[{children[0]}][{html_escape(children[1])}]"
-    elif node.value == "shortcut":
-        if len(children) > 1:
-            return f"![{children[0]}]{children[1]}"
-        return f"[{children[0]}]"
+    return None
 
 @_builder
 def link_label(buf, node, children):

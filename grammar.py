@@ -1063,13 +1063,13 @@ def compile_python(grammar, cython=False):
             var_name = VarBuilder('value',n=len(values))
             values[rule.key] = var_name
             
-            steps.append(f'{var_name} = {offset_1}')
+            steps.append(f'{var_name} = {offset_0}')
         elif rule.kind == UNTIL:
             value = rule.args['offset']
             value = values.get(value, repr(value))
 
             offset_0 = offset.incr()
-            count = count.inct()
+            count = count.incr()
             steps.append(f"{offset_0} = {offset}")
             steps.append(f"{count} = buf_eof")
             steps.append(f"buf_eof = {value}")
@@ -1758,7 +1758,7 @@ def compile_python(grammar, cython=False):
 
         elif rule.kind == PRINT:
             args = [str(values.get(a, repr(a))) for a in rule.args['args']]
-            steps.append(f"print('print', {', '.join(args)}, 'at' ,{offset},'col', {column}, repr(buf[{offset}:{offset}+15]), {prefix})")
+            steps.append(f"print('print', {', '.join(args)}, 'at' ,{offset},'col', {column}, repr(buf[{offset}:min({offset}+16, buf_eof)]), buf_eof, {prefix})")
         elif rule.kind == TRACE:
             steps.append(f"print('begin trace', 'at' ,{offset}, repr(buf[{offset}:{offset}+5]))")
             steps.append('while True:')
