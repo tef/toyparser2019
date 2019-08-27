@@ -115,8 +115,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
         self.whitespace(min=4, max=4)
         with self.capture_node('indented_code'), self.indented():
 
-            with self.count(columns=True) as w: self.partial_tab()
-            self.capture_value(name='partial_indent', value=w)
+            with self.capture_node('partial_indent'): self.partial_tab()
 
             with self.capture_node('indented_code_line'):
                 self.whitespace()
@@ -138,8 +137,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
 
                     with self.case():
                         self.indent()
-                        with self.count(columns=True) as w: self.partial_tab()
-                        self.capture_value(name='partial_indent', value=w)
+                        with self.capture_node('partial_indent'): self.partial_tab()
 
                         with self.capture_node('indented_code_line'):
                             self.whitespace()
@@ -500,6 +498,41 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
 
 
     ## lnk def
+            
+    @rule(inline=True)
+    def link_url_spaces(self):
+        with self.choice():
+            with self.case():
+                self.literal("<")
+                with self.capture_node("link_url"):
+                    with self.repeat(), self.choice():
+                        with self.case():
+                            self.literal("\\>", "\\>")
+                        with self.case(): self.range(">", "<", "\n", invert=True)
+                self.literal(">")
+                self.whitespace()
+            with self.case():
+                with self.capture_node("link_url"):
+                    with self.reject(): self.literal("<",)
+                    self.balanced_list_url_spaces()
+
+    @rule(inline=True)
+    def balanced_list_url_spaces(self):
+        with self.repeat():
+            with self.repeat():
+                with self.choice():
+                    with self.case():
+                        self.literal("\\(", "\\)")
+                    with self.case():
+                        self.range(")", "(", "\n",  " ", invert=True)
+                    with self.case():
+                        self.whitespace()
+                        with self.reject():
+                            self.end_of_line()
+            with self.repeat():
+                self.literal("(")
+                self.balanced_list_url_spaces()
+                self.literal(")")
 
     @rule()
     def link_definition(self):
@@ -524,9 +557,11 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                     self.indent(partial=True)
                     self.whitespace()
                     with self.reject(): self.newline()
-                with self.case(): self.whitespace()
-            with self.reject(): self.newline()
-            self.link_url()
+                    self.link_url_spaces()
+                with self.case():
+                    self.whitespace()
+                    with self.reject(): self.newline()
+                    self.link_url()
             with self.optional():
                 with self.choice():
                     with self.case():
@@ -914,11 +949,9 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
             with self.case():
                 with self.repeat(min=1):
                     self.literal('=')
-                self.capture_value(1)
             with self.case():
                 with self.repeat(min=1):
                     self.literal('-')
-                self.capture_value(2)
         self.line_end()
 
     @rule()
@@ -1073,7 +1106,10 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
 
     @rule()
     def link_operator(self):
-        with self.capture_node('link'):
+        with self.variable('link') as kind, self.capture_node(kind):
+            with self.optional():
+                self.literal("!")
+                self.set_variable(kind, "image")
             self.literal("[")
             with self.capture_node('link_para'), self.backref() as raw:
                 with self.optional():
@@ -1110,6 +1146,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                             with self.case():
                                 self.range("[", "]", "\n", invert=True)
                     self.literal("]")
+                    with self.reject(): self.literal("[")
 
                 with self.case():
                     self.literal("(")
@@ -1542,8 +1579,9 @@ import html
 import html.entities
 import urllib.parse 
 
-def percent_encode(text):
-    return urllib.parse.quote(text, safe="/:?=&+*;@,/.()#")
+def link_encode(text):
+    text = urllib.parse.quote(text, safe="/:?=&+*;@,.()#")
+    return text
 
 def html_escape(text):
     return text.replace("&", "&amp;").replace("\"", "&quot;").replace(">", "&gt;").replace("<","&lt;").replace("\x00", "\uFFFD")
@@ -1724,7 +1762,7 @@ def indented_code(buf, node, children):
 
 @_builder
 def partial_indent(buf, node, children):
-    return " "*node.value
+    return " "*(node.end_column-node.start_column)
 
 @_builder
 def indented_code_line(buf, node, children):
@@ -1820,12 +1858,12 @@ def raw(buf, node, children):
 @_builder
 def auto_link(buf, node, children): 
     text = buf[node.start:node.end]
-    return f'<a href="{percent_encode(html_escape(text))}">{html_escape(text)}</a>'
+    return f'<a href="{link_encode(text)}">{html_escape(text)}</a>'
 
 @_builder
 def mailto_auto_link(buf, node, children): 
     text = buf[node.start:node.end]
-    return f'<a href="mailto:{percent_encode(html_escape(text))}">{html_escape(text)}</a>'
+    return f'<a href="mailto:{link_encode(text)}">{html_escape(text)}</a>'
 
 @_builder
 def link_def(buf, node, children):
@@ -1836,12 +1874,21 @@ def link_name(buf, node, children):
     return buf[node.start:node.end]
 
 @_builder
-def link(buf, node, children):
+def image(buf, node, children):
     if len(children) == 3 and children[2]:
-        return f'<a href="{percent_encode(html_escape(children[1]))}" title="{html_escape(children[2])}">{children[0]}</a>'
+        return f'<img src="{link_encode(children[1])}" alt="{children[0]}" title="{html_escape(children[2])}" />'
 
     if len(children) >= 2 and children[1] is not None:
-        return f'<a href="{percent_encode(html_escape(children[1]))}">{children[0]}</a>'
+        return f'<img src="{link_encode(children[1])}" alt="{children[0]}" />'
+
+    return f"![{children[0]}]"
+@_builder
+def link(buf, node, children):
+    if len(children) == 3 and children[2]:
+        return f'<a href="{link_encode(children[1])}" title="{html_escape(children[2])}">{children[0]}</a>'
+
+    if len(children) >= 2 and children[1] is not None:
+        return f'<a href="{link_encode(children[1])}">{children[0]}</a>'
 
     return f"[{children[0]}]"
 
@@ -1970,7 +2017,7 @@ if __name__ == "__main__":
                     node.value = backrefs[name]
                 else:
                     node.value = None
-            if node.name == "link":
+            if node.name == "link" or node.name == "image":
                 if len(children) > 1 and children[1].name == "link_label" and children[1].value is not None:
                     node.children = children[:1] + children[1].value
             return node

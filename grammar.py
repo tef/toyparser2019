@@ -279,6 +279,7 @@ LITERAL = 'literal'
 RANGE = 'range'
 SEQUENCE = 'seq'
 CAPTURE = 'capture'
+REPARSE = 'reparse'
 BACKREF = 'backref'
 COLUMN = 'column'
 CHOICE = 'choice'
@@ -578,6 +579,15 @@ class FunctionBuilder:
         rules = self.rules
         self.rules = []
         node = GrammarNode(VARIABLE, args=dict(value=value), rules=self.rules)
+        yield node.key
+        rules.append(node)
+        self.rules = rules
+    @contextmanager
+    def reparse(self, value):
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
+        rules = self.rules
+        self.rules = []
+        node = GrammarNode(VARIABLE, args=dict(node=value), rules=self.rules)
         yield node.key
         rules.append(node)
         self.rules = rules
@@ -908,7 +918,7 @@ def compile_python(grammar, cython=False):
 
             steps.extend((
                 # f"print(len(buf), {offset}, {offset_0}, {children})",
-                f"{value} = {node}({name}, {offset}, {offset_0}, {children_0}, {column}, {column_0}, {captured_value})",
+                f"{value} = {node}({name}, {offset}, {offset_0}, {column}, {column_0}, {children_0}, {captured_value})",
                 f"{children}.append({value})",
             ))
             steps.append(f"{offset} = {offset_0}")
@@ -1103,6 +1113,25 @@ def compile_python(grammar, cython=False):
             value = values.get(value, repr(value))
 
             steps.append(f"{var} = {value}")
+
+        elif rule.kind == REPARSE:
+            node = values[rule.arg['node']]
+            offset_0 = offset.incr()
+            count_0 = count.incr()
+            steps.append(f"{count} = buf_eof")
+            steps.append(f"{offset_0} = {node}.start")
+            steps.append(f"buf_eof = {node}.end")
+
+            if not rule.rules:
+                raise Exception('empty rules')
+            steps.append(f"while True: # start backref")
+            build_subrules(rule.rules, steps.add_indent(), offset_0, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children, count_0, values)
+            steps.append(f"    break")
+            steps.append(f"buf_eof = {count}")
+            steps.append(f"if {offset_0} == -1:")
+            steps.append(f"    {offset} = -1")
+            steps.append(f"    break")
+
 
         elif rule.kind == VARIABLE:
             value = VarBuilder('value', n=len(values))
@@ -1721,10 +1750,12 @@ def compile_python(grammar, cython=False):
     old_output = output
     parse_node = (
         f"class Node:",
-        f"    def __init__(self, name, start, end, children, value):",
+        f"    def __init__(self, name, start, end, start_column, end_column, children, value):",
         f"        self.name = name",
         f"        self.start = start",
         f"        self.end = end",
+        f"        self.start_column = start_column",
+        f"        self.end_column = end_column",
         f"        self.children = children if children is not None else ()",
         f"        self.value = value",
         f"    def __str__(self):",
