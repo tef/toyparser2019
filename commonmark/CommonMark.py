@@ -1165,11 +1165,27 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
 
                     with self.case():
                         self.literal("(")
-                        self.whitespace()
+                        with self.choice():
+                            with self.case():
+                                self.whitespace()
+                                self.newline()
+                                self.whitespace()
+                                with self.reject():
+                                    self.newline()
+                            with self.case(): 
+                                self.whitespace()
                         self.link_url()
 
                         with self.optional():
-                            self.whitespace()
+                            with self.choice():
+                                with self.case():
+                                    self.whitespace()
+                                    self.newline()
+                                    self.whitespace()
+                                    with self.reject():
+                                        self.newline()
+                                with self.case(): 
+                                    self.whitespace()
                             self.link_title()
                         self.whitespace()
                         self.literal(")")
@@ -1660,6 +1676,8 @@ import html.entities
 import urllib.parse 
 
 def link_encode(text):
+    if '%' in text and ' ' not in text:
+        text = urllib.parse.unquote(text)
     text = urllib.parse.quote(text, safe="/:?=&+*;@,.()#")
     return text
 
