@@ -1351,18 +1351,7 @@ def _build(unicodedata):
                         offset_1 = offset_2
                         column_0 = column_1
 
-                        offset_2 = offset_1
-                        children_2 = []
-                        while True: # start capture
-                            children_2.append(self.Node('value', offset_2, offset_2, (), value_0))
-
-                            break
-                        if offset_2 == -1:
-                            offset_1 = -1
-                            break
-                        value_1 = self.Node('partial_indent', offset_1, offset_2, children_2, None)
-                        children_1.append(value_1)
-                        offset_1 = offset_2
+                        children_1.append(self.Node('partial_indent', offset_1, offset_1, (), value_0))
 
                         offset_2 = offset_1
                         children_2 = []
@@ -1430,8 +1419,8 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_2 = self.Node('indented_code_line', offset_1, offset_2, children_2, None)
-                        children_1.append(value_2)
+                        value_1 = self.Node('indented_code_line', offset_1, offset_2, children_2, None)
+                        children_1.append(value_1)
                         offset_1 = offset_2
 
                         if offset_1 < buf_eof:
@@ -1515,8 +1504,8 @@ def _build(unicodedata):
                                                 if offset_5 == -1:
                                                     offset_4 = -1
                                                     break
-                                                value_3 = self.Node('indented_code_line', offset_4, offset_5, children_5, None)
-                                                children_4.append(value_3)
+                                                value_2 = self.Node('indented_code_line', offset_4, offset_5, children_5, None)
+                                                children_4.append(value_2)
                                                 offset_4 = offset_5
 
                                                 if offset_4 < buf_eof:
@@ -1661,22 +1650,11 @@ def _build(unicodedata):
                                             break
                                         if offset_4 == -1:
                                             offset_3 = -1; break
-                                        value_4 = column_3 - column_2
+                                        value_3 = column_3 - column_2
                                         offset_3 = offset_4
                                         column_2 = column_3
 
-                                        offset_4 = offset_3
-                                        children_4 = []
-                                        while True: # start capture
-                                            children_4.append(self.Node('value', offset_4, offset_4, (), value_4))
-
-                                            break
-                                        if offset_4 == -1:
-                                            offset_3 = -1
-                                            break
-                                        value_5 = self.Node('partial_indent', offset_3, offset_4, children_4, None)
-                                        children_3.append(value_5)
-                                        offset_3 = offset_4
+                                        children_3.append(self.Node('partial_indent', offset_3, offset_3, (), value_3))
 
                                         offset_4 = offset_3
                                         children_4 = []
@@ -1744,8 +1722,8 @@ def _build(unicodedata):
                                         if offset_4 == -1:
                                             offset_3 = -1
                                             break
-                                        value_6 = self.Node('indented_code_line', offset_3, offset_4, children_4, None)
-                                        children_3.append(value_6)
+                                        value_4 = self.Node('indented_code_line', offset_3, offset_4, children_4, None)
+                                        children_3.append(value_4)
                                         offset_3 = offset_4
 
                                         if offset_3 < buf_eof:
@@ -1799,8 +1777,8 @@ def _build(unicodedata):
                 if offset_1 == -1:
                     offset_0 = -1
                     break
-                value_7 = self.Node('indented_code', offset_0, offset_1, children_1, None)
-                children_0.append(value_7)
+                value_5 = self.Node('indented_code', offset_0, offset_1, children_1, None)
+                children_0.append(value_5)
                 offset_0 = offset_1
 
 

@@ -116,7 +116,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
         with self.capture_node('indented_code'), self.indented():
 
             with self.count(columns=True) as w: self.partial_tab()
-            with self.capture_node('partial_indent'): self.capture_value(w)
+            self.capture_value(name='partial_indent', value=w)
 
             with self.capture_node('indented_code_line'):
                 self.whitespace()
@@ -139,7 +139,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                     with self.case():
                         self.indent()
                         with self.count(columns=True) as w: self.partial_tab()
-                        with self.capture_node('partial_indent'): self.capture_value(w)
+                        self.capture_value(name='partial_indent', value=w)
 
                         with self.capture_node('indented_code_line'):
                             self.whitespace()
@@ -1724,8 +1724,7 @@ def indented_code(buf, node, children):
 
 @_builder
 def partial_indent(buf, node, children):
-    width = children[0]
-    return " "*width
+    return " "*node.value
 
 @_builder
 def indented_code_line(buf, node, children):
