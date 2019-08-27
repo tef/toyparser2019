@@ -1208,9 +1208,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                         self.set_variable(style, "shortcut")
 
             with self.until(offset=end), self.capture_node('maybe_para'):
-                with self.capture_node('text'):
-                    self.literal("!")
-                self.inline_link_as_para()
+                self.inline_image_as_para()
 
 
     @rule()
@@ -1260,9 +1258,22 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                                 with self.case():
                                     self.range("[", "]", "\n", invert=True)
                         self.literal("]")
-                        with self.reject(): self.literal("[")
-                        self.set_variable(style, "reference")
-
+                        with self.choice():
+                            with self.case():
+                                with self.repeat(min=1):
+                                    self.literal("[")
+                                    self.whitespace()
+                                    with self.capture_node("link_label"):
+                                        with self.repeat(min=1), self.choice():
+                                            with self.case():
+                                                self.literal("\\[", "\\]")
+                                            with self.case():
+                                                self.range("[", "]", "\n", invert=True)
+                                    self.literal("]")
+                                
+                                self.set_variable(style, "multiple")
+                            with self.case():
+                                self.set_variable(style, "reference")
                     with self.case():
                         self.literal("(")
                         with self.choice():
@@ -1302,9 +1313,9 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
 
 
     @rule()
-    def inline_link_as_para(self):
+    def inline_image_as_para(self):
         with self.capture_node('operator'):
-            self.literal('[')
+            self.literal('![')
 
         with self.capture_node('whitespace'):
             self.whitespace()
@@ -1362,6 +1373,102 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
 
                 with self.capture_node('operator'):
                     self.literal(']')
+                
+            with self.case():
+                with self.capture_node('operator'):
+                    self.literal('(')
+
+                with self.capture_node('whitespace'):
+                    self.whitespace()
+
+                with self.optional():
+                    with self.reject():
+                        self.literal(")")
+                        self.end_of_file()
+
+                    self.inline_element()
+
+                    with self.repeat():
+                        with self.choice():
+                            with self.case():
+                                self.linebreak.inline()
+                            with self.case():
+                                with self.capture_node("whitespace"):
+                                    self.whitespace()
+
+                        with self.reject():
+                            self.literal(")")
+                            self.end_of_file()
+                        self.inline_element()
+
+                    with self.capture_node('whitespace'):
+                        self.whitespace()
+
+                with self.capture_node('operator'):
+                    self.literal(')')
+
+    @rule()
+    def inline_link_as_para(self):
+        with self.capture_node('operator'):
+            self.literal('[')
+
+        with self.capture_node('whitespace'):
+            self.whitespace()
+
+        with self.optional():
+            with self.reject():
+                self.literal("]")
+
+            self.inline_element()
+
+            with self.repeat():
+                with self.choice():
+                    with self.case():
+                        self.linebreak.inline()
+                    with self.case():
+                        with self.capture_node("whitespace"):
+                            self.whitespace()
+
+                with self.reject():
+                    self.literal("]")
+                self.inline_element()
+        with self.capture_node('operator'):
+            self.literal(']')
+
+        with self.choice():
+            with self.case():
+                self.end_of_file()
+            with self.case():
+                with self.repeat(min=1):
+                    with self.capture_node('operator'):
+                        self.literal('[')
+
+                    with self.capture_node('whitespace'):
+                        self.whitespace()
+
+                    with self.optional():
+                        with self.reject():
+                            self.literal("]")
+
+                        self.inline_element()
+
+                        with self.repeat():
+                            with self.choice():
+                                with self.case():
+                                    self.linebreak.inline()
+                                with self.case():
+                                    with self.capture_node("whitespace"):
+                                        self.whitespace()
+
+                            with self.reject():
+                                self.literal("]")
+                            self.inline_element()
+
+                        with self.capture_node('whitespace'):
+                            self.whitespace()
+
+                    with self.capture_node('operator'):
+                        self.literal(']')
                 
             with self.case():
                 with self.capture_node('operator'):
@@ -1891,20 +1998,38 @@ def parse(buf):
     def fill_backrefs(buf, node, children):
         if (node.name == "link" or node.name == "image"):
             name = None
+            if node.value == "multiple":
+                for child_node in children[1:]:
+                    name = buf[child_node.start:child_node.end]
+                    name = " ".join(name.strip().casefold().split())
+                    if name in backrefs:
+                        child_node.value = backrefs[name]
+                    else:
+                        child_node.value = None
+                if all(c.value is None for c in children[1:]):
+                    node.value = None
+
             if node.value == "reference":
                 child_node = children[1]
                 name = buf[child_node.start:child_node.end]
-                name = " ".join(name.strip().casefold().split())
-            elif node.value == "shortcut":
-                child_node = children[0]
-                name = buf[child_node.start:child_node.end]
-            if name is not None:
                 name = " ".join(name.strip().casefold().split())
                 if name in backrefs:
                     node.children = children[:1] + backrefs[name]
                     node.value = "inline"
                 else:
                     node.value = None
+            elif node.value == "shortcut":
+                child_node = children[0]
+                name = buf[child_node.start:child_node.end]
+                name = " ".join(name.strip().casefold().split())
+                if name in backrefs:
+                    node.children = children[:1] + backrefs[name]
+                    node.value = "inline"
+                else:
+                    node.value = None
+        if node.name == "maybe" and children[0].value == "multiple":
+            children[0].value = None
+            print('welp')
         return node
     out = out.build(buf, fill_backrefs)
 
