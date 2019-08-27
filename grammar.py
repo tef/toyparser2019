@@ -883,14 +883,16 @@ def compile_python(grammar, cython=False):
         elif rule.kind == CAPTURE:
             children_0 = children.incr()
             offset_0 = offset.incr()
+            column_0 = column.incr()
             steps.append(f"{offset_0} = {offset}")
+            steps.append(f"{column_0} = {column}")
             if rule.rules:
                 if rule.args['nested']:
                     steps.append(f"{children_0} = []")
                 else:
                     steps.append(f"{children_0} = None")
                 steps.append(f"while True: # start capture")
-                build_subrules(rule.rules, steps.add_indent(), offset_0, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children_0, count, values)
+                build_subrules(rule.rules, steps.add_indent(), offset_0, column_0, indent_column, partial_tab_offset, partial_tab_width, prefix, children_0, count, values)
                 steps.append(f"    break")
                 steps.append(f"if {offset_0} == -1:")
                 steps.append(f"    {offset} = -1")
@@ -906,10 +908,11 @@ def compile_python(grammar, cython=False):
 
             steps.extend((
                 # f"print(len(buf), {offset}, {offset_0}, {children})",
-                f"{value} = {node}({name}, {offset}, {offset_0}, {children_0}, {captured_value})",
+                f"{value} = {node}({name}, {offset}, {offset_0}, {children_0}, {column}, {column_0}, {captured_value})",
                 f"{children}.append({value})",
             ))
             steps.append(f"{offset} = {offset_0}")
+            steps.append(f"{column} = {column_0}")
 
         elif rule.kind == CHOICE:
             children_0 = children.incr()
@@ -1124,7 +1127,7 @@ def compile_python(grammar, cython=False):
             value = values.get(value, repr(value))
 
             steps.extend((
-                f"{children}.append({node}({repr(name)}, {offset}, {offset}, (), {value}))",
+                f"{children}.append({node}({repr(name)}, {offset}, {offset}, {column}, {column}, (), {value}))",
             ))
 
         elif rule.kind == SET_LINE_PREFIX:
@@ -1775,7 +1778,7 @@ def compile_python(grammar, cython=False):
         f"    prefix, children = [], []",
         f"    new_offset, column, indent_column, partial_tab_offset, partial_tab_width = self.parse_{start_rule}(buf, start, end, offset, column, indent_column, prefix, children, 0, 0)",
         f"    if children and new_offset == end:",
-        f"         if builder is None: return {node}({repr(grammar.capture)}, offset, new_offset, children, None)",
+        f"         if builder is None: return {node}({repr(grammar.capture)}, offset, new_offset, 0, column, children, None)",
         f"         return children[-1].build(buf, builder)",
         f"    print('no', offset, new_offset, end, buf[new_offset:])",
         f"    if err is not None: raise err(buf, new_offset, 'no')",

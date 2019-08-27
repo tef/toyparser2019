@@ -29,7 +29,7 @@ def _build(unicodedata):
             prefix, children = [], []
             new_offset, column, indent_column, partial_tab_offset, partial_tab_width = self.parse_document(buf, start, end, offset, column, indent_column, prefix, children, 0, 0)
             if children and new_offset == end:
-                 if builder is None: return self.Node('document', offset, new_offset, children, None)
+                 if builder is None: return self.Node('document', offset, new_offset, 0, column, children, None)
                  return children[-1].build(buf, builder)
             print('no', offset, new_offset, end, buf[new_offset:])
             if err is not None: raise err(buf, new_offset, 'no')
@@ -268,9 +268,10 @@ def _build(unicodedata):
                     break
 
                 offset_1 = offset_0
-                value_0 = self.Node('empty_line', offset_0, offset_1, children_1, None)
+                value_0 = self.Node('empty_line', offset_0, offset_1, children_1, column_0, column_1, None)
                 children_0.append(value_0)
                 offset_0 = offset_1
+                column_0 = column_1
 
 
                 break
@@ -597,7 +598,7 @@ def _build(unicodedata):
                 while True: # start capture
                     while True: # start choice
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -606,7 +607,7 @@ def _build(unicodedata):
                             count_0 = 0
                             while True:
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -614,7 +615,7 @@ def _build(unicodedata):
                                 while True:
                                     if buf[offset_3:offset_3+1] == '-':
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     else:
                                         offset_3 = -1
                                         break
@@ -627,13 +628,13 @@ def _build(unicodedata):
                                                 if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
-                                                    width  = (self.tabstop-(column_2%self.tabstop))
+                                                    width  = (self.tabstop-(column_3%self.tabstop))
                                                 count_1 += width
-                                                column_2 += width
+                                                column_3 += width
                                                 offset_3 += 1
                                             else:
                                                 count_1 += 1
-                                                column_2 += 1
+                                                column_3 += 1
                                                 offset_3 += 1
                                         else:
                                             break
@@ -645,7 +646,7 @@ def _build(unicodedata):
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 offset_2 = offset_3
-                                column_1 = column_2
+                                column_2 = column_3
                                 indent_column_1 = indent_column_2
                                 partial_tab_offset_1 = partial_tab_offset_2
                                 partial_tab_width_1 = partial_tab_width_2
@@ -660,7 +661,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -669,7 +670,7 @@ def _build(unicodedata):
                             break
                         # end case
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -678,7 +679,7 @@ def _build(unicodedata):
                             count_0 = 0
                             while True:
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -686,7 +687,7 @@ def _build(unicodedata):
                                 while True:
                                     if buf[offset_3:offset_3+1] == '*':
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     else:
                                         offset_3 = -1
                                         break
@@ -699,13 +700,13 @@ def _build(unicodedata):
                                                 if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
-                                                    width  = (self.tabstop-(column_2%self.tabstop))
+                                                    width  = (self.tabstop-(column_3%self.tabstop))
                                                 count_1 += width
-                                                column_2 += width
+                                                column_3 += width
                                                 offset_3 += 1
                                             else:
                                                 count_1 += 1
-                                                column_2 += 1
+                                                column_3 += 1
                                                 offset_3 += 1
                                         else:
                                             break
@@ -717,7 +718,7 @@ def _build(unicodedata):
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 offset_2 = offset_3
-                                column_1 = column_2
+                                column_2 = column_3
                                 indent_column_1 = indent_column_2
                                 partial_tab_offset_1 = partial_tab_offset_2
                                 partial_tab_width_1 = partial_tab_width_2
@@ -732,7 +733,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -741,7 +742,7 @@ def _build(unicodedata):
                             break
                         # end case
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -750,7 +751,7 @@ def _build(unicodedata):
                             count_0 = 0
                             while True:
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -758,7 +759,7 @@ def _build(unicodedata):
                                 while True:
                                     if buf[offset_3:offset_3+1] == '_':
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     else:
                                         offset_3 = -1
                                         break
@@ -771,13 +772,13 @@ def _build(unicodedata):
                                                 if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
-                                                    width  = (self.tabstop-(column_2%self.tabstop))
+                                                    width  = (self.tabstop-(column_3%self.tabstop))
                                                 count_1 += width
-                                                column_2 += width
+                                                column_3 += width
                                                 offset_3 += 1
                                             else:
                                                 count_1 += 1
-                                                column_2 += 1
+                                                column_3 += 1
                                                 offset_3 += 1
                                         else:
                                             break
@@ -789,7 +790,7 @@ def _build(unicodedata):
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 offset_2 = offset_3
-                                column_1 = column_2
+                                column_2 = column_3
                                 indent_column_1 = indent_column_2
                                 partial_tab_offset_1 = partial_tab_offset_2
                                 partial_tab_width_1 = partial_tab_width_2
@@ -804,7 +805,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -821,9 +822,10 @@ def _build(unicodedata):
                 if offset_1 == -1:
                     offset_0 = -1
                     break
-                value_0 = self.Node('thematic_break', offset_0, offset_1, children_1, None)
+                value_0 = self.Node('thematic_break', offset_0, offset_1, children_1, column_0, column_1, None)
                 children_0.append(value_0)
                 offset_0 = offset_1
+                column_0 = column_1
 
                 offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0 = self.parse_line_end(buf, buf_start, buf_eof, offset_0, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0)
                 if offset_0 == -1: break
@@ -868,12 +870,12 @@ def _build(unicodedata):
                     children_1 = []
                     while True: # start capture
                         offset_3 = offset_2
-                        column_1 = column_0
+                        column_2 = column_1
                         while True: # start count
                             count_0 = 0
                             while count_0 < 6:
                                 offset_4 = offset_3
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_1 = indent_column_0
                                 partial_tab_offset_1 = partial_tab_offset_0
                                 partial_tab_width_1 = partial_tab_width_0
@@ -881,7 +883,7 @@ def _build(unicodedata):
                                 while True:
                                     if buf[offset_4:offset_4+1] == '#':
                                         offset_4 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     else:
                                         offset_4 = -1
                                         break
@@ -893,7 +895,7 @@ def _build(unicodedata):
                                 if children_2 is not None and children_2 is not None:
                                     children_1.extend(children_2)
                                 offset_3 = offset_4
-                                column_1 = column_2
+                                column_2 = column_3
                                 indent_column_0 = indent_column_1
                                 partial_tab_offset_0 = partial_tab_offset_1
                                 partial_tab_width_0 = partial_tab_width_1
@@ -909,19 +911,19 @@ def _build(unicodedata):
                             offset_2 = -1; break
                         value_1 = buf[offset_2:offset_3].count('#')
                         offset_2 = offset_3
-                        column_0 = column_1
+                        column_1 = column_2
 
                         value_0 = value_1
 
                         while True: # start choice
                             offset_3 = offset_2
-                            column_1 = column_0
+                            column_2 = column_1
                             indent_column_1 = indent_column_0
                             partial_tab_offset_1 = partial_tab_offset_0
                             partial_tab_width_1 = partial_tab_width_0
                             children_2 = [] if children_1 is not None else None
                             while True: # case
-                                offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_atx_heading_end(buf, buf_start, buf_eof, offset_3, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
+                                offset_3, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_atx_heading_end(buf, buf_start, buf_eof, offset_3, column_2, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                                 if offset_3 == -1: break
 
 
@@ -929,7 +931,7 @@ def _build(unicodedata):
                                 break
                             if offset_3 != -1:
                                 offset_2 = offset_3
-                                column_0 = column_1
+                                column_1 = column_2
                                 indent_column_0 = indent_column_1
                                 partial_tab_offset_0 = partial_tab_offset_1
                                 partial_tab_width_0 = partial_tab_width_1
@@ -938,7 +940,7 @@ def _build(unicodedata):
                                 break
                             # end case
                             offset_3 = offset_2
-                            column_1 = column_0
+                            column_2 = column_1
                             indent_column_1 = indent_column_0
                             partial_tab_offset_1 = partial_tab_offset_0
                             partial_tab_width_1 = partial_tab_width_0
@@ -952,13 +954,13 @@ def _build(unicodedata):
                                             if offset_3 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                                 width = partial_tab_width_1
                                             else:
-                                                width  = (self.tabstop-(column_1%self.tabstop))
+                                                width  = (self.tabstop-(column_2%self.tabstop))
                                             count_0 += width
-                                            column_1 += width
+                                            column_2 += width
                                             offset_3 += 1
                                         else:
                                             count_0 += 1
-                                            column_1 += 1
+                                            column_2 += 1
                                             offset_3 += 1
                                     else:
                                         break
@@ -966,14 +968,14 @@ def _build(unicodedata):
                                     offset_3 = -1
                                     break
 
-                                offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_inline_element(buf, buf_start, buf_eof, offset_3, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
+                                offset_3, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_inline_element(buf, buf_start, buf_eof, offset_3, column_2, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                                 if offset_3 == -1: break
 
 
                                 count_0 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    column_2 = column_1
+                                    column_3 = column_2
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -982,11 +984,11 @@ def _build(unicodedata):
                                         while True: # start reject
                                             children_4 = []
                                             offset_5 = offset_4 + 0
-                                            column_3 = column_2
+                                            column_4 = column_3
                                             indent_column_3 = indent_column_2
                                             partial_tab_offset_3 = partial_tab_offset_2
                                             partial_tab_width_3 = partial_tab_width_2
-                                            offset_5, column_3, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = self.parse_atx_heading_end(buf, buf_start, buf_eof, offset_5, column_3, indent_column_3, prefix_0, children_4, partial_tab_offset_3, partial_tab_width_3)
+                                            offset_5, column_4, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = self.parse_atx_heading_end(buf, buf_start, buf_eof, offset_5, column_4, indent_column_3, prefix_0, children_4, partial_tab_offset_3, partial_tab_width_3)
                                             if offset_5 == -1: break
 
 
@@ -1006,13 +1008,13 @@ def _build(unicodedata):
                                                         if offset_5 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                             width = partial_tab_width_2
                                                         else:
-                                                            width  = (self.tabstop-(column_2%self.tabstop))
+                                                            width  = (self.tabstop-(column_4%self.tabstop))
                                                         count_1 += width
-                                                        column_2 += width
+                                                        column_4 += width
                                                         offset_5 += 1
                                                     else:
                                                         count_1 += 1
-                                                        column_2 += 1
+                                                        column_4 += 1
                                                         offset_5 += 1
                                                 else:
                                                     break
@@ -1021,11 +1023,12 @@ def _build(unicodedata):
                                         if offset_5 == -1:
                                             offset_4 = -1
                                             break
-                                        value_2 = self.Node('whitespace', offset_4, offset_5, children_4, None)
+                                        value_2 = self.Node('whitespace', offset_4, offset_5, children_4, column_3, column_4, None)
                                         children_3.append(value_2)
                                         offset_4 = offset_5
+                                        column_3 = column_4
 
-                                        offset_4, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_inline_element(buf, buf_start, buf_eof, offset_4, column_2, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
+                                        offset_4, column_3, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_inline_element(buf, buf_start, buf_eof, offset_4, column_3, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
                                         if offset_4 == -1: break
 
 
@@ -1036,7 +1039,7 @@ def _build(unicodedata):
                                     if children_3 is not None and children_3 is not None:
                                         children_2.extend(children_3)
                                     offset_3 = offset_4
-                                    column_1 = column_2
+                                    column_2 = column_3
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -1047,7 +1050,7 @@ def _build(unicodedata):
                                 count_0 = 0
                                 while count_0 < 1:
                                     offset_4 = offset_3
-                                    column_2 = column_1
+                                    column_3 = column_2
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -1055,12 +1058,12 @@ def _build(unicodedata):
                                     while True:
                                         if buf[offset_4:offset_4+1] == '\\':
                                             offset_4 += 1
-                                            column_2 += 1
+                                            column_3 += 1
                                         else:
                                             offset_4 = -1
                                             break
 
-                                        children_3.append(self.Node('value', offset_4, offset_4, (), '\\'))
+                                        children_3.append(self.Node('value', offset_4, offset_4, column_3, column_3, (), '\\'))
 
                                         break
                                     if offset_4 == -1:
@@ -1069,7 +1072,7 @@ def _build(unicodedata):
                                     if children_3 is not None and children_3 is not None:
                                         children_2.extend(children_3)
                                     offset_3 = offset_4
-                                    column_1 = column_2
+                                    column_2 = column_3
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -1078,7 +1081,7 @@ def _build(unicodedata):
                                 if offset_3 == -1:
                                     break
 
-                                offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_atx_heading_end(buf, buf_start, buf_eof, offset_3, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
+                                offset_3, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_atx_heading_end(buf, buf_start, buf_eof, offset_3, column_2, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                                 if offset_3 == -1: break
 
 
@@ -1086,7 +1089,7 @@ def _build(unicodedata):
                                 break
                             if offset_3 != -1:
                                 offset_2 = offset_3
-                                column_0 = column_1
+                                column_1 = column_2
                                 indent_column_0 = indent_column_1
                                 partial_tab_offset_0 = partial_tab_offset_1
                                 partial_tab_width_0 = partial_tab_width_1
@@ -1103,9 +1106,10 @@ def _build(unicodedata):
                     if offset_2 == -1:
                         offset_1 = -1
                         break
-                    value_3 = self.Node('atx_heading', offset_1, offset_2, children_1, value_0)
+                    value_3 = self.Node('atx_heading', offset_1, offset_2, children_1, column_0, column_1, value_0)
                     children_0.append(value_3)
                     offset_1 = offset_2
+                    column_0 = column_1
 
                     break
                 if offset_1 == -1:
@@ -1264,7 +1268,7 @@ def _build(unicodedata):
                 offset_1 = offset_0
                 children_1 = []
                 while True: # start capture
-                    count_0 = column_0 - indent_column_0[0]
+                    count_0 = column_1 - indent_column_0[0]
                     # print(count_0, 'indent')
                     def _indent(buf, buf_start, buf_eof, offset, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
                         saw_tab, saw_not_tab = False, False
@@ -1335,23 +1339,23 @@ def _build(unicodedata):
                                 offset = -1
                         return offset, column, indent_column, partial_tab_offset, partial_tab_width
                     prefix_0.append((_indent, _dedent))
-                    indent_column_0 = (column_0, indent_column_0)
+                    indent_column_0 = (column_1, indent_column_0)
                     while True:
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         while True: # start count
                             if offset_2 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                 offset_2 += 1
-                                column_1 += partial_tab_width_0
+                                column_2 += partial_tab_width_0
 
                             break
                         if offset_2 == -1:
                             offset_1 = -1; break
-                        value_0 = column_1 - column_0
+                        value_0 = column_2 - column_1
                         offset_1 = offset_2
-                        column_0 = column_1
+                        column_1 = column_2
 
-                        children_1.append(self.Node('partial_indent', offset_1, offset_1, (), value_0))
+                        children_1.append(self.Node('partial_indent', offset_1, offset_1, column_1, column_1, (), value_0))
 
                         offset_2 = offset_1
                         children_2 = []
@@ -1364,13 +1368,13 @@ def _build(unicodedata):
                                         if offset_2 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                             width = partial_tab_width_0
                                         else:
-                                            width  = (self.tabstop-(column_0%self.tabstop))
+                                            width  = (self.tabstop-(column_2%self.tabstop))
                                         count_0 += width
-                                        column_0 += width
+                                        column_2 += width
                                         offset_2 += 1
                                     else:
                                         count_0 += 1
-                                        column_0 += 1
+                                        column_2 += 1
                                         offset_2 += 1
                                 else:
                                     break
@@ -1378,7 +1382,7 @@ def _build(unicodedata):
                             count_0 = 0
                             while True:
                                 offset_3 = offset_2
-                                column_1 = column_0
+                                column_3 = column_2
                                 indent_column_1 = indent_column_0
                                 partial_tab_offset_1 = partial_tab_offset_0
                                 partial_tab_width_1 = partial_tab_width_0
@@ -1395,7 +1399,7 @@ def _build(unicodedata):
                                         break
                                     else:
                                         offset_3 += 1
-                                        column_1 += 1
+                                        column_3 += 1
 
                                     break
                                 if offset_3 == -1:
@@ -1404,7 +1408,7 @@ def _build(unicodedata):
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 offset_2 = offset_3
-                                column_0 = column_1
+                                column_2 = column_3
                                 indent_column_0 = indent_column_1
                                 partial_tab_offset_0 = partial_tab_offset_1
                                 partial_tab_width_0 = partial_tab_width_1
@@ -1419,15 +1423,16 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_1 = self.Node('indented_code_line', offset_1, offset_2, children_2, None)
+                        value_1 = self.Node('indented_code_line', offset_1, offset_2, children_2, column_1, column_2, None)
                         children_1.append(value_1)
                         offset_1 = offset_2
+                        column_1 = column_2
 
                         if offset_1 < buf_eof:
                             codepoint = buf[offset_1]
                             if codepoint in '\n':
                                 offset_1 +=1
-                                column_0 = 0
+                                column_1 = 0
                                 indent_column_0 = (0, None)
                             else:
                                 offset_1 = -1
@@ -1436,7 +1441,7 @@ def _build(unicodedata):
                         count_0 = 0
                         while True:
                             offset_2 = offset_1
-                            column_1 = column_0
+                            column_2 = column_1
                             indent_column_1 = indent_column_0
                             partial_tab_offset_1 = partial_tab_offset_0
                             partial_tab_width_1 = partial_tab_width_0
@@ -1444,7 +1449,7 @@ def _build(unicodedata):
                             while True:
                                 while True: # start choice
                                     offset_3 = offset_2
-                                    column_2 = column_1
+                                    column_3 = column_2
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -1453,13 +1458,13 @@ def _build(unicodedata):
                                         count_1 = 0
                                         while True:
                                             offset_4 = offset_3
-                                            column_3 = column_2
+                                            column_4 = column_3
                                             indent_column_3 = indent_column_2
                                             partial_tab_offset_3 = partial_tab_offset_2
                                             partial_tab_width_3 = partial_tab_width_2
                                             children_4 = [] if children_3 is not None else None
                                             while True:
-                                                if not (column_3 == indent_column_3[0] == 0):
+                                                if not (column_4 == indent_column_3[0] == 0):
                                                     offset_4 = -1
                                                     break
                                                 # print('start')
@@ -1467,14 +1472,14 @@ def _build(unicodedata):
                                                     # print(indent)
                                                     _children, _prefix = [], []
                                                     offset_5 = offset_4
-                                                    offset_5, column_3, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = indent(buf, buf_start, buf_eof, offset_5, column_3, indent_column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
+                                                    offset_5, column_4, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = indent(buf, buf_start, buf_eof, offset_5, column_4, indent_column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
                                                     if _prefix or _children:
                                                        raise Exception('bar')
                                                     if offset_5 == -1:
                                                         offset_4 = -1
                                                         break
                                                     offset_4 = offset_5
-                                                    indent_column_3 = (column_3, indent_column_3)
+                                                    indent_column_3 = (column_4, indent_column_3)
                                                 if offset_4 == -1:
                                                     break
 
@@ -1489,13 +1494,13 @@ def _build(unicodedata):
                                                                 if offset_5 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                                     width = partial_tab_width_3
                                                                 else:
-                                                                    width  = (self.tabstop-(column_3%self.tabstop))
+                                                                    width  = (self.tabstop-(column_5%self.tabstop))
                                                                 count_2 += width
-                                                                column_3 += width
+                                                                column_5 += width
                                                                 offset_5 += 1
                                                             else:
                                                                 count_2 += 1
-                                                                column_3 += 1
+                                                                column_5 += 1
                                                                 offset_5 += 1
                                                         else:
                                                             break
@@ -1504,15 +1509,16 @@ def _build(unicodedata):
                                                 if offset_5 == -1:
                                                     offset_4 = -1
                                                     break
-                                                value_2 = self.Node('indented_code_line', offset_4, offset_5, children_5, None)
+                                                value_2 = self.Node('indented_code_line', offset_4, offset_5, children_5, column_4, column_5, None)
                                                 children_4.append(value_2)
                                                 offset_4 = offset_5
+                                                column_4 = column_5
 
                                                 if offset_4 < buf_eof:
                                                     codepoint = buf[offset_4]
                                                     if codepoint in '\n':
                                                         offset_4 +=1
-                                                        column_3 = 0
+                                                        column_4 = 0
                                                         indent_column_3 = (0, None)
                                                     else:
                                                         offset_4 = -1
@@ -1528,7 +1534,7 @@ def _build(unicodedata):
                                             if children_4 is not None and children_4 is not None:
                                                 children_3.extend(children_4)
                                             offset_3 = offset_4
-                                            column_2 = column_3
+                                            column_3 = column_4
                                             indent_column_2 = indent_column_3
                                             partial_tab_offset_2 = partial_tab_offset_3
                                             partial_tab_width_2 = partial_tab_width_3
@@ -1542,11 +1548,11 @@ def _build(unicodedata):
                                         while True: # start lookahed
                                             children_4 = []
                                             offset_4 = offset_3 + 0
-                                            column_3 = column_2
+                                            column_4 = column_3
                                             indent_column_3 = indent_column_2
                                             partial_tab_offset_3 = partial_tab_offset_2
                                             partial_tab_width_3 = partial_tab_width_2
-                                            if not (column_3 == indent_column_3[0] == 0):
+                                            if not (column_4 == indent_column_3[0] == 0):
                                                 offset_4 = -1
                                                 break
                                             # print('start')
@@ -1554,14 +1560,14 @@ def _build(unicodedata):
                                                 # print(indent)
                                                 _children, _prefix = [], []
                                                 offset_5 = offset_4
-                                                offset_5, column_3, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = indent(buf, buf_start, buf_eof, offset_5, column_3, indent_column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
+                                                offset_5, column_4, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = indent(buf, buf_start, buf_eof, offset_5, column_4, indent_column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
                                                 if _prefix or _children:
                                                    raise Exception('bar')
                                                 if offset_5 == -1:
                                                     offset_4 = -1
                                                     break
                                                 offset_4 = offset_5
-                                                indent_column_3 = (column_3, indent_column_3)
+                                                indent_column_3 = (column_4, indent_column_3)
                                             if offset_4 == -1:
                                                 break
 
@@ -1573,13 +1579,13 @@ def _build(unicodedata):
                                                         if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                             width = partial_tab_width_3
                                                         else:
-                                                            width  = (self.tabstop-(column_3%self.tabstop))
+                                                            width  = (self.tabstop-(column_4%self.tabstop))
                                                         count_1 += width
-                                                        column_3 += width
+                                                        column_4 += width
                                                         offset_4 += 1
                                                     else:
                                                         count_1 += 1
-                                                        column_3 += 1
+                                                        column_4 += 1
                                                         offset_4 += 1
                                                 else:
                                                     break
@@ -1595,7 +1601,7 @@ def _build(unicodedata):
                                                 break
                                             else:
                                                 offset_4 += 1
-                                                column_3 += 1
+                                                column_4 += 1
 
                                             break
                                         if offset_4 == -1:
@@ -1606,7 +1612,7 @@ def _build(unicodedata):
                                         break
                                     if offset_3 != -1:
                                         offset_2 = offset_3
-                                        column_1 = column_2
+                                        column_2 = column_3
                                         indent_column_1 = indent_column_2
                                         partial_tab_offset_1 = partial_tab_offset_2
                                         partial_tab_width_1 = partial_tab_width_2
@@ -1615,13 +1621,13 @@ def _build(unicodedata):
                                         break
                                     # end case
                                     offset_3 = offset_2
-                                    column_2 = column_1
+                                    column_3 = column_2
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
                                     children_3 = [] if children_2 is not None else None
                                     while True: # case
-                                        if not (column_2 == indent_column_2[0] == 0):
+                                        if not (column_3 == indent_column_2[0] == 0):
                                             offset_3 = -1
                                             break
                                         # print('start')
@@ -1629,32 +1635,32 @@ def _build(unicodedata):
                                             # print(indent)
                                             _children, _prefix = [], []
                                             offset_4 = offset_3
-                                            offset_4, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = indent(buf, buf_start, buf_eof, offset_4, column_2, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
+                                            offset_4, column_3, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = indent(buf, buf_start, buf_eof, offset_4, column_3, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
                                             if _prefix or _children:
                                                raise Exception('bar')
                                             if offset_4 == -1:
                                                 offset_3 = -1
                                                 break
                                             offset_3 = offset_4
-                                            indent_column_2 = (column_2, indent_column_2)
+                                            indent_column_2 = (column_3, indent_column_2)
                                         if offset_3 == -1:
                                             break
 
                                         offset_4 = offset_3
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         while True: # start count
                                             if offset_4 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 offset_4 += 1
-                                                column_3 += partial_tab_width_2
+                                                column_4 += partial_tab_width_2
 
                                             break
                                         if offset_4 == -1:
                                             offset_3 = -1; break
-                                        value_3 = column_3 - column_2
+                                        value_3 = column_4 - column_3
                                         offset_3 = offset_4
-                                        column_2 = column_3
+                                        column_3 = column_4
 
-                                        children_3.append(self.Node('partial_indent', offset_3, offset_3, (), value_3))
+                                        children_3.append(self.Node('partial_indent', offset_3, offset_3, column_3, column_3, (), value_3))
 
                                         offset_4 = offset_3
                                         children_4 = []
@@ -1667,13 +1673,13 @@ def _build(unicodedata):
                                                         if offset_4 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                             width = partial_tab_width_2
                                                         else:
-                                                            width  = (self.tabstop-(column_2%self.tabstop))
+                                                            width  = (self.tabstop-(column_4%self.tabstop))
                                                         count_1 += width
-                                                        column_2 += width
+                                                        column_4 += width
                                                         offset_4 += 1
                                                     else:
                                                         count_1 += 1
-                                                        column_2 += 1
+                                                        column_4 += 1
                                                         offset_4 += 1
                                                 else:
                                                     break
@@ -1681,7 +1687,7 @@ def _build(unicodedata):
                                             count_1 = 0
                                             while True:
                                                 offset_5 = offset_4
-                                                column_3 = column_2
+                                                column_5 = column_4
                                                 indent_column_3 = indent_column_2
                                                 partial_tab_offset_3 = partial_tab_offset_2
                                                 partial_tab_width_3 = partial_tab_width_2
@@ -1698,7 +1704,7 @@ def _build(unicodedata):
                                                         break
                                                     else:
                                                         offset_5 += 1
-                                                        column_3 += 1
+                                                        column_5 += 1
 
                                                     break
                                                 if offset_5 == -1:
@@ -1707,7 +1713,7 @@ def _build(unicodedata):
                                                 if children_5 is not None and children_5 is not None:
                                                     children_4.extend(children_5)
                                                 offset_4 = offset_5
-                                                column_2 = column_3
+                                                column_4 = column_5
                                                 indent_column_2 = indent_column_3
                                                 partial_tab_offset_2 = partial_tab_offset_3
                                                 partial_tab_width_2 = partial_tab_width_3
@@ -1722,15 +1728,16 @@ def _build(unicodedata):
                                         if offset_4 == -1:
                                             offset_3 = -1
                                             break
-                                        value_4 = self.Node('indented_code_line', offset_3, offset_4, children_4, None)
+                                        value_4 = self.Node('indented_code_line', offset_3, offset_4, children_4, column_3, column_4, None)
                                         children_3.append(value_4)
                                         offset_3 = offset_4
+                                        column_3 = column_4
 
                                         if offset_3 < buf_eof:
                                             codepoint = buf[offset_3]
                                             if codepoint in '\n':
                                                 offset_3 +=1
-                                                column_2 = 0
+                                                column_3 = 0
                                                 indent_column_2 = (0, None)
                                             else:
                                                 offset_3 = -1
@@ -1740,7 +1747,7 @@ def _build(unicodedata):
                                         break
                                     if offset_3 != -1:
                                         offset_2 = offset_3
-                                        column_1 = column_2
+                                        column_2 = column_3
                                         indent_column_1 = indent_column_2
                                         partial_tab_offset_1 = partial_tab_offset_2
                                         partial_tab_width_1 = partial_tab_width_2
@@ -1760,7 +1767,7 @@ def _build(unicodedata):
                             if children_2 is not None and children_2 is not None:
                                 children_1.extend(children_2)
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -1777,9 +1784,10 @@ def _build(unicodedata):
                 if offset_1 == -1:
                     offset_0 = -1
                     break
-                value_5 = self.Node('indented_code', offset_0, offset_1, children_1, None)
+                value_5 = self.Node('indented_code', offset_0, offset_1, children_1, column_0, column_1, None)
                 children_0.append(value_5)
                 offset_0 = offset_1
+                column_0 = column_1
 
 
                 break
@@ -1917,12 +1925,12 @@ def _build(unicodedata):
                 children_1 = []
                 while True: # start capture
                     offset_2 = offset_1
-                    column_1 = column_0
+                    column_2 = column_1
                     while True: # start count
                         count_0 = 0
                         while True:
                             offset_3 = offset_2
-                            column_2 = column_1
+                            column_3 = column_2
                             indent_column_1 = indent_column_0
                             partial_tab_offset_1 = partial_tab_offset_0
                             partial_tab_width_1 = partial_tab_width_0
@@ -1930,7 +1938,7 @@ def _build(unicodedata):
                             while True:
                                 if buf[offset_3:offset_3+1] == '`':
                                     offset_3 += 1
-                                    column_2 += 1
+                                    column_3 += 1
                                 else:
                                     offset_3 = -1
                                     break
@@ -1942,7 +1950,7 @@ def _build(unicodedata):
                             if children_2 is not None and children_2 is not None:
                                 children_1.extend(children_2)
                             offset_2 = offset_3
-                            column_1 = column_2
+                            column_2 = column_3
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -1958,7 +1966,7 @@ def _build(unicodedata):
                         offset_1 = -1; break
                     value_1 = buf[offset_1:offset_2].count('`')
                     offset_1 = offset_2
-                    column_0 = column_1
+                    column_1 = column_2
 
                     offset_2 = offset_1
                     children_2 = []
@@ -1966,7 +1974,7 @@ def _build(unicodedata):
                         count_0 = 0
                         while True:
                             offset_3 = offset_2
-                            column_1 = column_0
+                            column_3 = column_2
                             indent_column_1 = indent_column_0
                             partial_tab_offset_1 = partial_tab_offset_0
                             partial_tab_width_1 = partial_tab_width_0
@@ -1975,13 +1983,13 @@ def _build(unicodedata):
                                 while True: # start reject
                                     children_4 = []
                                     offset_4 = offset_3 + 0
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
                                     if buf[offset_4:offset_4+1] == '`':
                                         offset_4 += 1
-                                        column_2 += 1
+                                        column_4 += 1
                                     else:
                                         offset_4 = -1
                                         break
@@ -1993,13 +2001,13 @@ def _build(unicodedata):
 
                                 while True: # start choice
                                     offset_4 = offset_3
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
-                                        offset_4, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_escaped_text(buf, buf_start, buf_eof, offset_4, column_2, indent_column_2, prefix_0, children_4, partial_tab_offset_2, partial_tab_width_2)
+                                        offset_4, column_4, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_escaped_text(buf, buf_start, buf_eof, offset_4, column_4, indent_column_2, prefix_0, children_4, partial_tab_offset_2, partial_tab_width_2)
                                         if offset_4 == -1: break
 
 
@@ -2007,7 +2015,7 @@ def _build(unicodedata):
                                         break
                                     if offset_4 != -1:
                                         offset_3 = offset_4
-                                        column_1 = column_2
+                                        column_3 = column_4
                                         indent_column_1 = indent_column_2
                                         partial_tab_offset_1 = partial_tab_offset_2
                                         partial_tab_width_1 = partial_tab_width_2
@@ -2016,13 +2024,13 @@ def _build(unicodedata):
                                         break
                                     # end case
                                     offset_4 = offset_3
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
-                                        offset_4, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_html_entity(buf, buf_start, buf_eof, offset_4, column_2, indent_column_2, prefix_0, children_4, partial_tab_offset_2, partial_tab_width_2)
+                                        offset_4, column_4, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_html_entity(buf, buf_start, buf_eof, offset_4, column_4, indent_column_2, prefix_0, children_4, partial_tab_offset_2, partial_tab_width_2)
                                         if offset_4 == -1: break
 
 
@@ -2030,7 +2038,7 @@ def _build(unicodedata):
                                         break
                                     if offset_4 != -1:
                                         offset_3 = offset_4
-                                        column_1 = column_2
+                                        column_3 = column_4
                                         indent_column_1 = indent_column_2
                                         partial_tab_offset_1 = partial_tab_offset_2
                                         partial_tab_width_1 = partial_tab_width_2
@@ -2039,7 +2047,7 @@ def _build(unicodedata):
                                         break
                                     # end case
                                     offset_4 = offset_3
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -2059,12 +2067,12 @@ def _build(unicodedata):
                                                 break
                                             else:
                                                 offset_5 += 1
-                                                column_2 += 1
+                                                column_5 += 1
 
                                             count_1 = 0
                                             while True:
                                                 offset_6 = offset_5
-                                                column_3 = column_2
+                                                column_6 = column_5
                                                 indent_column_3 = indent_column_2
                                                 partial_tab_offset_3 = partial_tab_offset_2
                                                 partial_tab_width_3 = partial_tab_width_2
@@ -2090,7 +2098,7 @@ def _build(unicodedata):
                                                         break
                                                     else:
                                                         offset_6 += 1
-                                                        column_3 += 1
+                                                        column_6 += 1
 
                                                     break
                                                 if offset_6 == -1:
@@ -2099,7 +2107,7 @@ def _build(unicodedata):
                                                 if children_6 is not None and children_6 is not None:
                                                     children_5.extend(children_6)
                                                 offset_5 = offset_6
-                                                column_2 = column_3
+                                                column_5 = column_6
                                                 indent_column_2 = indent_column_3
                                                 partial_tab_offset_2 = partial_tab_offset_3
                                                 partial_tab_width_2 = partial_tab_width_3
@@ -2111,15 +2119,16 @@ def _build(unicodedata):
                                         if offset_5 == -1:
                                             offset_4 = -1
                                             break
-                                        value_2 = self.Node('text', offset_4, offset_5, children_5, None)
+                                        value_2 = self.Node('text', offset_4, offset_5, children_5, column_4, column_5, None)
                                         children_4.append(value_2)
                                         offset_4 = offset_5
+                                        column_4 = column_5
 
 
                                         break
                                     if offset_4 != -1:
                                         offset_3 = offset_4
-                                        column_1 = column_2
+                                        column_3 = column_4
                                         indent_column_1 = indent_column_2
                                         partial_tab_offset_1 = partial_tab_offset_2
                                         partial_tab_width_1 = partial_tab_width_2
@@ -2139,7 +2148,7 @@ def _build(unicodedata):
                             if children_3 is not None and children_3 is not None:
                                 children_2.extend(children_3)
                             offset_2 = offset_3
-                            column_0 = column_1
+                            column_2 = column_3
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -2151,24 +2160,25 @@ def _build(unicodedata):
                     if offset_2 == -1:
                         offset_1 = -1
                         break
-                    value_3 = self.Node('info', offset_1, offset_2, children_2, None)
+                    value_3 = self.Node('info', offset_1, offset_2, children_2, column_1, column_2, None)
                     children_1.append(value_3)
                     offset_1 = offset_2
+                    column_1 = column_2
 
-                    offset_1, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0 = self.parse_line_end(buf, buf_start, buf_eof, offset_1, column_0, indent_column_0, prefix_0, children_1, partial_tab_offset_0, partial_tab_width_0)
+                    offset_1, column_1, indent_column_0, partial_tab_offset_0, partial_tab_width_0 = self.parse_line_end(buf, buf_start, buf_eof, offset_1, column_1, indent_column_0, prefix_0, children_1, partial_tab_offset_0, partial_tab_width_0)
                     if offset_1 == -1: break
 
 
                     count_0 = 0
                     while True:
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
                         children_2 = [] if children_1 is not None else None
                         while True:
-                            if not (column_1 == indent_column_1[0] == 0):
+                            if not (column_2 == indent_column_1[0] == 0):
                                 offset_2 = -1
                                 break
                             # print('start')
@@ -2176,21 +2186,21 @@ def _build(unicodedata):
                                 # print(indent)
                                 _children, _prefix = [], []
                                 offset_3 = offset_2
-                                offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
+                                offset_3, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_2, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
                                 if _prefix or _children:
                                    raise Exception('bar')
                                 if offset_3 == -1:
                                     offset_2 = -1
                                     break
                                 offset_2 = offset_3
-                                indent_column_1 = (column_1, indent_column_1)
+                                indent_column_1 = (column_2, indent_column_1)
                             if offset_2 == -1:
                                 break
 
                             while True: # start reject
                                 children_3 = []
                                 offset_3 = offset_2 + 0
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -2202,20 +2212,20 @@ def _build(unicodedata):
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-(column_3%self.tabstop))
                                             if count_1 + width > 3:
                                                 new_width = 3 - count_1
                                                 count_1 += new_width
-                                                column_2 += new_width
+                                                column_3 += new_width
                                                 partial_tab_offset_2 = offset_3
                                                 partial_tab_width_2 = width - new_width
                                                 break
                                             count_1 += width
-                                            column_2 += width
+                                            column_3 += width
                                             offset_3 += 1
                                         else:
                                             count_1 += 1
-                                            column_2 += 1
+                                            column_3 += 1
                                             offset_3 += 1
                                     else:
                                         break
@@ -2223,7 +2233,7 @@ def _build(unicodedata):
                                 count_1 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    column_3 = column_2
+                                    column_4 = column_3
                                     indent_column_3 = indent_column_2
                                     partial_tab_offset_3 = partial_tab_offset_2
                                     partial_tab_width_3 = partial_tab_width_2
@@ -2231,7 +2241,7 @@ def _build(unicodedata):
                                     while True:
                                         if buf[offset_4:offset_4+1] == '`':
                                             offset_4 += 1
-                                            column_3 += 1
+                                            column_4 += 1
                                         else:
                                             offset_4 = -1
                                             break
@@ -2244,13 +2254,13 @@ def _build(unicodedata):
                                                     if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                         width = partial_tab_width_3
                                                     else:
-                                                        width  = (self.tabstop-(column_3%self.tabstop))
+                                                        width  = (self.tabstop-(column_4%self.tabstop))
                                                     count_2 += width
-                                                    column_3 += width
+                                                    column_4 += width
                                                     offset_4 += 1
                                                 else:
                                                     count_2 += 1
-                                                    column_3 += 1
+                                                    column_4 += 1
                                                     offset_4 += 1
                                             else:
                                                 break
@@ -2262,7 +2272,7 @@ def _build(unicodedata):
                                     if children_4 is not None and children_4 is not None:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
-                                    column_2 = column_3
+                                    column_3 = column_4
                                     indent_column_2 = indent_column_3
                                     partial_tab_offset_2 = partial_tab_offset_3
                                     partial_tab_width_2 = partial_tab_width_3
@@ -2277,7 +2287,7 @@ def _build(unicodedata):
                                     codepoint = buf[offset_3]
                                     if codepoint in '\n':
                                         offset_3 +=1
-                                        column_2 = 0
+                                        column_3 = 0
                                         indent_column_2 = (0, None)
                                     else:
                                         offset_3 = -1
@@ -2296,20 +2306,20 @@ def _build(unicodedata):
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
-                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                            width  = (self.tabstop-(column_2%self.tabstop))
                                         if count_1 + width > value_0:
                                             new_width = value_0 - count_1
                                             count_1 += new_width
-                                            column_1 += new_width
+                                            column_2 += new_width
                                             partial_tab_offset_1 = offset_2
                                             partial_tab_width_1 = width - new_width
                                             break
                                         count_1 += width
-                                        column_1 += width
+                                        column_2 += width
                                         offset_2 += 1
                                     else:
                                         count_1 += 1
-                                        column_1 += 1
+                                        column_2 += 1
                                         offset_2 += 1
                                 else:
                                     break
@@ -2320,7 +2330,7 @@ def _build(unicodedata):
                                 count_1 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -2337,7 +2347,7 @@ def _build(unicodedata):
                                             break
                                         else:
                                             offset_4 += 1
-                                            column_2 += 1
+                                            column_4 += 1
 
                                         break
                                     if offset_4 == -1:
@@ -2346,7 +2356,7 @@ def _build(unicodedata):
                                     if children_4 is not None and children_4 is not None:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
-                                    column_1 = column_2
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -2358,11 +2368,12 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_4 = self.Node('text', offset_2, offset_3, children_3, None)
+                            value_4 = self.Node('text', offset_2, offset_3, children_3, column_2, column_3, None)
                             children_2.append(value_4)
                             offset_2 = offset_3
+                            column_2 = column_3
 
-                            offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_line_end(buf, buf_start, buf_eof, offset_2, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
+                            offset_2, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_line_end(buf, buf_start, buf_eof, offset_2, column_2, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                             if offset_2 == -1: break
 
 
@@ -2373,7 +2384,7 @@ def _build(unicodedata):
                         if children_2 is not None and children_2 is not None:
                             children_1.extend(children_2)
                         offset_1 = offset_2
-                        column_0 = column_1
+                        column_1 = column_2
                         indent_column_0 = indent_column_1
                         partial_tab_offset_0 = partial_tab_offset_1
                         partial_tab_width_0 = partial_tab_width_1
@@ -2383,7 +2394,7 @@ def _build(unicodedata):
 
                     while True: # start choice
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -2392,11 +2403,11 @@ def _build(unicodedata):
                             while True: # start reject
                                 children_3 = []
                                 offset_3 = offset_2 + 0
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
-                                if not (column_2 == indent_column_2[0] == 0):
+                                if not (column_3 == indent_column_2[0] == 0):
                                     offset_3 = -1
                                     break
                                 # print('start')
@@ -2404,14 +2415,14 @@ def _build(unicodedata):
                                     # print(indent)
                                     _children, _prefix = [], []
                                     offset_4 = offset_3
-                                    offset_4, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = indent(buf, buf_start, buf_eof, offset_4, column_2, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
+                                    offset_4, column_3, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = indent(buf, buf_start, buf_eof, offset_4, column_3, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
                                     if _prefix or _children:
                                        raise Exception('bar')
                                     if offset_4 == -1:
                                         offset_3 = -1
                                         break
                                     offset_3 = offset_4
-                                    indent_column_2 = (column_2, indent_column_2)
+                                    indent_column_2 = (column_3, indent_column_2)
                                 if offset_3 == -1:
                                     break
 
@@ -2424,7 +2435,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -2433,7 +2444,7 @@ def _build(unicodedata):
                             break
                         # end case
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -2447,13 +2458,13 @@ def _build(unicodedata):
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
-                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                            width  = (self.tabstop-(column_2%self.tabstop))
                                         count_0 += width
-                                        column_1 += width
+                                        column_2 += width
                                         offset_2 += 1
                                     else:
                                         count_0 += 1
-                                        column_1 += 1
+                                        column_2 += 1
                                         offset_2 += 1
                                 else:
                                     break
@@ -2466,7 +2477,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -2475,13 +2486,13 @@ def _build(unicodedata):
                             break
                         # end case
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
                         children_2 = [] if children_1 is not None else None
                         while True: # case
-                            if not (column_1 == indent_column_1[0] == 0):
+                            if not (column_2 == indent_column_1[0] == 0):
                                 offset_2 = -1
                                 break
                             # print('start')
@@ -2489,14 +2500,14 @@ def _build(unicodedata):
                                 # print(indent)
                                 _children, _prefix = [], []
                                 offset_3 = offset_2
-                                offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
+                                offset_3, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_2, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
                                 if _prefix or _children:
                                    raise Exception('bar')
                                 if offset_3 == -1:
                                     offset_2 = -1
                                     break
                                 offset_2 = offset_3
-                                indent_column_1 = (column_1, indent_column_1)
+                                indent_column_1 = (column_2, indent_column_1)
                             if offset_2 == -1:
                                 break
 
@@ -2508,20 +2519,20 @@ def _build(unicodedata):
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
-                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                            width  = (self.tabstop-(column_2%self.tabstop))
                                         if count_0 + width > 3:
                                             new_width = 3 - count_0
                                             count_0 += new_width
-                                            column_1 += new_width
+                                            column_2 += new_width
                                             partial_tab_offset_1 = offset_2
                                             partial_tab_width_1 = width - new_width
                                             break
                                         count_0 += width
-                                        column_1 += width
+                                        column_2 += width
                                         offset_2 += 1
                                     else:
                                         count_0 += 1
-                                        column_1 += 1
+                                        column_2 += 1
                                         offset_2 += 1
                                 else:
                                     break
@@ -2529,7 +2540,7 @@ def _build(unicodedata):
                             count_0 = 0
                             while True:
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -2543,20 +2554,20 @@ def _build(unicodedata):
                                                 if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
-                                                    width  = (self.tabstop-(column_2%self.tabstop))
+                                                    width  = (self.tabstop-(column_3%self.tabstop))
                                                 count_1 += width
-                                                column_2 += width
+                                                column_3 += width
                                                 offset_3 += 1
                                             else:
                                                 count_1 += 1
-                                                column_2 += 1
+                                                column_3 += 1
                                                 offset_3 += 1
                                         else:
                                             break
 
                                     if buf[offset_3:offset_3+1] == '`':
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     else:
                                         offset_3 = -1
                                         break
@@ -2568,7 +2579,7 @@ def _build(unicodedata):
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 offset_2 = offset_3
-                                column_1 = column_2
+                                column_2 = column_3
                                 indent_column_1 = indent_column_2
                                 partial_tab_offset_1 = partial_tab_offset_2
                                 partial_tab_width_1 = partial_tab_width_2
@@ -2587,18 +2598,18 @@ def _build(unicodedata):
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
-                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                            width  = (self.tabstop-(column_2%self.tabstop))
                                         count_0 += width
-                                        column_1 += width
+                                        column_2 += width
                                         offset_2 += 1
                                     else:
                                         count_0 += 1
-                                        column_1 += 1
+                                        column_2 += 1
                                         offset_2 += 1
                                 else:
                                     break
 
-                            offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_line_end(buf, buf_start, buf_eof, offset_2, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
+                            offset_2, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_line_end(buf, buf_start, buf_eof, offset_2, column_2, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                             if offset_2 == -1: break
 
 
@@ -2606,7 +2617,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -2623,9 +2634,10 @@ def _build(unicodedata):
                 if offset_1 == -1:
                     offset_0 = -1
                     break
-                value_5 = self.Node('fenced_code', offset_0, offset_1, children_1, None)
+                value_5 = self.Node('fenced_code', offset_0, offset_1, children_1, column_0, column_1, None)
                 children_0.append(value_5)
                 offset_0 = offset_1
+                column_0 = column_1
 
 
                 break
@@ -2673,12 +2685,12 @@ def _build(unicodedata):
                 children_1 = []
                 while True: # start capture
                     offset_2 = offset_1
-                    column_1 = column_0
+                    column_2 = column_1
                     while True: # start count
                         count_0 = 0
                         while True:
                             offset_3 = offset_2
-                            column_2 = column_1
+                            column_3 = column_2
                             indent_column_1 = indent_column_0
                             partial_tab_offset_1 = partial_tab_offset_0
                             partial_tab_width_1 = partial_tab_width_0
@@ -2686,7 +2698,7 @@ def _build(unicodedata):
                             while True:
                                 if buf[offset_3:offset_3+1] == '~':
                                     offset_3 += 1
-                                    column_2 += 1
+                                    column_3 += 1
                                 else:
                                     offset_3 = -1
                                     break
@@ -2698,7 +2710,7 @@ def _build(unicodedata):
                             if children_2 is not None and children_2 is not None:
                                 children_1.extend(children_2)
                             offset_2 = offset_3
-                            column_1 = column_2
+                            column_2 = column_3
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -2714,7 +2726,7 @@ def _build(unicodedata):
                         offset_1 = -1; break
                     value_1 = buf[offset_1:offset_2].count('~')
                     offset_1 = offset_2
-                    column_0 = column_1
+                    column_1 = column_2
 
                     offset_2 = offset_1
                     children_2 = []
@@ -2722,7 +2734,7 @@ def _build(unicodedata):
                         count_0 = 0
                         while True:
                             offset_3 = offset_2
-                            column_1 = column_0
+                            column_3 = column_2
                             indent_column_1 = indent_column_0
                             partial_tab_offset_1 = partial_tab_offset_0
                             partial_tab_width_1 = partial_tab_width_0
@@ -2730,13 +2742,13 @@ def _build(unicodedata):
                             while True:
                                 while True: # start choice
                                     offset_4 = offset_3
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
-                                        offset_4, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_escaped_text(buf, buf_start, buf_eof, offset_4, column_2, indent_column_2, prefix_0, children_4, partial_tab_offset_2, partial_tab_width_2)
+                                        offset_4, column_4, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_escaped_text(buf, buf_start, buf_eof, offset_4, column_4, indent_column_2, prefix_0, children_4, partial_tab_offset_2, partial_tab_width_2)
                                         if offset_4 == -1: break
 
 
@@ -2744,7 +2756,7 @@ def _build(unicodedata):
                                         break
                                     if offset_4 != -1:
                                         offset_3 = offset_4
-                                        column_1 = column_2
+                                        column_3 = column_4
                                         indent_column_1 = indent_column_2
                                         partial_tab_offset_1 = partial_tab_offset_2
                                         partial_tab_width_1 = partial_tab_width_2
@@ -2753,13 +2765,13 @@ def _build(unicodedata):
                                         break
                                     # end case
                                     offset_4 = offset_3
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
-                                        offset_4, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_html_entity(buf, buf_start, buf_eof, offset_4, column_2, indent_column_2, prefix_0, children_4, partial_tab_offset_2, partial_tab_width_2)
+                                        offset_4, column_4, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_html_entity(buf, buf_start, buf_eof, offset_4, column_4, indent_column_2, prefix_0, children_4, partial_tab_offset_2, partial_tab_width_2)
                                         if offset_4 == -1: break
 
 
@@ -2767,7 +2779,7 @@ def _build(unicodedata):
                                         break
                                     if offset_4 != -1:
                                         offset_3 = offset_4
-                                        column_1 = column_2
+                                        column_3 = column_4
                                         indent_column_1 = indent_column_2
                                         partial_tab_offset_1 = partial_tab_offset_2
                                         partial_tab_width_1 = partial_tab_width_2
@@ -2776,7 +2788,7 @@ def _build(unicodedata):
                                         break
                                     # end case
                                     offset_4 = offset_3
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -2796,12 +2808,12 @@ def _build(unicodedata):
                                                 break
                                             else:
                                                 offset_5 += 1
-                                                column_2 += 1
+                                                column_5 += 1
 
                                             count_1 = 0
                                             while True:
                                                 offset_6 = offset_5
-                                                column_3 = column_2
+                                                column_6 = column_5
                                                 indent_column_3 = indent_column_2
                                                 partial_tab_offset_3 = partial_tab_offset_2
                                                 partial_tab_width_3 = partial_tab_width_2
@@ -2824,7 +2836,7 @@ def _build(unicodedata):
                                                         break
                                                     else:
                                                         offset_6 += 1
-                                                        column_3 += 1
+                                                        column_6 += 1
 
                                                     break
                                                 if offset_6 == -1:
@@ -2833,7 +2845,7 @@ def _build(unicodedata):
                                                 if children_6 is not None and children_6 is not None:
                                                     children_5.extend(children_6)
                                                 offset_5 = offset_6
-                                                column_2 = column_3
+                                                column_5 = column_6
                                                 indent_column_2 = indent_column_3
                                                 partial_tab_offset_2 = partial_tab_offset_3
                                                 partial_tab_width_2 = partial_tab_width_3
@@ -2845,15 +2857,16 @@ def _build(unicodedata):
                                         if offset_5 == -1:
                                             offset_4 = -1
                                             break
-                                        value_2 = self.Node('text', offset_4, offset_5, children_5, None)
+                                        value_2 = self.Node('text', offset_4, offset_5, children_5, column_4, column_5, None)
                                         children_4.append(value_2)
                                         offset_4 = offset_5
+                                        column_4 = column_5
 
 
                                         break
                                     if offset_4 != -1:
                                         offset_3 = offset_4
-                                        column_1 = column_2
+                                        column_3 = column_4
                                         indent_column_1 = indent_column_2
                                         partial_tab_offset_1 = partial_tab_offset_2
                                         partial_tab_width_1 = partial_tab_width_2
@@ -2873,7 +2886,7 @@ def _build(unicodedata):
                             if children_3 is not None and children_3 is not None:
                                 children_2.extend(children_3)
                             offset_2 = offset_3
-                            column_0 = column_1
+                            column_2 = column_3
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -2885,24 +2898,25 @@ def _build(unicodedata):
                     if offset_2 == -1:
                         offset_1 = -1
                         break
-                    value_3 = self.Node('info', offset_1, offset_2, children_2, None)
+                    value_3 = self.Node('info', offset_1, offset_2, children_2, column_1, column_2, None)
                     children_1.append(value_3)
                     offset_1 = offset_2
+                    column_1 = column_2
 
-                    offset_1, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0 = self.parse_line_end(buf, buf_start, buf_eof, offset_1, column_0, indent_column_0, prefix_0, children_1, partial_tab_offset_0, partial_tab_width_0)
+                    offset_1, column_1, indent_column_0, partial_tab_offset_0, partial_tab_width_0 = self.parse_line_end(buf, buf_start, buf_eof, offset_1, column_1, indent_column_0, prefix_0, children_1, partial_tab_offset_0, partial_tab_width_0)
                     if offset_1 == -1: break
 
 
                     count_0 = 0
                     while True:
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
                         children_2 = [] if children_1 is not None else None
                         while True:
-                            if not (column_1 == indent_column_1[0] == 0):
+                            if not (column_2 == indent_column_1[0] == 0):
                                 offset_2 = -1
                                 break
                             # print('start')
@@ -2910,21 +2924,21 @@ def _build(unicodedata):
                                 # print(indent)
                                 _children, _prefix = [], []
                                 offset_3 = offset_2
-                                offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
+                                offset_3, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_2, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
                                 if _prefix or _children:
                                    raise Exception('bar')
                                 if offset_3 == -1:
                                     offset_2 = -1
                                     break
                                 offset_2 = offset_3
-                                indent_column_1 = (column_1, indent_column_1)
+                                indent_column_1 = (column_2, indent_column_1)
                             if offset_2 == -1:
                                 break
 
                             while True: # start reject
                                 children_3 = []
                                 offset_3 = offset_2 + 0
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -2936,20 +2950,20 @@ def _build(unicodedata):
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-(column_3%self.tabstop))
                                             if count_1 + width > 3:
                                                 new_width = 3 - count_1
                                                 count_1 += new_width
-                                                column_2 += new_width
+                                                column_3 += new_width
                                                 partial_tab_offset_2 = offset_3
                                                 partial_tab_width_2 = width - new_width
                                                 break
                                             count_1 += width
-                                            column_2 += width
+                                            column_3 += width
                                             offset_3 += 1
                                         else:
                                             count_1 += 1
-                                            column_2 += 1
+                                            column_3 += 1
                                             offset_3 += 1
                                     else:
                                         break
@@ -2957,7 +2971,7 @@ def _build(unicodedata):
                                 count_1 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    column_3 = column_2
+                                    column_4 = column_3
                                     indent_column_3 = indent_column_2
                                     partial_tab_offset_3 = partial_tab_offset_2
                                     partial_tab_width_3 = partial_tab_width_2
@@ -2965,7 +2979,7 @@ def _build(unicodedata):
                                     while True:
                                         if buf[offset_4:offset_4+1] == '~':
                                             offset_4 += 1
-                                            column_3 += 1
+                                            column_4 += 1
                                         else:
                                             offset_4 = -1
                                             break
@@ -2978,13 +2992,13 @@ def _build(unicodedata):
                                                     if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                         width = partial_tab_width_3
                                                     else:
-                                                        width  = (self.tabstop-(column_3%self.tabstop))
+                                                        width  = (self.tabstop-(column_4%self.tabstop))
                                                     count_2 += width
-                                                    column_3 += width
+                                                    column_4 += width
                                                     offset_4 += 1
                                                 else:
                                                     count_2 += 1
-                                                    column_3 += 1
+                                                    column_4 += 1
                                                     offset_4 += 1
                                             else:
                                                 break
@@ -2996,7 +3010,7 @@ def _build(unicodedata):
                                     if children_4 is not None and children_4 is not None:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
-                                    column_2 = column_3
+                                    column_3 = column_4
                                     indent_column_2 = indent_column_3
                                     partial_tab_offset_2 = partial_tab_offset_3
                                     partial_tab_width_2 = partial_tab_width_3
@@ -3020,20 +3034,20 @@ def _build(unicodedata):
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
-                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                            width  = (self.tabstop-(column_2%self.tabstop))
                                         if count_1 + width > value_0:
                                             new_width = value_0 - count_1
                                             count_1 += new_width
-                                            column_1 += new_width
+                                            column_2 += new_width
                                             partial_tab_offset_1 = offset_2
                                             partial_tab_width_1 = width - new_width
                                             break
                                         count_1 += width
-                                        column_1 += width
+                                        column_2 += width
                                         offset_2 += 1
                                     else:
                                         count_1 += 1
-                                        column_1 += 1
+                                        column_2 += 1
                                         offset_2 += 1
                                 else:
                                     break
@@ -3044,7 +3058,7 @@ def _build(unicodedata):
                                 count_1 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -3061,7 +3075,7 @@ def _build(unicodedata):
                                             break
                                         else:
                                             offset_4 += 1
-                                            column_2 += 1
+                                            column_4 += 1
 
                                         break
                                     if offset_4 == -1:
@@ -3070,7 +3084,7 @@ def _build(unicodedata):
                                     if children_4 is not None and children_4 is not None:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
-                                    column_1 = column_2
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -3082,11 +3096,12 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_4 = self.Node('text', offset_2, offset_3, children_3, None)
+                            value_4 = self.Node('text', offset_2, offset_3, children_3, column_2, column_3, None)
                             children_2.append(value_4)
                             offset_2 = offset_3
+                            column_2 = column_3
 
-                            offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_line_end(buf, buf_start, buf_eof, offset_2, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
+                            offset_2, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_line_end(buf, buf_start, buf_eof, offset_2, column_2, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                             if offset_2 == -1: break
 
 
@@ -3097,7 +3112,7 @@ def _build(unicodedata):
                         if children_2 is not None and children_2 is not None:
                             children_1.extend(children_2)
                         offset_1 = offset_2
-                        column_0 = column_1
+                        column_1 = column_2
                         indent_column_0 = indent_column_1
                         partial_tab_offset_0 = partial_tab_offset_1
                         partial_tab_width_0 = partial_tab_width_1
@@ -3107,7 +3122,7 @@ def _build(unicodedata):
 
                     while True: # start choice
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -3116,11 +3131,11 @@ def _build(unicodedata):
                             while True: # start reject
                                 children_3 = []
                                 offset_3 = offset_2 + 0
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
-                                if not (column_2 == indent_column_2[0] == 0):
+                                if not (column_3 == indent_column_2[0] == 0):
                                     offset_3 = -1
                                     break
                                 # print('start')
@@ -3128,14 +3143,14 @@ def _build(unicodedata):
                                     # print(indent)
                                     _children, _prefix = [], []
                                     offset_4 = offset_3
-                                    offset_4, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = indent(buf, buf_start, buf_eof, offset_4, column_2, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
+                                    offset_4, column_3, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = indent(buf, buf_start, buf_eof, offset_4, column_3, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
                                     if _prefix or _children:
                                        raise Exception('bar')
                                     if offset_4 == -1:
                                         offset_3 = -1
                                         break
                                     offset_3 = offset_4
-                                    indent_column_2 = (column_2, indent_column_2)
+                                    indent_column_2 = (column_3, indent_column_2)
                                 if offset_3 == -1:
                                     break
 
@@ -3148,7 +3163,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -3157,7 +3172,7 @@ def _build(unicodedata):
                             break
                         # end case
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -3171,13 +3186,13 @@ def _build(unicodedata):
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
-                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                            width  = (self.tabstop-(column_2%self.tabstop))
                                         count_0 += width
-                                        column_1 += width
+                                        column_2 += width
                                         offset_2 += 1
                                     else:
                                         count_0 += 1
-                                        column_1 += 1
+                                        column_2 += 1
                                         offset_2 += 1
                                 else:
                                     break
@@ -3190,7 +3205,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -3199,13 +3214,13 @@ def _build(unicodedata):
                             break
                         # end case
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
                         children_2 = [] if children_1 is not None else None
                         while True: # case
-                            if not (column_1 == indent_column_1[0] == 0):
+                            if not (column_2 == indent_column_1[0] == 0):
                                 offset_2 = -1
                                 break
                             # print('start')
@@ -3213,14 +3228,14 @@ def _build(unicodedata):
                                 # print(indent)
                                 _children, _prefix = [], []
                                 offset_3 = offset_2
-                                offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
+                                offset_3, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_2, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
                                 if _prefix or _children:
                                    raise Exception('bar')
                                 if offset_3 == -1:
                                     offset_2 = -1
                                     break
                                 offset_2 = offset_3
-                                indent_column_1 = (column_1, indent_column_1)
+                                indent_column_1 = (column_2, indent_column_1)
                             if offset_2 == -1:
                                 break
 
@@ -3232,20 +3247,20 @@ def _build(unicodedata):
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
-                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                            width  = (self.tabstop-(column_2%self.tabstop))
                                         if count_0 + width > 3:
                                             new_width = 3 - count_0
                                             count_0 += new_width
-                                            column_1 += new_width
+                                            column_2 += new_width
                                             partial_tab_offset_1 = offset_2
                                             partial_tab_width_1 = width - new_width
                                             break
                                         count_0 += width
-                                        column_1 += width
+                                        column_2 += width
                                         offset_2 += 1
                                     else:
                                         count_0 += 1
-                                        column_1 += 1
+                                        column_2 += 1
                                         offset_2 += 1
                                 else:
                                     break
@@ -3253,7 +3268,7 @@ def _build(unicodedata):
                             count_0 = 0
                             while True:
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -3267,20 +3282,20 @@ def _build(unicodedata):
                                                 if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
-                                                    width  = (self.tabstop-(column_2%self.tabstop))
+                                                    width  = (self.tabstop-(column_3%self.tabstop))
                                                 count_1 += width
-                                                column_2 += width
+                                                column_3 += width
                                                 offset_3 += 1
                                             else:
                                                 count_1 += 1
-                                                column_2 += 1
+                                                column_3 += 1
                                                 offset_3 += 1
                                         else:
                                             break
 
                                     if buf[offset_3:offset_3+1] == '~':
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     else:
                                         offset_3 = -1
                                         break
@@ -3292,7 +3307,7 @@ def _build(unicodedata):
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 offset_2 = offset_3
-                                column_1 = column_2
+                                column_2 = column_3
                                 indent_column_1 = indent_column_2
                                 partial_tab_offset_1 = partial_tab_offset_2
                                 partial_tab_width_1 = partial_tab_width_2
@@ -3311,18 +3326,18 @@ def _build(unicodedata):
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
-                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                            width  = (self.tabstop-(column_2%self.tabstop))
                                         count_0 += width
-                                        column_1 += width
+                                        column_2 += width
                                         offset_2 += 1
                                     else:
                                         count_0 += 1
-                                        column_1 += 1
+                                        column_2 += 1
                                         offset_2 += 1
                                 else:
                                     break
 
-                            offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_line_end(buf, buf_start, buf_eof, offset_2, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
+                            offset_2, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_line_end(buf, buf_start, buf_eof, offset_2, column_2, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                             if offset_2 == -1: break
 
 
@@ -3330,7 +3345,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -3347,9 +3362,10 @@ def _build(unicodedata):
                 if offset_1 == -1:
                     offset_0 = -1
                     break
-                value_5 = self.Node('fenced_code', offset_0, offset_1, children_1, None)
+                value_5 = self.Node('fenced_code', offset_0, offset_1, children_1, column_0, column_1, None)
                 children_0.append(value_5)
                 offset_0 = offset_1
+                column_0 = column_1
 
 
                 break
@@ -3712,13 +3728,13 @@ def _build(unicodedata):
                 offset_1 = offset_0
                 children_1 = []
                 while True: # start capture
-                    offset_1, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0 = self.parse_start_blockquote(buf, buf_start, buf_eof, offset_1, column_0, indent_column_0, prefix_0, children_1, partial_tab_offset_0, partial_tab_width_0)
+                    offset_1, column_1, indent_column_0, partial_tab_offset_0, partial_tab_width_0 = self.parse_start_blockquote(buf, buf_start, buf_eof, offset_1, column_1, indent_column_0, prefix_0, children_1, partial_tab_offset_0, partial_tab_width_0)
                     if offset_1 == -1: break
 
 
                     while True: # start choice
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -3732,13 +3748,13 @@ def _build(unicodedata):
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
-                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                            width  = (self.tabstop-(column_2%self.tabstop))
                                         count_0 += width
-                                        column_1 += width
+                                        column_2 += width
                                         offset_2 += 1
                                     else:
                                         count_0 += 1
-                                        column_1 += 1
+                                        column_2 += 1
                                         offset_2 += 1
                                 else:
                                     break
@@ -3747,7 +3763,7 @@ def _build(unicodedata):
                                 codepoint = buf[offset_2]
                                 if codepoint in '\n':
                                     offset_2 +=1
-                                    column_1 = 0
+                                    column_2 = 0
                                     indent_column_1 = (0, None)
                                 else:
                                     offset_2 = -1
@@ -3757,7 +3773,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -3766,16 +3782,16 @@ def _build(unicodedata):
                             break
                         # end case
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
                         children_2 = [] if children_1 is not None else None
                         while True: # case
                             prefix_0.append((self.parse_start_blockquote, self.parse_blockquote_interrupt))
-                            indent_column_1 = (column_1, indent_column_1)
+                            indent_column_1 = (column_2, indent_column_1)
                             while True:
-                                offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_block_element(buf, buf_start, buf_eof, offset_2, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
+                                offset_2, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_block_element(buf, buf_start, buf_eof, offset_2, column_2, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                                 if offset_2 == -1: break
 
 
@@ -3788,7 +3804,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -3804,13 +3820,13 @@ def _build(unicodedata):
                     count_0 = 0
                     while True:
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
                         children_2 = [] if children_1 is not None else None
                         while True:
-                            if not (column_1 == indent_column_1[0] == 0):
+                            if not (column_2 == indent_column_1[0] == 0):
                                 offset_2 = -1
                                 break
                             # print('start')
@@ -3818,24 +3834,24 @@ def _build(unicodedata):
                                 # print(indent)
                                 _children, _prefix = [], []
                                 offset_3 = offset_2
-                                offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
+                                offset_3, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_2, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
                                 if _prefix or _children:
                                    raise Exception('bar')
                                 if offset_3 == -1:
                                     offset_2 = -1
                                     break
                                 offset_2 = offset_3
-                                indent_column_1 = (column_1, indent_column_1)
+                                indent_column_1 = (column_2, indent_column_1)
                             if offset_2 == -1:
                                 break
 
-                            offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_start_blockquote(buf, buf_start, buf_eof, offset_2, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
+                            offset_2, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_start_blockquote(buf, buf_start, buf_eof, offset_2, column_2, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                             if offset_2 == -1: break
 
 
                             while True: # start choice
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -3849,13 +3865,13 @@ def _build(unicodedata):
                                                 if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
-                                                    width  = (self.tabstop-(column_2%self.tabstop))
+                                                    width  = (self.tabstop-(column_3%self.tabstop))
                                                 count_1 += width
-                                                column_2 += width
+                                                column_3 += width
                                                 offset_3 += 1
                                             else:
                                                 count_1 += 1
-                                                column_2 += 1
+                                                column_3 += 1
                                                 offset_3 += 1
                                         else:
                                             break
@@ -3864,7 +3880,7 @@ def _build(unicodedata):
                                         codepoint = buf[offset_3]
                                         if codepoint in '\n':
                                             offset_3 +=1
-                                            column_2 = 0
+                                            column_3 = 0
                                             indent_column_2 = (0, None)
                                         else:
                                             offset_3 = -1
@@ -3874,7 +3890,7 @@ def _build(unicodedata):
                                     break
                                 if offset_3 != -1:
                                     offset_2 = offset_3
-                                    column_1 = column_2
+                                    column_2 = column_3
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -3883,16 +3899,16 @@ def _build(unicodedata):
                                     break
                                 # end case
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
                                 children_3 = [] if children_2 is not None else None
                                 while True: # case
                                     prefix_0.append((self.parse_start_blockquote, self.parse_blockquote_interrupt))
-                                    indent_column_2 = (column_2, indent_column_2)
+                                    indent_column_2 = (column_3, indent_column_2)
                                     while True:
-                                        offset_3, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_block_element(buf, buf_start, buf_eof, offset_3, column_2, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
+                                        offset_3, column_3, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_block_element(buf, buf_start, buf_eof, offset_3, column_3, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
                                         if offset_3 == -1: break
 
 
@@ -3905,7 +3921,7 @@ def _build(unicodedata):
                                     break
                                 if offset_3 != -1:
                                     offset_2 = offset_3
-                                    column_1 = column_2
+                                    column_2 = column_3
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -3925,7 +3941,7 @@ def _build(unicodedata):
                         if children_2 is not None and children_2 is not None:
                             children_1.extend(children_2)
                         offset_1 = offset_2
-                        column_0 = column_1
+                        column_1 = column_2
                         indent_column_0 = indent_column_1
                         partial_tab_offset_0 = partial_tab_offset_1
                         partial_tab_width_0 = partial_tab_width_1
@@ -3937,9 +3953,10 @@ def _build(unicodedata):
                 if offset_1 == -1:
                     offset_0 = -1
                     break
-                value_0 = self.Node('blockquote', offset_0, offset_1, children_1, None)
+                value_0 = self.Node('blockquote', offset_0, offset_1, children_1, column_0, column_1, None)
                 children_0.append(value_0)
                 offset_0 = offset_1
+                column_0 = column_1
 
                 break
             return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
@@ -4938,7 +4955,7 @@ def _build(unicodedata):
                                                     codepoint = buf[offset_4]
                                                     if codepoint in '\n':
                                                         offset_4 +=1
-                                                        column_3 = 0
+                                                        column_4 = 0
                                                         indent_column_3 = (0, None)
                                                     else:
                                                         offset_4 = -1
@@ -4951,9 +4968,10 @@ def _build(unicodedata):
                                             if offset_4 == -1:
                                                 offset_3 = -1
                                                 break
-                                            value_1 = self.Node('empty', offset_3, offset_4, children_4, None)
+                                            value_1 = self.Node('empty', offset_3, offset_4, children_4, column_3, column_4, None)
                                             children_3.append(value_1)
                                             offset_3 = offset_4
+                                            column_3 = column_4
 
                                             if not (column_3 == indent_column_3[0] == 0):
                                                 offset_3 = -1
@@ -5151,20 +5169,20 @@ def _build(unicodedata):
                                 if offset_1 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                     width = partial_tab_width_0
                                 else:
-                                    width  = (self.tabstop-(column_0%self.tabstop))
+                                    width  = (self.tabstop-(column_1%self.tabstop))
                                 if count_0 + width > 3:
                                     new_width = 3 - count_0
                                     count_0 += new_width
-                                    column_0 += new_width
+                                    column_1 += new_width
                                     partial_tab_offset_0 = offset_1
                                     partial_tab_width_0 = width - new_width
                                     break
                                 count_0 += width
-                                column_0 += width
+                                column_1 += width
                                 offset_1 += 1
                             else:
                                 count_0 += 1
-                                column_0 += 1
+                                column_1 += 1
                                 offset_1 += 1
                         else:
                             break
@@ -5179,13 +5197,13 @@ def _build(unicodedata):
 
                         if codepoint == 45:
                             offset_2 += 1
-                            column_0 += 1
+                            column_1 += 1
                         elif codepoint == 42:
                             offset_2 += 1
-                            column_0 += 1
+                            column_1 += 1
                         elif codepoint == 43:
                             offset_2 += 1
-                            column_0 += 1
+                            column_1 += 1
                         else:
                             offset_2 = -1
                             break
@@ -5199,7 +5217,7 @@ def _build(unicodedata):
 
                     while True: # start choice
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -5208,7 +5226,7 @@ def _build(unicodedata):
                             while True: # start lookahed
                                 children_3 = []
                                 offset_3 = offset_2 + 0
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -5220,13 +5238,13 @@ def _build(unicodedata):
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-(column_3%self.tabstop))
                                             count_0 += width
-                                            column_2 += width
+                                            column_3 += width
                                             offset_3 += 1
                                         else:
                                             count_0 += 1
-                                            column_2 += 1
+                                            column_3 += 1
                                             offset_3 += 1
                                     else:
                                         break
@@ -5235,7 +5253,7 @@ def _build(unicodedata):
                                     codepoint = buf[offset_3]
                                     if codepoint in '\n':
                                         offset_3 +=1
-                                        column_2 = 0
+                                        column_3 = 0
                                         indent_column_2 = (0, None)
                                     else:
                                         offset_3 = -1
@@ -5250,7 +5268,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -5259,7 +5277,7 @@ def _build(unicodedata):
                             break
                         # end case
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -5270,7 +5288,7 @@ def _build(unicodedata):
                                 codepoint = buf[offset_2]
                                 if codepoint in '\n':
                                     offset_2 +=1
-                                    column_1 = 0
+                                    column_2 = 0
                                     indent_column_1 = (0, None)
                                     count_0 +=1
                                 elif codepoint in ' \t':
@@ -5278,20 +5296,20 @@ def _build(unicodedata):
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
-                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                            width  = (self.tabstop-(column_2%self.tabstop))
                                         if count_0 + width > 1:
                                             new_width = 1 - count_0
                                             count_0 += new_width
-                                            column_1 += new_width
+                                            column_2 += new_width
                                             partial_tab_offset_1 = offset_2
                                             partial_tab_width_1 = width - new_width
                                             break
                                         count_0 += width
-                                        column_1 += width
+                                        column_2 += width
                                         offset_2 += 1
                                     else:
                                         count_0 += 1
-                                        column_1 += 1
+                                        column_2 += 1
                                         offset_2 += 1
                                 else:
                                     break
@@ -5303,7 +5321,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -5318,7 +5336,7 @@ def _build(unicodedata):
 
                     while True: # start choice
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -5327,7 +5345,7 @@ def _build(unicodedata):
                             offset_3 = offset_2
                             children_3 = []
                             while True: # start capture
-                                offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_list_item(buf, buf_start, buf_eof, offset_3, column_1, indent_column_1, prefix_0, children_3, partial_tab_offset_1, partial_tab_width_1)
+                                offset_3, column_3, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_list_item(buf, buf_start, buf_eof, offset_3, column_3, indent_column_1, prefix_0, children_3, partial_tab_offset_1, partial_tab_width_1)
                                 if offset_3 == -1: break
 
 
@@ -5335,15 +5353,16 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_1 = self.Node('list_item', offset_2, offset_3, children_3, None)
+                            value_1 = self.Node('list_item', offset_2, offset_3, children_3, column_2, column_3, None)
                             children_2.append(value_1)
                             offset_2 = offset_3
+                            column_2 = column_3
 
 
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -5352,7 +5371,7 @@ def _build(unicodedata):
                             break
                         # end case
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -5369,13 +5388,13 @@ def _build(unicodedata):
                                             if offset_3 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                                 width = partial_tab_width_1
                                             else:
-                                                width  = (self.tabstop-(column_1%self.tabstop))
+                                                width  = (self.tabstop-(column_3%self.tabstop))
                                             count_0 += width
-                                            column_1 += width
+                                            column_3 += width
                                             offset_3 += 1
                                         else:
                                             count_0 += 1
-                                            column_1 += 1
+                                            column_3 += 1
                                             offset_3 += 1
                                     else:
                                         break
@@ -5384,15 +5403,16 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_2 = self.Node('list_item', offset_2, offset_3, children_3, None)
+                            value_2 = self.Node('list_item', offset_2, offset_3, children_3, column_2, column_3, None)
                             children_2.append(value_2)
                             offset_2 = offset_3
+                            column_2 = column_3
 
                             if offset_2 < buf_eof:
                                 codepoint = buf[offset_2]
                                 if codepoint in '\n':
                                     offset_2 +=1
-                                    column_1 = 0
+                                    column_2 = 0
                                     indent_column_1 = (0, None)
                                 else:
                                     offset_2 = -1
@@ -5402,7 +5422,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -5418,13 +5438,13 @@ def _build(unicodedata):
                     count_0 = 0
                     while True:
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
                         children_2 = [] if children_1 is not None else None
                         while True:
-                            if not (column_1 == indent_column_1[0] == 0):
+                            if not (column_2 == indent_column_1[0] == 0):
                                 offset_2 = -1
                                 break
                             # print('start')
@@ -5432,20 +5452,20 @@ def _build(unicodedata):
                                 # print(indent)
                                 _children, _prefix = [], []
                                 offset_3 = offset_2
-                                offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
+                                offset_3, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_2, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
                                 if _prefix or _children:
                                    raise Exception('bar')
                                 if offset_3 == -1:
                                     offset_2 = -1
                                     break
                                 offset_2 = offset_3
-                                indent_column_1 = (column_1, indent_column_1)
+                                indent_column_1 = (column_2, indent_column_1)
                             if offset_2 == -1:
                                 break
 
                             while True: # start choice
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -5459,13 +5479,13 @@ def _build(unicodedata):
                                                 if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
-                                                    width  = (self.tabstop-(column_2%self.tabstop))
+                                                    width  = (self.tabstop-(column_3%self.tabstop))
                                                 count_1 += width
-                                                column_2 += width
+                                                column_3 += width
                                                 offset_3 += 1
                                             else:
                                                 count_1 += 1
-                                                column_2 += 1
+                                                column_3 += 1
                                                 offset_3 += 1
                                         else:
                                             break
@@ -5474,7 +5494,7 @@ def _build(unicodedata):
                                         codepoint = buf[offset_3]
                                         if codepoint in '\n':
                                             offset_3 +=1
-                                            column_2 = 0
+                                            column_3 = 0
                                             indent_column_2 = (0, None)
                                         else:
                                             offset_3 = -1
@@ -5489,13 +5509,13 @@ def _build(unicodedata):
                                         count_1 = 0
                                         while True:
                                             offset_5 = offset_4
-                                            column_3 = column_2
+                                            column_5 = column_4
                                             indent_column_3 = indent_column_2
                                             partial_tab_offset_3 = partial_tab_offset_2
                                             partial_tab_width_3 = partial_tab_width_2
                                             children_5 = [] if children_4 is not None else None
                                             while True:
-                                                if not (column_3 == indent_column_3[0] == 0):
+                                                if not (column_5 == indent_column_3[0] == 0):
                                                     offset_5 = -1
                                                     break
                                                 # print('start')
@@ -5503,14 +5523,14 @@ def _build(unicodedata):
                                                     # print(indent)
                                                     _children, _prefix = [], []
                                                     offset_6 = offset_5
-                                                    offset_6, column_3, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = indent(buf, buf_start, buf_eof, offset_6, column_3, indent_column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
+                                                    offset_6, column_5, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = indent(buf, buf_start, buf_eof, offset_6, column_5, indent_column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
                                                     if _prefix or _children:
                                                        raise Exception('bar')
                                                     if offset_6 == -1:
                                                         offset_5 = -1
                                                         break
                                                     offset_5 = offset_6
-                                                    indent_column_3 = (column_3, indent_column_3)
+                                                    indent_column_3 = (column_5, indent_column_3)
                                                 if offset_5 == -1:
                                                     break
 
@@ -5522,13 +5542,13 @@ def _build(unicodedata):
                                                             if offset_5 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                                 width = partial_tab_width_3
                                                             else:
-                                                                width  = (self.tabstop-(column_3%self.tabstop))
+                                                                width  = (self.tabstop-(column_5%self.tabstop))
                                                             count_2 += width
-                                                            column_3 += width
+                                                            column_5 += width
                                                             offset_5 += 1
                                                         else:
                                                             count_2 += 1
-                                                            column_3 += 1
+                                                            column_5 += 1
                                                             offset_5 += 1
                                                     else:
                                                         break
@@ -5537,7 +5557,7 @@ def _build(unicodedata):
                                                     codepoint = buf[offset_5]
                                                     if codepoint in '\n':
                                                         offset_5 +=1
-                                                        column_3 = 0
+                                                        column_5 = 0
                                                         indent_column_3 = (0, None)
                                                     else:
                                                         offset_5 = -1
@@ -5553,7 +5573,7 @@ def _build(unicodedata):
                                             if children_5 is not None and children_5 is not None:
                                                 children_4.extend(children_5)
                                             offset_4 = offset_5
-                                            column_2 = column_3
+                                            column_4 = column_5
                                             indent_column_2 = indent_column_3
                                             partial_tab_offset_2 = partial_tab_offset_3
                                             partial_tab_width_2 = partial_tab_width_3
@@ -5565,18 +5585,19 @@ def _build(unicodedata):
                                     if offset_4 == -1:
                                         offset_3 = -1
                                         break
-                                    value_3 = self.Node('empty', offset_3, offset_4, children_4, None)
+                                    value_3 = self.Node('empty', offset_3, offset_4, children_4, column_3, column_4, None)
                                     children_3.append(value_3)
                                     offset_3 = offset_4
+                                    column_3 = column_4
 
                                     while True: # start lookahed
                                         children_4 = []
                                         offset_4 = offset_3 + 0
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
-                                        if not (column_3 == indent_column_3[0] == 0):
+                                        if not (column_4 == indent_column_3[0] == 0):
                                             offset_4 = -1
                                             break
                                         # print('start')
@@ -5584,14 +5605,14 @@ def _build(unicodedata):
                                             # print(indent)
                                             _children, _prefix = [], []
                                             offset_5 = offset_4
-                                            offset_5, column_3, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = indent(buf, buf_start, buf_eof, offset_5, column_3, indent_column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
+                                            offset_5, column_4, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = indent(buf, buf_start, buf_eof, offset_5, column_4, indent_column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
                                             if _prefix or _children:
                                                raise Exception('bar')
                                             if offset_5 == -1:
                                                 offset_4 = -1
                                                 break
                                             offset_4 = offset_5
-                                            indent_column_3 = (column_3, indent_column_3)
+                                            indent_column_3 = (column_4, indent_column_3)
                                         if offset_4 == -1:
                                             break
 
@@ -5603,27 +5624,27 @@ def _build(unicodedata):
                                                     if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                         width = partial_tab_width_3
                                                     else:
-                                                        width  = (self.tabstop-(column_3%self.tabstop))
+                                                        width  = (self.tabstop-(column_4%self.tabstop))
                                                     if count_1 + width > 3:
                                                         new_width = 3 - count_1
                                                         count_1 += new_width
-                                                        column_3 += new_width
+                                                        column_4 += new_width
                                                         partial_tab_offset_3 = offset_4
                                                         partial_tab_width_3 = width - new_width
                                                         break
                                                     count_1 += width
-                                                    column_3 += width
+                                                    column_4 += width
                                                     offset_4 += 1
                                                 else:
                                                     count_1 += 1
-                                                    column_3 += 1
+                                                    column_4 += 1
                                                     offset_4 += 1
                                             else:
                                                 break
 
                                         if buf[offset_4:offset_4+len(value_0)] == value_0:
                                             offset_4 += len(value_0)
-                                            column_3 += len(value_0)
+                                            column_4 += len(value_0)
                                         else:
                                             offset_4 = -1
                                             break
@@ -5637,7 +5658,7 @@ def _build(unicodedata):
                                     break
                                 if offset_3 != -1:
                                     offset_2 = offset_3
-                                    column_1 = column_2
+                                    column_2 = column_3
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -5646,7 +5667,7 @@ def _build(unicodedata):
                                     break
                                 # end case
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -5655,11 +5676,11 @@ def _build(unicodedata):
                                     while True: # start reject
                                         children_4 = []
                                         offset_4 = offset_3 + 0
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
-                                        offset_4, column_3, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = self.parse_thematic_break(buf, buf_start, buf_eof, offset_4, column_3, indent_column_3, prefix_0, children_4, partial_tab_offset_3, partial_tab_width_3)
+                                        offset_4, column_4, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = self.parse_thematic_break(buf, buf_start, buf_eof, offset_4, column_4, indent_column_3, prefix_0, children_4, partial_tab_offset_3, partial_tab_width_3)
                                         if offset_4 == -1: break
 
 
@@ -5676,34 +5697,34 @@ def _build(unicodedata):
                                                 if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
-                                                    width  = (self.tabstop-(column_2%self.tabstop))
+                                                    width  = (self.tabstop-(column_3%self.tabstop))
                                                 if count_1 + width > 3:
                                                     new_width = 3 - count_1
                                                     count_1 += new_width
-                                                    column_2 += new_width
+                                                    column_3 += new_width
                                                     partial_tab_offset_2 = offset_3
                                                     partial_tab_width_2 = width - new_width
                                                     break
                                                 count_1 += width
-                                                column_2 += width
+                                                column_3 += width
                                                 offset_3 += 1
                                             else:
                                                 count_1 += 1
-                                                column_2 += 1
+                                                column_3 += 1
                                                 offset_3 += 1
                                         else:
                                             break
 
                                     if buf[offset_3:offset_3+len(value_0)] == value_0:
                                         offset_3 += len(value_0)
-                                        column_2 += len(value_0)
+                                        column_3 += len(value_0)
                                     else:
                                         offset_3 = -1
                                         break
 
                                     while True: # start choice
                                         offset_4 = offset_3
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
@@ -5712,7 +5733,7 @@ def _build(unicodedata):
                                             while True: # start lookahed
                                                 children_5 = []
                                                 offset_5 = offset_4 + 0
-                                                column_4 = column_3
+                                                column_5 = column_4
                                                 indent_column_4 = indent_column_3
                                                 partial_tab_offset_4 = partial_tab_offset_3
                                                 partial_tab_width_4 = partial_tab_width_3
@@ -5724,13 +5745,13 @@ def _build(unicodedata):
                                                             if offset_5 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                                 width = partial_tab_width_4
                                                             else:
-                                                                width  = (self.tabstop-(column_4%self.tabstop))
+                                                                width  = (self.tabstop-(column_5%self.tabstop))
                                                             count_1 += width
-                                                            column_4 += width
+                                                            column_5 += width
                                                             offset_5 += 1
                                                         else:
                                                             count_1 += 1
-                                                            column_4 += 1
+                                                            column_5 += 1
                                                             offset_5 += 1
                                                     else:
                                                         break
@@ -5739,7 +5760,7 @@ def _build(unicodedata):
                                                     codepoint = buf[offset_5]
                                                     if codepoint in '\n':
                                                         offset_5 +=1
-                                                        column_4 = 0
+                                                        column_5 = 0
                                                         indent_column_4 = (0, None)
                                                     else:
                                                         offset_5 = -1
@@ -5754,7 +5775,7 @@ def _build(unicodedata):
                                             break
                                         if offset_4 != -1:
                                             offset_3 = offset_4
-                                            column_2 = column_3
+                                            column_3 = column_4
                                             indent_column_2 = indent_column_3
                                             partial_tab_offset_2 = partial_tab_offset_3
                                             partial_tab_width_2 = partial_tab_width_3
@@ -5763,7 +5784,7 @@ def _build(unicodedata):
                                             break
                                         # end case
                                         offset_4 = offset_3
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
@@ -5774,7 +5795,7 @@ def _build(unicodedata):
                                                 codepoint = buf[offset_4]
                                                 if codepoint in '\n':
                                                     offset_4 +=1
-                                                    column_3 = 0
+                                                    column_4 = 0
                                                     indent_column_3 = (0, None)
                                                     count_1 +=1
                                                 elif codepoint in ' \t':
@@ -5782,20 +5803,20 @@ def _build(unicodedata):
                                                         if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                             width = partial_tab_width_3
                                                         else:
-                                                            width  = (self.tabstop-(column_3%self.tabstop))
+                                                            width  = (self.tabstop-(column_4%self.tabstop))
                                                         if count_1 + width > 1:
                                                             new_width = 1 - count_1
                                                             count_1 += new_width
-                                                            column_3 += new_width
+                                                            column_4 += new_width
                                                             partial_tab_offset_3 = offset_4
                                                             partial_tab_width_3 = width - new_width
                                                             break
                                                         count_1 += width
-                                                        column_3 += width
+                                                        column_4 += width
                                                         offset_4 += 1
                                                     else:
                                                         count_1 += 1
-                                                        column_3 += 1
+                                                        column_4 += 1
                                                         offset_4 += 1
                                                 else:
                                                     break
@@ -5807,7 +5828,7 @@ def _build(unicodedata):
                                             break
                                         if offset_4 != -1:
                                             offset_3 = offset_4
-                                            column_2 = column_3
+                                            column_3 = column_4
                                             indent_column_2 = indent_column_3
                                             partial_tab_offset_2 = partial_tab_offset_3
                                             partial_tab_width_2 = partial_tab_width_3
@@ -5822,7 +5843,7 @@ def _build(unicodedata):
 
                                     while True: # start choice
                                         offset_4 = offset_3
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
@@ -5831,7 +5852,7 @@ def _build(unicodedata):
                                             offset_5 = offset_4
                                             children_5 = []
                                             while True: # start capture
-                                                offset_5, column_3, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = self.parse_list_item(buf, buf_start, buf_eof, offset_5, column_3, indent_column_3, prefix_0, children_5, partial_tab_offset_3, partial_tab_width_3)
+                                                offset_5, column_5, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = self.parse_list_item(buf, buf_start, buf_eof, offset_5, column_5, indent_column_3, prefix_0, children_5, partial_tab_offset_3, partial_tab_width_3)
                                                 if offset_5 == -1: break
 
 
@@ -5839,15 +5860,16 @@ def _build(unicodedata):
                                             if offset_5 == -1:
                                                 offset_4 = -1
                                                 break
-                                            value_4 = self.Node('list_item', offset_4, offset_5, children_5, None)
+                                            value_4 = self.Node('list_item', offset_4, offset_5, children_5, column_4, column_5, None)
                                             children_4.append(value_4)
                                             offset_4 = offset_5
+                                            column_4 = column_5
 
 
                                             break
                                         if offset_4 != -1:
                                             offset_3 = offset_4
-                                            column_2 = column_3
+                                            column_3 = column_4
                                             indent_column_2 = indent_column_3
                                             partial_tab_offset_2 = partial_tab_offset_3
                                             partial_tab_width_2 = partial_tab_width_3
@@ -5856,7 +5878,7 @@ def _build(unicodedata):
                                             break
                                         # end case
                                         offset_4 = offset_3
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
@@ -5873,13 +5895,13 @@ def _build(unicodedata):
                                                             if offset_5 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                                 width = partial_tab_width_3
                                                             else:
-                                                                width  = (self.tabstop-(column_3%self.tabstop))
+                                                                width  = (self.tabstop-(column_5%self.tabstop))
                                                             count_1 += width
-                                                            column_3 += width
+                                                            column_5 += width
                                                             offset_5 += 1
                                                         else:
                                                             count_1 += 1
-                                                            column_3 += 1
+                                                            column_5 += 1
                                                             offset_5 += 1
                                                     else:
                                                         break
@@ -5888,15 +5910,16 @@ def _build(unicodedata):
                                             if offset_5 == -1:
                                                 offset_4 = -1
                                                 break
-                                            value_5 = self.Node('list_item', offset_4, offset_5, children_5, None)
+                                            value_5 = self.Node('list_item', offset_4, offset_5, children_5, column_4, column_5, None)
                                             children_4.append(value_5)
                                             offset_4 = offset_5
+                                            column_4 = column_5
 
                                             if offset_4 < buf_eof:
                                                 codepoint = buf[offset_4]
                                                 if codepoint in '\n':
                                                     offset_4 +=1
-                                                    column_3 = 0
+                                                    column_4 = 0
                                                     indent_column_3 = (0, None)
                                                 else:
                                                     offset_4 = -1
@@ -5906,7 +5929,7 @@ def _build(unicodedata):
                                             break
                                         if offset_4 != -1:
                                             offset_3 = offset_4
-                                            column_2 = column_3
+                                            column_3 = column_4
                                             indent_column_2 = indent_column_3
                                             partial_tab_offset_2 = partial_tab_offset_3
                                             partial_tab_width_2 = partial_tab_width_3
@@ -5923,7 +5946,7 @@ def _build(unicodedata):
                                     break
                                 if offset_3 != -1:
                                     offset_2 = offset_3
-                                    column_1 = column_2
+                                    column_2 = column_3
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -5943,7 +5966,7 @@ def _build(unicodedata):
                         if children_2 is not None and children_2 is not None:
                             children_1.extend(children_2)
                         offset_1 = offset_2
-                        column_0 = column_1
+                        column_1 = column_2
                         indent_column_0 = indent_column_1
                         partial_tab_offset_0 = partial_tab_offset_1
                         partial_tab_width_0 = partial_tab_width_1
@@ -5955,9 +5978,10 @@ def _build(unicodedata):
                 if offset_1 == -1:
                     offset_0 = -1
                     break
-                value_6 = self.Node('unordered_list', offset_0, offset_1, children_1, None)
+                value_6 = self.Node('unordered_list', offset_0, offset_1, children_1, column_0, column_1, None)
                 children_0.append(value_6)
                 offset_0 = offset_1
+                column_0 = column_1
 
 
                 break
@@ -5976,20 +6000,20 @@ def _build(unicodedata):
                                 if offset_1 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                     width = partial_tab_width_0
                                 else:
-                                    width  = (self.tabstop-(column_0%self.tabstop))
+                                    width  = (self.tabstop-(column_1%self.tabstop))
                                 if count_0 + width > 3:
                                     new_width = 3 - count_0
                                     count_0 += new_width
-                                    column_0 += new_width
+                                    column_1 += new_width
                                     partial_tab_offset_0 = offset_1
                                     partial_tab_width_0 = width - new_width
                                     break
                                 count_0 += width
-                                column_0 += width
+                                column_1 += width
                                 offset_1 += 1
                             else:
                                 count_0 += 1
-                                column_0 += 1
+                                column_1 += 1
                                 offset_1 += 1
                         else:
                             break
@@ -6000,7 +6024,7 @@ def _build(unicodedata):
                         count_0 = 0
                         while count_0 < 9:
                             offset_3 = offset_2
-                            column_1 = column_0
+                            column_3 = column_2
                             indent_column_1 = indent_column_0
                             partial_tab_offset_1 = partial_tab_offset_0
                             partial_tab_width_1 = partial_tab_width_0
@@ -6014,7 +6038,7 @@ def _build(unicodedata):
 
                                 if 48 <= codepoint <= 57:
                                     offset_3 += 1
-                                    column_1 += 1
+                                    column_3 += 1
                                 else:
                                     offset_3 = -1
                                     break
@@ -6026,7 +6050,7 @@ def _build(unicodedata):
                             if children_3 is not None and children_3 is not None:
                                 children_2.extend(children_3)
                             offset_2 = offset_3
-                            column_0 = column_1
+                            column_2 = column_3
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -6041,9 +6065,10 @@ def _build(unicodedata):
                     if offset_2 == -1:
                         offset_1 = -1
                         break
-                    value_0 = self.Node('ordered_list_start', offset_1, offset_2, children_2, None)
+                    value_0 = self.Node('ordered_list_start', offset_1, offset_2, children_2, column_1, column_2, None)
                     children_1.append(value_0)
                     offset_1 = offset_2
+                    column_1 = column_2
 
                     offset_2 = offset_1
                     while True: # start backref
@@ -6055,10 +6080,10 @@ def _build(unicodedata):
 
                         if codepoint == 46:
                             offset_2 += 1
-                            column_0 += 1
+                            column_1 += 1
                         elif codepoint == 41:
                             offset_2 += 1
-                            column_0 += 1
+                            column_1 += 1
                         else:
                             offset_2 = -1
                             break
@@ -6072,7 +6097,7 @@ def _build(unicodedata):
 
                     while True: # start choice
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -6081,7 +6106,7 @@ def _build(unicodedata):
                             while True: # start lookahed
                                 children_3 = []
                                 offset_3 = offset_2 + 0
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -6093,13 +6118,13 @@ def _build(unicodedata):
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-(column_3%self.tabstop))
                                             count_0 += width
-                                            column_2 += width
+                                            column_3 += width
                                             offset_3 += 1
                                         else:
                                             count_0 += 1
-                                            column_2 += 1
+                                            column_3 += 1
                                             offset_3 += 1
                                     else:
                                         break
@@ -6108,7 +6133,7 @@ def _build(unicodedata):
                                     codepoint = buf[offset_3]
                                     if codepoint in '\n':
                                         offset_3 +=1
-                                        column_2 = 0
+                                        column_3 = 0
                                         indent_column_2 = (0, None)
                                     else:
                                         offset_3 = -1
@@ -6123,7 +6148,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -6132,7 +6157,7 @@ def _build(unicodedata):
                             break
                         # end case
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -6143,7 +6168,7 @@ def _build(unicodedata):
                                 codepoint = buf[offset_2]
                                 if codepoint in '\n':
                                     offset_2 +=1
-                                    column_1 = 0
+                                    column_2 = 0
                                     indent_column_1 = (0, None)
                                     count_0 +=1
                                 elif codepoint in ' \t':
@@ -6151,20 +6176,20 @@ def _build(unicodedata):
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
-                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                            width  = (self.tabstop-(column_2%self.tabstop))
                                         if count_0 + width > 1:
                                             new_width = 1 - count_0
                                             count_0 += new_width
-                                            column_1 += new_width
+                                            column_2 += new_width
                                             partial_tab_offset_1 = offset_2
                                             partial_tab_width_1 = width - new_width
                                             break
                                         count_0 += width
-                                        column_1 += width
+                                        column_2 += width
                                         offset_2 += 1
                                     else:
                                         count_0 += 1
-                                        column_1 += 1
+                                        column_2 += 1
                                         offset_2 += 1
                                 else:
                                     break
@@ -6176,7 +6201,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -6191,7 +6216,7 @@ def _build(unicodedata):
 
                     while True: # start choice
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -6200,7 +6225,7 @@ def _build(unicodedata):
                             offset_3 = offset_2
                             children_3 = []
                             while True: # start capture
-                                offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_list_item(buf, buf_start, buf_eof, offset_3, column_1, indent_column_1, prefix_0, children_3, partial_tab_offset_1, partial_tab_width_1)
+                                offset_3, column_3, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_list_item(buf, buf_start, buf_eof, offset_3, column_3, indent_column_1, prefix_0, children_3, partial_tab_offset_1, partial_tab_width_1)
                                 if offset_3 == -1: break
 
 
@@ -6208,15 +6233,16 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_2 = self.Node('list_item', offset_2, offset_3, children_3, None)
+                            value_2 = self.Node('list_item', offset_2, offset_3, children_3, column_2, column_3, None)
                             children_2.append(value_2)
                             offset_2 = offset_3
+                            column_2 = column_3
 
 
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -6225,7 +6251,7 @@ def _build(unicodedata):
                             break
                         # end case
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -6242,13 +6268,13 @@ def _build(unicodedata):
                                             if offset_3 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                                 width = partial_tab_width_1
                                             else:
-                                                width  = (self.tabstop-(column_1%self.tabstop))
+                                                width  = (self.tabstop-(column_3%self.tabstop))
                                             count_0 += width
-                                            column_1 += width
+                                            column_3 += width
                                             offset_3 += 1
                                         else:
                                             count_0 += 1
-                                            column_1 += 1
+                                            column_3 += 1
                                             offset_3 += 1
                                     else:
                                         break
@@ -6257,15 +6283,16 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_3 = self.Node('list_item', offset_2, offset_3, children_3, None)
+                            value_3 = self.Node('list_item', offset_2, offset_3, children_3, column_2, column_3, None)
                             children_2.append(value_3)
                             offset_2 = offset_3
+                            column_2 = column_3
 
                             if offset_2 < buf_eof:
                                 codepoint = buf[offset_2]
                                 if codepoint in '\n':
                                     offset_2 +=1
-                                    column_1 = 0
+                                    column_2 = 0
                                     indent_column_1 = (0, None)
                                 else:
                                     offset_2 = -1
@@ -6275,7 +6302,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -6291,13 +6318,13 @@ def _build(unicodedata):
                     count_0 = 0
                     while True:
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
                         children_2 = [] if children_1 is not None else None
                         while True:
-                            if not (column_1 == indent_column_1[0] == 0):
+                            if not (column_2 == indent_column_1[0] == 0):
                                 offset_2 = -1
                                 break
                             # print('start')
@@ -6305,20 +6332,20 @@ def _build(unicodedata):
                                 # print(indent)
                                 _children, _prefix = [], []
                                 offset_3 = offset_2
-                                offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
+                                offset_3, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_2, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
                                 if _prefix or _children:
                                    raise Exception('bar')
                                 if offset_3 == -1:
                                     offset_2 = -1
                                     break
                                 offset_2 = offset_3
-                                indent_column_1 = (column_1, indent_column_1)
+                                indent_column_1 = (column_2, indent_column_1)
                             if offset_2 == -1:
                                 break
 
                             while True: # start choice
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -6332,13 +6359,13 @@ def _build(unicodedata):
                                                 if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
-                                                    width  = (self.tabstop-(column_2%self.tabstop))
+                                                    width  = (self.tabstop-(column_3%self.tabstop))
                                                 count_1 += width
-                                                column_2 += width
+                                                column_3 += width
                                                 offset_3 += 1
                                             else:
                                                 count_1 += 1
-                                                column_2 += 1
+                                                column_3 += 1
                                                 offset_3 += 1
                                         else:
                                             break
@@ -6347,7 +6374,7 @@ def _build(unicodedata):
                                         codepoint = buf[offset_3]
                                         if codepoint in '\n':
                                             offset_3 +=1
-                                            column_2 = 0
+                                            column_3 = 0
                                             indent_column_2 = (0, None)
                                         else:
                                             offset_3 = -1
@@ -6362,13 +6389,13 @@ def _build(unicodedata):
                                         count_1 = 0
                                         while True:
                                             offset_5 = offset_4
-                                            column_3 = column_2
+                                            column_5 = column_4
                                             indent_column_3 = indent_column_2
                                             partial_tab_offset_3 = partial_tab_offset_2
                                             partial_tab_width_3 = partial_tab_width_2
                                             children_5 = [] if children_4 is not None else None
                                             while True:
-                                                if not (column_3 == indent_column_3[0] == 0):
+                                                if not (column_5 == indent_column_3[0] == 0):
                                                     offset_5 = -1
                                                     break
                                                 # print('start')
@@ -6376,14 +6403,14 @@ def _build(unicodedata):
                                                     # print(indent)
                                                     _children, _prefix = [], []
                                                     offset_6 = offset_5
-                                                    offset_6, column_3, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = indent(buf, buf_start, buf_eof, offset_6, column_3, indent_column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
+                                                    offset_6, column_5, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = indent(buf, buf_start, buf_eof, offset_6, column_5, indent_column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
                                                     if _prefix or _children:
                                                        raise Exception('bar')
                                                     if offset_6 == -1:
                                                         offset_5 = -1
                                                         break
                                                     offset_5 = offset_6
-                                                    indent_column_3 = (column_3, indent_column_3)
+                                                    indent_column_3 = (column_5, indent_column_3)
                                                 if offset_5 == -1:
                                                     break
 
@@ -6395,13 +6422,13 @@ def _build(unicodedata):
                                                             if offset_5 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                                 width = partial_tab_width_3
                                                             else:
-                                                                width  = (self.tabstop-(column_3%self.tabstop))
+                                                                width  = (self.tabstop-(column_5%self.tabstop))
                                                             count_2 += width
-                                                            column_3 += width
+                                                            column_5 += width
                                                             offset_5 += 1
                                                         else:
                                                             count_2 += 1
-                                                            column_3 += 1
+                                                            column_5 += 1
                                                             offset_5 += 1
                                                     else:
                                                         break
@@ -6410,7 +6437,7 @@ def _build(unicodedata):
                                                     codepoint = buf[offset_5]
                                                     if codepoint in '\n':
                                                         offset_5 +=1
-                                                        column_3 = 0
+                                                        column_5 = 0
                                                         indent_column_3 = (0, None)
                                                     else:
                                                         offset_5 = -1
@@ -6426,7 +6453,7 @@ def _build(unicodedata):
                                             if children_5 is not None and children_5 is not None:
                                                 children_4.extend(children_5)
                                             offset_4 = offset_5
-                                            column_2 = column_3
+                                            column_4 = column_5
                                             indent_column_2 = indent_column_3
                                             partial_tab_offset_2 = partial_tab_offset_3
                                             partial_tab_width_2 = partial_tab_width_3
@@ -6438,18 +6465,19 @@ def _build(unicodedata):
                                     if offset_4 == -1:
                                         offset_3 = -1
                                         break
-                                    value_4 = self.Node('empty', offset_3, offset_4, children_4, None)
+                                    value_4 = self.Node('empty', offset_3, offset_4, children_4, column_3, column_4, None)
                                     children_3.append(value_4)
                                     offset_3 = offset_4
+                                    column_3 = column_4
 
                                     while True: # start lookahed
                                         children_4 = []
                                         offset_4 = offset_3 + 0
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
-                                        if not (column_3 == indent_column_3[0] == 0):
+                                        if not (column_4 == indent_column_3[0] == 0):
                                             offset_4 = -1
                                             break
                                         # print('start')
@@ -6457,14 +6485,14 @@ def _build(unicodedata):
                                             # print(indent)
                                             _children, _prefix = [], []
                                             offset_5 = offset_4
-                                            offset_5, column_3, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = indent(buf, buf_start, buf_eof, offset_5, column_3, indent_column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
+                                            offset_5, column_4, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = indent(buf, buf_start, buf_eof, offset_5, column_4, indent_column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
                                             if _prefix or _children:
                                                raise Exception('bar')
                                             if offset_5 == -1:
                                                 offset_4 = -1
                                                 break
                                             offset_4 = offset_5
-                                            indent_column_3 = (column_3, indent_column_3)
+                                            indent_column_3 = (column_4, indent_column_3)
                                         if offset_4 == -1:
                                             break
 
@@ -6476,20 +6504,20 @@ def _build(unicodedata):
                                                     if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                         width = partial_tab_width_3
                                                     else:
-                                                        width  = (self.tabstop-(column_3%self.tabstop))
+                                                        width  = (self.tabstop-(column_4%self.tabstop))
                                                     if count_1 + width > 3:
                                                         new_width = 3 - count_1
                                                         count_1 += new_width
-                                                        column_3 += new_width
+                                                        column_4 += new_width
                                                         partial_tab_offset_3 = offset_4
                                                         partial_tab_width_3 = width - new_width
                                                         break
                                                     count_1 += width
-                                                    column_3 += width
+                                                    column_4 += width
                                                     offset_4 += 1
                                                 else:
                                                     count_1 += 1
-                                                    column_3 += 1
+                                                    column_4 += 1
                                                     offset_4 += 1
                                             else:
                                                 break
@@ -6497,7 +6525,7 @@ def _build(unicodedata):
                                         count_1 = 0
                                         while count_1 < 9:
                                             offset_5 = offset_4
-                                            column_4 = column_3
+                                            column_5 = column_4
                                             indent_column_4 = indent_column_3
                                             partial_tab_offset_4 = partial_tab_offset_3
                                             partial_tab_width_4 = partial_tab_width_3
@@ -6511,7 +6539,7 @@ def _build(unicodedata):
 
                                                 if 48 <= codepoint <= 57:
                                                     offset_5 += 1
-                                                    column_4 += 1
+                                                    column_5 += 1
                                                 else:
                                                     offset_5 = -1
                                                     break
@@ -6523,7 +6551,7 @@ def _build(unicodedata):
                                             if children_5 is not None and children_5 is not None:
                                                 children_4.extend(children_5)
                                             offset_4 = offset_5
-                                            column_3 = column_4
+                                            column_4 = column_5
                                             indent_column_3 = indent_column_4
                                             partial_tab_offset_3 = partial_tab_offset_4
                                             partial_tab_width_3 = partial_tab_width_4
@@ -6536,7 +6564,7 @@ def _build(unicodedata):
 
                                         if buf[offset_4:offset_4+len(value_1)] == value_1:
                                             offset_4 += len(value_1)
-                                            column_3 += len(value_1)
+                                            column_4 += len(value_1)
                                         else:
                                             offset_4 = -1
                                             break
@@ -6550,7 +6578,7 @@ def _build(unicodedata):
                                     break
                                 if offset_3 != -1:
                                     offset_2 = offset_3
-                                    column_1 = column_2
+                                    column_2 = column_3
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -6559,7 +6587,7 @@ def _build(unicodedata):
                                     break
                                 # end case
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -6573,20 +6601,20 @@ def _build(unicodedata):
                                                 if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
-                                                    width  = (self.tabstop-(column_2%self.tabstop))
+                                                    width  = (self.tabstop-(column_3%self.tabstop))
                                                 if count_1 + width > 3:
                                                     new_width = 3 - count_1
                                                     count_1 += new_width
-                                                    column_2 += new_width
+                                                    column_3 += new_width
                                                     partial_tab_offset_2 = offset_3
                                                     partial_tab_width_2 = width - new_width
                                                     break
                                                 count_1 += width
-                                                column_2 += width
+                                                column_3 += width
                                                 offset_3 += 1
                                             else:
                                                 count_1 += 1
-                                                column_2 += 1
+                                                column_3 += 1
                                                 offset_3 += 1
                                         else:
                                             break
@@ -6594,7 +6622,7 @@ def _build(unicodedata):
                                     count_1 = 0
                                     while count_1 < 9:
                                         offset_4 = offset_3
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
@@ -6608,7 +6636,7 @@ def _build(unicodedata):
 
                                             if 48 <= codepoint <= 57:
                                                 offset_4 += 1
-                                                column_3 += 1
+                                                column_4 += 1
                                             else:
                                                 offset_4 = -1
                                                 break
@@ -6620,7 +6648,7 @@ def _build(unicodedata):
                                         if children_4 is not None and children_4 is not None:
                                             children_3.extend(children_4)
                                         offset_3 = offset_4
-                                        column_2 = column_3
+                                        column_3 = column_4
                                         indent_column_2 = indent_column_3
                                         partial_tab_offset_2 = partial_tab_offset_3
                                         partial_tab_width_2 = partial_tab_width_3
@@ -6633,14 +6661,14 @@ def _build(unicodedata):
 
                                     if buf[offset_3:offset_3+len(value_1)] == value_1:
                                         offset_3 += len(value_1)
-                                        column_2 += len(value_1)
+                                        column_3 += len(value_1)
                                     else:
                                         offset_3 = -1
                                         break
 
                                     while True: # start choice
                                         offset_4 = offset_3
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
@@ -6649,7 +6677,7 @@ def _build(unicodedata):
                                             while True: # start lookahed
                                                 children_5 = []
                                                 offset_5 = offset_4 + 0
-                                                column_4 = column_3
+                                                column_5 = column_4
                                                 indent_column_4 = indent_column_3
                                                 partial_tab_offset_4 = partial_tab_offset_3
                                                 partial_tab_width_4 = partial_tab_width_3
@@ -6661,13 +6689,13 @@ def _build(unicodedata):
                                                             if offset_5 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                                 width = partial_tab_width_4
                                                             else:
-                                                                width  = (self.tabstop-(column_4%self.tabstop))
+                                                                width  = (self.tabstop-(column_5%self.tabstop))
                                                             count_1 += width
-                                                            column_4 += width
+                                                            column_5 += width
                                                             offset_5 += 1
                                                         else:
                                                             count_1 += 1
-                                                            column_4 += 1
+                                                            column_5 += 1
                                                             offset_5 += 1
                                                     else:
                                                         break
@@ -6676,7 +6704,7 @@ def _build(unicodedata):
                                                     codepoint = buf[offset_5]
                                                     if codepoint in '\n':
                                                         offset_5 +=1
-                                                        column_4 = 0
+                                                        column_5 = 0
                                                         indent_column_4 = (0, None)
                                                     else:
                                                         offset_5 = -1
@@ -6691,7 +6719,7 @@ def _build(unicodedata):
                                             break
                                         if offset_4 != -1:
                                             offset_3 = offset_4
-                                            column_2 = column_3
+                                            column_3 = column_4
                                             indent_column_2 = indent_column_3
                                             partial_tab_offset_2 = partial_tab_offset_3
                                             partial_tab_width_2 = partial_tab_width_3
@@ -6700,7 +6728,7 @@ def _build(unicodedata):
                                             break
                                         # end case
                                         offset_4 = offset_3
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
@@ -6711,7 +6739,7 @@ def _build(unicodedata):
                                                 codepoint = buf[offset_4]
                                                 if codepoint in '\n':
                                                     offset_4 +=1
-                                                    column_3 = 0
+                                                    column_4 = 0
                                                     indent_column_3 = (0, None)
                                                     count_1 +=1
                                                 elif codepoint in ' \t':
@@ -6719,20 +6747,20 @@ def _build(unicodedata):
                                                         if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                             width = partial_tab_width_3
                                                         else:
-                                                            width  = (self.tabstop-(column_3%self.tabstop))
+                                                            width  = (self.tabstop-(column_4%self.tabstop))
                                                         if count_1 + width > 1:
                                                             new_width = 1 - count_1
                                                             count_1 += new_width
-                                                            column_3 += new_width
+                                                            column_4 += new_width
                                                             partial_tab_offset_3 = offset_4
                                                             partial_tab_width_3 = width - new_width
                                                             break
                                                         count_1 += width
-                                                        column_3 += width
+                                                        column_4 += width
                                                         offset_4 += 1
                                                     else:
                                                         count_1 += 1
-                                                        column_3 += 1
+                                                        column_4 += 1
                                                         offset_4 += 1
                                                 else:
                                                     break
@@ -6744,7 +6772,7 @@ def _build(unicodedata):
                                             break
                                         if offset_4 != -1:
                                             offset_3 = offset_4
-                                            column_2 = column_3
+                                            column_3 = column_4
                                             indent_column_2 = indent_column_3
                                             partial_tab_offset_2 = partial_tab_offset_3
                                             partial_tab_width_2 = partial_tab_width_3
@@ -6759,7 +6787,7 @@ def _build(unicodedata):
 
                                     while True: # start choice
                                         offset_4 = offset_3
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
@@ -6768,7 +6796,7 @@ def _build(unicodedata):
                                             offset_5 = offset_4
                                             children_5 = []
                                             while True: # start capture
-                                                offset_5, column_3, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = self.parse_list_item(buf, buf_start, buf_eof, offset_5, column_3, indent_column_3, prefix_0, children_5, partial_tab_offset_3, partial_tab_width_3)
+                                                offset_5, column_5, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = self.parse_list_item(buf, buf_start, buf_eof, offset_5, column_5, indent_column_3, prefix_0, children_5, partial_tab_offset_3, partial_tab_width_3)
                                                 if offset_5 == -1: break
 
 
@@ -6776,15 +6804,16 @@ def _build(unicodedata):
                                             if offset_5 == -1:
                                                 offset_4 = -1
                                                 break
-                                            value_5 = self.Node('list_item', offset_4, offset_5, children_5, None)
+                                            value_5 = self.Node('list_item', offset_4, offset_5, children_5, column_4, column_5, None)
                                             children_4.append(value_5)
                                             offset_4 = offset_5
+                                            column_4 = column_5
 
 
                                             break
                                         if offset_4 != -1:
                                             offset_3 = offset_4
-                                            column_2 = column_3
+                                            column_3 = column_4
                                             indent_column_2 = indent_column_3
                                             partial_tab_offset_2 = partial_tab_offset_3
                                             partial_tab_width_2 = partial_tab_width_3
@@ -6793,7 +6822,7 @@ def _build(unicodedata):
                                             break
                                         # end case
                                         offset_4 = offset_3
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
@@ -6810,13 +6839,13 @@ def _build(unicodedata):
                                                             if offset_5 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                                 width = partial_tab_width_3
                                                             else:
-                                                                width  = (self.tabstop-(column_3%self.tabstop))
+                                                                width  = (self.tabstop-(column_5%self.tabstop))
                                                             count_1 += width
-                                                            column_3 += width
+                                                            column_5 += width
                                                             offset_5 += 1
                                                         else:
                                                             count_1 += 1
-                                                            column_3 += 1
+                                                            column_5 += 1
                                                             offset_5 += 1
                                                     else:
                                                         break
@@ -6825,15 +6854,16 @@ def _build(unicodedata):
                                             if offset_5 == -1:
                                                 offset_4 = -1
                                                 break
-                                            value_6 = self.Node('list_item', offset_4, offset_5, children_5, None)
+                                            value_6 = self.Node('list_item', offset_4, offset_5, children_5, column_4, column_5, None)
                                             children_4.append(value_6)
                                             offset_4 = offset_5
+                                            column_4 = column_5
 
                                             if offset_4 < buf_eof:
                                                 codepoint = buf[offset_4]
                                                 if codepoint in '\n':
                                                     offset_4 +=1
-                                                    column_3 = 0
+                                                    column_4 = 0
                                                     indent_column_3 = (0, None)
                                                 else:
                                                     offset_4 = -1
@@ -6843,7 +6873,7 @@ def _build(unicodedata):
                                             break
                                         if offset_4 != -1:
                                             offset_3 = offset_4
-                                            column_2 = column_3
+                                            column_3 = column_4
                                             indent_column_2 = indent_column_3
                                             partial_tab_offset_2 = partial_tab_offset_3
                                             partial_tab_width_2 = partial_tab_width_3
@@ -6860,7 +6890,7 @@ def _build(unicodedata):
                                     break
                                 if offset_3 != -1:
                                     offset_2 = offset_3
-                                    column_1 = column_2
+                                    column_2 = column_3
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -6880,7 +6910,7 @@ def _build(unicodedata):
                         if children_2 is not None and children_2 is not None:
                             children_1.extend(children_2)
                         offset_1 = offset_2
-                        column_0 = column_1
+                        column_1 = column_2
                         indent_column_0 = indent_column_1
                         partial_tab_offset_0 = partial_tab_offset_1
                         partial_tab_width_0 = partial_tab_width_1
@@ -6892,9 +6922,10 @@ def _build(unicodedata):
                 if offset_1 == -1:
                     offset_0 = -1
                     break
-                value_7 = self.Node('ordered_list', offset_0, offset_1, children_1, None)
+                value_7 = self.Node('ordered_list', offset_0, offset_1, children_1, column_0, column_1, None)
                 children_0.append(value_7)
                 offset_0 = offset_1
+                column_0 = column_1
 
                 break
             return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
@@ -6981,7 +7012,7 @@ def _build(unicodedata):
                         count_0 = 0
                         while True:
                             offset_3 = offset_2
-                            column_1 = column_0
+                            column_3 = column_2
                             indent_column_1 = indent_column_0
                             partial_tab_offset_1 = partial_tab_offset_0
                             partial_tab_width_1 = partial_tab_width_0
@@ -6989,7 +7020,7 @@ def _build(unicodedata):
                             while True:
                                 while True: # start choice
                                     offset_4 = offset_3
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -6997,10 +7028,10 @@ def _build(unicodedata):
                                     while True: # case
                                         if buf[offset_4:offset_4+2] == '\\[':
                                             offset_4 += 2
-                                            column_2 += 2
+                                            column_4 += 2
                                         elif buf[offset_4:offset_4+2] == '\\]':
                                             offset_4 += 2
-                                            column_2 += 2
+                                            column_4 += 2
                                         else:
                                             offset_4 = -1
                                             break
@@ -7009,7 +7040,7 @@ def _build(unicodedata):
                                         break
                                     if offset_4 != -1:
                                         offset_3 = offset_4
-                                        column_1 = column_2
+                                        column_3 = column_4
                                         indent_column_1 = indent_column_2
                                         partial_tab_offset_1 = partial_tab_offset_2
                                         partial_tab_width_1 = partial_tab_width_2
@@ -7018,7 +7049,7 @@ def _build(unicodedata):
                                         break
                                     # end case
                                     offset_4 = offset_3
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -7038,13 +7069,13 @@ def _build(unicodedata):
                                             break
                                         else:
                                             offset_4 += 1
-                                            column_2 += 1
+                                            column_4 += 1
 
 
                                         break
                                     if offset_4 != -1:
                                         offset_3 = offset_4
-                                        column_1 = column_2
+                                        column_3 = column_4
                                         indent_column_1 = indent_column_2
                                         partial_tab_offset_1 = partial_tab_offset_2
                                         partial_tab_width_1 = partial_tab_width_2
@@ -7064,7 +7095,7 @@ def _build(unicodedata):
                             if children_3 is not None and children_3 is not None:
                                 children_2.extend(children_3)
                             offset_2 = offset_3
-                            column_0 = column_1
+                            column_2 = column_3
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -7079,27 +7110,28 @@ def _build(unicodedata):
                     if offset_2 == -1:
                         offset_1 = -1
                         break
-                    value_0 = self.Node('link_name', offset_1, offset_2, children_2, None)
+                    value_0 = self.Node('link_name', offset_1, offset_2, children_2, column_1, column_2, None)
                     children_1.append(value_0)
                     offset_1 = offset_2
+                    column_1 = column_2
 
                     if buf[offset_1:offset_1+1] == ']':
                         offset_1 += 1
-                        column_0 += 1
+                        column_1 += 1
                     else:
                         offset_1 = -1
                         break
 
                     if buf[offset_1:offset_1+1] == ':':
                         offset_1 += 1
-                        column_0 += 1
+                        column_1 += 1
                     else:
                         offset_1 = -1
                         break
 
                     while True: # start choice
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -7113,13 +7145,13 @@ def _build(unicodedata):
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
-                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                            width  = (self.tabstop-(column_2%self.tabstop))
                                         count_0 += width
-                                        column_1 += width
+                                        column_2 += width
                                         offset_2 += 1
                                     else:
                                         count_0 += 1
-                                        column_1 += 1
+                                        column_2 += 1
                                         offset_2 += 1
                                 else:
                                     break
@@ -7128,7 +7160,7 @@ def _build(unicodedata):
                                 codepoint = buf[offset_2]
                                 if codepoint in '\n':
                                     offset_2 +=1
-                                    column_1 = 0
+                                    column_2 = 0
                                     indent_column_1 = (0, None)
                                 else:
                                     offset_2 = -1
@@ -7137,7 +7169,7 @@ def _build(unicodedata):
                                 offset_2 = -1
                                 break
 
-                            if not (column_1 == indent_column_1[0] == 0):
+                            if not (column_2 == indent_column_1[0] == 0):
                                 offset_2 = -1
                                 break
                             # print('start')
@@ -7145,7 +7177,7 @@ def _build(unicodedata):
                                 # print(indent)
                                 _children, _prefix = [], []
                                 offset_3 = offset_2
-                                offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
+                                offset_3, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_2, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
                                 if _prefix or _children:
                                    raise Exception('bar')
                                 if offset_3 == -1:
@@ -7154,14 +7186,14 @@ def _build(unicodedata):
                                         break
                                     _children, _prefix = [], []
                                     offset_3 = offset_2
-                                    offset_3, _column, _indent_column, _partial_tab_offset, _partial_tab_width = dedent(buf, buf_start, buf_eof, offset_3, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
+                                    offset_3, _column, _indent_column, _partial_tab_offset, _partial_tab_width = dedent(buf, buf_start, buf_eof, offset_3, column_2, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
                                     if offset_3 != -1:
                                         offset_2 = -1
                                         break
                                     else:
                                         offset_3 = offset_2
                                 offset_2 = offset_3
-                                indent_column_1 = (column_1, indent_column_1)
+                                indent_column_1 = (column_2, indent_column_1)
                             if offset_2 == -1:
                                 break
 
@@ -7173,13 +7205,13 @@ def _build(unicodedata):
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
-                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                            width  = (self.tabstop-(column_2%self.tabstop))
                                         count_0 += width
-                                        column_1 += width
+                                        column_2 += width
                                         offset_2 += 1
                                     else:
                                         count_0 += 1
-                                        column_1 += 1
+                                        column_2 += 1
                                         offset_2 += 1
                                 else:
                                     break
@@ -7187,7 +7219,7 @@ def _build(unicodedata):
                             while True: # start reject
                                 children_3 = []
                                 offset_3 = offset_2 + 0
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -7195,7 +7227,7 @@ def _build(unicodedata):
                                     codepoint = buf[offset_3]
                                     if codepoint in '\n':
                                         offset_3 +=1
-                                        column_2 = 0
+                                        column_3 = 0
                                         indent_column_2 = (0, None)
                                     else:
                                         offset_3 = -1
@@ -7213,7 +7245,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -7222,7 +7254,7 @@ def _build(unicodedata):
                             break
                         # end case
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -7236,13 +7268,13 @@ def _build(unicodedata):
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
-                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                            width  = (self.tabstop-(column_2%self.tabstop))
                                         count_0 += width
-                                        column_1 += width
+                                        column_2 += width
                                         offset_2 += 1
                                     else:
                                         count_0 += 1
-                                        column_1 += 1
+                                        column_2 += 1
                                         offset_2 += 1
                                 else:
                                     break
@@ -7251,7 +7283,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -7267,7 +7299,7 @@ def _build(unicodedata):
                     while True: # start reject
                         children_2 = []
                         offset_2 = offset_1 + 0
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -7275,7 +7307,7 @@ def _build(unicodedata):
                             codepoint = buf[offset_2]
                             if codepoint in '\n':
                                 offset_2 +=1
-                                column_1 = 0
+                                column_2 = 0
                                 indent_column_1 = (0, None)
                             else:
                                 offset_2 = -1
@@ -7289,14 +7321,14 @@ def _build(unicodedata):
                         offset_1 = -1
                         break
 
-                    offset_1, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0 = self.parse_link_url(buf, buf_start, buf_eof, offset_1, column_0, indent_column_0, prefix_0, children_1, partial_tab_offset_0, partial_tab_width_0)
+                    offset_1, column_1, indent_column_0, partial_tab_offset_0, partial_tab_width_0 = self.parse_link_url(buf, buf_start, buf_eof, offset_1, column_1, indent_column_0, prefix_0, children_1, partial_tab_offset_0, partial_tab_width_0)
                     if offset_1 == -1: break
 
 
                     count_0 = 0
                     while count_0 < 1:
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -7304,7 +7336,7 @@ def _build(unicodedata):
                         while True:
                             while True: # start choice
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -7318,13 +7350,13 @@ def _build(unicodedata):
                                                 if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
-                                                    width  = (self.tabstop-(column_2%self.tabstop))
+                                                    width  = (self.tabstop-(column_3%self.tabstop))
                                                 count_1 += width
-                                                column_2 += width
+                                                column_3 += width
                                                 offset_3 += 1
                                             else:
                                                 count_1 += 1
-                                                column_2 += 1
+                                                column_3 += 1
                                                 offset_3 += 1
                                         else:
                                             break
@@ -7333,7 +7365,7 @@ def _build(unicodedata):
                                         codepoint = buf[offset_3]
                                         if codepoint in '\n':
                                             offset_3 +=1
-                                            column_2 = 0
+                                            column_3 = 0
                                             indent_column_2 = (0, None)
                                         else:
                                             offset_3 = -1
@@ -7342,7 +7374,7 @@ def _build(unicodedata):
                                         offset_3 = -1
                                         break
 
-                                    if not (column_2 == indent_column_2[0] == 0):
+                                    if not (column_3 == indent_column_2[0] == 0):
                                         offset_3 = -1
                                         break
                                     # print('start')
@@ -7350,7 +7382,7 @@ def _build(unicodedata):
                                         # print(indent)
                                         _children, _prefix = [], []
                                         offset_4 = offset_3
-                                        offset_4, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = indent(buf, buf_start, buf_eof, offset_4, column_2, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
+                                        offset_4, column_3, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = indent(buf, buf_start, buf_eof, offset_4, column_3, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
                                         if _prefix or _children:
                                            raise Exception('bar')
                                         if offset_4 == -1:
@@ -7359,14 +7391,14 @@ def _build(unicodedata):
                                                 break
                                             _children, _prefix = [], []
                                             offset_4 = offset_3
-                                            offset_4, _column, _indent_column, _partial_tab_offset, _partial_tab_width = dedent(buf, buf_start, buf_eof, offset_4, column_2, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
+                                            offset_4, _column, _indent_column, _partial_tab_offset, _partial_tab_width = dedent(buf, buf_start, buf_eof, offset_4, column_3, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
                                             if offset_4 != -1:
                                                 offset_3 = -1
                                                 break
                                             else:
                                                 offset_4 = offset_3
                                         offset_3 = offset_4
-                                        indent_column_2 = (column_2, indent_column_2)
+                                        indent_column_2 = (column_3, indent_column_2)
                                     if offset_3 == -1:
                                         break
 
@@ -7378,13 +7410,13 @@ def _build(unicodedata):
                                                 if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
-                                                    width  = (self.tabstop-(column_2%self.tabstop))
+                                                    width  = (self.tabstop-(column_3%self.tabstop))
                                                 count_1 += width
-                                                column_2 += width
+                                                column_3 += width
                                                 offset_3 += 1
                                             else:
                                                 count_1 += 1
-                                                column_2 += 1
+                                                column_3 += 1
                                                 offset_3 += 1
                                         else:
                                             break
@@ -7392,7 +7424,7 @@ def _build(unicodedata):
                                     while True: # start reject
                                         children_4 = []
                                         offset_4 = offset_3 + 0
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
@@ -7400,7 +7432,7 @@ def _build(unicodedata):
                                             codepoint = buf[offset_4]
                                             if codepoint in '\n':
                                                 offset_4 +=1
-                                                column_3 = 0
+                                                column_4 = 0
                                                 indent_column_3 = (0, None)
                                             else:
                                                 offset_4 = -1
@@ -7418,7 +7450,7 @@ def _build(unicodedata):
                                     break
                                 if offset_3 != -1:
                                     offset_2 = offset_3
-                                    column_1 = column_2
+                                    column_2 = column_3
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -7427,7 +7459,7 @@ def _build(unicodedata):
                                     break
                                 # end case
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -7441,13 +7473,13 @@ def _build(unicodedata):
                                                 if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
-                                                    width  = (self.tabstop-(column_2%self.tabstop))
+                                                    width  = (self.tabstop-(column_3%self.tabstop))
                                                 count_1 += width
-                                                column_2 += width
+                                                column_3 += width
                                                 offset_3 += 1
                                             else:
                                                 count_1 += 1
-                                                column_2 += 1
+                                                column_3 += 1
                                                 offset_3 += 1
                                         else:
                                             break
@@ -7459,7 +7491,7 @@ def _build(unicodedata):
                                     break
                                 if offset_3 != -1:
                                     offset_2 = offset_3
-                                    column_1 = column_2
+                                    column_2 = column_3
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -7472,14 +7504,14 @@ def _build(unicodedata):
                             if offset_2 == -1:
                                 break
 
-                            offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_link_title(buf, buf_start, buf_eof, offset_2, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
+                            offset_2, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_link_title(buf, buf_start, buf_eof, offset_2, column_2, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                             if offset_2 == -1: break
 
 
                             while True: # start lookahed
                                 children_3 = []
                                 offset_3 = offset_2 + 0
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -7491,13 +7523,13 @@ def _build(unicodedata):
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-(column_3%self.tabstop))
                                             count_1 += width
-                                            column_2 += width
+                                            column_3 += width
                                             offset_3 += 1
                                         else:
                                             count_1 += 1
-                                            column_2 += 1
+                                            column_3 += 1
                                             offset_3 += 1
                                     else:
                                         break
@@ -7506,7 +7538,7 @@ def _build(unicodedata):
                                     codepoint = buf[offset_3]
                                     if codepoint in '\n':
                                         offset_3 +=1
-                                        column_2 = 0
+                                        column_3 = 0
                                         indent_column_2 = (0, None)
                                     else:
                                         offset_3 = -1
@@ -7523,7 +7555,7 @@ def _build(unicodedata):
                             count_1 = 0
                             while True:
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -7537,13 +7569,13 @@ def _build(unicodedata):
                                                 if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
-                                                    width  = (self.tabstop-(column_2%self.tabstop))
+                                                    width  = (self.tabstop-(column_3%self.tabstop))
                                                 count_2 += width
-                                                column_2 += width
+                                                column_3 += width
                                                 offset_3 += 1
                                             else:
                                                 count_2 += 1
-                                                column_2 += 1
+                                                column_3 += 1
                                                 offset_3 += 1
                                         else:
                                             break
@@ -7552,7 +7584,7 @@ def _build(unicodedata):
                                         codepoint = buf[offset_3]
                                         if codepoint in '\n':
                                             offset_3 +=1
-                                            column_2 = 0
+                                            column_3 = 0
                                             indent_column_2 = (0, None)
                                         else:
                                             offset_3 = -1
@@ -7561,7 +7593,7 @@ def _build(unicodedata):
                                         offset_3 = -1
                                         break
 
-                                    if not (column_2 == indent_column_2[0] == 0):
+                                    if not (column_3 == indent_column_2[0] == 0):
                                         offset_3 = -1
                                         break
                                     # print('start')
@@ -7569,7 +7601,7 @@ def _build(unicodedata):
                                         # print(indent)
                                         _children, _prefix = [], []
                                         offset_4 = offset_3
-                                        offset_4, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = indent(buf, buf_start, buf_eof, offset_4, column_2, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
+                                        offset_4, column_3, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = indent(buf, buf_start, buf_eof, offset_4, column_3, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
                                         if _prefix or _children:
                                            raise Exception('bar')
                                         if offset_4 == -1:
@@ -7578,14 +7610,14 @@ def _build(unicodedata):
                                                 break
                                             _children, _prefix = [], []
                                             offset_4 = offset_3
-                                            offset_4, _column, _indent_column, _partial_tab_offset, _partial_tab_width = dedent(buf, buf_start, buf_eof, offset_4, column_2, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
+                                            offset_4, _column, _indent_column, _partial_tab_offset, _partial_tab_width = dedent(buf, buf_start, buf_eof, offset_4, column_3, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
                                             if offset_4 != -1:
                                                 offset_3 = -1
                                                 break
                                             else:
                                                 offset_4 = offset_3
                                         offset_3 = offset_4
-                                        indent_column_2 = (column_2, indent_column_2)
+                                        indent_column_2 = (column_3, indent_column_2)
                                     if offset_3 == -1:
                                         break
 
@@ -7597,13 +7629,13 @@ def _build(unicodedata):
                                                 if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
-                                                    width  = (self.tabstop-(column_2%self.tabstop))
+                                                    width  = (self.tabstop-(column_3%self.tabstop))
                                                 count_2 += width
-                                                column_2 += width
+                                                column_3 += width
                                                 offset_3 += 1
                                             else:
                                                 count_2 += 1
-                                                column_2 += 1
+                                                column_3 += 1
                                                 offset_3 += 1
                                         else:
                                             break
@@ -7611,7 +7643,7 @@ def _build(unicodedata):
                                     while True: # start reject
                                         children_4 = []
                                         offset_4 = offset_3 + 0
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
@@ -7619,7 +7651,7 @@ def _build(unicodedata):
                                             codepoint = buf[offset_4]
                                             if codepoint in '\n':
                                                 offset_4 +=1
-                                                column_3 = 0
+                                                column_4 = 0
                                                 indent_column_3 = (0, None)
                                             else:
                                                 offset_4 = -1
@@ -7633,14 +7665,14 @@ def _build(unicodedata):
                                         offset_3 = -1
                                         break
 
-                                    offset_3, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_link_title(buf, buf_start, buf_eof, offset_3, column_2, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
+                                    offset_3, column_3, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_link_title(buf, buf_start, buf_eof, offset_3, column_3, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
                                     if offset_3 == -1: break
 
 
                                     while True: # start lookahed
                                         children_4 = []
                                         offset_4 = offset_3 + 0
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
@@ -7652,13 +7684,13 @@ def _build(unicodedata):
                                                     if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                         width = partial_tab_width_3
                                                     else:
-                                                        width  = (self.tabstop-(column_3%self.tabstop))
+                                                        width  = (self.tabstop-(column_4%self.tabstop))
                                                     count_2 += width
-                                                    column_3 += width
+                                                    column_4 += width
                                                     offset_4 += 1
                                                 else:
                                                     count_2 += 1
-                                                    column_3 += 1
+                                                    column_4 += 1
                                                     offset_4 += 1
                                             else:
                                                 break
@@ -7667,7 +7699,7 @@ def _build(unicodedata):
                                             codepoint = buf[offset_4]
                                             if codepoint in '\n':
                                                 offset_4 +=1
-                                                column_3 = 0
+                                                column_4 = 0
                                                 indent_column_3 = (0, None)
                                             else:
                                                 offset_4 = -1
@@ -7688,7 +7720,7 @@ def _build(unicodedata):
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 offset_2 = offset_3
-                                column_1 = column_2
+                                column_2 = column_3
                                 indent_column_1 = indent_column_2
                                 partial_tab_offset_1 = partial_tab_offset_2
                                 partial_tab_width_1 = partial_tab_width_2
@@ -7703,7 +7735,7 @@ def _build(unicodedata):
                         if children_2 is not None and children_2 is not None:
                             children_1.extend(children_2)
                         offset_1 = offset_2
-                        column_0 = column_1
+                        column_1 = column_2
                         indent_column_0 = indent_column_1
                         partial_tab_offset_0 = partial_tab_offset_1
                         partial_tab_width_0 = partial_tab_width_1
@@ -7716,9 +7748,10 @@ def _build(unicodedata):
                 if offset_1 == -1:
                     offset_0 = -1
                     break
-                value_1 = self.Node('link_def', offset_0, offset_1, children_1, None)
+                value_1 = self.Node('link_def', offset_0, offset_1, children_1, column_0, column_1, None)
                 children_0.append(value_1)
                 offset_0 = offset_1
+                column_0 = column_1
 
                 count_0 = 0
                 while offset_0 < buf_eof:
@@ -8408,33 +8441,33 @@ def _build(unicodedata):
                                     if offset_2 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                         width = partial_tab_width_0
                                     else:
-                                        width  = (self.tabstop-(column_0%self.tabstop))
+                                        width  = (self.tabstop-(column_2%self.tabstop))
                                     if count_0 + width > 3:
                                         new_width = 3 - count_0
                                         count_0 += new_width
-                                        column_0 += new_width
+                                        column_2 += new_width
                                         partial_tab_offset_0 = offset_2
                                         partial_tab_width_0 = width - new_width
                                         break
                                     count_0 += width
-                                    column_0 += width
+                                    column_2 += width
                                     offset_2 += 1
                                 else:
                                     count_0 += 1
-                                    column_0 += 1
+                                    column_2 += 1
                                     offset_2 += 1
                             else:
                                 break
 
                         if buf[offset_2:offset_2+7].lower() == '<script':
                             offset_2 += 7
-                            column_0 += 7
+                            column_2 += 7
                         elif buf[offset_2:offset_2+4].lower() == '<pre':
                             offset_2 += 4
-                            column_0 += 4
+                            column_2 += 4
                         elif buf[offset_2:offset_2+6].lower() == '<style':
                             offset_2 += 6
-                            column_0 += 6
+                            column_2 += 6
                         else:
                             offset_2 = -1
                             break
@@ -8442,13 +8475,13 @@ def _build(unicodedata):
                         while True: # start lookahed
                             children_3 = []
                             offset_3 = offset_2 + 0
-                            column_1 = column_0
+                            column_3 = column_2
                             indent_column_1 = indent_column_0
                             partial_tab_offset_1 = partial_tab_offset_0
                             partial_tab_width_1 = partial_tab_width_0
                             while True: # start choice
                                 offset_4 = offset_3
-                                column_2 = column_1
+                                column_4 = column_3
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -8462,13 +8495,13 @@ def _build(unicodedata):
                                                 if offset_4 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
-                                                    width  = (self.tabstop-(column_2%self.tabstop))
+                                                    width  = (self.tabstop-(column_4%self.tabstop))
                                                 count_0 += width
-                                                column_2 += width
+                                                column_4 += width
                                                 offset_4 += 1
                                             else:
                                                 count_0 += 1
-                                                column_2 += 1
+                                                column_4 += 1
                                                 offset_4 += 1
                                         else:
                                             break
@@ -8480,7 +8513,7 @@ def _build(unicodedata):
                                     break
                                 if offset_4 != -1:
                                     offset_3 = offset_4
-                                    column_1 = column_2
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -8489,7 +8522,7 @@ def _build(unicodedata):
                                     break
                                 # end case
                                 offset_4 = offset_3
-                                column_2 = column_1
+                                column_4 = column_3
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -8497,7 +8530,7 @@ def _build(unicodedata):
                                 while True: # case
                                     if buf[offset_4:offset_4+1] == '>':
                                         offset_4 += 1
-                                        column_2 += 1
+                                        column_4 += 1
                                     else:
                                         offset_4 = -1
                                         break
@@ -8506,7 +8539,7 @@ def _build(unicodedata):
                                     break
                                 if offset_4 != -1:
                                     offset_3 = offset_4
-                                    column_1 = column_2
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -8515,7 +8548,7 @@ def _build(unicodedata):
                                     break
                                 # end case
                                 offset_4 = offset_3
-                                column_2 = column_1
+                                column_4 = column_3
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -8525,7 +8558,7 @@ def _build(unicodedata):
                                         codepoint = buf[offset_4]
                                         if codepoint in '\n':
                                             offset_4 +=1
-                                            column_2 = 0
+                                            column_4 = 0
                                             indent_column_2 = (0, None)
                                         else:
                                             offset_4 = -1
@@ -8535,7 +8568,7 @@ def _build(unicodedata):
                                     break
                                 if offset_4 != -1:
                                     offset_3 = offset_4
-                                    column_1 = column_2
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -8556,7 +8589,7 @@ def _build(unicodedata):
                         count_0 = 0
                         while True:
                             offset_3 = offset_2
-                            column_1 = column_0
+                            column_3 = column_2
                             indent_column_1 = indent_column_0
                             partial_tab_offset_1 = partial_tab_offset_0
                             partial_tab_width_1 = partial_tab_width_0
@@ -8565,19 +8598,19 @@ def _build(unicodedata):
                                 while True: # start reject
                                     children_4 = []
                                     offset_4 = offset_3 + 0
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
                                     if buf[offset_4:offset_4+9].lower() == '</script>':
                                         offset_4 += 9
-                                        column_2 += 9
+                                        column_4 += 9
                                     elif buf[offset_4:offset_4+6].lower() == '</pre>':
                                         offset_4 += 6
-                                        column_2 += 6
+                                        column_4 += 6
                                     elif buf[offset_4:offset_4+8].lower() == '</style>':
                                         offset_4 += 8
-                                        column_2 += 8
+                                        column_4 += 8
                                     else:
                                         offset_4 = -1
                                         break
@@ -8598,7 +8631,7 @@ def _build(unicodedata):
                                     break
                                 else:
                                     offset_3 += 1
-                                    column_1 += 1
+                                    column_3 += 1
 
                                 break
                             if offset_3 == -1:
@@ -8607,7 +8640,7 @@ def _build(unicodedata):
                             if children_3 is not None and children_3 is not None:
                                 children_2.extend(children_3)
                             offset_2 = offset_3
-                            column_0 = column_1
+                            column_2 = column_3
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -8619,14 +8652,15 @@ def _build(unicodedata):
                     if offset_2 == -1:
                         offset_1 = -1
                         break
-                    value_0 = self.Node('raw', offset_1, offset_2, children_2, None)
+                    value_0 = self.Node('raw', offset_1, offset_2, children_2, column_1, column_2, None)
                     children_1.append(value_0)
                     offset_1 = offset_2
+                    column_1 = column_2
 
                     count_0 = 0
                     while True:
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -8639,7 +8673,7 @@ def _build(unicodedata):
                                     codepoint = buf[offset_3]
                                     if codepoint in '\n':
                                         offset_3 +=1
-                                        column_1 = 0
+                                        column_3 = 0
                                         indent_column_1 = (0, None)
                                     else:
                                         offset_3 = -1
@@ -8652,11 +8686,12 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_1 = self.Node('raw', offset_2, offset_3, children_3, None)
+                            value_1 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                             children_2.append(value_1)
                             offset_2 = offset_3
+                            column_2 = column_3
 
-                            if not (column_1 == indent_column_1[0] == 0):
+                            if not (column_2 == indent_column_1[0] == 0):
                                 offset_2 = -1
                                 break
                             # print('start')
@@ -8664,21 +8699,21 @@ def _build(unicodedata):
                                 # print(indent)
                                 _children, _prefix = [], []
                                 offset_3 = offset_2
-                                offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
+                                offset_3, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_2, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
                                 if _prefix or _children:
                                    raise Exception('bar')
                                 if offset_3 == -1:
                                     offset_2 = -1
                                     break
                                 offset_2 = offset_3
-                                indent_column_1 = (column_1, indent_column_1)
+                                indent_column_1 = (column_2, indent_column_1)
                             if offset_2 == -1:
                                 break
 
                             while True: # start reject
                                 children_3 = []
                                 offset_3 = offset_2 + 0
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -8690,13 +8725,13 @@ def _build(unicodedata):
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-(column_3%self.tabstop))
                                             count_1 += width
-                                            column_2 += width
+                                            column_3 += width
                                             offset_3 += 1
                                         else:
                                             count_1 += 1
-                                            column_2 += 1
+                                            column_3 += 1
                                             offset_3 += 1
                                     else:
                                         break
@@ -8716,7 +8751,7 @@ def _build(unicodedata):
                                 count_1 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -8725,19 +8760,19 @@ def _build(unicodedata):
                                         while True: # start reject
                                             children_5 = []
                                             offset_5 = offset_4 + 0
-                                            column_3 = column_2
+                                            column_5 = column_4
                                             indent_column_3 = indent_column_2
                                             partial_tab_offset_3 = partial_tab_offset_2
                                             partial_tab_width_3 = partial_tab_width_2
                                             if buf[offset_5:offset_5+9].lower() == '</script>':
                                                 offset_5 += 9
-                                                column_3 += 9
+                                                column_5 += 9
                                             elif buf[offset_5:offset_5+6].lower() == '</pre>':
                                                 offset_5 += 6
-                                                column_3 += 6
+                                                column_5 += 6
                                             elif buf[offset_5:offset_5+8].lower() == '</style>':
                                                 offset_5 += 8
-                                                column_3 += 8
+                                                column_5 += 8
                                             else:
                                                 offset_5 = -1
                                                 break
@@ -8758,7 +8793,7 @@ def _build(unicodedata):
                                             break
                                         else:
                                             offset_4 += 1
-                                            column_2 += 1
+                                            column_4 += 1
 
                                         break
                                     if offset_4 == -1:
@@ -8767,7 +8802,7 @@ def _build(unicodedata):
                                     if children_4 is not None and children_4 is not None:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
-                                    column_1 = column_2
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -8779,9 +8814,10 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_2 = self.Node('raw', offset_2, offset_3, children_3, None)
+                            value_2 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                             children_2.append(value_2)
                             offset_2 = offset_3
+                            column_2 = column_3
 
                             break
                         if offset_2 == -1:
@@ -8790,7 +8826,7 @@ def _build(unicodedata):
                         if children_2 is not None and children_2 is not None:
                             children_1.extend(children_2)
                         offset_1 = offset_2
-                        column_0 = column_1
+                        column_1 = column_2
                         indent_column_0 = indent_column_1
                         partial_tab_offset_0 = partial_tab_offset_1
                         partial_tab_width_0 = partial_tab_width_1
@@ -8800,7 +8836,7 @@ def _build(unicodedata):
 
                     while True: # start choice
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -8811,13 +8847,13 @@ def _build(unicodedata):
                             while True: # start capture
                                 if buf[offset_3:offset_3+9].lower() == '</script>':
                                     offset_3 += 9
-                                    column_1 += 9
+                                    column_3 += 9
                                 elif buf[offset_3:offset_3+6].lower() == '</pre>':
                                     offset_3 += 6
-                                    column_1 += 6
+                                    column_3 += 6
                                 elif buf[offset_3:offset_3+8].lower() == '</style>':
                                     offset_3 += 8
-                                    column_1 += 8
+                                    column_3 += 8
                                 else:
                                     offset_3 = -1
                                     break
@@ -8825,7 +8861,7 @@ def _build(unicodedata):
                                 count_0 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -8842,7 +8878,7 @@ def _build(unicodedata):
                                             break
                                         else:
                                             offset_4 += 1
-                                            column_2 += 1
+                                            column_4 += 1
 
                                         break
                                     if offset_4 == -1:
@@ -8851,7 +8887,7 @@ def _build(unicodedata):
                                     if children_4 is not None and children_4 is not None:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
-                                    column_1 = column_2
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -8863,15 +8899,16 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_3 = self.Node('raw', offset_2, offset_3, children_3, None)
+                            value_3 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                             children_2.append(value_3)
                             offset_2 = offset_3
+                            column_2 = column_3
 
                             if offset_2 < buf_eof:
                                 codepoint = buf[offset_2]
                                 if codepoint in '\n':
                                     offset_2 +=1
-                                    column_1 = 0
+                                    column_2 = 0
                                     indent_column_1 = (0, None)
                                 else:
                                     offset_2 = -1
@@ -8884,7 +8921,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -8893,7 +8930,7 @@ def _build(unicodedata):
                             break
                         # end case
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -8905,7 +8942,7 @@ def _build(unicodedata):
                                 count_0 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -8914,19 +8951,19 @@ def _build(unicodedata):
                                         while True: # start reject
                                             children_5 = []
                                             offset_5 = offset_4 + 0
-                                            column_3 = column_2
+                                            column_5 = column_4
                                             indent_column_3 = indent_column_2
                                             partial_tab_offset_3 = partial_tab_offset_2
                                             partial_tab_width_3 = partial_tab_width_2
                                             if buf[offset_5:offset_5+9].lower() == '</script>':
                                                 offset_5 += 9
-                                                column_3 += 9
+                                                column_5 += 9
                                             elif buf[offset_5:offset_5+6].lower() == '</pre>':
                                                 offset_5 += 6
-                                                column_3 += 6
+                                                column_5 += 6
                                             elif buf[offset_5:offset_5+8].lower() == '</style>':
                                                 offset_5 += 8
-                                                column_3 += 8
+                                                column_5 += 8
                                             else:
                                                 offset_5 = -1
                                                 break
@@ -8947,7 +8984,7 @@ def _build(unicodedata):
                                             break
                                         else:
                                             offset_4 += 1
-                                            column_2 += 1
+                                            column_4 += 1
 
                                         break
                                     if offset_4 == -1:
@@ -8956,7 +8993,7 @@ def _build(unicodedata):
                                     if children_4 is not None and children_4 is not None:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
-                                    column_1 = column_2
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -8968,15 +9005,16 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_4 = self.Node('raw', offset_2, offset_3, children_3, None)
+                            value_4 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                             children_2.append(value_4)
                             offset_2 = offset_3
+                            column_2 = column_3
 
                             if offset_2 < buf_eof:
                                 codepoint = buf[offset_2]
                                 if codepoint in '\n':
                                     offset_2 +=1
-                                    column_1 = 0
+                                    column_2 = 0
                                     indent_column_1 = (0, None)
                                 else:
                                     offset_2 = -1
@@ -8986,7 +9024,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -9003,9 +9041,10 @@ def _build(unicodedata):
                 if offset_1 == -1:
                     offset_0 = -1
                     break
-                value_5 = self.Node('html_block', offset_0, offset_1, children_1, None)
+                value_5 = self.Node('html_block', offset_0, offset_1, children_1, column_0, column_1, None)
                 children_0.append(value_5)
                 offset_0 = offset_1
+                column_0 = column_1
 
                 break
             return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
@@ -9026,27 +9065,27 @@ def _build(unicodedata):
                                     if offset_2 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                         width = partial_tab_width_0
                                     else:
-                                        width  = (self.tabstop-(column_0%self.tabstop))
+                                        width  = (self.tabstop-(column_2%self.tabstop))
                                     if count_0 + width > 3:
                                         new_width = 3 - count_0
                                         count_0 += new_width
-                                        column_0 += new_width
+                                        column_2 += new_width
                                         partial_tab_offset_0 = offset_2
                                         partial_tab_width_0 = width - new_width
                                         break
                                     count_0 += width
-                                    column_0 += width
+                                    column_2 += width
                                     offset_2 += 1
                                 else:
                                     count_0 += 1
-                                    column_0 += 1
+                                    column_2 += 1
                                     offset_2 += 1
                             else:
                                 break
 
                         if buf[offset_2:offset_2+4] == '<!--':
                             offset_2 += 4
-                            column_0 += 4
+                            column_2 += 4
                         else:
                             offset_2 = -1
                             break
@@ -9054,7 +9093,7 @@ def _build(unicodedata):
                         count_0 = 0
                         while True:
                             offset_3 = offset_2
-                            column_1 = column_0
+                            column_3 = column_2
                             indent_column_1 = indent_column_0
                             partial_tab_offset_1 = partial_tab_offset_0
                             partial_tab_width_1 = partial_tab_width_0
@@ -9063,13 +9102,13 @@ def _build(unicodedata):
                                 while True: # start reject
                                     children_4 = []
                                     offset_4 = offset_3 + 0
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
                                     if buf[offset_4:offset_4+3] == '-->':
                                         offset_4 += 3
-                                        column_2 += 3
+                                        column_4 += 3
                                     else:
                                         offset_4 = -1
                                         break
@@ -9090,7 +9129,7 @@ def _build(unicodedata):
                                     break
                                 else:
                                     offset_3 += 1
-                                    column_1 += 1
+                                    column_3 += 1
 
                                 break
                             if offset_3 == -1:
@@ -9099,7 +9138,7 @@ def _build(unicodedata):
                             if children_3 is not None and children_3 is not None:
                                 children_2.extend(children_3)
                             offset_2 = offset_3
-                            column_0 = column_1
+                            column_2 = column_3
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -9111,14 +9150,15 @@ def _build(unicodedata):
                     if offset_2 == -1:
                         offset_1 = -1
                         break
-                    value_0 = self.Node('raw', offset_1, offset_2, children_2, None)
+                    value_0 = self.Node('raw', offset_1, offset_2, children_2, column_1, column_2, None)
                     children_1.append(value_0)
                     offset_1 = offset_2
+                    column_1 = column_2
 
                     count_0 = 0
                     while True:
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -9131,7 +9171,7 @@ def _build(unicodedata):
                                     codepoint = buf[offset_3]
                                     if codepoint in '\n':
                                         offset_3 +=1
-                                        column_1 = 0
+                                        column_3 = 0
                                         indent_column_1 = (0, None)
                                     else:
                                         offset_3 = -1
@@ -9144,11 +9184,12 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_1 = self.Node('raw', offset_2, offset_3, children_3, None)
+                            value_1 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                             children_2.append(value_1)
                             offset_2 = offset_3
+                            column_2 = column_3
 
-                            if not (column_1 == indent_column_1[0] == 0):
+                            if not (column_2 == indent_column_1[0] == 0):
                                 offset_2 = -1
                                 break
                             # print('start')
@@ -9156,21 +9197,21 @@ def _build(unicodedata):
                                 # print(indent)
                                 _children, _prefix = [], []
                                 offset_3 = offset_2
-                                offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
+                                offset_3, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_2, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
                                 if _prefix or _children:
                                    raise Exception('bar')
                                 if offset_3 == -1:
                                     offset_2 = -1
                                     break
                                 offset_2 = offset_3
-                                indent_column_1 = (column_1, indent_column_1)
+                                indent_column_1 = (column_2, indent_column_1)
                             if offset_2 == -1:
                                 break
 
                             while True: # start reject
                                 children_3 = []
                                 offset_3 = offset_2 + 0
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -9182,13 +9223,13 @@ def _build(unicodedata):
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-(column_3%self.tabstop))
                                             count_1 += width
-                                            column_2 += width
+                                            column_3 += width
                                             offset_3 += 1
                                         else:
                                             count_1 += 1
-                                            column_2 += 1
+                                            column_3 += 1
                                             offset_3 += 1
                                     else:
                                         break
@@ -9208,7 +9249,7 @@ def _build(unicodedata):
                                 count_1 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -9217,13 +9258,13 @@ def _build(unicodedata):
                                         while True: # start reject
                                             children_5 = []
                                             offset_5 = offset_4 + 0
-                                            column_3 = column_2
+                                            column_5 = column_4
                                             indent_column_3 = indent_column_2
                                             partial_tab_offset_3 = partial_tab_offset_2
                                             partial_tab_width_3 = partial_tab_width_2
                                             if buf[offset_5:offset_5+3] == '-->':
                                                 offset_5 += 3
-                                                column_3 += 3
+                                                column_5 += 3
                                             else:
                                                 offset_5 = -1
                                                 break
@@ -9244,7 +9285,7 @@ def _build(unicodedata):
                                             break
                                         else:
                                             offset_4 += 1
-                                            column_2 += 1
+                                            column_4 += 1
 
                                         break
                                     if offset_4 == -1:
@@ -9253,7 +9294,7 @@ def _build(unicodedata):
                                     if children_4 is not None and children_4 is not None:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
-                                    column_1 = column_2
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -9265,9 +9306,10 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_2 = self.Node('raw', offset_2, offset_3, children_3, None)
+                            value_2 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                             children_2.append(value_2)
                             offset_2 = offset_3
+                            column_2 = column_3
 
                             break
                         if offset_2 == -1:
@@ -9276,7 +9318,7 @@ def _build(unicodedata):
                         if children_2 is not None and children_2 is not None:
                             children_1.extend(children_2)
                         offset_1 = offset_2
-                        column_0 = column_1
+                        column_1 = column_2
                         indent_column_0 = indent_column_1
                         partial_tab_offset_0 = partial_tab_offset_1
                         partial_tab_width_0 = partial_tab_width_1
@@ -9286,7 +9328,7 @@ def _build(unicodedata):
 
                     while True: # start choice
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -9297,7 +9339,7 @@ def _build(unicodedata):
                             while True: # start capture
                                 if buf[offset_3:offset_3+3] == '-->':
                                     offset_3 += 3
-                                    column_1 += 3
+                                    column_3 += 3
                                 else:
                                     offset_3 = -1
                                     break
@@ -9305,7 +9347,7 @@ def _build(unicodedata):
                                 count_0 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -9322,7 +9364,7 @@ def _build(unicodedata):
                                             break
                                         else:
                                             offset_4 += 1
-                                            column_2 += 1
+                                            column_4 += 1
 
                                         break
                                     if offset_4 == -1:
@@ -9331,7 +9373,7 @@ def _build(unicodedata):
                                     if children_4 is not None and children_4 is not None:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
-                                    column_1 = column_2
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -9343,15 +9385,16 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_3 = self.Node('raw', offset_2, offset_3, children_3, None)
+                            value_3 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                             children_2.append(value_3)
                             offset_2 = offset_3
+                            column_2 = column_3
 
                             if offset_2 < buf_eof:
                                 codepoint = buf[offset_2]
                                 if codepoint in '\n':
                                     offset_2 +=1
-                                    column_1 = 0
+                                    column_2 = 0
                                     indent_column_1 = (0, None)
                                 else:
                                     offset_2 = -1
@@ -9364,7 +9407,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -9373,7 +9416,7 @@ def _build(unicodedata):
                             break
                         # end case
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -9385,7 +9428,7 @@ def _build(unicodedata):
                                 count_0 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -9394,13 +9437,13 @@ def _build(unicodedata):
                                         while True: # start reject
                                             children_5 = []
                                             offset_5 = offset_4 + 0
-                                            column_3 = column_2
+                                            column_5 = column_4
                                             indent_column_3 = indent_column_2
                                             partial_tab_offset_3 = partial_tab_offset_2
                                             partial_tab_width_3 = partial_tab_width_2
                                             if buf[offset_5:offset_5+3] == '-->':
                                                 offset_5 += 3
-                                                column_3 += 3
+                                                column_5 += 3
                                             else:
                                                 offset_5 = -1
                                                 break
@@ -9421,7 +9464,7 @@ def _build(unicodedata):
                                             break
                                         else:
                                             offset_4 += 1
-                                            column_2 += 1
+                                            column_4 += 1
 
                                         break
                                     if offset_4 == -1:
@@ -9430,7 +9473,7 @@ def _build(unicodedata):
                                     if children_4 is not None and children_4 is not None:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
-                                    column_1 = column_2
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -9442,15 +9485,16 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_4 = self.Node('raw', offset_2, offset_3, children_3, None)
+                            value_4 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                             children_2.append(value_4)
                             offset_2 = offset_3
+                            column_2 = column_3
 
                             if offset_2 < buf_eof:
                                 codepoint = buf[offset_2]
                                 if codepoint in '\n':
                                     offset_2 +=1
-                                    column_1 = 0
+                                    column_2 = 0
                                     indent_column_1 = (0, None)
                                 else:
                                     offset_2 = -1
@@ -9460,7 +9504,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -9477,9 +9521,10 @@ def _build(unicodedata):
                 if offset_1 == -1:
                     offset_0 = -1
                     break
-                value_5 = self.Node('html_block', offset_0, offset_1, children_1, None)
+                value_5 = self.Node('html_block', offset_0, offset_1, children_1, column_0, column_1, None)
                 children_0.append(value_5)
                 offset_0 = offset_1
+                column_0 = column_1
 
                 break
             return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
@@ -9500,27 +9545,27 @@ def _build(unicodedata):
                                     if offset_2 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                         width = partial_tab_width_0
                                     else:
-                                        width  = (self.tabstop-(column_0%self.tabstop))
+                                        width  = (self.tabstop-(column_2%self.tabstop))
                                     if count_0 + width > 3:
                                         new_width = 3 - count_0
                                         count_0 += new_width
-                                        column_0 += new_width
+                                        column_2 += new_width
                                         partial_tab_offset_0 = offset_2
                                         partial_tab_width_0 = width - new_width
                                         break
                                     count_0 += width
-                                    column_0 += width
+                                    column_2 += width
                                     offset_2 += 1
                                 else:
                                     count_0 += 1
-                                    column_0 += 1
+                                    column_2 += 1
                                     offset_2 += 1
                             else:
                                 break
 
                         if buf[offset_2:offset_2+2] == '<?':
                             offset_2 += 2
-                            column_0 += 2
+                            column_2 += 2
                         else:
                             offset_2 = -1
                             break
@@ -9528,7 +9573,7 @@ def _build(unicodedata):
                         count_0 = 0
                         while True:
                             offset_3 = offset_2
-                            column_1 = column_0
+                            column_3 = column_2
                             indent_column_1 = indent_column_0
                             partial_tab_offset_1 = partial_tab_offset_0
                             partial_tab_width_1 = partial_tab_width_0
@@ -9537,13 +9582,13 @@ def _build(unicodedata):
                                 while True: # start reject
                                     children_4 = []
                                     offset_4 = offset_3 + 0
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
                                     if buf[offset_4:offset_4+2] == '?>':
                                         offset_4 += 2
-                                        column_2 += 2
+                                        column_4 += 2
                                     else:
                                         offset_4 = -1
                                         break
@@ -9564,7 +9609,7 @@ def _build(unicodedata):
                                     break
                                 else:
                                     offset_3 += 1
-                                    column_1 += 1
+                                    column_3 += 1
 
                                 break
                             if offset_3 == -1:
@@ -9573,7 +9618,7 @@ def _build(unicodedata):
                             if children_3 is not None and children_3 is not None:
                                 children_2.extend(children_3)
                             offset_2 = offset_3
-                            column_0 = column_1
+                            column_2 = column_3
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -9585,14 +9630,15 @@ def _build(unicodedata):
                     if offset_2 == -1:
                         offset_1 = -1
                         break
-                    value_0 = self.Node('raw', offset_1, offset_2, children_2, None)
+                    value_0 = self.Node('raw', offset_1, offset_2, children_2, column_1, column_2, None)
                     children_1.append(value_0)
                     offset_1 = offset_2
+                    column_1 = column_2
 
                     count_0 = 0
                     while True:
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -9605,7 +9651,7 @@ def _build(unicodedata):
                                     codepoint = buf[offset_3]
                                     if codepoint in '\n':
                                         offset_3 +=1
-                                        column_1 = 0
+                                        column_3 = 0
                                         indent_column_1 = (0, None)
                                     else:
                                         offset_3 = -1
@@ -9618,11 +9664,12 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_1 = self.Node('raw', offset_2, offset_3, children_3, None)
+                            value_1 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                             children_2.append(value_1)
                             offset_2 = offset_3
+                            column_2 = column_3
 
-                            if not (column_1 == indent_column_1[0] == 0):
+                            if not (column_2 == indent_column_1[0] == 0):
                                 offset_2 = -1
                                 break
                             # print('start')
@@ -9630,21 +9677,21 @@ def _build(unicodedata):
                                 # print(indent)
                                 _children, _prefix = [], []
                                 offset_3 = offset_2
-                                offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
+                                offset_3, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_2, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
                                 if _prefix or _children:
                                    raise Exception('bar')
                                 if offset_3 == -1:
                                     offset_2 = -1
                                     break
                                 offset_2 = offset_3
-                                indent_column_1 = (column_1, indent_column_1)
+                                indent_column_1 = (column_2, indent_column_1)
                             if offset_2 == -1:
                                 break
 
                             while True: # start reject
                                 children_3 = []
                                 offset_3 = offset_2 + 0
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -9656,13 +9703,13 @@ def _build(unicodedata):
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-(column_3%self.tabstop))
                                             count_1 += width
-                                            column_2 += width
+                                            column_3 += width
                                             offset_3 += 1
                                         else:
                                             count_1 += 1
-                                            column_2 += 1
+                                            column_3 += 1
                                             offset_3 += 1
                                     else:
                                         break
@@ -9682,7 +9729,7 @@ def _build(unicodedata):
                                 count_1 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -9691,13 +9738,13 @@ def _build(unicodedata):
                                         while True: # start reject
                                             children_5 = []
                                             offset_5 = offset_4 + 0
-                                            column_3 = column_2
+                                            column_5 = column_4
                                             indent_column_3 = indent_column_2
                                             partial_tab_offset_3 = partial_tab_offset_2
                                             partial_tab_width_3 = partial_tab_width_2
                                             if buf[offset_5:offset_5+2] == '?>':
                                                 offset_5 += 2
-                                                column_3 += 2
+                                                column_5 += 2
                                             else:
                                                 offset_5 = -1
                                                 break
@@ -9718,7 +9765,7 @@ def _build(unicodedata):
                                             break
                                         else:
                                             offset_4 += 1
-                                            column_2 += 1
+                                            column_4 += 1
 
                                         break
                                     if offset_4 == -1:
@@ -9727,7 +9774,7 @@ def _build(unicodedata):
                                     if children_4 is not None and children_4 is not None:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
-                                    column_1 = column_2
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -9739,9 +9786,10 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_2 = self.Node('raw', offset_2, offset_3, children_3, None)
+                            value_2 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                             children_2.append(value_2)
                             offset_2 = offset_3
+                            column_2 = column_3
 
                             break
                         if offset_2 == -1:
@@ -9750,7 +9798,7 @@ def _build(unicodedata):
                         if children_2 is not None and children_2 is not None:
                             children_1.extend(children_2)
                         offset_1 = offset_2
-                        column_0 = column_1
+                        column_1 = column_2
                         indent_column_0 = indent_column_1
                         partial_tab_offset_0 = partial_tab_offset_1
                         partial_tab_width_0 = partial_tab_width_1
@@ -9760,7 +9808,7 @@ def _build(unicodedata):
 
                     while True: # start choice
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -9771,7 +9819,7 @@ def _build(unicodedata):
                             while True: # start capture
                                 if buf[offset_3:offset_3+2] == '?>':
                                     offset_3 += 2
-                                    column_1 += 2
+                                    column_3 += 2
                                 else:
                                     offset_3 = -1
                                     break
@@ -9779,7 +9827,7 @@ def _build(unicodedata):
                                 count_0 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -9796,7 +9844,7 @@ def _build(unicodedata):
                                             break
                                         else:
                                             offset_4 += 1
-                                            column_2 += 1
+                                            column_4 += 1
 
                                         break
                                     if offset_4 == -1:
@@ -9805,7 +9853,7 @@ def _build(unicodedata):
                                     if children_4 is not None and children_4 is not None:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
-                                    column_1 = column_2
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -9817,15 +9865,16 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_3 = self.Node('raw', offset_2, offset_3, children_3, None)
+                            value_3 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                             children_2.append(value_3)
                             offset_2 = offset_3
+                            column_2 = column_3
 
                             if offset_2 < buf_eof:
                                 codepoint = buf[offset_2]
                                 if codepoint in '\n':
                                     offset_2 +=1
-                                    column_1 = 0
+                                    column_2 = 0
                                     indent_column_1 = (0, None)
                                 else:
                                     offset_2 = -1
@@ -9838,7 +9887,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -9847,7 +9896,7 @@ def _build(unicodedata):
                             break
                         # end case
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -9859,7 +9908,7 @@ def _build(unicodedata):
                                 count_0 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -9868,13 +9917,13 @@ def _build(unicodedata):
                                         while True: # start reject
                                             children_5 = []
                                             offset_5 = offset_4 + 0
-                                            column_3 = column_2
+                                            column_5 = column_4
                                             indent_column_3 = indent_column_2
                                             partial_tab_offset_3 = partial_tab_offset_2
                                             partial_tab_width_3 = partial_tab_width_2
                                             if buf[offset_5:offset_5+2] == '?>':
                                                 offset_5 += 2
-                                                column_3 += 2
+                                                column_5 += 2
                                             else:
                                                 offset_5 = -1
                                                 break
@@ -9895,7 +9944,7 @@ def _build(unicodedata):
                                             break
                                         else:
                                             offset_4 += 1
-                                            column_2 += 1
+                                            column_4 += 1
 
                                         break
                                     if offset_4 == -1:
@@ -9904,7 +9953,7 @@ def _build(unicodedata):
                                     if children_4 is not None and children_4 is not None:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
-                                    column_1 = column_2
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -9916,15 +9965,16 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_4 = self.Node('raw', offset_2, offset_3, children_3, None)
+                            value_4 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                             children_2.append(value_4)
                             offset_2 = offset_3
+                            column_2 = column_3
 
                             if offset_2 < buf_eof:
                                 codepoint = buf[offset_2]
                                 if codepoint in '\n':
                                     offset_2 +=1
-                                    column_1 = 0
+                                    column_2 = 0
                                     indent_column_1 = (0, None)
                                 else:
                                     offset_2 = -1
@@ -9934,7 +9984,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -9951,9 +10001,10 @@ def _build(unicodedata):
                 if offset_1 == -1:
                     offset_0 = -1
                     break
-                value_5 = self.Node('html_block', offset_0, offset_1, children_1, None)
+                value_5 = self.Node('html_block', offset_0, offset_1, children_1, column_0, column_1, None)
                 children_0.append(value_5)
                 offset_0 = offset_1
+                column_0 = column_1
 
                 break
             return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
@@ -9974,27 +10025,27 @@ def _build(unicodedata):
                                     if offset_2 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                         width = partial_tab_width_0
                                     else:
-                                        width  = (self.tabstop-(column_0%self.tabstop))
+                                        width  = (self.tabstop-(column_2%self.tabstop))
                                     if count_0 + width > 3:
                                         new_width = 3 - count_0
                                         count_0 += new_width
-                                        column_0 += new_width
+                                        column_2 += new_width
                                         partial_tab_offset_0 = offset_2
                                         partial_tab_width_0 = width - new_width
                                         break
                                     count_0 += width
-                                    column_0 += width
+                                    column_2 += width
                                     offset_2 += 1
                                 else:
                                     count_0 += 1
-                                    column_0 += 1
+                                    column_2 += 1
                                     offset_2 += 1
                             else:
                                 break
 
                         if buf[offset_2:offset_2+2] == '<!':
                             offset_2 += 2
-                            column_0 += 2
+                            column_2 += 2
                         else:
                             offset_2 = -1
                             break
@@ -10007,7 +10058,7 @@ def _build(unicodedata):
 
                         if 65 <= codepoint <= 90:
                             offset_2 += 1
-                            column_0 += 1
+                            column_2 += 1
                         else:
                             offset_2 = -1
                             break
@@ -10015,7 +10066,7 @@ def _build(unicodedata):
                         count_0 = 0
                         while True:
                             offset_3 = offset_2
-                            column_1 = column_0
+                            column_3 = column_2
                             indent_column_1 = indent_column_0
                             partial_tab_offset_1 = partial_tab_offset_0
                             partial_tab_width_1 = partial_tab_width_0
@@ -10024,13 +10075,13 @@ def _build(unicodedata):
                                 while True: # start reject
                                     children_4 = []
                                     offset_4 = offset_3 + 0
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
                                     if buf[offset_4:offset_4+1] == '>':
                                         offset_4 += 1
-                                        column_2 += 1
+                                        column_4 += 1
                                     else:
                                         offset_4 = -1
                                         break
@@ -10051,7 +10102,7 @@ def _build(unicodedata):
                                     break
                                 else:
                                     offset_3 += 1
-                                    column_1 += 1
+                                    column_3 += 1
 
                                 break
                             if offset_3 == -1:
@@ -10060,7 +10111,7 @@ def _build(unicodedata):
                             if children_3 is not None and children_3 is not None:
                                 children_2.extend(children_3)
                             offset_2 = offset_3
-                            column_0 = column_1
+                            column_2 = column_3
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -10072,14 +10123,15 @@ def _build(unicodedata):
                     if offset_2 == -1:
                         offset_1 = -1
                         break
-                    value_0 = self.Node('raw', offset_1, offset_2, children_2, None)
+                    value_0 = self.Node('raw', offset_1, offset_2, children_2, column_1, column_2, None)
                     children_1.append(value_0)
                     offset_1 = offset_2
+                    column_1 = column_2
 
                     count_0 = 0
                     while True:
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -10092,7 +10144,7 @@ def _build(unicodedata):
                                     codepoint = buf[offset_3]
                                     if codepoint in '\n':
                                         offset_3 +=1
-                                        column_1 = 0
+                                        column_3 = 0
                                         indent_column_1 = (0, None)
                                     else:
                                         offset_3 = -1
@@ -10105,11 +10157,12 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_1 = self.Node('raw', offset_2, offset_3, children_3, None)
+                            value_1 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                             children_2.append(value_1)
                             offset_2 = offset_3
+                            column_2 = column_3
 
-                            if not (column_1 == indent_column_1[0] == 0):
+                            if not (column_2 == indent_column_1[0] == 0):
                                 offset_2 = -1
                                 break
                             # print('start')
@@ -10117,21 +10170,21 @@ def _build(unicodedata):
                                 # print(indent)
                                 _children, _prefix = [], []
                                 offset_3 = offset_2
-                                offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
+                                offset_3, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_2, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
                                 if _prefix or _children:
                                    raise Exception('bar')
                                 if offset_3 == -1:
                                     offset_2 = -1
                                     break
                                 offset_2 = offset_3
-                                indent_column_1 = (column_1, indent_column_1)
+                                indent_column_1 = (column_2, indent_column_1)
                             if offset_2 == -1:
                                 break
 
                             while True: # start reject
                                 children_3 = []
                                 offset_3 = offset_2 + 0
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -10143,13 +10196,13 @@ def _build(unicodedata):
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-(column_3%self.tabstop))
                                             count_1 += width
-                                            column_2 += width
+                                            column_3 += width
                                             offset_3 += 1
                                         else:
                                             count_1 += 1
-                                            column_2 += 1
+                                            column_3 += 1
                                             offset_3 += 1
                                     else:
                                         break
@@ -10169,7 +10222,7 @@ def _build(unicodedata):
                                 count_1 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -10178,13 +10231,13 @@ def _build(unicodedata):
                                         while True: # start reject
                                             children_5 = []
                                             offset_5 = offset_4 + 0
-                                            column_3 = column_2
+                                            column_5 = column_4
                                             indent_column_3 = indent_column_2
                                             partial_tab_offset_3 = partial_tab_offset_2
                                             partial_tab_width_3 = partial_tab_width_2
                                             if buf[offset_5:offset_5+1] == '>':
                                                 offset_5 += 1
-                                                column_3 += 1
+                                                column_5 += 1
                                             else:
                                                 offset_5 = -1
                                                 break
@@ -10205,7 +10258,7 @@ def _build(unicodedata):
                                             break
                                         else:
                                             offset_4 += 1
-                                            column_2 += 1
+                                            column_4 += 1
 
                                         break
                                     if offset_4 == -1:
@@ -10214,7 +10267,7 @@ def _build(unicodedata):
                                     if children_4 is not None and children_4 is not None:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
-                                    column_1 = column_2
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -10226,9 +10279,10 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_2 = self.Node('raw', offset_2, offset_3, children_3, None)
+                            value_2 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                             children_2.append(value_2)
                             offset_2 = offset_3
+                            column_2 = column_3
 
                             break
                         if offset_2 == -1:
@@ -10237,7 +10291,7 @@ def _build(unicodedata):
                         if children_2 is not None and children_2 is not None:
                             children_1.extend(children_2)
                         offset_1 = offset_2
-                        column_0 = column_1
+                        column_1 = column_2
                         indent_column_0 = indent_column_1
                         partial_tab_offset_0 = partial_tab_offset_1
                         partial_tab_width_0 = partial_tab_width_1
@@ -10247,7 +10301,7 @@ def _build(unicodedata):
 
                     while True: # start choice
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -10258,7 +10312,7 @@ def _build(unicodedata):
                             while True: # start capture
                                 if buf[offset_3:offset_3+1] == '>':
                                     offset_3 += 1
-                                    column_1 += 1
+                                    column_3 += 1
                                 else:
                                     offset_3 = -1
                                     break
@@ -10266,7 +10320,7 @@ def _build(unicodedata):
                                 count_0 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -10283,7 +10337,7 @@ def _build(unicodedata):
                                             break
                                         else:
                                             offset_4 += 1
-                                            column_2 += 1
+                                            column_4 += 1
 
                                         break
                                     if offset_4 == -1:
@@ -10292,7 +10346,7 @@ def _build(unicodedata):
                                     if children_4 is not None and children_4 is not None:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
-                                    column_1 = column_2
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -10304,15 +10358,16 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_3 = self.Node('raw', offset_2, offset_3, children_3, None)
+                            value_3 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                             children_2.append(value_3)
                             offset_2 = offset_3
+                            column_2 = column_3
 
                             if offset_2 < buf_eof:
                                 codepoint = buf[offset_2]
                                 if codepoint in '\n':
                                     offset_2 +=1
-                                    column_1 = 0
+                                    column_2 = 0
                                     indent_column_1 = (0, None)
                                 else:
                                     offset_2 = -1
@@ -10325,7 +10380,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -10334,7 +10389,7 @@ def _build(unicodedata):
                             break
                         # end case
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -10346,7 +10401,7 @@ def _build(unicodedata):
                                 count_0 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -10355,13 +10410,13 @@ def _build(unicodedata):
                                         while True: # start reject
                                             children_5 = []
                                             offset_5 = offset_4 + 0
-                                            column_3 = column_2
+                                            column_5 = column_4
                                             indent_column_3 = indent_column_2
                                             partial_tab_offset_3 = partial_tab_offset_2
                                             partial_tab_width_3 = partial_tab_width_2
                                             if buf[offset_5:offset_5+1] == '>':
                                                 offset_5 += 1
-                                                column_3 += 1
+                                                column_5 += 1
                                             else:
                                                 offset_5 = -1
                                                 break
@@ -10382,7 +10437,7 @@ def _build(unicodedata):
                                             break
                                         else:
                                             offset_4 += 1
-                                            column_2 += 1
+                                            column_4 += 1
 
                                         break
                                     if offset_4 == -1:
@@ -10391,7 +10446,7 @@ def _build(unicodedata):
                                     if children_4 is not None and children_4 is not None:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
-                                    column_1 = column_2
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -10403,15 +10458,16 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_4 = self.Node('raw', offset_2, offset_3, children_3, None)
+                            value_4 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                             children_2.append(value_4)
                             offset_2 = offset_3
+                            column_2 = column_3
 
                             if offset_2 < buf_eof:
                                 codepoint = buf[offset_2]
                                 if codepoint in '\n':
                                     offset_2 +=1
-                                    column_1 = 0
+                                    column_2 = 0
                                     indent_column_1 = (0, None)
                                 else:
                                     offset_2 = -1
@@ -10421,7 +10477,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -10438,9 +10494,10 @@ def _build(unicodedata):
                 if offset_1 == -1:
                     offset_0 = -1
                     break
-                value_5 = self.Node('html_block', offset_0, offset_1, children_1, None)
+                value_5 = self.Node('html_block', offset_0, offset_1, children_1, column_0, column_1, None)
                 children_0.append(value_5)
                 offset_0 = offset_1
+                column_0 = column_1
 
                 break
             return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
@@ -10461,27 +10518,27 @@ def _build(unicodedata):
                                     if offset_2 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                         width = partial_tab_width_0
                                     else:
-                                        width  = (self.tabstop-(column_0%self.tabstop))
+                                        width  = (self.tabstop-(column_2%self.tabstop))
                                     if count_0 + width > 3:
                                         new_width = 3 - count_0
                                         count_0 += new_width
-                                        column_0 += new_width
+                                        column_2 += new_width
                                         partial_tab_offset_0 = offset_2
                                         partial_tab_width_0 = width - new_width
                                         break
                                     count_0 += width
-                                    column_0 += width
+                                    column_2 += width
                                     offset_2 += 1
                                 else:
                                     count_0 += 1
-                                    column_0 += 1
+                                    column_2 += 1
                                     offset_2 += 1
                             else:
                                 break
 
                         if buf[offset_2:offset_2+9] == '<![CDATA[':
                             offset_2 += 9
-                            column_0 += 9
+                            column_2 += 9
                         else:
                             offset_2 = -1
                             break
@@ -10489,7 +10546,7 @@ def _build(unicodedata):
                         count_0 = 0
                         while True:
                             offset_3 = offset_2
-                            column_1 = column_0
+                            column_3 = column_2
                             indent_column_1 = indent_column_0
                             partial_tab_offset_1 = partial_tab_offset_0
                             partial_tab_width_1 = partial_tab_width_0
@@ -10498,13 +10555,13 @@ def _build(unicodedata):
                                 while True: # start reject
                                     children_4 = []
                                     offset_4 = offset_3 + 0
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
                                     if buf[offset_4:offset_4+3] == ']]>':
                                         offset_4 += 3
-                                        column_2 += 3
+                                        column_4 += 3
                                     else:
                                         offset_4 = -1
                                         break
@@ -10525,7 +10582,7 @@ def _build(unicodedata):
                                     break
                                 else:
                                     offset_3 += 1
-                                    column_1 += 1
+                                    column_3 += 1
 
                                 break
                             if offset_3 == -1:
@@ -10534,7 +10591,7 @@ def _build(unicodedata):
                             if children_3 is not None and children_3 is not None:
                                 children_2.extend(children_3)
                             offset_2 = offset_3
-                            column_0 = column_1
+                            column_2 = column_3
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -10546,14 +10603,15 @@ def _build(unicodedata):
                     if offset_2 == -1:
                         offset_1 = -1
                         break
-                    value_0 = self.Node('raw', offset_1, offset_2, children_2, None)
+                    value_0 = self.Node('raw', offset_1, offset_2, children_2, column_1, column_2, None)
                     children_1.append(value_0)
                     offset_1 = offset_2
+                    column_1 = column_2
 
                     count_0 = 0
                     while True:
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -10566,7 +10624,7 @@ def _build(unicodedata):
                                     codepoint = buf[offset_3]
                                     if codepoint in '\n':
                                         offset_3 +=1
-                                        column_1 = 0
+                                        column_3 = 0
                                         indent_column_1 = (0, None)
                                     else:
                                         offset_3 = -1
@@ -10579,11 +10637,12 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_1 = self.Node('raw', offset_2, offset_3, children_3, None)
+                            value_1 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                             children_2.append(value_1)
                             offset_2 = offset_3
+                            column_2 = column_3
 
-                            if not (column_1 == indent_column_1[0] == 0):
+                            if not (column_2 == indent_column_1[0] == 0):
                                 offset_2 = -1
                                 break
                             # print('start')
@@ -10591,21 +10650,21 @@ def _build(unicodedata):
                                 # print(indent)
                                 _children, _prefix = [], []
                                 offset_3 = offset_2
-                                offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
+                                offset_3, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_2, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
                                 if _prefix or _children:
                                    raise Exception('bar')
                                 if offset_3 == -1:
                                     offset_2 = -1
                                     break
                                 offset_2 = offset_3
-                                indent_column_1 = (column_1, indent_column_1)
+                                indent_column_1 = (column_2, indent_column_1)
                             if offset_2 == -1:
                                 break
 
                             while True: # start reject
                                 children_3 = []
                                 offset_3 = offset_2 + 0
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -10617,13 +10676,13 @@ def _build(unicodedata):
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-(column_3%self.tabstop))
                                             count_1 += width
-                                            column_2 += width
+                                            column_3 += width
                                             offset_3 += 1
                                         else:
                                             count_1 += 1
-                                            column_2 += 1
+                                            column_3 += 1
                                             offset_3 += 1
                                     else:
                                         break
@@ -10643,7 +10702,7 @@ def _build(unicodedata):
                                 count_1 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -10652,13 +10711,13 @@ def _build(unicodedata):
                                         while True: # start reject
                                             children_5 = []
                                             offset_5 = offset_4 + 0
-                                            column_3 = column_2
+                                            column_5 = column_4
                                             indent_column_3 = indent_column_2
                                             partial_tab_offset_3 = partial_tab_offset_2
                                             partial_tab_width_3 = partial_tab_width_2
                                             if buf[offset_5:offset_5+3] == ']]>':
                                                 offset_5 += 3
-                                                column_3 += 3
+                                                column_5 += 3
                                             else:
                                                 offset_5 = -1
                                                 break
@@ -10679,7 +10738,7 @@ def _build(unicodedata):
                                             break
                                         else:
                                             offset_4 += 1
-                                            column_2 += 1
+                                            column_4 += 1
 
                                         break
                                     if offset_4 == -1:
@@ -10688,7 +10747,7 @@ def _build(unicodedata):
                                     if children_4 is not None and children_4 is not None:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
-                                    column_1 = column_2
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -10700,9 +10759,10 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_2 = self.Node('raw', offset_2, offset_3, children_3, None)
+                            value_2 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                             children_2.append(value_2)
                             offset_2 = offset_3
+                            column_2 = column_3
 
                             break
                         if offset_2 == -1:
@@ -10711,7 +10771,7 @@ def _build(unicodedata):
                         if children_2 is not None and children_2 is not None:
                             children_1.extend(children_2)
                         offset_1 = offset_2
-                        column_0 = column_1
+                        column_1 = column_2
                         indent_column_0 = indent_column_1
                         partial_tab_offset_0 = partial_tab_offset_1
                         partial_tab_width_0 = partial_tab_width_1
@@ -10721,7 +10781,7 @@ def _build(unicodedata):
 
                     while True: # start choice
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -10732,7 +10792,7 @@ def _build(unicodedata):
                             while True: # start capture
                                 if buf[offset_3:offset_3+3] == ']]>':
                                     offset_3 += 3
-                                    column_1 += 3
+                                    column_3 += 3
                                 else:
                                     offset_3 = -1
                                     break
@@ -10740,7 +10800,7 @@ def _build(unicodedata):
                                 count_0 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -10757,7 +10817,7 @@ def _build(unicodedata):
                                             break
                                         else:
                                             offset_4 += 1
-                                            column_2 += 1
+                                            column_4 += 1
 
                                         break
                                     if offset_4 == -1:
@@ -10766,7 +10826,7 @@ def _build(unicodedata):
                                     if children_4 is not None and children_4 is not None:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
-                                    column_1 = column_2
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -10778,15 +10838,16 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_3 = self.Node('raw', offset_2, offset_3, children_3, None)
+                            value_3 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                             children_2.append(value_3)
                             offset_2 = offset_3
+                            column_2 = column_3
 
                             if offset_2 < buf_eof:
                                 codepoint = buf[offset_2]
                                 if codepoint in '\n':
                                     offset_2 +=1
-                                    column_1 = 0
+                                    column_2 = 0
                                     indent_column_1 = (0, None)
                                 else:
                                     offset_2 = -1
@@ -10799,7 +10860,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -10808,7 +10869,7 @@ def _build(unicodedata):
                             break
                         # end case
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -10820,7 +10881,7 @@ def _build(unicodedata):
                                 count_0 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -10829,13 +10890,13 @@ def _build(unicodedata):
                                         while True: # start reject
                                             children_5 = []
                                             offset_5 = offset_4 + 0
-                                            column_3 = column_2
+                                            column_5 = column_4
                                             indent_column_3 = indent_column_2
                                             partial_tab_offset_3 = partial_tab_offset_2
                                             partial_tab_width_3 = partial_tab_width_2
                                             if buf[offset_5:offset_5+3] == ']]>':
                                                 offset_5 += 3
-                                                column_3 += 3
+                                                column_5 += 3
                                             else:
                                                 offset_5 = -1
                                                 break
@@ -10856,7 +10917,7 @@ def _build(unicodedata):
                                             break
                                         else:
                                             offset_4 += 1
-                                            column_2 += 1
+                                            column_4 += 1
 
                                         break
                                     if offset_4 == -1:
@@ -10865,7 +10926,7 @@ def _build(unicodedata):
                                     if children_4 is not None and children_4 is not None:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
-                                    column_1 = column_2
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -10877,15 +10938,16 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_4 = self.Node('raw', offset_2, offset_3, children_3, None)
+                            value_4 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                             children_2.append(value_4)
                             offset_2 = offset_3
+                            column_2 = column_3
 
                             if offset_2 < buf_eof:
                                 codepoint = buf[offset_2]
                                 if codepoint in '\n':
                                     offset_2 +=1
-                                    column_1 = 0
+                                    column_2 = 0
                                     indent_column_1 = (0, None)
                                 else:
                                     offset_2 = -1
@@ -10895,7 +10957,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -10912,9 +10974,10 @@ def _build(unicodedata):
                 if offset_1 == -1:
                     offset_0 = -1
                     break
-                value_5 = self.Node('html_block', offset_0, offset_1, children_1, None)
+                value_5 = self.Node('html_block', offset_0, offset_1, children_1, column_0, column_1, None)
                 children_0.append(value_5)
                 offset_0 = offset_1
+                column_0 = column_1
 
                 break
             return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
@@ -10935,220 +10998,220 @@ def _build(unicodedata):
                                     if offset_2 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                         width = partial_tab_width_0
                                     else:
-                                        width  = (self.tabstop-(column_0%self.tabstop))
+                                        width  = (self.tabstop-(column_2%self.tabstop))
                                     if count_0 + width > 3:
                                         new_width = 3 - count_0
                                         count_0 += new_width
-                                        column_0 += new_width
+                                        column_2 += new_width
                                         partial_tab_offset_0 = offset_2
                                         partial_tab_width_0 = width - new_width
                                         break
                                     count_0 += width
-                                    column_0 += width
+                                    column_2 += width
                                     offset_2 += 1
                                 else:
                                     count_0 += 1
-                                    column_0 += 1
+                                    column_2 += 1
                                     offset_2 += 1
                             else:
                                 break
 
                         if buf[offset_2:offset_2+2] == '</':
                             offset_2 += 2
-                            column_0 += 2
+                            column_2 += 2
                         elif buf[offset_2:offset_2+1] == '<':
                             offset_2 += 1
-                            column_0 += 1
+                            column_2 += 1
                         else:
                             offset_2 = -1
                             break
 
                         if buf[offset_2:offset_2+7].lower() == 'address':
                             offset_2 += 7
-                            column_0 += 7
+                            column_2 += 7
                         elif buf[offset_2:offset_2+7].lower() == 'article':
                             offset_2 += 7
-                            column_0 += 7
+                            column_2 += 7
                         elif buf[offset_2:offset_2+5].lower() == 'aside':
                             offset_2 += 5
-                            column_0 += 5
+                            column_2 += 5
                         elif buf[offset_2:offset_2+4].lower() == 'base':
                             offset_2 += 4
-                            column_0 += 4
+                            column_2 += 4
                         elif buf[offset_2:offset_2+8].lower() == 'basefont':
                             offset_2 += 8
-                            column_0 += 8
+                            column_2 += 8
                         elif buf[offset_2:offset_2+10].lower() == 'blockquote':
                             offset_2 += 10
-                            column_0 += 10
+                            column_2 += 10
                         elif buf[offset_2:offset_2+4].lower() == 'body':
                             offset_2 += 4
-                            column_0 += 4
+                            column_2 += 4
                         elif buf[offset_2:offset_2+7].lower() == 'caption':
                             offset_2 += 7
-                            column_0 += 7
+                            column_2 += 7
                         elif buf[offset_2:offset_2+6].lower() == 'center':
                             offset_2 += 6
-                            column_0 += 6
+                            column_2 += 6
                         elif buf[offset_2:offset_2+3].lower() == 'col':
                             offset_2 += 3
-                            column_0 += 3
+                            column_2 += 3
                         elif buf[offset_2:offset_2+8].lower() == 'colgroup':
                             offset_2 += 8
-                            column_0 += 8
+                            column_2 += 8
                         elif buf[offset_2:offset_2+2].lower() == 'dd':
                             offset_2 += 2
-                            column_0 += 2
+                            column_2 += 2
                         elif buf[offset_2:offset_2+7].lower() == 'details':
                             offset_2 += 7
-                            column_0 += 7
+                            column_2 += 7
                         elif buf[offset_2:offset_2+6].lower() == 'dialog':
                             offset_2 += 6
-                            column_0 += 6
+                            column_2 += 6
                         elif buf[offset_2:offset_2+3].lower() == 'dir':
                             offset_2 += 3
-                            column_0 += 3
+                            column_2 += 3
                         elif buf[offset_2:offset_2+3].lower() == 'div':
                             offset_2 += 3
-                            column_0 += 3
+                            column_2 += 3
                         elif buf[offset_2:offset_2+2].lower() == 'dl':
                             offset_2 += 2
-                            column_0 += 2
+                            column_2 += 2
                         elif buf[offset_2:offset_2+2].lower() == 'dt':
                             offset_2 += 2
-                            column_0 += 2
+                            column_2 += 2
                         elif buf[offset_2:offset_2+8].lower() == 'fieldset':
                             offset_2 += 8
-                            column_0 += 8
+                            column_2 += 8
                         elif buf[offset_2:offset_2+10].lower() == 'figcaption':
                             offset_2 += 10
-                            column_0 += 10
+                            column_2 += 10
                         elif buf[offset_2:offset_2+6].lower() == 'figure':
                             offset_2 += 6
-                            column_0 += 6
+                            column_2 += 6
                         elif buf[offset_2:offset_2+6].lower() == 'footer':
                             offset_2 += 6
-                            column_0 += 6
+                            column_2 += 6
                         elif buf[offset_2:offset_2+4].lower() == 'form':
                             offset_2 += 4
-                            column_0 += 4
+                            column_2 += 4
                         elif buf[offset_2:offset_2+5].lower() == 'frame':
                             offset_2 += 5
-                            column_0 += 5
+                            column_2 += 5
                         elif buf[offset_2:offset_2+8].lower() == 'frameset':
                             offset_2 += 8
-                            column_0 += 8
+                            column_2 += 8
                         elif buf[offset_2:offset_2+2].lower() == 'h1':
                             offset_2 += 2
-                            column_0 += 2
+                            column_2 += 2
                         elif buf[offset_2:offset_2+2].lower() == 'h2':
                             offset_2 += 2
-                            column_0 += 2
+                            column_2 += 2
                         elif buf[offset_2:offset_2+2].lower() == 'h3':
                             offset_2 += 2
-                            column_0 += 2
+                            column_2 += 2
                         elif buf[offset_2:offset_2+2].lower() == 'h4':
                             offset_2 += 2
-                            column_0 += 2
+                            column_2 += 2
                         elif buf[offset_2:offset_2+2].lower() == 'h5':
                             offset_2 += 2
-                            column_0 += 2
+                            column_2 += 2
                         elif buf[offset_2:offset_2+2].lower() == 'h6':
                             offset_2 += 2
-                            column_0 += 2
+                            column_2 += 2
                         elif buf[offset_2:offset_2+4].lower() == 'head':
                             offset_2 += 4
-                            column_0 += 4
+                            column_2 += 4
                         elif buf[offset_2:offset_2+6].lower() == 'header':
                             offset_2 += 6
-                            column_0 += 6
+                            column_2 += 6
                         elif buf[offset_2:offset_2+2].lower() == 'hr':
                             offset_2 += 2
-                            column_0 += 2
+                            column_2 += 2
                         elif buf[offset_2:offset_2+4].lower() == 'html':
                             offset_2 += 4
-                            column_0 += 4
+                            column_2 += 4
                         elif buf[offset_2:offset_2+6].lower() == 'iframe':
                             offset_2 += 6
-                            column_0 += 6
+                            column_2 += 6
                         elif buf[offset_2:offset_2+6].lower() == 'legend':
                             offset_2 += 6
-                            column_0 += 6
+                            column_2 += 6
                         elif buf[offset_2:offset_2+2].lower() == 'li':
                             offset_2 += 2
-                            column_0 += 2
+                            column_2 += 2
                         elif buf[offset_2:offset_2+4].lower() == 'link':
                             offset_2 += 4
-                            column_0 += 4
+                            column_2 += 4
                         elif buf[offset_2:offset_2+4].lower() == 'main':
                             offset_2 += 4
-                            column_0 += 4
+                            column_2 += 4
                         elif buf[offset_2:offset_2+4].lower() == 'menu':
                             offset_2 += 4
-                            column_0 += 4
+                            column_2 += 4
                         elif buf[offset_2:offset_2+8].lower() == 'menuitem':
                             offset_2 += 8
-                            column_0 += 8
+                            column_2 += 8
                         elif buf[offset_2:offset_2+3].lower() == 'nav':
                             offset_2 += 3
-                            column_0 += 3
+                            column_2 += 3
                         elif buf[offset_2:offset_2+8].lower() == 'noframes':
                             offset_2 += 8
-                            column_0 += 8
+                            column_2 += 8
                         elif buf[offset_2:offset_2+2].lower() == 'ol':
                             offset_2 += 2
-                            column_0 += 2
+                            column_2 += 2
                         elif buf[offset_2:offset_2+8].lower() == 'optgroup':
                             offset_2 += 8
-                            column_0 += 8
+                            column_2 += 8
                         elif buf[offset_2:offset_2+6].lower() == 'option':
                             offset_2 += 6
-                            column_0 += 6
+                            column_2 += 6
                         elif buf[offset_2:offset_2+1].lower() == 'p':
                             offset_2 += 1
-                            column_0 += 1
+                            column_2 += 1
                         elif buf[offset_2:offset_2+5].lower() == 'param':
                             offset_2 += 5
-                            column_0 += 5
+                            column_2 += 5
                         elif buf[offset_2:offset_2+7].lower() == 'section':
                             offset_2 += 7
-                            column_0 += 7
+                            column_2 += 7
                         elif buf[offset_2:offset_2+6].lower() == 'source':
                             offset_2 += 6
-                            column_0 += 6
+                            column_2 += 6
                         elif buf[offset_2:offset_2+7].lower() == 'summary':
                             offset_2 += 7
-                            column_0 += 7
+                            column_2 += 7
                         elif buf[offset_2:offset_2+5].lower() == 'table':
                             offset_2 += 5
-                            column_0 += 5
+                            column_2 += 5
                         elif buf[offset_2:offset_2+5].lower() == 'tbody':
                             offset_2 += 5
-                            column_0 += 5
+                            column_2 += 5
                         elif buf[offset_2:offset_2+2].lower() == 'td':
                             offset_2 += 2
-                            column_0 += 2
+                            column_2 += 2
                         elif buf[offset_2:offset_2+5].lower() == 'tfoot':
                             offset_2 += 5
-                            column_0 += 5
+                            column_2 += 5
                         elif buf[offset_2:offset_2+2].lower() == 'th':
                             offset_2 += 2
-                            column_0 += 2
+                            column_2 += 2
                         elif buf[offset_2:offset_2+5].lower() == 'thead':
                             offset_2 += 5
-                            column_0 += 5
+                            column_2 += 5
                         elif buf[offset_2:offset_2+5].lower() == 'title':
                             offset_2 += 5
-                            column_0 += 5
+                            column_2 += 5
                         elif buf[offset_2:offset_2+2].lower() == 'tr':
                             offset_2 += 2
-                            column_0 += 2
+                            column_2 += 2
                         elif buf[offset_2:offset_2+5].lower() == 'track':
                             offset_2 += 5
-                            column_0 += 5
+                            column_2 += 5
                         elif buf[offset_2:offset_2+2].lower() == 'ul':
                             offset_2 += 2
-                            column_0 += 2
+                            column_2 += 2
                         else:
                             offset_2 = -1
                             break
@@ -11156,13 +11219,13 @@ def _build(unicodedata):
                         while True: # start lookahed
                             children_3 = []
                             offset_3 = offset_2 + 0
-                            column_1 = column_0
+                            column_3 = column_2
                             indent_column_1 = indent_column_0
                             partial_tab_offset_1 = partial_tab_offset_0
                             partial_tab_width_1 = partial_tab_width_0
                             while True: # start choice
                                 offset_4 = offset_3
-                                column_2 = column_1
+                                column_4 = column_3
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -11176,13 +11239,13 @@ def _build(unicodedata):
                                                 if offset_4 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
-                                                    width  = (self.tabstop-(column_2%self.tabstop))
+                                                    width  = (self.tabstop-(column_4%self.tabstop))
                                                 count_0 += width
-                                                column_2 += width
+                                                column_4 += width
                                                 offset_4 += 1
                                             else:
                                                 count_0 += 1
-                                                column_2 += 1
+                                                column_4 += 1
                                                 offset_4 += 1
                                         else:
                                             break
@@ -11194,7 +11257,7 @@ def _build(unicodedata):
                                     break
                                 if offset_4 != -1:
                                     offset_3 = offset_4
-                                    column_1 = column_2
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -11203,7 +11266,7 @@ def _build(unicodedata):
                                     break
                                 # end case
                                 offset_4 = offset_3
-                                column_2 = column_1
+                                column_4 = column_3
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -11211,7 +11274,7 @@ def _build(unicodedata):
                                 while True: # case
                                     if buf[offset_4:offset_4+1] == '>':
                                         offset_4 += 1
-                                        column_2 += 1
+                                        column_4 += 1
                                     else:
                                         offset_4 = -1
                                         break
@@ -11220,7 +11283,7 @@ def _build(unicodedata):
                                     break
                                 if offset_4 != -1:
                                     offset_3 = offset_4
-                                    column_1 = column_2
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -11229,7 +11292,7 @@ def _build(unicodedata):
                                     break
                                 # end case
                                 offset_4 = offset_3
-                                column_2 = column_1
+                                column_4 = column_3
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -11239,7 +11302,7 @@ def _build(unicodedata):
                                         codepoint = buf[offset_4]
                                         if codepoint in '\n':
                                             offset_4 +=1
-                                            column_2 = 0
+                                            column_4 = 0
                                             indent_column_2 = (0, None)
                                         else:
                                             offset_4 = -1
@@ -11249,7 +11312,7 @@ def _build(unicodedata):
                                     break
                                 if offset_4 != -1:
                                     offset_3 = offset_4
-                                    column_1 = column_2
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -11270,7 +11333,7 @@ def _build(unicodedata):
                         count_0 = 0
                         while True:
                             offset_3 = offset_2
-                            column_1 = column_0
+                            column_3 = column_2
                             indent_column_1 = indent_column_0
                             partial_tab_offset_1 = partial_tab_offset_0
                             partial_tab_width_1 = partial_tab_width_0
@@ -11287,7 +11350,7 @@ def _build(unicodedata):
                                     break
                                 else:
                                     offset_3 += 1
-                                    column_1 += 1
+                                    column_3 += 1
 
                                 break
                             if offset_3 == -1:
@@ -11296,7 +11359,7 @@ def _build(unicodedata):
                             if children_3 is not None and children_3 is not None:
                                 children_2.extend(children_3)
                             offset_2 = offset_3
-                            column_0 = column_1
+                            column_2 = column_3
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -11308,14 +11371,15 @@ def _build(unicodedata):
                     if offset_2 == -1:
                         offset_1 = -1
                         break
-                    value_0 = self.Node('raw', offset_1, offset_2, children_2, None)
+                    value_0 = self.Node('raw', offset_1, offset_2, children_2, column_1, column_2, None)
                     children_1.append(value_0)
                     offset_1 = offset_2
+                    column_1 = column_2
 
                     count_0 = 0
                     while True:
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -11328,7 +11392,7 @@ def _build(unicodedata):
                                     codepoint = buf[offset_3]
                                     if codepoint in '\n':
                                         offset_3 +=1
-                                        column_1 = 0
+                                        column_3 = 0
                                         indent_column_1 = (0, None)
                                     else:
                                         offset_3 = -1
@@ -11341,11 +11405,12 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_1 = self.Node('raw', offset_2, offset_3, children_3, None)
+                            value_1 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                             children_2.append(value_1)
                             offset_2 = offset_3
+                            column_2 = column_3
 
-                            if not (column_1 == indent_column_1[0] == 0):
+                            if not (column_2 == indent_column_1[0] == 0):
                                 offset_2 = -1
                                 break
                             # print('start')
@@ -11353,21 +11418,21 @@ def _build(unicodedata):
                                 # print(indent)
                                 _children, _prefix = [], []
                                 offset_3 = offset_2
-                                offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
+                                offset_3, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_2, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
                                 if _prefix or _children:
                                    raise Exception('bar')
                                 if offset_3 == -1:
                                     offset_2 = -1
                                     break
                                 offset_2 = offset_3
-                                indent_column_1 = (column_1, indent_column_1)
+                                indent_column_1 = (column_2, indent_column_1)
                             if offset_2 == -1:
                                 break
 
                             while True: # start reject
                                 children_3 = []
                                 offset_3 = offset_2 + 0
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -11379,13 +11444,13 @@ def _build(unicodedata):
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-(column_3%self.tabstop))
                                             count_1 += width
-                                            column_2 += width
+                                            column_3 += width
                                             offset_3 += 1
                                         else:
                                             count_1 += 1
-                                            column_2 += 1
+                                            column_3 += 1
                                             offset_3 += 1
                                     else:
                                         break
@@ -11394,7 +11459,7 @@ def _build(unicodedata):
                                     codepoint = buf[offset_3]
                                     if codepoint in '\n':
                                         offset_3 +=1
-                                        column_2 = 0
+                                        column_3 = 0
                                         indent_column_2 = (0, None)
                                     else:
                                         offset_3 = -1
@@ -11411,7 +11476,7 @@ def _build(unicodedata):
                                 count_1 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -11428,7 +11493,7 @@ def _build(unicodedata):
                                             break
                                         else:
                                             offset_4 += 1
-                                            column_2 += 1
+                                            column_4 += 1
 
                                         break
                                     if offset_4 == -1:
@@ -11437,7 +11502,7 @@ def _build(unicodedata):
                                     if children_4 is not None and children_4 is not None:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
-                                    column_1 = column_2
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -11449,9 +11514,10 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_2 = self.Node('raw', offset_2, offset_3, children_3, None)
+                            value_2 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                             children_2.append(value_2)
                             offset_2 = offset_3
+                            column_2 = column_3
 
                             break
                         if offset_2 == -1:
@@ -11460,7 +11526,7 @@ def _build(unicodedata):
                         if children_2 is not None and children_2 is not None:
                             children_1.extend(children_2)
                         offset_1 = offset_2
-                        column_0 = column_1
+                        column_1 = column_2
                         indent_column_0 = indent_column_1
                         partial_tab_offset_0 = partial_tab_offset_1
                         partial_tab_width_0 = partial_tab_width_1
@@ -11470,7 +11536,7 @@ def _build(unicodedata):
 
                     while True: # start choice
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -11480,7 +11546,7 @@ def _build(unicodedata):
                                 codepoint = buf[offset_2]
                                 if codepoint in '\n':
                                     offset_2 +=1
-                                    column_1 = 0
+                                    column_2 = 0
                                     indent_column_1 = (0, None)
                                 else:
                                     offset_2 = -1
@@ -11489,7 +11555,7 @@ def _build(unicodedata):
                                 offset_2 = -1
                                 break
 
-                            if not (column_1 == indent_column_1[0] == 0):
+                            if not (column_2 == indent_column_1[0] == 0):
                                 offset_2 = -1
                                 break
                             # print('start')
@@ -11497,14 +11563,14 @@ def _build(unicodedata):
                                 # print(indent)
                                 _children, _prefix = [], []
                                 offset_3 = offset_2
-                                offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
+                                offset_3, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_2, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
                                 if _prefix or _children:
                                    raise Exception('bar')
                                 if offset_3 == -1:
                                     offset_2 = -1
                                     break
                                 offset_2 = offset_3
-                                indent_column_1 = (column_1, indent_column_1)
+                                indent_column_1 = (column_2, indent_column_1)
                             if offset_2 == -1:
                                 break
 
@@ -11516,13 +11582,13 @@ def _build(unicodedata):
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
-                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                            width  = (self.tabstop-(column_2%self.tabstop))
                                         count_0 += width
-                                        column_1 += width
+                                        column_2 += width
                                         offset_2 += 1
                                     else:
                                         count_0 += 1
-                                        column_1 += 1
+                                        column_2 += 1
                                         offset_2 += 1
                                 else:
                                     break
@@ -11531,7 +11597,7 @@ def _build(unicodedata):
                                 codepoint = buf[offset_2]
                                 if codepoint in '\n':
                                     offset_2 +=1
-                                    column_1 = 0
+                                    column_2 = 0
                                     indent_column_1 = (0, None)
                                 else:
                                     offset_2 = -1
@@ -11541,7 +11607,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -11550,7 +11616,7 @@ def _build(unicodedata):
                             break
                         # end case
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -11560,7 +11626,7 @@ def _build(unicodedata):
                                 codepoint = buf[offset_2]
                                 if codepoint in '\n':
                                     offset_2 +=1
-                                    column_1 = 0
+                                    column_2 = 0
                                     indent_column_1 = (0, None)
                                 else:
                                     offset_2 = -1
@@ -11569,11 +11635,11 @@ def _build(unicodedata):
                             while True: # start reject
                                 children_3 = []
                                 offset_3 = offset_2 + 0
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
-                                if not (column_2 == indent_column_2[0] == 0):
+                                if not (column_3 == indent_column_2[0] == 0):
                                     offset_3 = -1
                                     break
                                 # print('start')
@@ -11581,14 +11647,14 @@ def _build(unicodedata):
                                     # print(indent)
                                     _children, _prefix = [], []
                                     offset_4 = offset_3
-                                    offset_4, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = indent(buf, buf_start, buf_eof, offset_4, column_2, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
+                                    offset_4, column_3, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = indent(buf, buf_start, buf_eof, offset_4, column_3, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
                                     if _prefix or _children:
                                        raise Exception('bar')
                                     if offset_4 == -1:
                                         offset_3 = -1
                                         break
                                     offset_3 = offset_4
-                                    indent_column_2 = (column_2, indent_column_2)
+                                    indent_column_2 = (column_3, indent_column_2)
                                 if offset_3 == -1:
                                     break
 
@@ -11601,7 +11667,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -11610,7 +11676,7 @@ def _build(unicodedata):
                             break
                         # end case
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -11620,7 +11686,7 @@ def _build(unicodedata):
                                 codepoint = buf[offset_2]
                                 if codepoint in '\n':
                                     offset_2 +=1
-                                    column_1 = 0
+                                    column_2 = 0
                                     indent_column_1 = (0, None)
                                 else:
                                     offset_2 = -1
@@ -11634,7 +11700,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -11651,9 +11717,10 @@ def _build(unicodedata):
                 if offset_1 == -1:
                     offset_0 = -1
                     break
-                value_3 = self.Node('html_block', offset_0, offset_1, children_1, None)
+                value_3 = self.Node('html_block', offset_0, offset_1, children_1, column_0, column_1, None)
                 children_0.append(value_3)
                 offset_0 = offset_1
+                column_0 = column_1
 
                 break
             return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
@@ -11674,27 +11741,27 @@ def _build(unicodedata):
                                     if offset_2 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                         width = partial_tab_width_0
                                     else:
-                                        width  = (self.tabstop-(column_0%self.tabstop))
+                                        width  = (self.tabstop-(column_2%self.tabstop))
                                     if count_0 + width > 3:
                                         new_width = 3 - count_0
                                         count_0 += new_width
-                                        column_0 += new_width
+                                        column_2 += new_width
                                         partial_tab_offset_0 = offset_2
                                         partial_tab_width_0 = width - new_width
                                         break
                                     count_0 += width
-                                    column_0 += width
+                                    column_2 += width
                                     offset_2 += 1
                                 else:
                                     count_0 += 1
-                                    column_0 += 1
+                                    column_2 += 1
                                     offset_2 += 1
                             else:
                                 break
 
                         if buf[offset_2:offset_2+1] == '<':
                             offset_2 += 1
-                            column_0 += 1
+                            column_2 += 1
                         else:
                             offset_2 = -1
                             break
@@ -11702,19 +11769,19 @@ def _build(unicodedata):
                         while True: # start reject
                             children_3 = []
                             offset_3 = offset_2 + 0
-                            column_1 = column_0
+                            column_3 = column_2
                             indent_column_1 = indent_column_0
                             partial_tab_offset_1 = partial_tab_offset_0
                             partial_tab_width_1 = partial_tab_width_0
                             if buf[offset_3:offset_3+3].lower() == 'pre':
                                 offset_3 += 3
-                                column_1 += 3
+                                column_3 += 3
                             elif buf[offset_3:offset_3+6].lower() == 'script':
                                 offset_3 += 6
-                                column_1 += 6
+                                column_3 += 6
                             elif buf[offset_3:offset_3+5].lower() == 'style':
                                 offset_3 += 5
-                                column_1 += 5
+                                column_3 += 5
                             else:
                                 offset_3 = -1
                                 break
@@ -11726,7 +11793,7 @@ def _build(unicodedata):
 
                         while True: # start choice
                             offset_3 = offset_2
-                            column_1 = column_0
+                            column_3 = column_2
                             indent_column_1 = indent_column_0
                             partial_tab_offset_1 = partial_tab_offset_0
                             partial_tab_width_1 = partial_tab_width_0
@@ -11734,7 +11801,7 @@ def _build(unicodedata):
                             while True: # case
                                 if buf[offset_3:offset_3+1] == '/':
                                     offset_3 += 1
-                                    column_1 += 1
+                                    column_3 += 1
                                 else:
                                     offset_3 = -1
                                     break
@@ -11747,10 +11814,10 @@ def _build(unicodedata):
 
                                 if 97 <= codepoint <= 122:
                                     offset_3 += 1
-                                    column_1 += 1
+                                    column_3 += 1
                                 elif 65 <= codepoint <= 90:
                                     offset_3 += 1
-                                    column_1 += 1
+                                    column_3 += 1
                                 else:
                                     offset_3 = -1
                                     break
@@ -11758,7 +11825,7 @@ def _build(unicodedata):
                                 count_0 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -11772,16 +11839,16 @@ def _build(unicodedata):
 
                                         if 97 <= codepoint <= 122:
                                             offset_4 += 1
-                                            column_2 += 1
+                                            column_4 += 1
                                         elif 65 <= codepoint <= 90:
                                             offset_4 += 1
-                                            column_2 += 1
+                                            column_4 += 1
                                         elif codepoint == 45:
                                             offset_4 += 1
-                                            column_2 += 1
+                                            column_4 += 1
                                         elif 48 <= codepoint <= 57:
                                             offset_4 += 1
-                                            column_2 += 1
+                                            column_4 += 1
                                         else:
                                             offset_4 = -1
                                             break
@@ -11793,7 +11860,7 @@ def _build(unicodedata):
                                     if children_4 is not None and children_4 is not None:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
-                                    column_1 = column_2
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -11809,20 +11876,20 @@ def _build(unicodedata):
                                             if offset_3 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                                 width = partial_tab_width_1
                                             else:
-                                                width  = (self.tabstop-(column_1%self.tabstop))
+                                                width  = (self.tabstop-(column_3%self.tabstop))
                                             count_0 += width
-                                            column_1 += width
+                                            column_3 += width
                                             offset_3 += 1
                                         else:
                                             count_0 += 1
-                                            column_1 += 1
+                                            column_3 += 1
                                             offset_3 += 1
                                     else:
                                         break
 
                                 if buf[offset_3:offset_3+1] == '>':
                                     offset_3 += 1
-                                    column_1 += 1
+                                    column_3 += 1
                                 else:
                                     offset_3 = -1
                                     break
@@ -11835,13 +11902,13 @@ def _build(unicodedata):
                                             if offset_3 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                                 width = partial_tab_width_1
                                             else:
-                                                width  = (self.tabstop-(column_1%self.tabstop))
+                                                width  = (self.tabstop-(column_3%self.tabstop))
                                             count_0 += width
-                                            column_1 += width
+                                            column_3 += width
                                             offset_3 += 1
                                         else:
                                             count_0 += 1
-                                            column_1 += 1
+                                            column_3 += 1
                                             offset_3 += 1
                                     else:
                                         break
@@ -11850,7 +11917,7 @@ def _build(unicodedata):
                                 break
                             if offset_3 != -1:
                                 offset_2 = offset_3
-                                column_0 = column_1
+                                column_2 = column_3
                                 indent_column_0 = indent_column_1
                                 partial_tab_offset_0 = partial_tab_offset_1
                                 partial_tab_width_0 = partial_tab_width_1
@@ -11859,7 +11926,7 @@ def _build(unicodedata):
                                 break
                             # end case
                             offset_3 = offset_2
-                            column_1 = column_0
+                            column_3 = column_2
                             indent_column_1 = indent_column_0
                             partial_tab_offset_1 = partial_tab_offset_0
                             partial_tab_width_1 = partial_tab_width_0
@@ -11873,10 +11940,10 @@ def _build(unicodedata):
 
                                 if 97 <= codepoint <= 122:
                                     offset_3 += 1
-                                    column_1 += 1
+                                    column_3 += 1
                                 elif 65 <= codepoint <= 90:
                                     offset_3 += 1
-                                    column_1 += 1
+                                    column_3 += 1
                                 else:
                                     offset_3 = -1
                                     break
@@ -11884,7 +11951,7 @@ def _build(unicodedata):
                                 count_0 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -11898,16 +11965,16 @@ def _build(unicodedata):
 
                                         if 97 <= codepoint <= 122:
                                             offset_4 += 1
-                                            column_2 += 1
+                                            column_4 += 1
                                         elif 65 <= codepoint <= 90:
                                             offset_4 += 1
-                                            column_2 += 1
+                                            column_4 += 1
                                         elif codepoint == 45:
                                             offset_4 += 1
-                                            column_2 += 1
+                                            column_4 += 1
                                         elif 48 <= codepoint <= 57:
                                             offset_4 += 1
-                                            column_2 += 1
+                                            column_4 += 1
                                         else:
                                             offset_4 = -1
                                             break
@@ -11919,7 +11986,7 @@ def _build(unicodedata):
                                     if children_4 is not None and children_4 is not None:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
-                                    column_1 = column_2
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -11930,7 +11997,7 @@ def _build(unicodedata):
                                 count_0 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -11944,13 +12011,13 @@ def _build(unicodedata):
                                                     if offset_4 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                         width = partial_tab_width_2
                                                     else:
-                                                        width  = (self.tabstop-(column_2%self.tabstop))
+                                                        width  = (self.tabstop-(column_4%self.tabstop))
                                                     count_1 += width
-                                                    column_2 += width
+                                                    column_4 += width
                                                     offset_4 += 1
                                                 else:
                                                     count_1 += 1
-                                                    column_2 += 1
+                                                    column_4 += 1
                                                     offset_4 += 1
                                             else:
                                                 break
@@ -11966,16 +12033,16 @@ def _build(unicodedata):
 
                                         if 97 <= codepoint <= 122:
                                             offset_4 += 1
-                                            column_2 += 1
+                                            column_4 += 1
                                         elif 65 <= codepoint <= 90:
                                             offset_4 += 1
-                                            column_2 += 1
+                                            column_4 += 1
                                         elif codepoint == 58:
                                             offset_4 += 1
-                                            column_2 += 1
+                                            column_4 += 1
                                         elif codepoint == 95:
                                             offset_4 += 1
-                                            column_2 += 1
+                                            column_4 += 1
                                         else:
                                             offset_4 = -1
                                             break
@@ -11983,7 +12050,7 @@ def _build(unicodedata):
                                         count_1 = 0
                                         while True:
                                             offset_5 = offset_4
-                                            column_3 = column_2
+                                            column_5 = column_4
                                             indent_column_3 = indent_column_2
                                             partial_tab_offset_3 = partial_tab_offset_2
                                             partial_tab_width_3 = partial_tab_width_2
@@ -11997,22 +12064,22 @@ def _build(unicodedata):
 
                                                 if 97 <= codepoint <= 122:
                                                     offset_5 += 1
-                                                    column_3 += 1
+                                                    column_5 += 1
                                                 elif 65 <= codepoint <= 90:
                                                     offset_5 += 1
-                                                    column_3 += 1
+                                                    column_5 += 1
                                                 elif codepoint == 58:
                                                     offset_5 += 1
-                                                    column_3 += 1
+                                                    column_5 += 1
                                                 elif codepoint == 95:
                                                     offset_5 += 1
-                                                    column_3 += 1
+                                                    column_5 += 1
                                                 elif 48 <= codepoint <= 57:
                                                     offset_5 += 1
-                                                    column_3 += 1
+                                                    column_5 += 1
                                                 elif codepoint == 45:
                                                     offset_5 += 1
-                                                    column_3 += 1
+                                                    column_5 += 1
                                                 else:
                                                     offset_5 = -1
                                                     break
@@ -12024,7 +12091,7 @@ def _build(unicodedata):
                                             if children_5 is not None and children_5 is not None:
                                                 children_4.extend(children_5)
                                             offset_4 = offset_5
-                                            column_2 = column_3
+                                            column_4 = column_5
                                             indent_column_2 = indent_column_3
                                             partial_tab_offset_2 = partial_tab_offset_3
                                             partial_tab_width_2 = partial_tab_width_3
@@ -12038,7 +12105,7 @@ def _build(unicodedata):
                                         count_1 = 0
                                         while count_1 < 1:
                                             offset_5 = offset_4
-                                            column_3 = column_2
+                                            column_5 = column_4
                                             indent_column_3 = indent_column_2
                                             partial_tab_offset_3 = partial_tab_offset_2
                                             partial_tab_width_3 = partial_tab_width_2
@@ -12052,20 +12119,20 @@ def _build(unicodedata):
                                                             if offset_5 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                                 width = partial_tab_width_3
                                                             else:
-                                                                width  = (self.tabstop-(column_3%self.tabstop))
+                                                                width  = (self.tabstop-(column_5%self.tabstop))
                                                             count_2 += width
-                                                            column_3 += width
+                                                            column_5 += width
                                                             offset_5 += 1
                                                         else:
                                                             count_2 += 1
-                                                            column_3 += 1
+                                                            column_5 += 1
                                                             offset_5 += 1
                                                     else:
                                                         break
 
                                                 if buf[offset_5:offset_5+1] == '=':
                                                     offset_5 += 1
-                                                    column_3 += 1
+                                                    column_5 += 1
                                                 else:
                                                     offset_5 = -1
                                                     break
@@ -12078,20 +12145,20 @@ def _build(unicodedata):
                                                             if offset_5 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                                 width = partial_tab_width_3
                                                             else:
-                                                                width  = (self.tabstop-(column_3%self.tabstop))
+                                                                width  = (self.tabstop-(column_5%self.tabstop))
                                                             count_2 += width
-                                                            column_3 += width
+                                                            column_5 += width
                                                             offset_5 += 1
                                                         else:
                                                             count_2 += 1
-                                                            column_3 += 1
+                                                            column_5 += 1
                                                             offset_5 += 1
                                                     else:
                                                         break
 
                                                 while True: # start choice
                                                     offset_6 = offset_5
-                                                    column_4 = column_3
+                                                    column_6 = column_5
                                                     indent_column_4 = indent_column_3
                                                     partial_tab_offset_4 = partial_tab_offset_3
                                                     partial_tab_width_4 = partial_tab_width_3
@@ -12100,7 +12167,7 @@ def _build(unicodedata):
                                                         count_2 = 0
                                                         while True:
                                                             offset_7 = offset_6
-                                                            column_5 = column_4
+                                                            column_7 = column_6
                                                             indent_column_5 = indent_column_4
                                                             partial_tab_offset_5 = partial_tab_offset_4
                                                             partial_tab_width_5 = partial_tab_width_4
@@ -12144,7 +12211,7 @@ def _build(unicodedata):
                                                                     break
                                                                 else:
                                                                     offset_7 += 1
-                                                                    column_5 += 1
+                                                                    column_7 += 1
 
                                                                 break
                                                             if offset_7 == -1:
@@ -12153,7 +12220,7 @@ def _build(unicodedata):
                                                             if children_7 is not None and children_7 is not None:
                                                                 children_6.extend(children_7)
                                                             offset_6 = offset_7
-                                                            column_4 = column_5
+                                                            column_6 = column_7
                                                             indent_column_4 = indent_column_5
                                                             partial_tab_offset_4 = partial_tab_offset_5
                                                             partial_tab_width_4 = partial_tab_width_5
@@ -12168,7 +12235,7 @@ def _build(unicodedata):
                                                         break
                                                     if offset_6 != -1:
                                                         offset_5 = offset_6
-                                                        column_3 = column_4
+                                                        column_5 = column_6
                                                         indent_column_3 = indent_column_4
                                                         partial_tab_offset_3 = partial_tab_offset_4
                                                         partial_tab_width_3 = partial_tab_width_4
@@ -12177,7 +12244,7 @@ def _build(unicodedata):
                                                         break
                                                     # end case
                                                     offset_6 = offset_5
-                                                    column_4 = column_3
+                                                    column_6 = column_5
                                                     indent_column_4 = indent_column_3
                                                     partial_tab_offset_4 = partial_tab_offset_3
                                                     partial_tab_width_4 = partial_tab_width_3
@@ -12185,7 +12252,7 @@ def _build(unicodedata):
                                                     while True: # case
                                                         if buf[offset_6:offset_6+1] == '"':
                                                             offset_6 += 1
-                                                            column_4 += 1
+                                                            column_6 += 1
                                                         else:
                                                             offset_6 = -1
                                                             break
@@ -12193,7 +12260,7 @@ def _build(unicodedata):
                                                         count_2 = 0
                                                         while True:
                                                             offset_7 = offset_6
-                                                            column_5 = column_4
+                                                            column_7 = column_6
                                                             indent_column_5 = indent_column_4
                                                             partial_tab_offset_5 = partial_tab_offset_4
                                                             partial_tab_width_5 = partial_tab_width_4
@@ -12213,7 +12280,7 @@ def _build(unicodedata):
                                                                     break
                                                                 else:
                                                                     offset_7 += 1
-                                                                    column_5 += 1
+                                                                    column_7 += 1
 
                                                                 break
                                                             if offset_7 == -1:
@@ -12222,7 +12289,7 @@ def _build(unicodedata):
                                                             if children_7 is not None and children_7 is not None:
                                                                 children_6.extend(children_7)
                                                             offset_6 = offset_7
-                                                            column_4 = column_5
+                                                            column_6 = column_7
                                                             indent_column_4 = indent_column_5
                                                             partial_tab_offset_4 = partial_tab_offset_5
                                                             partial_tab_width_4 = partial_tab_width_5
@@ -12232,7 +12299,7 @@ def _build(unicodedata):
 
                                                         if buf[offset_6:offset_6+1] == '"':
                                                             offset_6 += 1
-                                                            column_4 += 1
+                                                            column_6 += 1
                                                         else:
                                                             offset_6 = -1
                                                             break
@@ -12241,7 +12308,7 @@ def _build(unicodedata):
                                                         break
                                                     if offset_6 != -1:
                                                         offset_5 = offset_6
-                                                        column_3 = column_4
+                                                        column_5 = column_6
                                                         indent_column_3 = indent_column_4
                                                         partial_tab_offset_3 = partial_tab_offset_4
                                                         partial_tab_width_3 = partial_tab_width_4
@@ -12250,7 +12317,7 @@ def _build(unicodedata):
                                                         break
                                                     # end case
                                                     offset_6 = offset_5
-                                                    column_4 = column_3
+                                                    column_6 = column_5
                                                     indent_column_4 = indent_column_3
                                                     partial_tab_offset_4 = partial_tab_offset_3
                                                     partial_tab_width_4 = partial_tab_width_3
@@ -12258,7 +12325,7 @@ def _build(unicodedata):
                                                     while True: # case
                                                         if buf[offset_6:offset_6+1] == "'":
                                                             offset_6 += 1
-                                                            column_4 += 1
+                                                            column_6 += 1
                                                         else:
                                                             offset_6 = -1
                                                             break
@@ -12266,7 +12333,7 @@ def _build(unicodedata):
                                                         count_2 = 0
                                                         while True:
                                                             offset_7 = offset_6
-                                                            column_5 = column_4
+                                                            column_7 = column_6
                                                             indent_column_5 = indent_column_4
                                                             partial_tab_offset_5 = partial_tab_offset_4
                                                             partial_tab_width_5 = partial_tab_width_4
@@ -12286,7 +12353,7 @@ def _build(unicodedata):
                                                                     break
                                                                 else:
                                                                     offset_7 += 1
-                                                                    column_5 += 1
+                                                                    column_7 += 1
 
                                                                 break
                                                             if offset_7 == -1:
@@ -12295,7 +12362,7 @@ def _build(unicodedata):
                                                             if children_7 is not None and children_7 is not None:
                                                                 children_6.extend(children_7)
                                                             offset_6 = offset_7
-                                                            column_4 = column_5
+                                                            column_6 = column_7
                                                             indent_column_4 = indent_column_5
                                                             partial_tab_offset_4 = partial_tab_offset_5
                                                             partial_tab_width_4 = partial_tab_width_5
@@ -12305,7 +12372,7 @@ def _build(unicodedata):
 
                                                         if buf[offset_6:offset_6+1] == "'":
                                                             offset_6 += 1
-                                                            column_4 += 1
+                                                            column_6 += 1
                                                         else:
                                                             offset_6 = -1
                                                             break
@@ -12314,7 +12381,7 @@ def _build(unicodedata):
                                                         break
                                                     if offset_6 != -1:
                                                         offset_5 = offset_6
-                                                        column_3 = column_4
+                                                        column_5 = column_6
                                                         indent_column_3 = indent_column_4
                                                         partial_tab_offset_3 = partial_tab_offset_4
                                                         partial_tab_width_3 = partial_tab_width_4
@@ -12334,7 +12401,7 @@ def _build(unicodedata):
                                             if children_5 is not None and children_5 is not None:
                                                 children_4.extend(children_5)
                                             offset_4 = offset_5
-                                            column_2 = column_3
+                                            column_4 = column_5
                                             indent_column_2 = indent_column_3
                                             partial_tab_offset_2 = partial_tab_offset_3
                                             partial_tab_width_2 = partial_tab_width_3
@@ -12350,7 +12417,7 @@ def _build(unicodedata):
                                     if children_4 is not None and children_4 is not None:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
-                                    column_1 = column_2
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -12366,23 +12433,23 @@ def _build(unicodedata):
                                             if offset_3 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                                 width = partial_tab_width_1
                                             else:
-                                                width  = (self.tabstop-(column_1%self.tabstop))
+                                                width  = (self.tabstop-(column_3%self.tabstop))
                                             count_0 += width
-                                            column_1 += width
+                                            column_3 += width
                                             offset_3 += 1
                                         else:
                                             count_0 += 1
-                                            column_1 += 1
+                                            column_3 += 1
                                             offset_3 += 1
                                     else:
                                         break
 
                                 if buf[offset_3:offset_3+1] == '>':
                                     offset_3 += 1
-                                    column_1 += 1
+                                    column_3 += 1
                                 elif buf[offset_3:offset_3+2] == '/>':
                                     offset_3 += 2
-                                    column_1 += 2
+                                    column_3 += 2
                                 else:
                                     offset_3 = -1
                                     break
@@ -12395,13 +12462,13 @@ def _build(unicodedata):
                                             if offset_3 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                                 width = partial_tab_width_1
                                             else:
-                                                width  = (self.tabstop-(column_1%self.tabstop))
+                                                width  = (self.tabstop-(column_3%self.tabstop))
                                             count_0 += width
-                                            column_1 += width
+                                            column_3 += width
                                             offset_3 += 1
                                         else:
                                             count_0 += 1
-                                            column_1 += 1
+                                            column_3 += 1
                                             offset_3 += 1
                                     else:
                                         break
@@ -12410,7 +12477,7 @@ def _build(unicodedata):
                                 break
                             if offset_3 != -1:
                                 offset_2 = offset_3
-                                column_0 = column_1
+                                column_2 = column_3
                                 indent_column_0 = indent_column_1
                                 partial_tab_offset_0 = partial_tab_offset_1
                                 partial_tab_width_0 = partial_tab_width_1
@@ -12427,14 +12494,15 @@ def _build(unicodedata):
                     if offset_2 == -1:
                         offset_1 = -1
                         break
-                    value_0 = self.Node('raw', offset_1, offset_2, children_2, None)
+                    value_0 = self.Node('raw', offset_1, offset_2, children_2, column_1, column_2, None)
                     children_1.append(value_0)
                     offset_1 = offset_2
+                    column_1 = column_2
 
                     count_0 = 0
                     while True:
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -12447,7 +12515,7 @@ def _build(unicodedata):
                                     codepoint = buf[offset_3]
                                     if codepoint in '\n':
                                         offset_3 +=1
-                                        column_1 = 0
+                                        column_3 = 0
                                         indent_column_1 = (0, None)
                                     else:
                                         offset_3 = -1
@@ -12460,11 +12528,12 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_1 = self.Node('raw', offset_2, offset_3, children_3, None)
+                            value_1 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                             children_2.append(value_1)
                             offset_2 = offset_3
+                            column_2 = column_3
 
-                            if not (column_1 == indent_column_1[0] == 0):
+                            if not (column_2 == indent_column_1[0] == 0):
                                 offset_2 = -1
                                 break
                             # print('start')
@@ -12472,21 +12541,21 @@ def _build(unicodedata):
                                 # print(indent)
                                 _children, _prefix = [], []
                                 offset_3 = offset_2
-                                offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
+                                offset_3, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_2, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
                                 if _prefix or _children:
                                    raise Exception('bar')
                                 if offset_3 == -1:
                                     offset_2 = -1
                                     break
                                 offset_2 = offset_3
-                                indent_column_1 = (column_1, indent_column_1)
+                                indent_column_1 = (column_2, indent_column_1)
                             if offset_2 == -1:
                                 break
 
                             while True: # start reject
                                 children_3 = []
                                 offset_3 = offset_2 + 0
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -12498,13 +12567,13 @@ def _build(unicodedata):
                                             if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-(column_3%self.tabstop))
                                             count_1 += width
-                                            column_2 += width
+                                            column_3 += width
                                             offset_3 += 1
                                         else:
                                             count_1 += 1
-                                            column_2 += 1
+                                            column_3 += 1
                                             offset_3 += 1
                                     else:
                                         break
@@ -12513,7 +12582,7 @@ def _build(unicodedata):
                                     codepoint = buf[offset_3]
                                     if codepoint in '\n':
                                         offset_3 +=1
-                                        column_2 = 0
+                                        column_3 = 0
                                         indent_column_2 = (0, None)
                                     else:
                                         offset_3 = -1
@@ -12530,7 +12599,7 @@ def _build(unicodedata):
                                 count_1 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -12547,7 +12616,7 @@ def _build(unicodedata):
                                             break
                                         else:
                                             offset_4 += 1
-                                            column_2 += 1
+                                            column_4 += 1
 
                                         break
                                     if offset_4 == -1:
@@ -12556,7 +12625,7 @@ def _build(unicodedata):
                                     if children_4 is not None and children_4 is not None:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
-                                    column_1 = column_2
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -12568,9 +12637,10 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_2 = self.Node('raw', offset_2, offset_3, children_3, None)
+                            value_2 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                             children_2.append(value_2)
                             offset_2 = offset_3
+                            column_2 = column_3
 
                             break
                         if offset_2 == -1:
@@ -12579,7 +12649,7 @@ def _build(unicodedata):
                         if children_2 is not None and children_2 is not None:
                             children_1.extend(children_2)
                         offset_1 = offset_2
-                        column_0 = column_1
+                        column_1 = column_2
                         indent_column_0 = indent_column_1
                         partial_tab_offset_0 = partial_tab_offset_1
                         partial_tab_width_0 = partial_tab_width_1
@@ -12589,7 +12659,7 @@ def _build(unicodedata):
 
                     while True: # start choice
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -12599,7 +12669,7 @@ def _build(unicodedata):
                                 codepoint = buf[offset_2]
                                 if codepoint in '\n':
                                     offset_2 +=1
-                                    column_1 = 0
+                                    column_2 = 0
                                     indent_column_1 = (0, None)
                                 else:
                                     offset_2 = -1
@@ -12608,7 +12678,7 @@ def _build(unicodedata):
                                 offset_2 = -1
                                 break
 
-                            if not (column_1 == indent_column_1[0] == 0):
+                            if not (column_2 == indent_column_1[0] == 0):
                                 offset_2 = -1
                                 break
                             # print('start')
@@ -12616,14 +12686,14 @@ def _build(unicodedata):
                                 # print(indent)
                                 _children, _prefix = [], []
                                 offset_3 = offset_2
-                                offset_3, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
+                                offset_3, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_2, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
                                 if _prefix or _children:
                                    raise Exception('bar')
                                 if offset_3 == -1:
                                     offset_2 = -1
                                     break
                                 offset_2 = offset_3
-                                indent_column_1 = (column_1, indent_column_1)
+                                indent_column_1 = (column_2, indent_column_1)
                             if offset_2 == -1:
                                 break
 
@@ -12635,13 +12705,13 @@ def _build(unicodedata):
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
-                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                            width  = (self.tabstop-(column_2%self.tabstop))
                                         count_0 += width
-                                        column_1 += width
+                                        column_2 += width
                                         offset_2 += 1
                                     else:
                                         count_0 += 1
-                                        column_1 += 1
+                                        column_2 += 1
                                         offset_2 += 1
                                 else:
                                     break
@@ -12650,7 +12720,7 @@ def _build(unicodedata):
                                 codepoint = buf[offset_2]
                                 if codepoint in '\n':
                                     offset_2 +=1
-                                    column_1 = 0
+                                    column_2 = 0
                                     indent_column_1 = (0, None)
                                 else:
                                     offset_2 = -1
@@ -12663,7 +12733,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -12672,7 +12742,7 @@ def _build(unicodedata):
                             break
                         # end case
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -12682,7 +12752,7 @@ def _build(unicodedata):
                                 codepoint = buf[offset_2]
                                 if codepoint in '\n':
                                     offset_2 +=1
-                                    column_1 = 0
+                                    column_2 = 0
                                     indent_column_1 = (0, None)
                                 else:
                                     offset_2 = -1
@@ -12691,11 +12761,11 @@ def _build(unicodedata):
                             while True: # start reject
                                 children_3 = []
                                 offset_3 = offset_2 + 0
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
-                                if not (column_2 == indent_column_2[0] == 0):
+                                if not (column_3 == indent_column_2[0] == 0):
                                     offset_3 = -1
                                     break
                                 # print('start')
@@ -12703,14 +12773,14 @@ def _build(unicodedata):
                                     # print(indent)
                                     _children, _prefix = [], []
                                     offset_4 = offset_3
-                                    offset_4, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = indent(buf, buf_start, buf_eof, offset_4, column_2, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
+                                    offset_4, column_3, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = indent(buf, buf_start, buf_eof, offset_4, column_3, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
                                     if _prefix or _children:
                                        raise Exception('bar')
                                     if offset_4 == -1:
                                         offset_3 = -1
                                         break
                                     offset_3 = offset_4
-                                    indent_column_2 = (column_2, indent_column_2)
+                                    indent_column_2 = (column_3, indent_column_2)
                                 if offset_3 == -1:
                                     break
 
@@ -12723,7 +12793,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -12732,7 +12802,7 @@ def _build(unicodedata):
                             break
                         # end case
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -12742,7 +12812,7 @@ def _build(unicodedata):
                                 codepoint = buf[offset_2]
                                 if codepoint in '\n':
                                     offset_2 +=1
-                                    column_1 = 0
+                                    column_2 = 0
                                     indent_column_1 = (0, None)
                                 else:
                                     offset_2 = -1
@@ -12756,7 +12826,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -12773,9 +12843,10 @@ def _build(unicodedata):
                 if offset_1 == -1:
                     offset_0 = -1
                     break
-                value_3 = self.Node('html_block', offset_0, offset_1, children_1, None)
+                value_3 = self.Node('html_block', offset_0, offset_1, children_1, column_0, column_1, None)
                 children_0.append(value_3)
                 offset_0 = offset_1
+                column_0 = column_1
 
                 break
             return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
@@ -13190,7 +13261,7 @@ def _build(unicodedata):
                                 codepoint = buf[offset_2]
                                 if codepoint in '\n':
                                     offset_2 +=1
-                                    column_1 = 0
+                                    column_2 = 0
                                     indent_column_1 = (0, None)
                                 else:
                                     offset_2 = -1
@@ -13203,9 +13274,10 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_0 = self.Node('hardbreak', offset_1, offset_2, children_2, None)
+                        value_0 = self.Node('hardbreak', offset_1, offset_2, children_2, column_1, column_2, None)
                         children_1.append(value_0)
                         offset_1 = offset_2
+                        column_1 = column_2
 
 
                         break
@@ -13252,7 +13324,7 @@ def _build(unicodedata):
                                 codepoint = buf[offset_2]
                                 if codepoint in '\n':
                                     offset_2 +=1
-                                    column_1 = 0
+                                    column_2 = 0
                                     indent_column_1 = (0, None)
                                 else:
                                     offset_2 = -1
@@ -13265,9 +13337,10 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_1 = self.Node('softbreak', offset_1, offset_2, children_2, None)
+                        value_1 = self.Node('softbreak', offset_1, offset_2, children_2, column_1, column_2, None)
                         children_1.append(value_1)
                         offset_1 = offset_2
+                        column_1 = column_2
 
 
                         break
@@ -13448,7 +13521,7 @@ def _build(unicodedata):
                         if offset_1 == -1:
                             break
 
-                        children_1.append(self.Node('value', offset_1, offset_1, (), 1))
+                        children_1.append(self.Node('value', offset_1, offset_1, column_1, column_1, (), 1))
 
 
                         break
@@ -13503,7 +13576,7 @@ def _build(unicodedata):
                         if offset_1 == -1:
                             break
 
-                        children_1.append(self.Node('value', offset_1, offset_1, (), 2))
+                        children_1.append(self.Node('value', offset_1, offset_1, column_1, column_1, (), 2))
 
 
                         break
@@ -13589,16 +13662,16 @@ def _build(unicodedata):
                         children_1 = []
                         while True: # start capture
                             prefix_0.append((self.parse_no_setext_heading_line, None))
-                            indent_column_0 = (column_0, indent_column_0)
+                            indent_column_0 = (column_1, indent_column_0)
                             while True:
-                                offset_3, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0 = self.parse_inline_element(buf, buf_start, buf_eof, offset_3, column_0, indent_column_0, prefix_0, children_1, partial_tab_offset_0, partial_tab_width_0)
+                                offset_3, column_1, indent_column_0, partial_tab_offset_0, partial_tab_width_0 = self.parse_inline_element(buf, buf_start, buf_eof, offset_3, column_1, indent_column_0, prefix_0, children_1, partial_tab_offset_0, partial_tab_width_0)
                                 if offset_3 == -1: break
 
 
                                 count_0 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    column_1 = column_0
+                                    column_2 = column_1
                                     indent_column_1 = indent_column_0
                                     partial_tab_offset_1 = partial_tab_offset_0
                                     partial_tab_width_1 = partial_tab_width_0
@@ -13606,13 +13679,13 @@ def _build(unicodedata):
                                     while True:
                                         while True: # start choice
                                             offset_5 = offset_4
-                                            column_2 = column_1
+                                            column_3 = column_2
                                             indent_column_2 = indent_column_1
                                             partial_tab_offset_2 = partial_tab_offset_1
                                             partial_tab_width_2 = partial_tab_width_1
                                             children_3 = [] if children_2 is not None else None
                                             while True: # case
-                                                offset_5, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_linebreak(buf, buf_start, buf_eof, offset_5, column_2, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
+                                                offset_5, column_3, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_linebreak(buf, buf_start, buf_eof, offset_5, column_3, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
                                                 if offset_5 == -1: break
 
 
@@ -13620,7 +13693,7 @@ def _build(unicodedata):
                                                 break
                                             if offset_5 != -1:
                                                 offset_4 = offset_5
-                                                column_1 = column_2
+                                                column_2 = column_3
                                                 indent_column_1 = indent_column_2
                                                 partial_tab_offset_1 = partial_tab_offset_2
                                                 partial_tab_width_1 = partial_tab_width_2
@@ -13629,7 +13702,7 @@ def _build(unicodedata):
                                                 break
                                             # end case
                                             offset_5 = offset_4
-                                            column_2 = column_1
+                                            column_3 = column_2
                                             indent_column_2 = indent_column_1
                                             partial_tab_offset_2 = partial_tab_offset_1
                                             partial_tab_width_2 = partial_tab_width_1
@@ -13646,13 +13719,13 @@ def _build(unicodedata):
                                                                 if offset_6 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                                     width = partial_tab_width_2
                                                                 else:
-                                                                    width  = (self.tabstop-(column_2%self.tabstop))
+                                                                    width  = (self.tabstop-(column_4%self.tabstop))
                                                                 count_1 += width
-                                                                column_2 += width
+                                                                column_4 += width
                                                                 offset_6 += 1
                                                             else:
                                                                 count_1 += 1
-                                                                column_2 += 1
+                                                                column_4 += 1
                                                                 offset_6 += 1
                                                         else:
                                                             break
@@ -13661,15 +13734,16 @@ def _build(unicodedata):
                                                 if offset_6 == -1:
                                                     offset_5 = -1
                                                     break
-                                                value_2 = self.Node('whitespace', offset_5, offset_6, children_4, None)
+                                                value_2 = self.Node('whitespace', offset_5, offset_6, children_4, column_3, column_4, None)
                                                 children_3.append(value_2)
                                                 offset_5 = offset_6
+                                                column_3 = column_4
 
 
                                                 break
                                             if offset_5 != -1:
                                                 offset_4 = offset_5
-                                                column_1 = column_2
+                                                column_2 = column_3
                                                 indent_column_1 = indent_column_2
                                                 partial_tab_offset_1 = partial_tab_offset_2
                                                 partial_tab_width_1 = partial_tab_width_2
@@ -13682,7 +13756,7 @@ def _build(unicodedata):
                                         if offset_4 == -1:
                                             break
 
-                                        offset_4, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_inline_element(buf, buf_start, buf_eof, offset_4, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
+                                        offset_4, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_inline_element(buf, buf_start, buf_eof, offset_4, column_2, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                                         if offset_4 == -1: break
 
 
@@ -13693,7 +13767,7 @@ def _build(unicodedata):
                                     if children_2 is not None and children_2 is not None:
                                         children_1.extend(children_2)
                                     offset_3 = offset_4
-                                    column_0 = column_1
+                                    column_1 = column_2
                                     indent_column_0 = indent_column_1
                                     partial_tab_offset_0 = partial_tab_offset_1
                                     partial_tab_width_0 = partial_tab_width_1
@@ -13708,7 +13782,7 @@ def _build(unicodedata):
 
                             while True: # start choice
                                 offset_4 = offset_3
-                                column_1 = column_0
+                                column_2 = column_1
                                 indent_column_1 = indent_column_0
                                 partial_tab_offset_1 = partial_tab_offset_0
                                 partial_tab_width_1 = partial_tab_width_0
@@ -13717,7 +13791,7 @@ def _build(unicodedata):
                                     count_0 = 0
                                     while count_0 < 1:
                                         offset_5 = offset_4
-                                        column_2 = column_1
+                                        column_3 = column_2
                                         indent_column_2 = indent_column_1
                                         partial_tab_offset_2 = partial_tab_offset_1
                                         partial_tab_width_2 = partial_tab_width_1
@@ -13725,12 +13799,12 @@ def _build(unicodedata):
                                         while True:
                                             if buf[offset_5:offset_5+1] == '\\':
                                                 offset_5 += 1
-                                                column_2 += 1
+                                                column_3 += 1
                                             else:
                                                 offset_5 = -1
                                                 break
 
-                                            children_3.append(self.Node('value', offset_5, offset_5, (), '\\'))
+                                            children_3.append(self.Node('value', offset_5, offset_5, column_3, column_3, (), '\\'))
 
                                             break
                                         if offset_5 == -1:
@@ -13739,7 +13813,7 @@ def _build(unicodedata):
                                         if children_3 is not None and children_3 is not None:
                                             children_2.extend(children_3)
                                         offset_4 = offset_5
-                                        column_1 = column_2
+                                        column_2 = column_3
                                         indent_column_1 = indent_column_2
                                         partial_tab_offset_1 = partial_tab_offset_2
                                         partial_tab_width_1 = partial_tab_width_2
@@ -13756,13 +13830,13 @@ def _build(unicodedata):
                                                 if offset_4 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                                     width = partial_tab_width_1
                                                 else:
-                                                    width  = (self.tabstop-(column_1%self.tabstop))
+                                                    width  = (self.tabstop-(column_2%self.tabstop))
                                                 count_0 += width
-                                                column_1 += width
+                                                column_2 += width
                                                 offset_4 += 1
                                             else:
                                                 count_0 += 1
-                                                column_1 += 1
+                                                column_2 += 1
                                                 offset_4 += 1
                                         else:
                                             break
@@ -13771,7 +13845,7 @@ def _build(unicodedata):
                                         codepoint = buf[offset_4]
                                         if codepoint in '\n':
                                             offset_4 +=1
-                                            column_1 = 0
+                                            column_2 = 0
                                             indent_column_1 = (0, None)
                                         else:
                                             offset_4 = -1
@@ -13780,7 +13854,7 @@ def _build(unicodedata):
                                         offset_4 = -1
                                         break
 
-                                    if not (column_1 == indent_column_1[0] == 0):
+                                    if not (column_2 == indent_column_1[0] == 0):
                                         offset_4 = -1
                                         break
                                     # print('start')
@@ -13788,14 +13862,14 @@ def _build(unicodedata):
                                         # print(indent)
                                         _children, _prefix = [], []
                                         offset_5 = offset_4
-                                        offset_5, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_5, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
+                                        offset_5, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_5, column_2, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
                                         if _prefix or _children:
                                            raise Exception('bar')
                                         if offset_5 == -1:
                                             offset_4 = -1
                                             break
                                         offset_4 = offset_5
-                                        indent_column_1 = (column_1, indent_column_1)
+                                        indent_column_1 = (column_2, indent_column_1)
                                     if offset_4 == -1:
                                         break
 
@@ -13807,27 +13881,27 @@ def _build(unicodedata):
                                                 if offset_4 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                                     width = partial_tab_width_1
                                                 else:
-                                                    width  = (self.tabstop-(column_1%self.tabstop))
+                                                    width  = (self.tabstop-(column_2%self.tabstop))
                                                 if count_0 + width > 3:
                                                     new_width = 3 - count_0
                                                     count_0 += new_width
-                                                    column_1 += new_width
+                                                    column_2 += new_width
                                                     partial_tab_offset_1 = offset_4
                                                     partial_tab_width_1 = width - new_width
                                                     break
                                                 count_0 += width
-                                                column_1 += width
+                                                column_2 += width
                                                 offset_4 += 1
                                             else:
                                                 count_0 += 1
-                                                column_1 += 1
+                                                column_2 += 1
                                                 offset_4 += 1
                                         else:
                                             break
 
                                     while True: # start choice
                                         offset_5 = offset_4
-                                        column_2 = column_1
+                                        column_3 = column_2
                                         indent_column_2 = indent_column_1
                                         partial_tab_offset_2 = partial_tab_offset_1
                                         partial_tab_width_2 = partial_tab_width_1
@@ -13836,7 +13910,7 @@ def _build(unicodedata):
                                             count_0 = 0
                                             while True:
                                                 offset_6 = offset_5
-                                                column_3 = column_2
+                                                column_4 = column_3
                                                 indent_column_3 = indent_column_2
                                                 partial_tab_offset_3 = partial_tab_offset_2
                                                 partial_tab_width_3 = partial_tab_width_2
@@ -13844,7 +13918,7 @@ def _build(unicodedata):
                                                 while True:
                                                     if buf[offset_6:offset_6+1] == '=':
                                                         offset_6 += 1
-                                                        column_3 += 1
+                                                        column_4 += 1
                                                     else:
                                                         offset_6 = -1
                                                         break
@@ -13856,7 +13930,7 @@ def _build(unicodedata):
                                                 if children_4 is not None and children_4 is not None:
                                                     children_3.extend(children_4)
                                                 offset_5 = offset_6
-                                                column_2 = column_3
+                                                column_3 = column_4
                                                 indent_column_2 = indent_column_3
                                                 partial_tab_offset_2 = partial_tab_offset_3
                                                 partial_tab_width_2 = partial_tab_width_3
@@ -13873,7 +13947,7 @@ def _build(unicodedata):
                                             break
                                         if offset_5 != -1:
                                             offset_4 = offset_5
-                                            column_1 = column_2
+                                            column_2 = column_3
                                             indent_column_1 = indent_column_2
                                             partial_tab_offset_1 = partial_tab_offset_2
                                             partial_tab_width_1 = partial_tab_width_2
@@ -13882,7 +13956,7 @@ def _build(unicodedata):
                                             break
                                         # end case
                                         offset_5 = offset_4
-                                        column_2 = column_1
+                                        column_3 = column_2
                                         indent_column_2 = indent_column_1
                                         partial_tab_offset_2 = partial_tab_offset_1
                                         partial_tab_width_2 = partial_tab_width_1
@@ -13891,7 +13965,7 @@ def _build(unicodedata):
                                             count_0 = 0
                                             while True:
                                                 offset_6 = offset_5
-                                                column_3 = column_2
+                                                column_4 = column_3
                                                 indent_column_3 = indent_column_2
                                                 partial_tab_offset_3 = partial_tab_offset_2
                                                 partial_tab_width_3 = partial_tab_width_2
@@ -13899,7 +13973,7 @@ def _build(unicodedata):
                                                 while True:
                                                     if buf[offset_6:offset_6+1] == '-':
                                                         offset_6 += 1
-                                                        column_3 += 1
+                                                        column_4 += 1
                                                     else:
                                                         offset_6 = -1
                                                         break
@@ -13911,7 +13985,7 @@ def _build(unicodedata):
                                                 if children_4 is not None and children_4 is not None:
                                                     children_3.extend(children_4)
                                                 offset_5 = offset_6
-                                                column_2 = column_3
+                                                column_3 = column_4
                                                 indent_column_2 = indent_column_3
                                                 partial_tab_offset_2 = partial_tab_offset_3
                                                 partial_tab_width_2 = partial_tab_width_3
@@ -13928,7 +14002,7 @@ def _build(unicodedata):
                                             break
                                         if offset_5 != -1:
                                             offset_4 = offset_5
-                                            column_1 = column_2
+                                            column_2 = column_3
                                             indent_column_1 = indent_column_2
                                             partial_tab_offset_1 = partial_tab_offset_2
                                             partial_tab_width_1 = partial_tab_width_2
@@ -13941,7 +14015,7 @@ def _build(unicodedata):
                                     if offset_4 == -1:
                                         break
 
-                                    offset_4, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_line_end(buf, buf_start, buf_eof, offset_4, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
+                                    offset_4, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_line_end(buf, buf_start, buf_eof, offset_4, column_2, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                                     if offset_4 == -1: break
 
 
@@ -13951,7 +14025,7 @@ def _build(unicodedata):
                                     break
                                 if offset_4 != -1:
                                     offset_3 = offset_4
-                                    column_0 = column_1
+                                    column_1 = column_2
                                     indent_column_0 = indent_column_1
                                     partial_tab_offset_0 = partial_tab_offset_1
                                     partial_tab_width_0 = partial_tab_width_1
@@ -13960,7 +14034,7 @@ def _build(unicodedata):
                                     break
                                 # end case
                                 offset_4 = offset_3
-                                column_1 = column_0
+                                column_2 = column_1
                                 indent_column_1 = indent_column_0
                                 partial_tab_offset_1 = partial_tab_offset_0
                                 partial_tab_width_1 = partial_tab_width_0
@@ -13969,7 +14043,7 @@ def _build(unicodedata):
                                     count_0 = 0
                                     while True:
                                         offset_5 = offset_4
-                                        column_2 = column_1
+                                        column_3 = column_2
                                         indent_column_2 = indent_column_1
                                         partial_tab_offset_2 = partial_tab_offset_1
                                         partial_tab_width_2 = partial_tab_width_1
@@ -13977,13 +14051,13 @@ def _build(unicodedata):
                                         while True:
                                             while True: # start choice
                                                 offset_6 = offset_5
-                                                column_3 = column_2
+                                                column_4 = column_3
                                                 indent_column_3 = indent_column_2
                                                 partial_tab_offset_3 = partial_tab_offset_2
                                                 partial_tab_width_3 = partial_tab_width_2
                                                 children_4 = [] if children_3 is not None else None
                                                 while True: # case
-                                                    offset_6, column_3, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = self.parse_linebreak(buf, buf_start, buf_eof, offset_6, column_3, indent_column_3, prefix_0, children_4, partial_tab_offset_3, partial_tab_width_3)
+                                                    offset_6, column_4, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = self.parse_linebreak(buf, buf_start, buf_eof, offset_6, column_4, indent_column_3, prefix_0, children_4, partial_tab_offset_3, partial_tab_width_3)
                                                     if offset_6 == -1: break
 
 
@@ -13991,7 +14065,7 @@ def _build(unicodedata):
                                                     break
                                                 if offset_6 != -1:
                                                     offset_5 = offset_6
-                                                    column_2 = column_3
+                                                    column_3 = column_4
                                                     indent_column_2 = indent_column_3
                                                     partial_tab_offset_2 = partial_tab_offset_3
                                                     partial_tab_width_2 = partial_tab_width_3
@@ -14000,7 +14074,7 @@ def _build(unicodedata):
                                                     break
                                                 # end case
                                                 offset_6 = offset_5
-                                                column_3 = column_2
+                                                column_4 = column_3
                                                 indent_column_3 = indent_column_2
                                                 partial_tab_offset_3 = partial_tab_offset_2
                                                 partial_tab_width_3 = partial_tab_width_2
@@ -14017,13 +14091,13 @@ def _build(unicodedata):
                                                                     if offset_7 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                                         width = partial_tab_width_3
                                                                     else:
-                                                                        width  = (self.tabstop-(column_3%self.tabstop))
+                                                                        width  = (self.tabstop-(column_5%self.tabstop))
                                                                     count_1 += width
-                                                                    column_3 += width
+                                                                    column_5 += width
                                                                     offset_7 += 1
                                                                 else:
                                                                     count_1 += 1
-                                                                    column_3 += 1
+                                                                    column_5 += 1
                                                                     offset_7 += 1
                                                             else:
                                                                 break
@@ -14032,15 +14106,16 @@ def _build(unicodedata):
                                                     if offset_7 == -1:
                                                         offset_6 = -1
                                                         break
-                                                    value_3 = self.Node('whitespace', offset_6, offset_7, children_5, None)
+                                                    value_3 = self.Node('whitespace', offset_6, offset_7, children_5, column_4, column_5, None)
                                                     children_4.append(value_3)
                                                     offset_6 = offset_7
+                                                    column_4 = column_5
 
 
                                                     break
                                                 if offset_6 != -1:
                                                     offset_5 = offset_6
-                                                    column_2 = column_3
+                                                    column_3 = column_4
                                                     indent_column_2 = indent_column_3
                                                     partial_tab_offset_2 = partial_tab_offset_3
                                                     partial_tab_width_2 = partial_tab_width_3
@@ -14053,7 +14128,7 @@ def _build(unicodedata):
                                             if offset_5 == -1:
                                                 break
 
-                                            offset_5, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_inline_element(buf, buf_start, buf_eof, offset_5, column_2, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
+                                            offset_5, column_3, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_inline_element(buf, buf_start, buf_eof, offset_5, column_3, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
                                             if offset_5 == -1: break
 
 
@@ -14064,7 +14139,7 @@ def _build(unicodedata):
                                         if children_3 is not None and children_3 is not None:
                                             children_2.extend(children_3)
                                         offset_4 = offset_5
-                                        column_1 = column_2
+                                        column_2 = column_3
                                         indent_column_1 = indent_column_2
                                         partial_tab_offset_1 = partial_tab_offset_2
                                         partial_tab_width_1 = partial_tab_width_2
@@ -14080,13 +14155,13 @@ def _build(unicodedata):
                                                 if offset_4 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                                     width = partial_tab_width_1
                                                 else:
-                                                    width  = (self.tabstop-(column_1%self.tabstop))
+                                                    width  = (self.tabstop-(column_2%self.tabstop))
                                                 count_0 += width
-                                                column_1 += width
+                                                column_2 += width
                                                 offset_4 += 1
                                             else:
                                                 count_0 += 1
-                                                column_1 += 1
+                                                column_2 += 1
                                                 offset_4 += 1
                                         else:
                                             break
@@ -14094,7 +14169,7 @@ def _build(unicodedata):
                                     count_0 = 0
                                     while count_0 < 1:
                                         offset_5 = offset_4
-                                        column_2 = column_1
+                                        column_3 = column_2
                                         indent_column_2 = indent_column_1
                                         partial_tab_offset_2 = partial_tab_offset_1
                                         partial_tab_width_2 = partial_tab_width_1
@@ -14102,12 +14177,12 @@ def _build(unicodedata):
                                         while True:
                                             if buf[offset_5:offset_5+1] == '\\':
                                                 offset_5 += 1
-                                                column_2 += 1
+                                                column_3 += 1
                                             else:
                                                 offset_5 = -1
                                                 break
 
-                                            children_3.append(self.Node('value', offset_5, offset_5, (), '\\'))
+                                            children_3.append(self.Node('value', offset_5, offset_5, column_3, column_3, (), '\\'))
 
                                             break
                                         if offset_5 == -1:
@@ -14116,7 +14191,7 @@ def _build(unicodedata):
                                         if children_3 is not None and children_3 is not None:
                                             children_2.extend(children_3)
                                         offset_4 = offset_5
-                                        column_1 = column_2
+                                        column_2 = column_3
                                         indent_column_1 = indent_column_2
                                         partial_tab_offset_1 = partial_tab_offset_2
                                         partial_tab_width_1 = partial_tab_width_2
@@ -14129,7 +14204,7 @@ def _build(unicodedata):
                                         codepoint = buf[offset_4]
                                         if codepoint in '\n':
                                             offset_4 +=1
-                                            column_1 = 0
+                                            column_2 = 0
                                             indent_column_1 = (0, None)
                                         else:
                                             offset_4 = -1
@@ -14139,7 +14214,7 @@ def _build(unicodedata):
                                     break
                                 if offset_4 != -1:
                                     offset_3 = offset_4
-                                    column_0 = column_1
+                                    column_1 = column_2
                                     indent_column_0 = indent_column_1
                                     partial_tab_offset_0 = partial_tab_offset_1
                                     partial_tab_width_0 = partial_tab_width_1
@@ -14156,9 +14231,10 @@ def _build(unicodedata):
                         if offset_3 == -1:
                             offset_2 = -1
                             break
-                        value_4 = self.Node(value_0, offset_2, offset_3, children_1, value_1)
+                        value_4 = self.Node(value_0, offset_2, offset_3, children_1, column_0, column_1, value_1)
                         children_0.append(value_4)
                         offset_2 = offset_3
+                        column_0 = column_1
 
                         break
                     if offset_2 == -1:
@@ -14250,10 +14326,10 @@ def _build(unicodedata):
 
                             if 97 <= codepoint <= 122:
                                 offset_2 += 1
-                                column_1 += 1
+                                column_2 += 1
                             elif 65 <= codepoint <= 90:
                                 offset_2 += 1
-                                column_1 += 1
+                                column_2 += 1
                             else:
                                 offset_2 = -1
                                 break
@@ -14261,7 +14337,7 @@ def _build(unicodedata):
                             count_0 = 0
                             while True:
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -14275,22 +14351,22 @@ def _build(unicodedata):
 
                                     if 97 <= codepoint <= 122:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif 65 <= codepoint <= 90:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif 48 <= codepoint <= 57:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif codepoint == 43:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif codepoint == 46:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif codepoint == 45:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     else:
                                         offset_3 = -1
                                         break
@@ -14302,7 +14378,7 @@ def _build(unicodedata):
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 offset_2 = offset_3
-                                column_1 = column_2
+                                column_2 = column_3
                                 indent_column_1 = indent_column_2
                                 partial_tab_offset_1 = partial_tab_offset_2
                                 partial_tab_width_1 = partial_tab_width_2
@@ -14315,7 +14391,7 @@ def _build(unicodedata):
 
                             if buf[offset_2:offset_2+1] == ':':
                                 offset_2 += 1
-                                column_1 += 1
+                                column_2 += 1
                             else:
                                 offset_2 = -1
                                 break
@@ -14323,7 +14399,7 @@ def _build(unicodedata):
                             count_0 = 0
                             while True:
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -14346,7 +14422,7 @@ def _build(unicodedata):
                                         break
                                     else:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
 
                                     break
                                 if offset_3 == -1:
@@ -14355,7 +14431,7 @@ def _build(unicodedata):
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 offset_2 = offset_3
-                                column_1 = column_2
+                                column_2 = column_3
                                 indent_column_1 = indent_column_2
                                 partial_tab_offset_1 = partial_tab_offset_2
                                 partial_tab_width_1 = partial_tab_width_2
@@ -14367,9 +14443,10 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_0 = self.Node('auto_link', offset_1, offset_2, children_2, None)
+                        value_0 = self.Node('auto_link', offset_1, offset_2, children_2, column_1, column_2, None)
                         children_1.append(value_0)
                         offset_1 = offset_2
+                        column_1 = column_2
 
                         if buf[offset_1:offset_1+1] == '>':
                             offset_1 += 1
@@ -14410,7 +14487,7 @@ def _build(unicodedata):
                             count_0 = 0
                             while True:
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -14424,73 +14501,73 @@ def _build(unicodedata):
 
                                     if 97 <= codepoint <= 122:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif 65 <= codepoint <= 90:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif 48 <= codepoint <= 57:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif codepoint == 46:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif codepoint == 33:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif codepoint == 35:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif codepoint == 36:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif codepoint == 37:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif codepoint == 38:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif codepoint == 39:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif codepoint == 42:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif codepoint == 43:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif codepoint == 47:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif codepoint == 61:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif codepoint == 63:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif codepoint == 94:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif codepoint == 95:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif codepoint == 96:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif codepoint == 123:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif codepoint == 124:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif codepoint == 125:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif codepoint == 126:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif codepoint == 45:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     else:
                                         offset_3 = -1
                                         break
@@ -14502,7 +14579,7 @@ def _build(unicodedata):
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 offset_2 = offset_3
-                                column_1 = column_2
+                                column_2 = column_3
                                 indent_column_1 = indent_column_2
                                 partial_tab_offset_1 = partial_tab_offset_2
                                 partial_tab_width_1 = partial_tab_width_2
@@ -14515,7 +14592,7 @@ def _build(unicodedata):
 
                             if buf[offset_2:offset_2+1] == '@':
                                 offset_2 += 1
-                                column_1 += 1
+                                column_2 += 1
                             else:
                                 offset_2 = -1
                                 break
@@ -14528,13 +14605,13 @@ def _build(unicodedata):
 
                             if 97 <= codepoint <= 122:
                                 offset_2 += 1
-                                column_1 += 1
+                                column_2 += 1
                             elif 65 <= codepoint <= 90:
                                 offset_2 += 1
-                                column_1 += 1
+                                column_2 += 1
                             elif 48 <= codepoint <= 57:
                                 offset_2 += 1
-                                column_1 += 1
+                                column_2 += 1
                             else:
                                 offset_2 = -1
                                 break
@@ -14542,7 +14619,7 @@ def _build(unicodedata):
                             count_0 = 0
                             while count_0 < 1:
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -14551,7 +14628,7 @@ def _build(unicodedata):
                                     count_1 = 0
                                     while count_1 < 62:
                                         offset_4 = offset_3
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
@@ -14559,7 +14636,7 @@ def _build(unicodedata):
                                         while True:
                                             while True: # start choice
                                                 offset_5 = offset_4
-                                                column_4 = column_3
+                                                column_5 = column_4
                                                 indent_column_4 = indent_column_3
                                                 partial_tab_offset_4 = partial_tab_offset_3
                                                 partial_tab_width_4 = partial_tab_width_3
@@ -14573,13 +14650,13 @@ def _build(unicodedata):
 
                                                     if 97 <= codepoint <= 122:
                                                         offset_5 += 1
-                                                        column_4 += 1
+                                                        column_5 += 1
                                                     elif 65 <= codepoint <= 90:
                                                         offset_5 += 1
-                                                        column_4 += 1
+                                                        column_5 += 1
                                                     elif 48 <= codepoint <= 57:
                                                         offset_5 += 1
-                                                        column_4 += 1
+                                                        column_5 += 1
                                                     else:
                                                         offset_5 = -1
                                                         break
@@ -14588,7 +14665,7 @@ def _build(unicodedata):
                                                     break
                                                 if offset_5 != -1:
                                                     offset_4 = offset_5
-                                                    column_3 = column_4
+                                                    column_4 = column_5
                                                     indent_column_3 = indent_column_4
                                                     partial_tab_offset_3 = partial_tab_offset_4
                                                     partial_tab_width_3 = partial_tab_width_4
@@ -14597,7 +14674,7 @@ def _build(unicodedata):
                                                     break
                                                 # end case
                                                 offset_5 = offset_4
-                                                column_4 = column_3
+                                                column_5 = column_4
                                                 indent_column_4 = indent_column_3
                                                 partial_tab_offset_4 = partial_tab_offset_3
                                                 partial_tab_width_4 = partial_tab_width_3
@@ -14606,7 +14683,7 @@ def _build(unicodedata):
                                                     count_2 = 0
                                                     while True:
                                                         offset_6 = offset_5
-                                                        column_5 = column_4
+                                                        column_6 = column_5
                                                         indent_column_5 = indent_column_4
                                                         partial_tab_offset_5 = partial_tab_offset_4
                                                         partial_tab_width_5 = partial_tab_width_4
@@ -14614,7 +14691,7 @@ def _build(unicodedata):
                                                         while True:
                                                             if buf[offset_6:offset_6+1] == '-':
                                                                 offset_6 += 1
-                                                                column_5 += 1
+                                                                column_6 += 1
                                                             else:
                                                                 offset_6 = -1
                                                                 break
@@ -14626,7 +14703,7 @@ def _build(unicodedata):
                                                         if children_6 is not None and children_6 is not None:
                                                             children_5.extend(children_6)
                                                         offset_5 = offset_6
-                                                        column_4 = column_5
+                                                        column_5 = column_6
                                                         indent_column_4 = indent_column_5
                                                         partial_tab_offset_4 = partial_tab_offset_5
                                                         partial_tab_width_4 = partial_tab_width_5
@@ -14645,13 +14722,13 @@ def _build(unicodedata):
 
                                                     if 97 <= codepoint <= 122:
                                                         offset_5 += 1
-                                                        column_4 += 1
+                                                        column_5 += 1
                                                     elif 65 <= codepoint <= 90:
                                                         offset_5 += 1
-                                                        column_4 += 1
+                                                        column_5 += 1
                                                     elif 48 <= codepoint <= 57:
                                                         offset_5 += 1
-                                                        column_4 += 1
+                                                        column_5 += 1
                                                     else:
                                                         offset_5 = -1
                                                         break
@@ -14660,7 +14737,7 @@ def _build(unicodedata):
                                                     break
                                                 if offset_5 != -1:
                                                     offset_4 = offset_5
-                                                    column_3 = column_4
+                                                    column_4 = column_5
                                                     indent_column_3 = indent_column_4
                                                     partial_tab_offset_3 = partial_tab_offset_4
                                                     partial_tab_width_3 = partial_tab_width_4
@@ -14680,7 +14757,7 @@ def _build(unicodedata):
                                         if children_4 is not None and children_4 is not None:
                                             children_3.extend(children_4)
                                         offset_3 = offset_4
-                                        column_2 = column_3
+                                        column_3 = column_4
                                         indent_column_2 = indent_column_3
                                         partial_tab_offset_2 = partial_tab_offset_3
                                         partial_tab_width_2 = partial_tab_width_3
@@ -14695,7 +14772,7 @@ def _build(unicodedata):
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 offset_2 = offset_3
-                                column_1 = column_2
+                                column_2 = column_3
                                 indent_column_1 = indent_column_2
                                 partial_tab_offset_1 = partial_tab_offset_2
                                 partial_tab_width_1 = partial_tab_width_2
@@ -14707,7 +14784,7 @@ def _build(unicodedata):
                             count_0 = 0
                             while True:
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -14715,7 +14792,7 @@ def _build(unicodedata):
                                 while True:
                                     if buf[offset_3:offset_3+1] == '.':
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     else:
                                         offset_3 = -1
                                         break
@@ -14728,13 +14805,13 @@ def _build(unicodedata):
 
                                     if 97 <= codepoint <= 122:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif 65 <= codepoint <= 90:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif 48 <= codepoint <= 57:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     else:
                                         offset_3 = -1
                                         break
@@ -14742,7 +14819,7 @@ def _build(unicodedata):
                                     count_1 = 0
                                     while count_1 < 1:
                                         offset_4 = offset_3
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
@@ -14751,7 +14828,7 @@ def _build(unicodedata):
                                             count_2 = 0
                                             while count_2 < 61:
                                                 offset_5 = offset_4
-                                                column_4 = column_3
+                                                column_5 = column_4
                                                 indent_column_4 = indent_column_3
                                                 partial_tab_offset_4 = partial_tab_offset_3
                                                 partial_tab_width_4 = partial_tab_width_3
@@ -14759,7 +14836,7 @@ def _build(unicodedata):
                                                 while True:
                                                     while True: # start choice
                                                         offset_6 = offset_5
-                                                        column_5 = column_4
+                                                        column_6 = column_5
                                                         indent_column_5 = indent_column_4
                                                         partial_tab_offset_5 = partial_tab_offset_4
                                                         partial_tab_width_5 = partial_tab_width_4
@@ -14773,13 +14850,13 @@ def _build(unicodedata):
 
                                                             if 97 <= codepoint <= 122:
                                                                 offset_6 += 1
-                                                                column_5 += 1
+                                                                column_6 += 1
                                                             elif 65 <= codepoint <= 90:
                                                                 offset_6 += 1
-                                                                column_5 += 1
+                                                                column_6 += 1
                                                             elif 48 <= codepoint <= 57:
                                                                 offset_6 += 1
-                                                                column_5 += 1
+                                                                column_6 += 1
                                                             else:
                                                                 offset_6 = -1
                                                                 break
@@ -14788,7 +14865,7 @@ def _build(unicodedata):
                                                             break
                                                         if offset_6 != -1:
                                                             offset_5 = offset_6
-                                                            column_4 = column_5
+                                                            column_5 = column_6
                                                             indent_column_4 = indent_column_5
                                                             partial_tab_offset_4 = partial_tab_offset_5
                                                             partial_tab_width_4 = partial_tab_width_5
@@ -14797,7 +14874,7 @@ def _build(unicodedata):
                                                             break
                                                         # end case
                                                         offset_6 = offset_5
-                                                        column_5 = column_4
+                                                        column_6 = column_5
                                                         indent_column_5 = indent_column_4
                                                         partial_tab_offset_5 = partial_tab_offset_4
                                                         partial_tab_width_5 = partial_tab_width_4
@@ -14806,7 +14883,7 @@ def _build(unicodedata):
                                                             count_3 = 0
                                                             while True:
                                                                 offset_7 = offset_6
-                                                                column_6 = column_5
+                                                                column_7 = column_6
                                                                 indent_column_6 = indent_column_5
                                                                 partial_tab_offset_6 = partial_tab_offset_5
                                                                 partial_tab_width_6 = partial_tab_width_5
@@ -14814,7 +14891,7 @@ def _build(unicodedata):
                                                                 while True:
                                                                     if buf[offset_7:offset_7+1] == '-':
                                                                         offset_7 += 1
-                                                                        column_6 += 1
+                                                                        column_7 += 1
                                                                     else:
                                                                         offset_7 = -1
                                                                         break
@@ -14826,7 +14903,7 @@ def _build(unicodedata):
                                                                 if children_7 is not None and children_7 is not None:
                                                                     children_6.extend(children_7)
                                                                 offset_6 = offset_7
-                                                                column_5 = column_6
+                                                                column_6 = column_7
                                                                 indent_column_5 = indent_column_6
                                                                 partial_tab_offset_5 = partial_tab_offset_6
                                                                 partial_tab_width_5 = partial_tab_width_6
@@ -14845,13 +14922,13 @@ def _build(unicodedata):
 
                                                             if 97 <= codepoint <= 122:
                                                                 offset_6 += 1
-                                                                column_5 += 1
+                                                                column_6 += 1
                                                             elif 65 <= codepoint <= 90:
                                                                 offset_6 += 1
-                                                                column_5 += 1
+                                                                column_6 += 1
                                                             elif 48 <= codepoint <= 57:
                                                                 offset_6 += 1
-                                                                column_5 += 1
+                                                                column_6 += 1
                                                             else:
                                                                 offset_6 = -1
                                                                 break
@@ -14860,7 +14937,7 @@ def _build(unicodedata):
                                                             break
                                                         if offset_6 != -1:
                                                             offset_5 = offset_6
-                                                            column_4 = column_5
+                                                            column_5 = column_6
                                                             indent_column_4 = indent_column_5
                                                             partial_tab_offset_4 = partial_tab_offset_5
                                                             partial_tab_width_4 = partial_tab_width_5
@@ -14880,7 +14957,7 @@ def _build(unicodedata):
                                                 if children_5 is not None and children_5 is not None:
                                                     children_4.extend(children_5)
                                                 offset_4 = offset_5
-                                                column_3 = column_4
+                                                column_4 = column_5
                                                 indent_column_3 = indent_column_4
                                                 partial_tab_offset_3 = partial_tab_offset_4
                                                 partial_tab_width_3 = partial_tab_width_4
@@ -14895,7 +14972,7 @@ def _build(unicodedata):
                                         if children_4 is not None and children_4 is not None:
                                             children_3.extend(children_4)
                                         offset_3 = offset_4
-                                        column_2 = column_3
+                                        column_3 = column_4
                                         indent_column_2 = indent_column_3
                                         partial_tab_offset_2 = partial_tab_offset_3
                                         partial_tab_width_2 = partial_tab_width_3
@@ -14911,7 +14988,7 @@ def _build(unicodedata):
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 offset_2 = offset_3
-                                column_1 = column_2
+                                column_2 = column_3
                                 indent_column_1 = indent_column_2
                                 partial_tab_offset_1 = partial_tab_offset_2
                                 partial_tab_width_1 = partial_tab_width_2
@@ -14923,9 +15000,10 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_1 = self.Node('mailto_auto_link', offset_1, offset_2, children_2, None)
+                        value_1 = self.Node('mailto_auto_link', offset_1, offset_2, children_2, column_1, column_2, None)
                         children_1.append(value_1)
                         offset_1 = offset_2
+                        column_1 = column_2
 
                         if buf[offset_1:offset_1+1] == '>':
                             offset_1 += 1
@@ -15097,7 +15175,7 @@ def _build(unicodedata):
                             count_0 = 0
                             while True:
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -15105,7 +15183,7 @@ def _build(unicodedata):
                                 while True:
                                     if buf[offset_3:offset_3+1] == '_':
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     else:
                                         offset_3 = -1
                                         break
@@ -15117,7 +15195,7 @@ def _build(unicodedata):
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 offset_2 = offset_3
-                                column_1 = column_2
+                                column_2 = column_3
                                 indent_column_1 = indent_column_2
                                 partial_tab_offset_1 = partial_tab_offset_2
                                 partial_tab_width_1 = partial_tab_width_2
@@ -15132,9 +15210,10 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_2 = self.Node('text', offset_1, offset_2, children_2, None)
+                        value_2 = self.Node('text', offset_1, offset_2, children_2, column_1, column_2, None)
                         children_1.append(value_2)
                         offset_1 = offset_2
+                        column_1 = column_2
 
 
                         break
@@ -15161,7 +15240,7 @@ def _build(unicodedata):
                             count_0 = 0
                             while True:
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -15169,7 +15248,7 @@ def _build(unicodedata):
                                 while True:
                                     if buf[offset_3:offset_3+1] == '*':
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     else:
                                         offset_3 = -1
                                         break
@@ -15181,7 +15260,7 @@ def _build(unicodedata):
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 offset_2 = offset_3
-                                column_1 = column_2
+                                column_2 = column_3
                                 indent_column_1 = indent_column_2
                                 partial_tab_offset_1 = partial_tab_offset_2
                                 partial_tab_width_1 = partial_tab_width_2
@@ -15196,9 +15275,10 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_3 = self.Node('text', offset_1, offset_2, children_2, None)
+                        value_3 = self.Node('text', offset_1, offset_2, children_2, column_1, column_2, None)
                         children_1.append(value_3)
                         offset_1 = offset_2
+                        column_1 = column_2
 
 
                         break
@@ -15239,12 +15319,12 @@ def _build(unicodedata):
                                 break
                             else:
                                 offset_2 += 1
-                                column_1 += 1
+                                column_2 += 1
 
                             count_0 = 0
                             while True:
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -15252,7 +15332,7 @@ def _build(unicodedata):
                                 while True:
                                     while True: # start choice
                                         offset_4 = offset_3
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
@@ -15296,13 +15376,13 @@ def _build(unicodedata):
                                                 break
                                             else:
                                                 offset_4 += 1
-                                                column_3 += 1
+                                                column_4 += 1
 
 
                                             break
                                         if offset_4 != -1:
                                             offset_3 = offset_4
-                                            column_2 = column_3
+                                            column_3 = column_4
                                             indent_column_2 = indent_column_3
                                             partial_tab_offset_2 = partial_tab_offset_3
                                             partial_tab_width_2 = partial_tab_width_3
@@ -15311,7 +15391,7 @@ def _build(unicodedata):
                                             break
                                         # end case
                                         offset_4 = offset_3
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
@@ -15320,7 +15400,7 @@ def _build(unicodedata):
                                             while True: # start reject
                                                 children_5 = []
                                                 offset_5 = offset_4 + -1
-                                                column_4 = column_3
+                                                column_5 = column_4
                                                 indent_column_4 = indent_column_3
                                                 partial_tab_offset_4 = partial_tab_offset_3
                                                 partial_tab_width_4 = partial_tab_width_3
@@ -15332,7 +15412,7 @@ def _build(unicodedata):
 
                                                 if unicodedata.category(chr(codepoint)).startswith('P'):
                                                     offset_5 += 1
-                                                    column_4 += 1
+                                                    column_5 += 1
                                                 else:
                                                     offset_5 = -1
                                                     break
@@ -15345,18 +15425,18 @@ def _build(unicodedata):
                                             while True: # start reject
                                                 children_5 = []
                                                 offset_5 = offset_4 + 0
-                                                column_4 = column_3
+                                                column_5 = column_4
                                                 indent_column_4 = indent_column_3
                                                 partial_tab_offset_4 = partial_tab_offset_3
                                                 partial_tab_width_4 = partial_tab_width_3
                                                 while True: # start reject
                                                     children_6 = []
                                                     offset_6 = offset_5 + 0
-                                                    column_5 = column_4
+                                                    column_6 = column_5
                                                     indent_column_5 = indent_column_4
                                                     partial_tab_offset_5 = partial_tab_offset_4
                                                     partial_tab_width_5 = partial_tab_width_4
-                                                    offset_6, column_5, indent_column_5, partial_tab_offset_5, partial_tab_width_5 = self.parse_left_flank(buf, buf_start, buf_eof, offset_6, column_5, indent_column_5, prefix_0, children_6, partial_tab_offset_5, partial_tab_width_5)
+                                                    offset_6, column_6, indent_column_5, partial_tab_offset_5, partial_tab_width_5 = self.parse_left_flank(buf, buf_start, buf_eof, offset_6, column_6, indent_column_5, prefix_0, children_6, partial_tab_offset_5, partial_tab_width_5)
                                                     if offset_6 == -1: break
 
 
@@ -15365,7 +15445,7 @@ def _build(unicodedata):
                                                     offset_5 = -1
                                                     break
 
-                                                offset_5, column_4, indent_column_4, partial_tab_offset_4, partial_tab_width_4 = self.parse_right_flank(buf, buf_start, buf_eof, offset_5, column_4, indent_column_4, prefix_0, children_5, partial_tab_offset_4, partial_tab_width_4)
+                                                offset_5, column_5, indent_column_4, partial_tab_offset_4, partial_tab_width_4 = self.parse_right_flank(buf, buf_start, buf_eof, offset_5, column_5, indent_column_4, prefix_0, children_5, partial_tab_offset_4, partial_tab_width_4)
                                                 if offset_5 == -1: break
 
 
@@ -15377,7 +15457,7 @@ def _build(unicodedata):
                                             count_1 = 0
                                             while True:
                                                 offset_5 = offset_4
-                                                column_4 = column_3
+                                                column_5 = column_4
                                                 indent_column_4 = indent_column_3
                                                 partial_tab_offset_4 = partial_tab_offset_3
                                                 partial_tab_width_4 = partial_tab_width_3
@@ -15385,7 +15465,7 @@ def _build(unicodedata):
                                                 while True:
                                                     if buf[offset_5:offset_5+1] == '_':
                                                         offset_5 += 1
-                                                        column_4 += 1
+                                                        column_5 += 1
                                                     else:
                                                         offset_5 = -1
                                                         break
@@ -15397,7 +15477,7 @@ def _build(unicodedata):
                                                 if children_5 is not None and children_5 is not None:
                                                     children_4.extend(children_5)
                                                 offset_4 = offset_5
-                                                column_3 = column_4
+                                                column_4 = column_5
                                                 indent_column_3 = indent_column_4
                                                 partial_tab_offset_3 = partial_tab_offset_4
                                                 partial_tab_width_3 = partial_tab_width_4
@@ -15412,7 +15492,7 @@ def _build(unicodedata):
                                             break
                                         if offset_4 != -1:
                                             offset_3 = offset_4
-                                            column_2 = column_3
+                                            column_3 = column_4
                                             indent_column_2 = indent_column_3
                                             partial_tab_offset_2 = partial_tab_offset_3
                                             partial_tab_width_2 = partial_tab_width_3
@@ -15432,7 +15512,7 @@ def _build(unicodedata):
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 offset_2 = offset_3
-                                column_1 = column_2
+                                column_2 = column_3
                                 indent_column_1 = indent_column_2
                                 partial_tab_offset_1 = partial_tab_offset_2
                                 partial_tab_width_1 = partial_tab_width_2
@@ -15444,9 +15524,10 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_4 = self.Node('text', offset_1, offset_2, children_2, None)
+                        value_4 = self.Node('text', offset_1, offset_2, children_2, column_1, column_2, None)
                         children_1.append(value_4)
                         offset_1 = offset_2
+                        column_1 = column_2
 
 
                         break
@@ -15475,7 +15556,7 @@ def _build(unicodedata):
                 while True: # start capture
                     if buf[offset_1:offset_1+1] == '[':
                         offset_1 += 1
-                        column_0 += 1
+                        column_1 += 1
                     else:
                         offset_1 = -1
                         break
@@ -15488,7 +15569,7 @@ def _build(unicodedata):
                             count_0 = 0
                             while count_0 < 1:
                                 offset_4 = offset_3
-                                column_1 = column_0
+                                column_3 = column_2
                                 indent_column_1 = indent_column_0
                                 partial_tab_offset_1 = partial_tab_offset_0
                                 partial_tab_width_1 = partial_tab_width_0
@@ -15497,7 +15578,7 @@ def _build(unicodedata):
                                     while True: # start reject
                                         children_4 = []
                                         offset_5 = offset_4 + 0
-                                        column_2 = column_1
+                                        column_4 = column_3
                                         indent_column_2 = indent_column_1
                                         partial_tab_offset_2 = partial_tab_offset_1
                                         partial_tab_width_2 = partial_tab_width_1
@@ -15509,20 +15590,20 @@ def _build(unicodedata):
                                                     if offset_5 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                         width = partial_tab_width_2
                                                     else:
-                                                        width  = (self.tabstop-(column_2%self.tabstop))
+                                                        width  = (self.tabstop-(column_4%self.tabstop))
                                                     count_1 += width
-                                                    column_2 += width
+                                                    column_4 += width
                                                     offset_5 += 1
                                                 else:
                                                     count_1 += 1
-                                                    column_2 += 1
+                                                    column_4 += 1
                                                     offset_5 += 1
                                             else:
                                                 break
 
                                         if buf[offset_5:offset_5+1] == ']':
                                             offset_5 += 1
-                                            column_2 += 1
+                                            column_4 += 1
                                         else:
                                             offset_5 = -1
                                             break
@@ -15532,14 +15613,14 @@ def _build(unicodedata):
                                         offset_4 = -1
                                         break
 
-                                    offset_4, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_inline_element(buf, buf_start, buf_eof, offset_4, column_1, indent_column_1, prefix_0, children_3, partial_tab_offset_1, partial_tab_width_1)
+                                    offset_4, column_3, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_inline_element(buf, buf_start, buf_eof, offset_4, column_3, indent_column_1, prefix_0, children_3, partial_tab_offset_1, partial_tab_width_1)
                                     if offset_4 == -1: break
 
 
                                     count_1 = 0
                                     while True:
                                         offset_5 = offset_4
-                                        column_2 = column_1
+                                        column_4 = column_3
                                         indent_column_2 = indent_column_1
                                         partial_tab_offset_2 = partial_tab_offset_1
                                         partial_tab_width_2 = partial_tab_width_1
@@ -15547,13 +15628,13 @@ def _build(unicodedata):
                                         while True:
                                             while True: # start choice
                                                 offset_6 = offset_5
-                                                column_3 = column_2
+                                                column_5 = column_4
                                                 indent_column_3 = indent_column_2
                                                 partial_tab_offset_3 = partial_tab_offset_2
                                                 partial_tab_width_3 = partial_tab_width_2
                                                 children_5 = [] if children_4 is not None else None
                                                 while True: # case
-                                                    offset_6, column_3, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = self.parse_linebreak(buf, buf_start, buf_eof, offset_6, column_3, indent_column_3, prefix_0, children_5, partial_tab_offset_3, partial_tab_width_3)
+                                                    offset_6, column_5, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = self.parse_linebreak(buf, buf_start, buf_eof, offset_6, column_5, indent_column_3, prefix_0, children_5, partial_tab_offset_3, partial_tab_width_3)
                                                     if offset_6 == -1: break
 
 
@@ -15561,7 +15642,7 @@ def _build(unicodedata):
                                                     break
                                                 if offset_6 != -1:
                                                     offset_5 = offset_6
-                                                    column_2 = column_3
+                                                    column_4 = column_5
                                                     indent_column_2 = indent_column_3
                                                     partial_tab_offset_2 = partial_tab_offset_3
                                                     partial_tab_width_2 = partial_tab_width_3
@@ -15570,7 +15651,7 @@ def _build(unicodedata):
                                                     break
                                                 # end case
                                                 offset_6 = offset_5
-                                                column_3 = column_2
+                                                column_5 = column_4
                                                 indent_column_3 = indent_column_2
                                                 partial_tab_offset_3 = partial_tab_offset_2
                                                 partial_tab_width_3 = partial_tab_width_2
@@ -15587,13 +15668,13 @@ def _build(unicodedata):
                                                                     if offset_7 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                                         width = partial_tab_width_3
                                                                     else:
-                                                                        width  = (self.tabstop-(column_3%self.tabstop))
+                                                                        width  = (self.tabstop-(column_6%self.tabstop))
                                                                     count_2 += width
-                                                                    column_3 += width
+                                                                    column_6 += width
                                                                     offset_7 += 1
                                                                 else:
                                                                     count_2 += 1
-                                                                    column_3 += 1
+                                                                    column_6 += 1
                                                                     offset_7 += 1
                                                             else:
                                                                 break
@@ -15602,15 +15683,16 @@ def _build(unicodedata):
                                                     if offset_7 == -1:
                                                         offset_6 = -1
                                                         break
-                                                    value_0 = self.Node('whitespace', offset_6, offset_7, children_6, None)
+                                                    value_0 = self.Node('whitespace', offset_6, offset_7, children_6, column_5, column_6, None)
                                                     children_5.append(value_0)
                                                     offset_6 = offset_7
+                                                    column_5 = column_6
 
 
                                                     break
                                                 if offset_6 != -1:
                                                     offset_5 = offset_6
-                                                    column_2 = column_3
+                                                    column_4 = column_5
                                                     indent_column_2 = indent_column_3
                                                     partial_tab_offset_2 = partial_tab_offset_3
                                                     partial_tab_width_2 = partial_tab_width_3
@@ -15626,13 +15708,13 @@ def _build(unicodedata):
                                             while True: # start reject
                                                 children_5 = []
                                                 offset_6 = offset_5 + 0
-                                                column_3 = column_2
+                                                column_5 = column_4
                                                 indent_column_3 = indent_column_2
                                                 partial_tab_offset_3 = partial_tab_offset_2
                                                 partial_tab_width_3 = partial_tab_width_2
                                                 if buf[offset_6:offset_6+1] == ']':
                                                     offset_6 += 1
-                                                    column_3 += 1
+                                                    column_5 += 1
                                                 else:
                                                     offset_6 = -1
                                                     break
@@ -15642,7 +15724,7 @@ def _build(unicodedata):
                                                 offset_5 = -1
                                                 break
 
-                                            offset_5, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_inline_element(buf, buf_start, buf_eof, offset_5, column_2, indent_column_2, prefix_0, children_4, partial_tab_offset_2, partial_tab_width_2)
+                                            offset_5, column_4, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_inline_element(buf, buf_start, buf_eof, offset_5, column_4, indent_column_2, prefix_0, children_4, partial_tab_offset_2, partial_tab_width_2)
                                             if offset_5 == -1: break
 
 
@@ -15653,7 +15735,7 @@ def _build(unicodedata):
                                         if children_4 is not None and children_4 is not None:
                                             children_3.extend(children_4)
                                         offset_4 = offset_5
-                                        column_1 = column_2
+                                        column_3 = column_4
                                         indent_column_1 = indent_column_2
                                         partial_tab_offset_1 = partial_tab_offset_2
                                         partial_tab_width_1 = partial_tab_width_2
@@ -15668,7 +15750,7 @@ def _build(unicodedata):
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 offset_3 = offset_4
-                                column_0 = column_1
+                                column_2 = column_3
                                 indent_column_0 = indent_column_1
                                 partial_tab_offset_0 = partial_tab_offset_1
                                 partial_tab_width_0 = partial_tab_width_1
@@ -15688,13 +15770,13 @@ def _build(unicodedata):
                                             if offset_4 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                                 width = partial_tab_width_0
                                             else:
-                                                width  = (self.tabstop-(column_0%self.tabstop))
+                                                width  = (self.tabstop-(column_3%self.tabstop))
                                             count_0 += width
-                                            column_0 += width
+                                            column_3 += width
                                             offset_4 += 1
                                         else:
                                             count_0 += 1
-                                            column_0 += 1
+                                            column_3 += 1
                                             offset_4 += 1
                                     else:
                                         break
@@ -15703,9 +15785,10 @@ def _build(unicodedata):
                             if offset_4 == -1:
                                 offset_3 = -1
                                 break
-                            value_1 = self.Node('whitespace', offset_3, offset_4, children_3, None)
+                            value_1 = self.Node('whitespace', offset_3, offset_4, children_3, column_2, column_3, None)
                             children_2.append(value_1)
                             offset_3 = offset_4
+                            column_2 = column_3
 
                             break
                         if offset_3 == -1:
@@ -15718,20 +15801,21 @@ def _build(unicodedata):
                     if offset_2 == -1:
                         offset_1 = -1
                         break
-                    value_3 = self.Node('link_para', offset_1, offset_2, children_2, None)
+                    value_3 = self.Node('link_para', offset_1, offset_2, children_2, column_1, column_2, None)
                     children_1.append(value_3)
                     offset_1 = offset_2
+                    column_1 = column_2
 
                     if buf[offset_1:offset_1+1] == ']':
                         offset_1 += 1
-                        column_0 += 1
+                        column_1 += 1
                     else:
                         offset_1 = -1
                         break
 
                     while True: # start choice
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -15739,7 +15823,7 @@ def _build(unicodedata):
                         while True: # case
                             if buf[offset_2:offset_2+1] == '[':
                                 offset_2 += 1
-                                column_1 += 1
+                                column_2 += 1
                             else:
                                 offset_2 = -1
                                 break
@@ -15752,13 +15836,13 @@ def _build(unicodedata):
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
-                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                            width  = (self.tabstop-(column_2%self.tabstop))
                                         count_0 += width
-                                        column_1 += width
+                                        column_2 += width
                                         offset_2 += 1
                                     else:
                                         count_0 += 1
-                                        column_1 += 1
+                                        column_2 += 1
                                         offset_2 += 1
                                 else:
                                     break
@@ -15769,7 +15853,7 @@ def _build(unicodedata):
                                 count_0 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    column_2 = column_1
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -15777,7 +15861,7 @@ def _build(unicodedata):
                                     while True:
                                         while True: # start choice
                                             offset_5 = offset_4
-                                            column_3 = column_2
+                                            column_5 = column_4
                                             indent_column_3 = indent_column_2
                                             partial_tab_offset_3 = partial_tab_offset_2
                                             partial_tab_width_3 = partial_tab_width_2
@@ -15785,10 +15869,10 @@ def _build(unicodedata):
                                             while True: # case
                                                 if buf[offset_5:offset_5+2] == '\\[':
                                                     offset_5 += 2
-                                                    column_3 += 2
+                                                    column_5 += 2
                                                 elif buf[offset_5:offset_5+2] == '\\]':
                                                     offset_5 += 2
-                                                    column_3 += 2
+                                                    column_5 += 2
                                                 else:
                                                     offset_5 = -1
                                                     break
@@ -15797,7 +15881,7 @@ def _build(unicodedata):
                                                 break
                                             if offset_5 != -1:
                                                 offset_4 = offset_5
-                                                column_2 = column_3
+                                                column_4 = column_5
                                                 indent_column_2 = indent_column_3
                                                 partial_tab_offset_2 = partial_tab_offset_3
                                                 partial_tab_width_2 = partial_tab_width_3
@@ -15806,7 +15890,7 @@ def _build(unicodedata):
                                                 break
                                             # end case
                                             offset_5 = offset_4
-                                            column_3 = column_2
+                                            column_5 = column_4
                                             indent_column_3 = indent_column_2
                                             partial_tab_offset_3 = partial_tab_offset_2
                                             partial_tab_width_3 = partial_tab_width_2
@@ -15829,13 +15913,13 @@ def _build(unicodedata):
                                                     break
                                                 else:
                                                     offset_5 += 1
-                                                    column_3 += 1
+                                                    column_5 += 1
 
 
                                                 break
                                             if offset_5 != -1:
                                                 offset_4 = offset_5
-                                                column_2 = column_3
+                                                column_4 = column_5
                                                 indent_column_2 = indent_column_3
                                                 partial_tab_offset_2 = partial_tab_offset_3
                                                 partial_tab_width_2 = partial_tab_width_3
@@ -15855,7 +15939,7 @@ def _build(unicodedata):
                                     if children_4 is not None and children_4 is not None:
                                         children_3.extend(children_4)
                                     offset_3 = offset_4
-                                    column_1 = column_2
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -15870,13 +15954,14 @@ def _build(unicodedata):
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_4 = self.Node('link_label', offset_2, offset_3, children_3, None)
+                            value_4 = self.Node('link_label', offset_2, offset_3, children_3, column_2, column_3, None)
                             children_2.append(value_4)
                             offset_2 = offset_3
+                            column_2 = column_3
 
                             if buf[offset_2:offset_2+1] == ']':
                                 offset_2 += 1
-                                column_1 += 1
+                                column_2 += 1
                             else:
                                 offset_2 = -1
                                 break
@@ -15885,7 +15970,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -15894,7 +15979,7 @@ def _build(unicodedata):
                             break
                         # end case
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -15902,7 +15987,7 @@ def _build(unicodedata):
                         while True: # case
                             if buf[offset_2:offset_2+1] == '(':
                                 offset_2 += 1
-                                column_1 += 1
+                                column_2 += 1
                             else:
                                 offset_2 = -1
                                 break
@@ -15915,25 +16000,25 @@ def _build(unicodedata):
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
-                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                            width  = (self.tabstop-(column_2%self.tabstop))
                                         count_0 += width
-                                        column_1 += width
+                                        column_2 += width
                                         offset_2 += 1
                                     else:
                                         count_0 += 1
-                                        column_1 += 1
+                                        column_2 += 1
                                         offset_2 += 1
                                 else:
                                     break
 
-                            offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_link_url(buf, buf_start, buf_eof, offset_2, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
+                            offset_2, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_link_url(buf, buf_start, buf_eof, offset_2, column_2, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                             if offset_2 == -1: break
 
 
                             count_0 = 0
                             while count_0 < 1:
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -15947,18 +16032,18 @@ def _build(unicodedata):
                                                 if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
-                                                    width  = (self.tabstop-(column_2%self.tabstop))
+                                                    width  = (self.tabstop-(column_3%self.tabstop))
                                                 count_1 += width
-                                                column_2 += width
+                                                column_3 += width
                                                 offset_3 += 1
                                             else:
                                                 count_1 += 1
-                                                column_2 += 1
+                                                column_3 += 1
                                                 offset_3 += 1
                                         else:
                                             break
 
-                                    offset_3, column_2, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_link_title(buf, buf_start, buf_eof, offset_3, column_2, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
+                                    offset_3, column_3, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_link_title(buf, buf_start, buf_eof, offset_3, column_3, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
                                     if offset_3 == -1: break
 
 
@@ -15969,7 +16054,7 @@ def _build(unicodedata):
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 offset_2 = offset_3
-                                column_1 = column_2
+                                column_2 = column_3
                                 indent_column_1 = indent_column_2
                                 partial_tab_offset_1 = partial_tab_offset_2
                                 partial_tab_width_1 = partial_tab_width_2
@@ -15986,20 +16071,20 @@ def _build(unicodedata):
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
-                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                            width  = (self.tabstop-(column_2%self.tabstop))
                                         count_0 += width
-                                        column_1 += width
+                                        column_2 += width
                                         offset_2 += 1
                                     else:
                                         count_0 += 1
-                                        column_1 += 1
+                                        column_2 += 1
                                         offset_2 += 1
                                 else:
                                     break
 
                             if buf[offset_2:offset_2+1] == ')':
                                 offset_2 += 1
-                                column_1 += 1
+                                column_2 += 1
                             else:
                                 offset_2 = -1
                                 break
@@ -16008,7 +16093,7 @@ def _build(unicodedata):
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -16017,7 +16102,7 @@ def _build(unicodedata):
                             break
                         # end case
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -16025,18 +16110,18 @@ def _build(unicodedata):
                         while True: # case
                             if buf[offset_2:offset_2+2] == '[]':
                                 offset_2 += 2
-                                column_1 += 2
+                                column_2 += 2
                             else:
                                 offset_2 = -1
                                 break
 
-                            children_2.append(self.Node('link_label', offset_2, offset_2, (), value_2))
+                            children_2.append(self.Node('link_label', offset_2, offset_2, column_2, column_2, (), value_2))
 
 
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -16045,7 +16130,7 @@ def _build(unicodedata):
                             break
                         # end case
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -16054,19 +16139,19 @@ def _build(unicodedata):
                             while True: # start reject
                                 children_3 = []
                                 offset_3 = offset_2 + 0
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
                                 if buf[offset_3:offset_3+1] == '{':
                                     offset_3 += 1
-                                    column_2 += 1
+                                    column_3 += 1
                                 elif buf[offset_3:offset_3+1] == '(':
                                     offset_3 += 1
-                                    column_2 += 1
+                                    column_3 += 1
                                 elif buf[offset_3:offset_3+1] == ':':
                                     offset_3 += 1
-                                    column_2 += 1
+                                    column_3 += 1
                                 else:
                                     offset_3 = -1
                                     break
@@ -16076,13 +16161,13 @@ def _build(unicodedata):
                                 offset_2 = -1
                                 break
 
-                            children_2.append(self.Node('link_label', offset_2, offset_2, (), value_2))
+                            children_2.append(self.Node('link_label', offset_2, offset_2, column_2, column_2, (), value_2))
 
 
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -16099,9 +16184,10 @@ def _build(unicodedata):
                 if offset_1 == -1:
                     offset_0 = -1
                     break
-                value_5 = self.Node('link', offset_0, offset_1, children_1, None)
+                value_5 = self.Node('link', offset_0, offset_1, children_1, column_0, column_1, None)
                 children_0.append(value_5)
                 offset_0 = offset_1
+                column_0 = column_1
 
                 break
             return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
@@ -16129,7 +16215,7 @@ def _build(unicodedata):
                             count_0 = 0
                             while True:
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -16137,7 +16223,7 @@ def _build(unicodedata):
                                 while True:
                                     while True: # start choice
                                         offset_4 = offset_3
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
@@ -16145,10 +16231,10 @@ def _build(unicodedata):
                                         while True: # case
                                             if buf[offset_4:offset_4+2] == '\\>':
                                                 offset_4 += 2
-                                                column_3 += 2
+                                                column_4 += 2
                                             elif buf[offset_4:offset_4+2] == '\\>':
                                                 offset_4 += 2
-                                                column_3 += 2
+                                                column_4 += 2
                                             else:
                                                 offset_4 = -1
                                                 break
@@ -16157,7 +16243,7 @@ def _build(unicodedata):
                                             break
                                         if offset_4 != -1:
                                             offset_3 = offset_4
-                                            column_2 = column_3
+                                            column_3 = column_4
                                             indent_column_2 = indent_column_3
                                             partial_tab_offset_2 = partial_tab_offset_3
                                             partial_tab_width_2 = partial_tab_width_3
@@ -16166,7 +16252,7 @@ def _build(unicodedata):
                                             break
                                         # end case
                                         offset_4 = offset_3
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
@@ -16189,13 +16275,13 @@ def _build(unicodedata):
                                                 break
                                             else:
                                                 offset_4 += 1
-                                                column_3 += 1
+                                                column_4 += 1
 
 
                                             break
                                         if offset_4 != -1:
                                             offset_3 = offset_4
-                                            column_2 = column_3
+                                            column_3 = column_4
                                             indent_column_2 = indent_column_3
                                             partial_tab_offset_2 = partial_tab_offset_3
                                             partial_tab_width_2 = partial_tab_width_3
@@ -16215,7 +16301,7 @@ def _build(unicodedata):
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 offset_2 = offset_3
-                                column_1 = column_2
+                                column_2 = column_3
                                 indent_column_1 = indent_column_2
                                 partial_tab_offset_1 = partial_tab_offset_2
                                 partial_tab_width_1 = partial_tab_width_2
@@ -16227,9 +16313,10 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_0 = self.Node('link_url', offset_1, offset_2, children_2, None)
+                        value_0 = self.Node('link_url', offset_1, offset_2, children_2, column_1, column_2, None)
                         children_1.append(value_0)
                         offset_1 = offset_2
+                        column_1 = column_2
 
                         if buf[offset_1:offset_1+1] == '>':
                             offset_1 += 1
@@ -16282,16 +16369,16 @@ def _build(unicodedata):
                             while True: # start reject
                                 children_3 = []
                                 offset_3 = offset_2 + 0
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
                                 if buf[offset_3:offset_3+1] == '<':
                                     offset_3 += 1
-                                    column_2 += 1
+                                    column_3 += 1
                                 elif buf[offset_3:offset_3+1] == ' ':
                                     offset_3 += 1
-                                    column_2 += 1
+                                    column_3 += 1
                                 else:
                                     offset_3 = -1
                                     break
@@ -16301,7 +16388,7 @@ def _build(unicodedata):
                                 offset_2 = -1
                                 break
 
-                            offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_balanced_list_url(buf, buf_start, buf_eof, offset_2, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
+                            offset_2, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_balanced_list_url(buf, buf_start, buf_eof, offset_2, column_2, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                             if offset_2 == -1: break
 
 
@@ -16309,9 +16396,10 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_1 = self.Node('link_url', offset_1, offset_2, children_2, None)
+                        value_1 = self.Node('link_url', offset_1, offset_2, children_2, column_1, column_2, None)
                         children_1.append(value_1)
                         offset_1 = offset_2
+                        column_1 = column_2
 
 
                         break
@@ -16527,7 +16615,7 @@ def _build(unicodedata):
                             count_0 = 0
                             while True:
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -16535,7 +16623,7 @@ def _build(unicodedata):
                                 while True:
                                     while True: # start choice
                                         offset_4 = offset_3
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
@@ -16555,13 +16643,13 @@ def _build(unicodedata):
                                                 break
                                             else:
                                                 offset_4 += 1
-                                                column_3 += 1
+                                                column_4 += 1
 
 
                                             break
                                         if offset_4 != -1:
                                             offset_3 = offset_4
-                                            column_2 = column_3
+                                            column_3 = column_4
                                             indent_column_2 = indent_column_3
                                             partial_tab_offset_2 = partial_tab_offset_3
                                             partial_tab_width_2 = partial_tab_width_3
@@ -16570,7 +16658,7 @@ def _build(unicodedata):
                                             break
                                         # end case
                                         offset_4 = offset_3
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
@@ -16580,7 +16668,7 @@ def _build(unicodedata):
                                                 codepoint = buf[offset_4]
                                                 if codepoint in '\n':
                                                     offset_4 +=1
-                                                    column_3 = 0
+                                                    column_4 = 0
                                                     indent_column_3 = (0, None)
                                                 else:
                                                     offset_4 = -1
@@ -16589,7 +16677,7 @@ def _build(unicodedata):
                                                 offset_4 = -1
                                                 break
 
-                                            if not (column_3 == indent_column_3[0] == 0):
+                                            if not (column_4 == indent_column_3[0] == 0):
                                                 offset_4 = -1
                                                 break
                                             # print('start')
@@ -16597,7 +16685,7 @@ def _build(unicodedata):
                                                 # print(indent)
                                                 _children, _prefix = [], []
                                                 offset_5 = offset_4
-                                                offset_5, column_3, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = indent(buf, buf_start, buf_eof, offset_5, column_3, indent_column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
+                                                offset_5, column_4, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = indent(buf, buf_start, buf_eof, offset_5, column_4, indent_column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
                                                 if _prefix or _children:
                                                    raise Exception('bar')
                                                 if offset_5 == -1:
@@ -16606,14 +16694,14 @@ def _build(unicodedata):
                                                         break
                                                     _children, _prefix = [], []
                                                     offset_5 = offset_4
-                                                    offset_5, _column, _indent_column, _partial_tab_offset, _partial_tab_width = dedent(buf, buf_start, buf_eof, offset_5, column_3, indent_column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
+                                                    offset_5, _column, _indent_column, _partial_tab_offset, _partial_tab_width = dedent(buf, buf_start, buf_eof, offset_5, column_4, indent_column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
                                                     if offset_5 != -1:
                                                         offset_4 = -1
                                                         break
                                                     else:
                                                         offset_5 = offset_4
                                                 offset_4 = offset_5
-                                                indent_column_3 = (column_3, indent_column_3)
+                                                indent_column_3 = (column_4, indent_column_3)
                                             if offset_4 == -1:
                                                 break
 
@@ -16625,13 +16713,13 @@ def _build(unicodedata):
                                                         if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                             width = partial_tab_width_3
                                                         else:
-                                                            width  = (self.tabstop-(column_3%self.tabstop))
+                                                            width  = (self.tabstop-(column_4%self.tabstop))
                                                         count_1 += width
-                                                        column_3 += width
+                                                        column_4 += width
                                                         offset_4 += 1
                                                     else:
                                                         count_1 += 1
-                                                        column_3 += 1
+                                                        column_4 += 1
                                                         offset_4 += 1
                                                 else:
                                                     break
@@ -16639,7 +16727,7 @@ def _build(unicodedata):
                                             while True: # start reject
                                                 children_5 = []
                                                 offset_5 = offset_4 + 0
-                                                column_4 = column_3
+                                                column_5 = column_4
                                                 indent_column_4 = indent_column_3
                                                 partial_tab_offset_4 = partial_tab_offset_3
                                                 partial_tab_width_4 = partial_tab_width_3
@@ -16647,7 +16735,7 @@ def _build(unicodedata):
                                                     codepoint = buf[offset_5]
                                                     if codepoint in '\n':
                                                         offset_5 +=1
-                                                        column_4 = 0
+                                                        column_5 = 0
                                                         indent_column_4 = (0, None)
                                                     else:
                                                         offset_5 = -1
@@ -16665,7 +16753,7 @@ def _build(unicodedata):
                                             break
                                         if offset_4 != -1:
                                             offset_3 = offset_4
-                                            column_2 = column_3
+                                            column_3 = column_4
                                             indent_column_2 = indent_column_3
                                             partial_tab_offset_2 = partial_tab_offset_3
                                             partial_tab_width_2 = partial_tab_width_3
@@ -16685,7 +16773,7 @@ def _build(unicodedata):
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 offset_2 = offset_3
-                                column_1 = column_2
+                                column_2 = column_3
                                 indent_column_1 = indent_column_2
                                 partial_tab_offset_1 = partial_tab_offset_2
                                 partial_tab_width_1 = partial_tab_width_2
@@ -16697,9 +16785,10 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_0 = self.Node('link_title', offset_1, offset_2, children_2, None)
+                        value_0 = self.Node('link_title', offset_1, offset_2, children_2, column_1, column_2, None)
                         children_1.append(value_0)
                         offset_1 = offset_2
+                        column_1 = column_2
 
                         if buf[offset_1:offset_1+1] == '"':
                             offset_1 += 1
@@ -16740,7 +16829,7 @@ def _build(unicodedata):
                             count_0 = 0
                             while True:
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -16748,7 +16837,7 @@ def _build(unicodedata):
                                 while True:
                                     while True: # start choice
                                         offset_4 = offset_3
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
@@ -16768,13 +16857,13 @@ def _build(unicodedata):
                                                 break
                                             else:
                                                 offset_4 += 1
-                                                column_3 += 1
+                                                column_4 += 1
 
 
                                             break
                                         if offset_4 != -1:
                                             offset_3 = offset_4
-                                            column_2 = column_3
+                                            column_3 = column_4
                                             indent_column_2 = indent_column_3
                                             partial_tab_offset_2 = partial_tab_offset_3
                                             partial_tab_width_2 = partial_tab_width_3
@@ -16783,7 +16872,7 @@ def _build(unicodedata):
                                             break
                                         # end case
                                         offset_4 = offset_3
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
@@ -16793,7 +16882,7 @@ def _build(unicodedata):
                                                 codepoint = buf[offset_4]
                                                 if codepoint in '\n':
                                                     offset_4 +=1
-                                                    column_3 = 0
+                                                    column_4 = 0
                                                     indent_column_3 = (0, None)
                                                 else:
                                                     offset_4 = -1
@@ -16802,7 +16891,7 @@ def _build(unicodedata):
                                                 offset_4 = -1
                                                 break
 
-                                            if not (column_3 == indent_column_3[0] == 0):
+                                            if not (column_4 == indent_column_3[0] == 0):
                                                 offset_4 = -1
                                                 break
                                             # print('start')
@@ -16810,7 +16899,7 @@ def _build(unicodedata):
                                                 # print(indent)
                                                 _children, _prefix = [], []
                                                 offset_5 = offset_4
-                                                offset_5, column_3, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = indent(buf, buf_start, buf_eof, offset_5, column_3, indent_column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
+                                                offset_5, column_4, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = indent(buf, buf_start, buf_eof, offset_5, column_4, indent_column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
                                                 if _prefix or _children:
                                                    raise Exception('bar')
                                                 if offset_5 == -1:
@@ -16819,14 +16908,14 @@ def _build(unicodedata):
                                                         break
                                                     _children, _prefix = [], []
                                                     offset_5 = offset_4
-                                                    offset_5, _column, _indent_column, _partial_tab_offset, _partial_tab_width = dedent(buf, buf_start, buf_eof, offset_5, column_3, indent_column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
+                                                    offset_5, _column, _indent_column, _partial_tab_offset, _partial_tab_width = dedent(buf, buf_start, buf_eof, offset_5, column_4, indent_column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
                                                     if offset_5 != -1:
                                                         offset_4 = -1
                                                         break
                                                     else:
                                                         offset_5 = offset_4
                                                 offset_4 = offset_5
-                                                indent_column_3 = (column_3, indent_column_3)
+                                                indent_column_3 = (column_4, indent_column_3)
                                             if offset_4 == -1:
                                                 break
 
@@ -16838,13 +16927,13 @@ def _build(unicodedata):
                                                         if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                             width = partial_tab_width_3
                                                         else:
-                                                            width  = (self.tabstop-(column_3%self.tabstop))
+                                                            width  = (self.tabstop-(column_4%self.tabstop))
                                                         count_1 += width
-                                                        column_3 += width
+                                                        column_4 += width
                                                         offset_4 += 1
                                                     else:
                                                         count_1 += 1
-                                                        column_3 += 1
+                                                        column_4 += 1
                                                         offset_4 += 1
                                                 else:
                                                     break
@@ -16852,7 +16941,7 @@ def _build(unicodedata):
                                             while True: # start reject
                                                 children_5 = []
                                                 offset_5 = offset_4 + 0
-                                                column_4 = column_3
+                                                column_5 = column_4
                                                 indent_column_4 = indent_column_3
                                                 partial_tab_offset_4 = partial_tab_offset_3
                                                 partial_tab_width_4 = partial_tab_width_3
@@ -16860,7 +16949,7 @@ def _build(unicodedata):
                                                     codepoint = buf[offset_5]
                                                     if codepoint in '\n':
                                                         offset_5 +=1
-                                                        column_4 = 0
+                                                        column_5 = 0
                                                         indent_column_4 = (0, None)
                                                     else:
                                                         offset_5 = -1
@@ -16878,7 +16967,7 @@ def _build(unicodedata):
                                             break
                                         if offset_4 != -1:
                                             offset_3 = offset_4
-                                            column_2 = column_3
+                                            column_3 = column_4
                                             indent_column_2 = indent_column_3
                                             partial_tab_offset_2 = partial_tab_offset_3
                                             partial_tab_width_2 = partial_tab_width_3
@@ -16898,7 +16987,7 @@ def _build(unicodedata):
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 offset_2 = offset_3
-                                column_1 = column_2
+                                column_2 = column_3
                                 indent_column_1 = indent_column_2
                                 partial_tab_offset_1 = partial_tab_offset_2
                                 partial_tab_width_1 = partial_tab_width_2
@@ -16910,9 +16999,10 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_1 = self.Node('link_title', offset_1, offset_2, children_2, None)
+                        value_1 = self.Node('link_title', offset_1, offset_2, children_2, column_1, column_2, None)
                         children_1.append(value_1)
                         offset_1 = offset_2
+                        column_1 = column_2
 
                         if buf[offset_1:offset_1+1] == "'":
                             offset_1 += 1
@@ -16950,7 +17040,7 @@ def _build(unicodedata):
                         offset_2 = offset_1
                         children_2 = []
                         while True: # start capture
-                            offset_2, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_balanced_list_title(buf, buf_start, buf_eof, offset_2, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
+                            offset_2, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_balanced_list_title(buf, buf_start, buf_eof, offset_2, column_2, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                             if offset_2 == -1: break
 
 
@@ -16958,9 +17048,10 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_2 = self.Node('link_title', offset_1, offset_2, children_2, None)
+                        value_2 = self.Node('link_title', offset_1, offset_2, children_2, column_1, column_2, None)
                         children_1.append(value_2)
                         offset_1 = offset_2
+                        column_1 = column_2
 
                         if buf[offset_1:offset_1+1] == ')':
                             offset_1 += 1
@@ -17242,16 +17333,16 @@ def _build(unicodedata):
 
                             if 33 <= codepoint <= 47:
                                 offset_2 += 1
-                                column_1 += 1
+                                column_2 += 1
                             elif 58 <= codepoint <= 64:
                                 offset_2 += 1
-                                column_1 += 1
+                                column_2 += 1
                             elif 91 <= codepoint <= 96:
                                 offset_2 += 1
-                                column_1 += 1
+                                column_2 += 1
                             elif 123 <= codepoint <= 126:
                                 offset_2 += 1
-                                column_1 += 1
+                                column_2 += 1
                             else:
                                 offset_2 = -1
                                 break
@@ -17260,9 +17351,10 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_0 = self.Node('text', offset_1, offset_2, children_2, None)
+                        value_0 = self.Node('text', offset_1, offset_2, children_2, column_1, column_2, None)
                         children_1.append(value_0)
                         offset_1 = offset_2
+                        column_1 = column_2
 
 
                         break
@@ -17283,7 +17375,7 @@ def _build(unicodedata):
                     partial_tab_width_1 = partial_tab_width_0
                     children_1 = [] if children_0 is not None else None
                     while True: # case
-                        children_1.append(self.Node('value', offset_1, offset_1, (), '\\'))
+                        children_1.append(self.Node('value', offset_1, offset_1, column_1, column_1, (), '\\'))
 
 
                         break
@@ -17336,7 +17428,7 @@ def _build(unicodedata):
                             count_0 = 0
                             while count_0 < 7:
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -17350,7 +17442,7 @@ def _build(unicodedata):
 
                                     if 48 <= codepoint <= 57:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     else:
                                         offset_3 = -1
                                         break
@@ -17362,7 +17454,7 @@ def _build(unicodedata):
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 offset_2 = offset_3
-                                column_1 = column_2
+                                column_2 = column_3
                                 indent_column_1 = indent_column_2
                                 partial_tab_offset_1 = partial_tab_offset_2
                                 partial_tab_width_1 = partial_tab_width_2
@@ -17377,9 +17469,10 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_0 = self.Node('dec_entity', offset_1, offset_2, children_2, None)
+                        value_0 = self.Node('dec_entity', offset_1, offset_2, children_2, column_1, column_2, None)
                         children_1.append(value_0)
                         offset_1 = offset_2
+                        column_1 = column_2
 
                         if buf[offset_1:offset_1+1] == ';':
                             offset_1 += 1
@@ -17441,13 +17534,13 @@ def _build(unicodedata):
 
                             if 48 <= codepoint <= 57:
                                 offset_2 += 1
-                                column_1 += 1
+                                column_2 += 1
                             elif 97 <= codepoint <= 102:
                                 offset_2 += 1
-                                column_1 += 1
+                                column_2 += 1
                             elif 65 <= codepoint <= 70:
                                 offset_2 += 1
-                                column_1 += 1
+                                column_2 += 1
                             else:
                                 offset_2 = -1
                                 break
@@ -17455,7 +17548,7 @@ def _build(unicodedata):
                             count_0 = 0
                             while count_0 < 6:
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -17469,13 +17562,13 @@ def _build(unicodedata):
 
                                     if 48 <= codepoint <= 57:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif 97 <= codepoint <= 102:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif 65 <= codepoint <= 70:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     else:
                                         offset_3 = -1
                                         break
@@ -17487,7 +17580,7 @@ def _build(unicodedata):
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 offset_2 = offset_3
-                                column_1 = column_2
+                                column_2 = column_3
                                 indent_column_1 = indent_column_2
                                 partial_tab_offset_1 = partial_tab_offset_2
                                 partial_tab_width_1 = partial_tab_width_2
@@ -17499,9 +17592,10 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_1 = self.Node('hex_entity', offset_1, offset_2, children_2, None)
+                        value_1 = self.Node('hex_entity', offset_1, offset_2, children_2, column_1, column_2, None)
                         children_1.append(value_1)
                         offset_1 = offset_2
+                        column_1 = column_2
 
                         if buf[offset_1:offset_1+1] == ';':
                             offset_1 += 1
@@ -17540,10 +17634,10 @@ def _build(unicodedata):
 
                             if 97 <= codepoint <= 122:
                                 offset_2 += 1
-                                column_1 += 1
+                                column_2 += 1
                             elif 65 <= codepoint <= 90:
                                 offset_2 += 1
-                                column_1 += 1
+                                column_2 += 1
                             else:
                                 offset_2 = -1
                                 break
@@ -17551,7 +17645,7 @@ def _build(unicodedata):
                             count_0 = 0
                             while True:
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -17565,13 +17659,13 @@ def _build(unicodedata):
 
                                     if 48 <= codepoint <= 57:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif 97 <= codepoint <= 122:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif 65 <= codepoint <= 90:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     else:
                                         offset_3 = -1
                                         break
@@ -17583,7 +17677,7 @@ def _build(unicodedata):
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 offset_2 = offset_3
-                                column_1 = column_2
+                                column_2 = column_3
                                 indent_column_1 = indent_column_2
                                 partial_tab_offset_1 = partial_tab_offset_2
                                 partial_tab_width_1 = partial_tab_width_2
@@ -17598,9 +17692,10 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_2 = self.Node('named_entity', offset_1, offset_2, children_2, None)
+                        value_2 = self.Node('named_entity', offset_1, offset_2, children_2, column_1, column_2, None)
                         children_1.append(value_2)
                         offset_1 = offset_2
+                        column_1 = column_2
 
                         if buf[offset_1:offset_1+1] == ';':
                             offset_1 += 1
@@ -17637,7 +17732,7 @@ def _build(unicodedata):
                 while True: # start capture
                     while True: # start choice
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -17646,7 +17741,7 @@ def _build(unicodedata):
                             while True: # start lookahed
                                 children_3 = []
                                 offset_3 = offset_2 + -1
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -17658,13 +17753,13 @@ def _build(unicodedata):
 
                                 if unicodedata.category(chr(codepoint)) == 'Zs':
                                     offset_3 += 1
-                                    column_2 += 1
+                                    column_3 += 1
                                 elif unicodedata.category(chr(codepoint)) in ('Zl', 'Zp', 'Cc'):
                                     offset_3 += 1
-                                    column_2 += 1
+                                    column_3 += 1
                                 elif unicodedata.category(chr(codepoint)).startswith('P'):
                                     offset_3 += 1
-                                    column_2 += 1
+                                    column_3 += 1
                                 else:
                                     offset_3 = -1
                                     break
@@ -17675,7 +17770,7 @@ def _build(unicodedata):
                                 break
 
                             offset_3 = offset_2
-                            column_2 = column_1
+                            column_3 = column_2
                             while True: # start count
                                 offset_4 = offset_3
                                 while True: # start backref
@@ -17687,10 +17782,10 @@ def _build(unicodedata):
 
                                     if codepoint == 95:
                                         offset_4 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif codepoint == 42:
                                         offset_4 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     else:
                                         offset_4 = -1
                                         break
@@ -17705,7 +17800,7 @@ def _build(unicodedata):
                                 count_0 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    column_3 = column_2
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -17713,7 +17808,7 @@ def _build(unicodedata):
                                     while True:
                                         if buf[offset_4:offset_4+len(value_0)] == value_0:
                                             offset_4 += len(value_0)
-                                            column_3 += len(value_0)
+                                            column_4 += len(value_0)
                                         else:
                                             offset_4 = -1
                                             break
@@ -17725,7 +17820,7 @@ def _build(unicodedata):
                                     if children_3 is not None and children_3 is not None:
                                         children_2.extend(children_3)
                                     offset_3 = offset_4
-                                    column_2 = column_3
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -17736,14 +17831,14 @@ def _build(unicodedata):
                                 break
                             if offset_3 == -1:
                                 offset_2 = -1; break
-                            value_1 = column_2 - column_1
+                            value_1 = column_3 - column_2
                             offset_2 = offset_3
-                            column_1 = column_2
+                            column_2 = column_3
 
                             while True: # start reject
                                 children_3 = []
                                 offset_3 = offset_2 + 0
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -17755,10 +17850,10 @@ def _build(unicodedata):
 
                                 if unicodedata.category(chr(codepoint)) == 'Zs':
                                     offset_3 += 1
-                                    column_2 += 1
+                                    column_3 += 1
                                 elif unicodedata.category(chr(codepoint)) in ('Zl', 'Zp', 'Cc'):
                                     offset_3 += 1
-                                    column_2 += 1
+                                    column_3 += 1
                                 else:
                                     offset_3 = -1
                                     break
@@ -17768,17 +17863,17 @@ def _build(unicodedata):
                                 offset_2 = -1
                                 break
 
-                            children_2.append(self.Node('value', offset_2, offset_2, (), 'left'))
+                            children_2.append(self.Node('value', offset_2, offset_2, column_2, column_2, (), 'left'))
 
-                            children_2.append(self.Node('value', offset_2, offset_2, (), value_0))
+                            children_2.append(self.Node('value', offset_2, offset_2, column_2, column_2, (), value_0))
 
-                            children_2.append(self.Node('value', offset_2, offset_2, (), value_1))
+                            children_2.append(self.Node('value', offset_2, offset_2, column_2, column_2, (), value_1))
 
 
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -17787,7 +17882,7 @@ def _build(unicodedata):
                             break
                         # end case
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -17796,7 +17891,7 @@ def _build(unicodedata):
                             while True: # start reject
                                 children_3 = []
                                 offset_3 = offset_2 + -1
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -17808,7 +17903,7 @@ def _build(unicodedata):
 
                                 if unicodedata.category(chr(codepoint)).startswith('P'):
                                     offset_3 += 1
-                                    column_2 += 1
+                                    column_3 += 1
                                 else:
                                     offset_3 = -1
                                     break
@@ -17819,7 +17914,7 @@ def _build(unicodedata):
                                 break
 
                             offset_3 = offset_2
-                            column_2 = column_1
+                            column_3 = column_2
                             while True: # start count
                                 offset_4 = offset_3
                                 while True: # start backref
@@ -17831,10 +17926,10 @@ def _build(unicodedata):
 
                                     if codepoint == 95:
                                         offset_4 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif codepoint == 42:
                                         offset_4 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     else:
                                         offset_4 = -1
                                         break
@@ -17849,7 +17944,7 @@ def _build(unicodedata):
                                 count_0 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    column_3 = column_2
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -17857,7 +17952,7 @@ def _build(unicodedata):
                                     while True:
                                         if buf[offset_4:offset_4+len(value_2)] == value_2:
                                             offset_4 += len(value_2)
-                                            column_3 += len(value_2)
+                                            column_4 += len(value_2)
                                         else:
                                             offset_4 = -1
                                             break
@@ -17869,7 +17964,7 @@ def _build(unicodedata):
                                     if children_3 is not None and children_3 is not None:
                                         children_2.extend(children_3)
                                     offset_3 = offset_4
-                                    column_2 = column_3
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -17880,14 +17975,14 @@ def _build(unicodedata):
                                 break
                             if offset_3 == -1:
                                 offset_2 = -1; break
-                            value_3 = column_2 - column_1
+                            value_3 = column_3 - column_2
                             offset_2 = offset_3
-                            column_1 = column_2
+                            column_2 = column_3
 
                             while True: # start reject
                                 children_3 = []
                                 offset_3 = offset_2 + 0
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -17899,13 +17994,13 @@ def _build(unicodedata):
 
                                 if unicodedata.category(chr(codepoint)) == 'Zs':
                                     offset_3 += 1
-                                    column_2 += 1
+                                    column_3 += 1
                                 elif unicodedata.category(chr(codepoint)) in ('Zl', 'Zp', 'Cc'):
                                     offset_3 += 1
-                                    column_2 += 1
+                                    column_3 += 1
                                 elif unicodedata.category(chr(codepoint)).startswith('P'):
                                     offset_3 += 1
-                                    column_2 += 1
+                                    column_3 += 1
                                 else:
                                     offset_3 = -1
                                     break
@@ -17915,17 +18010,17 @@ def _build(unicodedata):
                                 offset_2 = -1
                                 break
 
-                            children_2.append(self.Node('value', offset_2, offset_2, (), 'left'))
+                            children_2.append(self.Node('value', offset_2, offset_2, column_2, column_2, (), 'left'))
 
-                            children_2.append(self.Node('value', offset_2, offset_2, (), value_2))
+                            children_2.append(self.Node('value', offset_2, offset_2, column_2, column_2, (), value_2))
 
-                            children_2.append(self.Node('value', offset_2, offset_2, (), value_3))
+                            children_2.append(self.Node('value', offset_2, offset_2, column_2, column_2, (), value_3))
 
 
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -17942,9 +18037,10 @@ def _build(unicodedata):
                 if offset_1 == -1:
                     offset_0 = -1
                     break
-                value_4 = self.Node('left_flank', offset_0, offset_1, children_1, None)
+                value_4 = self.Node('left_flank', offset_0, offset_1, children_1, column_0, column_1, None)
                 children_0.append(value_4)
                 offset_0 = offset_1
+                column_0 = column_1
 
                 break
             return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
@@ -17956,7 +18052,7 @@ def _build(unicodedata):
                 while True: # start capture
                     while True: # start choice
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -17965,7 +18061,7 @@ def _build(unicodedata):
                             while True: # start reject
                                 children_3 = []
                                 offset_3 = offset_2 + -1
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -17977,13 +18073,13 @@ def _build(unicodedata):
 
                                 if unicodedata.category(chr(codepoint)) == 'Zs':
                                     offset_3 += 1
-                                    column_2 += 1
+                                    column_3 += 1
                                 elif unicodedata.category(chr(codepoint)) in ('Zl', 'Zp', 'Cc'):
                                     offset_3 += 1
-                                    column_2 += 1
+                                    column_3 += 1
                                 elif unicodedata.category(chr(codepoint)).startswith('P'):
                                     offset_3 += 1
-                                    column_2 += 1
+                                    column_3 += 1
                                 else:
                                     offset_3 = -1
                                     break
@@ -17994,7 +18090,7 @@ def _build(unicodedata):
                                 break
 
                             offset_3 = offset_2
-                            column_2 = column_1
+                            column_3 = column_2
                             while True: # start count
                                 offset_4 = offset_3
                                 while True: # start backref
@@ -18006,10 +18102,10 @@ def _build(unicodedata):
 
                                     if codepoint == 95:
                                         offset_4 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif codepoint == 42:
                                         offset_4 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     else:
                                         offset_4 = -1
                                         break
@@ -18024,7 +18120,7 @@ def _build(unicodedata):
                                 count_0 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    column_3 = column_2
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -18032,7 +18128,7 @@ def _build(unicodedata):
                                     while True:
                                         if buf[offset_4:offset_4+len(value_0)] == value_0:
                                             offset_4 += len(value_0)
-                                            column_3 += len(value_0)
+                                            column_4 += len(value_0)
                                         else:
                                             offset_4 = -1
                                             break
@@ -18044,7 +18140,7 @@ def _build(unicodedata):
                                     if children_3 is not None and children_3 is not None:
                                         children_2.extend(children_3)
                                     offset_3 = offset_4
-                                    column_2 = column_3
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -18055,21 +18151,21 @@ def _build(unicodedata):
                                 break
                             if offset_3 == -1:
                                 offset_2 = -1; break
-                            value_1 = column_2 - column_1
+                            value_1 = column_3 - column_2
                             offset_2 = offset_3
-                            column_1 = column_2
+                            column_2 = column_3
 
-                            children_2.append(self.Node('value', offset_2, offset_2, (), 'right'))
+                            children_2.append(self.Node('value', offset_2, offset_2, column_2, column_2, (), 'right'))
 
-                            children_2.append(self.Node('value', offset_2, offset_2, (), value_0))
+                            children_2.append(self.Node('value', offset_2, offset_2, column_2, column_2, (), value_0))
 
-                            children_2.append(self.Node('value', offset_2, offset_2, (), value_1))
+                            children_2.append(self.Node('value', offset_2, offset_2, column_2, column_2, (), value_1))
 
 
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -18078,7 +18174,7 @@ def _build(unicodedata):
                             break
                         # end case
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -18087,7 +18183,7 @@ def _build(unicodedata):
                             while True: # start reject
                                 children_3 = []
                                 offset_3 = offset_2 + -1
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -18099,10 +18195,10 @@ def _build(unicodedata):
 
                                 if unicodedata.category(chr(codepoint)) == 'Zs':
                                     offset_3 += 1
-                                    column_2 += 1
+                                    column_3 += 1
                                 elif unicodedata.category(chr(codepoint)) in ('Zl', 'Zp', 'Cc'):
                                     offset_3 += 1
-                                    column_2 += 1
+                                    column_3 += 1
                                 else:
                                     offset_3 = -1
                                     break
@@ -18113,7 +18209,7 @@ def _build(unicodedata):
                                 break
 
                             offset_3 = offset_2
-                            column_2 = column_1
+                            column_3 = column_2
                             while True: # start count
                                 offset_4 = offset_3
                                 while True: # start backref
@@ -18125,10 +18221,10 @@ def _build(unicodedata):
 
                                     if codepoint == 95:
                                         offset_4 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif codepoint == 42:
                                         offset_4 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     else:
                                         offset_4 = -1
                                         break
@@ -18143,7 +18239,7 @@ def _build(unicodedata):
                                 count_0 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    column_3 = column_2
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -18151,7 +18247,7 @@ def _build(unicodedata):
                                     while True:
                                         if buf[offset_4:offset_4+len(value_2)] == value_2:
                                             offset_4 += len(value_2)
-                                            column_3 += len(value_2)
+                                            column_4 += len(value_2)
                                         else:
                                             offset_4 = -1
                                             break
@@ -18163,7 +18259,7 @@ def _build(unicodedata):
                                     if children_3 is not None and children_3 is not None:
                                         children_2.extend(children_3)
                                     offset_3 = offset_4
-                                    column_2 = column_3
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -18174,14 +18270,14 @@ def _build(unicodedata):
                                 break
                             if offset_3 == -1:
                                 offset_2 = -1; break
-                            value_3 = column_2 - column_1
+                            value_3 = column_3 - column_2
                             offset_2 = offset_3
-                            column_1 = column_2
+                            column_2 = column_3
 
                             while True: # start lookahed
                                 children_3 = []
                                 offset_3 = offset_2 + 0
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -18193,13 +18289,13 @@ def _build(unicodedata):
 
                                 if unicodedata.category(chr(codepoint)) == 'Zs':
                                     offset_3 += 1
-                                    column_2 += 1
+                                    column_3 += 1
                                 elif unicodedata.category(chr(codepoint)) in ('Zl', 'Zp', 'Cc'):
                                     offset_3 += 1
-                                    column_2 += 1
+                                    column_3 += 1
                                 elif unicodedata.category(chr(codepoint)).startswith('P'):
                                     offset_3 += 1
-                                    column_2 += 1
+                                    column_3 += 1
                                 else:
                                     offset_3 = -1
                                     break
@@ -18209,17 +18305,17 @@ def _build(unicodedata):
                                 offset_2 = -1
                                 break
 
-                            children_2.append(self.Node('value', offset_2, offset_2, (), 'right'))
+                            children_2.append(self.Node('value', offset_2, offset_2, column_2, column_2, (), 'right'))
 
-                            children_2.append(self.Node('value', offset_2, offset_2, (), value_2))
+                            children_2.append(self.Node('value', offset_2, offset_2, column_2, column_2, (), value_2))
 
-                            children_2.append(self.Node('value', offset_2, offset_2, (), value_3))
+                            children_2.append(self.Node('value', offset_2, offset_2, column_2, column_2, (), value_3))
 
 
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -18236,9 +18332,10 @@ def _build(unicodedata):
                 if offset_1 == -1:
                     offset_0 = -1
                     break
-                value_4 = self.Node('right_flank', offset_0, offset_1, children_1, None)
+                value_4 = self.Node('right_flank', offset_0, offset_1, children_1, column_0, column_1, None)
                 children_0.append(value_4)
                 offset_0 = offset_1
+                column_0 = column_1
 
                 break
             return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
@@ -18250,7 +18347,7 @@ def _build(unicodedata):
                 while True: # start capture
                     while True: # start choice
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -18259,7 +18356,7 @@ def _build(unicodedata):
                             while True: # start lookahed
                                 children_3 = []
                                 offset_3 = offset_2 + -1
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -18271,7 +18368,7 @@ def _build(unicodedata):
 
                                 if unicodedata.category(chr(codepoint)).startswith('P'):
                                     offset_3 += 1
-                                    column_2 += 1
+                                    column_3 += 1
                                 else:
                                     offset_3 = -1
                                     break
@@ -18282,7 +18379,7 @@ def _build(unicodedata):
                                 break
 
                             offset_3 = offset_2
-                            column_2 = column_1
+                            column_3 = column_2
                             while True: # start count
                                 offset_4 = offset_3
                                 while True: # start backref
@@ -18294,10 +18391,10 @@ def _build(unicodedata):
 
                                     if codepoint == 95:
                                         offset_4 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif codepoint == 42:
                                         offset_4 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     else:
                                         offset_4 = -1
                                         break
@@ -18312,7 +18409,7 @@ def _build(unicodedata):
                                 count_0 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    column_3 = column_2
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -18320,7 +18417,7 @@ def _build(unicodedata):
                                     while True:
                                         if buf[offset_4:offset_4+len(value_0)] == value_0:
                                             offset_4 += len(value_0)
-                                            column_3 += len(value_0)
+                                            column_4 += len(value_0)
                                         else:
                                             offset_4 = -1
                                             break
@@ -18332,7 +18429,7 @@ def _build(unicodedata):
                                     if children_3 is not None and children_3 is not None:
                                         children_2.extend(children_3)
                                     offset_3 = offset_4
-                                    column_2 = column_3
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -18343,14 +18440,14 @@ def _build(unicodedata):
                                 break
                             if offset_3 == -1:
                                 offset_2 = -1; break
-                            value_1 = column_2 - column_1
+                            value_1 = column_3 - column_2
                             offset_2 = offset_3
-                            column_1 = column_2
+                            column_2 = column_3
 
                             while True: # start lookahed
                                 children_3 = []
                                 offset_3 = offset_2 + 0
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -18362,7 +18459,7 @@ def _build(unicodedata):
 
                                 if unicodedata.category(chr(codepoint)).startswith('P'):
                                     offset_3 += 1
-                                    column_2 += 1
+                                    column_3 += 1
                                 else:
                                     offset_3 = -1
                                     break
@@ -18372,17 +18469,17 @@ def _build(unicodedata):
                                 offset_2 = -1
                                 break
 
-                            children_2.append(self.Node('value', offset_2, offset_2, (), 'dual'))
+                            children_2.append(self.Node('value', offset_2, offset_2, column_2, column_2, (), 'dual'))
 
-                            children_2.append(self.Node('value', offset_2, offset_2, (), value_0))
+                            children_2.append(self.Node('value', offset_2, offset_2, column_2, column_2, (), value_0))
 
-                            children_2.append(self.Node('value', offset_2, offset_2, (), value_1))
+                            children_2.append(self.Node('value', offset_2, offset_2, column_2, column_2, (), value_1))
 
 
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -18391,7 +18488,7 @@ def _build(unicodedata):
                             break
                         # end case
                         offset_2 = offset_1
-                        column_1 = column_0
+                        column_2 = column_1
                         indent_column_1 = indent_column_0
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
@@ -18400,7 +18497,7 @@ def _build(unicodedata):
                             while True: # start reject
                                 children_3 = []
                                 offset_3 = offset_2 + -1
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -18412,13 +18509,13 @@ def _build(unicodedata):
 
                                 if unicodedata.category(chr(codepoint)) == 'Zs':
                                     offset_3 += 1
-                                    column_2 += 1
+                                    column_3 += 1
                                 elif unicodedata.category(chr(codepoint)) in ('Zl', 'Zp', 'Cc'):
                                     offset_3 += 1
-                                    column_2 += 1
+                                    column_3 += 1
                                 elif unicodedata.category(chr(codepoint)).startswith('P'):
                                     offset_3 += 1
-                                    column_2 += 1
+                                    column_3 += 1
                                 else:
                                     offset_3 = -1
                                     break
@@ -18429,7 +18526,7 @@ def _build(unicodedata):
                                 break
 
                             offset_3 = offset_2
-                            column_2 = column_1
+                            column_3 = column_2
                             while True: # start count
                                 offset_4 = offset_3
                                 while True: # start backref
@@ -18441,7 +18538,7 @@ def _build(unicodedata):
 
                                     if codepoint == 42:
                                         offset_4 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     else:
                                         offset_4 = -1
                                         break
@@ -18456,7 +18553,7 @@ def _build(unicodedata):
                                 count_0 = 0
                                 while True:
                                     offset_4 = offset_3
-                                    column_3 = column_2
+                                    column_4 = column_3
                                     indent_column_2 = indent_column_1
                                     partial_tab_offset_2 = partial_tab_offset_1
                                     partial_tab_width_2 = partial_tab_width_1
@@ -18464,7 +18561,7 @@ def _build(unicodedata):
                                     while True:
                                         if buf[offset_4:offset_4+len(value_2)] == value_2:
                                             offset_4 += len(value_2)
-                                            column_3 += len(value_2)
+                                            column_4 += len(value_2)
                                         else:
                                             offset_4 = -1
                                             break
@@ -18476,7 +18573,7 @@ def _build(unicodedata):
                                     if children_3 is not None and children_3 is not None:
                                         children_2.extend(children_3)
                                     offset_3 = offset_4
-                                    column_2 = column_3
+                                    column_3 = column_4
                                     indent_column_1 = indent_column_2
                                     partial_tab_offset_1 = partial_tab_offset_2
                                     partial_tab_width_1 = partial_tab_width_2
@@ -18487,14 +18584,14 @@ def _build(unicodedata):
                                 break
                             if offset_3 == -1:
                                 offset_2 = -1; break
-                            value_3 = column_2 - column_1
+                            value_3 = column_3 - column_2
                             offset_2 = offset_3
-                            column_1 = column_2
+                            column_2 = column_3
 
                             while True: # start reject
                                 children_3 = []
                                 offset_3 = offset_2 + 0
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -18506,13 +18603,13 @@ def _build(unicodedata):
 
                                 if unicodedata.category(chr(codepoint)) == 'Zs':
                                     offset_3 += 1
-                                    column_2 += 1
+                                    column_3 += 1
                                 elif unicodedata.category(chr(codepoint)) in ('Zl', 'Zp', 'Cc'):
                                     offset_3 += 1
-                                    column_2 += 1
+                                    column_3 += 1
                                 elif unicodedata.category(chr(codepoint)).startswith('P'):
                                     offset_3 += 1
-                                    column_2 += 1
+                                    column_3 += 1
                                 else:
                                     offset_3 = -1
                                     break
@@ -18522,17 +18619,17 @@ def _build(unicodedata):
                                 offset_2 = -1
                                 break
 
-                            children_2.append(self.Node('value', offset_2, offset_2, (), 'dual'))
+                            children_2.append(self.Node('value', offset_2, offset_2, column_2, column_2, (), 'dual'))
 
-                            children_2.append(self.Node('value', offset_2, offset_2, (), value_2))
+                            children_2.append(self.Node('value', offset_2, offset_2, column_2, column_2, (), value_2))
 
-                            children_2.append(self.Node('value', offset_2, offset_2, (), value_3))
+                            children_2.append(self.Node('value', offset_2, offset_2, column_2, column_2, (), value_3))
 
 
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
-                            column_0 = column_1
+                            column_1 = column_2
                             indent_column_0 = indent_column_1
                             partial_tab_offset_0 = partial_tab_offset_1
                             partial_tab_width_0 = partial_tab_width_1
@@ -18549,9 +18646,10 @@ def _build(unicodedata):
                 if offset_1 == -1:
                     offset_0 = -1
                     break
-                value_4 = self.Node('dual_flank', offset_0, offset_1, children_1, None)
+                value_4 = self.Node('dual_flank', offset_0, offset_1, children_1, column_0, column_1, None)
                 children_0.append(value_4)
                 offset_0 = offset_1
+                column_0 = column_1
 
                 break
             return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
@@ -18616,7 +18714,7 @@ def _build(unicodedata):
                             count_0 = 0
                             while True:
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -18624,7 +18722,7 @@ def _build(unicodedata):
                                 while True:
                                     while True: # start choice
                                         offset_4 = offset_3
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
@@ -18647,12 +18745,12 @@ def _build(unicodedata):
                                                     break
                                                 else:
                                                     offset_5 += 1
-                                                    column_3 += 1
+                                                    column_5 += 1
 
                                                 count_1 = 0
                                                 while True:
                                                     offset_6 = offset_5
-                                                    column_4 = column_3
+                                                    column_6 = column_5
                                                     indent_column_4 = indent_column_3
                                                     partial_tab_offset_4 = partial_tab_offset_3
                                                     partial_tab_width_4 = partial_tab_width_3
@@ -18672,7 +18770,7 @@ def _build(unicodedata):
                                                             break
                                                         else:
                                                             offset_6 += 1
-                                                            column_4 += 1
+                                                            column_6 += 1
 
                                                         break
                                                     if offset_6 == -1:
@@ -18681,7 +18779,7 @@ def _build(unicodedata):
                                                     if children_6 is not None and children_6 is not None:
                                                         children_5.extend(children_6)
                                                     offset_5 = offset_6
-                                                    column_3 = column_4
+                                                    column_5 = column_6
                                                     indent_column_3 = indent_column_4
                                                     partial_tab_offset_3 = partial_tab_offset_4
                                                     partial_tab_width_3 = partial_tab_width_4
@@ -18693,15 +18791,16 @@ def _build(unicodedata):
                                             if offset_5 == -1:
                                                 offset_4 = -1
                                                 break
-                                            value_1 = self.Node('text', offset_4, offset_5, children_5, None)
+                                            value_1 = self.Node('text', offset_4, offset_5, children_5, column_4, column_5, None)
                                             children_4.append(value_1)
                                             offset_4 = offset_5
+                                            column_4 = column_5
 
 
                                             break
                                         if offset_4 != -1:
                                             offset_3 = offset_4
-                                            column_2 = column_3
+                                            column_3 = column_4
                                             indent_column_2 = indent_column_3
                                             partial_tab_offset_2 = partial_tab_offset_3
                                             partial_tab_width_2 = partial_tab_width_3
@@ -18710,7 +18809,7 @@ def _build(unicodedata):
                                             break
                                         # end case
                                         offset_4 = offset_3
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
@@ -18723,7 +18822,7 @@ def _build(unicodedata):
                                                     codepoint = buf[offset_5]
                                                     if codepoint in '\n':
                                                         offset_5 +=1
-                                                        column_3 = 0
+                                                        column_5 = 0
                                                         indent_column_3 = (0, None)
                                                     else:
                                                         offset_5 = -1
@@ -18736,11 +18835,12 @@ def _build(unicodedata):
                                             if offset_5 == -1:
                                                 offset_4 = -1
                                                 break
-                                            value_2 = self.Node('text', offset_4, offset_5, children_5, None)
+                                            value_2 = self.Node('text', offset_4, offset_5, children_5, column_4, column_5, None)
                                             children_4.append(value_2)
                                             offset_4 = offset_5
+                                            column_4 = column_5
 
-                                            if not (column_3 == indent_column_3[0] == 0):
+                                            if not (column_4 == indent_column_3[0] == 0):
                                                 offset_4 = -1
                                                 break
                                             # print('start')
@@ -18748,7 +18848,7 @@ def _build(unicodedata):
                                                 # print(indent)
                                                 _children, _prefix = [], []
                                                 offset_5 = offset_4
-                                                offset_5, column_3, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = indent(buf, buf_start, buf_eof, offset_5, column_3, indent_column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
+                                                offset_5, column_4, indent_column_3, partial_tab_offset_3, partial_tab_width_3 = indent(buf, buf_start, buf_eof, offset_5, column_4, indent_column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
                                                 if _prefix or _children:
                                                    raise Exception('bar')
                                                 if offset_5 == -1:
@@ -18757,14 +18857,14 @@ def _build(unicodedata):
                                                         break
                                                     _children, _prefix = [], []
                                                     offset_5 = offset_4
-                                                    offset_5, _column, _indent_column, _partial_tab_offset, _partial_tab_width = dedent(buf, buf_start, buf_eof, offset_5, column_3, indent_column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
+                                                    offset_5, _column, _indent_column, _partial_tab_offset, _partial_tab_width = dedent(buf, buf_start, buf_eof, offset_5, column_4, indent_column_3, _prefix, _children, partial_tab_offset_3, partial_tab_width_3)
                                                     if offset_5 != -1:
                                                         offset_4 = -1
                                                         break
                                                     else:
                                                         offset_5 = offset_4
                                                 offset_4 = offset_5
-                                                indent_column_3 = (column_3, indent_column_3)
+                                                indent_column_3 = (column_4, indent_column_3)
                                             if offset_4 == -1:
                                                 break
 
@@ -18772,7 +18872,7 @@ def _build(unicodedata):
                                             break
                                         if offset_4 != -1:
                                             offset_3 = offset_4
-                                            column_2 = column_3
+                                            column_3 = column_4
                                             indent_column_2 = indent_column_3
                                             partial_tab_offset_2 = partial_tab_offset_3
                                             partial_tab_width_2 = partial_tab_width_3
@@ -18781,7 +18881,7 @@ def _build(unicodedata):
                                             break
                                         # end case
                                         offset_4 = offset_3
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
@@ -18790,14 +18890,14 @@ def _build(unicodedata):
                                             while True: # start reject
                                                 children_5 = []
                                                 offset_5 = offset_4 + 0
-                                                column_4 = column_3
+                                                column_5 = column_4
                                                 indent_column_4 = indent_column_3
                                                 partial_tab_offset_4 = partial_tab_offset_3
                                                 partial_tab_width_4 = partial_tab_width_3
                                                 count_1 = 0
                                                 while count_1 < value_0:
                                                     offset_6 = offset_5
-                                                    column_5 = column_4
+                                                    column_6 = column_5
                                                     indent_column_5 = indent_column_4
                                                     partial_tab_offset_5 = partial_tab_offset_4
                                                     partial_tab_width_5 = partial_tab_width_4
@@ -18805,7 +18905,7 @@ def _build(unicodedata):
                                                     while True:
                                                         if buf[offset_6:offset_6+1] == '`':
                                                             offset_6 += 1
-                                                            column_5 += 1
+                                                            column_6 += 1
                                                         else:
                                                             offset_6 = -1
                                                             break
@@ -18817,7 +18917,7 @@ def _build(unicodedata):
                                                     if children_6 is not None and children_6 is not None:
                                                         children_5.extend(children_6)
                                                     offset_5 = offset_6
-                                                    column_4 = column_5
+                                                    column_5 = column_6
                                                     indent_column_4 = indent_column_5
                                                     partial_tab_offset_4 = partial_tab_offset_5
                                                     partial_tab_width_4 = partial_tab_width_5
@@ -18830,7 +18930,7 @@ def _build(unicodedata):
 
                                                 while True: # start choice
                                                     offset_6 = offset_5
-                                                    column_5 = column_4
+                                                    column_6 = column_5
                                                     indent_column_5 = indent_column_4
                                                     partial_tab_offset_5 = partial_tab_offset_4
                                                     partial_tab_width_5 = partial_tab_width_4
@@ -18847,13 +18947,13 @@ def _build(unicodedata):
                                                             break
                                                         else:
                                                             offset_6 += 1
-                                                            column_5 += 1
+                                                            column_6 += 1
 
 
                                                         break
                                                     if offset_6 != -1:
                                                         offset_5 = offset_6
-                                                        column_4 = column_5
+                                                        column_5 = column_6
                                                         indent_column_4 = indent_column_5
                                                         partial_tab_offset_4 = partial_tab_offset_5
                                                         partial_tab_width_4 = partial_tab_width_5
@@ -18862,7 +18962,7 @@ def _build(unicodedata):
                                                         break
                                                     # end case
                                                     offset_6 = offset_5
-                                                    column_5 = column_4
+                                                    column_6 = column_5
                                                     indent_column_5 = indent_column_4
                                                     partial_tab_offset_5 = partial_tab_offset_4
                                                     partial_tab_width_5 = partial_tab_width_4
@@ -18876,7 +18976,7 @@ def _build(unicodedata):
                                                         break
                                                     if offset_6 != -1:
                                                         offset_5 = offset_6
-                                                        column_4 = column_5
+                                                        column_5 = column_6
                                                         indent_column_4 = indent_column_5
                                                         partial_tab_offset_4 = partial_tab_offset_5
                                                         partial_tab_width_4 = partial_tab_width_5
@@ -18900,7 +19000,7 @@ def _build(unicodedata):
                                                 count_1 = 0
                                                 while True:
                                                     offset_6 = offset_5
-                                                    column_4 = column_3
+                                                    column_6 = column_5
                                                     indent_column_4 = indent_column_3
                                                     partial_tab_offset_4 = partial_tab_offset_3
                                                     partial_tab_width_4 = partial_tab_width_3
@@ -18908,7 +19008,7 @@ def _build(unicodedata):
                                                     while True:
                                                         if buf[offset_6:offset_6+1] == '`':
                                                             offset_6 += 1
-                                                            column_4 += 1
+                                                            column_6 += 1
                                                         else:
                                                             offset_6 = -1
                                                             break
@@ -18920,7 +19020,7 @@ def _build(unicodedata):
                                                     if children_6 is not None and children_6 is not None:
                                                         children_5.extend(children_6)
                                                     offset_5 = offset_6
-                                                    column_3 = column_4
+                                                    column_5 = column_6
                                                     indent_column_3 = indent_column_4
                                                     partial_tab_offset_3 = partial_tab_offset_4
                                                     partial_tab_width_3 = partial_tab_width_4
@@ -18932,15 +19032,16 @@ def _build(unicodedata):
                                             if offset_5 == -1:
                                                 offset_4 = -1
                                                 break
-                                            value_3 = self.Node('text', offset_4, offset_5, children_5, None)
+                                            value_3 = self.Node('text', offset_4, offset_5, children_5, column_4, column_5, None)
                                             children_4.append(value_3)
                                             offset_4 = offset_5
+                                            column_4 = column_5
 
 
                                             break
                                         if offset_4 != -1:
                                             offset_3 = offset_4
-                                            column_2 = column_3
+                                            column_3 = column_4
                                             indent_column_2 = indent_column_3
                                             partial_tab_offset_2 = partial_tab_offset_3
                                             partial_tab_width_2 = partial_tab_width_3
@@ -18960,7 +19061,7 @@ def _build(unicodedata):
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 offset_2 = offset_3
-                                column_1 = column_2
+                                column_2 = column_3
                                 indent_column_1 = indent_column_2
                                 partial_tab_offset_1 = partial_tab_offset_2
                                 partial_tab_width_1 = partial_tab_width_2
@@ -18975,9 +19076,10 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_4 = self.Node('code_span', offset_1, offset_2, children_2, None)
+                        value_4 = self.Node('code_span', offset_1, offset_2, children_2, column_1, column_2, None)
                         children_1.append(value_4)
                         offset_1 = offset_2
+                        column_1 = column_2
 
                         count_0 = 0
                         while count_0 < value_0:
@@ -19057,7 +19159,7 @@ def _build(unicodedata):
                             count_0 = 0
                             while True:
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -19065,7 +19167,7 @@ def _build(unicodedata):
                                 while True:
                                     if buf[offset_3:offset_3+1] == '`':
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     else:
                                         offset_3 = -1
                                         break
@@ -19077,7 +19179,7 @@ def _build(unicodedata):
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 offset_2 = offset_3
-                                column_1 = column_2
+                                column_2 = column_3
                                 indent_column_1 = indent_column_2
                                 partial_tab_offset_1 = partial_tab_offset_2
                                 partial_tab_width_1 = partial_tab_width_2
@@ -19092,9 +19194,10 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_5 = self.Node('text', offset_1, offset_2, children_2, None)
+                        value_5 = self.Node('text', offset_1, offset_2, children_2, column_1, column_2, None)
                         children_1.append(value_5)
                         offset_1 = offset_2
+                        column_1 = column_2
 
 
                         break
@@ -19131,7 +19234,7 @@ def _build(unicodedata):
                         while True: # start capture
                             if buf[offset_2:offset_2+2] == '<?':
                                 offset_2 += 2
-                                column_1 += 2
+                                column_2 += 2
                             else:
                                 offset_2 = -1
                                 break
@@ -19139,7 +19242,7 @@ def _build(unicodedata):
                             count_0 = 0
                             while True:
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -19148,13 +19251,13 @@ def _build(unicodedata):
                                     while True: # start reject
                                         children_4 = []
                                         offset_4 = offset_3 + 0
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
                                         if buf[offset_4:offset_4+2] == '?>':
                                             offset_4 += 2
-                                            column_3 += 2
+                                            column_4 += 2
                                         else:
                                             offset_4 = -1
                                             break
@@ -19175,7 +19278,7 @@ def _build(unicodedata):
                                         break
                                     else:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
 
                                     break
                                 if offset_3 == -1:
@@ -19184,7 +19287,7 @@ def _build(unicodedata):
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 offset_2 = offset_3
-                                column_1 = column_2
+                                column_2 = column_3
                                 indent_column_1 = indent_column_2
                                 partial_tab_offset_1 = partial_tab_offset_2
                                 partial_tab_width_1 = partial_tab_width_2
@@ -19196,9 +19299,10 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_0 = self.Node('raw', offset_1, offset_2, children_2, None)
+                        value_0 = self.Node('raw', offset_1, offset_2, children_2, column_1, column_2, None)
                         children_1.append(value_0)
                         offset_1 = offset_2
+                        column_1 = column_2
 
                         count_0 = 0
                         while True:
@@ -19216,7 +19320,7 @@ def _build(unicodedata):
                                         codepoint = buf[offset_3]
                                         if codepoint in '\n':
                                             offset_3 +=1
-                                            column_2 = 0
+                                            column_3 = 0
                                             indent_column_2 = (0, None)
                                         else:
                                             offset_3 = -1
@@ -19229,9 +19333,10 @@ def _build(unicodedata):
                                 if offset_3 == -1:
                                     offset_2 = -1
                                     break
-                                value_1 = self.Node('raw', offset_2, offset_3, children_3, None)
+                                value_1 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                                 children_2.append(value_1)
                                 offset_2 = offset_3
+                                column_2 = column_3
 
                                 if not (column_2 == indent_column_2[0] == 0):
                                     offset_2 = -1
@@ -19267,7 +19372,7 @@ def _build(unicodedata):
                                     count_1 = 0
                                     while True:
                                         offset_4 = offset_3
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
@@ -19276,13 +19381,13 @@ def _build(unicodedata):
                                             while True: # start reject
                                                 children_5 = []
                                                 offset_5 = offset_4 + 0
-                                                column_4 = column_3
+                                                column_5 = column_4
                                                 indent_column_4 = indent_column_3
                                                 partial_tab_offset_4 = partial_tab_offset_3
                                                 partial_tab_width_4 = partial_tab_width_3
                                                 if buf[offset_5:offset_5+2] == '?>':
                                                     offset_5 += 2
-                                                    column_4 += 2
+                                                    column_5 += 2
                                                 else:
                                                     offset_5 = -1
                                                     break
@@ -19303,7 +19408,7 @@ def _build(unicodedata):
                                                 break
                                             else:
                                                 offset_4 += 1
-                                                column_3 += 1
+                                                column_4 += 1
 
                                             break
                                         if offset_4 == -1:
@@ -19312,7 +19417,7 @@ def _build(unicodedata):
                                         if children_4 is not None and children_4 is not None:
                                             children_3.extend(children_4)
                                         offset_3 = offset_4
-                                        column_2 = column_3
+                                        column_3 = column_4
                                         indent_column_2 = indent_column_3
                                         partial_tab_offset_2 = partial_tab_offset_3
                                         partial_tab_width_2 = partial_tab_width_3
@@ -19324,9 +19429,10 @@ def _build(unicodedata):
                                 if offset_3 == -1:
                                     offset_2 = -1
                                     break
-                                value_2 = self.Node('raw', offset_2, offset_3, children_3, None)
+                                value_2 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                                 children_2.append(value_2)
                                 offset_2 = offset_3
+                                column_2 = column_3
 
                                 break
                             if offset_2 == -1:
@@ -19348,7 +19454,7 @@ def _build(unicodedata):
                         while True: # start capture
                             if buf[offset_2:offset_2+2] == '?>':
                                 offset_2 += 2
-                                column_1 += 2
+                                column_2 += 2
                             else:
                                 offset_2 = -1
                                 break
@@ -19357,9 +19463,10 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_3 = self.Node('raw', offset_1, offset_2, children_2, None)
+                        value_3 = self.Node('raw', offset_1, offset_2, children_2, column_1, column_2, None)
                         children_1.append(value_3)
                         offset_1 = offset_2
+                        column_1 = column_2
 
 
                         break
@@ -19385,7 +19492,7 @@ def _build(unicodedata):
                         while True: # start capture
                             if buf[offset_2:offset_2+4] == '<!--':
                                 offset_2 += 4
-                                column_1 += 4
+                                column_2 += 4
                             else:
                                 offset_2 = -1
                                 break
@@ -19393,7 +19500,7 @@ def _build(unicodedata):
                             count_0 = 0
                             while True:
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -19402,22 +19509,22 @@ def _build(unicodedata):
                                     while True: # start reject
                                         children_4 = []
                                         offset_4 = offset_3 + 0
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
                                         if buf[offset_4:offset_4+2] == '--':
                                             offset_4 += 2
-                                            column_3 += 2
+                                            column_4 += 2
                                         elif buf[offset_4:offset_4+2] == '->':
                                             offset_4 += 2
-                                            column_3 += 2
+                                            column_4 += 2
                                         elif buf[offset_4:offset_4+1] == '>':
                                             offset_4 += 1
-                                            column_3 += 1
+                                            column_4 += 1
                                         elif buf[offset_4:offset_4+3] == '---':
                                             offset_4 += 3
-                                            column_3 += 3
+                                            column_4 += 3
                                         else:
                                             offset_4 = -1
                                             break
@@ -19438,7 +19545,7 @@ def _build(unicodedata):
                                         break
                                     else:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
 
                                     break
                                 if offset_3 == -1:
@@ -19447,7 +19554,7 @@ def _build(unicodedata):
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 offset_2 = offset_3
-                                column_1 = column_2
+                                column_2 = column_3
                                 indent_column_1 = indent_column_2
                                 partial_tab_offset_1 = partial_tab_offset_2
                                 partial_tab_width_1 = partial_tab_width_2
@@ -19459,9 +19566,10 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_4 = self.Node('raw', offset_1, offset_2, children_2, None)
+                        value_4 = self.Node('raw', offset_1, offset_2, children_2, column_1, column_2, None)
                         children_1.append(value_4)
                         offset_1 = offset_2
+                        column_1 = column_2
 
                         count_0 = 0
                         while True:
@@ -19479,7 +19587,7 @@ def _build(unicodedata):
                                         codepoint = buf[offset_3]
                                         if codepoint in '\n':
                                             offset_3 +=1
-                                            column_2 = 0
+                                            column_3 = 0
                                             indent_column_2 = (0, None)
                                         else:
                                             offset_3 = -1
@@ -19492,9 +19600,10 @@ def _build(unicodedata):
                                 if offset_3 == -1:
                                     offset_2 = -1
                                     break
-                                value_5 = self.Node('raw', offset_2, offset_3, children_3, None)
+                                value_5 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                                 children_2.append(value_5)
                                 offset_2 = offset_3
+                                column_2 = column_3
 
                                 if not (column_2 == indent_column_2[0] == 0):
                                     offset_2 = -1
@@ -19530,7 +19639,7 @@ def _build(unicodedata):
                                     count_1 = 0
                                     while True:
                                         offset_4 = offset_3
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
@@ -19539,22 +19648,22 @@ def _build(unicodedata):
                                             while True: # start reject
                                                 children_5 = []
                                                 offset_5 = offset_4 + 0
-                                                column_4 = column_3
+                                                column_5 = column_4
                                                 indent_column_4 = indent_column_3
                                                 partial_tab_offset_4 = partial_tab_offset_3
                                                 partial_tab_width_4 = partial_tab_width_3
                                                 if buf[offset_5:offset_5+2] == '--':
                                                     offset_5 += 2
-                                                    column_4 += 2
+                                                    column_5 += 2
                                                 elif buf[offset_5:offset_5+2] == '->':
                                                     offset_5 += 2
-                                                    column_4 += 2
+                                                    column_5 += 2
                                                 elif buf[offset_5:offset_5+1] == '>':
                                                     offset_5 += 1
-                                                    column_4 += 1
+                                                    column_5 += 1
                                                 elif buf[offset_5:offset_5+3] == '---':
                                                     offset_5 += 3
-                                                    column_4 += 3
+                                                    column_5 += 3
                                                 else:
                                                     offset_5 = -1
                                                     break
@@ -19575,7 +19684,7 @@ def _build(unicodedata):
                                                 break
                                             else:
                                                 offset_4 += 1
-                                                column_3 += 1
+                                                column_4 += 1
 
                                             break
                                         if offset_4 == -1:
@@ -19584,7 +19693,7 @@ def _build(unicodedata):
                                         if children_4 is not None and children_4 is not None:
                                             children_3.extend(children_4)
                                         offset_3 = offset_4
-                                        column_2 = column_3
+                                        column_3 = column_4
                                         indent_column_2 = indent_column_3
                                         partial_tab_offset_2 = partial_tab_offset_3
                                         partial_tab_width_2 = partial_tab_width_3
@@ -19596,9 +19705,10 @@ def _build(unicodedata):
                                 if offset_3 == -1:
                                     offset_2 = -1
                                     break
-                                value_6 = self.Node('raw', offset_2, offset_3, children_3, None)
+                                value_6 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                                 children_2.append(value_6)
                                 offset_2 = offset_3
+                                column_2 = column_3
 
                                 break
                             if offset_2 == -1:
@@ -19620,7 +19730,7 @@ def _build(unicodedata):
                         while True: # start capture
                             if buf[offset_2:offset_2+3] == '-->':
                                 offset_2 += 3
-                                column_1 += 3
+                                column_2 += 3
                             else:
                                 offset_2 = -1
                                 break
@@ -19629,9 +19739,10 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_7 = self.Node('raw', offset_1, offset_2, children_2, None)
+                        value_7 = self.Node('raw', offset_1, offset_2, children_2, column_1, column_2, None)
                         children_1.append(value_7)
                         offset_1 = offset_2
+                        column_1 = column_2
 
 
                         break
@@ -19657,7 +19768,7 @@ def _build(unicodedata):
                         while True: # start capture
                             if buf[offset_2:offset_2+2] == '<!':
                                 offset_2 += 2
-                                column_1 += 2
+                                column_2 += 2
                             else:
                                 offset_2 = -1
                                 break
@@ -19670,7 +19781,7 @@ def _build(unicodedata):
 
                             if 65 <= codepoint <= 90:
                                 offset_2 += 1
-                                column_1 += 1
+                                column_2 += 1
                             else:
                                 offset_2 = -1
                                 break
@@ -19678,7 +19789,7 @@ def _build(unicodedata):
                             count_0 = 0
                             while True:
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -19698,7 +19809,7 @@ def _build(unicodedata):
                                         break
                                     else:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
 
                                     break
                                 if offset_3 == -1:
@@ -19707,7 +19818,7 @@ def _build(unicodedata):
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 offset_2 = offset_3
-                                column_1 = column_2
+                                column_2 = column_3
                                 indent_column_1 = indent_column_2
                                 partial_tab_offset_1 = partial_tab_offset_2
                                 partial_tab_width_1 = partial_tab_width_2
@@ -19719,9 +19830,10 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_8 = self.Node('raw', offset_1, offset_2, children_2, None)
+                        value_8 = self.Node('raw', offset_1, offset_2, children_2, column_1, column_2, None)
                         children_1.append(value_8)
                         offset_1 = offset_2
+                        column_1 = column_2
 
                         count_0 = 0
                         while True:
@@ -19739,7 +19851,7 @@ def _build(unicodedata):
                                         codepoint = buf[offset_3]
                                         if codepoint in '\n':
                                             offset_3 +=1
-                                            column_2 = 0
+                                            column_3 = 0
                                             indent_column_2 = (0, None)
                                         else:
                                             offset_3 = -1
@@ -19752,9 +19864,10 @@ def _build(unicodedata):
                                 if offset_3 == -1:
                                     offset_2 = -1
                                     break
-                                value_9 = self.Node('raw', offset_2, offset_3, children_3, None)
+                                value_9 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                                 children_2.append(value_9)
                                 offset_2 = offset_3
+                                column_2 = column_3
 
                                 if not (column_2 == indent_column_2[0] == 0):
                                     offset_2 = -1
@@ -19790,7 +19903,7 @@ def _build(unicodedata):
                                     count_1 = 0
                                     while True:
                                         offset_4 = offset_3
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
@@ -19810,7 +19923,7 @@ def _build(unicodedata):
                                                 break
                                             else:
                                                 offset_4 += 1
-                                                column_3 += 1
+                                                column_4 += 1
 
                                             break
                                         if offset_4 == -1:
@@ -19819,7 +19932,7 @@ def _build(unicodedata):
                                         if children_4 is not None and children_4 is not None:
                                             children_3.extend(children_4)
                                         offset_3 = offset_4
-                                        column_2 = column_3
+                                        column_3 = column_4
                                         indent_column_2 = indent_column_3
                                         partial_tab_offset_2 = partial_tab_offset_3
                                         partial_tab_width_2 = partial_tab_width_3
@@ -19831,9 +19944,10 @@ def _build(unicodedata):
                                 if offset_3 == -1:
                                     offset_2 = -1
                                     break
-                                value_10 = self.Node('raw', offset_2, offset_3, children_3, None)
+                                value_10 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                                 children_2.append(value_10)
                                 offset_2 = offset_3
+                                column_2 = column_3
 
                                 break
                             if offset_2 == -1:
@@ -19855,7 +19969,7 @@ def _build(unicodedata):
                         while True: # start capture
                             if buf[offset_2:offset_2+1] == '>':
                                 offset_2 += 1
-                                column_1 += 1
+                                column_2 += 1
                             else:
                                 offset_2 = -1
                                 break
@@ -19864,9 +19978,10 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_11 = self.Node('raw', offset_1, offset_2, children_2, None)
+                        value_11 = self.Node('raw', offset_1, offset_2, children_2, column_1, column_2, None)
                         children_1.append(value_11)
                         offset_1 = offset_2
+                        column_1 = column_2
 
 
                         break
@@ -19892,7 +20007,7 @@ def _build(unicodedata):
                         while True: # start capture
                             if buf[offset_2:offset_2+9] == '<![CDATA[':
                                 offset_2 += 9
-                                column_1 += 9
+                                column_2 += 9
                             else:
                                 offset_2 = -1
                                 break
@@ -19900,7 +20015,7 @@ def _build(unicodedata):
                             count_0 = 0
                             while True:
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -19909,13 +20024,13 @@ def _build(unicodedata):
                                     while True: # start reject
                                         children_4 = []
                                         offset_4 = offset_3 + 0
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
                                         if buf[offset_4:offset_4+3] == ']]>':
                                             offset_4 += 3
-                                            column_3 += 3
+                                            column_4 += 3
                                         else:
                                             offset_4 = -1
                                             break
@@ -19936,7 +20051,7 @@ def _build(unicodedata):
                                         break
                                     else:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
 
                                     break
                                 if offset_3 == -1:
@@ -19945,7 +20060,7 @@ def _build(unicodedata):
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 offset_2 = offset_3
-                                column_1 = column_2
+                                column_2 = column_3
                                 indent_column_1 = indent_column_2
                                 partial_tab_offset_1 = partial_tab_offset_2
                                 partial_tab_width_1 = partial_tab_width_2
@@ -19957,9 +20072,10 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_12 = self.Node('raw', offset_1, offset_2, children_2, None)
+                        value_12 = self.Node('raw', offset_1, offset_2, children_2, column_1, column_2, None)
                         children_1.append(value_12)
                         offset_1 = offset_2
+                        column_1 = column_2
 
                         count_0 = 0
                         while True:
@@ -19977,7 +20093,7 @@ def _build(unicodedata):
                                         codepoint = buf[offset_3]
                                         if codepoint in '\n':
                                             offset_3 +=1
-                                            column_2 = 0
+                                            column_3 = 0
                                             indent_column_2 = (0, None)
                                         else:
                                             offset_3 = -1
@@ -19990,9 +20106,10 @@ def _build(unicodedata):
                                 if offset_3 == -1:
                                     offset_2 = -1
                                     break
-                                value_13 = self.Node('raw', offset_2, offset_3, children_3, None)
+                                value_13 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                                 children_2.append(value_13)
                                 offset_2 = offset_3
+                                column_2 = column_3
 
                                 if not (column_2 == indent_column_2[0] == 0):
                                     offset_2 = -1
@@ -20028,7 +20145,7 @@ def _build(unicodedata):
                                     count_1 = 0
                                     while True:
                                         offset_4 = offset_3
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
@@ -20037,13 +20154,13 @@ def _build(unicodedata):
                                             while True: # start reject
                                                 children_5 = []
                                                 offset_5 = offset_4 + 0
-                                                column_4 = column_3
+                                                column_5 = column_4
                                                 indent_column_4 = indent_column_3
                                                 partial_tab_offset_4 = partial_tab_offset_3
                                                 partial_tab_width_4 = partial_tab_width_3
                                                 if buf[offset_5:offset_5+3] == ']]>':
                                                     offset_5 += 3
-                                                    column_4 += 3
+                                                    column_5 += 3
                                                 else:
                                                     offset_5 = -1
                                                     break
@@ -20064,7 +20181,7 @@ def _build(unicodedata):
                                                 break
                                             else:
                                                 offset_4 += 1
-                                                column_3 += 1
+                                                column_4 += 1
 
                                             break
                                         if offset_4 == -1:
@@ -20073,7 +20190,7 @@ def _build(unicodedata):
                                         if children_4 is not None and children_4 is not None:
                                             children_3.extend(children_4)
                                         offset_3 = offset_4
-                                        column_2 = column_3
+                                        column_3 = column_4
                                         indent_column_2 = indent_column_3
                                         partial_tab_offset_2 = partial_tab_offset_3
                                         partial_tab_width_2 = partial_tab_width_3
@@ -20085,9 +20202,10 @@ def _build(unicodedata):
                                 if offset_3 == -1:
                                     offset_2 = -1
                                     break
-                                value_14 = self.Node('raw', offset_2, offset_3, children_3, None)
+                                value_14 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                                 children_2.append(value_14)
                                 offset_2 = offset_3
+                                column_2 = column_3
 
                                 break
                             if offset_2 == -1:
@@ -20109,7 +20227,7 @@ def _build(unicodedata):
                         while True: # start capture
                             if buf[offset_2:offset_2+3] == ']]>':
                                 offset_2 += 3
-                                column_1 += 3
+                                column_2 += 3
                             else:
                                 offset_2 = -1
                                 break
@@ -20118,9 +20236,10 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_15 = self.Node('raw', offset_1, offset_2, children_2, None)
+                        value_15 = self.Node('raw', offset_1, offset_2, children_2, column_1, column_2, None)
                         children_1.append(value_15)
                         offset_1 = offset_2
+                        column_1 = column_2
 
 
                         break
@@ -20146,7 +20265,7 @@ def _build(unicodedata):
                         while True: # start capture
                             if buf[offset_2:offset_2+1] == '<':
                                 offset_2 += 1
-                                column_1 += 1
+                                column_2 += 1
                             else:
                                 offset_2 = -1
                                 break
@@ -20159,10 +20278,10 @@ def _build(unicodedata):
 
                             if 97 <= codepoint <= 122:
                                 offset_2 += 1
-                                column_1 += 1
+                                column_2 += 1
                             elif 65 <= codepoint <= 90:
                                 offset_2 += 1
-                                column_1 += 1
+                                column_2 += 1
                             else:
                                 offset_2 = -1
                                 break
@@ -20170,7 +20289,7 @@ def _build(unicodedata):
                             count_0 = 0
                             while True:
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -20184,16 +20303,16 @@ def _build(unicodedata):
 
                                     if 97 <= codepoint <= 122:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif 65 <= codepoint <= 90:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif codepoint == 45:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif 48 <= codepoint <= 57:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     else:
                                         offset_3 = -1
                                         break
@@ -20205,7 +20324,7 @@ def _build(unicodedata):
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 offset_2 = offset_3
-                                column_1 = column_2
+                                column_2 = column_3
                                 indent_column_1 = indent_column_2
                                 partial_tab_offset_1 = partial_tab_offset_2
                                 partial_tab_width_1 = partial_tab_width_2
@@ -20217,9 +20336,10 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_16 = self.Node('raw', offset_1, offset_2, children_2, None)
+                        value_16 = self.Node('raw', offset_1, offset_2, children_2, column_1, column_2, None)
                         children_1.append(value_16)
                         offset_1 = offset_2
+                        column_1 = column_2
 
                         count_0 = 0
                         while True:
@@ -20249,13 +20369,13 @@ def _build(unicodedata):
                                                         if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                             width = partial_tab_width_3
                                                         else:
-                                                            width  = (self.tabstop-(column_3%self.tabstop))
+                                                            width  = (self.tabstop-(column_4%self.tabstop))
                                                         count_1 += width
-                                                        column_3 += width
+                                                        column_4 += width
                                                         offset_4 += 1
                                                     else:
                                                         count_1 += 1
-                                                        column_3 += 1
+                                                        column_4 += 1
                                                         offset_4 += 1
                                                 else:
                                                     break
@@ -20267,9 +20387,10 @@ def _build(unicodedata):
                                         if offset_4 == -1:
                                             offset_3 = -1
                                             break
-                                        value_17 = self.Node('raw', offset_3, offset_4, children_4, None)
+                                        value_17 = self.Node('raw', offset_3, offset_4, children_4, column_3, column_4, None)
                                         children_3.append(value_17)
                                         offset_3 = offset_4
+                                        column_3 = column_4
 
 
                                         break
@@ -20310,13 +20431,13 @@ def _build(unicodedata):
                                                                 if offset_5 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                                     width = partial_tab_width_4
                                                                 else:
-                                                                    width  = (self.tabstop-(column_4%self.tabstop))
+                                                                    width  = (self.tabstop-(column_5%self.tabstop))
                                                                 count_2 += width
-                                                                column_4 += width
+                                                                column_5 += width
                                                                 offset_5 += 1
                                                             else:
                                                                 count_2 += 1
-                                                                column_4 += 1
+                                                                column_5 += 1
                                                                 offset_5 += 1
                                                         else:
                                                             break
@@ -20325,7 +20446,7 @@ def _build(unicodedata):
                                                         codepoint = buf[offset_5]
                                                         if codepoint in '\n':
                                                             offset_5 +=1
-                                                            column_4 = 0
+                                                            column_5 = 0
                                                             indent_column_4 = (0, None)
                                                         else:
                                                             offset_5 = -1
@@ -20338,9 +20459,10 @@ def _build(unicodedata):
                                                 if offset_5 == -1:
                                                     offset_4 = -1
                                                     break
-                                                value_18 = self.Node('raw', offset_4, offset_5, children_5, None)
+                                                value_18 = self.Node('raw', offset_4, offset_5, children_5, column_4, column_5, None)
                                                 children_4.append(value_18)
                                                 offset_4 = offset_5
+                                                column_4 = column_5
 
                                                 if not (column_4 == indent_column_4[0] == 0):
                                                     offset_4 = -1
@@ -20381,13 +20503,13 @@ def _build(unicodedata):
                                                                 if offset_5 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                                     width = partial_tab_width_4
                                                                 else:
-                                                                    width  = (self.tabstop-(column_4%self.tabstop))
+                                                                    width  = (self.tabstop-(column_5%self.tabstop))
                                                                 count_2 += width
-                                                                column_4 += width
+                                                                column_5 += width
                                                                 offset_5 += 1
                                                             else:
                                                                 count_2 += 1
-                                                                column_4 += 1
+                                                                column_5 += 1
                                                                 offset_5 += 1
                                                         else:
                                                             break
@@ -20396,9 +20518,10 @@ def _build(unicodedata):
                                                 if offset_5 == -1:
                                                     offset_4 = -1
                                                     break
-                                                value_19 = self.Node('raw', offset_4, offset_5, children_5, None)
+                                                value_19 = self.Node('raw', offset_4, offset_5, children_5, column_4, column_5, None)
                                                 children_4.append(value_19)
                                                 offset_4 = offset_5
+                                                column_4 = column_5
 
                                                 break
                                             if offset_4 == -1:
@@ -20446,16 +20569,16 @@ def _build(unicodedata):
 
                                     if 97 <= codepoint <= 122:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif 65 <= codepoint <= 90:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif codepoint == 58:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif codepoint == 95:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     else:
                                         offset_3 = -1
                                         break
@@ -20463,7 +20586,7 @@ def _build(unicodedata):
                                     count_1 = 0
                                     while True:
                                         offset_4 = offset_3
-                                        column_3 = column_2
+                                        column_4 = column_3
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
@@ -20477,22 +20600,22 @@ def _build(unicodedata):
 
                                             if 97 <= codepoint <= 122:
                                                 offset_4 += 1
-                                                column_3 += 1
+                                                column_4 += 1
                                             elif 65 <= codepoint <= 90:
                                                 offset_4 += 1
-                                                column_3 += 1
+                                                column_4 += 1
                                             elif codepoint == 58:
                                                 offset_4 += 1
-                                                column_3 += 1
+                                                column_4 += 1
                                             elif codepoint == 95:
                                                 offset_4 += 1
-                                                column_3 += 1
+                                                column_4 += 1
                                             elif 48 <= codepoint <= 57:
                                                 offset_4 += 1
-                                                column_3 += 1
+                                                column_4 += 1
                                             elif codepoint == 45:
                                                 offset_4 += 1
-                                                column_3 += 1
+                                                column_4 += 1
                                             else:
                                                 offset_4 = -1
                                                 break
@@ -20504,7 +20627,7 @@ def _build(unicodedata):
                                         if children_4 is not None and children_4 is not None:
                                             children_3.extend(children_4)
                                         offset_3 = offset_4
-                                        column_2 = column_3
+                                        column_3 = column_4
                                         indent_column_2 = indent_column_3
                                         partial_tab_offset_2 = partial_tab_offset_3
                                         partial_tab_width_2 = partial_tab_width_3
@@ -20519,9 +20642,10 @@ def _build(unicodedata):
                                 if offset_3 == -1:
                                     offset_2 = -1
                                     break
-                                value_20 = self.Node('raw', offset_2, offset_3, children_3, None)
+                                value_20 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                                 children_2.append(value_20)
                                 offset_2 = offset_3
+                                column_2 = column_3
 
                                 count_1 = 0
                                 while count_1 < 1:
@@ -20543,20 +20667,20 @@ def _build(unicodedata):
                                                         if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                             width = partial_tab_width_3
                                                         else:
-                                                            width  = (self.tabstop-(column_3%self.tabstop))
+                                                            width  = (self.tabstop-(column_4%self.tabstop))
                                                         count_2 += width
-                                                        column_3 += width
+                                                        column_4 += width
                                                         offset_4 += 1
                                                     else:
                                                         count_2 += 1
-                                                        column_3 += 1
+                                                        column_4 += 1
                                                         offset_4 += 1
                                                 else:
                                                     break
 
                                             if buf[offset_4:offset_4+1] == '=':
                                                 offset_4 += 1
-                                                column_3 += 1
+                                                column_4 += 1
                                             else:
                                                 offset_4 = -1
                                                 break
@@ -20565,9 +20689,10 @@ def _build(unicodedata):
                                         if offset_4 == -1:
                                             offset_3 = -1
                                             break
-                                        value_21 = self.Node('raw', offset_3, offset_4, children_4, None)
+                                        value_21 = self.Node('raw', offset_3, offset_4, children_4, column_3, column_4, None)
                                         children_3.append(value_21)
                                         offset_3 = offset_4
+                                        column_3 = column_4
 
                                         while True: # start choice
                                             offset_4 = offset_3
@@ -20588,13 +20713,13 @@ def _build(unicodedata):
                                                                 if offset_5 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                                     width = partial_tab_width_4
                                                                 else:
-                                                                    width  = (self.tabstop-(column_4%self.tabstop))
+                                                                    width  = (self.tabstop-(column_5%self.tabstop))
                                                                 count_2 += width
-                                                                column_4 += width
+                                                                column_5 += width
                                                                 offset_5 += 1
                                                             else:
                                                                 count_2 += 1
-                                                                column_4 += 1
+                                                                column_5 += 1
                                                                 offset_5 += 1
                                                         else:
                                                             break
@@ -20603,9 +20728,10 @@ def _build(unicodedata):
                                                 if offset_5 == -1:
                                                     offset_4 = -1
                                                     break
-                                                value_22 = self.Node('raw', offset_4, offset_5, children_5, None)
+                                                value_22 = self.Node('raw', offset_4, offset_5, children_5, column_4, column_5, None)
                                                 children_4.append(value_22)
                                                 offset_4 = offset_5
+                                                column_4 = column_5
 
 
                                                 break
@@ -20646,13 +20772,13 @@ def _build(unicodedata):
                                                                         if offset_6 == partial_tab_offset_5 and partial_tab_width_5 > 0:
                                                                             width = partial_tab_width_5
                                                                         else:
-                                                                            width  = (self.tabstop-(column_5%self.tabstop))
+                                                                            width  = (self.tabstop-(column_6%self.tabstop))
                                                                         count_3 += width
-                                                                        column_5 += width
+                                                                        column_6 += width
                                                                         offset_6 += 1
                                                                     else:
                                                                         count_3 += 1
-                                                                        column_5 += 1
+                                                                        column_6 += 1
                                                                         offset_6 += 1
                                                                 else:
                                                                     break
@@ -20661,7 +20787,7 @@ def _build(unicodedata):
                                                                 codepoint = buf[offset_6]
                                                                 if codepoint in '\n':
                                                                     offset_6 +=1
-                                                                    column_5 = 0
+                                                                    column_6 = 0
                                                                     indent_column_5 = (0, None)
                                                                 else:
                                                                     offset_6 = -1
@@ -20674,9 +20800,10 @@ def _build(unicodedata):
                                                         if offset_6 == -1:
                                                             offset_5 = -1
                                                             break
-                                                        value_23 = self.Node('raw', offset_5, offset_6, children_6, None)
+                                                        value_23 = self.Node('raw', offset_5, offset_6, children_6, column_5, column_6, None)
                                                         children_5.append(value_23)
                                                         offset_5 = offset_6
+                                                        column_5 = column_6
 
                                                         if not (column_5 == indent_column_5[0] == 0):
                                                             offset_5 = -1
@@ -20717,13 +20844,13 @@ def _build(unicodedata):
                                                                         if offset_6 == partial_tab_offset_5 and partial_tab_width_5 > 0:
                                                                             width = partial_tab_width_5
                                                                         else:
-                                                                            width  = (self.tabstop-(column_5%self.tabstop))
+                                                                            width  = (self.tabstop-(column_6%self.tabstop))
                                                                         count_3 += width
-                                                                        column_5 += width
+                                                                        column_6 += width
                                                                         offset_6 += 1
                                                                     else:
                                                                         count_3 += 1
-                                                                        column_5 += 1
+                                                                        column_6 += 1
                                                                         offset_6 += 1
                                                                 else:
                                                                     break
@@ -20732,9 +20859,10 @@ def _build(unicodedata):
                                                         if offset_6 == -1:
                                                             offset_5 = -1
                                                             break
-                                                        value_24 = self.Node('raw', offset_5, offset_6, children_6, None)
+                                                        value_24 = self.Node('raw', offset_5, offset_6, children_6, column_5, column_6, None)
                                                         children_5.append(value_24)
                                                         offset_5 = offset_6
+                                                        column_5 = column_6
 
                                                         break
                                                     if offset_5 == -1:
@@ -20782,7 +20910,7 @@ def _build(unicodedata):
                                                     count_2 = 0
                                                     while True:
                                                         offset_6 = offset_5
-                                                        column_5 = column_4
+                                                        column_6 = column_5
                                                         indent_column_5 = indent_column_4
                                                         partial_tab_offset_5 = partial_tab_offset_4
                                                         partial_tab_width_5 = partial_tab_width_4
@@ -20826,7 +20954,7 @@ def _build(unicodedata):
                                                                 break
                                                             else:
                                                                 offset_6 += 1
-                                                                column_5 += 1
+                                                                column_6 += 1
 
                                                             break
                                                         if offset_6 == -1:
@@ -20835,7 +20963,7 @@ def _build(unicodedata):
                                                         if children_6 is not None and children_6 is not None:
                                                             children_5.extend(children_6)
                                                         offset_5 = offset_6
-                                                        column_4 = column_5
+                                                        column_5 = column_6
                                                         indent_column_4 = indent_column_5
                                                         partial_tab_offset_4 = partial_tab_offset_5
                                                         partial_tab_width_4 = partial_tab_width_5
@@ -20850,9 +20978,10 @@ def _build(unicodedata):
                                                 if offset_5 == -1:
                                                     offset_4 = -1
                                                     break
-                                                value_25 = self.Node('raw', offset_4, offset_5, children_5, None)
+                                                value_25 = self.Node('raw', offset_4, offset_5, children_5, column_4, column_5, None)
                                                 children_4.append(value_25)
                                                 offset_4 = offset_5
+                                                column_4 = column_5
 
 
                                                 break
@@ -20878,7 +21007,7 @@ def _build(unicodedata):
                                                 while True: # start capture
                                                     if buf[offset_5:offset_5+1] == '"':
                                                         offset_5 += 1
-                                                        column_4 += 1
+                                                        column_5 += 1
                                                     else:
                                                         offset_5 = -1
                                                         break
@@ -20886,7 +21015,7 @@ def _build(unicodedata):
                                                     count_2 = 0
                                                     while True:
                                                         offset_6 = offset_5
-                                                        column_5 = column_4
+                                                        column_6 = column_5
                                                         indent_column_5 = indent_column_4
                                                         partial_tab_offset_5 = partial_tab_offset_4
                                                         partial_tab_width_5 = partial_tab_width_4
@@ -20906,7 +21035,7 @@ def _build(unicodedata):
                                                                 break
                                                             else:
                                                                 offset_6 += 1
-                                                                column_5 += 1
+                                                                column_6 += 1
 
                                                             break
                                                         if offset_6 == -1:
@@ -20915,7 +21044,7 @@ def _build(unicodedata):
                                                         if children_6 is not None and children_6 is not None:
                                                             children_5.extend(children_6)
                                                         offset_5 = offset_6
-                                                        column_4 = column_5
+                                                        column_5 = column_6
                                                         indent_column_4 = indent_column_5
                                                         partial_tab_offset_4 = partial_tab_offset_5
                                                         partial_tab_width_4 = partial_tab_width_5
@@ -20927,9 +21056,10 @@ def _build(unicodedata):
                                                 if offset_5 == -1:
                                                     offset_4 = -1
                                                     break
-                                                value_26 = self.Node('raw', offset_4, offset_5, children_5, None)
+                                                value_26 = self.Node('raw', offset_4, offset_5, children_5, column_4, column_5, None)
                                                 children_4.append(value_26)
                                                 offset_4 = offset_5
+                                                column_4 = column_5
 
                                                 count_2 = 0
                                                 while True:
@@ -20947,7 +21077,7 @@ def _build(unicodedata):
                                                                 codepoint = buf[offset_6]
                                                                 if codepoint in '\n':
                                                                     offset_6 +=1
-                                                                    column_5 = 0
+                                                                    column_6 = 0
                                                                     indent_column_5 = (0, None)
                                                                 else:
                                                                     offset_6 = -1
@@ -20960,9 +21090,10 @@ def _build(unicodedata):
                                                         if offset_6 == -1:
                                                             offset_5 = -1
                                                             break
-                                                        value_27 = self.Node('raw', offset_5, offset_6, children_6, None)
+                                                        value_27 = self.Node('raw', offset_5, offset_6, children_6, column_5, column_6, None)
                                                         children_5.append(value_27)
                                                         offset_5 = offset_6
+                                                        column_5 = column_6
 
                                                         if not (column_5 == indent_column_5[0] == 0):
                                                             offset_5 = -1
@@ -20998,7 +21129,7 @@ def _build(unicodedata):
                                                             count_3 = 0
                                                             while True:
                                                                 offset_7 = offset_6
-                                                                column_6 = column_5
+                                                                column_7 = column_6
                                                                 indent_column_6 = indent_column_5
                                                                 partial_tab_offset_6 = partial_tab_offset_5
                                                                 partial_tab_width_6 = partial_tab_width_5
@@ -21018,7 +21149,7 @@ def _build(unicodedata):
                                                                         break
                                                                     else:
                                                                         offset_7 += 1
-                                                                        column_6 += 1
+                                                                        column_7 += 1
 
                                                                     break
                                                                 if offset_7 == -1:
@@ -21027,7 +21158,7 @@ def _build(unicodedata):
                                                                 if children_7 is not None and children_7 is not None:
                                                                     children_6.extend(children_7)
                                                                 offset_6 = offset_7
-                                                                column_5 = column_6
+                                                                column_6 = column_7
                                                                 indent_column_5 = indent_column_6
                                                                 partial_tab_offset_5 = partial_tab_offset_6
                                                                 partial_tab_width_5 = partial_tab_width_6
@@ -21039,9 +21170,10 @@ def _build(unicodedata):
                                                         if offset_6 == -1:
                                                             offset_5 = -1
                                                             break
-                                                        value_28 = self.Node('raw', offset_5, offset_6, children_6, None)
+                                                        value_28 = self.Node('raw', offset_5, offset_6, children_6, column_5, column_6, None)
                                                         children_5.append(value_28)
                                                         offset_5 = offset_6
+                                                        column_5 = column_6
 
                                                         break
                                                     if offset_5 == -1:
@@ -21063,7 +21195,7 @@ def _build(unicodedata):
                                                 while True: # start capture
                                                     if buf[offset_5:offset_5+1] == '"':
                                                         offset_5 += 1
-                                                        column_4 += 1
+                                                        column_5 += 1
                                                     else:
                                                         offset_5 = -1
                                                         break
@@ -21072,9 +21204,10 @@ def _build(unicodedata):
                                                 if offset_5 == -1:
                                                     offset_4 = -1
                                                     break
-                                                value_29 = self.Node('raw', offset_4, offset_5, children_5, None)
+                                                value_29 = self.Node('raw', offset_4, offset_5, children_5, column_4, column_5, None)
                                                 children_4.append(value_29)
                                                 offset_4 = offset_5
+                                                column_4 = column_5
 
 
                                                 break
@@ -21100,7 +21233,7 @@ def _build(unicodedata):
                                                 while True: # start capture
                                                     if buf[offset_5:offset_5+1] == "'":
                                                         offset_5 += 1
-                                                        column_4 += 1
+                                                        column_5 += 1
                                                     else:
                                                         offset_5 = -1
                                                         break
@@ -21108,7 +21241,7 @@ def _build(unicodedata):
                                                     count_2 = 0
                                                     while True:
                                                         offset_6 = offset_5
-                                                        column_5 = column_4
+                                                        column_6 = column_5
                                                         indent_column_5 = indent_column_4
                                                         partial_tab_offset_5 = partial_tab_offset_4
                                                         partial_tab_width_5 = partial_tab_width_4
@@ -21128,7 +21261,7 @@ def _build(unicodedata):
                                                                 break
                                                             else:
                                                                 offset_6 += 1
-                                                                column_5 += 1
+                                                                column_6 += 1
 
                                                             break
                                                         if offset_6 == -1:
@@ -21137,7 +21270,7 @@ def _build(unicodedata):
                                                         if children_6 is not None and children_6 is not None:
                                                             children_5.extend(children_6)
                                                         offset_5 = offset_6
-                                                        column_4 = column_5
+                                                        column_5 = column_6
                                                         indent_column_4 = indent_column_5
                                                         partial_tab_offset_4 = partial_tab_offset_5
                                                         partial_tab_width_4 = partial_tab_width_5
@@ -21149,9 +21282,10 @@ def _build(unicodedata):
                                                 if offset_5 == -1:
                                                     offset_4 = -1
                                                     break
-                                                value_30 = self.Node('raw', offset_4, offset_5, children_5, None)
+                                                value_30 = self.Node('raw', offset_4, offset_5, children_5, column_4, column_5, None)
                                                 children_4.append(value_30)
                                                 offset_4 = offset_5
+                                                column_4 = column_5
 
                                                 count_2 = 0
                                                 while True:
@@ -21169,7 +21303,7 @@ def _build(unicodedata):
                                                                 codepoint = buf[offset_6]
                                                                 if codepoint in '\n':
                                                                     offset_6 +=1
-                                                                    column_5 = 0
+                                                                    column_6 = 0
                                                                     indent_column_5 = (0, None)
                                                                 else:
                                                                     offset_6 = -1
@@ -21182,9 +21316,10 @@ def _build(unicodedata):
                                                         if offset_6 == -1:
                                                             offset_5 = -1
                                                             break
-                                                        value_31 = self.Node('raw', offset_5, offset_6, children_6, None)
+                                                        value_31 = self.Node('raw', offset_5, offset_6, children_6, column_5, column_6, None)
                                                         children_5.append(value_31)
                                                         offset_5 = offset_6
+                                                        column_5 = column_6
 
                                                         if not (column_5 == indent_column_5[0] == 0):
                                                             offset_5 = -1
@@ -21220,7 +21355,7 @@ def _build(unicodedata):
                                                             count_3 = 0
                                                             while True:
                                                                 offset_7 = offset_6
-                                                                column_6 = column_5
+                                                                column_7 = column_6
                                                                 indent_column_6 = indent_column_5
                                                                 partial_tab_offset_6 = partial_tab_offset_5
                                                                 partial_tab_width_6 = partial_tab_width_5
@@ -21240,7 +21375,7 @@ def _build(unicodedata):
                                                                         break
                                                                     else:
                                                                         offset_7 += 1
-                                                                        column_6 += 1
+                                                                        column_7 += 1
 
                                                                     break
                                                                 if offset_7 == -1:
@@ -21249,7 +21384,7 @@ def _build(unicodedata):
                                                                 if children_7 is not None and children_7 is not None:
                                                                     children_6.extend(children_7)
                                                                 offset_6 = offset_7
-                                                                column_5 = column_6
+                                                                column_6 = column_7
                                                                 indent_column_5 = indent_column_6
                                                                 partial_tab_offset_5 = partial_tab_offset_6
                                                                 partial_tab_width_5 = partial_tab_width_6
@@ -21261,9 +21396,10 @@ def _build(unicodedata):
                                                         if offset_6 == -1:
                                                             offset_5 = -1
                                                             break
-                                                        value_32 = self.Node('raw', offset_5, offset_6, children_6, None)
+                                                        value_32 = self.Node('raw', offset_5, offset_6, children_6, column_5, column_6, None)
                                                         children_5.append(value_32)
                                                         offset_5 = offset_6
+                                                        column_5 = column_6
 
                                                         break
                                                     if offset_5 == -1:
@@ -21285,7 +21421,7 @@ def _build(unicodedata):
                                                 while True: # start capture
                                                     if buf[offset_5:offset_5+1] == "'":
                                                         offset_5 += 1
-                                                        column_4 += 1
+                                                        column_5 += 1
                                                     else:
                                                         offset_5 = -1
                                                         break
@@ -21294,9 +21430,10 @@ def _build(unicodedata):
                                                 if offset_5 == -1:
                                                     offset_4 = -1
                                                     break
-                                                value_33 = self.Node('raw', offset_4, offset_5, children_5, None)
+                                                value_33 = self.Node('raw', offset_4, offset_5, children_5, column_4, column_5, None)
                                                 children_4.append(value_33)
                                                 offset_4 = offset_5
+                                                column_4 = column_5
 
 
                                                 break
@@ -21365,23 +21502,23 @@ def _build(unicodedata):
                                                 if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
-                                                    width  = (self.tabstop-(column_2%self.tabstop))
+                                                    width  = (self.tabstop-(column_3%self.tabstop))
                                                 count_0 += width
-                                                column_2 += width
+                                                column_3 += width
                                                 offset_3 += 1
                                             else:
                                                 count_0 += 1
-                                                column_2 += 1
+                                                column_3 += 1
                                                 offset_3 += 1
                                         else:
                                             break
 
                                     if buf[offset_3:offset_3+2] == '/>':
                                         offset_3 += 2
-                                        column_2 += 2
+                                        column_3 += 2
                                     elif buf[offset_3:offset_3+1] == '>':
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     else:
                                         offset_3 = -1
                                         break
@@ -21390,9 +21527,10 @@ def _build(unicodedata):
                                 if offset_3 == -1:
                                     offset_2 = -1
                                     break
-                                value_34 = self.Node('raw', offset_2, offset_3, children_3, None)
+                                value_34 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                                 children_2.append(value_34)
                                 offset_2 = offset_3
+                                column_2 = column_3
 
 
                                 break
@@ -21432,13 +21570,13 @@ def _build(unicodedata):
                                                         if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                             width = partial_tab_width_3
                                                         else:
-                                                            width  = (self.tabstop-(column_3%self.tabstop))
+                                                            width  = (self.tabstop-(column_4%self.tabstop))
                                                         count_0 += width
-                                                        column_3 += width
+                                                        column_4 += width
                                                         offset_4 += 1
                                                     else:
                                                         count_0 += 1
-                                                        column_3 += 1
+                                                        column_4 += 1
                                                         offset_4 += 1
                                                 else:
                                                     break
@@ -21447,9 +21585,10 @@ def _build(unicodedata):
                                         if offset_4 == -1:
                                             offset_3 = -1
                                             break
-                                        value_35 = self.Node('raw', offset_3, offset_4, children_4, None)
+                                        value_35 = self.Node('raw', offset_3, offset_4, children_4, column_3, column_4, None)
                                         children_3.append(value_35)
                                         offset_3 = offset_4
+                                        column_3 = column_4
 
 
                                         break
@@ -21490,13 +21629,13 @@ def _build(unicodedata):
                                                                 if offset_5 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                                     width = partial_tab_width_4
                                                                 else:
-                                                                    width  = (self.tabstop-(column_4%self.tabstop))
+                                                                    width  = (self.tabstop-(column_5%self.tabstop))
                                                                 count_1 += width
-                                                                column_4 += width
+                                                                column_5 += width
                                                                 offset_5 += 1
                                                             else:
                                                                 count_1 += 1
-                                                                column_4 += 1
+                                                                column_5 += 1
                                                                 offset_5 += 1
                                                         else:
                                                             break
@@ -21505,7 +21644,7 @@ def _build(unicodedata):
                                                         codepoint = buf[offset_5]
                                                         if codepoint in '\n':
                                                             offset_5 +=1
-                                                            column_4 = 0
+                                                            column_5 = 0
                                                             indent_column_4 = (0, None)
                                                         else:
                                                             offset_5 = -1
@@ -21518,9 +21657,10 @@ def _build(unicodedata):
                                                 if offset_5 == -1:
                                                     offset_4 = -1
                                                     break
-                                                value_36 = self.Node('raw', offset_4, offset_5, children_5, None)
+                                                value_36 = self.Node('raw', offset_4, offset_5, children_5, column_4, column_5, None)
                                                 children_4.append(value_36)
                                                 offset_4 = offset_5
+                                                column_4 = column_5
 
                                                 if not (column_4 == indent_column_4[0] == 0):
                                                     offset_4 = -1
@@ -21561,13 +21701,13 @@ def _build(unicodedata):
                                                                 if offset_5 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                                     width = partial_tab_width_4
                                                                 else:
-                                                                    width  = (self.tabstop-(column_4%self.tabstop))
+                                                                    width  = (self.tabstop-(column_5%self.tabstop))
                                                                 count_1 += width
-                                                                column_4 += width
+                                                                column_5 += width
                                                                 offset_5 += 1
                                                             else:
                                                                 count_1 += 1
-                                                                column_4 += 1
+                                                                column_5 += 1
                                                                 offset_5 += 1
                                                         else:
                                                             break
@@ -21576,9 +21716,10 @@ def _build(unicodedata):
                                                 if offset_5 == -1:
                                                     offset_4 = -1
                                                     break
-                                                value_37 = self.Node('raw', offset_4, offset_5, children_5, None)
+                                                value_37 = self.Node('raw', offset_4, offset_5, children_5, column_4, column_5, None)
                                                 children_4.append(value_37)
                                                 offset_4 = offset_5
+                                                column_4 = column_5
 
                                                 break
                                             if offset_4 == -1:
@@ -21617,7 +21758,7 @@ def _build(unicodedata):
                                 while True: # start capture
                                     if buf[offset_3:offset_3+2] == '/>':
                                         offset_3 += 2
-                                        column_2 += 2
+                                        column_3 += 2
                                     else:
                                         offset_3 = -1
                                         break
@@ -21626,9 +21767,10 @@ def _build(unicodedata):
                                 if offset_3 == -1:
                                     offset_2 = -1
                                     break
-                                value_38 = self.Node('raw', offset_2, offset_3, children_3, None)
+                                value_38 = self.Node('raw', offset_2, offset_3, children_3, column_2, column_3, None)
                                 children_2.append(value_38)
                                 offset_2 = offset_3
+                                column_2 = column_3
 
 
                                 break
@@ -21671,7 +21813,7 @@ def _build(unicodedata):
                         while True: # start capture
                             if buf[offset_2:offset_2+2] == '</':
                                 offset_2 += 2
-                                column_1 += 2
+                                column_2 += 2
                             else:
                                 offset_2 = -1
                                 break
@@ -21684,10 +21826,10 @@ def _build(unicodedata):
 
                             if 97 <= codepoint <= 122:
                                 offset_2 += 1
-                                column_1 += 1
+                                column_2 += 1
                             elif 65 <= codepoint <= 90:
                                 offset_2 += 1
-                                column_1 += 1
+                                column_2 += 1
                             else:
                                 offset_2 = -1
                                 break
@@ -21695,7 +21837,7 @@ def _build(unicodedata):
                             count_0 = 0
                             while True:
                                 offset_3 = offset_2
-                                column_2 = column_1
+                                column_3 = column_2
                                 indent_column_2 = indent_column_1
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
@@ -21709,16 +21851,16 @@ def _build(unicodedata):
 
                                     if 97 <= codepoint <= 122:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif 65 <= codepoint <= 90:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif codepoint == 45:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     elif 48 <= codepoint <= 57:
                                         offset_3 += 1
-                                        column_2 += 1
+                                        column_3 += 1
                                     else:
                                         offset_3 = -1
                                         break
@@ -21730,7 +21872,7 @@ def _build(unicodedata):
                                 if children_3 is not None and children_3 is not None:
                                     children_2.extend(children_3)
                                 offset_2 = offset_3
-                                column_1 = column_2
+                                column_2 = column_3
                                 indent_column_1 = indent_column_2
                                 partial_tab_offset_1 = partial_tab_offset_2
                                 partial_tab_width_1 = partial_tab_width_2
@@ -21746,20 +21888,20 @@ def _build(unicodedata):
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
-                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                            width  = (self.tabstop-(column_2%self.tabstop))
                                         count_0 += width
-                                        column_1 += width
+                                        column_2 += width
                                         offset_2 += 1
                                     else:
                                         count_0 += 1
-                                        column_1 += 1
+                                        column_2 += 1
                                         offset_2 += 1
                                 else:
                                     break
 
                             if buf[offset_2:offset_2+1] == '>':
                                 offset_2 += 1
-                                column_1 += 1
+                                column_2 += 1
                             else:
                                 offset_2 = -1
                                 break
@@ -21768,9 +21910,10 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_39 = self.Node('raw', offset_1, offset_2, children_2, None)
+                        value_39 = self.Node('raw', offset_1, offset_2, children_2, column_1, column_2, None)
                         children_1.append(value_39)
                         offset_1 = offset_2
+                        column_1 = column_2
 
 
                         break
