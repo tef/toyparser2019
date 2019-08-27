@@ -249,6 +249,8 @@ ACCEPT_IF = 'accept-if'
 REJECT_IF = 'reject-if'
 COUNT = 'count'
 VALUE = 'value'
+VARIABLE = 'variable'
+SET_VAR = 'set-variable'
 SHUNT = 'shunt'
 
 RULE = 'rule'
@@ -528,7 +530,7 @@ class FunctionBuilder:
     def capture_buffer(self, name):
         return self.capture_node(name, nested=False)
 
-    def capture_node(self, name, nested=True):
+    def capture_node(self, name, nested=True, value=None):
         if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         if name is None:
             raise Exception('missing name')
@@ -537,7 +539,7 @@ class FunctionBuilder:
         def _capture():
             rules = self.rules
             self.rules = []
-            c= GrammarNode(CAPTURE, args=dict(name=name, nested=nested), rules=self.rules)
+            c= GrammarNode(CAPTURE, args=dict(name=name, nested=nested, value=value), rules=self.rules)
             yield c.key
             rules.append(c)
             self.rules = rules
@@ -547,6 +549,21 @@ class FunctionBuilder:
     def capture_value(self, value, name="value"):
         if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         node = GrammarNode(VALUE, args=dict(name=name, value=value))
+        self.rules.append(node)
+
+    @contextmanager
+    def variable(self, value):
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
+        rules = self.rules
+        self.rules = []
+        node = GrammarNode(VARIABLE, args=dict(value=value), rules=self.rules)
+        yield node.key
+        rules.append(node)
+        self.rules = rules
+
+    def set_variable(self, var, value):
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
+        node = GrammarNode(SET_VAR, args=dict(var=var, value=value))
         self.rules.append(node)
 
     @contextmanager
@@ -858,9 +875,12 @@ def compile_python(grammar, cython=False):
             value = VarBuilder('value', n=len(values))
             values[rule.key] = value
 
+            captured_value = rule.args['value'] 
+            captured_value = values.get(captured_value, repr(captured_value))
+
             steps.extend((
                 # f"print(len(buf), {offset}, {offset_0}, {children})",
-                f"{value} = {node}({name}, {offset}, {offset_0}, {children_0}, None)",
+                f"{value} = {node}({name}, {offset}, {offset_0}, {children_0}, {captured_value})",
                 f"{children}.append({value})",
             ))
             steps.append(f"{offset} = {offset_0}")
@@ -1047,6 +1067,30 @@ def compile_python(grammar, cython=False):
             steps.append(f"{offset} = {offset_0}")
             steps.append(f"{column} = {column_0}")
 
+        elif rule.kind == SET_VAR:
+            var = rule.args['var']
+            var = values.get(var)
+            value = rule.args['value']
+            value = values.get(value, repr(value))
+
+            steps.append(f"{var} = {value}")
+
+        elif rule.kind == VARIABLE:
+            value = VarBuilder('value', n=len(values))
+            values[rule.key] = value
+            steps.append(f"{value} = {repr(rule.args['value'])}")
+            offset_0 = offset.incr()
+            steps.append(f"{offset_0} = {offset}")
+            if not rule.rules:
+                raise Exception('empty rules')
+            steps.append(f"while True: # start backref")
+            build_subrules(rule.rules, steps.add_indent(), offset_0, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children, count, values)
+            steps.append(f"    break")
+            steps.append(f"if {offset_0} == -1:")
+            steps.append(f"    {offset} = -1")
+            steps.append(f"    break")
+
+            steps.append(f"{offset} = {offset_0}")
 
         elif rule.kind == VALUE:
             value = rule.args['value']

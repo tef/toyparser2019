@@ -16,6 +16,7 @@ def _build(unicodedata):
                 return '{}[{}:{}]'.format(self.name, self.start, self.end)
             def build(self, buf, builder):
                 children = [child.build(buf, builder) for child in self.children]
+                if callable(builder): return builder(buf, self, children)
                 if self.name == "value": return self.value
                 return builder[self.name](buf, self, children)
 
