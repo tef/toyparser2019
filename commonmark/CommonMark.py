@@ -13,9 +13,9 @@ def walk(node, indent="- "):
 def unescape(string):
     return codecs.decode(string, 'unicode_escape')
 
-class CommonMark(Grammar, start="document", capture="document", whitespace=[" ", "\t"], newline=["\n"], tabstop=4):
+class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["\n"], tabstop=4):
     version = 0.29
-    @rule()
+    @rule(start="document")
     def document(self):
         with self.repeat(min=0):
             self.indent()
@@ -1986,5 +1986,4 @@ if __name__ == "__main__":
             print()
     print(count, worked, failed)
 
-print(CommonMark.rule_options)
 

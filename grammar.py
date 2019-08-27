@@ -64,6 +64,14 @@ def build_class_dict(attrs, start, whitespace, newline, tabstop, capture):
 
     builder = FunctionBuilder(names)
     rule_options = {k:r.options() for k,r in rules.items()}
+    if start is None:
+        candidates = []
+        for name, options in rule_options.items():
+            if options.get('start'):
+                candidates.append(name)
+        if len(candidates)==1:
+            start = candidates[0]
+
     rules = {k:r.canonical(builder).make_rule() for k,r in rules.items()}
     
     rule_childs = {}
@@ -664,9 +672,10 @@ class FunctionBuilder:
 UNDEF = object()
 class Builtins:
     """ These methods are exported as functions inside the class defintion """
-    def rule(*args, inline=UNDEF, capture=None):
+    def rule(*args, start=UNDEF, inline=UNDEF, capture=None):
         options = {}
         if inline is not UNDEF: options['inline'] = inline
+        if start is not UNDEF: options['start'] = start
         def _wrapper(rules):
             if capture:
                 return GrammarNode(CAPTURE,args=dict(name=capture, nested=True), rules=rules)
