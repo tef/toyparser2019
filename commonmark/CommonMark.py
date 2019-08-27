@@ -1119,7 +1119,7 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                     self.capture_value(name="link_label", value=raw)
 
             
-    @rule()
+    @rule(inline=True)
     def link_url(self):
         with self.choice():
             with self.case():
@@ -1136,7 +1136,7 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
                     with self.reject(): self.literal("<", " ")
                     self.balanced_list_url()
 
-    @rule()
+    @rule(inline=True)
     def balanced_list_url(self):
         with self.repeat():
             with self.repeat():
@@ -1985,4 +1985,6 @@ if __name__ == "__main__":
             walk(out1)
             print()
     print(count, worked, failed)
+
+print(CommonMark.rule_options)
 

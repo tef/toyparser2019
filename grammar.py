@@ -63,6 +63,7 @@ def build_class_dict(attrs, start, whitespace, newline, tabstop, capture):
     names = {name:attrs.named_rules.get(name, NamedNode(name)) for name in rules}
 
     builder = FunctionBuilder(names)
+    rule_options = {k:r.options() for k,r in rules.items()}
     rules = {k:r.canonical(builder).make_rule() for k,r in rules.items()}
     
     rule_childs = {}
@@ -106,7 +107,7 @@ def build_class_dict(attrs, start, whitespace, newline, tabstop, capture):
         for name in all_rules:
             if name == n: continue
             if n not in rule_childs[name]: continue
-            rules[name] = rules[name].inline(n, rules[n])
+            rules[name] = rules[name].inline(n, rules[n], rule_options[n])
             
             rule_childs[name].remove(n)
             if not rule_childs[name]:
@@ -129,6 +130,7 @@ def build_class_dict(attrs, start, whitespace, newline, tabstop, capture):
                 rules.pop(n)
 
     new_attrs['rules'] = rules
+    new_attrs['rule_options'] = rule_options
     new_attrs['start'] = start
     new_attrs['capture'] = capture or start
     new_attrs['whitespace'] = whitespace
@@ -139,8 +141,9 @@ def build_class_dict(attrs, start, whitespace, newline, tabstop, capture):
 
 class GrammarRule:
     """ Wraps rules that are assigned to the class dictionary"""
-    def __init__(self, rule):
+    def __init__(self, rule, options):
         self.rule = rule
+        self.options = options
 
     def canonical(self, builder):
         return self.rule.canonical(builder)
@@ -153,13 +156,12 @@ class GrammarRuleSet:
         self.rules = rules
 
     def append(self, value):
-        rule = value.rule
-        if rule is self: raise BadGrammar('recursive')
-        if isinstance(rule, ChoiceNode):
-            if self in rule.rules: raise Exception()
-            self.rules.extend(rule.rules)
-        elif isinstance(rule, GrammarNode):
-            self.rules.append(rule)
+        inner_rule = value.rule
+        if inner_rule is self: raise BadGrammar('recursive')
+        if isinstance(inner_rule, ChoiceNode):
+            if self in inner_rule.rules: raise Exception()
+        if isinstance(value, GrammarRule):
+            self.rules.append(value)
         else:
             raise BadGrammar('Rule', value, 'is not a grammar definition')
 
@@ -170,6 +172,17 @@ class GrammarRuleSet:
         if len(rules) == 1:
             return rules[0]
         return ChoiceNode(rules)
+
+    def options(self):
+        opts = {}
+        for rule in self.rules:
+            for k,v in rule.options.items():
+                if k not in opts:
+                    opts[k]=v
+                else:
+                    raise Exception('no')
+        return opts
+                
 
 class GrammarDict(dict):
     """ A Special class dictionary that handles rule assignments """
@@ -648,9 +661,12 @@ class FunctionBuilder:
         rules.append(GrammarNode(REPEAT, rules=self.rules, args=dict(min=0, max=1)))
         self.rules = rules
 
+UNDEF = object()
 class Builtins:
     """ These methods are exported as functions inside the class defintion """
-    def rule(*args, inline=False, capture=None):
+    def rule(*args, inline=UNDEF, capture=None):
+        options = {}
+        if inline is not UNDEF: options['inline'] = inline
         def _wrapper(rules):
             if capture:
                 return GrammarNode(CAPTURE,args=dict(name=capture, nested=True), rules=rules)
@@ -659,10 +675,10 @@ class Builtins:
             else:
                 return rules[0]
         if len(args) > 0:
-            return GrammarRule(_wrapper(args))
+            return GrammarRule(_wrapper(args), options=options)
         else:
             def _decorator(fn):
-                return GrammarRule(FunctionNode(fn, _wrapper))
+                return GrammarRule(FunctionNode(fn, _wrapper), options=options)
             return _decorator
 
     def capture(name, *args):
@@ -715,15 +731,15 @@ class ParserRule:
         if self.rules:
             for r in self.rules:
                 r.visit(visitor)
-    def inline(self, name, rule):
+    def inline(self, name, rule, rule_options):
         if self.kind == RULE:
-            if self.args['name'] == name and self.args['inline']:
+            if self.args['name'] == name and (self.args['inline'] or rule_options.get('inline')):
                 return rule
             else:
                 return self
         if not self.rules:
             return self
-        rules = [r.inline(name, rule) for r in self.rules]
+        rules = [r.inline(name, rule, rule_options) for r in self.rules]
         nullable = any(r.nullable for r in rules)
         regular = all(r.regular for r in rules)
         return ParserRule(self.kind, key=self.key, args=self.args, rules=rules, nullable=nullable, regular=regular)
@@ -1764,7 +1780,7 @@ def compile_python(grammar, cython=False):
     for name, rule in grammar.rules.items():
         cdefs = {}
         if cython:
-            output.append(f"cdef parse_{name}(self, str buf, int buf_start, int buf_eof, int offset_0,  int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):")
+            output.append(f"cdef parse_{name}(self, str buf, int buf_start, int buf_eof, int offset_0,  int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0, **kwargs):")
             output.append(f"    cdef Py_UCS4 codepoint")
             
             for v in varnames:
