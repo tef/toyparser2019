@@ -7426,55 +7426,26 @@ def _build(unicodedata):
 
         def parse_link_definition(self, buf, buf_start, buf_eof, offset_0, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
             while True: # note: return at end of loop
-                count_0 = 0
-                while offset_0 < buf_eof and count_0 < 3:
-                    codepoint = buf[offset_0]
-                    if codepoint in ' \t':
-                        if codepoint == '\t':
-                            if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
-                                width = partial_tab_width_0
-                            else:
-                                width  = (self.tabstop-(column_0%self.tabstop))
-                            if count_0 + width > 3:
-                                new_width = 3 - count_0
-                                count_0 += new_width
-                                column_0 += new_width
-                                partial_tab_offset_0 = offset_0
-                                partial_tab_width_0 = width - new_width
-                                break
-                            count_0 += width
-                            column_0 += width
-                            offset_0 += 1
-                        else:
-                            count_0 += 1
-                            column_0 += 1
-                            offset_0 += 1
-                    else:
-                        break
-
-                if buf[offset_0:offset_0+1] == '[':
-                    offset_0 += 1
-                    column_0 += 1
-                else:
-                    offset_0 = -1
-                    break
-
-                while True: # start reject
-                    children_1 = []
-                    offset_1 = offset_0 + 0
-                    column_1 = column_0
-                    indent_column_1 = indent_column_0
-                    partial_tab_offset_1 = partial_tab_offset_0
-                    partial_tab_width_1 = partial_tab_width_0
+                offset_1 = offset_0
+                column_1 = column_0
+                children_1 = []
+                while True: # start capture
                     count_0 = 0
-                    while offset_1 < buf_eof:
+                    while offset_1 < buf_eof and count_0 < 3:
                         codepoint = buf[offset_1]
                         if codepoint in ' \t':
                             if codepoint == '\t':
-                                if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
-                                    width = partial_tab_width_1
+                                if offset_1 == partial_tab_offset_0 and partial_tab_width_0 > 0:
+                                    width = partial_tab_width_0
                                 else:
                                     width  = (self.tabstop-(column_1%self.tabstop))
+                                if count_0 + width > 3:
+                                    new_width = 3 - count_0
+                                    count_0 += new_width
+                                    column_1 += new_width
+                                    partial_tab_offset_0 = offset_1
+                                    partial_tab_width_0 = width - new_width
+                                    break
                                 count_0 += width
                                 column_1 += width
                                 offset_1 += 1
@@ -7485,22 +7456,51 @@ def _build(unicodedata):
                         else:
                             break
 
-                    if buf[offset_1:offset_1+1] == ']':
+                    if buf[offset_1:offset_1+1] == '[':
                         offset_1 += 1
                         column_1 += 1
                     else:
                         offset_1 = -1
                         break
 
-                    break
-                if offset_1 != -1:
-                    offset_0 = -1
-                    break
+                    while True: # start reject
+                        children_2 = []
+                        offset_2 = offset_1 + 0
+                        column_2 = column_1
+                        indent_column_1 = indent_column_0
+                        partial_tab_offset_1 = partial_tab_offset_0
+                        partial_tab_width_1 = partial_tab_width_0
+                        count_0 = 0
+                        while offset_2 < buf_eof:
+                            codepoint = buf[offset_2]
+                            if codepoint in ' \t':
+                                if codepoint == '\t':
+                                    if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
+                                        width = partial_tab_width_1
+                                    else:
+                                        width  = (self.tabstop-(column_2%self.tabstop))
+                                    count_0 += width
+                                    column_2 += width
+                                    offset_2 += 1
+                                else:
+                                    count_0 += 1
+                                    column_2 += 1
+                                    offset_2 += 1
+                            else:
+                                break
 
-                offset_1 = offset_0
-                column_1 = column_0
-                children_1 = []
-                while True: # start capture
+                        if buf[offset_2:offset_2+1] == ']':
+                            offset_2 += 1
+                            column_2 += 1
+                        else:
+                            offset_2 = -1
+                            break
+
+                        break
+                    if offset_2 != -1:
+                        offset_1 = -1
+                        break
+
                     offset_2 = offset_1
                     column_2 = column_1
                     children_2 = []

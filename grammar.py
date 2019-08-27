@@ -583,11 +583,11 @@ class FunctionBuilder:
         rules.append(node)
         self.rules = rules
     @contextmanager
-    def reparse(self, value):
+    def reparse(self, capture=None, start=None, end=None):
         if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         rules = self.rules
         self.rules = []
-        node = GrammarNode(VARIABLE, args=dict(node=value), rules=self.rules)
+        node = GrammarNode(REPARSE, args=dict(capture=capture, start=start, end=end), rules=self.rules)
         yield node.key
         rules.append(node)
         self.rules = rules
@@ -1115,12 +1115,24 @@ def compile_python(grammar, cython=False):
             steps.append(f"{var} = {value}")
 
         elif rule.kind == REPARSE:
-            node = values[rule.arg['node']]
             offset_0 = offset.incr()
             count_0 = count.incr()
             steps.append(f"{count} = buf_eof")
-            steps.append(f"{offset_0} = {node}.start")
-            steps.append(f"buf_eof = {node}.end")
+            if rule.args['capture']:
+                cap = values[rules.args['capture']]
+                steps.append(f"{offset_0} = {cap}.start")
+                steps.append(f"buf_eof = {cap}.end")
+            else:
+                start = rules.args['start']
+                start = values.get(start, repr(start))
+                end = rules.args['end']
+                if end is None: 
+                    steps.append(f"{offset_0} = {start}")
+                    steps.append(f"buf_eof = {offset}")
+                else:
+                    end = values.get(end, repr(end))
+                    steps.append(f"{offset_0} = {start}")
+                    steps.append(f"buf_eof = {end}")
 
             if not rule.rules:
                 raise Exception('empty rules')
