@@ -1867,6 +1867,201 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                         self.range("a-z", "A-Z", "-", "0-9")
                     self.whitespace()
                     self.literal(">")
+# ---
+
+
+parser = CommonMark.parser()
+
+def parse(buf):
+    out = parser.parse(buf)
+    backrefs = {}
+    def visit_backrefs(buf, node, children):
+        if node.name == "link_def":
+            name_node = children[0]
+            name = buf[name_node.start:name_node.end]
+            name = " ".join(name.strip().casefold().split())
+            if name not in backrefs:
+                backrefs[name] = children[1:]
+        return node
+
+    out = out.build(buf, visit_backrefs)
+
+    # --- 
+
+    def fill_backrefs(buf, node, children):
+        if (node.name == "link" or node.name == "image"):
+            name = None
+            if node.value == "reference":
+                child_node = children[1]
+                name = buf[child_node.start:child_node.end]
+                name = " ".join(name.strip().casefold().split())
+            elif node.value == "shortcut":
+                child_node = children[0]
+                name = buf[child_node.start:child_node.end]
+            if name is not None:
+                name = " ".join(name.strip().casefold().split())
+                if name in backrefs:
+                    node.children = children[:1] + backrefs[name]
+                    node.value = "inline"
+                else:
+                    node.value = None
+        return node
+    out = out.build(buf, fill_backrefs)
+
+    def remove_nesting_links(buf, node, children):
+        if node.name == "link":
+            def contains_link(buf, node, children):
+                return (node.name == "link" and node.value and node.value != "shortcut") or any(children)
+            if any(c.build(buf, contains_link) for c in children):
+                node.value = None
+
+        if "maybe" in (c.name for c in children):
+            new_children = []
+            for c in children:
+                if c.name != "maybe":
+                    new_children.append(c)
+                else:
+                    if c.children[0].value is None:
+                        for c2 in c.children[1].children:
+                            new_children.append(c2)
+                    else:
+                        new_children.append(c.children[0]) # can't remove maybe, yet as image may still collapse
+            node.children = new_children
+
+        return node
+    out = out.build(buf, remove_nesting_links)
+
+    def flatten_images(buf, node, children):
+        if node.name == "image" and node.value is not None:
+            def flatten_alt_text(buf, node, children):
+                new_children = []
+                for c in children:
+                    if c.name in ("link", "image"):
+                        for c2 in c.children[0].children:
+                            if c2.name not in ("operator", "right_flank", "left_flank"):
+                                new_children.append(c2)
+                    elif c.name not in ("right_flank", "left_flank"):
+                        new_children.append(c)
+                node.children = new_children
+
+                return node
+
+            children[0] = children[0].build(buf, flatten_alt_text)
+        return node
+    out = out.build(buf, flatten_images)
+
+    def process_emphasis(buf, node, children):
+        operators = []
+        for idx, c in enumerate(children):
+            if c.name in ('right_flank', 'left_flank', 'dual_flank'):
+                kind, chr, N = [ch.value for ch in c.children]
+                operators.append([idx, kind, chr, N, N])
+        active = {k:True for k in range(len(operators))}
+
+        if not operators:
+            return node
+
+        left_replacement = {}
+        right_replacement = {}
+        op_idx = 0
+
+        while op_idx < len(operators):
+            idx, kind, chr, N, n = operators[op_idx]
+            if kind == "right" or kind == "dual":
+                left_op = op_idx -1
+                while n >0 and left_op >=0:
+                    found = False
+                    while left_op >= 0:
+                        if active[left_op]:
+                            left_idx, left_kind, left_chr, left_N, left_n = operators[left_op]
+                            if left_chr == chr and left_n > 0 and (kind != "dual" or  left_N%3 == 0 or N%3 == 0 or (left_N + N)%3 != 0):
+                                if left_kind == "left" or (left_kind == "dual" and( left_N%3 == 0 or N%3 == 0 or (left_N + N)%3 != 0)):
+                                    found = True
+                                    break
+                        left_op -=1
+                    if found:
+                        if left_n  <= n:
+                            operators[left_op] = (left_idx, left_kind, left_chr, left_N, 0)
+                            n = n - left_n
+                        else:
+                            operators[left_op] = (left_idx, left_kind, left_chr, left_N, left_n -n)
+                            left_n = n
+                            n = 0
+                            
+                        if left_idx not in left_replacement:
+                            left_replacement[left_idx] = []
+                        if idx not in right_replacement:
+                            right_replacement[idx] = []
+                        
+                        left_replacement[left_idx].insert(0, left_n)
+                        right_replacement[idx].append(left_n)
+
+                        for i in range(left_op+1, op_idx):
+                            active[i] = False
+
+                    left_op -= 1
+                operators[op_idx] = (idx, kind, chr, N, n)
+            op_idx +=1
+
+        for idx, kind, chr, N, count in operators:
+            if kind == "left": # replacements in left to right order
+                out = []
+                for _ in range(count):
+                    out.append(chr)
+                if idx in left_replacement:
+                    for c in left_replacement[idx]:
+                        if c%4: out.append(["<strong><strong>", "<em>", "<strong>", "<em><strong>"][c%4])
+                        for _ in range(c//4):
+                            out.append("<strong><strong>")
+                children[idx].value = "".join(out)
+            elif kind == "right":
+                out = []
+                if idx in right_replacement:
+                    for c in right_replacement[idx]: 
+                        for _ in range(c//4):
+                            out.append("</strong></strong>")
+                        if c%4: out.append(["</strong></strong>", "</em>", "</strong>", "</strong></em>"][c%4])
+                for _ in range(count):
+                    out.append(chr)
+                children[idx].value = "".join(out)
+            elif kind == "dual":
+                out = []
+                if idx in right_replacement:
+                    for c in reversed(right_replacement[idx]): 
+                        for _ in range(c//4):
+                            out.append("</strong></strong>")
+                        if c%4: out.append(["</strong></strong>", "</em>", "</strong>", "</strong></em>"][c%4])
+                for _ in range(count):
+                    out.append(chr)
+                if idx in left_replacement:
+                    for c in left_replacement[idx]:
+                        if c%4: out.append(["<strong><strong>", "<em>", "<strong>", "<em><strong>"][c%4])
+                        for _ in range(c//4):
+                            out.append("<strong><strong>")
+                children[idx].value = "".join(out)
+        node.children = children
+        return node
+
+    out = out.build(buf, process_emphasis)
+
+    def has_empty(children):
+        idx = 0
+        while idx < len(children) and children[idx].name == "empty": idx+=1
+        while idx < len(children) and children[idx].name != "empty": idx+=1
+        while idx < len(children) and children[idx].name == "empty": idx+=1
+        return idx != len(children)
+
+    def list_tightness(buf, node, children):
+        if node.name == "ordered_list" or node.name =="unordered_list":
+            if has_empty(children) or any(has_empty(c.children) for c in children):
+                node.value = "loose"
+            else:
+                node.value = "tight"
+        return node
+
+    out = out.build(buf, list_tightness)
+
+    return out
 
 
 ## HTML Builder
@@ -1885,92 +2080,6 @@ def html_escape(text):
     return text.replace("&", "&amp;").replace("\"", "&quot;").replace(">", "&gt;").replace("<","&lt;").replace("\x00", "\uFFFD")
 
 def make_para(children):
-    return process_emphasis(children)
-
-def process_emphasis(children):
-    operators =[(idx, o[0], o[1], o[2], o[2]) for idx, o in enumerate(children) if isinstance(o, tuple)]
-    active = {k:True for k in range(len(operators))}
-
-    left_replacement = {}
-    right_replacement = {}
-    op_idx = 0
-
-    while op_idx < len(operators):
-        idx, kind, chr, N, n = operators[op_idx]
-        if kind == "right" or kind == "dual":
-            left_op = op_idx -1
-            while n >0 and left_op >=0:
-                found = False
-                while left_op >= 0:
-                    if active[left_op]:
-                        left_idx, left_kind, left_chr, left_N, left_n = operators[left_op]
-                        if left_chr == chr and left_n > 0 and (kind != "dual" or  left_N%3 == 0 or N%3 == 0 or (left_N + N)%3 != 0):
-                            if left_kind == "left" or (left_kind == "dual" and( left_N%3 == 0 or N%3 == 0 or (left_N + N)%3 != 0)):
-                                found = True
-                                break
-                    left_op -=1
-                if found:
-                    if left_n  <= n:
-                        operators[left_op] = (left_idx, left_kind, left_chr, left_N, 0)
-                        n = n - left_n
-                    else:
-                        operators[left_op] = (left_idx, left_kind, left_chr, left_N, left_n -n)
-                        left_n = n
-                        n = 0
-                        
-                    if left_idx not in left_replacement:
-                        left_replacement[left_idx] = []
-                    if idx not in right_replacement:
-                        right_replacement[idx] = []
-                    
-                    left_replacement[left_idx].insert(0, left_n)
-                    right_replacement[idx].append(left_n)
-
-                    for i in range(left_op+1, op_idx):
-                        active[i] = False
-
-                left_op -= 1
-            operators[op_idx] = (idx, kind, chr, N, n)
-        op_idx +=1
-
-    for idx, kind, chr, N, count in operators:
-        if kind == "left": # replacements in left to right order
-            out = []
-            for _ in range(count):
-                out.append(chr)
-            if idx in left_replacement:
-                for c in left_replacement[idx]:
-                    if c%4: out.append(["<strong><strong>", "<em>", "<strong>", "<em><strong>"][c%4])
-                    for _ in range(c//4):
-                        out.append("<strong><strong>")
-            children[idx] = "".join(out)
-        elif kind == "right":
-            out = []
-            if idx in right_replacement:
-                for c in right_replacement[idx]: 
-                    for _ in range(c//4):
-                        out.append("</strong></strong>")
-                    if c%4: out.append(["</strong></strong>", "</em>", "</strong>", "</strong></em>"][c%4])
-            for _ in range(count):
-                out.append(chr)
-            children[idx] = "".join(out)
-        elif kind == "dual":
-            out = []
-            if idx in right_replacement:
-                for c in reversed(right_replacement[idx]): 
-                    for _ in range(c//4):
-                        out.append("</strong></strong>")
-                    if c%4: out.append(["</strong></strong>", "</em>", "</strong>", "</strong></em>"][c%4])
-            for _ in range(count):
-                out.append(chr)
-            if idx in left_replacement:
-                for c in left_replacement[idx]:
-                    if c%4: out.append(["<strong><strong>", "<em>", "<strong>", "<em><strong>"][c%4])
-                    for _ in range(c//4):
-                        out.append("<strong><strong>")
-            children[idx] = "".join(out)
-
-
     return "".join(children)
 
 def join_blocks(children):
@@ -1980,28 +2089,19 @@ def join_blocks(children):
         return c
     return '\n'.join(wrap(c) for c in children if c)
 
-EMPTY = object()
-
-def loose(list_items):
-    idx = 0
-    while idx < len(list_items) and list_items[idx] is EMPTY: idx+=1
-    while idx < len(list_items) and list_items[idx] is not EMPTY: idx+=1
-    while idx < len(list_items) and list_items[idx] is EMPTY: idx+=1
-    return idx != len(list_items)
-
 def wrap_loose(list_items, out):
     def wrap(c):
-        if not c or c is EMPTY: return None
+        if not c: return None
         if isinstance(c, tuple):
             return f"<p>{c[0]}</p>"
         return c
     for item in list_items:
-        if item == None or item is EMPTY: continue
+        if item is None: continue
         wrapped = [ wrap(line) for line in item]
         _out = []
         for line in item:
             line = wrap(line)
-            if line is None or line is EMPTY:
+            if line is None:
                 if not _out[-1].endswith('\n'):
 
                     _out.append('\n')
@@ -2021,7 +2121,7 @@ def wrap_loose(list_items, out):
 
 def wrap_tight(list_items, out):
     def wrap(c):
-        if not c or c is EMPTY: return None
+        if not c: return None
         if isinstance(c, tuple):
             return f"{c[0]}"
         return c if c.endswith('\n') else c+"\n"
@@ -2032,7 +2132,7 @@ def wrap_tight(list_items, out):
             if isinstance(c, tuple):
                 out2.append(f"{c[0]}")
                 a_block=False
-            elif c is not None and c != EMPTY:
+            elif c is not None:
                 if not a_block: out2.append('\n')
                 out2.append(c)
                 out2.append("\n")
@@ -2104,7 +2204,7 @@ def blockquote(buf, node, children):
 def unordered_list(buf, node, list_items):
     out = ["<ul>\n"]
 
-    if loose(list_items) or any(loose(c) for c in list_items if c is not None and c is not EMPTY):
+    if node.value == "loose":
         wrap_loose(list_items, out)
     else:
         wrap_tight(list_items, out)
@@ -2121,7 +2221,7 @@ def ordered_list(buf, node, list_items):
         start = ''
     out = [f'<ol{start}>\n']
 
-    if loose(list_items) or any(loose(c) for c in list_items if c):
+    if node.value == "loose":
         wrap_loose(list_items, out)
     else:
         wrap_tight(list_items, out)
@@ -2147,16 +2247,6 @@ def link_def(buf, node, children):
 @_builder
 def link_name(buf, node, children):
     return "".join(children)
-
-@_builder
-def maybe(buf, node, children):
-    if children[0] is not None:
-        return children[0]
-    return make_para(children[1])
-
-@_builder
-def maybe_para(buf, node, children):
-    return children
 
 @_builder
 def image(buf, node, children):
@@ -2244,16 +2334,17 @@ def code_span(buf, node, children):
 
 @_builder
 def left_flank(buf, node, children):
-    if node.value: return node.value
+    return node.value
     return tuple(children)
 
 @_builder
 def right_flank(buf, node, children):
-    if node.value: return node.value
+    return node.value
     return tuple(children)
 
 @_builder
 def dual_flank(buf, node, children):
+    return node.value
     return tuple(children)
 
 @_builder
@@ -2293,7 +2384,7 @@ def raw(buf, node, children):
 
 @_builder
 def empty(buf, node, children):
-    return EMPTY
+    return None
 
 @_builder
 def empty_line(buf, node, children):
@@ -2314,88 +2405,6 @@ def markup(buf):
         walk(node)
         print()
         print(node.build(buf, builder))
-
-parser = CommonMark.parser()
-
-def parse(buf):
-    out = parser.parse(buf)
-    backrefs = {}
-    def visit_backrefs(buf, node, children):
-        if node.name == "link_def":
-            name_node = children[0]
-            name = buf[name_node.start:name_node.end]
-            name = " ".join(name.strip().casefold().split())
-            if name not in backrefs:
-                backrefs[name] = children[1:]
-        return node
-
-    out = out.build(buf, visit_backrefs)
-
-    # --- 
-
-    def fill_backrefs(buf, node, children):
-        if (node.name == "link" or node.name == "image"):
-            name = None
-            if node.value == "reference":
-                child_node = children[1]
-                name = buf[child_node.start:child_node.end]
-                name = " ".join(name.strip().casefold().split())
-            elif node.value == "shortcut":
-                child_node = children[0]
-                name = buf[child_node.start:child_node.end]
-            if name is not None:
-                name = " ".join(name.strip().casefold().split())
-                if name in backrefs:
-                    node.children = children[:1] + backrefs[name]
-                    node.value = "inline"
-                else:
-                    node.value = None
-        return node
-    out = out.build(buf, fill_backrefs)
-
-    def remove_nesting_links(buf, node, children):
-        if node.name == "link":
-            def contains_link(buf, node, children):
-                return (node.name == "link" and node.value and node.value != "shortcut") or any(children)
-            if any(c.build(buf, contains_link) for c in children):
-                node.value = None
-
-        if "maybe" in (c.name for c in children):
-            new_children = []
-            for c in children:
-                if c.name != "maybe":
-                    new_children.append(c)
-                else:
-                    if c.children[0].value is None:
-                        for c2 in c.children[1].children:
-                            new_children.append(c2)
-                    else:
-                        new_children.append(c.children[0]) # can't remove maybe, yet as image may still collapse
-            node.children = new_children
-
-        return node
-    out = out.build(buf, remove_nesting_links)
-
-    def flatten_images(buf, node, children):
-        if node.name == "image" and node.value is not None:
-            def flatten_alt_text(buf, node, children):
-                new_children = []
-                for c in children:
-                    if c.name in ("link", "image"):
-                        for c2 in c.children[0].children:
-                            if c2.name not in ("operator", "right_flank", "left_flank"):
-                                new_children.append(c2)
-                    elif c.name not in ("right_flank", "left_flank"):
-                        new_children.append(c)
-                node.children = new_children
-
-                return node
-
-            children[0] = children[0].build(buf, flatten_alt_text)
-        return node
-    out = out.build(buf, flatten_images)
-
-    return out
 
 
 if __name__ == "__main__":
