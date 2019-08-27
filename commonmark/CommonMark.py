@@ -555,13 +555,20 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
             self.whitespace(max=3)
             self.literal("[")
             with self.reject():
-                self.whitespace()
+                self.whitespace(newline=True)
                 self.literal("]")
             with self.capture_node("link_name"):
                 with self.repeat(min=1), self.choice():
                     with self.case():
-                        self.literal("\\[", "\\]")
+                        self.raw_entity()
                     with self.case():
+                        self.literal("\\")
+                        with self.lookahead():
+                            self.range("!-/",":-@","[-`","{-~")
+                        with self.capture_node('raw'):
+                            self.range("!-/",":-@","[-`","{-~")
+
+                    with self.case(), self.capture_node('raw'): 
                         self.range("[", "]", invert=True)
             self.literal("]")
             self.literal(":")
@@ -1121,50 +1128,67 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
 
     @rule()
     def link_operator(self):
-            with self.variable('link') as kind, self.capture_node(kind) as cap:
+        with self.variable('link') as kind, self.variable('reference') as style, self.capture_node(kind, value=style) as cap:
+            with self.optional():
+                self.literal("!")
+                self.set_variable(kind, "image")
+            self.literal("[")
+            with self.reject():
+                self.whitespace(newline=True)
+                self.literal("]")
+                with self.reject():
+                    self.literal("(")
+            with self.capture_node('link_para'), self.backref() as raw:
                 with self.optional():
-                    self.literal("!")
-                    self.set_variable(kind, "image")
-                self.literal("[")
-                with self.capture_node('link_para'), self.backref() as raw:
-                    with self.optional():
+                    with self.reject():
+                        self.literal("]")
+
+                    self.inline_element()
+
+                    with self.repeat():
+                        with self.choice():
+                            with self.case():
+                                self.linebreak.inline()
+                            with self.case():
+                                with self.capture_node("whitespace"):
+                                    self.whitespace()
 
                         with self.reject():
-                            self.whitespace()
                             self.literal("]")
                         self.inline_element()
 
-                        with self.repeat():
-                            with self.choice():
-                                with self.case():
-                                    self.linebreak.inline()
-                                with self.case():
-                                    with self.capture_node("whitespace"):
-                                        self.whitespace()
+                with self.capture_node("whitespace"):
+                    self.whitespace()
+            self.literal("]")
 
+            with self.choice():
+                with self.case():
+                    self.literal("[")
+                    self.whitespace()
+                    with self.capture_node("link_label"):
+                        with self.repeat(min=1), self.choice():
+                            with self.case():
+                                self.literal("\\[", "\\]")
+                            with self.case():
+                                self.range("[", "]", "\n", invert=True)
+                    self.literal("]")
+                    with self.reject(): self.literal("[")
+                    self.set_variable(style, "reference")
+
+                with self.case():
+                    self.literal("(")
+                    with self.choice():
+                        with self.case():
+                            self.whitespace()
+                            self.newline()
+                            self.whitespace()
                             with self.reject():
-                                self.literal("]")
-                            self.inline_element()
+                                self.newline()
+                        with self.case(): 
+                            self.whitespace()
+                    self.link_url()
 
-                    with self.capture_node("whitespace"):
-                        self.whitespace()
-                self.literal("]")
-
-                with self.choice():
-                    with self.case():
-                        self.literal("[")
-                        self.whitespace()
-                        with self.capture_node("link_label"):
-                            with self.repeat(min=1), self.choice():
-                                with self.case():
-                                    self.literal("\\[", "\\]")
-                                with self.case():
-                                    self.range("[", "]", "\n", invert=True)
-                        self.literal("]")
-                        with self.reject(): self.literal("[")
-
-                    with self.case():
-                        self.literal("(")
+                    with self.optional():
                         with self.choice():
                             with self.case():
                                 self.whitespace()
@@ -1174,28 +1198,16 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                                     self.newline()
                             with self.case(): 
                                 self.whitespace()
-                        self.link_url()
-
-                        with self.optional():
-                            with self.choice():
-                                with self.case():
-                                    self.whitespace()
-                                    self.newline()
-                                    self.whitespace()
-                                    with self.reject():
-                                        self.newline()
-                                with self.case(): 
-                                    self.whitespace()
-                            self.link_title()
-                        self.whitespace()
-                        self.literal(")")
-                    with self.case():
-                        self.literal('[]')
-                        self.capture_value(name="link_label", value=raw)
-                    with self.case():
-                        with self.reject():
-                            self.literal('{', '(', ":")
-                        self.capture_value(name="link_label", value=raw)
+                        self.link_title()
+                    self.whitespace()
+                    self.literal(")")
+                    self.set_variable(style, "inline")
+                with self.case():
+                    with self.capture_node('text'):
+                        self.literal('[]', '()')
+                    self.set_variable(style, "shortcut")
+                with self.case():
+                    self.set_variable(style, "shortcut")
 
             
     @rule(inline=True)
@@ -1679,7 +1691,7 @@ def link_encode(text):
     if '%' in text and ' ' not in text:
         text = urllib.parse.unquote(text)
     text = urllib.parse.quote(text, safe="/:?=&+*;@,.()#")
-    return text
+    return html_escape(text)
 
 def html_escape(text):
     return text.replace("&", "&amp;").replace("\"", "&quot;").replace(">", "&gt;").replace("<","&lt;").replace("\x00", "\uFFFD")
@@ -1943,31 +1955,42 @@ def link_def(buf, node, children):
 
 @_builder
 def link_name(buf, node, children):
-    return buf[node.start:node.end]
+    return "".join(children)
 
 @_builder
 def image(buf, node, children):
-    if len(children) == 3 and children[2]:
-        return f'<img src="{link_encode(children[1])}" alt="{children[0]}" title="{html_escape(children[2])}" />'
+    if node.value == "inline":
+        if len(children) == 3 and children[2]:
+            return f'<img src="{link_encode(children[1])}" alt="{children[0]}" title="{html_escape(children[2])}" />'
 
-    if len(children) >= 2 and children[1] is not None:
-        return f'<img src="{link_encode(children[1])}" alt="{children[0]}" />'
-
-    return f"![{children[0]}]"
+        if len(children) >= 2 and children[1] is not None:
+            return f'<img src="{link_encode(children[1])}" alt="{children[0]}" />'
+    elif node.value == "reference":
+        return f"![{children[0]}][{html_escape(children[1])}]"
+    elif node.value == "shortcut":
+        if len(children) > 1:
+            return f"![{children[0]}]{children[1]}"
+        return f"![{children[0]}]"
 
 @_builder
 def link(buf, node, children):
-    if len(children) == 3 and children[2]:
-        return f'<a href="{link_encode(children[1])}" title="{html_escape(children[2])}">{children[0]}</a>'
+    if node.value == "inline":
+        if len(children) == 3 and children[2]:
+            return f'<a href="{link_encode(children[1])}" title="{html_escape(children[2])}">{children[0]}</a>'
 
-    if len(children) >= 2 and children[1] is not None:
-        return f'<a href="{link_encode(children[1])}">{children[0]}</a>'
+        if len(children) >= 2 and children[1] is not None:
+            return f'<a href="{link_encode(children[1])}">{children[0]}</a>'
 
-    return f"[{children[0]}]"
+    elif node.value == "reference":
+        return f"[{children[0]}][{html_escape(children[1])}]"
+    elif node.value == "shortcut":
+        if len(children) > 1:
+            return f"![{children[0]}]{children[1]}"
+        return f"[{children[0]}]"
 
 @_builder
 def link_label(buf, node, children):
-    return None
+    return buf[node.start:node.end]
     
 @_builder
 def link_para(buf, node, children):
@@ -2133,16 +2156,20 @@ if __name__ == "__main__":
         out1.build(markd, visit_backrefs)
 
         def fill_backrefs(buf, node, children):
-            if node.name == "link_label":
-                name = node.value or buf[node.start:node.end]
-                name = " ".join(name.strip().casefold().split())
-                if name in backrefs:
-                    node.value = backrefs[name]
-                else:
-                    node.value = None
-            if node.name == "link" or node.name == "image":
-                if len(children) > 1 and children[1].name == "link_label" and children[1].value is not None:
-                    node.children = children[:1] + children[1].value
+            if (node.name == "link" or node.name == "image"):
+                name = None
+                if node.value == "reference":
+                    child_node = children[1]
+                    name = buf[child_node.start:child_node.end]
+                    name = " ".join(name.strip().casefold().split())
+                elif node.value == "shortcut":
+                    child_node = children[0]
+                    name = buf[child_node.start:child_node.end]
+                name = " ".join(name.strip().casefold().split()) if name is not None else None
+                if name is not None and name in backrefs:
+                    node.children = children[:1] + backrefs[name]
+                    node.value = "inline"
+
             return node
 
         out1 = out1.build(markd, fill_backrefs)
@@ -2162,8 +2189,8 @@ if __name__ == "__main__":
             print('=', repr(t['html']))
             print('X', repr(out))
             print()
-            walk(out1)
-            print()
+            # walk(out1)
+            # print()
     print(count, worked, failed)
 
 
