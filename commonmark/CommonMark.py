@@ -1166,8 +1166,6 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                             self.literal('{', '(', ":")
                         self.capture_value(name="link_label", value=raw)
 
-        
-
             
     @rule(inline=True)
     def link_url(self):
@@ -1271,19 +1269,19 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
         with self.choice():
             with self.case():
                 self.literal("#")
-                with self.capture_node("dec_entity"), self.repeat(min=1, max=7):
+                with self.capture_node("html_entity", value="decimal"), self.repeat(min=1, max=7):
                     self.range("0-9")
                 self.literal(";")
             with self.case():
                 self.literal("#")
                 self.range("x","X")
-                with self.capture_node("hex_entity"):
+                with self.capture_node("html_entity", value="hex"):
                     self.range("0-9", "a-f","A-F")
                     with self.repeat(min=0, max=6):
                         self.range("0-9", "a-f","A-F")
                 self.literal(";")
             with self.case():
-                with self.capture_node("named_entity"):
+                with self.capture_node("html_entity", value="named"):
                     self.range("a-z","A-Z")
                     with self.repeat(min=1):
                         self.range("0-9","a-z","A-Z")
@@ -1758,6 +1756,14 @@ def atx_heading(buf, node, children):
     return f"<h{node.value}>{make_para(children)}</h{node.value}>"
 
 @_builder
+def setext(buf, node, children):
+    return f"<h{node.value}>{make_para(children)}</h{node.value}>"
+
+@_builder
+def para(buf, node,  children):
+    return (make_para(children),)
+
+@_builder
 def indented_code(buf, node, children):
     text = html_escape("".join(children))
     return f"<pre><code>{text}</code></pre>"
@@ -1830,42 +1836,8 @@ def ordered_list_start(buf, node, children):
     return int(buf[node.start:node.end])
 
 @_builder
-def empty(buf, node, children):
-    return None
-
-@_builder
-def empty_line(buf, node, children):
-    return None
-
-@_builder
-def left_flank(buf, node, children):
-    return tuple(children)
-
-@_builder
-def right_flank(buf, node, children):
-    return tuple(children)
-
-@_builder
-def dual_flank(buf, node, children):
-    return tuple(children)
-
-@_builder
 def html_block(buf, node, children):
     return "".join(children)
-
-@_builder
-def raw(buf, node, children):
-    return buf[node.start:node.end]
-
-@_builder
-def auto_link(buf, node, children): 
-    text = buf[node.start:node.end]
-    return f'<a href="{link_encode(text)}">{html_escape(text)}</a>'
-
-@_builder
-def mailto_auto_link(buf, node, children): 
-    text = buf[node.start:node.end]
-    return f'<a href="mailto:{link_encode(text)}">{html_escape(text)}</a>'
 
 @_builder
 def link_def(buf, node, children):
@@ -1884,6 +1856,7 @@ def image(buf, node, children):
         return f'<img src="{link_encode(children[1])}" alt="{children[0]}" />'
 
     return f"![{children[0]}]"
+
 @_builder
 def link(buf, node, children):
     if len(children) == 3 and children[2]:
@@ -1894,6 +1867,10 @@ def link(buf, node, children):
 
     return f"[{children[0]}]"
 
+@_builder
+def link_label(buf, node, children):
+    return None
+    
 @_builder
 def link_para(buf, node, children):
     return make_para(children)
@@ -1907,9 +1884,42 @@ def link_title(buf, node, children):
     return buf[node.start:node.end]
 
 @_builder
-def link_label(buf, node, children):
-    return None
-    
+def raw_entity(buf, node, children):
+    kind = node.value
+    if kind == "named":
+        text = buf[node.start:node.end+1] # + ;
+        if text in html.entities.html5:
+            out = (html.entities.html5[text])
+        else:
+            out = f"&{text}"
+    elif kind == "hex":
+        text = buf[node.start:node.end]
+        out =(chr(int(text,16)))
+    elif kind == "decimal":
+        text = buf[node.start:node.end]
+        out = (chr(int(text)))
+    else:
+        raise Exception('no')
+    return out
+
+@_builder
+def html_entity(buf, node, children):
+    kind = node.value
+    if kind == "named":
+        text = buf[node.start:node.end+1] # + ;
+        if text in html.entities.html5:
+            out = (html.entities.html5[text])
+        else:
+            out = f"&{(text)}"
+    elif kind == "hex":
+        text = buf[node.start:node.end]
+        out =(chr(int(text,16)))
+    elif kind == "decimal":
+        text = buf[node.start:node.end]
+        out = (chr(int(text)))
+    else:
+        raise Exception('no')
+    return html_escape(out)
 @_builder
 def code_span(buf, node, children):
     text = "".join(children)
@@ -1919,34 +1929,27 @@ def code_span(buf, node, children):
     return f"<code>{text}</code>"
 
 @_builder
-def setext(buf, node, children):
-    return f"<h{node.value}>{make_para(children)}</h{node.value}>"
+def left_flank(buf, node, children):
+    return tuple(children)
 
 @_builder
-def para(buf, node,  children):
-    return (make_para(children),)
+def right_flank(buf, node, children):
+    return tuple(children)
 
 @_builder
-def text(buf, node, children):
-    return html_escape(buf[node.start: node.end])
+def dual_flank(buf, node, children):
+    return tuple(children)
 
 @_builder
-def named_entity(buf, node, children):
-    text = buf[node.start:node.end+1] # + ;
-    if text in html.entities.html5:
-        return html_escape(html.entities.html5[text])
-    else:
-        return f"&amp;{html_escape(text)}"
-
-@_builder
-def hex_entity(buf, node, children):
+def auto_link(buf, node, children): 
     text = buf[node.start:node.end]
-    return html_escape(chr(int(text,16)))
+    return f'<a href="{link_encode(text)}">{html_escape(text)}</a>'
 
 @_builder
-def dec_entity(buf, node, children):
+def mailto_auto_link(buf, node, children): 
     text = buf[node.start:node.end]
-    return html_escape(chr(int(text)))
+    return f'<a href="mailto:{link_encode(text)}">{html_escape(text)}</a>'
+
 
 @_builder
 def softbreak(buf, node, children):
@@ -1959,6 +1962,23 @@ def hardbreak(buf,  node, children):
 @_builder
 def whitespace(buf, node,  children):
     return buf[node.start:node.end]
+
+@_builder
+def text(buf, node, children):
+    return html_escape(buf[node.start: node.end])
+
+@_builder
+def raw(buf, node, children):
+    return buf[node.start:node.end]
+
+@_builder
+def empty(buf, node, children):
+    return None
+
+@_builder
+def empty_line(buf, node, children):
+    return None
+
 
 ### 
 

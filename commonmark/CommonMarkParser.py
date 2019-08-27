@@ -18087,7 +18087,7 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_0 = self.Node('dec_entity', offset_1, offset_2, column_1, column_2, children_2, None)
+                        value_0 = self.Node('html_entity', offset_1, offset_2, column_1, column_2, children_2, 'decimal')
                         children_1.append(value_0)
                         offset_1 = offset_2
                         column_1 = column_2
@@ -18211,7 +18211,7 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_1 = self.Node('hex_entity', offset_1, offset_2, column_1, column_2, children_2, None)
+                        value_1 = self.Node('html_entity', offset_1, offset_2, column_1, column_2, children_2, 'hex')
                         children_1.append(value_1)
                         offset_1 = offset_2
                         column_1 = column_2
@@ -18312,7 +18312,7 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_2 = self.Node('named_entity', offset_1, offset_2, column_1, column_2, children_2, None)
+                        value_2 = self.Node('html_entity', offset_1, offset_2, column_1, column_2, children_2, 'named')
                         children_1.append(value_2)
                         offset_1 = offset_2
                         column_1 = column_2
