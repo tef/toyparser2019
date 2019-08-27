@@ -3,7 +3,7 @@ from grammar import Grammar, compile_python
 import codecs
 
 def walk(node, indent="- "):
-    if (node.name == "value"):
+    if (node.value is not None):
         print(indent, node, node.value)
     else:
         print(indent, node)
@@ -1305,7 +1305,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
 
     @rule()
     def inline_link_as_para(self):
-        with self.capture_node('text'):
+        with self.capture_node('operator'):
             self.literal('[')
 
         with self.capture_node('whitespace'):
@@ -1328,14 +1328,14 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                 with self.reject():
                     self.literal("]")
                 self.inline_element()
-        with self.capture_node('text'):
+        with self.capture_node('operator'):
             self.literal(']')
 
         with self.choice():
             with self.case():
                 self.end_of_file()
             with self.case():
-                with self.capture_node('text'):
+                with self.capture_node('operator'):
                     self.literal('[')
 
                 with self.capture_node('whitespace'):
@@ -1362,11 +1362,11 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                     with self.capture_node('whitespace'):
                         self.whitespace()
 
-                with self.capture_node('text'):
+                with self.capture_node('operator'):
                     self.literal(']')
                 
             with self.case():
-                with self.capture_node('text'):
+                with self.capture_node('operator'):
                     self.literal('(')
 
                 with self.capture_node('whitespace'):
@@ -1395,7 +1395,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                     with self.capture_node('whitespace'):
                         self.whitespace()
 
-                with self.capture_node('text'):
+                with self.capture_node('operator'):
                     self.literal(')')
 
 
@@ -2284,6 +2284,10 @@ def text(buf, node, children):
     return html_escape(buf[node.start: node.end])
 
 @_builder
+def operator(buf, node, children):
+    return html_escape(buf[node.start: node.end])
+
+@_builder
 def raw(buf, node, children):
     return buf[node.start:node.end]
 
@@ -2311,6 +2315,103 @@ def markup(buf):
         print()
         print(node.build(buf, builder))
 
+parser = CommonMark.parser()
+
+def parse(buf):
+    out = parser.parse(buf)
+    backrefs = {}
+    def visit_backrefs(buf, node, children):
+        if node.name == "link_def":
+            name_node = children[0]
+            name = buf[name_node.start:name_node.end]
+            name = " ".join(name.strip().casefold().split())
+            if name not in backrefs:
+                backrefs[name] = children[1:]
+        return node
+
+    out = out.build(buf, visit_backrefs)
+
+    def fill_backrefs(buf, node, children):
+        if (node.name == "link" or node.name == "image"):
+            name = None
+            if node.value == "reference":
+                child_node = children[1]
+                name = buf[child_node.start:child_node.end]
+                name = " ".join(name.strip().casefold().split())
+            elif node.value == "shortcut":
+                child_node = children[0]
+                name = buf[child_node.start:child_node.end]
+            if name is not None:
+                name = " ".join(name.strip().casefold().split())
+                if name in backrefs:
+                    node.children = children[:1] + backrefs[name]
+                    node.value = "inline"
+                else:
+                    node.value = None
+        return node
+    out = out.build(buf, fill_backrefs)
+
+    def remove_nesting_links(buf, node, children):
+        if node.name == "link":
+            def contains_link(buf, node, children):
+                return (node.name == "link" and node.value and node.value != "shortcut") or any(children)
+            if any(c.build(buf, contains_link) for c in children):
+                node.value = None
+
+        if "maybe" in (c.name for c in children):
+            new_children = []
+            for c in children:
+                if c.name != "maybe":
+                    new_children.append(c)
+                else:
+                    if c.children[0].value is None:
+                        for c2 in c.children[1].children:
+                            new_children.append(c2)
+                    else:
+                        new_children.append(c.children[0]) # can't remove maybe, yet as image may still collapse
+            node.children = new_children
+
+        return node
+    out = out.build(buf, remove_nesting_links)
+
+    def flatten_images(buf, node, children):
+        if node.name == "image" and node.value is not None:
+            def flatten_alt_text(buf, node, children):
+                new_children = []
+                for c in children:
+                    if c.name in ("link", "image"):
+                        for c2 in c.children[0].children:
+                            if c2.name not in ("operator", "right_flank", "left_flank"):
+                                new_children.append(c2)
+                    elif c.name not in ("right_flank", "left_flank"):
+                        new_children.append(c)
+                node.children = new_children
+
+                return node
+
+            children[0] = children[0].build(buf, flatten_alt_text)
+        return node
+    out = out.build(buf, flatten_images)
+
+    def remove_maybe(buf, node, children):
+        if "maybe" in (c.name for c in children):
+            new_children = []
+            for c in children:
+                if c.name != "maybe":
+                    new_children.append(c)
+                else:
+                    if c.children[0].value is None:
+                        for c2 in c.children[1].children:
+                            new_children.append(c2)
+                    else:
+                        new_children.append(c.children[0])
+            node.children = new_children
+
+        return node
+    out = out.build(buf, remove_maybe)
+    return out
+
+
 if __name__ == "__main__":
     with open('CommonMarkParser.py', 'w') as fh:
         fh.write(compile_python(CommonMark))
@@ -2331,55 +2432,9 @@ if __name__ == "__main__":
     worked = 0
     count =0
 
-    parser = CommonMark.parser()
     for t in tests:
         markd = t['markdown']
-        out1 = parser.parse(markd)
-        backrefs = {}
-        def visit_backrefs(buf, node, children):
-            if node.name == "link_def":
-                name_node = children[0]
-                name = buf[name_node.start:name_node.end]
-                name = " ".join(name.strip().casefold().split())
-                if name not in backrefs:
-                    backrefs[name] = children[1:]
-            return node
-
-        out1.build(markd, visit_backrefs)
-
-        def fill_backrefs(buf, node, children):
-            if (node.name == "link" or node.name == "image"):
-                name = None
-                if node.value == "reference":
-                    child_node = children[1]
-                    name = buf[child_node.start:child_node.end]
-                    name = " ".join(name.strip().casefold().split())
-                elif node.value == "shortcut":
-                    child_node = children[0]
-                    name = buf[child_node.start:child_node.end]
-                if name is not None:
-                    name = " ".join(name.strip().casefold().split())
-                    if name in backrefs:
-                        node.children = children[:1] + backrefs[name]
-                        node.value = "inline"
-                    else:
-                        node.value = None
-            if "maybe" in (c.name for c in children):
-                new_children = []
-                for c in children:
-                    if c.name != "maybe":
-                        new_children.append(c)
-                    else:
-                        if c.children[0].value is None:
-                            for c2 in c.children[1].children:
-                                new_children.append(c2)
-                        else:
-                            new_children.append(c.children[0])
-                node.children = new_children
-
-            return node
-
-        out1 = out1.build(markd, fill_backrefs)
+        out1 = parse(markd)
 
         out = out1.build(markd, builder)
         count +=1
@@ -2396,7 +2451,7 @@ if __name__ == "__main__":
             print('=', repr(t['html']))
             print('X', repr(out))
             print()
-            # walk(out1)
+            #walk(out1)
             print()
     print(count, worked, failed)
 

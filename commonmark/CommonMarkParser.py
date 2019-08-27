@@ -18565,7 +18565,7 @@ def _build(unicodedata):
                 if offset_1 == -1:
                     offset_0 = -1
                     break
-                value_0 = self.Node('text', offset_0, offset_1, column_0, column_1, children_1, None)
+                value_0 = self.Node('operator', offset_0, offset_1, column_0, column_1, children_1, None)
                 children_0.append(value_0)
                 offset_0 = offset_1
                 column_0 = column_1
@@ -18792,7 +18792,7 @@ def _build(unicodedata):
                 if offset_1 == -1:
                     offset_0 = -1
                     break
-                value_3 = self.Node('text', offset_0, offset_1, column_0, column_1, children_1, None)
+                value_3 = self.Node('operator', offset_0, offset_1, column_0, column_1, children_1, None)
                 children_0.append(value_3)
                 offset_0 = offset_1
                 column_0 = column_1
@@ -18843,7 +18843,7 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_4 = self.Node('text', offset_1, offset_2, column_1, column_2, children_2, None)
+                        value_4 = self.Node('operator', offset_1, offset_2, column_1, column_2, children_2, None)
                         children_1.append(value_4)
                         offset_1 = offset_2
                         column_1 = column_2
@@ -19102,7 +19102,7 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_8 = self.Node('text', offset_1, offset_2, column_1, column_2, children_2, None)
+                        value_8 = self.Node('operator', offset_1, offset_2, column_1, column_2, children_2, None)
                         children_1.append(value_8)
                         offset_1 = offset_2
                         column_1 = column_2
@@ -19141,7 +19141,7 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_9 = self.Node('text', offset_1, offset_2, column_1, column_2, children_2, None)
+                        value_9 = self.Node('operator', offset_1, offset_2, column_1, column_2, children_2, None)
                         children_1.append(value_9)
                         offset_1 = offset_2
                         column_1 = column_2
@@ -19408,7 +19408,7 @@ def _build(unicodedata):
                         if offset_2 == -1:
                             offset_1 = -1
                             break
-                        value_13 = self.Node('text', offset_1, offset_2, column_1, column_2, children_2, None)
+                        value_13 = self.Node('operator', offset_1, offset_2, column_1, column_2, children_2, None)
                         children_1.append(value_13)
                         offset_1 = offset_2
                         column_1 = column_2
