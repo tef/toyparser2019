@@ -10,8 +10,6 @@ def walk(node, indent="- "):
     for child in node.children:
         walk(child, indent+ "  ")
 
-def unescape(string):
-    return codecs.decode(string, 'unicode_escape')
 
 class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["\n"], tabstop=4):
     version = 0.29
@@ -2246,10 +2244,12 @@ def code_span(buf, node, children):
 
 @_builder
 def left_flank(buf, node, children):
+    if node.value: return node.value
     return tuple(children)
 
 @_builder
 def right_flank(buf, node, children):
+    if node.value: return node.value
     return tuple(children)
 
 @_builder
@@ -2331,6 +2331,8 @@ def parse(buf):
 
     out = out.build(buf, visit_backrefs)
 
+    # --- 
+
     def fill_backrefs(buf, node, children):
         if (node.name == "link" or node.name == "image"):
             name = None
@@ -2393,22 +2395,6 @@ def parse(buf):
         return node
     out = out.build(buf, flatten_images)
 
-    def remove_maybe(buf, node, children):
-        if "maybe" in (c.name for c in children):
-            new_children = []
-            for c in children:
-                if c.name != "maybe":
-                    new_children.append(c)
-                else:
-                    if c.children[0].value is None:
-                        for c2 in c.children[1].children:
-                            new_children.append(c2)
-                    else:
-                        new_children.append(c.children[0])
-            node.children = new_children
-
-        return node
-    out = out.build(buf, remove_maybe)
     return out
 
 
