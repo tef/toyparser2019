@@ -507,8 +507,16 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                 with self.capture_node("link_url"):
                     with self.repeat(), self.choice():
                         with self.case():
-                            self.literal("\\>", "\\>")
-                        with self.case(): self.range(">", "<", "\n", invert=True)
+                            self.raw_entity()
+                        with self.case():
+                            self.literal("\\")
+                            with self.lookahead():
+                                self.range("!-/",":-@","[-`","{-~")
+                            with self.capture_node('raw'):
+                                self.range("!-/",":-@","[-`","{-~")
+
+                        with self.case(), self.capture_node('raw'): 
+                            self.range(">", "<", "\n", invert=True)
                 self.literal(">")
                 self.whitespace()
             with self.case():
@@ -522,17 +530,24 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
             with self.repeat():
                 with self.choice():
                     with self.case():
-                        self.literal("\\(", "\\)")
+                        self.raw_entity()
                     with self.case():
+                        self.literal("\\")
+                        with self.lookahead():
+                            self.range("!-/",":-@","[-`","{-~")
+                        with self.capture_node('raw'):
+                            self.range("!-/",":-@","[-`","{-~")
+
+                    with self.case(), self.capture_node('raw'): 
                         self.range(")", "(", "\n",  " ", invert=True)
-                    with self.case():
+                    with self.case(), self.capture_node('raw'):
                         self.whitespace()
                         with self.reject():
                             self.end_of_line()
             with self.repeat():
-                self.literal("(")
+                with self.capture_node('raw'): self.literal("(")
                 self.balanced_list_url_spaces()
-                self.literal(")")
+                with self.capture_node('raw'): self.literal(")")
 
     @rule()
     def link_definition(self):
@@ -1175,8 +1190,15 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                 with self.capture_node("link_url"):
                     with self.repeat(), self.choice():
                         with self.case():
-                            self.literal("\\>", "\\>")
-                        with self.case(): self.range(">", "<", "\n", invert=True)
+                            self.raw_entity()
+                        with self.case():
+                            self.literal("\\")
+                            with self.lookahead():
+                                self.range("!-/",":-@","[-`","{-~")
+                            with self.capture_node('raw'):
+                                self.range("!-/",":-@","[-`","{-~")
+                        with self.case(), self.capture_node('raw'):
+                            self.range(">", "<", "\n", invert=True)
                 self.literal(">")
                 self.whitespace()
             with self.case():
@@ -1190,13 +1212,21 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
             with self.repeat():
                 with self.choice():
                     with self.case():
-                        self.literal("\\(", "\\)")
+                        self.raw_entity()
                     with self.case():
+                        self.literal("\\")
+                        with self.lookahead():
+                            self.range("!-/",":-@","[-`","{-~")
+                        with self.capture_node('raw'):
+                            self.range("!-/",":-@","[-`","{-~")
+                    with self.case(), self.capture_node('raw'):
                         self.range(")", "(", "\n", " ", invert=True)
             with self.repeat():
-                self.literal("(")
+                with self.capture_node('raw'):
+                    self.literal("(")
                 self.balanced_list_url()
-                self.literal(")")
+                with self.capture_node('raw'):
+                    self.literal(")")
             
 
     @rule()
@@ -1207,9 +1237,18 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                 with self.capture_node("link_title"), self.repeat():
                     with self.choice():
                         with self.case():
+                            self.raw_entity()
+                        with self.case():
+                            self.literal("\\")
+                            with self.lookahead():
+                                self.range("!-/",":-@","[-`","{-~")
+                            with self.capture_node('raw'):
+                                self.range("!-/",":-@","[-`","{-~")
+                        with self.case(), self.capture_node('raw'):
                             self.range("\"", "\n", invert=True)
                         with self.case():
-                            self.newline()
+                            with self.capture_node('raw'):
+                                self.newline()
                             self.indent(partial=True)
                             self.whitespace()
                             with self.reject(): self.newline()
@@ -1220,9 +1259,18 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                 with self.capture_node("link_title"), self.repeat():
                     with self.choice():
                         with self.case():
+                            self.raw_entity()
+                        with self.case():
+                            self.literal("\\")
+                            with self.lookahead():
+                                self.range("!-/",":-@","[-`","{-~")
+                            with self.capture_node('raw'):
+                                self.range("!-/",":-@","[-`","{-~")
+                        with self.case(), self.capture_node('raw'):
                             self.range("\'", "\n", invert=True)
                         with self.case():
-                            self.newline()
+                            with self.capture_node('raw'):
+                                self.newline()
                             self.indent(partial=True)
                             self.whitespace()
                             with self.reject(): self.newline()
@@ -1239,15 +1287,47 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
             with self.repeat():
                 with self.choice():
                     with self.case():
-                        self.literal("\\(", "\\)")
+                        self.raw_entity()
                     with self.case():
-                        self.range(")", "(", "\n", invert=True)
+                        self.literal("\\")
+                        with self.lookahead():
+                            self.range("!-/",":-@","[-`","{-~")
+                        with self.capture_node('raw'):
+                            self.range("!-/",":-@","[-`","{-~")
+                    with self.case():
+                        with self.capture_node('raw'):
+                            self.range(")", "(", "\n", invert=True)
             with self.repeat():
-                self.literal("(")
+                with self.capture_node('raw'):
+                    self.literal("(")
                 self.balanced_list_title()
-                self.literal(")")
+                with self.capture_node('raw'):
+                    self.literal(")")
             
 
+    @rule()
+    def raw_entity(self):
+        self.literal("&");
+        with self.choice():
+            with self.case():
+                self.literal("#")
+                with self.capture_node("raw_entity", value="decimal"), self.repeat(min=1, max=7):
+                    self.range("0-9")
+                self.literal(";")
+            with self.case():
+                self.literal("#")
+                self.range("x","X")
+                with self.capture_node("raw_entity", value="hex"):
+                    self.range("0-9", "a-f","A-F")
+                    with self.repeat(min=0, max=6):
+                        self.range("0-9", "a-f","A-F")
+                self.literal(";")
+            with self.case():
+                with self.capture_node("raw_entity", value="named"):
+                    self.range("a-z","A-Z")
+                    with self.repeat(min=1):
+                        self.range("0-9","a-z","A-Z")
+                self.literal(";")
 
     @rule()
     def escaped_text(self):
@@ -1877,10 +1957,12 @@ def link_para(buf, node, children):
 
 @_builder
 def link_url(buf, node, children):
+    return "".join(children)
     return buf[node.start:node.end]
 
 @_builder
 def link_title(buf, node, children):
+    return "".join(children)
     return buf[node.start:node.end]
 
 @_builder
@@ -1920,6 +2002,7 @@ def html_entity(buf, node, children):
     else:
         raise Exception('no')
     return html_escape(out)
+
 @_builder
 def code_span(buf, node, children):
     text = "".join(children)
