@@ -271,6 +271,7 @@ REJECT_IF = 'reject-if'
 COUNT = 'count'
 VALUE = 'value'
 VARIABLE = 'variable'
+UNTIL = 'until'
 SET_VAR = 'set-variable'
 SHUNT = 'shunt'
 
@@ -279,7 +280,7 @@ LITERAL = 'literal'
 RANGE = 'range'
 SEQUENCE = 'seq'
 CAPTURE = 'capture'
-REPARSE = 'reparse'
+PARSEAHEAD = 'parseahead'
 BACKREF = 'backref'
 COLUMN = 'column'
 CHOICE = 'choice'
@@ -574,6 +575,16 @@ class FunctionBuilder:
         self.rules.append(node)
 
     @contextmanager
+    def until(self, offset):
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
+        rules = self.rules
+        self.rules = []
+        node = GrammarNode(UNTIL, args=dict(offset=offset), rules=self.rules)
+        yield node.key
+        rules.append(node)
+        self.rules = rules
+
+    @contextmanager
     def variable(self, value):
         if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         rules = self.rules
@@ -582,12 +593,13 @@ class FunctionBuilder:
         yield node.key
         rules.append(node)
         self.rules = rules
+
     @contextmanager
-    def reparse(self, capture=None, start=None, end=None):
+    def parseahead(self):
         if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         rules = self.rules
         self.rules = []
-        node = GrammarNode(REPARSE, args=dict(capture=capture, start=start, end=end), rules=self.rules)
+        node = GrammarNode(PARSEAHEAD, rules=self.rules)
         yield node.key
         rules.append(node)
         self.rules = rules
@@ -1028,15 +1040,15 @@ def compile_python(grammar, cython=False):
             steps.append(f"if {offset} == -1:")
             steps.append(f"    break")
 
-        elif rule.kind == REPARSE:
+        elif rule.kind == PARSEAHEAD:
             steps_0 = steps.add_indent()
             offset_0 = offset.incr()
             column_0 = column.incr()
             indent_column_0 = indent_column.incr()
             partial_tab_offset_0 = partial_tab_offset.incr()
             partial_tab_width_0 = partial_tab_width.incr()
-            steps.append(f"while True: # start lookahed")
-            steps_0.append(f"{offset_0} = {offset} + {rule.args['offset']}")
+            steps.append(f"while True: # start parse ahead")
+            steps_0.append(f"{offset_0} = {offset}")
             steps_0.append(f"{column_0} = {column}")
             steps_0.append(f"{indent_column_0} = {indent_column}")
             steps_0.append(f"{partial_tab_offset_0} = {partial_tab_offset}")
@@ -1047,6 +1059,31 @@ def compile_python(grammar, cython=False):
             steps.append(f'if {offset_0} == -1:')
             steps.append(f'    {offset} = -1')
             steps.append(f'    break')
+             
+            var_name = VarBuilder('value',n=len(values))
+            values[rule.key] = var_name
+            
+            steps.append(f'{var_name} = {offset_1}')
+        elif rule.kind == UNTIL:
+            value = rule.args['offset']
+            value = values.get(value, repr(value))
+
+            offset_0 = offset.incr()
+            count = count.inct()
+            steps.append(f"{offset_0} = {offset}")
+            steps.append(f"{count} = buf_eof")
+            steps.append(f"buf_eof = {value}")
+            if not rule.rules:
+                raise Exception('empty rules')
+            steps.append(f"while True: # start until")
+            build_subrules(rule.rules, steps.add_indent(), offset_0, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children, count.incr(), values)
+            steps.append(f"    break")
+            steps.append(f"buf_eof = {count}")
+            steps.append(f"if {offset_0} == -1 or {offset_0} != {value}:")
+            steps.append(f"    {offset} = -1")
+            steps.append(f"    break")
+
+            steps.append(f"{offset} = {offset_0}")
 
         elif rule.kind == LOOKAHEAD:
             steps_0 = steps.add_indent()

@@ -1041,6 +1041,8 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
     def inline_element(self):
         with self.choice():
             with self.case():
+                self.image_operator()
+            with self.case():
                 self.link_operator()
             with self.case():
                 self.inline_html()
@@ -1125,13 +1127,10 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                                     self.right_flank()
                                 with self.repeat(min=1): 
                                     self.literal("_") 
-
     @rule()
-    def link_operator(self):
-        with self.variable('link') as kind, self.variable('reference') as style, self.capture_node(kind, value=style) as cap:
-            with self.optional():
-                self.literal("!")
-                self.set_variable(kind, "image")
+    def image_operator(self):
+        with self.variable('reference') as style, self.capture_node("image", value=style) as cap:
+            self.literal("!")
             self.literal("[")
             with self.reject():
                 self.whitespace(newline=True)
@@ -1139,6 +1138,90 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                 with self.reject():
                     self.literal("(")
             with self.capture_node('link_para'), self.backref() as raw:
+                with self.optional():
+                    with self.reject():
+                        self.literal("]")
+
+                    self.inline_element()
+
+                    with self.repeat():
+                        with self.choice():
+                            with self.case():
+                                self.linebreak.inline()
+                            with self.case():
+                                with self.capture_node("whitespace"):
+                                    self.whitespace()
+
+                        with self.reject():
+                            self.literal("]")
+                        self.inline_element()
+
+                with self.capture_node("whitespace"):
+                    self.whitespace()
+            self.literal("]")
+
+            with self.choice():
+                with self.case():
+                    self.literal("[")
+                    self.whitespace()
+                    with self.capture_node("link_label"):
+                        with self.repeat(min=1), self.choice():
+                            with self.case():
+                                self.literal("\\[", "\\]")
+                            with self.case():
+                                self.range("[", "]", "\n", invert=True)
+                    self.literal("]")
+                    with self.reject(): self.literal("[")
+                    self.set_variable(style, "reference")
+
+                with self.case():
+                    self.literal("(")
+                    with self.choice():
+                        with self.case():
+                            self.whitespace()
+                            self.newline()
+                            self.whitespace()
+                            with self.reject():
+                                self.newline()
+                        with self.case(): 
+                            self.whitespace()
+                    self.link_url()
+
+                    with self.optional():
+                        with self.choice():
+                            with self.case():
+                                self.whitespace()
+                                self.newline()
+                                self.whitespace()
+                                with self.reject():
+                                    self.newline()
+                            with self.case(): 
+                                self.whitespace()
+                        self.link_title()
+                    self.whitespace()
+                    self.literal(")")
+                    self.set_variable(style, "inline")
+                with self.case():
+                    with self.capture_node('text'):
+                        self.literal('[]', '()')
+                    self.set_variable(style, "shortcut")
+                with self.case():
+                    self.set_variable(style, "shortcut")
+
+
+    @rule()
+    def link_operator(self):
+        with self.variable('reference') as style, self.capture_node("link", value=style) as cap:
+            self.literal("[")
+            with self.reject():
+                self.whitespace(newline=True)
+                self.literal("]")
+                with self.reject():
+                    self.literal("(")
+            with self.capture_node('link_para'), self.backref() as raw:
+                with self.capture_node("whitespace"):
+                    self.whitespace()
+                
                 with self.optional():
                     with self.reject():
                         self.literal("]")
@@ -1792,27 +1875,30 @@ def join_blocks(children):
         return c
     return '\n'.join(wrap(c) for c in children if c)
 
+EMPTY = object()
+
 def loose(list_items):
     idx = 0
-    while idx < len(list_items) and list_items[idx] is None: idx+=1
-    while idx < len(list_items) and list_items[idx] is not None: idx+=1
-    while idx < len(list_items) and list_items[idx] is None: idx+=1
+    while idx < len(list_items) and list_items[idx] is EMPTY: idx+=1
+    while idx < len(list_items) and list_items[idx] is not EMPTY: idx+=1
+    while idx < len(list_items) and list_items[idx] is EMPTY: idx+=1
     return idx != len(list_items)
 
 def wrap_loose(list_items, out):
     def wrap(c):
-        if not c: return None
+        if not c or c is EMPTY: return None
         if isinstance(c, tuple):
             return f"<p>{c[0]}</p>"
         return c
     for item in list_items:
-        if item == None: continue
+        if item == None or item is EMPTY: continue
         wrapped = [ wrap(line) for line in item]
         _out = []
         for line in item:
             line = wrap(line)
-            if line is None:
+            if line is None or line is EMPTY:
                 if not _out[-1].endswith('\n'):
+
                     _out.append('\n')
             else:
                 _out.append(line)
@@ -1830,7 +1916,7 @@ def wrap_loose(list_items, out):
 
 def wrap_tight(list_items, out):
     def wrap(c):
-        if not c: return None
+        if not c or c is EMPTY: return None
         if isinstance(c, tuple):
             return f"{c[0]}"
         return c if c.endswith('\n') else c+"\n"
@@ -1841,7 +1927,7 @@ def wrap_tight(list_items, out):
             if isinstance(c, tuple):
                 out2.append(f"{c[0]}")
                 a_block=False
-            elif c:
+            elif c is not None and c != EMPTY:
                 if not a_block: out2.append('\n')
                 out2.append(c)
                 out2.append("\n")
@@ -1913,7 +1999,7 @@ def blockquote(buf, node, children):
 def unordered_list(buf, node, list_items):
     out = ["<ul>\n"]
 
-    if loose(list_items) or any(loose(c) for c in list_items if c):
+    if loose(list_items) or any(loose(c) for c in list_items if c is not None and c is not EMPTY):
         wrap_loose(list_items, out)
     else:
         wrap_tight(list_items, out)
@@ -2097,7 +2183,7 @@ def raw(buf, node, children):
 
 @_builder
 def empty(buf, node, children):
-    return None
+    return EMPTY
 
 @_builder
 def empty_line(buf, node, children):
@@ -2165,10 +2251,11 @@ if __name__ == "__main__":
                 elif node.value == "shortcut":
                     child_node = children[0]
                     name = buf[child_node.start:child_node.end]
-                name = " ".join(name.strip().casefold().split()) if name is not None else None
-                if name is not None and name in backrefs:
-                    node.children = children[:1] + backrefs[name]
-                    node.value = "inline"
+                if name is not None:
+                    name = " ".join(name.strip().casefold().split())
+                    if name in backrefs:
+                        node.children = children[:1] + backrefs[name]
+                        node.value = "inline"
 
             return node
 
@@ -2189,8 +2276,8 @@ if __name__ == "__main__":
             print('=', repr(t['html']))
             print('X', repr(out))
             print()
-            # walk(out1)
-            # print()
+            walk(out1)
+            print()
     print(count, worked, failed)
 
 
