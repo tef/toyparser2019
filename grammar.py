@@ -856,7 +856,6 @@ def compile_python(grammar, cython=False):
                 steps.append( f"{value} = {column}")
 
         elif rule.kind == CAPTURE:
-            name = repr(rule.args['name'])
             children_0 = children.incr()
             offset_0 = offset.incr()
             steps.append(f"{offset_0} = {offset}")
@@ -872,6 +871,8 @@ def compile_python(grammar, cython=False):
                 steps.append(f"    {offset} = -1")
                 steps.append(f"    break")
 
+            name = rule.args['name']
+            name = values.get(name, repr(name))
             value = VarBuilder('value', n=len(values))
             values[rule.key] = value
 

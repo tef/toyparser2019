@@ -929,8 +929,7 @@ class CommonMark(Grammar, start="document", capture="document", whitespace=[" ",
     @rule()
     def para(self):
         self.whitespace(max=3)
-        kind = "para"
-        with self.variable("para") as kind, self.capture_node("para", value=kind):
+        with self.variable("para") as kind, self.capture_node(kind):
             with self.no_setext_heading_line.as_indent():
                 self.inline_element()
 
@@ -1851,16 +1850,7 @@ def link_title(buf, node, children):
 @_builder
 def link_label(buf, node, children):
     return None
-
     
-
-@_builder
-def para(buf, node,  children):
-    if node.value == "setext":
-        return f"<h{children[-1]}>{make_para(children[:-1])}</h{children[-1]}>"
-    else:
-        return (make_para(children),)
-
 @_builder
 def code_span(buf, node, children):
     text = "".join(children)
@@ -1868,6 +1858,14 @@ def code_span(buf, node, children):
     if len(text) > 2 and text[0] == text[-1] == " ":
         text = text[1:-1]
     return f"<code>{text}</code>"
+
+@_builder
+def setext(buf, node, children):
+    return f"<h{children[-1]}>{make_para(children[:-1])}</h{children[-1]}>"
+
+@_builder
+def para(buf, node,  children):
+    return (make_para(children),)
 
 @_builder
 def text(buf, node, children):

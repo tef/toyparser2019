@@ -14024,7 +14024,7 @@ def _build(unicodedata):
                     if offset_2 == -1:
                         offset_1 = -1
                         break
-                    value_3 = self.Node('para', offset_1, offset_2, children_1, value_0)
+                    value_3 = self.Node(value_0, offset_1, offset_2, children_1, None)
                     children_0.append(value_3)
                     offset_1 = offset_2
 
