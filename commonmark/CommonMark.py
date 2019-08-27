@@ -78,11 +78,11 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
     @rule()
     def atx_heading(self):
         self.whitespace(max=3)
-        with self.capture_node("atx_heading"):
+        with self.variable(0) as num, self.capture_node("atx_heading", value=num):
             with self.count(char='#') as level:
                 with self.repeat(min=1, max=6):
                     self.literal("#")
-            self.capture_value(level)
+            self.set_variable(num, level)
             with self.choice():
                 with self.case():
                     self.atx_heading_end()
@@ -929,7 +929,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
     @rule()
     def para(self):
         self.whitespace(max=3)
-        with self.variable("para") as kind, self.capture_node(kind):
+        with self.variable("para") as kind, self.variable(0) as level, self.capture_node(kind, value=level):
             with self.no_setext_heading_line.as_indent():
                 self.inline_element()
 
@@ -951,7 +951,18 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                     self.whitespace()
                     self.newline()
                     self.indent(partial=False)
-                    self.setext_heading_line()
+
+                    self.whitespace(max=3)
+                    with self.choice():
+                        with self.case():
+                            with self.repeat(min=1):
+                                self.literal('=')
+                            self.set_variable(level, 1)
+                        with self.case():
+                            with self.repeat(min=1):
+                                self.literal('-')
+                            self.set_variable(level, 2)
+                    self.line_end()
                     self.set_variable(kind, 'setext')
                 with self.case():
                     with self.repeat():
@@ -1704,7 +1715,7 @@ def thematic_break(buf, node, children):
 
 @_builder
 def atx_heading(buf, node, children):
-    return f"<h{children[0]}>{make_para(children[1:])}</h{children[0]}>"
+    return f"<h{node.value}>{make_para(children)}</h{node.value}>"
 
 @_builder
 def indented_code(buf, node, children):
@@ -1861,7 +1872,7 @@ def code_span(buf, node, children):
 
 @_builder
 def setext(buf, node, children):
-    return f"<h{children[-1]}>{make_para(children[:-1])}</h{children[-1]}>"
+    return f"<h{node.value}>{make_para(children)}</h{node.value}>"
 
 @_builder
 def para(buf, node,  children):
