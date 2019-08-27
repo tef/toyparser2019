@@ -544,7 +544,7 @@ class FunctionBuilder:
 
         return _capture()
 
-    def capture_value(self, value, name=None):
+    def capture_value(self, value, name="value"):
         if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         node = GrammarNode(VALUE, args=dict(name=name, value=value))
         self.rules.append(node)
@@ -810,13 +810,12 @@ def compile_python(grammar, cython=False):
             steps.append(f"    break")
 
         elif rule.kind == BACKREF:
-            children_0 = children.incr()
             offset_0 = offset.incr()
             steps.append(f"{offset_0} = {offset}")
             if not rule.rules:
                 raise Exception('empty rules')
             steps.append(f"while True: # start backref")
-            build_subrules(rule.rules, steps.add_indent(), offset_0, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children_0, count, values)
+            build_subrules(rule.rules, steps.add_indent(), offset_0, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children, count, values)
             steps.append(f"    break")
             steps.append(f"if {offset_0} == -1:")
             steps.append(f"    {offset} = -1")
@@ -1051,10 +1050,11 @@ def compile_python(grammar, cython=False):
 
         elif rule.kind == VALUE:
             value = rule.args['value']
+            name = rule.args['name']
             value = values.get(value, repr(value))
 
             steps.extend((
-                f"{children}.append({node}('value', {offset}, {offset}, (), {value}))",
+                f"{children}.append({node}({repr(name)}, {offset}, {offset}, (), {value}))",
             ))
 
         elif rule.kind == SET_LINE_PREFIX:
@@ -1658,6 +1658,7 @@ def compile_python(grammar, cython=False):
         "        return '{}[{}:{}]'.format(self.name, self.start, self.end)",
         f'    def build(self, buf, builder):',
         f'        children = [child.build(buf, builder) for child in self.children]',
+        f'        if callable(builder): return builder(buf, self, children)',
         f'        if self.name == "value": return self.value',
         f'        return builder[self.name](buf, self, children)',
         f'',
