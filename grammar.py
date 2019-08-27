@@ -1028,6 +1028,26 @@ def compile_python(grammar, cython=False):
             steps.append(f"if {offset} == -1:")
             steps.append(f"    break")
 
+        elif rule.kind == REPARSE:
+            steps_0 = steps.add_indent()
+            offset_0 = offset.incr()
+            column_0 = column.incr()
+            indent_column_0 = indent_column.incr()
+            partial_tab_offset_0 = partial_tab_offset.incr()
+            partial_tab_width_0 = partial_tab_width.incr()
+            steps.append(f"while True: # start lookahed")
+            steps_0.append(f"{offset_0} = {offset} + {rule.args['offset']}")
+            steps_0.append(f"{column_0} = {column}")
+            steps_0.append(f"{indent_column_0} = {indent_column}")
+            steps_0.append(f"{partial_tab_offset_0} = {partial_tab_offset}")
+            steps_0.append(f"{partial_tab_width_0} = {partial_tab_width}")
+            build_subrules(rule.rules, steps_0, offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0, prefix, children, count, values)
+            steps_0.append("break")
+
+            steps.append(f'if {offset_0} == -1:')
+            steps.append(f'    {offset} = -1')
+            steps.append(f'    break')
+
         elif rule.kind == LOOKAHEAD:
             steps_0 = steps.add_indent()
             children_0 = children.incr()
@@ -1113,36 +1133,6 @@ def compile_python(grammar, cython=False):
             value = values.get(value, repr(value))
 
             steps.append(f"{var} = {value}")
-
-        elif rule.kind == REPARSE:
-            offset_0 = offset.incr()
-            count_0 = count.incr()
-            steps.append(f"{count} = buf_eof")
-            if rule.args['capture']:
-                cap = values[rules.args['capture']]
-                steps.append(f"{offset_0} = {cap}.start")
-                steps.append(f"buf_eof = {cap}.end")
-            else:
-                start = rules.args['start']
-                start = values.get(start, repr(start))
-                end = rules.args['end']
-                if end is None: 
-                    steps.append(f"{offset_0} = {start}")
-                    steps.append(f"buf_eof = {offset}")
-                else:
-                    end = values.get(end, repr(end))
-                    steps.append(f"{offset_0} = {start}")
-                    steps.append(f"buf_eof = {end}")
-
-            if not rule.rules:
-                raise Exception('empty rules')
-            steps.append(f"while True: # start backref")
-            build_subrules(rule.rules, steps.add_indent(), offset_0, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children, count_0, values)
-            steps.append(f"    break")
-            steps.append(f"buf_eof = {count}")
-            steps.append(f"if {offset_0} == -1:")
-            steps.append(f"    {offset} = -1")
-            steps.append(f"    break")
 
 
         elif rule.kind == VARIABLE:
