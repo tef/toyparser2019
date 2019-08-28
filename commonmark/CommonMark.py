@@ -2484,36 +2484,13 @@ def empty_line(buf, node, children):
 
 ### 
 
+def test_spec():
+    print('grammar version', CommonMark.version)
 
-def markup(buf):
-    parser = CommonMark.parser()
-    node = parser.parse(buf)
-    if node:
-        print("test")
-        for b in buf.splitlines():
-            print(b)
-        print()
-        walk(node)
-        print()
-        print(node.build(buf, builder))
-
-
-if __name__ == "__main__":
-    with open('CommonMarkParser.py', 'w') as fh:
-        fh.write(compile_python(CommonMark))
-            
-    #for name, value in CommonMark.rules.items():
-    #    print(name, '<--', value,'.')
-
-    print(CommonMark.version)
-    #with open("../README.md") as readme:
-    #    markup(readme.read())
-
-
-    print('spec')
     import json
     with open("commonmark_0_29.json") as fh:
         tests = json.load(fh)
+
     failed = 0
     worked = 0
     count =0
@@ -2530,9 +2507,7 @@ if __name__ == "__main__":
             #print(repr(out))
         else:
             failed +=1
-            # if '<' in markd: continue
-            # if '[' in markd: continue
-            print(t['example'])
+            print("example", t['example'])
             print(repr(markd))
             print('=', repr(t['html']))
             print('X', repr(out))
@@ -2540,5 +2515,29 @@ if __name__ == "__main__":
             #walk(out1)
             print()
     print(count, worked, failed)
+
+
+if __name__ == "__main__":
+    with open('CommonMarkParser.py', 'w') as fh:
+        fh.write(compile_python(CommonMark))
+            
+    test_spec()
+
+    #for name, value in CommonMark.rules.items():
+    #    print(name, '<--', value,'.')
+    #def markup(buf):
+    #    parser = CommonMark.parser()
+    #    node = parser.parse(buf)
+    #    if node:
+    #        print("test")
+    #        for b in buf.splitlines():
+    #            print(b)
+    #        print()
+    #        walk(node)
+    #        print()
+    #        print(node.build(buf, builder))
+
+    #with open("../README.md") as readme:
+    #    markup(readme.read())
 
 
