@@ -608,317 +608,6 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
         self.whitespace()
         self.newline()
 
-    ## html
-
-    html_block = rule(
-            html_block_type_1 |
-            html_block_type_2 |
-            html_block_type_3 |
-            html_block_type_4 |
-            html_block_type_5 |
-            html_block_type_6 |
-            html_block_type_7 
-    )
-
-    @rule()
-    def start_html_block(self):
-        self.whitespace(max=3)
-        with self.choice():
-            with self.case():
-                self.literal("<script", "<pre", "<style", transform="lower")
-            with self.case():
-                self.literal("<?", "<![CDATA[")
-            with self.case():
-                self.literal("<!")
-                self.range("A-Z")
-            with self.case():
-                self.literal("</", "<")
-                self.literal(*"address,article,aside,base,basefont,blockquote,body,caption,center,col,colgroup,dd,details,dialog,dir,div,dl,dt,fieldset,figcaption,figure,footer,form,frame,frameset,h1,h2,h3,h4,h5,h6,head,header,hr,html,iframe,legend,li,link,main,menu,menuitem,nav,noframes,ol,optgroup,option,p,param,section,source,summary,table,tbody,td,tfoot,th,thead,title,tr,track,ul".split(","), transform="lower")
-                with self.lookahead(), self.choice():
-                    with self.case(): self.whitespace(min=1)
-                    with self.case(): self.literal(">")
-                    with self.case(): self.end_of_line()
-
-
-    @rule()
-    def html_block_type_1(self):
-        with self.capture_node('html_block'):
-            with self.capture_node('raw'):
-                self.whitespace(max=3)
-                self.literal("<script", "<pre", "<style", transform="lower")
-                with self.lookahead(), self.choice():
-                    with self.case(): self.whitespace(min=1)
-                    with self.case(): self.literal(">")
-                    with self.case(): self.end_of_line()
-                with self.repeat():
-                    with self.reject(): self.literal("</script>", "</pre>", "</style>", transform="lower")
-                    self.range("\n", invert=True)
-
-            with self.repeat():
-                with self.capture_node('raw'): self.newline()
-                self.indent(partial=False)
-                with self.reject():
-                    self.whitespace()
-                    self.end_of_file()
-                with self.capture_node('raw'):
-                    with self.repeat():
-                        with self.reject(): self.literal("</script>", "</pre>", "</style>", transform="lower")
-                        self.range("\n", invert=True)
-
-            with self.choice():
-                with self.case():
-                    with self.capture_node('raw'):
-                        self.literal("</script>", "</pre>", "</style>", transform="lower")
-                        with self.repeat(): self.range("\n", invert=True)
-                    self.newline()
-                with self.case():
-                    with self.capture_node('raw'):
-                        with self.repeat():
-                            with self.reject(): self.literal("</script>", "</pre>", "</style>", transform="lower")
-                            self.range("\n", invert=True)
-                    self.end_of_line()
-    @rule()
-    def html_block_type_2(self):
-        with self.capture_node('html_block'):
-            with self.capture_node('raw'):
-                self.whitespace(max=3)
-                self.literal("<!--")
-                with self.repeat():
-                    with self.reject(): self.literal("-->")
-                    self.range("\n", invert=True)
-
-            with self.repeat():
-                with self.capture_node('raw'): self.newline()
-                self.indent(partial=False)
-                with self.reject():
-                    self.whitespace()
-                    self.end_of_file()
-                with self.capture_node('raw'):
-                    with self.repeat():
-                        with self.reject(): self.literal("-->")
-                        self.range("\n", invert=True)
-
-            with self.choice():
-                with self.case():
-                    with self.capture_node('raw'):
-                        self.literal("-->")
-                        with self.repeat(): self.range("\n", invert=True)
-                    self.newline()
-                with self.case():
-                    with self.capture_node('raw'):
-                        with self.repeat():
-                            with self.reject(): self.literal("-->")
-                            self.range("\n", invert=True)
-                    self.end_of_line()
-    @rule()
-    def html_block_type_3(self):
-        with self.capture_node('html_block'):
-            with self.capture_node('raw'):
-                self.whitespace(max=3)
-                self.literal("<?")
-                with self.repeat():
-                    with self.reject(): self.literal("?>")
-                    self.range("\n", invert=True)
-
-            with self.repeat():
-                with self.capture_node('raw'): self.newline()
-                self.indent(partial=False)
-                with self.reject():
-                    self.whitespace()
-                    self.end_of_file()
-                with self.capture_node('raw'):
-                    with self.repeat():
-                        with self.reject(): self.literal("?>")
-                        self.range("\n", invert=True)
-
-            with self.choice():
-                with self.case():
-                    with self.capture_node('raw'):
-                        self.literal("?>")
-                        with self.repeat(): self.range("\n", invert=True)
-                    self.newline()
-                with self.case():
-                    with self.capture_node('raw'):
-                        with self.repeat():
-                            with self.reject(): self.literal("?>")
-                            self.range("\n", invert=True)
-                    self.end_of_line()
-    @rule()
-    def html_block_type_4(self):
-        with self.capture_node('html_block'):
-            with self.capture_node('raw'):
-                self.whitespace(max=3)
-                self.literal("<!")
-                self.range("A-Z")
-                with self.repeat():
-                    with self.reject(): self.literal(">")
-                    self.range("\n", invert=True)
-
-            with self.repeat():
-                with self.capture_node('raw'): self.newline()
-                self.indent(partial=False)
-                with self.reject():
-                    self.whitespace()
-                    self.end_of_file()
-                with self.capture_node('raw'):
-                    with self.repeat():
-                        with self.reject(): self.literal(">")
-                        self.range("\n", invert=True)
-
-            with self.choice():
-                with self.case():
-                    with self.capture_node('raw'):
-                        self.literal(">")
-                        with self.repeat(): self.range("\n", invert=True)
-                    self.newline()
-                with self.case():
-                    with self.capture_node('raw'):
-                        with self.repeat():
-                            with self.reject(): self.literal(">")
-                            self.range("\n", invert=True)
-                    self.end_of_line()
-    @rule()
-    def html_block_type_5(self):
-        with self.capture_node('html_block'):
-            with self.capture_node('raw'):
-                self.whitespace(max=3)
-                self.literal("<![CDATA[")
-                with self.repeat():
-                    with self.reject(): self.literal("]]>")
-                    self.range("\n", invert=True)
-
-            with self.repeat():
-                with self.capture_node('raw'): self.newline()
-                self.indent(partial=False)
-                with self.reject():
-                    self.whitespace()
-                    self.end_of_file()
-                with self.capture_node('raw'):
-                    with self.repeat():
-                        with self.reject(): self.literal("]]>")
-                        self.range("\n", invert=True)
-
-            with self.choice():
-                with self.case():
-                    with self.capture_node('raw'):
-                        self.literal("]]>")
-                        with self.repeat(): self.range("\n", invert=True)
-                    self.newline()
-                with self.case():
-                    with self.capture_node('raw'):
-                        with self.repeat():
-                            with self.reject(): self.literal("]]>")
-                            self.range("\n", invert=True)
-                    self.end_of_line()
-    @rule()
-    def html_block_type_6(self):
-        with self.capture_node('html_block'):
-            with self.capture_node('raw'):
-                self.whitespace(max=3)
-                self.literal("</", "<")
-                self.literal(*"address,article,aside,base,basefont,blockquote,body,caption,center,col,colgroup,dd,details,dialog,dir,div,dl,dt,fieldset,figcaption,figure,footer,form,frame,frameset,h1,h2,h3,h4,h5,h6,head,header,hr,html,iframe,legend,li,link,main,menu,menuitem,nav,noframes,ol,optgroup,option,p,param,section,source,summary,table,tbody,td,tfoot,th,thead,title,tr,track,ul".split(","), transform="lower")
-                with self.lookahead(), self.choice():
-                    with self.case(): self.whitespace(min=1)
-                    with self.case(): self.literal(">")
-                    with self.case(): self.end_of_line()
-                with self.repeat():
-                    self.range("\n", invert=True)
-
-            with self.repeat():
-                with self.capture_node('raw'): self.newline()
-                self.indent(partial=False)
-                with self.reject():
-                    self.whitespace()
-                    self.end_of_line()
-                with self.capture_node('raw'):
-                    with self.repeat():
-                        self.range("\n", invert=True)
-
-            with self.choice():
-                with self.case():
-                    self.newline()
-                    self.indent(partial=False)
-                    self.whitespace()
-                    self.end_of_line()
-                with self.case():
-                    self.end_of_line()
-                    with self.reject():
-                        self.indent(partial=False)
-                with self.case():
-                    self.end_of_line()
-                    self.end_of_file()
-    @rule()
-    def html_block_type_7(self):
-        with self.capture_node('html_block'):
-            with self.capture_node('raw'):
-                self.whitespace(max=3)
-                self.literal("<")
-                with self.reject():
-                    self.literal("pre", "script", "style", transform="lower")
-                with self.choice():
-                    with self.case():
-                        self.literal("/")
-                        self.range("a-z", "A-Z")
-                        with self.repeat():
-                            self.range("a-z", "A-Z", "-", "0-9")
-                        self.whitespace()
-                        self.literal(">")
-                        self.whitespace()
-                    with self.case():
-                        self.range("a-z", "A-Z")
-                        with self.repeat():
-                            self.range("a-z", "A-Z", "-", "0-9")
-                        with self.repeat():
-                            self.whitespace(min=1)
-                            self.range("a-z", "A-Z", ":", "_")
-                            with self.repeat(min=1):
-                                self.range("a-z", "A-Z", ":", "_", "0-9", "-")
-                            with self.optional():
-                                self.whitespace()
-                                self.literal("=")
-                                self.whitespace()
-                                with self.choice():
-                                    with self.case():
-                                        with self.repeat(min=1):
-                                            self.range("\"", "'", "=", "<", ">", "`", "\t", " ", "\n", "\r", invert=True)
-                                    with self.case():
-                                        self.literal("\"")
-                                        with self.repeat(): self.range('"',"\n",  invert=True)
-                                        self.literal("\"")
-                                    with self.case():
-                                        self.literal('\'')
-                                        with self.repeat(): self.range("'","\n", invert=True)
-                                        self.literal('\'')
-                        self.whitespace()
-                        self.literal(">", "/>")
-                        self.whitespace()
-                
-
-            with self.repeat():
-                with self.capture_node('raw'): self.newline()
-                self.indent(partial=False)
-                with self.reject():
-                    self.whitespace()
-                    self.end_of_line()
-                with self.capture_node('raw'):
-                    with self.repeat():
-                        self.range("\n", invert=True)
-
-            with self.choice():
-                with self.case():
-                    self.newline()
-                    self.indent(partial=False)
-                    self.whitespace()
-                    self.newline()
-                with self.case():
-                    self.end_of_line()
-                    with self.reject():
-                        self.indent(partial=False)
-                with self.case():
-                    self.end_of_line()
-                    self.end_of_file()
-
-
     @rule()
     def para_interrupt(self):
         with self.choice():
@@ -1776,6 +1465,37 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                 with self.capture_node('text'), self.repeat(min=1):
                     self.literal("`")
 
+    ## html
+
+    html_block = rule(
+            html_block_type_1 |
+            html_block_type_2 |
+            html_block_type_3 |
+            html_block_type_4 |
+            html_block_type_5 |
+            html_block_type_6 |
+            html_block_type_7 
+    )
+
+    @rule()
+    def start_html_block(self):
+        self.whitespace(max=3)
+        with self.choice():
+            with self.case():
+                self.literal("<script", "<pre", "<style", transform="lower")
+            with self.case():
+                self.literal("<?", "<![CDATA[")
+            with self.case():
+                self.literal("<!")
+                self.range("A-Z")
+            with self.case():
+                self.literal("</", "<")
+                self.literal(*"address,article,aside,base,basefont,blockquote,body,caption,center,col,colgroup,dd,details,dialog,dir,div,dl,dt,fieldset,figcaption,figure,footer,form,frame,frameset,h1,h2,h3,h4,h5,h6,head,header,hr,html,iframe,legend,li,link,main,menu,menuitem,nav,noframes,ol,optgroup,option,p,param,section,source,summary,table,tbody,td,tfoot,th,thead,title,tr,track,ul".split(","), transform="lower")
+                with self.lookahead(), self.choice():
+                    with self.case(): self.whitespace(min=1)
+                    with self.case(): self.literal(">")
+                    with self.case(): self.end_of_line()
+
     @rule()
     def inline_html(self):
         with self.choice():
@@ -1937,6 +1657,286 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                         self.range("a-z", "A-Z", "-", "0-9")
                     self.whitespace()
                     self.literal(">")
+
+    @rule()
+    def html_block_type_1(self):
+        with self.capture_node('html_block'):
+            with self.capture_node('raw'):
+                self.whitespace(max=3)
+                self.literal("<script", "<pre", "<style", transform="lower")
+                with self.lookahead(), self.choice():
+                    with self.case(): self.whitespace(min=1)
+                    with self.case(): self.literal(">")
+                    with self.case(): self.end_of_line()
+                with self.repeat():
+                    with self.reject(): self.literal("</script>", "</pre>", "</style>", transform="lower")
+                    self.range("\n", invert=True)
+
+            with self.repeat():
+                with self.capture_node('raw'): self.newline()
+                self.indent(partial=False)
+                with self.reject():
+                    self.whitespace()
+                    self.end_of_file()
+                with self.capture_node('raw'):
+                    with self.repeat():
+                        with self.reject(): self.literal("</script>", "</pre>", "</style>", transform="lower")
+                        self.range("\n", invert=True)
+
+            with self.choice():
+                with self.case():
+                    with self.capture_node('raw'):
+                        self.literal("</script>", "</pre>", "</style>", transform="lower")
+                        with self.repeat(): self.range("\n", invert=True)
+                    self.newline()
+                with self.case():
+                    with self.capture_node('raw'):
+                        with self.repeat():
+                            with self.reject(): self.literal("</script>", "</pre>", "</style>", transform="lower")
+                            self.range("\n", invert=True)
+                    self.end_of_line()
+    @rule()
+    def html_block_type_2(self):
+        with self.capture_node('html_block'):
+            with self.capture_node('raw'):
+                self.whitespace(max=3)
+                self.literal("<!--")
+                with self.repeat():
+                    with self.reject(): self.literal("-->")
+                    self.range("\n", invert=True)
+
+            with self.repeat():
+                with self.capture_node('raw'): self.newline()
+                self.indent(partial=False)
+                with self.reject():
+                    self.whitespace()
+                    self.end_of_file()
+                with self.capture_node('raw'):
+                    with self.repeat():
+                        with self.reject(): self.literal("-->")
+                        self.range("\n", invert=True)
+
+            with self.choice():
+                with self.case():
+                    with self.capture_node('raw'):
+                        self.literal("-->")
+                        with self.repeat(): self.range("\n", invert=True)
+                    self.newline()
+                with self.case():
+                    with self.capture_node('raw'):
+                        with self.repeat():
+                            with self.reject(): self.literal("-->")
+                            self.range("\n", invert=True)
+                    self.end_of_line()
+    @rule()
+    def html_block_type_3(self):
+        with self.capture_node('html_block'):
+            with self.capture_node('raw'):
+                self.whitespace(max=3)
+                self.literal("<?")
+                with self.repeat():
+                    with self.reject(): self.literal("?>")
+                    self.range("\n", invert=True)
+
+            with self.repeat():
+                with self.capture_node('raw'): self.newline()
+                self.indent(partial=False)
+                with self.reject():
+                    self.whitespace()
+                    self.end_of_file()
+                with self.capture_node('raw'):
+                    with self.repeat():
+                        with self.reject(): self.literal("?>")
+                        self.range("\n", invert=True)
+
+            with self.choice():
+                with self.case():
+                    with self.capture_node('raw'):
+                        self.literal("?>")
+                        with self.repeat(): self.range("\n", invert=True)
+                    self.newline()
+                with self.case():
+                    with self.capture_node('raw'):
+                        with self.repeat():
+                            with self.reject(): self.literal("?>")
+                            self.range("\n", invert=True)
+                    self.end_of_line()
+    @rule()
+    def html_block_type_4(self):
+        with self.capture_node('html_block'):
+            with self.capture_node('raw'):
+                self.whitespace(max=3)
+                self.literal("<!")
+                self.range("A-Z")
+                with self.repeat():
+                    with self.reject(): self.literal(">")
+                    self.range("\n", invert=True)
+
+            with self.repeat():
+                with self.capture_node('raw'): self.newline()
+                self.indent(partial=False)
+                with self.reject():
+                    self.whitespace()
+                    self.end_of_file()
+                with self.capture_node('raw'):
+                    with self.repeat():
+                        with self.reject(): self.literal(">")
+                        self.range("\n", invert=True)
+
+            with self.choice():
+                with self.case():
+                    with self.capture_node('raw'):
+                        self.literal(">")
+                        with self.repeat(): self.range("\n", invert=True)
+                    self.newline()
+                with self.case():
+                    with self.capture_node('raw'):
+                        with self.repeat():
+                            with self.reject(): self.literal(">")
+                            self.range("\n", invert=True)
+                    self.end_of_line()
+    @rule()
+    def html_block_type_5(self):
+        with self.capture_node('html_block'):
+            with self.capture_node('raw'):
+                self.whitespace(max=3)
+                self.literal("<![CDATA[")
+                with self.repeat():
+                    with self.reject(): self.literal("]]>")
+                    self.range("\n", invert=True)
+
+            with self.repeat():
+                with self.capture_node('raw'): self.newline()
+                self.indent(partial=False)
+                with self.reject():
+                    self.whitespace()
+                    self.end_of_file()
+                with self.capture_node('raw'):
+                    with self.repeat():
+                        with self.reject(): self.literal("]]>")
+                        self.range("\n", invert=True)
+
+            with self.choice():
+                with self.case():
+                    with self.capture_node('raw'):
+                        self.literal("]]>")
+                        with self.repeat(): self.range("\n", invert=True)
+                    self.newline()
+                with self.case():
+                    with self.capture_node('raw'):
+                        with self.repeat():
+                            with self.reject(): self.literal("]]>")
+                            self.range("\n", invert=True)
+                    self.end_of_line()
+    @rule()
+    def html_block_type_6(self):
+        with self.capture_node('html_block'):
+            with self.capture_node('raw'):
+                self.whitespace(max=3)
+                self.literal("</", "<")
+                self.literal(*"address,article,aside,base,basefont,blockquote,body,caption,center,col,colgroup,dd,details,dialog,dir,div,dl,dt,fieldset,figcaption,figure,footer,form,frame,frameset,h1,h2,h3,h4,h5,h6,head,header,hr,html,iframe,legend,li,link,main,menu,menuitem,nav,noframes,ol,optgroup,option,p,param,section,source,summary,table,tbody,td,tfoot,th,thead,title,tr,track,ul".split(","), transform="lower")
+                with self.lookahead(), self.choice():
+                    with self.case(): self.whitespace(min=1)
+                    with self.case(): self.literal(">")
+                    with self.case(): self.end_of_line()
+                with self.repeat():
+                    self.range("\n", invert=True)
+
+            with self.repeat():
+                with self.capture_node('raw'): self.newline()
+                self.indent(partial=False)
+                with self.reject():
+                    self.whitespace()
+                    self.end_of_line()
+                with self.capture_node('raw'):
+                    with self.repeat():
+                        self.range("\n", invert=True)
+
+            with self.choice():
+                with self.case():
+                    self.newline()
+                    self.indent(partial=False)
+                    self.whitespace()
+                    self.end_of_line()
+                with self.case():
+                    self.end_of_line()
+                    with self.reject():
+                        self.indent(partial=False)
+                with self.case():
+                    self.end_of_line()
+                    self.end_of_file()
+    @rule()
+    def html_block_type_7(self):
+        with self.capture_node('html_block'):
+            with self.capture_node('raw'):
+                self.whitespace(max=3)
+                self.literal("<")
+                with self.reject():
+                    self.literal("pre", "script", "style", transform="lower")
+                with self.choice():
+                    with self.case():
+                        self.literal("/")
+                        self.range("a-z", "A-Z")
+                        with self.repeat():
+                            self.range("a-z", "A-Z", "-", "0-9")
+                        self.whitespace()
+                        self.literal(">")
+                        self.whitespace()
+                    with self.case():
+                        self.range("a-z", "A-Z")
+                        with self.repeat():
+                            self.range("a-z", "A-Z", "-", "0-9")
+                        with self.repeat():
+                            self.whitespace(min=1)
+                            self.range("a-z", "A-Z", ":", "_")
+                            with self.repeat(min=1):
+                                self.range("a-z", "A-Z", ":", "_", "0-9", "-")
+                            with self.optional():
+                                self.whitespace()
+                                self.literal("=")
+                                self.whitespace()
+                                with self.choice():
+                                    with self.case():
+                                        with self.repeat(min=1):
+                                            self.range("\"", "'", "=", "<", ">", "`", "\t", " ", "\n", "\r", invert=True)
+                                    with self.case():
+                                        self.literal("\"")
+                                        with self.repeat(): self.range('"',"\n",  invert=True)
+                                        self.literal("\"")
+                                    with self.case():
+                                        self.literal('\'')
+                                        with self.repeat(): self.range("'","\n", invert=True)
+                                        self.literal('\'')
+                        self.whitespace()
+                        self.literal(">", "/>")
+                        self.whitespace()
+                
+
+            with self.repeat():
+                with self.capture_node('raw'): self.newline()
+                self.indent(partial=False)
+                with self.reject():
+                    self.whitespace()
+                    self.end_of_line()
+                with self.capture_node('raw'):
+                    with self.repeat():
+                        self.range("\n", invert=True)
+
+            with self.choice():
+                with self.case():
+                    self.newline()
+                    self.indent(partial=False)
+                    self.whitespace()
+                    self.newline()
+                with self.case():
+                    self.end_of_line()
+                    with self.reject():
+                        self.indent(partial=False)
+                with self.case():
+                    self.end_of_line()
+                    self.end_of_file()
+
+
 # ---
 
 
@@ -2370,12 +2370,10 @@ def link_para(buf, node, children):
 @_builder
 def link_url(buf, node, children):
     return "".join(children)
-    return buf[node.start:node.end]
 
 @_builder
 def link_title(buf, node, children):
     return "".join(children)
-    return buf[node.start:node.end]
 
 @_builder
 def raw_entity(buf, node, children):
