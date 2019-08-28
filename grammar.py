@@ -700,7 +700,7 @@ class Builtins:
         if start is not UNDEF: options['start'] = start
         def _wrapper(rules):
             if capture:
-                return GrammarNode(CAPTURE,args=dict(name=capture, nested=True), rules=rules)
+                return GrammarNode(CAPTURE,args=dict(name=capture, nested=True, value=None), rules=rules)
             elif len(rules) > 1:
                 return SequenceNode(rules)
             else:
@@ -1862,7 +1862,7 @@ def compile_python(grammar, cython=False):
     for name, rule in grammar.rules.items():
         cdefs = {}
         if cython:
-            output.append(f"cdef parse_{name}(self, str buf, int buf_start, int buf_eof, int offset_0,  int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0, **kwargs):")
+            output.append(f"cdef parse_{name}(self, str buf, int buf_start, int buf_eof, int offset_0,  int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):")
             output.append(f"    cdef Py_UCS4 codepoint")
             
             for v in varnames:
