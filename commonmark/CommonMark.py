@@ -1306,17 +1306,18 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
 
     @rule()
     def escaped_text(self):
-        self.literal("\\")
-        with self.reject(): # hardbreaks
-            self.newline()
-            self.whitespace()
-            self.range('\n', invert=True)
-
         with self.choice():
-            with self.case(), self.capture_node("text"):
-                self.range("!-/",":-@","[-`","{-~")
             with self.case():
-                self.capture_value("\\")
+                self.literal("\\")
+                with self.capture_node("text"):
+                    self.range("!-/",":-@","[-`","{-~")
+
+            with self.case(), self.capture_node("text"):
+                self.literal("\\")
+                with self.reject(): # hardbreaks
+                    self.newline()
+                    self.whitespace()
+                    self.range('\n', invert=True)
 
     @rule()
     def html_entity(self):

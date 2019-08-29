@@ -17501,70 +17501,6 @@ def _build(unicodedata):
 
         def parse_escaped_text(self, buf, buf_start, buf_eof, offset_0, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
             while True: # note: return at end of loop
-                if buf[offset_0:offset_0+1] == '\\':
-                    offset_0 += 1
-                    column_0 += 1
-                else:
-                    offset_0 = -1
-                    break
-
-                while True: # start reject
-                    children_1 = []
-                    offset_1 = offset_0 + 0
-                    column_1 = column_0
-                    indent_column_1 = indent_column_0
-                    partial_tab_offset_1 = partial_tab_offset_0
-                    partial_tab_width_1 = partial_tab_width_0
-                    if offset_1 < buf_eof:
-                        codepoint = buf[offset_1]
-                        if codepoint in '\n':
-                            offset_1 +=1
-                            column_1 = 0
-                            indent_column_1 = (0, None)
-                        else:
-                            offset_1 = -1
-                            break
-                    else:
-                        offset_1 = -1
-                        break
-
-                    count_0 = 0
-                    while offset_1 < buf_eof:
-                        codepoint = buf[offset_1]
-                        if codepoint in ' \t':
-                            if codepoint == '\t':
-                                if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
-                                    width = partial_tab_width_1
-                                else:
-                                    width  = (self.tabstop-(column_1%self.tabstop))
-                                count_0 += width
-                                column_1 += width
-                                offset_1 += 1
-                            else:
-                                count_0 += 1
-                                column_1 += 1
-                                offset_1 += 1
-                        else:
-                            break
-
-                    if offset_1 == buf_eof:
-                        offset_1 = -1
-                        break
-
-                    codepoint = ord(buf[offset_1])
-
-                    if codepoint == 10:
-                        offset_1 = -1
-                        break
-                    else:
-                        offset_1 += 1
-                        column_1 += 1
-
-                    break
-                if offset_1 != -1:
-                    offset_0 = -1
-                    break
-
                 while True: # start choice
                     offset_1 = offset_0
                     column_1 = column_0
@@ -17573,6 +17509,13 @@ def _build(unicodedata):
                     partial_tab_width_1 = partial_tab_width_0
                     children_1 = [] if children_0 is not None else None
                     while True: # case
+                        if buf[offset_1:offset_1+1] == '\\':
+                            offset_1 += 1
+                            column_1 += 1
+                        else:
+                            offset_1 = -1
+                            break
+
                         offset_2 = offset_1
                         column_2 = column_1
                         children_2 = []
@@ -17627,7 +17570,82 @@ def _build(unicodedata):
                     partial_tab_width_1 = partial_tab_width_0
                     children_1 = [] if children_0 is not None else None
                     while True: # case
-                        children_1.append(self.Node('value', offset_1, offset_1, column_1, column_1, (), '\\'))
+                        offset_2 = offset_1
+                        column_2 = column_1
+                        children_2 = []
+                        while True: # start capture
+                            if buf[offset_2:offset_2+1] == '\\':
+                                offset_2 += 1
+                                column_2 += 1
+                            else:
+                                offset_2 = -1
+                                break
+
+                            while True: # start reject
+                                children_3 = []
+                                offset_3 = offset_2 + 0
+                                column_3 = column_2
+                                indent_column_2 = indent_column_1
+                                partial_tab_offset_2 = partial_tab_offset_1
+                                partial_tab_width_2 = partial_tab_width_1
+                                if offset_3 < buf_eof:
+                                    codepoint = buf[offset_3]
+                                    if codepoint in '\n':
+                                        offset_3 +=1
+                                        column_3 = 0
+                                        indent_column_2 = (0, None)
+                                    else:
+                                        offset_3 = -1
+                                        break
+                                else:
+                                    offset_3 = -1
+                                    break
+
+                                count_0 = 0
+                                while offset_3 < buf_eof:
+                                    codepoint = buf[offset_3]
+                                    if codepoint in ' \t':
+                                        if codepoint == '\t':
+                                            if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
+                                                width = partial_tab_width_2
+                                            else:
+                                                width  = (self.tabstop-(column_3%self.tabstop))
+                                            count_0 += width
+                                            column_3 += width
+                                            offset_3 += 1
+                                        else:
+                                            count_0 += 1
+                                            column_3 += 1
+                                            offset_3 += 1
+                                    else:
+                                        break
+
+                                if offset_3 == buf_eof:
+                                    offset_3 = -1
+                                    break
+
+                                codepoint = ord(buf[offset_3])
+
+                                if codepoint == 10:
+                                    offset_3 = -1
+                                    break
+                                else:
+                                    offset_3 += 1
+                                    column_3 += 1
+
+                                break
+                            if offset_3 != -1:
+                                offset_2 = -1
+                                break
+
+                            break
+                        if offset_2 == -1:
+                            offset_1 = -1
+                            break
+                        value_1 = self.Node('text', offset_1, offset_2, column_1, column_2, children_2, None)
+                        children_1.append(value_1)
+                        offset_1 = offset_2
+                        column_1 = column_2
 
 
                         break
@@ -17645,7 +17663,6 @@ def _build(unicodedata):
                     break # end choice
                 if offset_0 == -1:
                     break
-
 
                 break
             return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
