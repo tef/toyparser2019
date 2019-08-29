@@ -1,4 +1,4 @@
-from grammar import Grammar
+from toyparser.grammar import Grammar
 
 import codecs
 
@@ -11,19 +11,19 @@ def unescape(string):
     return codecs.decode(string, 'unicode_escape')
 
 builder = {
-    'document': (lambda buf, start, end, children: children),
-    'para': (lambda buf, start, end, children: {"para":children}),
-    'header': (lambda buf, start, end, children: {"header":children}),
-    'text': (lambda buf, start, end, children: buf[start:end]),
+    'document': (lambda buf, node, children: children),
+    'para': (lambda buf, node, children: {"para":children}),
+    'header': (lambda buf, node, children: {"header":children}),
+    'text': (lambda buf, node, children: buf[node.start:node.end]),
 }
 
 class Markup(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
     @rule()
     def document(self):
-        with self.capture("document"), self.repeat(min=0):
+        with self.repeat(min=0):
             self.element()
         self.whitespace()
-        self.eof()
+        self.end_of_file()
 
     element = rule(
         blockquote | header | para | hr | empty_lines
@@ -33,27 +33,27 @@ class Markup(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
 
     @rule()
     def header(self):
-        with self.capture("header"):
+        with self.capture_node("header"):
             with self.count('#') as c, self.repeat(min=1):
-                self.accept("#")
+                self.literal("#")
             self.capture_value(c)
             with self.optional():
                 self.whitespace()
-            with self.capture('text'):
+            with self.capture_node('text'):
                 self.inline_element()
                 with self.repeat():
                     self.whitespace()
                     self.inline_element()
             self.whitespace()
             with self.choice():
-                with self.case(): self.eof()
+                with self.case(): self.end_of_file()
                 with self.case(): self.newline()
 
     @rule()
     def para(self):
         self.whitespace()
-        with self.capture("para"):
-            with self.capture('text'):
+        with self.capture_node("para"):
+            with self.capture_node('text'):
                 self.inline_element()
             with self.repeat():
                 with self.reject():
@@ -68,27 +68,27 @@ class Markup(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
                         self.whitespace()
                     with self.case():
                         self.whitespace()
-                with self.capture('text'):
+                with self.capture_node('text'):
                     self.inline_element()
 
             self.whitespace()
             with self.choice():
                 with self.case():
-                    self.eof()
+                    self.end_of_file()
                 with self.case():
                     self.newline()
                     self.whitespace()
             with self.choice():
-                with self.case(): self.eof()
+                with self.case(): self.end_of_file()
                 with self.case(): self.newline()
             
     @rule()
     def hr(self):
         self.whitespace()
-        self.accept("---")
+        self.literal("---")
         self.whitespace()
         with self.choice():
-            with self.case(): self.eof()
+            with self.case(): self.end_of_file()
             with self.case(): self.newline()
     @rule()
     def empty_lines(self):
@@ -98,24 +98,24 @@ class Markup(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n"]):
 
     @rule()
     def word(self):
-        with self.capture('text'), self.repeat(min=1):
+        with self.capture_node('text'), self.repeat(min=1):
             self.range(" ", "\n", invert=True)
 
     @rule()
     def start_blockquote(self):
         self.whitespace()
-        self.accept('>')
+        self.literal('>')
         
     @rule()
     def blockquote(self):
         self.start_blockquote()
-        with self.indented(prefix="start_blockquote"):
+        with self.indented(indent=self.start_blockquote):
             self.para()
 for name, value in Markup.rules.items():
     print(name, '<--', value,'.')
 
 def markup(buf):
-    parser = Markup.parser(None)
+    parser = Markup.parser()
     node = parser.parse(buf)
     if node:
         walk(node)

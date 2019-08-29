@@ -81,6 +81,8 @@ def build_class_dict(attrs, start, whitespace, newline, tabstop, capture):
     
     rule_childs = {}
     dont_pop = set()
+    if start:
+        dont_pop.add(start)
     for name, rule in rules.items():
         seen = set()
         def visits(rule):
