@@ -1,11 +1,6 @@
-from grammar import Grammar, compile_python
+from ..grammar import Grammar, compile_python, sibling
 
 import codecs
-
-def walk(node, indent="- "):
-    print(indent, node, node.value)
-    for child in node.children:
-        walk(child, indent+ "  ")
 
 def unescape(string):
     return codecs.decode(string, 'unicode_escape')
@@ -232,120 +227,21 @@ class YAML(Grammar, start="document", whitespace=[" ", "\t"], newline=["\n", "\r
             self.whitespace()
 
 
-if __name__ == '__main__':
-    import subprocess, sys
-    if not sys.argv[1:] or sys.argv[1] != "--skip":
-        code = compile_python(YAML, cython=False)
-        with open("YAMLParser.py", "w") as fh:
-            fh.write(code)
-        code = compile_python(YAML, cython=True)
-        with open("YAMLParser.pyx", "w") as fh:
-            fh.write(code)
+if __name__ == "__main__":
+    import subprocess
+    import os.path
 
-        subprocess.run(["python3", "setup.py", "build_ext", "--inplace"]).check_returncode()
 
-        from YAMLParser import Parser as YAMLParser
-        parser2 = YAMLParser(None)
-    else:
-        parser2 = YAML.parser()
-    from old_grammar import compile, Parser
+    filename = sibling(__file__, "YAMLParser.py")
+    code = compile_python(YAML, cython=False)
 
-    parser = Parser(YAML)
-    import time
+    with open(filename, "w") as fh:
+        fh.write(code)
 
-    def yaml(buf):
-        print(len(buf))
-        print(buf)
-        t1 = time.time()
-        node = parser.parse(buf)
-        t1 = time.time() - t1
-        t2 = time.time()
-        node2 = parser2.parse(buf)
-        t2 = time.time() - t2
-        if node:
-            walk(node)
-        else:
-            print('parser1failed')
-        print(parser2)
-        if node2:
-            walk(node2)
-        else:
-            raise Exception('no')
-            print('parser2failed')
-   #     print(t1, t2, t2/t1*100)
-        print()
+    filename = sibling(__file__, "YAMLParser.pyx")
+    code = compile_python(YAML, cython=True)
 
-    # yaml = lambda x:x
-    yaml("""\
-- 1
-- 2
-- 
-  - 3
-  - 4
-- 5
-- 6
-- - 7
-  - 8
-  - - 9
-  - 
-    - 10
-    - 11
-- 12
-- 
- 13
-    """)
+    with open(filename, "w") as fh:
+        fh.write(code)
 
-    yaml("""\
-    servers:
-        alpha: { "a": 1 }
-    example: 
-        a: 1
-        b: 2
-    """)
-    yaml("""\
-    servers:
-      alpha: {
-        "ip": "10.0.0.1",
-        "names": [
-          "alpha",
-          "alpha.server",
-        ],
-      }
-      beta: {
-        "ip": "10.0.0.2",
-        "names": ["beta"],
-      }
-    """)
-
-    yaml("""\
-    title: "SafeYAML Example"
-
-    database:
-      server: "192.168.1.1"
-
-      ports:
-        - 8000
-        - 8001
-        - 8002
-
-      enabled: true
-
-    servers:
-      alpha: {
-        "ip": "10.0.0.1",
-        "names": [
-          "alpha",
-          "alpha.server",
-        ],
-      }
-      beta: {
-        "ip": "10.0.0.2",
-        "names": ["beta"],
-      }
-    """)
-
-    yaml("""\
-example: 
-\ta: 1
-        b: 2
-""")
+    subprocess.run(["cythonize", "-3", "-i", filename]).check_returncode()
