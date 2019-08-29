@@ -1,4 +1,4 @@
-from grammar import Grammar, compile_python
+from ..grammar import Grammar, compile_python, sibling
 
 import codecs
 
@@ -2488,7 +2488,9 @@ def test_spec():
     print('grammar version', CommonMark.version)
 
     import json
-    with open("commonmark_0_29.json") as fh:
+    import os.path
+
+    with open(sibling(__file__, "commonmark_0_29.json")) as fh:
         tests = json.load(fh)
 
     failed = 0
@@ -2524,7 +2526,7 @@ if __name__ == "__main__":
             
     test_spec()
 
-    with open("syntax.md") as readme:
+    with open(sibling(__file__, "syntax.md")) as readme:
         test_case = readme.read()
 
     t = time.time()

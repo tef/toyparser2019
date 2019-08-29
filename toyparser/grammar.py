@@ -1,6 +1,11 @@
 from contextlib import contextmanager
 from types import FunctionType
 
+import os.path
+
+def sibling(file, fn):
+    return os.path.join(os.path.dirname(file), fn)
+
 """
 This is a lot of python magic so that you can define grammar rules inside a normal looking
 python class:
