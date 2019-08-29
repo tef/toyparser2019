@@ -1,13 +1,8 @@
-from grammar import Grammar, compile_python
+from ..grammar import Grammar, compile_python, sibling
 import codecs
 
-def walk(node, indent="- "):
-    print(indent, node)
-    for child in node.children:
-        walk(child, indent+ "  ")
-
 def unescape(string):
-    return codecs.decode(string, 'unicode_escape')
+    return codecs.decode(string.replace('\\/', '/'), 'unicode_escape')
 
 builder = {
     'number': (lambda buf, node, children: int(buf[node.start:node.end])),
@@ -136,65 +131,21 @@ class JSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n"]):
 
 
 if __name__ == "__main__":
-    import subprocess, sys
-    if not sys.argv[1:] or sys.argv[1] != "--skip":
-        code = compile_python(JSON, cython=False)
-        with open("JSONParser.py", "w") as fh:
-            fh.write(code)
-        code = compile_python(JSON, cython=True)
-        with open("JSONParser.pyx", "w") as fh:
-            fh.write(code)
-
-        subprocess.run(["python3", "setup.py", "build_ext", "--inplace"]).check_returncode()
-
-    from JSONParser import Parser as JSONParser
-    from old_grammar import compile, Parser
-    print()
-
-    print()
-    parser = JSON.parser()
-    buf = '[1, 2, 3, "fooo"]'
-    node = parser.parse(buf)
-
-    walk(node, "")
-    print()
-
-    print(node.build(buf, builder))
-    print()
-
-    print(parser.parse("[1, 2, 3]"))
-    print()
+    import subprocess
+    import os.path
 
 
-    import time, json
+    filename = sibling(__file__, "JSONParser.py")
+    code = compile_python(JSON, cython=False)
 
-    inter_parser = Parser(JSON)
-    python_parser = JSON.parser()
-    old_python_parser = compile(JSON)
-    cython_parser = JSONParser()
+    with open(filename, "w") as fh:
+        fh.write(code)
 
-    n= 80_000
-    import random
-    l = list(range(n))+list(str(x) for x in range(n))
-    random.shuffle(l)
-    s = json.dumps(l)
-    print()
-    print('file is', len(s)/1024, 'k')
+    filename = sibling(__file__, "JSONParser.pyx")
+    code = compile_python(JSON, cython=True)
 
-    def timeit(name,parser, buf):
-        t = time.time()
-        o = parser(buf)
-        t = time.time() - t
-        print(name, t, len(o))
-        return t
+    with open(filename, "w") as fh:
+        fh.write(code)
 
-    json_t = timeit("json", json.loads, s)
-    cython_t = timeit("cython compiled", (lambda b: cython_parser.parse(b, builder=builder)), s)
-    python_t = timeit("python", (lambda b: python_parser.parse(b, builder=builder)), s)
-    print("cython is",cython_t/json_t, "times slower than handrolled C",  python_t/cython_t, "times faster than python")
-
-#    t2 = timeit("python-compiled-old", old_python_parser.parse, s)
-#    t3 = timeit("python-interpreted", inter_parser.parse, s)
-#    print("cython is",t2/cython_t, "times faster than cheap codegen", t3/cython_t, "times faster than interpreter")
-
+    subprocess.run(["cythonize", "-3", "-i", filename]).check_returncode()
 
