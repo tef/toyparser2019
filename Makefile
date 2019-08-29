@@ -1,4 +1,4 @@
-all: commonmark json yaml
+all: commonmark json yaml rson
 
 commonmark: 
 	python3 -m toyparser.commonmark.CommonMark
