@@ -23,7 +23,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
         self.whitespace()
         self.end_of_file()
 
-    @rule()
+    @rule(inline=True)
     def empty_lines(self):
         self.whitespace()
         self.newline()
@@ -34,7 +34,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
         with self.capture_node("empty_line"):
             pass
 
-    @rule() # 2.1 line ends by newline or end_of_file
+    @rule(inline=True) # 2.1 line ends by newline or end_of_file
     def line_end(self):
         self.whitespace()
         self.end_of_line()
@@ -98,7 +98,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                         self.capture_value("\\")
                     self.atx_heading_end()
 
-    @rule()
+    @rule(inline=True)
     def atx_heading_end(self):
         with self.optional():
             self.whitespace(min=1)
@@ -629,7 +629,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                     self.whitespace()
                     self.end_of_line()
             
-    @rule()
+    @rule(inline=True)
     def linebreak(self):
         with self.choice():
             with self.case():
@@ -991,7 +991,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                 self.inline_link_as_para()
 
 
-    @rule()
+    @rule(inline=True)
     def inline_image_as_para(self):
         with self.capture_node('operator'):
             self.literal('![')
@@ -1086,7 +1086,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                 with self.capture_node('operator'):
                     self.literal(')')
 
-    @rule()
+    @rule(inline=True)
     def inline_link_as_para(self):
         with self.capture_node('operator'):
             self.literal('[')
@@ -2137,9 +2137,9 @@ def parse(buf, _walk=False):
 
     def has_empty(children):
         idx = 0
-        while idx < len(children) and children[idx].name == "empty": idx+=1
-        while idx < len(children) and children[idx].name != "empty": idx+=1
-        while idx < len(children) and children[idx].name == "empty": idx+=1
+        while idx < len(children) and children[idx].name in ("empty", "empty_line"): idx+=1
+        while idx < len(children) and children[idx].name not in ("empty", "empty_line"): idx+=1
+        while idx < len(children) and children[idx].name in ("empty", "empty_line"): idx+=1
         return idx != len(children)
 
     def list_tightness(buf, node, children):
@@ -2219,15 +2219,16 @@ def wrap_tight(list_items, out):
     for item in list_items:
         out2=[]
         a_block=False
-        for c in item:
-            if isinstance(c, tuple):
-                out2.append(f"{c[0]}")
-                a_block=False
-            elif c is not None:
-                if not a_block: out2.append('\n')
-                out2.append(c)
-                out2.append("\n")
-                a_block=True
+        if item:
+            for c in item:
+                if isinstance(c, tuple):
+                    out2.append(f"{c[0]}")
+                    a_block=False
+                elif c is not None:
+                    if not a_block: out2.append('\n')
+                    out2.append(c)
+                    out2.append("\n")
+                    a_block=True
         out.append(f"<li>{''.join(out2)}</li>\n")
     return out
 
@@ -2516,10 +2517,30 @@ def test_spec():
 
 
 if __name__ == "__main__":
+    import time 
     with open('CommonMarkParser.py', 'w') as fh:
         fh.write(compile_python(CommonMark))
             
     test_spec()
+
+    with open("syntax.md") as readme:
+        test_case = readme.read()
+
+    t = time.time()
+    times = 10
+    for i in range(times):
+        out = parse(test_case).build(test_case,builder)
+    t = time.time() -t 
+
+    print(t, t/times)
+    import commonmark
+
+    t = time.time()
+    for i in range(times):
+        out = commonmark.commonmark(test_case)
+    t = time.time() -t 
+
+    print(t, t/times)
 
     #for name, value in CommonMark.rules.items():
     #    print(name, '<--', value,'.')
@@ -2535,7 +2556,5 @@ if __name__ == "__main__":
     #        print()
     #        print(node.build(buf, builder))
 
-    #with open("../README.md") as readme:
-    #    markup(readme.read())
 
 

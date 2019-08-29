@@ -279,6 +279,7 @@ RULE = 'rule'
 LITERAL = 'literal'
 RANGE = 'range'
 SEQUENCE = 'seq'
+PARALLEL = 'parallel'
 CAPTURE = 'capture'
 PARSEAHEAD = 'parseahead'
 BACKREF = 'backref'
@@ -1084,6 +1085,59 @@ def compile_python(grammar, cython=False):
             steps.append(f"    break")
 
             steps.append(f"{offset} = {offset_0}")
+
+        elif rule.kind == PARALLEL:
+            children_0 = children.incr()
+            offset_0 = offset.incr()
+            column_0 = column.incr()
+            indent_column_0 = indent_column.incr()
+            partial_tab_offset_0 = partial_tab_offset.incr()
+            partial_tab_width_0 = partial_tab_width.incr()
+            count_0 = count.incr()
+            count_1 = count_0.incr()
+
+            steps.append(f"{count} = buf_eof")
+            steps.append(f"{count_0} = buf_eof")
+            steps.append(f"{children_0} = [] if {children} is not None else None")
+            steps.append(f"while True: # start parallel")
+
+            steps_0 = steps.add_indent()
+            for n, subrule in enumerate(rule.rules):
+                steps_0.append(f"{offset_0} = {offset}")
+                steps_0.append(f"{column_0} = {column}")
+                steps_0.append(f"{indent_column_0} = {indent_column}")
+                steps_0.append(f"{partial_tab_offset_0} = {partial_tab_offset}")
+                steps_0.append(f"{partial_tab_width_0} = {partial_tab_width}")
+                if n > 0:
+                    steps.append(f"buf_eof = {count_0}")
+                steps_0.append(f"while True: # case")
+                build_steps(subrule, steps_0.add_indent(), offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0, prefix, children_0, count_1, values)
+                steps_0.append(f"    break")
+
+                steps_0.append(f"if {offset_0} == -1:")
+                steps_0.append(f"    {offset} = -1")
+                steps_0.append(f"    break")
+                if n == 0:
+                    steps.append(f"{count_0} = {offset_0}")
+                else:
+                    steps_0.append(f"if {offset_0} != {count_0}:")
+                    steps_0.append(f"    {offset} = -1")
+                    steps_0.append(f"    break")
+
+                steps_0.append(f"# end case")
+
+            steps_0.append(f"break # end parallel")
+
+            steps.append(f"buf_eof = {count}")
+            steps.append(f"if {offset} == -1:")
+            steps.append(f"    break")
+            steps.append(f"{column} = {column_0}")
+            steps.append(f"{indent_column} = {indent_column_0}")
+            steps.append(f"{partial_tab_offset} = {partial_tab_offset_0}")
+            steps.append(f"{partial_tab_width} = {partial_tab_width_0}")
+            steps.append(f"if {children_0} is not None and {children_0} is not None:")
+            steps.append(f"    {children}.extend({children_0})")
+
 
         elif rule.kind == LOOKAHEAD:
             steps_0 = steps.add_indent()
