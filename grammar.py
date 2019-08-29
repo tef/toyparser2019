@@ -662,14 +662,27 @@ class FunctionBuilder:
         self.rules = rules
 
     @contextmanager
+    def parallel(self):
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
+        rules = self.rules
+        self.rules = []
+        self.block_mode = "parallel"
+        yield
+        if self.block_mode != "parallel": raise Exception('Buggy code has wiped context')
+        self.block_mode = None
+        rules.append(GrammarNode(PARALLEL, rules=self.rules))
+        self.rules = rules
+
+    @contextmanager
     def case(self):
-        if self.block_mode != "choice": raise BadGrammar('Case outside of choice')
+        if self.block_mode not in ("choice", "parallel"): raise BadGrammar('Case outside of choice')
+        old = self.block_mode
         rules = self.rules
         self.rules = []
         self.block_mode = None
         yield
         if self.block_mode: raise SyntaxError()
-        self.block_mode = "choice"
+        self.block_mode = old
         rules.append(SequenceNode(self.rules))
         self.rules = rules
 
@@ -1109,7 +1122,7 @@ def compile_python(grammar, cython=False):
                 steps_0.append(f"{partial_tab_offset_0} = {partial_tab_offset}")
                 steps_0.append(f"{partial_tab_width_0} = {partial_tab_width}")
                 if n > 0:
-                    steps.append(f"buf_eof = {count_0}")
+                    steps_0.append(f"buf_eof = {count_0}")
                 steps_0.append(f"while True: # case")
                 build_steps(subrule, steps_0.add_indent(), offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0, prefix, children_0, count_1, values)
                 steps_0.append(f"    break")
@@ -1118,7 +1131,7 @@ def compile_python(grammar, cython=False):
                 steps_0.append(f"    {offset} = -1")
                 steps_0.append(f"    break")
                 if n == 0:
-                    steps.append(f"{count_0} = {offset_0}")
+                    steps_0.append(f"{count_0} = {offset_0}")
                 else:
                     steps_0.append(f"if {offset_0} != {count_0}:")
                     steps_0.append(f"    {offset} = -1")
@@ -1131,6 +1144,7 @@ def compile_python(grammar, cython=False):
             steps.append(f"buf_eof = {count}")
             steps.append(f"if {offset} == -1:")
             steps.append(f"    break")
+            steps.append(f"{offset} = {offset_0}")
             steps.append(f"{column} = {column_0}")
             steps.append(f"{indent_column} = {indent_column_0}")
             steps.append(f"{partial_tab_offset} = {partial_tab_offset_0}")

@@ -816,8 +816,8 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                                     self.literal("_") 
     @rule()
     def image(self):
-        with self.capture_node('maybe'):
-            with self.parseahead() as end, self.variable('reference') as style, self.capture_node("image", value=style) as cap:
+        with self.capture_node('maybe'), self.parallel():
+            with self.case(), self.variable('reference') as style, self.capture_node("image", value=style) as cap:
                 self.literal("!")
                 self.literal("[")
                 with self.reject():
@@ -896,7 +896,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                     with self.case():
                         self.set_variable(style, "shortcut")
 
-            with self.until(offset=end), self.capture_node('maybe_para'):
+            with self.case(), self.capture_node('maybe_para'):
                 self.inline_image_as_para()
 
 
