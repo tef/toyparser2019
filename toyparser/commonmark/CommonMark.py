@@ -2482,6 +2482,21 @@ def empty_line(buf, node, children):
     return None
 
 if __name__ == '__main__':
-    with open(sibling(__file__, 'CommonMarkParser.py'), 'w') as fh:
-        fh.write(compile_python(CommonMark))
-            
+    import subprocess
+    import os.path
+
+
+    filename = sibling(__file__, "CommonMarkParser.py")
+    code = compile_python(CommonMark, cython=False)
+
+    with open(filename, "w") as fh:
+        fh.write(code)
+
+    filename = sibling(__file__, "CommonMarkParser.pyx")
+    code = compile_python(CommonMark, cython=True)
+
+    with open(filename, "w") as fh:
+        fh.write(code)
+
+    subprocess.run(["cythonize", "-3", "-i", filename]).check_returncode()
+
