@@ -23,7 +23,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
         self.whitespace()
         self.end_of_file()
 
-    @rule(inline=True)
+    @rule(inline=False)
     def empty_lines(self):
         self.whitespace()
         self.newline()
@@ -34,7 +34,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
         with self.capture_node("empty_line"):
             pass
 
-    @rule(inline=True) # 2.1 line ends by newline or end_of_file
+    @rule(inline=False) # 2.1 line ends by newline or end_of_file
     def line_end(self):
         self.whitespace()
         self.end_of_line()
@@ -98,7 +98,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                         self.capture_value("\\")
                     self.atx_heading_end()
 
-    @rule(inline=True)
+    @rule(inline=False)
     def atx_heading_end(self):
         with self.optional():
             self.whitespace(min=1)
@@ -497,7 +497,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
 
     ## lnk def
             
-    @rule(inline=True)
+    @rule(inline=False)
     def link_url_spaces(self):
         with self.choice():
             with self.case():
@@ -522,7 +522,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                     with self.reject(): self.literal("<",)
                     self.balanced_list_url_spaces()
 
-    @rule(inline=True)
+    @rule(inline=False)
     def balanced_list_url_spaces(self):
         with self.repeat():
             with self.repeat():
@@ -629,7 +629,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                     self.whitespace()
                     self.end_of_line()
             
-    @rule(inline=True)
+    @rule(inline=False)
     def linebreak(self):
         with self.choice():
             with self.case():
@@ -645,7 +645,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
 
         self.indent(partial=True)
         with self.reject(): 
-            self.para_interrupt.inline()
+            self.para_interrupt()
         self.whitespace()
         with self.reject(): 
             self.newline()
@@ -678,7 +678,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                 with self.repeat():
                     with self.choice():
                         with self.case():
-                            self.linebreak.inline()
+                            self.linebreak()
                         with self.case():
                             with self.capture_node("whitespace"):
                                 self.whitespace()
@@ -710,7 +710,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                     with self.repeat():
                         with self.choice():
                             with self.case():
-                                self.linebreak.inline()
+                                self.linebreak()
                             with self.case():
                                 with self.capture_node("whitespace"):
                                     self.whitespace()
@@ -835,7 +835,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                         with self.repeat():
                             with self.choice():
                                 with self.case():
-                                    self.linebreak.inline()
+                                    self.linebreak()
                                 with self.case():
                                     with self.capture_node("whitespace"):
                                         self.whitespace()
@@ -923,7 +923,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                         with self.repeat():
                             with self.choice():
                                 with self.case():
-                                    self.linebreak.inline()
+                                    self.linebreak()
                                 with self.case():
                                     with self.capture_node("whitespace"):
                                         self.whitespace()
@@ -991,7 +991,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                 self.inline_link_as_para()
 
 
-    @rule(inline=True)
+    @rule(inline=False)
     def inline_image_as_para(self):
         with self.capture_node('operator'):
             self.literal('![')
@@ -1008,7 +1008,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
             with self.repeat():
                 with self.choice():
                     with self.case():
-                        self.linebreak.inline()
+                        self.linebreak()
                     with self.case():
                         with self.capture_node("whitespace"):
                             self.whitespace()
@@ -1038,7 +1038,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                     with self.repeat():
                         with self.choice():
                             with self.case():
-                                self.linebreak.inline()
+                                self.linebreak()
                             with self.case():
                                 with self.capture_node("whitespace"):
                                     self.whitespace()
@@ -1070,7 +1070,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                     with self.repeat():
                         with self.choice():
                             with self.case():
-                                self.linebreak.inline()
+                                self.linebreak()
                             with self.case():
                                 with self.capture_node("whitespace"):
                                     self.whitespace()
@@ -1086,7 +1086,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                 with self.capture_node('operator'):
                     self.literal(')')
 
-    @rule(inline=True)
+    @rule(inline=False)
     def inline_link_as_para(self):
         with self.capture_node('operator'):
             self.literal('[')
@@ -1103,7 +1103,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
             with self.repeat():
                 with self.choice():
                     with self.case():
-                        self.linebreak.inline()
+                        self.linebreak()
                     with self.case():
                         with self.capture_node("whitespace"):
                             self.whitespace()
@@ -1137,7 +1137,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                     with self.repeat():
                         with self.choice():
                             with self.case():
-                                self.linebreak.inline()
+                                self.linebreak()
                             with self.case():
                                 with self.capture_node("whitespace"):
                                     self.whitespace()
@@ -1157,7 +1157,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                     self.inline_link()
 
             
-    @rule(inline=True)
+    @rule(inline=False)
     def link_url(self):
         with self.choice():
             with self.case():
@@ -1181,7 +1181,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                     with self.reject(): self.literal("<", " ")
                     self.balanced_list_url()
 
-    @rule(inline=True)
+    @rule(inline=False)
     def balanced_list_url(self):
         with self.repeat():
             with self.repeat():
@@ -1943,7 +1943,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
 
 parser = CommonMark.parser()
 
-def parse(buf, _walk=False):
+def parse(buf, _walk=False, parser=parser):
     out = parser.parse(buf)
     if _walk:
         walk(out)
@@ -2090,7 +2090,6 @@ def parse(buf, _walk=False):
 
                         for i in range(left_op+1, op_idx):
                             active[i] = False
-
                     left_op -= 1
                 operators[op_idx] = (idx, kind, chr, N, n)
             op_idx +=1
@@ -2498,5 +2497,5 @@ if __name__ == '__main__':
     with open(filename, "w") as fh:
         fh.write(code)
 
-    subprocess.run(["cythonize", "-3", "-i", filename]).check_returncode()
+    subprocess.run(f"python3 `which cythonize` -i {filename}", shell=True).check_returncode()
 

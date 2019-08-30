@@ -1379,22 +1379,36 @@ def compile_python(grammar, cython=False):
                         f"            offset = -1",
                         f"    return offset, column, indent_column, partial_tab_offset, partial_tab_width",
                     ))
-
                     steps.extend((
                         f'{prefix}.append((_indent, _dedent))',
                     ))
 
                 else:
                     dedent = rule.args['dedent']
-                    steps.extend((
-
-                            f'{prefix}.append((_indent, self.parse_{dedent}))',
-                    ))
+                    if cython:
+                        steps.append(f'_dedent = lambda b, st, en, off, col, idt, pf, ch, tab_off, tab_w:'
+                                 f'self.parse_{dedent}(b, st, en, off, col, idt, pf, ch, tab_off, tab_w)')
+                        steps.append(f'{prefix}.append((_indent, _dedent))')
+                    else:
+                        dedent = f"self.parse_{dedent}" if dedent else repr(None)
+                        steps.append(f'{prefix}.append((_indent, {dedent}))')
             else:
                 prule = rule.args['indent']
                 dedent = rule.args['dedent']
-                dedent = f"self.parse_{dedent}" if dedent else repr(None)
-                steps.append(f'{prefix}.append((self.parse_{prule}, {dedent}))')
+                if cython:
+                    steps.append(f'_indent = lambda b, st, en, off, col, idt, pf, ch, tab_off, tab_w:'
+                                 f'self.parse_{prule}(b, st, en, off, col, idt, pf, ch, tab_off, tab_w)')
+                    if dedent:
+                        steps.append(f'_dedent = lambda b, st, en, off, col, idt, pf, ch, tab_off, tab_w:'
+                                 f'self.parse_{dedent}(b, st, en, off, col, idt, pf, ch, tab_off, tab_w)')
+                    else:
+                        steps.append(f'_dedent = None')
+                    steps.append(f'{prefix}.append((_indent, _dedent))')
+                else:
+                    prule = rule.args['indent']
+                    dedent = f"self.parse_{dedent}" if dedent else repr(None)
+                    steps.append(f'{prefix}.append((self.parse_{prule}, {dedent}))')
+
 
             steps.append(f'{indent_column} = ({column}, {indent_column})')
 
@@ -1423,7 +1437,7 @@ def compile_python(grammar, cython=False):
                 f"    break",
                 f"# print('start')",
                 f"for indent, dedent in {prefix}:",
-                f"    # print(indent)",
+                f"    # print(indent, dedent)",
                 f"    _children, _prefix = [], []",
                 f"    {offset_0} = {offset}",
                 f"    {offset_0}, {column}, {indent_column}, {partial_tab_offset}, {partial_tab_width} = indent(buf, buf_start, buf_eof, {offset_0}, {column}, {indent_column}, _prefix, _children, {partial_tab_offset}, {partial_tab_width})",
@@ -1568,13 +1582,14 @@ def compile_python(grammar, cython=False):
                 else:
                     raise BadGrammar('bad range', repr(literal))
 
+            _chr = "" if cython else "chr"
             for name, active in rule.args['named_ranges'].items():
                 if not active: continue
                 _if = {0:"if"}.get(idx, "elif")
                 idx +=1 
                 if name == "unicode_punctuation":
                     steps.extend((
-                        f"{_if} unicodedata.category(chr(codepoint)).startswith('P'):",
+                        f"{_if} unicodedata.category({_chr}(codepoint)).startswith('P'):",
                     ))
                     if invert: steps.extend ((
                         f"    {offset} = -1",
@@ -1586,7 +1601,7 @@ def compile_python(grammar, cython=False):
                     ))
                 elif name == "unicode_whitespace":
                     steps.extend((
-                        f"{_if} unicodedata.category(chr(codepoint)) == 'Zs':",
+                        f"{_if} unicodedata.category({_chr}(codepoint)) == 'Zs':",
                     ))
                     if invert: steps.extend ((
                         f"    {offset} = -1",
@@ -1598,7 +1613,7 @@ def compile_python(grammar, cython=False):
                     ))
                 elif name == "unicode_newline": # crlf ugh
                     steps.extend((
-                        f"{_if} unicodedata.category(chr(codepoint)) in ('Zl', 'Zp', 'Cc'):",
+                        f"{_if} unicodedata.category({_chr}(codepoint)) in ('Zl', 'Zp', 'Cc'):",
                     ))
                     if invert: steps.extend ((
                         f"    {offset} = -1",
@@ -1883,7 +1898,7 @@ def compile_python(grammar, cython=False):
         f"",
     )
     if cython:
-        output.append('# cython: language_level=3, bounds_check=False')
+        output.append('#cython: language_level=3, bounds_check=False')
         output.append("import unicodedata")
         output.extend(parse_node)
         output.extend((

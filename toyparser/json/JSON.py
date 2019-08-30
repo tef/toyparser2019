@@ -147,5 +147,5 @@ if __name__ == "__main__":
     with open(filename, "w") as fh:
         fh.write(code)
 
-    subprocess.run(["cythonize", "-3", "-i", filename]).check_returncode()
+    subprocess.run(f"python3 `which cythonize` -i {filename}", shell=True).check_returncode()
 
