@@ -1,4 +1,4 @@
-# cython: language_level=3, bounds_check=False
+#cython: language_level=3, bounds_check=False
 import unicodedata
 class Node:
     def __init__(self, name, start, end, start_column, end_column, children, value):

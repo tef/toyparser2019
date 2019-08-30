@@ -1,4 +1,4 @@
-# cython: language_level=3, bounds_check=False
+#cython: language_level=3, bounds_check=False
 import unicodedata
 class Node:
     def __init__(self, name, start, end, start_column, end_column, children, value):
@@ -2019,7 +2019,7 @@ cdef class Parser:
                                 break
                             # print('start')
                             for indent, dedent in prefix_0:
-                                # print(indent)
+                                # print(indent, dedent)
                                 _children, _prefix = [], []
                                 offset_3 = offset_2
                                 offset_3, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_2, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
@@ -2094,7 +2094,7 @@ cdef class Parser:
                                 break
                             # print('start')
                             for indent, dedent in prefix_0:
-                                # print(indent)
+                                # print(indent, dedent)
                                 _children, _prefix = [], []
                                 offset_3 = offset_2
                                 offset_3, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_3, column_2, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
@@ -2196,7 +2196,7 @@ cdef class Parser:
                                         break
                                     # print('start')
                                     for indent, dedent in prefix_0:
-                                        # print(indent)
+                                        # print(indent, dedent)
                                         _children, _prefix = [], []
                                         offset_4 = offset_3
                                         offset_4, column_3, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = indent(buf, buf_start, buf_eof, offset_4, column_3, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
@@ -2425,7 +2425,7 @@ cdef class Parser:
                                     break
                                 # print('start')
                                 for indent, dedent in prefix_0:
-                                    # print(indent)
+                                    # print(indent, dedent)
                                     _children, _prefix = [], []
                                     offset_4 = offset_3
                                     offset_4, column_3, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_4, column_3, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
@@ -2555,7 +2555,7 @@ cdef class Parser:
                                     break
                                 # print('start')
                                 for indent, dedent in prefix_0:
-                                    # print(indent)
+                                    # print(indent, dedent)
                                     _children, _prefix = [], []
                                     offset_4 = offset_3
                                     offset_4, column_3, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_4, column_3, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
@@ -2660,7 +2660,7 @@ cdef class Parser:
                                             break
                                         # print('start')
                                         for indent, dedent in prefix_0:
-                                            # print(indent)
+                                            # print(indent, dedent)
                                             _children, _prefix = [], []
                                             offset_5 = offset_4
                                             offset_5, column_4, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = indent(buf, buf_start, buf_eof, offset_5, column_4, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)

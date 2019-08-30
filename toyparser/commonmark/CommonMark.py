@@ -1958,7 +1958,6 @@ def parse(buf, _walk=False, parser=parser):
                 backrefs[name] = children[1:]
         return node
 
-    out = out.build(buf, visit_backrefs)
 
     # --- 
 
@@ -1990,7 +1989,6 @@ def parse(buf, _walk=False, parser=parser):
                 else:
                     node.value = None
         return node
-    out = out.build(buf, fill_backrefs)
 
     def remove_nesting_links(buf, node, children):
         if node.name == "link":
@@ -2021,7 +2019,6 @@ def parse(buf, _walk=False, parser=parser):
             node.children = new_children
 
         return node
-    out = out.build(buf, remove_nesting_links)
 
     def flatten_images(buf, node, children):
         if node.name == "image" and node.value is not None:
@@ -2040,7 +2037,6 @@ def parse(buf, _walk=False, parser=parser):
 
             children[0] = children[0].build(buf, flatten_alt_text)
         return node
-    out = out.build(buf, flatten_images)
 
     def process_emphasis(buf, node, children):
         operators = []
@@ -2133,7 +2129,25 @@ def parse(buf, _walk=False, parser=parser):
         node.children = children
         return node
 
-    out = out.build(buf, process_emphasis)
+    def _process(buf, node, children):
+        node = fill_backrefs(buf, node, children)
+        node = remove_nesting_links(buf, node, children)
+        return node
+
+    def _process2(buf, node, children):
+        node = flatten_images(buf, node, children)
+        node = process_emphasis(buf, node, children)
+        return node
+
+    out = out.build(buf, visit_backrefs)
+
+    #out = out.build(buf, fill_backrefs)
+    #out = out.build(buf, remove_nesting_links)
+    #out = out.build(buf, flatten_images)
+    #out = out.build(buf, process_emphasis)
+
+    out = out.build(buf, _process)
+    out = out.build(buf, _process2)
 
     def has_empty(children):
         idx = 0
