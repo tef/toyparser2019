@@ -561,7 +561,7 @@ class FunctionBuilder:
     def capture_buffer(self, name):
         return self.capture_node(name, nested=False)
 
-    def capture_node(self, name, nested=True, value=None):
+    def capture_node(self, name, nested=True, value=None, parent=None):
         if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         if name is None:
             raise Exception('missing name')
@@ -570,7 +570,7 @@ class FunctionBuilder:
         def _capture():
             rules = self.rules
             self.rules = []
-            c= GrammarNode(CAPTURE, args=dict(name=name, nested=nested, value=value), rules=self.rules)
+            c= GrammarNode(CAPTURE, args=dict(name=name, nested=nested, value=value, parent=None), rules=self.rules)
             yield c.key
             rules.append(c)
             self.rules = rules
@@ -849,13 +849,14 @@ class VarBuilder:
         return VarBuilder(self.name, maxes=self.maxes, n=self.n+1)
 
 
-def compile_python(grammar, cython=False):
+def compile_python(grammar, cython=False, wrap=False):
     memoized = {}
+    node = "Node"
     if cython:
-        node = "Node"
-    else:
+        wrap = False
+    elif wrap:
         node = "self.Node"
-
+            
     def build_subrules(rules, steps, offset, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children, count, values):
         for subrule in rules:
             build_steps(subrule, steps, offset, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children, count, values)
@@ -929,11 +930,18 @@ def compile_python(grammar, cython=False):
             column_0 = column.incr()
             steps.append(f"{offset_0} = {offset}")
             steps.append(f"{column_0} = {column}")
+
+            value = VarBuilder('value', n=len(values))
+            values[rule.key] = value
+
+            if rule.args['nested']:
+                steps.append(f"{children_0} = []")
+            else:
+                steps.append(f"{children_0} = None")
+
+            steps.append(f"{value} = {node}(None, {offset}, {offset}, {column}, {column}, {children_0}, None)")
+
             if rule.rules:
-                if rule.args['nested']:
-                    steps.append(f"{children_0} = []")
-                else:
-                    steps.append(f"{children_0} = None")
                 steps.append(f"while True: # start capture")
                 build_subrules(rule.rules, steps.add_indent(), offset_0, column_0, indent_column, partial_tab_offset, partial_tab_width, prefix, children_0, count, values)
                 steps.append(f"    break")
@@ -943,17 +951,24 @@ def compile_python(grammar, cython=False):
 
             name = rule.args['name']
             name = values.get(name, repr(name))
-            value = VarBuilder('value', n=len(values))
-            values[rule.key] = value
 
             captured_value = rule.args['value'] 
             captured_value = values.get(captured_value, repr(captured_value))
 
             steps.extend((
                 # f"print(len(buf), {offset}, {offset_0}, {children})",
-                f"{value} = {node}({name}, {offset}, {offset_0}, {column}, {column_0}, {children_0}, {captured_value})",
-                f"{children}.append({value})",
+                f"{value}.name = {name}",
+                f"{value}.end = {offset_0}",
+                f"{value}.end_column = {column_0}",
+                f"{value}.value = {captured_value}",
             ))
+            if rule.args.get('parent'):
+                key = rule.args['parent']
+                parent = values[key]
+                steps.append(f"{parent}.append({value})")
+            else:
+                steps.append(f"{children}.append({value})")
+
             steps.append(f"{offset} = {offset_0}")
             steps.append(f"{column} = {column_0}")
 
@@ -1872,7 +1887,7 @@ def compile_python(grammar, cython=False):
     whitespace = repr(tuple(grammar.whitespace)) if grammar.whitespace else '()'
     whitespace_tab = bool(grammar.whitespace) and '\t' in grammar.whitespace
 
-    if not cython:
+    if wrap:
         output.append("def _build(unicodedata):")
         output = output.add_indent()
 
@@ -1895,7 +1910,6 @@ def compile_python(grammar, cython=False):
         f'        if self.name == "value": return self.value',
         f'        return builder[self.name](buf, self, children)',
         f'',
-        f"",
     )
     if cython:
         output.append('#cython: language_level=3, bounds_check=False')
@@ -1916,6 +1930,10 @@ def compile_python(grammar, cython=False):
         output = output.add_indent(4)
 
     else:
+        if not wrap:
+            output.extend(parse_node)
+            output.append("")
+
         output.extend((
             f"class Parser:",
             f"    def __init__(self, tabstop=None, allow_mixed_indent=False):",
@@ -1926,7 +1944,8 @@ def compile_python(grammar, cython=False):
         ))
 
         output = output.add_indent(4)
-        output.extend(parse_node)
+        if wrap:
+            output.extend(parse_node)
 
     start_rule = grammar.start
     output.extend((
@@ -1983,7 +2002,7 @@ def compile_python(grammar, cython=False):
     #     output.append(f"    print(('exit' if offset_0 != -1 else 'fail'), '{name}', offset_0, column_0, repr(buf[offset_0: offset_0+10]))")
         output.append(f"    return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0")
         output.append("")
-    if not cython:
+    if wrap:
         old_output.append("return Parser")
     # for lineno, line in enumerate(output.output):
     #   print(lineno, '\t', line)
@@ -1995,7 +2014,7 @@ def compile_python(grammar, cython=False):
 
 
 def parser(grammar):
-    output = compile_python(grammar)
+    output = compile_python(grammar, wrap=True)
     glob, loc = {}, {}
     exec(output, glob, loc)
     import unicodedata

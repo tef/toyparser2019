@@ -17,7 +17,6 @@ class Node:
         if self.name == "value": return self.value
         return builder[self.name](buf, self, children)
 
-
 cdef class Parser:
     cdef dict cache
     cdef int tabstop

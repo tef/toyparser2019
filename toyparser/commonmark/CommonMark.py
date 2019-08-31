@@ -817,7 +817,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
     @rule()
     def image(self):
         with self.capture_node('maybe'), self.parallel():
-            with self.case(), self.variable('reference') as style, self.capture_node("image", value=style) as cap:
+            with self.case(), self.capture_node('maybe_image') as p, self.variable('reference') as style, self.capture_node("image", value=style) as cap:
                 self.literal("!")
                 self.literal("[")
                 with self.reject():
@@ -903,7 +903,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
     @rule()
     def inline_link(self):
         with self.capture_node('maybe'):
-            with self.parseahead() as end, self.variable('reference') as style, self.capture_node("link", value=style) as cap:
+            with self.parseahead() as end, self.capture_node('maybe_link') as p, self.variable('reference') as style, self.capture_node("link", value=style) as cap:
                 self.literal("[")
                 with self.reject():
                     self.whitespace(newline=True)
@@ -1958,9 +1958,6 @@ def parse(buf, _walk=False, parser=parser):
                 backrefs[name] = children[1:]
         return node
 
-
-    # --- 
-
     def fill_backrefs(buf, node, children):
         if (node.name == "link" or node.name == "image"):
             name = None
@@ -1988,14 +1985,15 @@ def parse(buf, _walk=False, parser=parser):
                     node.value = "inline"
                 else:
                     node.value = None
-        return node
 
-    def remove_nesting_links(buf, node, children):
         if node.name == "link":
             def contains_link(buf, node, children):
                 return (node.name == "link" and node.value and node.value != "shortcut") or any(children)
             if children[0].build(buf, contains_link):
                 node.value = None
+
+        if (node.name == "maybe_link" or node.name == "maybe_image"):
+            node.value = (node.children[0].value is None)
 
         if "maybe" in (c.name for c in children):
             new_children = []
@@ -2003,10 +2001,11 @@ def parse(buf, _walk=False, parser=parser):
                 if c.name != "maybe":
                     new_children.append(c)
                 else:
-                    if c.children[0].value is None:
+                    if c.children[0].value:
                         for c2 in c.children[1].children:
                             new_children.append(c2)
                     else:
+                        c = c.children[0]
                         new_children.append(c.children[0])
                         if c.children[0].value == "multiple":
                             for c2 in c.children[0].children[2:]:
@@ -2140,14 +2139,10 @@ def parse(buf, _walk=False, parser=parser):
         return node
 
     out = out.build(buf, visit_backrefs)
+    out = out.build(buf, fill_backrefs)
+    out = out.build(buf, flatten_images)
+    out = out.build(buf, process_emphasis)
 
-    #out = out.build(buf, fill_backrefs)
-    #out = out.build(buf, remove_nesting_links)
-    #out = out.build(buf, flatten_images)
-    #out = out.build(buf, process_emphasis)
-
-    out = out.build(buf, _process)
-    out = out.build(buf, _process2)
 
     def has_empty(children):
         idx = 0
@@ -2362,7 +2357,7 @@ def image(buf, node, children):
 
         if len(children) >= 2 and children[1] is not None:
             return f'<img src="{link_encode(children[1])}" alt="{children[0]}" />'
-    return "MISSING"
+    return f"MISSING {node.value}"
 
 @_builder
 def link(buf, node, children):
@@ -2372,7 +2367,7 @@ def link(buf, node, children):
 
         if len(children) >= 2 and children[1] is not None:
             return f'<a href="{link_encode(children[1])}">{children[0]}</a>'
-    return "MISSING"
+    return f"MISSING {node.value}"
 
 @_builder
 def link_label(buf, node, children):
