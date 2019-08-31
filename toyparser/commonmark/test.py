@@ -60,13 +60,13 @@ if __name__ == "__main__":
 
     print(t, t/times)
 
-    from .CommonMarkParser import Parser
-    t = time.time()
-    for i in range(times):
-        out = parse(test_case, parser=Parser()).build(test_case,builder)
-    t = time.time() -t 
+    #from .CommonMarkParser import Parser
+    #t = time.time()
+    #for i in range(times):
+    #    out = parse(test_case, parser=Parser()).build(test_case,builder)
+    #t = time.time() -t 
+    #print(t, t/times)
 
-    print(t, t/times)
     import commonmark
 
     t = time.time()

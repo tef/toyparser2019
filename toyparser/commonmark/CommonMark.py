@@ -949,7 +949,8 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                         self.literal("]")
                         with self.choice():
                             with self.case():
-                                self.inline_link()
+                                with self.capture_node('link_tail'):
+                                    self.inline_link()
                                 self.set_variable(style, "multiple")
                             with self.case():
                                 self.set_variable(style, "reference")
@@ -1950,6 +1951,13 @@ def parse(buf, _walk=False, parser=parser):
         print()
     backrefs = {}
     def visit_backrefs(buf, node, children):
+        if node.name == "maybe_link":
+            child = node.children[0]
+            if child.name == "link" and child.value == "multiple":
+                extras = child.children.pop()
+                node.children.extend(extras.children)
+                child.value = "reference"
+
         if node.name == "link_def":
             name_node = children[0]
             name = buf[name_node.start:name_node.end]
@@ -1961,13 +1969,7 @@ def parse(buf, _walk=False, parser=parser):
     def fill_backrefs(buf, node, children):
         if (node.name == "link" or node.name == "image"):
             name = None
-            if node.value == "multiple":
-                child_node = children[1]
-                name = buf[child_node.start:child_node.end]
-                name = " ".join(name.strip().casefold().split())
-                if name not in backrefs:
-                    node.value = None
-            elif node.value == "reference":
+            if node.value == "reference":
                 child_node = children[1]
                 name = buf[child_node.start:child_node.end]
                 name = " ".join(name.strip().casefold().split())
@@ -1993,7 +1995,7 @@ def parse(buf, _walk=False, parser=parser):
                 node.value = None
 
         if (node.name == "maybe_link" or node.name == "maybe_image"):
-            node.value = (node.children[0].value is None)
+            node.value = (node.children[0].value is not None)
 
         if "maybe" in (c.name for c in children):
             new_children = []
@@ -2002,19 +2004,11 @@ def parse(buf, _walk=False, parser=parser):
                     new_children.append(c)
                 else:
                     if c.children[0].value:
-                        for c2 in c.children[1].children:
+                        for c2 in c.children[0].children:
                             new_children.append(c2)
                     else:
-                        c = c.children[0]
-                        new_children.append(c.children[0])
-                        if c.children[0].value == "multiple":
-                            for c2 in c.children[0].children[2:]:
-                                new_children.append(c2)
-                            child_node = c.children[0].children[1]
-                            name = buf[child_node.start:child_node.end]
-                            name = " ".join(name.strip().casefold().split())
-                            c.children[0].children = c.children[0].children[:1] + backrefs[name]
-                            c.children[0].value = "inline"
+                        for c2 in c.children[1].children:
+                            new_children.append(c2)
             node.children = new_children
 
         return node
@@ -2506,5 +2500,5 @@ if __name__ == '__main__':
     with open(filename, "w") as fh:
         fh.write(code)
 
-    subprocess.run(f"python3 `which cythonize` -i {filename}", shell=True).check_returncode()
+    # subprocess.run(f"python3 `which cythonize` -i {filename}", shell=True).check_returncode()
 
