@@ -347,11 +347,9 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                     self.indent()
                 self.whitespace(min=1, max=1)
 
-        c = self.column(from_prefix=True)
-        with self.list_interrupts.as_dedent(count=c):
+        with self.list_interrupts.as_dedent():
             self.block_element()
-        with self.repeat():
-            with self.list_interrupts.as_dedent(count=c):
+            with self.repeat():
                 self.indent(partial=True)
                 with self.optional():
                     with self.repeat():
@@ -362,7 +360,6 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                     with self.lookahead():
                         self.whitespace()
                         self.range("\n", invert=True)
-            with self.list_interrupts.as_dedent(count=c):
                 self.block_element()
 
     @rule()
