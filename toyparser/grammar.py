@@ -885,7 +885,7 @@ def compile_python(grammar, cython=False, wrap=False):
             build_subrules(rule.rules, steps_0.add_indent(), offset_0, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children_0, count.incr(), values)
             steps_0.append(f"    break")
 
-            steps_0.append(f"self.cache[{count}] = ({offset_0}, {column}, {indent_column}, {children_0}, {partial_tab_offset},{partial_tab_width})")
+            steps_0.append(f"self.cache[{count}] = ({offset_0}, {column}, list({indent_column}, {children_0}, {partial_tab_offset},{partial_tab_width})")
 
             steps.append(f"{offset} = {offset_0}")
             steps.append(f"if {children_0} is not None and {children_0} is not None:")
