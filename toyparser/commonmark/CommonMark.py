@@ -23,7 +23,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
         self.whitespace()
         self.end_of_file()
 
-    @rule(inline=False)
+    @rule(inline=True)
     def empty_lines(self):
         self.whitespace()
         self.newline()
@@ -34,7 +34,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
         with self.capture_node("empty_line"):
             pass
 
-    @rule(inline=False) # 2.1 line ends by newline or end_of_file
+    @rule(inline=True) # 2.1 line ends by newline or end_of_file
     def line_end(self):
         self.whitespace()
         self.end_of_line()
@@ -98,7 +98,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                         self.capture_value("\\")
                     self.atx_heading_end()
 
-    @rule(inline=False)
+    @rule(inline=True)
     def atx_heading_end(self):
         with self.optional():
             self.whitespace(min=1)
@@ -497,7 +497,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
 
     ## lnk def
             
-    @rule(inline=False)
+    @rule(inline=True)
     def link_url_spaces(self):
         with self.choice():
             with self.case():
@@ -522,7 +522,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                     with self.reject(): self.literal("<",)
                     self.balanced_list_url_spaces()
 
-    @rule(inline=False)
+    @rule(inline=True)
     def balanced_list_url_spaces(self):
         with self.repeat():
             with self.repeat():
@@ -629,7 +629,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                     self.whitespace()
                     self.end_of_line()
             
-    @rule(inline=False)
+    @rule(inline=True)
     def linebreak(self):
         with self.choice():
             with self.case():
@@ -992,7 +992,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                 self.inline_link_as_para()
 
 
-    @rule(inline=False)
+    @rule(inline=True)
     def inline_image_as_para(self):
         with self.capture_node('operator'):
             self.literal('![')
@@ -1087,7 +1087,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                 with self.capture_node('operator'):
                     self.literal(')')
 
-    @rule(inline=False)
+    @rule(inline=True)
     def inline_link_as_para(self):
         with self.capture_node('operator'):
             self.literal('[')
@@ -1158,7 +1158,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                     self.inline_link()
 
             
-    @rule(inline=False)
+    @rule(inline=True)
     def link_url(self):
         with self.choice():
             with self.case():
@@ -1182,7 +1182,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                     with self.reject(): self.literal("<", " ")
                     self.balanced_list_url()
 
-    @rule(inline=False)
+    @rule(inline=True)
     def balanced_list_url(self):
         with self.repeat():
             with self.repeat():
@@ -1305,7 +1305,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                         self.range("0-9","a-z","A-Z")
                 self.literal(";")
 
-    @rule()
+    @rule(inline=True)
     def escaped_text(self):
         with self.choice():
             with self.case():
@@ -1320,7 +1320,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                     self.whitespace()
                     self.range('\n', invert=True)
 
-    @rule()
+    @rule(inline=True)
     def html_entity(self):
         self.literal("&");
         with self.choice():
@@ -1950,6 +1950,13 @@ def parse(buf, _walk=False, parser=parser):
         walk(out)
         print()
     backrefs = {}
+    def has_empty(children):
+        idx = 0
+        while idx < len(children) and children[idx].name in ("empty", "empty_line"): idx+=1
+        while idx < len(children) and children[idx].name not in ("empty", "empty_line"): idx+=1
+        while idx < len(children) and children[idx].name in ("empty", "empty_line"): idx+=1
+        return idx != len(children)
+
     def visit_backrefs(buf, node, children):
         if node.name == "maybe_link":
             child = node.children[0]
@@ -1964,6 +1971,12 @@ def parse(buf, _walk=False, parser=parser):
             name = " ".join(name.strip().casefold().split())
             if name not in backrefs:
                 backrefs[name] = children[1:]
+
+        if node.name == "ordered_list" or node.name =="unordered_list":
+            if has_empty(children) or any(has_empty(c.children) for c in children):
+                node.value = "loose"
+            else:
+                node.value = "tight"
         return node
 
     def fill_backrefs(buf, node, children):
@@ -2011,9 +2024,6 @@ def parse(buf, _walk=False, parser=parser):
                             new_children.append(c2)
             node.children = new_children
 
-        return node
-
-    def flatten_images(buf, node, children):
         if node.name == "image" and node.value is not None:
             def flatten_alt_text(buf, node, children):
                 new_children = []
@@ -2032,6 +2042,9 @@ def parse(buf, _walk=False, parser=parser):
         return node
 
     def process_emphasis(buf, node, children):
+        name = node.name
+        if name not in ('para', 'atx_heading', 'setext', 'link_para'):
+            return node
         operators = []
         for idx, c in enumerate(children):
             if c.name in ('right_flank', 'left_flank', 'dual_flank'):
@@ -2134,26 +2147,8 @@ def parse(buf, _walk=False, parser=parser):
 
     out = out.build(buf, visit_backrefs)
     out = out.build(buf, fill_backrefs)
-    out = out.build(buf, flatten_images)
+    # after alt text!
     out = out.build(buf, process_emphasis)
-
-
-    def has_empty(children):
-        idx = 0
-        while idx < len(children) and children[idx].name in ("empty", "empty_line"): idx+=1
-        while idx < len(children) and children[idx].name not in ("empty", "empty_line"): idx+=1
-        while idx < len(children) and children[idx].name in ("empty", "empty_line"): idx+=1
-        return idx != len(children)
-
-    def list_tightness(buf, node, children):
-        if node.name == "ordered_list" or node.name =="unordered_list":
-            if has_empty(children) or any(has_empty(c.children) for c in children):
-                node.value = "loose"
-            else:
-                node.value = "tight"
-        return node
-
-    out = out.build(buf, list_tightness)
 
     return out
 
@@ -2500,5 +2495,5 @@ if __name__ == '__main__':
     with open(filename, "w") as fh:
         fh.write(code)
 
-    # subprocess.run(f"python3 `which cythonize` -i {filename}", shell=True).check_returncode()
+    subprocess.run(f"python3 `which cythonize` -i {filename}", shell=True).check_returncode()
 

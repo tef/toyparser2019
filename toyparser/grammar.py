@@ -854,8 +854,6 @@ def compile_python(grammar, cython=False, wrap=False):
     node = "Node"
     if cython:
         wrap = False
-    elif wrap:
-        node = "self.Node"
             
     def build_subrules(rules, steps, offset, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children, count, values):
         for subrule in rules:
@@ -940,21 +938,12 @@ def compile_python(grammar, cython=False, wrap=False):
                 steps.append(f"{children_0} = None")
 
             steps.append(f"{value} = {node}(None, {offset}, {offset}, {column}, {column}, {children_0}, None)")
-            if rule.args.get('parent'):
-                raise Exception('broken')
-                key = rule.args['parent']
-                parent = values[key]
-            else:
-                parent = children
-
-            steps.append(f"{parent}.append({value})")
             if rule.rules:
                 steps.append(f"while True: # start capture")
                 build_subrules(rule.rules, steps.add_indent(), offset_0, column_0, indent_column, partial_tab_offset, partial_tab_width, prefix, children_0, count, values)
                 steps.append(f"    break")
                 steps.append(f"if {offset_0} == -1:")
                 steps.append(f"    {offset} = -1")
-                steps.append(f"    if {parent}.pop() is not {value}: raise Exception('oh dear')")
                 steps.append(f"    break")
 
             name = rule.args['name']
@@ -970,6 +959,15 @@ def compile_python(grammar, cython=False, wrap=False):
                 f"{value}.end_column = {column_0}",
                 f"{value}.value = {captured_value}",
             ))
+
+            if rule.args.get('parent'):
+                raise Exception('broken')
+                key = rule.args['parent']
+                parent = values[key]
+            else:
+                parent = children
+
+            steps.append(f"{parent}.append({value})")
 
             steps.append(f"{offset} = {offset_0}")
             steps.append(f"{column} = {column_0}")
@@ -1932,9 +1930,8 @@ def compile_python(grammar, cython=False, wrap=False):
         output = output.add_indent(4)
 
     else:
-        if not wrap:
-            output.extend(parse_node)
-            output.append("")
+        output.extend(parse_node)
+        output.append("")
 
         output.extend((
             f"class Parser:",

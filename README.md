@@ -5,6 +5,7 @@ this is a parsing expression library for python 3
 the big idea is that you should be able to express Python, Markdown, or similar
 without resorting to lexer hacks, or inlining code into the parser
 
+
 ## example
 
 it uses a builder/dsl like thingy to describe and build rules
