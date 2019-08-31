@@ -17,6 +17,12 @@ class Node:
         if self.name == "value": return self.value
         return builder[self.name](buf, self, children)
 
+cdef class Indent:
+    cdef int value
+    cdef Indent parent
+    def __init__(self, value, parent=None):
+        self.value = value
+        self.parent = parent
 cdef class Parser:
     cdef dict cache
     cdef int tabstop
@@ -31,7 +37,7 @@ cdef class Parser:
         self.cache = dict()
         end = len(buf) if end is None else end
         start, eof = offset, end
-        column, indent_column = 0, (0, None)
+        column, indent_column = 0, Indent(0, None)
         prefix, children = [], []
         new_offset, column, indent_column, partial_tab_offset, partial_tab_width = self.parse_document(buf, start, end, offset, column, indent_column, prefix, children, 0, 0)
         if children and new_offset == end:
@@ -40,14 +46,14 @@ cdef class Parser:
         print('no', offset, new_offset, end, buf[new_offset:])
         if err is not None: raise err(buf, new_offset, 'no')
 
-    cdef parse_document(self, str buf, int buf_start, int buf_eof, int offset_0,  int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
+    cdef parse_document(self, str buf, int buf_start, int buf_eof, int offset_0,  int column_0, Indent indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
         cdef Py_UCS4 codepoint
         cdef int offset_1
         cdef int column_1
 
         cdef list children_1
 
-        cdef tuple indent_column_1
+        cdef Indent indent_column_1
         cdef int partial_tab_offset_1
         cdef int partial_tab_width_1
         while True: # note: return at end of loop
@@ -148,14 +154,14 @@ cdef class Parser:
             break
         return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
-    cdef parse_json_value(self, str buf, int buf_start, int buf_eof, int offset_0,  int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
+    cdef parse_json_value(self, str buf, int buf_start, int buf_eof, int offset_0,  int column_0, Indent indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
         cdef Py_UCS4 codepoint
         cdef int offset_1, offset_2, offset_3, offset_4, offset_5
         cdef int column_1, column_2, column_3, column_4, column_5
 
         cdef list children_1, children_2, children_3, children_4, children_5
         cdef int count_1, count_2, count_3
-        cdef tuple indent_column_1, indent_column_2, indent_column_3, indent_column_4
+        cdef Indent indent_column_1, indent_column_2, indent_column_3, indent_column_4
         cdef int partial_tab_offset_1, partial_tab_offset_2, partial_tab_offset_3, partial_tab_offset_4
         cdef int partial_tab_width_1, partial_tab_width_2, partial_tab_width_3, partial_tab_width_4
         while True: # note: return at end of loop
@@ -223,6 +229,7 @@ cdef class Parser:
                     offset_2 = offset_1
                     column_2 = column_1
                     children_2 = None
+                    value_0 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
                         count_0 = 0
                         while True:
@@ -455,7 +462,10 @@ cdef class Parser:
                     if offset_2 == -1:
                         offset_1 = -1
                         break
-                    value_0 = Node('string', offset_1, offset_2, column_1, column_2, children_2, None)
+                    value_0.name = 'string'
+                    value_0.end = offset_2
+                    value_0.end_column = column_2
+                    value_0.value = None
                     children_1.append(value_0)
                     offset_1 = offset_2
                     column_1 = column_2
@@ -490,6 +500,7 @@ cdef class Parser:
                     offset_2 = offset_1
                     column_2 = column_1
                     children_2 = None
+                    value_1 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
                         count_0 = 0
                         while count_0 < 1:
@@ -804,7 +815,10 @@ cdef class Parser:
                     if offset_2 == -1:
                         offset_1 = -1
                         break
-                    value_1 = Node('number', offset_1, offset_2, column_1, column_2, children_2, None)
+                    value_1.name = 'number'
+                    value_1.end = offset_2
+                    value_1.end_column = column_2
+                    value_1.value = None
                     children_1.append(value_1)
                     offset_1 = offset_2
                     column_1 = column_2
@@ -831,6 +845,7 @@ cdef class Parser:
                     offset_2 = offset_1
                     column_2 = column_1
                     children_2 = None
+                    value_2 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
                         if offset_2 + 4 <= buf_eof and buf[offset_2+0] == 't' and buf[offset_2+1] == 'r' and buf[offset_2+2] == 'u' and buf[offset_2+3] == 'e':
                             offset_2 += 4
@@ -843,7 +858,10 @@ cdef class Parser:
                     if offset_2 == -1:
                         offset_1 = -1
                         break
-                    value_2 = Node('bool', offset_1, offset_2, column_1, column_2, children_2, None)
+                    value_2.name = 'bool'
+                    value_2.end = offset_2
+                    value_2.end_column = column_2
+                    value_2.value = None
                     children_1.append(value_2)
                     offset_1 = offset_2
                     column_1 = column_2
@@ -870,6 +888,7 @@ cdef class Parser:
                     offset_2 = offset_1
                     column_2 = column_1
                     children_2 = None
+                    value_3 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
                         if offset_2 + 5 <= buf_eof and buf[offset_2+0] == 'f' and buf[offset_2+1] == 'a' and buf[offset_2+2] == 'l' and buf[offset_2+3] == 's' and buf[offset_2+4] == 'e':
                             offset_2 += 5
@@ -882,7 +901,10 @@ cdef class Parser:
                     if offset_2 == -1:
                         offset_1 = -1
                         break
-                    value_3 = Node('bool', offset_1, offset_2, column_1, column_2, children_2, None)
+                    value_3.name = 'bool'
+                    value_3.end = offset_2
+                    value_3.end_column = column_2
+                    value_3.value = None
                     children_1.append(value_3)
                     offset_1 = offset_2
                     column_1 = column_2
@@ -909,6 +931,7 @@ cdef class Parser:
                     offset_2 = offset_1
                     column_2 = column_1
                     children_2 = None
+                    value_4 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
                         if offset_2 + 4 <= buf_eof and buf[offset_2+0] == 'n' and buf[offset_2+1] == 'u' and buf[offset_2+2] == 'l' and buf[offset_2+3] == 'l':
                             offset_2 += 4
@@ -921,7 +944,10 @@ cdef class Parser:
                     if offset_2 == -1:
                         offset_1 = -1
                         break
-                    value_4 = Node('bool', offset_1, offset_2, column_1, column_2, children_2, None)
+                    value_4.name = 'bool'
+                    value_4.end = offset_2
+                    value_4.end_column = column_2
+                    value_4.value = None
                     children_1.append(value_4)
                     offset_1 = offset_2
                     column_1 = column_2
@@ -946,14 +972,14 @@ cdef class Parser:
             break
         return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
-    cdef parse_json_string(self, str buf, int buf_start, int buf_eof, int offset_0,  int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
+    cdef parse_json_string(self, str buf, int buf_start, int buf_eof, int offset_0,  int column_0, Indent indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
         cdef Py_UCS4 codepoint
         cdef int offset_1, offset_2, offset_3
         cdef int column_1, column_2, column_3
 
         cdef list children_1, children_2, children_3
         cdef int count_1
-        cdef tuple indent_column_1, indent_column_2
+        cdef Indent indent_column_1, indent_column_2
         cdef int partial_tab_offset_1, partial_tab_offset_2
         cdef int partial_tab_width_1, partial_tab_width_2
         while True: # note: return at end of loop
@@ -967,6 +993,7 @@ cdef class Parser:
             offset_1 = offset_0
             column_1 = column_0
             children_1 = None
+            value_0 = Node(None, offset_0, offset_0, column_0, column_0, children_1, None)
             while True: # start capture
                 count_0 = 0
                 while True:
@@ -1199,7 +1226,10 @@ cdef class Parser:
             if offset_1 == -1:
                 offset_0 = -1
                 break
-            value_0 = Node('string', offset_0, offset_1, column_0, column_1, children_1, None)
+            value_0.name = 'string'
+            value_0.end = offset_1
+            value_0.end_column = column_1
+            value_0.value = None
             children_0.append(value_0)
             offset_0 = offset_1
             column_0 = column_1
@@ -1215,14 +1245,14 @@ cdef class Parser:
             break
         return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
-    cdef parse_json_list(self, str buf, int buf_start, int buf_eof, int offset_0,  int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
+    cdef parse_json_list(self, str buf, int buf_start, int buf_eof, int offset_0,  int column_0, Indent indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
         cdef Py_UCS4 codepoint
         cdef int offset_1, offset_2, offset_3
         cdef int column_1, column_2, column_3
 
         cdef list children_1, children_2, children_3
         cdef int count_1, count_2
-        cdef tuple indent_column_1, indent_column_2
+        cdef Indent indent_column_1, indent_column_2
         cdef int partial_tab_offset_1, partial_tab_offset_2
         cdef int partial_tab_width_1, partial_tab_width_2
         while True: # note: return at end of loop
@@ -1255,6 +1285,7 @@ cdef class Parser:
             offset_1 = offset_0
             column_1 = column_0
             children_1 = []
+            value_0 = Node(None, offset_0, offset_0, column_0, column_0, children_1, None)
             while True: # start capture
                 count_0 = 0
                 while count_0 < 1:
@@ -1362,7 +1393,10 @@ cdef class Parser:
             if offset_1 == -1:
                 offset_0 = -1
                 break
-            value_0 = Node('list', offset_0, offset_1, column_0, column_1, children_1, None)
+            value_0.name = 'list'
+            value_0.end = offset_1
+            value_0.end_column = column_1
+            value_0.value = None
             children_0.append(value_0)
             offset_0 = offset_1
             column_0 = column_1
@@ -1378,14 +1412,14 @@ cdef class Parser:
             break
         return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0
 
-    cdef parse_json_object(self, str buf, int buf_start, int buf_eof, int offset_0,  int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
+    cdef parse_json_object(self, str buf, int buf_start, int buf_eof, int offset_0,  int column_0, Indent indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
         cdef Py_UCS4 codepoint
         cdef int offset_1, offset_2, offset_3, offset_4, offset_5, offset_6
         cdef int column_1, column_2, column_3, column_4, column_5, column_6
 
         cdef list children_1, children_2, children_3, children_4, children_5, children_6
         cdef int count_1, count_2
-        cdef tuple indent_column_1, indent_column_2, indent_column_3
+        cdef Indent indent_column_1, indent_column_2, indent_column_3
         cdef int partial_tab_offset_1, partial_tab_offset_2, partial_tab_offset_3
         cdef int partial_tab_width_1, partial_tab_width_2, partial_tab_width_3
         while True: # note: return at end of loop
@@ -1418,6 +1452,7 @@ cdef class Parser:
             offset_1 = offset_0
             column_1 = column_0
             children_1 = []
+            value_0 = Node(None, offset_0, offset_0, column_0, column_0, children_1, None)
             while True: # start capture
                 count_0 = 0
                 while count_0 < 1:
@@ -1431,6 +1466,7 @@ cdef class Parser:
                         offset_3 = offset_2
                         column_3 = column_2
                         children_3 = []
+                        value_1 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
                         while True: # start capture
                             if offset_3 + 1 <= buf_eof and buf[offset_3+0] == '"':
                                 offset_3 += 1
@@ -1442,6 +1478,7 @@ cdef class Parser:
                             offset_4 = offset_3
                             column_4 = column_3
                             children_4 = None
+                            value_2 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
                             while True: # start capture
                                 count_1 = 0
                                 while True:
@@ -1674,8 +1711,11 @@ cdef class Parser:
                             if offset_4 == -1:
                                 offset_3 = -1
                                 break
-                            value_0 = Node('string', offset_3, offset_4, column_3, column_4, children_4, None)
-                            children_3.append(value_0)
+                            value_2.name = 'string'
+                            value_2.end = offset_4
+                            value_2.end_column = column_4
+                            value_2.value = None
+                            children_3.append(value_2)
                             offset_3 = offset_4
                             column_3 = column_4
 
@@ -1740,7 +1780,10 @@ cdef class Parser:
                         if offset_3 == -1:
                             offset_2 = -1
                             break
-                        value_1 = Node('pair', offset_2, offset_3, column_2, column_3, children_3, None)
+                        value_1.name = 'pair'
+                        value_1.end = offset_3
+                        value_1.end_column = column_3
+                        value_1.value = None
                         children_2.append(value_1)
                         offset_2 = offset_3
                         column_2 = column_3
@@ -1802,6 +1845,7 @@ cdef class Parser:
                                 offset_4 = offset_3
                                 column_4 = column_3
                                 children_4 = []
+                                value_3 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
                                 while True: # start capture
                                     offset_4, column_4, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_json_string(buf, buf_start, buf_eof, offset_4, column_4, indent_column_2, prefix_0, children_4, partial_tab_offset_2, partial_tab_width_2)
                                     if offset_4 == -1: break
@@ -1860,8 +1904,11 @@ cdef class Parser:
                                 if offset_4 == -1:
                                     offset_3 = -1
                                     break
-                                value_2 = Node('pair', offset_3, offset_4, column_3, column_4, children_4, None)
-                                children_3.append(value_2)
+                                value_3.name = 'pair'
+                                value_3.end = offset_4
+                                value_3.end_column = column_4
+                                value_3.value = None
+                                children_3.append(value_3)
                                 offset_3 = offset_4
                                 column_3 = column_4
 
@@ -1919,8 +1966,11 @@ cdef class Parser:
             if offset_1 == -1:
                 offset_0 = -1
                 break
-            value_3 = Node('object', offset_0, offset_1, column_0, column_1, children_1, None)
-            children_0.append(value_3)
+            value_0.name = 'object'
+            value_0.end = offset_1
+            value_0.end_column = column_1
+            value_0.value = None
+            children_0.append(value_0)
             offset_0 = offset_1
             column_0 = column_1
 

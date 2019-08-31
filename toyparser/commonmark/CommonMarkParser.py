@@ -16,6 +16,10 @@ class Node:
         return builder[self.name](buf, self, children)
 
 
+class Indent:
+    def __init__(self, value, parent=None):
+        self.value = value
+        self.parent = parent
 class Parser:
     def __init__(self, tabstop=None, allow_mixed_indent=False):
          self.tabstop = tabstop or 4
@@ -26,7 +30,7 @@ class Parser:
         self.cache = dict()
         end = len(buf) if end is None else end
         start, eof = offset, end
-        column, indent_column = 0, (0, None)
+        column, indent_column = 0, Indent(0, None)
         prefix, children = [], []
         new_offset, column, indent_column, partial_tab_offset, partial_tab_width = self.parse_document(buf, start, end, offset, column, indent_column, prefix, children, 0, 0)
         if children and new_offset == end:
@@ -46,7 +50,7 @@ class Parser:
                 partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True:
-                    if not (column_1 == indent_column_1[0] == 0):
+                    if not (column_1 == indent_column_1.value == 0):
                         offset_1 = -1
                         break
                     # print('start')
@@ -61,7 +65,7 @@ class Parser:
                             offset_1 = -1
                             break
                         offset_1 = offset_2
-                        indent_column_1 = (column_1, indent_column_1)
+                        indent_column_1 = Indent(column_1, indent_column_1)
                     if offset_1 == -1:
                         break
 
@@ -120,7 +124,7 @@ class Parser:
                                 if codepoint in '\n':
                                     offset_2 +=1
                                     column_2 = 0
-                                    indent_column_2 = (0, None)
+                                    indent_column_2 = Indent(0, None)
                                 else:
                                     offset_2 = -1
                                     break
@@ -137,7 +141,7 @@ class Parser:
                                 partial_tab_width_3 = partial_tab_width_2
                                 children_3 = [] if children_2 is not None else None
                                 while True:
-                                    if not (column_3 == indent_column_3[0] == 0):
+                                    if not (column_3 == indent_column_3.value == 0):
                                         offset_3 = -1
                                         break
                                     # print('start')
@@ -152,7 +156,7 @@ class Parser:
                                             offset_3 = -1
                                             break
                                         offset_3 = offset_4
-                                        indent_column_3 = (column_3, indent_column_3)
+                                        indent_column_3 = Indent(column_3, indent_column_3)
                                     if offset_3 == -1:
                                         break
 
@@ -180,7 +184,7 @@ class Parser:
                                         if codepoint in '\n':
                                             offset_3 +=1
                                             column_3 = 0
-                                            indent_column_3 = (0, None)
+                                            indent_column_3 = Indent(0, None)
                                         else:
                                             offset_3 = -1
                                             break
@@ -819,7 +823,7 @@ class Parser:
                 if codepoint in '\n':
                     offset_0 +=1
                     column_0 = 0
-                    indent_column_0 = (0, None)
+                    indent_column_0 = Indent(0, None)
                 else:
                     offset_0 = -1
                     break
@@ -1021,7 +1025,7 @@ class Parser:
                                 if codepoint in '\n':
                                     offset_3 +=1
                                     column_2 = 0
-                                    indent_column_1 = (0, None)
+                                    indent_column_1 = Indent(0, None)
                                 else:
                                     offset_3 = -1
                                     break
@@ -1190,7 +1194,7 @@ class Parser:
                                             if codepoint in '\n':
                                                 offset_5 +=1
                                                 column_4 = 0
-                                                indent_column_3 = (0, None)
+                                                indent_column_3 = Indent(0, None)
                                             else:
                                                 offset_5 = -1
                                                 break
@@ -1392,7 +1396,7 @@ class Parser:
                                 if codepoint in '\n':
                                     offset_3 +=1
                                     column_2 = 0
-                                    indent_column_1 = (0, None)
+                                    indent_column_1 = Indent(0, None)
                                 else:
                                     offset_3 = -1
                                     break
@@ -1473,7 +1477,7 @@ class Parser:
             children_1 = []
             value_0 = Node(None, offset_0, offset_0, column_0, column_0, children_1, None)
             while True: # start capture
-                count_0 = column_1 - indent_column_0[0]
+                count_0 = column_1 - indent_column_0.value
                 # print(count_0, 'indent')
                 def _indent(buf, buf_start, buf_eof, offset, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
                     saw_tab, saw_not_tab = False, False
@@ -1544,7 +1548,7 @@ class Parser:
                             offset = -1
                     return offset, column, indent_column, partial_tab_offset, partial_tab_width
                 prefix_0.append((_indent, _dedent))
-                indent_column_0 = (column_1, indent_column_0)
+                indent_column_0 = Indent(column_1, indent_column_0)
                 while True:
                     offset_2 = offset_1
                     column_2 = column_1
@@ -1648,7 +1652,7 @@ class Parser:
                         if codepoint in '\n':
                             offset_1 +=1
                             column_1 = 0
-                            indent_column_0 = (0, None)
+                            indent_column_0 = Indent(0, None)
                         else:
                             offset_1 = -1
                             break
@@ -1679,7 +1683,7 @@ class Parser:
                                         partial_tab_width_3 = partial_tab_width_2
                                         children_4 = [] if children_3 is not None else None
                                         while True:
-                                            if not (column_4 == indent_column_3[0] == 0):
+                                            if not (column_4 == indent_column_3.value == 0):
                                                 offset_4 = -1
                                                 break
                                             # print('start')
@@ -1694,7 +1698,7 @@ class Parser:
                                                     offset_4 = -1
                                                     break
                                                 offset_4 = offset_5
-                                                indent_column_3 = (column_4, indent_column_3)
+                                                indent_column_3 = Indent(column_4, indent_column_3)
                                             if offset_4 == -1:
                                                 break
 
@@ -1739,7 +1743,7 @@ class Parser:
                                                 if codepoint in '\n':
                                                     offset_4 +=1
                                                     column_4 = 0
-                                                    indent_column_3 = (0, None)
+                                                    indent_column_3 = Indent(0, None)
                                                 else:
                                                     offset_4 = -1
                                                     break
@@ -1772,7 +1776,7 @@ class Parser:
                                         indent_column_3 = indent_column_2
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
-                                        if not (column_4 == indent_column_3[0] == 0):
+                                        if not (column_4 == indent_column_3.value == 0):
                                             offset_4 = -1
                                             break
                                         # print('start')
@@ -1787,7 +1791,7 @@ class Parser:
                                                 offset_4 = -1
                                                 break
                                             offset_4 = offset_5
-                                            indent_column_3 = (column_4, indent_column_3)
+                                            indent_column_3 = Indent(column_4, indent_column_3)
                                         if offset_4 == -1:
                                             break
 
@@ -1847,7 +1851,7 @@ class Parser:
                                 partial_tab_width_2 = partial_tab_width_1
                                 children_3 = [] if children_2 is not None else None
                                 while True: # case
-                                    if not (column_3 == indent_column_2[0] == 0):
+                                    if not (column_3 == indent_column_2.value == 0):
                                         offset_3 = -1
                                         break
                                     # print('start')
@@ -1862,7 +1866,7 @@ class Parser:
                                             offset_3 = -1
                                             break
                                         offset_3 = offset_4
-                                        indent_column_2 = (column_3, indent_column_2)
+                                        indent_column_2 = Indent(column_3, indent_column_2)
                                     if offset_3 == -1:
                                         break
 
@@ -1968,7 +1972,7 @@ class Parser:
                                         if codepoint in '\n':
                                             offset_3 +=1
                                             column_3 = 0
-                                            indent_column_2 = (0, None)
+                                            indent_column_2 = Indent(0, None)
                                         else:
                                             offset_3 = -1
                                             break
@@ -2007,7 +2011,7 @@ class Parser:
 
                     break
                 prefix_0.pop()
-                if indent_column_0 != (0, None): indent_column_0 = indent_column_0[1]
+                if indent_column_0.parent != None: indent_column_0 = indent_column_0.parent
                 if offset_1 == -1: break
 
                 break
@@ -2341,7 +2345,7 @@ class Parser:
                                                         if codepoint in '\n':
                                                             offset_7 +=1
                                                             column_7 = 0
-                                                            indent_column_4 = (0, None)
+                                                            indent_column_4 = Indent(0, None)
                                                         else:
                                                             offset_7 = -1
                                                             break
@@ -2934,7 +2938,7 @@ class Parser:
                     if codepoint in '\n':
                         offset_1 +=1
                         column_1 = 0
-                        indent_column_0 = (0, None)
+                        indent_column_0 = Indent(0, None)
                     else:
                         offset_1 = -1
                         break
@@ -2949,7 +2953,7 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
-                        if not (column_2 == indent_column_1[0] == 0):
+                        if not (column_2 == indent_column_1.value == 0):
                             offset_2 = -1
                             break
                         # print('start')
@@ -2964,7 +2968,7 @@ class Parser:
                                 offset_2 = -1
                                 break
                             offset_2 = offset_3
-                            indent_column_1 = (column_2, indent_column_1)
+                            indent_column_1 = Indent(column_2, indent_column_1)
                         if offset_2 == -1:
                             break
 
@@ -3059,7 +3063,7 @@ class Parser:
                                 if codepoint in '\n':
                                     offset_3 +=1
                                     column_3 = 0
-                                    indent_column_2 = (0, None)
+                                    indent_column_2 = Indent(0, None)
                                 else:
                                     offset_3 = -1
                                     break
@@ -3173,7 +3177,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_1 = (0, None)
+                                indent_column_1 = Indent(0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -3209,7 +3213,7 @@ class Parser:
                             indent_column_2 = indent_column_1
                             partial_tab_offset_2 = partial_tab_offset_1
                             partial_tab_width_2 = partial_tab_width_1
-                            if not (column_3 == indent_column_2[0] == 0):
+                            if not (column_3 == indent_column_2.value == 0):
                                 offset_3 = -1
                                 break
                             # print('start')
@@ -3224,7 +3228,7 @@ class Parser:
                                     offset_3 = -1
                                     break
                                 offset_3 = offset_4
-                                indent_column_2 = (column_3, indent_column_2)
+                                indent_column_2 = Indent(column_3, indent_column_2)
                             if offset_3 == -1:
                                 break
 
@@ -3294,7 +3298,7 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True: # case
-                        if not (column_2 == indent_column_1[0] == 0):
+                        if not (column_2 == indent_column_1.value == 0):
                             offset_2 = -1
                             break
                         # print('start')
@@ -3309,7 +3313,7 @@ class Parser:
                                 offset_2 = -1
                                 break
                             offset_2 = offset_3
-                            indent_column_1 = (column_2, indent_column_1)
+                            indent_column_1 = Indent(column_2, indent_column_1)
                         if offset_2 == -1:
                             break
 
@@ -3435,7 +3439,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_1 = (0, None)
+                                indent_column_1 = Indent(0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -3680,7 +3684,7 @@ class Parser:
                                                         if codepoint in '\n':
                                                             offset_7 +=1
                                                             column_7 = 0
-                                                            indent_column_4 = (0, None)
+                                                            indent_column_4 = Indent(0, None)
                                                         else:
                                                             offset_7 = -1
                                                             break
@@ -4270,7 +4274,7 @@ class Parser:
                     if codepoint in '\n':
                         offset_1 +=1
                         column_1 = 0
-                        indent_column_0 = (0, None)
+                        indent_column_0 = Indent(0, None)
                     else:
                         offset_1 = -1
                         break
@@ -4285,7 +4289,7 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
-                        if not (column_2 == indent_column_1[0] == 0):
+                        if not (column_2 == indent_column_1.value == 0):
                             offset_2 = -1
                             break
                         # print('start')
@@ -4300,7 +4304,7 @@ class Parser:
                                 offset_2 = -1
                                 break
                             offset_2 = offset_3
-                            indent_column_1 = (column_2, indent_column_1)
+                            indent_column_1 = Indent(column_2, indent_column_1)
                         if offset_2 == -1:
                             break
 
@@ -4499,7 +4503,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_1 = (0, None)
+                                indent_column_1 = Indent(0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -4535,7 +4539,7 @@ class Parser:
                             indent_column_2 = indent_column_1
                             partial_tab_offset_2 = partial_tab_offset_1
                             partial_tab_width_2 = partial_tab_width_1
-                            if not (column_3 == indent_column_2[0] == 0):
+                            if not (column_3 == indent_column_2.value == 0):
                                 offset_3 = -1
                                 break
                             # print('start')
@@ -4550,7 +4554,7 @@ class Parser:
                                     offset_3 = -1
                                     break
                                 offset_3 = offset_4
-                                indent_column_2 = (column_3, indent_column_2)
+                                indent_column_2 = Indent(column_3, indent_column_2)
                             if offset_3 == -1:
                                 break
 
@@ -4620,7 +4624,7 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True: # case
-                        if not (column_2 == indent_column_1[0] == 0):
+                        if not (column_2 == indent_column_1.value == 0):
                             offset_2 = -1
                             break
                         # print('start')
@@ -4635,7 +4639,7 @@ class Parser:
                                 offset_2 = -1
                                 break
                             offset_2 = offset_3
-                            indent_column_1 = (column_2, indent_column_1)
+                            indent_column_1 = Indent(column_2, indent_column_1)
                         if offset_2 == -1:
                             break
 
@@ -4761,7 +4765,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_1 = (0, None)
+                                indent_column_1 = Indent(0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -4874,7 +4878,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_2 = (0, None)
+                                indent_column_2 = Indent(0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -5009,7 +5013,7 @@ class Parser:
                         if codepoint in '\n':
                             offset_1 +=1
                             column_1 = 0
-                            indent_column_1 = (0, None)
+                            indent_column_1 = Indent(0, None)
                         else:
                             offset_1 = -1
                             break
@@ -5195,7 +5199,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_1 = (0, None)
+                                indent_column_1 = Indent(0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -5220,7 +5224,7 @@ class Parser:
                     children_2 = [] if children_1 is not None else None
                     while True: # case
                         prefix_0.append((self.parse_start_blockquote, self.parse_blockquote_interrupt))
-                        indent_column_1 = (column_2, indent_column_1)
+                        indent_column_1 = Indent(column_2, indent_column_1)
                         while True:
                             offset_2, column_2, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_block_element(buf, buf_start, buf_eof, offset_2, column_2, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                             if offset_2 == -1: break
@@ -5228,7 +5232,7 @@ class Parser:
 
                             break
                         prefix_0.pop()
-                        if indent_column_1 != (0, None): indent_column_1 = indent_column_1[1]
+                        if indent_column_1.parent != None: indent_column_1 = indent_column_1.parent
                         if offset_2 == -1: break
 
 
@@ -5257,7 +5261,7 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
-                        if not (column_2 == indent_column_1[0] == 0):
+                        if not (column_2 == indent_column_1.value == 0):
                             offset_2 = -1
                             break
                         # print('start')
@@ -5272,7 +5276,7 @@ class Parser:
                                 offset_2 = -1
                                 break
                             offset_2 = offset_3
-                            indent_column_1 = (column_2, indent_column_1)
+                            indent_column_1 = Indent(column_2, indent_column_1)
                         if offset_2 == -1:
                             break
 
@@ -5312,7 +5316,7 @@ class Parser:
                                     if codepoint in '\n':
                                         offset_3 +=1
                                         column_3 = 0
-                                        indent_column_2 = (0, None)
+                                        indent_column_2 = Indent(0, None)
                                     else:
                                         offset_3 = -1
                                         break
@@ -5337,7 +5341,7 @@ class Parser:
                             children_3 = [] if children_2 is not None else None
                             while True: # case
                                 prefix_0.append((self.parse_start_blockquote, self.parse_blockquote_interrupt))
-                                indent_column_2 = (column_3, indent_column_2)
+                                indent_column_2 = Indent(column_3, indent_column_2)
                                 while True:
                                     offset_3, column_3, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_block_element(buf, buf_start, buf_eof, offset_3, column_3, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
                                     if offset_3 == -1: break
@@ -5345,7 +5349,7 @@ class Parser:
 
                                     break
                                 prefix_0.pop()
-                                if indent_column_2 != (0, None): indent_column_2 = indent_column_2[1]
+                                if indent_column_2.parent != None: indent_column_2 = indent_column_2.parent
                                 if offset_3 == -1: break
 
 
@@ -5581,7 +5585,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_2 = (0, None)
+                                indent_column_2 = Indent(0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -5616,7 +5620,7 @@ class Parser:
                         if codepoint in '\n':
                             offset_1 +=1
                             column_1 = 0
-                            indent_column_1 = (0, None)
+                            indent_column_1 = Indent(0, None)
                             count_0 +=1
                         elif codepoint in ' \t':
                             if codepoint == '\t':
@@ -5891,7 +5895,7 @@ class Parser:
                                 if codepoint in '\n':
                                     offset_3 +=1
                                     column_3 = 0
-                                    indent_column_3 = (0, None)
+                                    indent_column_3 = Indent(0, None)
                                 else:
                                     offset_3 = -1
                                     break
@@ -5992,7 +5996,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_2 = (0, None)
+                                indent_column_2 = Indent(0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -6055,7 +6059,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_2 = (0, None)
+                                indent_column_2 = Indent(0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -6068,7 +6072,7 @@ class Parser:
                         offset_1 = -1
                         break
 
-                    count_0 = column_1 - indent_column_1[0]
+                    count_0 = column_1 - indent_column_1.value
                     # print(count_0, 'indent')
                     def _indent(buf, buf_start, buf_eof, offset, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
                         saw_tab, saw_not_tab = False, False
@@ -6139,7 +6143,7 @@ class Parser:
                                 offset = -1
                         return offset, column, indent_column, partial_tab_offset, partial_tab_width
                     prefix_0.append((_indent, _dedent))
-                    indent_column_1 = (column_1, indent_column_1)
+                    indent_column_1 = Indent(column_1, indent_column_1)
                     while True:
                         count_0 = 0
                         while offset_1 < buf_eof:
@@ -6165,7 +6169,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_1 +=1
                                 column_1 = 0
-                                indent_column_1 = (0, None)
+                                indent_column_1 = Indent(0, None)
                             else:
                                 offset_1 = -1
                                 break
@@ -6173,7 +6177,7 @@ class Parser:
                             offset_1 = -1
                             break
 
-                        if not (column_1 == indent_column_1[0] == 0):
+                        if not (column_1 == indent_column_1.value == 0):
                             offset_1 = -1
                             break
                         # print('start')
@@ -6188,13 +6192,13 @@ class Parser:
                                 offset_1 = -1
                                 break
                             offset_1 = offset_2
-                            indent_column_1 = (column_1, indent_column_1)
+                            indent_column_1 = Indent(column_1, indent_column_1)
                         if offset_1 == -1:
                             break
 
                         break
                     prefix_0.pop()
-                    if indent_column_1 != (0, None): indent_column_1 = indent_column_1[1]
+                    if indent_column_1.parent != None: indent_column_1 = indent_column_1.parent
                     if offset_1 == -1: break
 
                     count_0 = 0
@@ -6243,7 +6247,7 @@ class Parser:
             if offset_0 == -1:
                 break
 
-            value_0 = column_0 - indent_column_0[0]
+            value_0 = column_0 - indent_column_0.value
 
             count_0 = value_0
             # print(count_0, 'indent')
@@ -6283,7 +6287,7 @@ class Parser:
                         break
                 return offset, column, indent_column, partial_tab_offset, partial_tab_width
             prefix_0.append((_indent, self.parse_list_interrupts))
-            indent_column_0 = (column_0, indent_column_0)
+            indent_column_0 = Indent(column_0, indent_column_0)
             while True:
                 offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0 = self.parse_block_element(buf, buf_start, buf_eof, offset_0, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0)
                 if offset_0 == -1: break
@@ -6291,7 +6295,7 @@ class Parser:
 
                 break
             prefix_0.pop()
-            if indent_column_0 != (0, None): indent_column_0 = indent_column_0[1]
+            if indent_column_0.parent != None: indent_column_0 = indent_column_0.parent
             if offset_0 == -1: break
 
             count_0 = 0
@@ -6341,9 +6345,9 @@ class Parser:
                                 break
                         return offset, column, indent_column, partial_tab_offset, partial_tab_width
                     prefix_0.append((_indent, self.parse_list_interrupts))
-                    indent_column_1 = (column_1, indent_column_1)
+                    indent_column_1 = Indent(column_1, indent_column_1)
                     while True:
-                        if not (column_1 == indent_column_1[0] == 0):
+                        if not (column_1 == indent_column_1.value == 0):
                             offset_1 = -1
                             break
                         # print('start')
@@ -6367,7 +6371,7 @@ class Parser:
                                 else:
                                     offset_2 = offset_1
                             offset_1 = offset_2
-                            indent_column_1 = (column_1, indent_column_1)
+                            indent_column_1 = Indent(column_1, indent_column_1)
                         if offset_1 == -1:
                             break
 
@@ -6418,7 +6422,7 @@ class Parser:
                                                 if codepoint in '\n':
                                                     offset_4 +=1
                                                     column_4 = 0
-                                                    indent_column_3 = (0, None)
+                                                    indent_column_3 = Indent(0, None)
                                                 else:
                                                     offset_4 = -1
                                                     break
@@ -6438,7 +6442,7 @@ class Parser:
                                         offset_3 = offset_4
                                         column_3 = column_4
 
-                                        if not (column_3 == indent_column_3[0] == 0):
+                                        if not (column_3 == indent_column_3.value == 0):
                                             offset_3 = -1
                                             break
                                         # print('start')
@@ -6453,7 +6457,7 @@ class Parser:
                                                 offset_3 = -1
                                                 break
                                             offset_3 = offset_4
-                                            indent_column_3 = (column_3, indent_column_3)
+                                            indent_column_3 = Indent(column_3, indent_column_3)
                                         if offset_3 == -1:
                                             break
 
@@ -6534,7 +6538,7 @@ class Parser:
 
                         break
                     prefix_0.pop()
-                    if indent_column_1 != (0, None): indent_column_1 = indent_column_1[1]
+                    if indent_column_1.parent != None: indent_column_1 = indent_column_1.parent
                     if offset_1 == -1: break
 
                     count_1 = value_0
@@ -6575,7 +6579,7 @@ class Parser:
                                 break
                         return offset, column, indent_column, partial_tab_offset, partial_tab_width
                     prefix_0.append((_indent, self.parse_list_interrupts))
-                    indent_column_1 = (column_1, indent_column_1)
+                    indent_column_1 = Indent(column_1, indent_column_1)
                     while True:
                         offset_1, column_1, indent_column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_block_element(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                         if offset_1 == -1: break
@@ -6583,7 +6587,7 @@ class Parser:
 
                         break
                     prefix_0.pop()
-                    if indent_column_1 != (0, None): indent_column_1 = indent_column_1[1]
+                    if indent_column_1.parent != None: indent_column_1 = indent_column_1.parent
                     if offset_1 == -1: break
 
                     break
@@ -6721,7 +6725,7 @@ class Parser:
                                 if codepoint in '\n':
                                     offset_3 +=1
                                     column_3 = 0
-                                    indent_column_2 = (0, None)
+                                    indent_column_2 = Indent(0, None)
                                 else:
                                     offset_3 = -1
                                     break
@@ -6756,7 +6760,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_1 = (0, None)
+                                indent_column_1 = Indent(0, None)
                                 count_0 +=1
                             elif codepoint in ' \t':
                                 if codepoint == '\t':
@@ -6890,7 +6894,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_1 = (0, None)
+                                indent_column_1 = Indent(0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -6921,7 +6925,7 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
-                        if not (column_2 == indent_column_1[0] == 0):
+                        if not (column_2 == indent_column_1.value == 0):
                             offset_2 = -1
                             break
                         # print('start')
@@ -6936,7 +6940,7 @@ class Parser:
                                 offset_2 = -1
                                 break
                             offset_2 = offset_3
-                            indent_column_1 = (column_2, indent_column_1)
+                            indent_column_1 = Indent(column_2, indent_column_1)
                         if offset_2 == -1:
                             break
 
@@ -6972,7 +6976,7 @@ class Parser:
                                     if codepoint in '\n':
                                         offset_3 +=1
                                         column_3 = 0
-                                        indent_column_2 = (0, None)
+                                        indent_column_2 = Indent(0, None)
                                     else:
                                         offset_3 = -1
                                         break
@@ -6994,7 +6998,7 @@ class Parser:
                                         partial_tab_width_3 = partial_tab_width_2
                                         children_5 = [] if children_4 is not None else None
                                         while True:
-                                            if not (column_5 == indent_column_3[0] == 0):
+                                            if not (column_5 == indent_column_3.value == 0):
                                                 offset_5 = -1
                                                 break
                                             # print('start')
@@ -7009,7 +7013,7 @@ class Parser:
                                                     offset_5 = -1
                                                     break
                                                 offset_5 = offset_6
-                                                indent_column_3 = (column_5, indent_column_3)
+                                                indent_column_3 = Indent(column_5, indent_column_3)
                                             if offset_5 == -1:
                                                 break
 
@@ -7037,7 +7041,7 @@ class Parser:
                                                 if codepoint in '\n':
                                                     offset_5 +=1
                                                     column_5 = 0
-                                                    indent_column_3 = (0, None)
+                                                    indent_column_3 = Indent(0, None)
                                                 else:
                                                     offset_5 = -1
                                                     break
@@ -7079,7 +7083,7 @@ class Parser:
                                     indent_column_3 = indent_column_2
                                     partial_tab_offset_3 = partial_tab_offset_2
                                     partial_tab_width_3 = partial_tab_width_2
-                                    if not (column_4 == indent_column_3[0] == 0):
+                                    if not (column_4 == indent_column_3.value == 0):
                                         offset_4 = -1
                                         break
                                     # print('start')
@@ -7094,7 +7098,7 @@ class Parser:
                                             offset_4 = -1
                                             break
                                         offset_4 = offset_5
-                                        indent_column_3 = (column_4, indent_column_3)
+                                        indent_column_3 = Indent(column_4, indent_column_3)
                                     if offset_4 == -1:
                                         break
 
@@ -7243,7 +7247,7 @@ class Parser:
                                                 if codepoint in '\n':
                                                     offset_5 +=1
                                                     column_5 = 0
-                                                    indent_column_4 = (0, None)
+                                                    indent_column_4 = Indent(0, None)
                                                 else:
                                                     offset_5 = -1
                                                     break
@@ -7278,7 +7282,7 @@ class Parser:
                                             if codepoint in '\n':
                                                 offset_4 +=1
                                                 column_4 = 0
-                                                indent_column_3 = (0, None)
+                                                indent_column_3 = Indent(0, None)
                                                 count_1 +=1
                                             elif codepoint in ' \t':
                                                 if codepoint == '\t':
@@ -7412,7 +7416,7 @@ class Parser:
                                             if codepoint in '\n':
                                                 offset_4 +=1
                                                 column_4 = 0
-                                                indent_column_3 = (0, None)
+                                                indent_column_3 = Indent(0, None)
                                             else:
                                                 offset_4 = -1
                                                 break
@@ -7636,7 +7640,7 @@ class Parser:
                                 if codepoint in '\n':
                                     offset_3 +=1
                                     column_3 = 0
-                                    indent_column_2 = (0, None)
+                                    indent_column_2 = Indent(0, None)
                                 else:
                                     offset_3 = -1
                                     break
@@ -7671,7 +7675,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_1 = (0, None)
+                                indent_column_1 = Indent(0, None)
                                 count_0 +=1
                             elif codepoint in ' \t':
                                 if codepoint == '\t':
@@ -7805,7 +7809,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_1 = (0, None)
+                                indent_column_1 = Indent(0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -7836,7 +7840,7 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
-                        if not (column_2 == indent_column_1[0] == 0):
+                        if not (column_2 == indent_column_1.value == 0):
                             offset_2 = -1
                             break
                         # print('start')
@@ -7851,7 +7855,7 @@ class Parser:
                                 offset_2 = -1
                                 break
                             offset_2 = offset_3
-                            indent_column_1 = (column_2, indent_column_1)
+                            indent_column_1 = Indent(column_2, indent_column_1)
                         if offset_2 == -1:
                             break
 
@@ -7887,7 +7891,7 @@ class Parser:
                                     if codepoint in '\n':
                                         offset_3 +=1
                                         column_3 = 0
-                                        indent_column_2 = (0, None)
+                                        indent_column_2 = Indent(0, None)
                                     else:
                                         offset_3 = -1
                                         break
@@ -7909,7 +7913,7 @@ class Parser:
                                         partial_tab_width_3 = partial_tab_width_2
                                         children_5 = [] if children_4 is not None else None
                                         while True:
-                                            if not (column_5 == indent_column_3[0] == 0):
+                                            if not (column_5 == indent_column_3.value == 0):
                                                 offset_5 = -1
                                                 break
                                             # print('start')
@@ -7924,7 +7928,7 @@ class Parser:
                                                     offset_5 = -1
                                                     break
                                                 offset_5 = offset_6
-                                                indent_column_3 = (column_5, indent_column_3)
+                                                indent_column_3 = Indent(column_5, indent_column_3)
                                             if offset_5 == -1:
                                                 break
 
@@ -7952,7 +7956,7 @@ class Parser:
                                                 if codepoint in '\n':
                                                     offset_5 +=1
                                                     column_5 = 0
-                                                    indent_column_3 = (0, None)
+                                                    indent_column_3 = Indent(0, None)
                                                 else:
                                                     offset_5 = -1
                                                     break
@@ -7994,7 +7998,7 @@ class Parser:
                                     indent_column_3 = indent_column_2
                                     partial_tab_offset_3 = partial_tab_offset_2
                                     partial_tab_width_3 = partial_tab_width_2
-                                    if not (column_4 == indent_column_3[0] == 0):
+                                    if not (column_4 == indent_column_3.value == 0):
                                         offset_4 = -1
                                         break
                                     # print('start')
@@ -8009,7 +8013,7 @@ class Parser:
                                             offset_4 = -1
                                             break
                                         offset_4 = offset_5
-                                        indent_column_3 = (column_4, indent_column_3)
+                                        indent_column_3 = Indent(column_4, indent_column_3)
                                     if offset_4 == -1:
                                         break
 
@@ -8222,7 +8226,7 @@ class Parser:
                                                 if codepoint in '\n':
                                                     offset_5 +=1
                                                     column_5 = 0
-                                                    indent_column_4 = (0, None)
+                                                    indent_column_4 = Indent(0, None)
                                                 else:
                                                     offset_5 = -1
                                                     break
@@ -8257,7 +8261,7 @@ class Parser:
                                             if codepoint in '\n':
                                                 offset_4 +=1
                                                 column_4 = 0
-                                                indent_column_3 = (0, None)
+                                                indent_column_3 = Indent(0, None)
                                                 count_1 +=1
                                             elif codepoint in ' \t':
                                                 if codepoint == '\t':
@@ -8391,7 +8395,7 @@ class Parser:
                                             if codepoint in '\n':
                                                 offset_4 +=1
                                                 column_4 = 0
-                                                indent_column_3 = (0, None)
+                                                indent_column_3 = Indent(0, None)
                                             else:
                                                 offset_4 = -1
                                                 break
@@ -9050,7 +9054,7 @@ class Parser:
                                                 if codepoint in '\n':
                                                     offset_5 +=1
                                                     column_5 = 0
-                                                    indent_column_4 = (0, None)
+                                                    indent_column_4 = Indent(0, None)
                                                 else:
                                                     offset_5 = -1
                                                     break
@@ -9251,7 +9255,7 @@ class Parser:
                         if codepoint in '\n':
                             offset_2 +=1
                             column_2 = 0
-                            indent_column_1 = (0, None)
+                            indent_column_1 = Indent(0, None)
                             count_0 +=1
                         elif codepoint in ' \t':
                             if codepoint == '\t':
@@ -9551,7 +9555,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_1 = (0, None)
+                                indent_column_1 = Indent(0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -9559,7 +9563,7 @@ class Parser:
                             offset_2 = -1
                             break
 
-                        if not (column_2 == indent_column_1[0] == 0):
+                        if not (column_2 == indent_column_1.value == 0):
                             offset_2 = -1
                             break
                         # print('start')
@@ -9583,7 +9587,7 @@ class Parser:
                                 else:
                                     offset_3 = offset_2
                             offset_2 = offset_3
-                            indent_column_1 = (column_2, indent_column_1)
+                            indent_column_1 = Indent(column_2, indent_column_1)
                         if offset_2 == -1:
                             break
 
@@ -9618,7 +9622,7 @@ class Parser:
                                 if codepoint in '\n':
                                     offset_3 +=1
                                     column_3 = 0
-                                    indent_column_2 = (0, None)
+                                    indent_column_2 = Indent(0, None)
                                 else:
                                     offset_3 = -1
                                     break
@@ -9685,7 +9689,7 @@ class Parser:
                                 if codepoint in '\n':
                                     offset_3 +=1
                                     column_3 = 0
-                                    indent_column_2 = (0, None)
+                                    indent_column_2 = Indent(0, None)
                                 else:
                                     offset_3 = -1
                                     break
@@ -9760,7 +9764,7 @@ class Parser:
                                     if codepoint in '\n':
                                         offset_3 +=1
                                         column_3 = 0
-                                        indent_column_2 = (0, None)
+                                        indent_column_2 = Indent(0, None)
                                     else:
                                         offset_3 = -1
                                         break
@@ -9768,7 +9772,7 @@ class Parser:
                                     offset_3 = -1
                                     break
 
-                                if not (column_3 == indent_column_2[0] == 0):
+                                if not (column_3 == indent_column_2.value == 0):
                                     offset_3 = -1
                                     break
                                 # print('start')
@@ -9792,7 +9796,7 @@ class Parser:
                                         else:
                                             offset_4 = offset_3
                                     offset_3 = offset_4
-                                    indent_column_2 = (column_3, indent_column_2)
+                                    indent_column_2 = Indent(column_3, indent_column_2)
                                 if offset_3 == -1:
                                     break
 
@@ -9827,7 +9831,7 @@ class Parser:
                                         if codepoint in '\n':
                                             offset_4 +=1
                                             column_4 = 0
-                                            indent_column_3 = (0, None)
+                                            indent_column_3 = Indent(0, None)
                                         else:
                                             offset_4 = -1
                                             break
@@ -9933,7 +9937,7 @@ class Parser:
                                 if codepoint in '\n':
                                     offset_3 +=1
                                     column_3 = 0
-                                    indent_column_2 = (0, None)
+                                    indent_column_2 = Indent(0, None)
                                 else:
                                     offset_3 = -1
                                     break
@@ -9979,7 +9983,7 @@ class Parser:
                                     if codepoint in '\n':
                                         offset_3 +=1
                                         column_3 = 0
-                                        indent_column_2 = (0, None)
+                                        indent_column_2 = Indent(0, None)
                                     else:
                                         offset_3 = -1
                                         break
@@ -9987,7 +9991,7 @@ class Parser:
                                     offset_3 = -1
                                     break
 
-                                if not (column_3 == indent_column_2[0] == 0):
+                                if not (column_3 == indent_column_2.value == 0):
                                     offset_3 = -1
                                     break
                                 # print('start')
@@ -10011,7 +10015,7 @@ class Parser:
                                         else:
                                             offset_4 = offset_3
                                     offset_3 = offset_4
-                                    indent_column_2 = (column_3, indent_column_2)
+                                    indent_column_2 = Indent(column_3, indent_column_2)
                                 if offset_3 == -1:
                                     break
 
@@ -10046,7 +10050,7 @@ class Parser:
                                         if codepoint in '\n':
                                             offset_4 +=1
                                             column_4 = 0
-                                            indent_column_3 = (0, None)
+                                            indent_column_3 = Indent(0, None)
                                         else:
                                             offset_4 = -1
                                             break
@@ -10094,7 +10098,7 @@ class Parser:
                                         if codepoint in '\n':
                                             offset_4 +=1
                                             column_4 = 0
-                                            indent_column_3 = (0, None)
+                                            indent_column_3 = Indent(0, None)
                                         else:
                                             offset_4 = -1
                                             break
@@ -10174,7 +10178,7 @@ class Parser:
                 if codepoint in '\n':
                     offset_0 +=1
                     column_0 = 0
-                    indent_column_0 = (0, None)
+                    indent_column_0 = Indent(0, None)
                 else:
                     offset_0 = -1
                     break
@@ -10476,7 +10480,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_2 = (0, None)
+                                indent_column_2 = Indent(0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -10599,7 +10603,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_1 = (0, None)
+                                indent_column_1 = Indent(0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -10667,7 +10671,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_1 = (0, None)
+                                indent_column_1 = Indent(0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -10704,7 +10708,7 @@ class Parser:
             if offset_0 == -1:
                 break
 
-            if not (column_0 == indent_column_0[0] == 0):
+            if not (column_0 == indent_column_0.value == 0):
                 offset_0 = -1
                 break
             # print('start')
@@ -10728,7 +10732,7 @@ class Parser:
                     else:
                         offset_1 = offset_0
                 offset_0 = offset_1
-                indent_column_0 = (column_0, indent_column_0)
+                indent_column_0 = Indent(column_0, indent_column_0)
             if offset_0 == -1:
                 break
 
@@ -10779,7 +10783,7 @@ class Parser:
                     if codepoint in '\n':
                         offset_1 +=1
                         column_1 = 0
-                        indent_column_1 = (0, None)
+                        indent_column_1 = Indent(0, None)
                     else:
                         offset_1 = -1
                         break
@@ -10960,7 +10964,7 @@ class Parser:
                 if codepoint in '\n':
                     offset_0 +=1
                     column_0 = 0
-                    indent_column_0 = (0, None)
+                    indent_column_0 = Indent(0, None)
                 else:
                     offset_0 = -1
                     break
@@ -11031,7 +11035,7 @@ class Parser:
                     value_2 = Node(None, offset_2, offset_2, column_0, column_0, children_1, None)
                     while True: # start capture
                         prefix_0.append((self.parse_no_setext_heading_line, None))
-                        indent_column_0 = (column_1, indent_column_0)
+                        indent_column_0 = Indent(column_1, indent_column_0)
                         while True:
                             offset_3, column_1, indent_column_0, partial_tab_offset_0, partial_tab_width_0 = self.parse_inline_element(buf, buf_start, buf_eof, offset_3, column_1, indent_column_0, prefix_0, children_1, partial_tab_offset_0, partial_tab_width_0)
                             if offset_3 == -1: break
@@ -11151,7 +11155,7 @@ class Parser:
 
                             break
                         prefix_0.pop()
-                        if indent_column_0 != (0, None): indent_column_0 = indent_column_0[1]
+                        if indent_column_0.parent != None: indent_column_0 = indent_column_0.parent
                         if offset_3 == -1: break
 
                         while True: # start choice
@@ -11220,7 +11224,7 @@ class Parser:
                                     if codepoint in '\n':
                                         offset_4 +=1
                                         column_2 = 0
-                                        indent_column_1 = (0, None)
+                                        indent_column_1 = Indent(0, None)
                                     else:
                                         offset_4 = -1
                                         break
@@ -11228,7 +11232,7 @@ class Parser:
                                     offset_4 = -1
                                     break
 
-                                if not (column_2 == indent_column_1[0] == 0):
+                                if not (column_2 == indent_column_1.value == 0):
                                     offset_4 = -1
                                     break
                                 # print('start')
@@ -11243,7 +11247,7 @@ class Parser:
                                         offset_4 = -1
                                         break
                                     offset_4 = offset_5
-                                    indent_column_1 = (column_2, indent_column_1)
+                                    indent_column_1 = Indent(column_2, indent_column_1)
                                 if offset_4 == -1:
                                     break
 
@@ -11413,7 +11417,7 @@ class Parser:
                                     if codepoint in '\n':
                                         offset_4 +=1
                                         column_2 = 0
-                                        indent_column_1 = (0, None)
+                                        indent_column_1 = Indent(0, None)
                                     else:
                                         offset_4 = -1
                                         break
@@ -11610,7 +11614,7 @@ class Parser:
                                     if codepoint in '\n':
                                         offset_4 +=1
                                         column_2 = 0
-                                        indent_column_1 = (0, None)
+                                        indent_column_1 = Indent(0, None)
                                     else:
                                         offset_4 = -1
                                         break
@@ -13017,7 +13021,7 @@ class Parser:
                                         if codepoint in '\n':
                                             offset_4 +=1
                                             column_4 = 0
-                                            indent_column_3 = (0, None)
+                                            indent_column_3 = Indent(0, None)
                                         else:
                                             offset_4 = -1
                                             break
@@ -13571,7 +13575,7 @@ class Parser:
                                             if codepoint in '\n':
                                                 offset_6 +=1
                                                 column_5 = 0
-                                                indent_column_2 = (0, None)
+                                                indent_column_2 = Indent(0, None)
                                                 count_2 +=1
                                             elif codepoint in ' \t':
                                                 if codepoint == '\t':
@@ -14105,7 +14109,7 @@ class Parser:
                                                         if codepoint in '\n':
                                                             offset_7 +=1
                                                             column_6 = 0
-                                                            indent_column_3 = (0, None)
+                                                            indent_column_3 = Indent(0, None)
                                                         else:
                                                             offset_7 = -1
                                                             break
@@ -14144,7 +14148,7 @@ class Parser:
                                                             if codepoint in '\n':
                                                                 offset_8 +=1
                                                                 column_7 = 0
-                                                                indent_column_4 = (0, None)
+                                                                indent_column_4 = Indent(0, None)
                                                             else:
                                                                 offset_8 = -1
                                                                 break
@@ -14257,7 +14261,7 @@ class Parser:
                                                                 if codepoint in '\n':
                                                                     offset_8 +=1
                                                                     column_7 = 0
-                                                                    indent_column_4 = (0, None)
+                                                                    indent_column_4 = Indent(0, None)
                                                                 else:
                                                                     offset_8 = -1
                                                                     break
@@ -14296,7 +14300,7 @@ class Parser:
                                                                     if codepoint in '\n':
                                                                         offset_9 +=1
                                                                         column_8 = 0
-                                                                        indent_column_5 = (0, None)
+                                                                        indent_column_5 = Indent(0, None)
                                                                     else:
                                                                         offset_9 = -1
                                                                         break
@@ -14645,7 +14649,7 @@ class Parser:
                                         if codepoint in '\n':
                                             offset_6 +=1
                                             column_5 = 0
-                                            indent_column_2 = (0, None)
+                                            indent_column_2 = Indent(0, None)
                                             count_0 +=1
                                         elif codepoint in ' \t':
                                             if codepoint == '\t':
@@ -15263,7 +15267,7 @@ class Parser:
                                                     if codepoint in '\n':
                                                         offset_7 +=1
                                                         column_6 = 0
-                                                        indent_column_3 = (0, None)
+                                                        indent_column_3 = Indent(0, None)
                                                     else:
                                                         offset_7 = -1
                                                         break
@@ -15302,7 +15306,7 @@ class Parser:
                                                         if codepoint in '\n':
                                                             offset_8 +=1
                                                             column_7 = 0
-                                                            indent_column_4 = (0, None)
+                                                            indent_column_4 = Indent(0, None)
                                                         else:
                                                             offset_8 = -1
                                                             break
@@ -15415,7 +15419,7 @@ class Parser:
                                                             if codepoint in '\n':
                                                                 offset_8 +=1
                                                                 column_7 = 0
-                                                                indent_column_4 = (0, None)
+                                                                indent_column_4 = Indent(0, None)
                                                             else:
                                                                 offset_8 = -1
                                                                 break
@@ -15454,7 +15458,7 @@ class Parser:
                                                                 if codepoint in '\n':
                                                                     offset_9 +=1
                                                                     column_8 = 0
-                                                                    indent_column_5 = (0, None)
+                                                                    indent_column_5 = Indent(0, None)
                                                                 else:
                                                                     offset_9 = -1
                                                                     break
@@ -18288,7 +18292,7 @@ class Parser:
                                                 if codepoint in '\n':
                                                     offset_5 +=1
                                                     column_5 = 0
-                                                    indent_column_3 = (0, None)
+                                                    indent_column_3 = Indent(0, None)
                                                 else:
                                                     offset_5 = -1
                                                     break
@@ -18308,7 +18312,7 @@ class Parser:
                                         offset_4 = offset_5
                                         column_4 = column_5
 
-                                        if not (column_4 == indent_column_3[0] == 0):
+                                        if not (column_4 == indent_column_3.value == 0):
                                             offset_4 = -1
                                             break
                                         # print('start')
@@ -18332,7 +18336,7 @@ class Parser:
                                                 else:
                                                     offset_5 = offset_4
                                             offset_4 = offset_5
-                                            indent_column_3 = (column_4, indent_column_3)
+                                            indent_column_3 = Indent(column_4, indent_column_3)
                                         if offset_4 == -1:
                                             break
 
@@ -18367,7 +18371,7 @@ class Parser:
                                                 if codepoint in '\n':
                                                     offset_5 +=1
                                                     column_5 = 0
-                                                    indent_column_4 = (0, None)
+                                                    indent_column_4 = Indent(0, None)
                                                 else:
                                                     offset_5 = -1
                                                     break
@@ -18663,7 +18667,7 @@ class Parser:
                                                 if codepoint in '\n':
                                                     offset_5 +=1
                                                     column_5 = 0
-                                                    indent_column_3 = (0, None)
+                                                    indent_column_3 = Indent(0, None)
                                                 else:
                                                     offset_5 = -1
                                                     break
@@ -18683,7 +18687,7 @@ class Parser:
                                         offset_4 = offset_5
                                         column_4 = column_5
 
-                                        if not (column_4 == indent_column_3[0] == 0):
+                                        if not (column_4 == indent_column_3.value == 0):
                                             offset_4 = -1
                                             break
                                         # print('start')
@@ -18707,7 +18711,7 @@ class Parser:
                                                 else:
                                                     offset_5 = offset_4
                                             offset_4 = offset_5
-                                            indent_column_3 = (column_4, indent_column_3)
+                                            indent_column_3 = Indent(column_4, indent_column_3)
                                         if offset_4 == -1:
                                             break
 
@@ -18742,7 +18746,7 @@ class Parser:
                                                 if codepoint in '\n':
                                                     offset_5 +=1
                                                     column_5 = 0
-                                                    indent_column_4 = (0, None)
+                                                    indent_column_4 = Indent(0, None)
                                                 else:
                                                     offset_5 = -1
                                                     break
@@ -20656,7 +20660,7 @@ class Parser:
                                                 if codepoint in '\n':
                                                     offset_5 +=1
                                                     column_5 = 0
-                                                    indent_column_3 = (0, None)
+                                                    indent_column_3 = Indent(0, None)
                                                 else:
                                                     offset_5 = -1
                                                     break
@@ -20676,7 +20680,7 @@ class Parser:
                                         offset_4 = offset_5
                                         column_4 = column_5
 
-                                        if not (column_4 == indent_column_3[0] == 0):
+                                        if not (column_4 == indent_column_3.value == 0):
                                             offset_4 = -1
                                             break
                                         # print('start')
@@ -20700,7 +20704,7 @@ class Parser:
                                                 else:
                                                     offset_5 = offset_4
                                             offset_4 = offset_5
-                                            indent_column_3 = (column_4, indent_column_3)
+                                            indent_column_3 = Indent(column_4, indent_column_3)
                                         if offset_4 == -1:
                                             break
 
@@ -21656,7 +21660,7 @@ class Parser:
                                     if codepoint in '\n':
                                         offset_3 +=1
                                         column_3 = 0
-                                        indent_column_3 = (0, None)
+                                        indent_column_3 = Indent(0, None)
                                     else:
                                         offset_3 = -1
                                         break
@@ -21813,7 +21817,7 @@ class Parser:
                                     if codepoint in '\n':
                                         offset_3 +=1
                                         column_3 = 0
-                                        indent_column_2 = (0, None)
+                                        indent_column_2 = Indent(0, None)
                                     else:
                                         offset_3 = -1
                                         break
@@ -21833,7 +21837,7 @@ class Parser:
                             offset_2 = offset_3
                             column_2 = column_3
 
-                            if not (column_2 == indent_column_2[0] == 0):
+                            if not (column_2 == indent_column_2.value == 0):
                                 offset_2 = -1
                                 break
                             # print('start')
@@ -21857,7 +21861,7 @@ class Parser:
                                     else:
                                         offset_3 = offset_2
                                 offset_2 = offset_3
-                                indent_column_2 = (column_2, indent_column_2)
+                                indent_column_2 = Indent(column_2, indent_column_2)
                             if offset_2 == -1:
                                 break
 
@@ -22100,7 +22104,7 @@ class Parser:
                                     if codepoint in '\n':
                                         offset_3 +=1
                                         column_3 = 0
-                                        indent_column_2 = (0, None)
+                                        indent_column_2 = Indent(0, None)
                                     else:
                                         offset_3 = -1
                                         break
@@ -22120,7 +22124,7 @@ class Parser:
                             offset_2 = offset_3
                             column_2 = column_3
 
-                            if not (column_2 == indent_column_2[0] == 0):
+                            if not (column_2 == indent_column_2.value == 0):
                                 offset_2 = -1
                                 break
                             # print('start')
@@ -22144,7 +22148,7 @@ class Parser:
                                     else:
                                         offset_3 = offset_2
                                 offset_2 = offset_3
-                                indent_column_2 = (column_2, indent_column_2)
+                                indent_column_2 = Indent(column_2, indent_column_2)
                             if offset_2 == -1:
                                 break
 
@@ -22384,7 +22388,7 @@ class Parser:
                                     if codepoint in '\n':
                                         offset_3 +=1
                                         column_3 = 0
-                                        indent_column_2 = (0, None)
+                                        indent_column_2 = Indent(0, None)
                                     else:
                                         offset_3 = -1
                                         break
@@ -22404,7 +22408,7 @@ class Parser:
                             offset_2 = offset_3
                             column_2 = column_3
 
-                            if not (column_2 == indent_column_2[0] == 0):
+                            if not (column_2 == indent_column_2.value == 0):
                                 offset_2 = -1
                                 break
                             # print('start')
@@ -22428,7 +22432,7 @@ class Parser:
                                     else:
                                         offset_3 = offset_2
                                 offset_2 = offset_3
-                                indent_column_2 = (column_2, indent_column_2)
+                                indent_column_2 = Indent(column_2, indent_column_2)
                             if offset_2 == -1:
                                 break
 
@@ -22646,7 +22650,7 @@ class Parser:
                                     if codepoint in '\n':
                                         offset_3 +=1
                                         column_3 = 0
-                                        indent_column_2 = (0, None)
+                                        indent_column_2 = Indent(0, None)
                                     else:
                                         offset_3 = -1
                                         break
@@ -22666,7 +22670,7 @@ class Parser:
                             offset_2 = offset_3
                             column_2 = column_3
 
-                            if not (column_2 == indent_column_2[0] == 0):
+                            if not (column_2 == indent_column_2.value == 0):
                                 offset_2 = -1
                                 break
                             # print('start')
@@ -22690,7 +22694,7 @@ class Parser:
                                     else:
                                         offset_3 = offset_2
                                 offset_2 = offset_3
-                                indent_column_2 = (column_2, indent_column_2)
+                                indent_column_2 = Indent(column_2, indent_column_2)
                             if offset_2 == -1:
                                 break
 
@@ -23024,7 +23028,7 @@ class Parser:
                                                     if codepoint in '\n':
                                                         offset_5 +=1
                                                         column_5 = 0
-                                                        indent_column_4 = (0, None)
+                                                        indent_column_4 = Indent(0, None)
                                                     else:
                                                         offset_5 = -1
                                                         break
@@ -23044,7 +23048,7 @@ class Parser:
                                             offset_4 = offset_5
                                             column_4 = column_5
 
-                                            if not (column_4 == indent_column_4[0] == 0):
+                                            if not (column_4 == indent_column_4.value == 0):
                                                 offset_4 = -1
                                                 break
                                             # print('start')
@@ -23068,7 +23072,7 @@ class Parser:
                                                     else:
                                                         offset_5 = offset_4
                                                 offset_4 = offset_5
-                                                indent_column_4 = (column_4, indent_column_4)
+                                                indent_column_4 = Indent(column_4, indent_column_4)
                                             if offset_4 == -1:
                                                 break
 
@@ -23390,7 +23394,7 @@ class Parser:
                                                             if codepoint in '\n':
                                                                 offset_6 +=1
                                                                 column_6 = 0
-                                                                indent_column_5 = (0, None)
+                                                                indent_column_5 = Indent(0, None)
                                                             else:
                                                                 offset_6 = -1
                                                                 break
@@ -23410,7 +23414,7 @@ class Parser:
                                                     offset_5 = offset_6
                                                     column_5 = column_6
 
-                                                    if not (column_5 == indent_column_5[0] == 0):
+                                                    if not (column_5 == indent_column_5.value == 0):
                                                         offset_5 = -1
                                                         break
                                                     # print('start')
@@ -23434,7 +23438,7 @@ class Parser:
                                                             else:
                                                                 offset_6 = offset_5
                                                         offset_5 = offset_6
-                                                        indent_column_5 = (column_5, indent_column_5)
+                                                        indent_column_5 = Indent(column_5, indent_column_5)
                                                     if offset_5 == -1:
                                                         break
 
@@ -23700,7 +23704,7 @@ class Parser:
                                                             if codepoint in '\n':
                                                                 offset_6 +=1
                                                                 column_6 = 0
-                                                                indent_column_5 = (0, None)
+                                                                indent_column_5 = Indent(0, None)
                                                             else:
                                                                 offset_6 = -1
                                                                 break
@@ -23720,7 +23724,7 @@ class Parser:
                                                     offset_5 = offset_6
                                                     column_5 = column_6
 
-                                                    if not (column_5 == indent_column_5[0] == 0):
+                                                    if not (column_5 == indent_column_5.value == 0):
                                                         offset_5 = -1
                                                         break
                                                     # print('start')
@@ -23744,7 +23748,7 @@ class Parser:
                                                             else:
                                                                 offset_6 = offset_5
                                                         offset_5 = offset_6
-                                                        indent_column_5 = (column_5, indent_column_5)
+                                                        indent_column_5 = Indent(column_5, indent_column_5)
                                                     if offset_5 == -1:
                                                         break
 
@@ -23946,7 +23950,7 @@ class Parser:
                                                             if codepoint in '\n':
                                                                 offset_6 +=1
                                                                 column_6 = 0
-                                                                indent_column_5 = (0, None)
+                                                                indent_column_5 = Indent(0, None)
                                                             else:
                                                                 offset_6 = -1
                                                                 break
@@ -23966,7 +23970,7 @@ class Parser:
                                                     offset_5 = offset_6
                                                     column_5 = column_6
 
-                                                    if not (column_5 == indent_column_5[0] == 0):
+                                                    if not (column_5 == indent_column_5.value == 0):
                                                         offset_5 = -1
                                                         break
                                                     # print('start')
@@ -23990,7 +23994,7 @@ class Parser:
                                                             else:
                                                                 offset_6 = offset_5
                                                         offset_5 = offset_6
-                                                        indent_column_5 = (column_5, indent_column_5)
+                                                        indent_column_5 = Indent(column_5, indent_column_5)
                                                     if offset_5 == -1:
                                                         break
 
@@ -24312,7 +24316,7 @@ class Parser:
                                                     if codepoint in '\n':
                                                         offset_5 +=1
                                                         column_5 = 0
-                                                        indent_column_4 = (0, None)
+                                                        indent_column_4 = Indent(0, None)
                                                     else:
                                                         offset_5 = -1
                                                         break
@@ -24332,7 +24336,7 @@ class Parser:
                                             offset_4 = offset_5
                                             column_4 = column_5
 
-                                            if not (column_4 == indent_column_4[0] == 0):
+                                            if not (column_4 == indent_column_4.value == 0):
                                                 offset_4 = -1
                                                 break
                                             # print('start')
@@ -24356,7 +24360,7 @@ class Parser:
                                                     else:
                                                         offset_5 = offset_4
                                                 offset_4 = offset_5
-                                                indent_column_4 = (column_4, indent_column_4)
+                                                indent_column_4 = Indent(column_4, indent_column_4)
                                             if offset_4 == -1:
                                                 break
 
@@ -24758,7 +24762,7 @@ class Parser:
                                     if codepoint in '\n':
                                         offset_4 +=1
                                         column_4 = 0
-                                        indent_column_2 = (0, None)
+                                        indent_column_2 = Indent(0, None)
                                     else:
                                         offset_4 = -1
                                         break
@@ -24878,7 +24882,7 @@ class Parser:
                                 if codepoint in '\n':
                                     offset_3 +=1
                                     column_3 = 0
-                                    indent_column_1 = (0, None)
+                                    indent_column_1 = Indent(0, None)
                                 else:
                                     offset_3 = -1
                                     break
@@ -24898,7 +24902,7 @@ class Parser:
                         offset_2 = offset_3
                         column_2 = column_3
 
-                        if not (column_2 == indent_column_1[0] == 0):
+                        if not (column_2 == indent_column_1.value == 0):
                             offset_2 = -1
                             break
                         # print('start')
@@ -24913,7 +24917,7 @@ class Parser:
                                 offset_2 = -1
                                 break
                             offset_2 = offset_3
-                            indent_column_1 = (column_2, indent_column_1)
+                            indent_column_1 = Indent(column_2, indent_column_1)
                         if offset_2 == -1:
                             break
 
@@ -25126,7 +25130,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_1 = (0, None)
+                                indent_column_1 = Indent(0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -25237,7 +25241,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_1 = (0, None)
+                                indent_column_1 = Indent(0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -25406,7 +25410,7 @@ class Parser:
                                 if codepoint in '\n':
                                     offset_3 +=1
                                     column_3 = 0
-                                    indent_column_1 = (0, None)
+                                    indent_column_1 = Indent(0, None)
                                 else:
                                     offset_3 = -1
                                     break
@@ -25426,7 +25430,7 @@ class Parser:
                         offset_2 = offset_3
                         column_2 = column_3
 
-                        if not (column_2 == indent_column_1[0] == 0):
+                        if not (column_2 == indent_column_1.value == 0):
                             offset_2 = -1
                             break
                         # print('start')
@@ -25441,7 +25445,7 @@ class Parser:
                                 offset_2 = -1
                                 break
                             offset_2 = offset_3
-                            indent_column_1 = (column_2, indent_column_1)
+                            indent_column_1 = Indent(column_2, indent_column_1)
                         if offset_2 == -1:
                             break
 
@@ -25642,7 +25646,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_1 = (0, None)
+                                indent_column_1 = Indent(0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -25747,7 +25751,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_1 = (0, None)
+                                indent_column_1 = Indent(0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -25916,7 +25920,7 @@ class Parser:
                                 if codepoint in '\n':
                                     offset_3 +=1
                                     column_3 = 0
-                                    indent_column_1 = (0, None)
+                                    indent_column_1 = Indent(0, None)
                                 else:
                                     offset_3 = -1
                                     break
@@ -25936,7 +25940,7 @@ class Parser:
                         offset_2 = offset_3
                         column_2 = column_3
 
-                        if not (column_2 == indent_column_1[0] == 0):
+                        if not (column_2 == indent_column_1.value == 0):
                             offset_2 = -1
                             break
                         # print('start')
@@ -25951,7 +25955,7 @@ class Parser:
                                 offset_2 = -1
                                 break
                             offset_2 = offset_3
-                            indent_column_1 = (column_2, indent_column_1)
+                            indent_column_1 = Indent(column_2, indent_column_1)
                         if offset_2 == -1:
                             break
 
@@ -26152,7 +26156,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_1 = (0, None)
+                                indent_column_1 = Indent(0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -26257,7 +26261,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_1 = (0, None)
+                                indent_column_1 = Indent(0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -26439,7 +26443,7 @@ class Parser:
                                 if codepoint in '\n':
                                     offset_3 +=1
                                     column_3 = 0
-                                    indent_column_1 = (0, None)
+                                    indent_column_1 = Indent(0, None)
                                 else:
                                     offset_3 = -1
                                     break
@@ -26459,7 +26463,7 @@ class Parser:
                         offset_2 = offset_3
                         column_2 = column_3
 
-                        if not (column_2 == indent_column_1[0] == 0):
+                        if not (column_2 == indent_column_1.value == 0):
                             offset_2 = -1
                             break
                         # print('start')
@@ -26474,7 +26478,7 @@ class Parser:
                                 offset_2 = -1
                                 break
                             offset_2 = offset_3
-                            indent_column_1 = (column_2, indent_column_1)
+                            indent_column_1 = Indent(column_2, indent_column_1)
                         if offset_2 == -1:
                             break
 
@@ -26675,7 +26679,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_1 = (0, None)
+                                indent_column_1 = Indent(0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -26780,7 +26784,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_1 = (0, None)
+                                indent_column_1 = Indent(0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -26949,7 +26953,7 @@ class Parser:
                                 if codepoint in '\n':
                                     offset_3 +=1
                                     column_3 = 0
-                                    indent_column_1 = (0, None)
+                                    indent_column_1 = Indent(0, None)
                                 else:
                                     offset_3 = -1
                                     break
@@ -26969,7 +26973,7 @@ class Parser:
                         offset_2 = offset_3
                         column_2 = column_3
 
-                        if not (column_2 == indent_column_1[0] == 0):
+                        if not (column_2 == indent_column_1.value == 0):
                             offset_2 = -1
                             break
                         # print('start')
@@ -26984,7 +26988,7 @@ class Parser:
                                 offset_2 = -1
                                 break
                             offset_2 = offset_3
-                            indent_column_1 = (column_2, indent_column_1)
+                            indent_column_1 = Indent(column_2, indent_column_1)
                         if offset_2 == -1:
                             break
 
@@ -27185,7 +27189,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_1 = (0, None)
+                                indent_column_1 = Indent(0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -27290,7 +27294,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_1 = (0, None)
+                                indent_column_1 = Indent(0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -27652,7 +27656,7 @@ class Parser:
                                     if codepoint in '\n':
                                         offset_4 +=1
                                         column_4 = 0
-                                        indent_column_2 = (0, None)
+                                        indent_column_2 = Indent(0, None)
                                     else:
                                         offset_4 = -1
                                         break
@@ -27747,7 +27751,7 @@ class Parser:
                                 if codepoint in '\n':
                                     offset_3 +=1
                                     column_3 = 0
-                                    indent_column_1 = (0, None)
+                                    indent_column_1 = Indent(0, None)
                                 else:
                                     offset_3 = -1
                                     break
@@ -27767,7 +27771,7 @@ class Parser:
                         offset_2 = offset_3
                         column_2 = column_3
 
-                        if not (column_2 == indent_column_1[0] == 0):
+                        if not (column_2 == indent_column_1.value == 0):
                             offset_2 = -1
                             break
                         # print('start')
@@ -27782,7 +27786,7 @@ class Parser:
                                 offset_2 = -1
                                 break
                             offset_2 = offset_3
-                            indent_column_1 = (column_2, indent_column_1)
+                            indent_column_1 = Indent(column_2, indent_column_1)
                         if offset_2 == -1:
                             break
 
@@ -27817,7 +27821,7 @@ class Parser:
                                 if codepoint in '\n':
                                     offset_3 +=1
                                     column_3 = 0
-                                    indent_column_2 = (0, None)
+                                    indent_column_2 = Indent(0, None)
                                 else:
                                     offset_3 = -1
                                     break
@@ -27909,7 +27913,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_1 = (0, None)
+                                indent_column_1 = Indent(0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -27917,7 +27921,7 @@ class Parser:
                             offset_2 = -1
                             break
 
-                        if not (column_2 == indent_column_1[0] == 0):
+                        if not (column_2 == indent_column_1.value == 0):
                             offset_2 = -1
                             break
                         # print('start')
@@ -27932,7 +27936,7 @@ class Parser:
                                 offset_2 = -1
                                 break
                             offset_2 = offset_3
-                            indent_column_1 = (column_2, indent_column_1)
+                            indent_column_1 = Indent(column_2, indent_column_1)
                         if offset_2 == -1:
                             break
 
@@ -27960,7 +27964,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_1 = (0, None)
+                                indent_column_1 = Indent(0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -27989,7 +27993,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_1 = (0, None)
+                                indent_column_1 = Indent(0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -28001,7 +28005,7 @@ class Parser:
                             indent_column_2 = indent_column_1
                             partial_tab_offset_2 = partial_tab_offset_1
                             partial_tab_width_2 = partial_tab_width_1
-                            if not (column_3 == indent_column_2[0] == 0):
+                            if not (column_3 == indent_column_2.value == 0):
                                 offset_3 = -1
                                 break
                             # print('start')
@@ -28016,7 +28020,7 @@ class Parser:
                                     offset_3 = -1
                                     break
                                 offset_3 = offset_4
-                                indent_column_2 = (column_3, indent_column_2)
+                                indent_column_2 = Indent(column_3, indent_column_2)
                             if offset_3 == -1:
                                 break
 
@@ -28049,7 +28053,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_1 = (0, None)
+                                indent_column_1 = Indent(0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -28890,7 +28894,7 @@ class Parser:
                                 if codepoint in '\n':
                                     offset_3 +=1
                                     column_3 = 0
-                                    indent_column_1 = (0, None)
+                                    indent_column_1 = Indent(0, None)
                                 else:
                                     offset_3 = -1
                                     break
@@ -28910,7 +28914,7 @@ class Parser:
                         offset_2 = offset_3
                         column_2 = column_3
 
-                        if not (column_2 == indent_column_1[0] == 0):
+                        if not (column_2 == indent_column_1.value == 0):
                             offset_2 = -1
                             break
                         # print('start')
@@ -28925,7 +28929,7 @@ class Parser:
                                 offset_2 = -1
                                 break
                             offset_2 = offset_3
-                            indent_column_1 = (column_2, indent_column_1)
+                            indent_column_1 = Indent(column_2, indent_column_1)
                         if offset_2 == -1:
                             break
 
@@ -28960,7 +28964,7 @@ class Parser:
                                 if codepoint in '\n':
                                     offset_3 +=1
                                     column_3 = 0
-                                    indent_column_2 = (0, None)
+                                    indent_column_2 = Indent(0, None)
                                 else:
                                     offset_3 = -1
                                     break
@@ -29052,7 +29056,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_1 = (0, None)
+                                indent_column_1 = Indent(0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -29060,7 +29064,7 @@ class Parser:
                             offset_2 = -1
                             break
 
-                        if not (column_2 == indent_column_1[0] == 0):
+                        if not (column_2 == indent_column_1.value == 0):
                             offset_2 = -1
                             break
                         # print('start')
@@ -29075,7 +29079,7 @@ class Parser:
                                 offset_2 = -1
                                 break
                             offset_2 = offset_3
-                            indent_column_1 = (column_2, indent_column_1)
+                            indent_column_1 = Indent(column_2, indent_column_1)
                         if offset_2 == -1:
                             break
 
@@ -29103,7 +29107,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_1 = (0, None)
+                                indent_column_1 = Indent(0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -29135,7 +29139,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_1 = (0, None)
+                                indent_column_1 = Indent(0, None)
                             else:
                                 offset_2 = -1
                                 break
@@ -29147,7 +29151,7 @@ class Parser:
                             indent_column_2 = indent_column_1
                             partial_tab_offset_2 = partial_tab_offset_1
                             partial_tab_width_2 = partial_tab_width_1
-                            if not (column_3 == indent_column_2[0] == 0):
+                            if not (column_3 == indent_column_2.value == 0):
                                 offset_3 = -1
                                 break
                             # print('start')
@@ -29162,7 +29166,7 @@ class Parser:
                                     offset_3 = -1
                                     break
                                 offset_3 = offset_4
-                                indent_column_2 = (column_3, indent_column_2)
+                                indent_column_2 = Indent(column_3, indent_column_2)
                             if offset_3 == -1:
                                 break
 
@@ -29195,7 +29199,7 @@ class Parser:
                             if codepoint in '\n':
                                 offset_2 +=1
                                 column_2 = 0
-                                indent_column_1 = (0, None)
+                                indent_column_1 = Indent(0, None)
                             else:
                                 offset_2 = -1
                                 break

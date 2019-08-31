@@ -16,6 +16,10 @@ class Node:
         return builder[self.name](buf, self, children)
 
 
+class Indent:
+    def __init__(self, value, parent=None):
+        self.value = value
+        self.parent = parent
 class Parser:
     def __init__(self, tabstop=None, allow_mixed_indent=False):
          self.tabstop = tabstop or 8
@@ -26,7 +30,7 @@ class Parser:
         self.cache = dict()
         end = len(buf) if end is None else end
         start, eof = offset, end
-        column, indent_column = 0, (0, None)
+        column, indent_column = 0, Indent(0, None)
         prefix, children = [], []
         new_offset, column, indent_column, partial_tab_offset, partial_tab_width = self.parse_document(buf, start, end, offset, column, indent_column, prefix, children, 0, 0)
         if children and new_offset == end:
@@ -200,6 +204,7 @@ class Parser:
                     offset_2 = offset_1
                     column_2 = column_1
                     children_2 = None
+                    value_0 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
                         count_0 = 0
                         while True:
@@ -432,7 +437,10 @@ class Parser:
                     if offset_2 == -1:
                         offset_1 = -1
                         break
-                    value_0 = Node('string', offset_1, offset_2, column_1, column_2, children_2, None)
+                    value_0.name = 'string'
+                    value_0.end = offset_2
+                    value_0.end_column = column_2
+                    value_0.value = None
                     children_1.append(value_0)
                     offset_1 = offset_2
                     column_1 = column_2
@@ -467,6 +475,7 @@ class Parser:
                     offset_2 = offset_1
                     column_2 = column_1
                     children_2 = None
+                    value_1 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
                         count_0 = 0
                         while count_0 < 1:
@@ -781,7 +790,10 @@ class Parser:
                     if offset_2 == -1:
                         offset_1 = -1
                         break
-                    value_1 = Node('number', offset_1, offset_2, column_1, column_2, children_2, None)
+                    value_1.name = 'number'
+                    value_1.end = offset_2
+                    value_1.end_column = column_2
+                    value_1.value = None
                     children_1.append(value_1)
                     offset_1 = offset_2
                     column_1 = column_2
@@ -808,6 +820,7 @@ class Parser:
                     offset_2 = offset_1
                     column_2 = column_1
                     children_2 = None
+                    value_2 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
                         if buf[offset_2:offset_2+4] == 'true':
                             offset_2 += 4
@@ -820,7 +833,10 @@ class Parser:
                     if offset_2 == -1:
                         offset_1 = -1
                         break
-                    value_2 = Node('bool', offset_1, offset_2, column_1, column_2, children_2, None)
+                    value_2.name = 'bool'
+                    value_2.end = offset_2
+                    value_2.end_column = column_2
+                    value_2.value = None
                     children_1.append(value_2)
                     offset_1 = offset_2
                     column_1 = column_2
@@ -847,6 +863,7 @@ class Parser:
                     offset_2 = offset_1
                     column_2 = column_1
                     children_2 = None
+                    value_3 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
                         if buf[offset_2:offset_2+5] == 'false':
                             offset_2 += 5
@@ -859,7 +876,10 @@ class Parser:
                     if offset_2 == -1:
                         offset_1 = -1
                         break
-                    value_3 = Node('bool', offset_1, offset_2, column_1, column_2, children_2, None)
+                    value_3.name = 'bool'
+                    value_3.end = offset_2
+                    value_3.end_column = column_2
+                    value_3.value = None
                     children_1.append(value_3)
                     offset_1 = offset_2
                     column_1 = column_2
@@ -886,6 +906,7 @@ class Parser:
                     offset_2 = offset_1
                     column_2 = column_1
                     children_2 = None
+                    value_4 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
                         if buf[offset_2:offset_2+4] == 'null':
                             offset_2 += 4
@@ -898,7 +919,10 @@ class Parser:
                     if offset_2 == -1:
                         offset_1 = -1
                         break
-                    value_4 = Node('bool', offset_1, offset_2, column_1, column_2, children_2, None)
+                    value_4.name = 'bool'
+                    value_4.end = offset_2
+                    value_4.end_column = column_2
+                    value_4.value = None
                     children_1.append(value_4)
                     offset_1 = offset_2
                     column_1 = column_2
@@ -935,6 +959,7 @@ class Parser:
             offset_1 = offset_0
             column_1 = column_0
             children_1 = None
+            value_0 = Node(None, offset_0, offset_0, column_0, column_0, children_1, None)
             while True: # start capture
                 count_0 = 0
                 while True:
@@ -1167,7 +1192,10 @@ class Parser:
             if offset_1 == -1:
                 offset_0 = -1
                 break
-            value_0 = Node('string', offset_0, offset_1, column_0, column_1, children_1, None)
+            value_0.name = 'string'
+            value_0.end = offset_1
+            value_0.end_column = column_1
+            value_0.value = None
             children_0.append(value_0)
             offset_0 = offset_1
             column_0 = column_1
@@ -1214,6 +1242,7 @@ class Parser:
             offset_1 = offset_0
             column_1 = column_0
             children_1 = []
+            value_0 = Node(None, offset_0, offset_0, column_0, column_0, children_1, None)
             while True: # start capture
                 count_0 = 0
                 while count_0 < 1:
@@ -1321,7 +1350,10 @@ class Parser:
             if offset_1 == -1:
                 offset_0 = -1
                 break
-            value_0 = Node('list', offset_0, offset_1, column_0, column_1, children_1, None)
+            value_0.name = 'list'
+            value_0.end = offset_1
+            value_0.end_column = column_1
+            value_0.value = None
             children_0.append(value_0)
             offset_0 = offset_1
             column_0 = column_1
@@ -1368,6 +1400,7 @@ class Parser:
             offset_1 = offset_0
             column_1 = column_0
             children_1 = []
+            value_0 = Node(None, offset_0, offset_0, column_0, column_0, children_1, None)
             while True: # start capture
                 count_0 = 0
                 while count_0 < 1:
@@ -1381,6 +1414,7 @@ class Parser:
                         offset_3 = offset_2
                         column_3 = column_2
                         children_3 = []
+                        value_1 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
                         while True: # start capture
                             if buf[offset_3:offset_3+1] == '"':
                                 offset_3 += 1
@@ -1392,6 +1426,7 @@ class Parser:
                             offset_4 = offset_3
                             column_4 = column_3
                             children_4 = None
+                            value_2 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
                             while True: # start capture
                                 count_1 = 0
                                 while True:
@@ -1624,8 +1659,11 @@ class Parser:
                             if offset_4 == -1:
                                 offset_3 = -1
                                 break
-                            value_0 = Node('string', offset_3, offset_4, column_3, column_4, children_4, None)
-                            children_3.append(value_0)
+                            value_2.name = 'string'
+                            value_2.end = offset_4
+                            value_2.end_column = column_4
+                            value_2.value = None
+                            children_3.append(value_2)
                             offset_3 = offset_4
                             column_3 = column_4
 
@@ -1690,7 +1728,10 @@ class Parser:
                         if offset_3 == -1:
                             offset_2 = -1
                             break
-                        value_1 = Node('pair', offset_2, offset_3, column_2, column_3, children_3, None)
+                        value_1.name = 'pair'
+                        value_1.end = offset_3
+                        value_1.end_column = column_3
+                        value_1.value = None
                         children_2.append(value_1)
                         offset_2 = offset_3
                         column_2 = column_3
@@ -1752,6 +1793,7 @@ class Parser:
                                 offset_4 = offset_3
                                 column_4 = column_3
                                 children_4 = []
+                                value_3 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
                                 while True: # start capture
                                     offset_4, column_4, indent_column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_json_string(buf, buf_start, buf_eof, offset_4, column_4, indent_column_2, prefix_0, children_4, partial_tab_offset_2, partial_tab_width_2)
                                     if offset_4 == -1: break
@@ -1810,8 +1852,11 @@ class Parser:
                                 if offset_4 == -1:
                                     offset_3 = -1
                                     break
-                                value_2 = Node('pair', offset_3, offset_4, column_3, column_4, children_4, None)
-                                children_3.append(value_2)
+                                value_3.name = 'pair'
+                                value_3.end = offset_4
+                                value_3.end_column = column_4
+                                value_3.value = None
+                                children_3.append(value_3)
                                 offset_3 = offset_4
                                 column_3 = column_4
 
@@ -1869,8 +1914,11 @@ class Parser:
             if offset_1 == -1:
                 offset_0 = -1
                 break
-            value_3 = Node('object', offset_0, offset_1, column_0, column_1, children_1, None)
-            children_0.append(value_3)
+            value_0.name = 'object'
+            value_0.end = offset_1
+            value_0.end_column = column_1
+            value_0.value = None
+            children_0.append(value_0)
             offset_0 = offset_1
             column_0 = column_1
 

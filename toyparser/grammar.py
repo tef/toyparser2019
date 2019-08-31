@@ -918,7 +918,7 @@ def compile_python(grammar, cython=False, wrap=False):
             values[rule.key] = value
 
             if rule.args.get('from_prefix'):
-                steps.append( f"{value} = {column} - {indent_column}[0]")
+                steps.append( f"{value} = {column} - {indent_column}.value")
             else:
                 steps.append( f"{value} = {column}")
 
@@ -1300,7 +1300,7 @@ def compile_python(grammar, cython=False, wrap=False):
                 else:
                     c0 = count.incr()
                     steps.extend((
-                        f"{count} = {column} - {indent_column}[0]",
+                        f"{count} = {column} - {indent_column}.value",
                     ))
 
                 steps.append(f"# print({count}, 'indent')")
@@ -1425,19 +1425,19 @@ def compile_python(grammar, cython=False, wrap=False):
                     steps.append(f'{prefix}.append((self.parse_{prule}, {dedent}))')
 
 
-            steps.append(f'{indent_column} = ({column}, {indent_column})')
+            steps.append(f'{indent_column} = Indent({column}, {indent_column})')
 
             steps.append('while True:')
             build_subrules(rule.rules, steps.add_indent(), offset, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children, count, values)
             steps.append('    break')
 
             steps.append(f'{prefix}.pop()')
-            steps.append(f'if {indent_column} != (0, None): {indent_column} = {indent_column}[1]')
+            steps.append(f'if {indent_column}.parent != None: {indent_column} = {indent_column}.parent')
             steps.append(f'if {offset} == -1: break')
 
         elif rule.kind == START_OF_LINE:
             steps.extend((
-                f"if not ({column} == {indent_column}[0] == 0):",
+                f"if not ({column} == {indent_column}.value == 0):",
                 f"    {offset} = -1",
                 f"    break",
             ))
@@ -1447,7 +1447,7 @@ def compile_python(grammar, cython=False, wrap=False):
             offset_0 = offset.incr()
             partial = rule.args['partial']
             steps.extend((
-                f"if not ({column} == {indent_column}[0] == 0):",
+                f"if not ({column} == {indent_column}.value == 0):",
                 f"    {offset} = -1",
                 f"    break",
                 f"# print('start')",
@@ -1482,7 +1482,7 @@ def compile_python(grammar, cython=False, wrap=False):
 
             steps.extend((
                 f"    {offset} = {offset_0}",
-                f"    {indent_column} = ({column}, {indent_column})",
+                f"    {indent_column} = Indent({column}, {indent_column})",
                 f"if {offset} == -1:",
                 f"    break",
             ))
@@ -1500,7 +1500,7 @@ def compile_python(grammar, cython=False, wrap=False):
             partial_tab_offset_1 = partial_tab_offset.incr()
             partial_tab_width_1 = partial_tab_width.incr()
             steps.extend((
-                f"if not ({column} == {indent_column}[0] == 0):",
+                f"if not ({column} == {indent_column}.value == 0):",
                 f"    {offset} = -1",
                 f"    break",
                 f"{offset_0} = {offset}",
@@ -1740,7 +1740,7 @@ def compile_python(grammar, cython=False, wrap=False):
                         f"    if codepoint == '\\r' and {offset} + 1 < buf_eof and buf[{offset}+1] == '\\n':", 
                         f"        {offset} +=2",
                         f"        {column} = 0",
-                        f"        {indent_column} = (0, None)",
+                        f"        {indent_column} = Indent(0, None)",
                         f"    elif {cond3}:", # in newline
                     ))
                 else:
@@ -1750,7 +1750,7 @@ def compile_python(grammar, cython=False, wrap=False):
                 steps.extend((
                         f"        {offset} +=1",
                         f"        {column} = 0",
-                        f"        {indent_column} = (0, None)",
+                        f"        {indent_column} = Indent(0, None)",
                         f"        {count} +=1",
                         f"    elif {cond2}:",
                 ))
@@ -1807,7 +1807,7 @@ def compile_python(grammar, cython=False, wrap=False):
                     f"    if codepoint == '\\r' and {offset} + 1 < buf_eof and buf[{offset}+1] == '\\n':", 
                     f"        {offset} +=2",
                     f"        {column} = 0",
-                    f"        {indent_column} = (0, None)",
+                    f"        {indent_column} = Indent(0, None)",
                     f"    elif {cond}:",
                 ))
             else:
@@ -1817,7 +1817,7 @@ def compile_python(grammar, cython=False, wrap=False):
             steps.extend((
                     f"        {offset} +=1",
                     f"        {column} = 0",
-                    f"        {indent_column} = (0, None)",
+                    f"        {indent_column} = Indent(0, None)",
                     f"    else:",
                     f"        {offset} = -1",
                     f"        break",
@@ -1838,7 +1838,7 @@ def compile_python(grammar, cython=False, wrap=False):
                     f"    if codepoint == '\\r' and {offset} + 1 < buf_eof and buf[{offset}+1] == '\\n':", 
                     f"        {offset} +=2",
                     f"        {column} = 0",
-                    f"        {indent_column} = (0, None)",
+                    f"        {indent_column} = Indent(0, None)",
                     f"    elif {cond}:",
                 ))
             else:
@@ -1848,7 +1848,7 @@ def compile_python(grammar, cython=False, wrap=False):
             steps.extend((
                     f"        {offset} +=1",
                     f"        {column} = 0",
-                    f"        {indent_column} = (0, None)",
+                    f"        {indent_column} = Indent(0, None)",
                     f"    else:",
                     f"        {offset} = -1",
                     f"        break",
@@ -1916,6 +1916,12 @@ def compile_python(grammar, cython=False, wrap=False):
         output.append("import unicodedata")
         output.extend(parse_node)
         output.extend((
+            f"cdef class Indent:",
+            f"    cdef int value",
+            f"    cdef Indent parent", 
+            f"    def __init__(self, value, parent=None):",
+            f"        self.value = value",
+            f"        self.parent = parent",
             f"cdef class Parser:",
             f"    cdef dict cache",
             f"    cdef int tabstop",
@@ -1934,6 +1940,10 @@ def compile_python(grammar, cython=False, wrap=False):
         output.append("")
 
         output.extend((
+            f"class Indent:",
+            f"    def __init__(self, value, parent=None):",
+            f"        self.value = value",
+            f"        self.parent = parent",
             f"class Parser:",
             f"    def __init__(self, tabstop=None, allow_mixed_indent=False):",
             f"         self.tabstop = tabstop or {grammar.tabstop}",
@@ -1952,7 +1962,7 @@ def compile_python(grammar, cython=False, wrap=False):
         f"    self.cache = dict()",
         f"    end = len(buf) if end is None else end",
         f"    start, eof = offset, end",
-        f"    column, indent_column = 0, (0, None)",
+        f"    column, indent_column = 0, Indent(0, None)",
         f"    prefix, children = [], []",
         f"    new_offset, column, indent_column, partial_tab_offset, partial_tab_width = self.parse_{start_rule}(buf, start, end, offset, column, indent_column, prefix, children, 0, 0)",
         f"    if children and new_offset == end:",
@@ -1965,12 +1975,12 @@ def compile_python(grammar, cython=False, wrap=False):
 
     varnames = {
             "offset":"cdef int", "column":"cdef int", 
-            "prefix":"cdef list", "children":"cdef list", "count":"cdef int", "indent_column":"cdef tuple",
+            "prefix":"cdef list", "children":"cdef list", "count":"cdef int", "indent_column":"cdef Indent",
             "partial_tab_offset":"cdef int", "partial_tab_width": "cdef int"}
     for name, rule in grammar.rules.items():
         cdefs = {}
         if cython:
-            output.append(f"cdef parse_{name}(self, str buf, int buf_start, int buf_eof, int offset_0,  int column_0, tuple indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):")
+            output.append(f"cdef parse_{name}(self, str buf, int buf_start, int buf_eof, int offset_0,  int column_0, Indent indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):")
             output.append(f"    cdef Py_UCS4 codepoint")
             
             for v in varnames:
