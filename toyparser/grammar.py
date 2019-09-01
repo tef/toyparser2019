@@ -78,71 +78,9 @@ def build_class_dict(attrs, start, whitespace, newline, tabstop, capture):
             start = candidates[0]
 
     rules = {k:r.canonical(builder).make_rule() for k,r in rules.items()}
+
+    rules = process_rules(start, rules, rule_options)
     
-    rule_childs = {}
-    dont_pop = set()
-    if start:
-        dont_pop.add(start)
-    for name, rule in rules.items():
-        seen = set()
-        def visits(rule):
-            if rule.kind == RULE:
-                seen.add(rule.args['name'])
-            if rule.kind == SET_LINE_PREFIX:
-                indent = rule.args['indent']
-                dedent = rule.args['dedent']
-                if indent: dont_pop.add(indent)
-                if dedent: dont_pop.add(dedent)
-            
-        rule.visit(visits)
-        rule_childs[name] = seen
-
-    inlineable = {}
-    to_inline = []
-
-    for name, child in rule_childs.items():
-        seen = set((name,))
-        def walk(childs):
-            for c in childs:
-                if c in seen: return False
-                seen.add(c)
-                if not walk(rule_childs[c]):
-                    return False
-            return True
-        if child:
-            inlineable[name] = walk(child)
-        else:
-            inlineable[name] = True
-            to_inline.append(name)
-        
-    all_rules = set(rules.keys())
-    while to_inline:
-        n = to_inline.pop(0)
-        all_rules.remove(n)
-        for name in all_rules:
-            if name == n: continue
-            if n not in rule_childs[name]: continue
-            rules[name] = rules[name].inline(n, rules[n], rule_options[n])
-            
-            rule_childs[name].remove(n)
-            if not rule_childs[name]:
-                to_inline.append(name)
-        if n not in dont_pop: 
-            safe = True
-            for name, rule in rules.items():
-                if name == n: continue
-                def _visit(rule):
-                    nonlocal safe
-                    if rule.kind == RULE and rule.args['name'] == n:
-                        safe = False
-                    if rule.kind == SET_LINE_PREFIX and rule.args['indent'] == n:
-                        safe = False
-                    if rule.kind == SET_LINE_PREFIX and rule.args.get('dedent') == n:
-                        safe = False
-                rule.visit(_visit)
-                if not safe: break
-            if safe:
-                rules.pop(n)
 
     new_attrs['rules'] = rules
     new_attrs['rule_options'] = rule_options
@@ -299,13 +237,11 @@ PRINT = 'print'
 TRACE = 'trace'
 
 class GrammarNode:
-    def __init__(self, kind, *, key=None, rules=None, args=None, regular=False, nullable=True):
+    def __init__(self, kind, *, key=None, rules=None, args=None):
         self.kind = kind
         self.rules = rules
         self.args = args
         self.key = key if key else object()
-        self.regular = regular
-        self.nullable = nullable
 
     def __str__(self):
         rules = ' '.join(str(x) for x in self.rules) if self.rules else ''
@@ -318,13 +254,11 @@ class GrammarNode:
 
     def canonical(self, builder):
         rules = [r.canonical(builder) for r in self.rules] if self.rules else None
-        return GrammarNode(self.kind, key=self.key, rules=rules, args=self.args, regular=self.regular, nullable=self.nullable)
+        return GrammarNode(self.kind, key=self.key, rules=rules, args=self.args,)
 
     def make_rule(self):
         rules = [r.make_rule() for r in self.rules] if self.rules else None
-        nullable = self.nullable or (self.rules and any(r.nullable for r in rules))
-        regular = self.regular and (not self.rules or all(r.regular for r in rules))
-        return ParserRule(self.kind, key=self.key, rules=rules, args=self.args, regular=self.regular, nullable=self.nullable)
+        return ParserRule(self.kind, key=self.key, rules=rules, args=self.args)
 
 class FunctionNode(GrammarNode):
     def __init__(self, fn, wrapper):
@@ -370,9 +304,7 @@ class ChoiceNode(GrammarNode):
 
     def make_rule(self):
         rules=[r.make_rule() for r in self.rules]
-        nullable = any(r.nullable for r in rules)
-        regular = all(r.regular for r in rules)
-        return ParserRule(CHOICE, rules=rules, regular=regular, nullable=nullable)
+        return ParserRule(CHOICE, rules=rules)
 
 class SequenceNode(GrammarNode):
     def __init__(self, rules):
@@ -388,9 +320,7 @@ class SequenceNode(GrammarNode):
 
     def make_rule(self):
         rules=[r.make_rule() for r in self.rules]
-        nullable = any(r.nullable for r in rules)
-        regular = all(r.regular for r in rules)
-        return ParserRule(SEQUENCE, rules=rules, regular=regular, nullable=nullable)
+        return ParserRule(SEQUENCE, rules=rules)
 
 # Builders
 NULL = object()
@@ -466,7 +396,7 @@ class FunctionBuilder:
 
     def whitespace(self, min=0, max=None, newline=False):
         if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
-        self.rules.append(GrammarNode(WHITESPACE, args=dict(min=min, max=max, newline=newline), nullable=(not min), regular=True))
+        self.rules.append(GrammarNode(WHITESPACE, args=dict(min=min, max=max, newline=newline)))
 
     def partial_tab(self,):
         if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
@@ -474,15 +404,15 @@ class FunctionBuilder:
 
     def newline(self):
         if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
-        self.rules.append(GrammarNode(NEWLINE, regular=True, nullable=False))
+        self.rules.append(GrammarNode(NEWLINE))
 
     def end_of_file(self):
         if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
-        self.rules.append(GrammarNode(END_OF_FILE, regular=False, nullable=True))
+        self.rules.append(GrammarNode(END_OF_FILE ))
 
     def end_of_line(self):
         if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
-        self.rules.append(GrammarNode(END_OF_LINE, regular=True, nullable=True))
+        self.rules.append(GrammarNode(END_OF_LINE, ))
 
     def start_of_line(self):
         if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
@@ -783,6 +713,7 @@ class ParserRule:
         if self.rules:
             for r in self.rules:
                 r.visit(visitor)
+
     def inline(self, name, rule, rule_options):
         if self.kind == RULE:
             if self.args['name'] == name and (self.args['inline'] or rule_options.get('inline')):
@@ -791,12 +722,77 @@ class ParserRule:
                 return self
         if not self.rules:
             return self
-        rules = [r.inline(name, rule, rule_options) for r in self.rules]
-        nullable = any(r.nullable for r in rules)
-        regular = all(r.regular for r in rules)
-        return ParserRule(self.kind, key=self.key, args=self.args, rules=rules, nullable=nullable, regular=regular)
+        self.rules = [r.inline(name, rule, rule_options) for r in self.rules]
+        return self
 
             
+def process_rules(start, rules, rule_options):
+    rules = dict(rules)
+    rule_childs = {}
+    dont_pop = set()
+    if start:
+        dont_pop.add(start)
+    for name, rule in rules.items():
+        seen = set()
+        def visits(rule):
+            if rule.kind == RULE:
+                seen.add(rule.args['name'])
+            if rule.kind == SET_LINE_PREFIX:
+                indent = rule.args['indent']
+                dedent = rule.args['dedent']
+                if indent: dont_pop.add(indent)
+                if dedent: dont_pop.add(dedent)
+            
+        rule.visit(visits)
+        rule_childs[name] = seen
+
+    inlineable = {}
+    to_inline = []
+
+    for name, child in rule_childs.items():
+        seen = set((name,))
+        def walk(childs):
+            for c in childs:
+                if c in seen: return False
+                seen.add(c)
+                if not walk(rule_childs[c]):
+                    return False
+            return True
+        if child:
+            inlineable[name] = walk(child)
+        else:
+            inlineable[name] = True
+            to_inline.append(name)
+        
+    all_rules = set(rules.keys())
+    while to_inline:
+        n = to_inline.pop(0)
+        all_rules.remove(n)
+        for name in all_rules:
+            if name == n: continue
+            if n not in rule_childs[name]: continue
+            rules[name] = rules[name].inline(n, rules[n], rule_options[n])
+            
+            rule_childs[name].remove(n)
+            if not rule_childs[name]:
+                to_inline.append(name)
+        if n not in dont_pop: 
+            safe = True
+            for name, rule in rules.items():
+                if name == n: continue
+                def _visit(rule):
+                    nonlocal safe
+                    if rule.kind == RULE and rule.args['name'] == n:
+                        safe = False
+                    if rule.kind == SET_LINE_PREFIX and rule.args['indent'] == n:
+                        safe = False
+                    if rule.kind == SET_LINE_PREFIX and rule.args.get('dedent') == n:
+                        safe = False
+                rule.visit(_visit)
+                if not safe: break
+            if safe:
+                rules.pop(n)
+    return rules
 
 # Parser
 
@@ -877,7 +873,7 @@ def compile_python(grammar, cython=False, wrap=False):
             steps.append(f"{children_0} = [] if {children} is not None else None")
             steps.append(f"{count} = ({value}, {offset})")
             steps.append(f"if {count} in self.cache:")
-            steps.append(f"    {offset_0}, {column}, {indent_column}, {children_0}, {partial_tab_offset}, {partial_tab_width} = self.cache[{count}]")
+            steps.append(f"    {offset_0}, {column}, {indent_column}[:], {children_0}, {partial_tab_offset}, {partial_tab_width} = self.cache[{count}]")
             steps.append("else:")
 
             steps_0 = steps.add_indent()
@@ -1347,7 +1343,7 @@ def compile_python(grammar, cython=False, wrap=False):
                         f"        else:",
                         f"            offset = -1",
                         f"            break",
-                        f"    return offset, column, indent_column, partial_tab_offset, partial_tab_width",
+                        f"    return offset, column, partial_tab_offset, partial_tab_width",
                 ))
 
 
@@ -1392,7 +1388,7 @@ def compile_python(grammar, cython=False, wrap=False):
                         f"            offset = start_offset",
                         f"    if count == 0:",
                         f"            offset = -1",
-                        f"    return offset, column, indent_column, partial_tab_offset, partial_tab_width",
+                        f"    return offset, column, partial_tab_offset, partial_tab_width",
                     ))
                     steps.extend((
                         f'{prefix}.append((_indent, _dedent))',
@@ -1447,7 +1443,7 @@ def compile_python(grammar, cython=False, wrap=False):
             offset_0 = offset.incr()
             partial = rule.args['partial']
             steps.extend((
-                f"if {column} != 0 or len({indent_column}) > 1:",
+                f"if {column} != 0:",
                 f"    {offset} = -1",
                 f"    break",
                 f"# print('start')",
@@ -1455,7 +1451,7 @@ def compile_python(grammar, cython=False, wrap=False):
                 f"    # print(indent, dedent)",
                 f"    _children, _prefix = [], []",
                 f"    {offset_0} = {offset}",
-                f"    {offset_0}, {column}, {indent_column}, {partial_tab_offset}, {partial_tab_width} = indent(buf, buf_start, buf_eof, {offset_0}, {column}, {indent_column}, _prefix, _children, {partial_tab_offset}, {partial_tab_width})",
+                f"    {offset_0}, {column}, {partial_tab_offset}, {partial_tab_width} = indent(buf, buf_start, buf_eof, {offset_0}, {column}, {indent_column}, _prefix, _children, {partial_tab_offset}, {partial_tab_width})",
                 f"    if _prefix or _children:",
                 f"       raise Exception('bar')",
             ))
@@ -1467,7 +1463,7 @@ def compile_python(grammar, cython=False, wrap=False):
                 f"            break",
                 f"        _children, _prefix = [], []",
                 f"        {offset_0} = {offset}",
-                f"        {offset_0}, _column, _indent_column, _partial_tab_offset, _partial_tab_width = dedent(buf, buf_start, buf_eof, {offset_0}, {column}, {indent_column}, _prefix, _children, {partial_tab_offset}, {partial_tab_width})",
+                f"        {offset_0}, _column, _partial_tab_offset, _partial_tab_width = dedent(buf, buf_start, buf_eof, {offset_0}, {column}, list({indent_column}), _prefix, _children, {partial_tab_offset}, {partial_tab_width})",
                 f"        if {offset_0} != -1:",
                 f"            {offset} = -1",
                 f"            break",
@@ -1487,6 +1483,7 @@ def compile_python(grammar, cython=False, wrap=False):
                 f"    break",
             ))
         elif rule.kind == DEDENT:
+            raise Exception('broken')
             # if partial
             # break to dedent
             # for each pair
@@ -1536,7 +1533,7 @@ def compile_python(grammar, cython=False, wrap=False):
 
         elif rule.kind == RULE:
             steps.extend((
-                f"{offset}, {column}, {indent_column}, {partial_tab_offset}, {partial_tab_width} = self.parse_{rule.args['name']}(buf, buf_start, buf_eof, {offset}, {column}, {indent_column}, {prefix}, {children}, {partial_tab_offset}, {partial_tab_width})",
+                f"{offset}, {column}, {partial_tab_offset}, {partial_tab_width} = self.parse_{rule.args['name']}(buf, buf_start, buf_eof, {offset}, {column}, {indent_column}, {prefix}, {children}, {partial_tab_offset}, {partial_tab_width})",
                 f"if {offset} == -1: break",
                 f"",
             ))
@@ -1964,7 +1961,7 @@ def compile_python(grammar, cython=False, wrap=False):
         f"    start, eof = offset, end",
         f"    column, indent_column = 0, [0]",
         f"    prefix, children = [], []",
-        f"    new_offset, column, indent_column, partial_tab_offset, partial_tab_width = self.parse_{start_rule}(buf, start, end, offset, column, indent_column, prefix, children, 0, 0)",
+        f"    new_offset, column, partial_tab_offset, partial_tab_width = self.parse_{start_rule}(buf, start, end, offset, column, indent_column, prefix, children, 0, 0)",
         f"    if children and new_offset == end:",
         f"         if builder is None: return {node}({repr(grammar.capture)}, offset, new_offset, 0, column, children, None)",
         f"         return children[-1].build(buf, builder)",
@@ -1975,12 +1972,12 @@ def compile_python(grammar, cython=False, wrap=False):
 
     varnames = {
             "offset":"cdef int", "column":"cdef int", 
-            "prefix":"cdef list", "children":"cdef list", "count":"cdef int", "indent_column":"cdef int[:]",
+            "prefix":"cdef list", "children":"cdef list", "count":"cdef int", "indent_column":"cdef list",
             "partial_tab_offset":"cdef int", "partial_tab_width": "cdef int"}
     for name, rule in grammar.rules.items():
         cdefs = {}
         if cython:
-            output.append(f"cdef parse_{name}(self, str buf, int buf_start, int buf_eof, int offset_0,  int column_0, list indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):")
+            output.append(f"cdef (int, int, int, int) parse_{name}(self, str buf, int buf_start, int buf_eof, int offset_0,  int column_0, list indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):")
             output.append(f"    cdef Py_UCS4 codepoint")
             
             for v in varnames:
@@ -2009,7 +2006,7 @@ def compile_python(grammar, cython=False, wrap=False):
                 output.replace_placeholder(p, line)
         output.append(f"        break")
     #     output.append(f"    print(('exit' if offset_0 != -1 else 'fail'), '{name}', offset_0, column_0, repr(buf[offset_0: offset_0+10]))")
-        output.append(f"    return offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0")
+        output.append(f"    return offset_0, column_0, partial_tab_offset_0, partial_tab_width_0")
         output.append("")
     if wrap:
         old_output.append("return Parser")
