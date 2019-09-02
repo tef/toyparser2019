@@ -1,5 +1,6 @@
 from contextlib import contextmanager
 from types import FunctionType
+import re
 
 import os.path
 
@@ -832,9 +833,35 @@ def process_rules(start, rules, rule_options):
             rule.regular = all(r.regular for r in rule.rules)
         else:
             rule.regular = False
+    def _build_regex(rule):
+        if rule.kind == LITERAL:
+            return f'(?:{"|".join(re.escape(l) for l in rule.args["literals"])})'
+        if rule.kind == RANGE:
+            out = []
+            def _f(x):
+                if 32 < ord(x)< 127 :return re.escape(x)
+                return repr(x)[1:-1]
+            for r in rule.args['range']:
+                if len(r) == 1:
+                    out.append(_f(r))
+                else:
+                    out.append(f"{_f(r[0])}-{_f(r[2])}")
+            if rule.args['invert']:
+                return f"[^{''.join(out)}]"
+            return f"[{''.join(out)}]"
+        if rule.kind == SEQUENCE:
+            return "".join(_build_regex(r) for r in self.rules)
+        if rule.kind == CHOICE:
+            return f'(?:{"|".join(_build_regex(r) for r in self.rules)})'
+        if rule.kind == REPEAT:
+            num = f"{rule.args['min'] or 0}, {rule.args['max'] or''}"
+            return f'(?:{"".join(_build_regex(r) for r in rule.rules)})^' '{' f'{num}' '}'
+
     def _lift_regular(rule):
         if rule.regular:
-            return ParserRule(REGULAR, args=dict(rule=rule))
+            if rule.kind != LITERAL or len(rule.args['literals']) > 1:
+                regex= _build_regex(rule)
+                return ParserRule(REGULAR, args=dict(regex=regex, rule=rule))
         return rule
 
     for name in list(rules):
@@ -896,7 +923,7 @@ class VarBuilder:
 
 def compile_python(grammar, cython=False, wrap=False):
     memoized = {}
-    regexes = {}
+    regexes = []
     node = "Node"
     if cython:
         wrap = False
@@ -908,11 +935,10 @@ def compile_python(grammar, cython=False, wrap=False):
     def build_steps(rule, steps, offset, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children, count, values):
         # steps.append(f"print('start', {repr(str(rule))})")
         if rule.kind == REGULAR:
-            regexes
-            build_steps(rule.args['rule'], steps, offset, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children, count, values)
-        elif rule.kind == SEQUENCE:
+            print(rule.args['regex'].replace('\\','_').encode('ascii',errors="replace"))
             regex_name = "name"
             steps.extend((
+                f"_re = re.compile('{rule.args['regex']}')",
                 f"# _match = {regex_name}.match(buf, {offset})",
                 f"# if _match:",
                 f"#     _end = _match.end()",
@@ -922,6 +948,8 @@ def compile_python(grammar, cython=False, wrap=False):
                 f"#     {offset} = -1",
                 f"#     break",
             ))
+            build_steps(rule.args['rule'], steps, offset, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children, count, values)
+        elif rule.kind == SEQUENCE:
             build_subrules(rule.rules, steps, offset, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children, count, values)
 
         elif rule.kind == MEMOIZE:
@@ -1949,7 +1977,7 @@ def compile_python(grammar, cython=False, wrap=False):
     whitespace_tab = bool(grammar.whitespace) and '\t' in grammar.whitespace
 
     if wrap:
-        output.append("def _build(unicodedata):")
+        output.append("def _build():")
         output = output.add_indent()
 
     old_output = output
@@ -1974,7 +2002,8 @@ def compile_python(grammar, cython=False, wrap=False):
     )
     if cython:
         output.append('#cython: language_level=3, bounds_check=False')
-        output.append("import unicodedata")
+        output.append("import unicodedata, re")
+        output.append("")
         output.extend(parse_node)
         output.extend((
             f"cdef class Indent:",
@@ -1997,6 +2026,8 @@ def compile_python(grammar, cython=False, wrap=False):
         output = output.add_indent(4)
 
     else:
+        output.append("import unicodedata, re")
+        output.append("")
         output.extend(parse_node)
         output.append("")
 

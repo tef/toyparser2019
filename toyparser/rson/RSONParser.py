@@ -1,3 +1,5 @@
+import unicodedata, re
+
 class Node:
     def __init__(self, name, start, end, start_column, end_column, children, value):
         self.name = name
@@ -76,6 +78,15 @@ class Parser:
                         offset_1 = -1
                         break
 
+                    _re = re.compile('(?:[^\n])^{0, }')
+                    # _match = name.match(buf, offset_1)
+                    # if _match:
+                    #     _end = _match.end()
+                    #     column_1 += (_end - offset_1)
+                    #     offset_1 = _end
+                    # else:
+                    #     offset_1 = -1
+                    #     break
                     count_1 = 0
                     while True:
                         offset_2 = offset_1
@@ -112,6 +123,7 @@ class Parser:
                         count_1 += 1
                     if offset_1 == -1:
                         break
+
 
                     count_1 = 0
                     while offset_1 < buf_eof:
@@ -206,6 +218,15 @@ class Parser:
                         offset_1 = -1
                         break
 
+                    _re = re.compile('(?:[^\n])^{0, }')
+                    # _match = name.match(buf, offset_1)
+                    # if _match:
+                    #     _end = _match.end()
+                    #     column_1 += (_end - offset_1)
+                    #     offset_1 = _end
+                    # else:
+                    #     offset_1 = -1
+                    #     break
                     count_1 = 0
                     while True:
                         offset_2 = offset_1
@@ -242,6 +263,7 @@ class Parser:
                         count_1 += 1
                     if offset_1 == -1:
                         break
+
 
                     count_1 = 0
                     while offset_1 < buf_eof:
@@ -328,6 +350,15 @@ class Parser:
                         children_3 = None
                         value_1 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
                         while True: # start capture
+                            _re = re.compile('[a-za-Z]')
+                            # _match = name.match(buf, offset_3)
+                            # if _match:
+                            #     _end = _match.end()
+                            #     column_3 += (_end - offset_3)
+                            #     offset_3 = _end
+                            # else:
+                            #     offset_3 = -1
+                            #     break
                             if offset_3 == buf_eof:
                                 offset_3 = -1
                                 break
@@ -344,6 +375,7 @@ class Parser:
                                 offset_3 = -1
                                 break
 
+
                             count_0 = 0
                             while True:
                                 offset_4 = offset_3
@@ -353,6 +385,15 @@ class Parser:
                                 partial_tab_width_2 = partial_tab_width_1
                                 children_4 = [] if children_3 is not None else None
                                 while True:
+                                    _re = re.compile('[0-9a-zA-Z_]')
+                                    # _match = name.match(buf, offset_4)
+                                    # if _match:
+                                    #     _end = _match.end()
+                                    #     column_4 += (_end - offset_4)
+                                    #     offset_4 = _end
+                                    # else:
+                                    #     offset_4 = -1
+                                    #     break
                                     if offset_4 == buf_eof:
                                         offset_4 = -1
                                         break
@@ -374,6 +415,7 @@ class Parser:
                                     else:
                                         offset_4 = -1
                                         break
+
 
                                     break
                                 if offset_4 == -1:
@@ -561,6 +603,15 @@ class Parser:
                                             partial_tab_width_4 = partial_tab_width_3
                                             children_5 = [] if children_4 is not None else None
                                             while True: # case
+                                                _re = re.compile('[^\x00-\x1f\\\"\ud800-\udfff]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -582,6 +633,7 @@ class Parser:
                                                 else:
                                                     offset_5 += 1
                                                     column_5 += 1
+
 
 
                                                 break
@@ -616,6 +668,15 @@ class Parser:
                                                     indent_column_5 = list(indent_column_4)
                                                     partial_tab_offset_5 = partial_tab_offset_4
                                                     partial_tab_width_5 = partial_tab_width_4
+                                                    _re = re.compile('[0-1]')
+                                                    # _match = name.match(buf, offset_6)
+                                                    # if _match:
+                                                    #     _end = _match.end()
+                                                    #     column_6 += (_end - offset_6)
+                                                    #     offset_6 = _end
+                                                    # else:
+                                                    #     offset_6 = -1
+                                                    #     break
                                                     if offset_6 == buf_eof:
                                                         offset_6 = -1
                                                         break
@@ -629,11 +690,21 @@ class Parser:
                                                         offset_6 = -1
                                                         break
 
+
                                                     break
                                                 if offset_6 != -1:
                                                     offset_5 = -1
                                                     break
 
+                                                _re = re.compile('[0-9a-fA-F]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -653,6 +724,16 @@ class Parser:
                                                     offset_5 = -1
                                                     break
 
+
+                                                _re = re.compile('[0-9a-fA-F]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -671,6 +752,7 @@ class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
+
 
 
                                                 break
@@ -712,6 +794,15 @@ class Parser:
                                                         offset_6 = -1
                                                         break
 
+                                                    _re = re.compile('[0-1]')
+                                                    # _match = name.match(buf, offset_6)
+                                                    # if _match:
+                                                    #     _end = _match.end()
+                                                    #     column_6 += (_end - offset_6)
+                                                    #     offset_6 = _end
+                                                    # else:
+                                                    #     offset_6 = -1
+                                                    #     break
                                                     if offset_6 == buf_eof:
                                                         offset_6 = -1
                                                         break
@@ -725,6 +816,7 @@ class Parser:
                                                         offset_6 = -1
                                                         break
 
+
                                                     break
                                                 if offset_6 != -1:
                                                     offset_5 = -1
@@ -737,6 +829,15 @@ class Parser:
                                                     indent_column_5 = list(indent_column_4)
                                                     partial_tab_offset_5 = partial_tab_offset_4
                                                     partial_tab_width_5 = partial_tab_width_4
+                                                    _re = re.compile('(?:D|d)')
+                                                    # _match = name.match(buf, offset_6)
+                                                    # if _match:
+                                                    #     _end = _match.end()
+                                                    #     column_6 += (_end - offset_6)
+                                                    #     offset_6 = _end
+                                                    # else:
+                                                    #     offset_6 = -1
+                                                    #     break
                                                     if buf[offset_6:offset_6+1] == 'D':
                                                         offset_6 += 1
                                                         column_6 += 1
@@ -747,6 +848,16 @@ class Parser:
                                                         offset_6 = -1
                                                         break
 
+
+                                                    _re = re.compile('[8-9A-F]')
+                                                    # _match = name.match(buf, offset_6)
+                                                    # if _match:
+                                                    #     _end = _match.end()
+                                                    #     column_6 += (_end - offset_6)
+                                                    #     offset_6 = _end
+                                                    # else:
+                                                    #     offset_6 = -1
+                                                    #     break
                                                     if offset_6 == buf_eof:
                                                         offset_6 = -1
                                                         break
@@ -763,11 +874,21 @@ class Parser:
                                                         offset_6 = -1
                                                         break
 
+
                                                     break
                                                 if offset_6 != -1:
                                                     offset_5 = -1
                                                     break
 
+                                                _re = re.compile('[0-9a-fA-F]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -787,6 +908,16 @@ class Parser:
                                                     offset_5 = -1
                                                     break
 
+
+                                                _re = re.compile('[0-9a-fA-F]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -806,6 +937,16 @@ class Parser:
                                                     offset_5 = -1
                                                     break
 
+
+                                                _re = re.compile('[0-9a-fA-F]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -825,6 +966,16 @@ class Parser:
                                                     offset_5 = -1
                                                     break
 
+
+                                                _re = re.compile('[0-9a-fA-F]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -843,6 +994,7 @@ class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
+
 
 
                                                 break
@@ -884,6 +1036,15 @@ class Parser:
                                                         offset_6 = -1
                                                         break
 
+                                                    _re = re.compile('[0-1]')
+                                                    # _match = name.match(buf, offset_6)
+                                                    # if _match:
+                                                    #     _end = _match.end()
+                                                    #     column_6 += (_end - offset_6)
+                                                    #     offset_6 = _end
+                                                    # else:
+                                                    #     offset_6 = -1
+                                                    #     break
                                                     if offset_6 == buf_eof:
                                                         offset_6 = -1
                                                         break
@@ -896,6 +1057,7 @@ class Parser:
                                                     else:
                                                         offset_6 = -1
                                                         break
+
 
                                                     break
                                                 if offset_6 != -1:
@@ -916,6 +1078,15 @@ class Parser:
                                                         offset_6 = -1
                                                         break
 
+                                                    _re = re.compile('(?:D|d)')
+                                                    # _match = name.match(buf, offset_6)
+                                                    # if _match:
+                                                    #     _end = _match.end()
+                                                    #     column_6 += (_end - offset_6)
+                                                    #     offset_6 = _end
+                                                    # else:
+                                                    #     offset_6 = -1
+                                                    #     break
                                                     if buf[offset_6:offset_6+1] == 'D':
                                                         offset_6 += 1
                                                         column_6 += 1
@@ -926,6 +1097,16 @@ class Parser:
                                                         offset_6 = -1
                                                         break
 
+
+                                                    _re = re.compile('[8-9A-F]')
+                                                    # _match = name.match(buf, offset_6)
+                                                    # if _match:
+                                                    #     _end = _match.end()
+                                                    #     column_6 += (_end - offset_6)
+                                                    #     offset_6 = _end
+                                                    # else:
+                                                    #     offset_6 = -1
+                                                    #     break
                                                     if offset_6 == buf_eof:
                                                         offset_6 = -1
                                                         break
@@ -942,11 +1123,21 @@ class Parser:
                                                         offset_6 = -1
                                                         break
 
+
                                                     break
                                                 if offset_6 != -1:
                                                     offset_5 = -1
                                                     break
 
+                                                _re = re.compile('[0-9a-fA-F]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -966,6 +1157,16 @@ class Parser:
                                                     offset_5 = -1
                                                     break
 
+
+                                                _re = re.compile('[0-9a-fA-F]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -985,6 +1186,16 @@ class Parser:
                                                     offset_5 = -1
                                                     break
 
+
+                                                _re = re.compile('[0-9a-fA-F]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -1004,6 +1215,16 @@ class Parser:
                                                     offset_5 = -1
                                                     break
 
+
+                                                _re = re.compile('[0-9a-fA-F]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -1023,6 +1244,16 @@ class Parser:
                                                     offset_5 = -1
                                                     break
 
+
+                                                _re = re.compile('[0-9a-fA-F]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -1042,6 +1273,16 @@ class Parser:
                                                     offset_5 = -1
                                                     break
 
+
+                                                _re = re.compile('[0-9a-fA-F]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -1061,6 +1302,16 @@ class Parser:
                                                     offset_5 = -1
                                                     break
 
+
+                                                _re = re.compile('[0-9a-fA-F]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -1080,6 +1331,16 @@ class Parser:
                                                     offset_5 = -1
                                                     break
 
+
+                                                _re = re.compile('[0-9a-fA-F]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -1098,6 +1359,7 @@ class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
+
 
 
                                                 break
@@ -1125,6 +1387,15 @@ class Parser:
                                                     offset_5 = -1
                                                     break
 
+                                                _re = re.compile('[\"\\\/bfnrt\'\n]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -1164,6 +1435,7 @@ class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
+
 
 
                                                 break
@@ -1264,6 +1536,15 @@ class Parser:
                                             partial_tab_width_4 = partial_tab_width_3
                                             children_5 = [] if children_4 is not None else None
                                             while True: # case
+                                                _re = re.compile('[^\x00-\x1f\\\'\ud800-\udfff]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -1285,6 +1566,7 @@ class Parser:
                                                 else:
                                                     offset_5 += 1
                                                     column_5 += 1
+
 
 
                                                 break
@@ -1319,6 +1601,15 @@ class Parser:
                                                     indent_column_5 = list(indent_column_4)
                                                     partial_tab_offset_5 = partial_tab_offset_4
                                                     partial_tab_width_5 = partial_tab_width_4
+                                                    _re = re.compile('[0-1]')
+                                                    # _match = name.match(buf, offset_6)
+                                                    # if _match:
+                                                    #     _end = _match.end()
+                                                    #     column_6 += (_end - offset_6)
+                                                    #     offset_6 = _end
+                                                    # else:
+                                                    #     offset_6 = -1
+                                                    #     break
                                                     if offset_6 == buf_eof:
                                                         offset_6 = -1
                                                         break
@@ -1332,11 +1623,21 @@ class Parser:
                                                         offset_6 = -1
                                                         break
 
+
                                                     break
                                                 if offset_6 != -1:
                                                     offset_5 = -1
                                                     break
 
+                                                _re = re.compile('[0-9a-fA-F]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -1356,6 +1657,16 @@ class Parser:
                                                     offset_5 = -1
                                                     break
 
+
+                                                _re = re.compile('[0-9a-fA-F]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -1374,6 +1685,7 @@ class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
+
 
 
                                                 break
@@ -1415,6 +1727,15 @@ class Parser:
                                                         offset_6 = -1
                                                         break
 
+                                                    _re = re.compile('[0-1]')
+                                                    # _match = name.match(buf, offset_6)
+                                                    # if _match:
+                                                    #     _end = _match.end()
+                                                    #     column_6 += (_end - offset_6)
+                                                    #     offset_6 = _end
+                                                    # else:
+                                                    #     offset_6 = -1
+                                                    #     break
                                                     if offset_6 == buf_eof:
                                                         offset_6 = -1
                                                         break
@@ -1428,6 +1749,7 @@ class Parser:
                                                         offset_6 = -1
                                                         break
 
+
                                                     break
                                                 if offset_6 != -1:
                                                     offset_5 = -1
@@ -1440,6 +1762,15 @@ class Parser:
                                                     indent_column_5 = list(indent_column_4)
                                                     partial_tab_offset_5 = partial_tab_offset_4
                                                     partial_tab_width_5 = partial_tab_width_4
+                                                    _re = re.compile('(?:D|d)')
+                                                    # _match = name.match(buf, offset_6)
+                                                    # if _match:
+                                                    #     _end = _match.end()
+                                                    #     column_6 += (_end - offset_6)
+                                                    #     offset_6 = _end
+                                                    # else:
+                                                    #     offset_6 = -1
+                                                    #     break
                                                     if buf[offset_6:offset_6+1] == 'D':
                                                         offset_6 += 1
                                                         column_6 += 1
@@ -1450,6 +1781,16 @@ class Parser:
                                                         offset_6 = -1
                                                         break
 
+
+                                                    _re = re.compile('[8-9A-F]')
+                                                    # _match = name.match(buf, offset_6)
+                                                    # if _match:
+                                                    #     _end = _match.end()
+                                                    #     column_6 += (_end - offset_6)
+                                                    #     offset_6 = _end
+                                                    # else:
+                                                    #     offset_6 = -1
+                                                    #     break
                                                     if offset_6 == buf_eof:
                                                         offset_6 = -1
                                                         break
@@ -1466,11 +1807,21 @@ class Parser:
                                                         offset_6 = -1
                                                         break
 
+
                                                     break
                                                 if offset_6 != -1:
                                                     offset_5 = -1
                                                     break
 
+                                                _re = re.compile('[0-9a-fA-F]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -1490,6 +1841,16 @@ class Parser:
                                                     offset_5 = -1
                                                     break
 
+
+                                                _re = re.compile('[0-9a-fA-F]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -1509,6 +1870,16 @@ class Parser:
                                                     offset_5 = -1
                                                     break
 
+
+                                                _re = re.compile('[0-9a-fA-F]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -1528,6 +1899,16 @@ class Parser:
                                                     offset_5 = -1
                                                     break
 
+
+                                                _re = re.compile('[0-9a-fA-F]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -1546,6 +1927,7 @@ class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
+
 
 
                                                 break
@@ -1587,6 +1969,15 @@ class Parser:
                                                         offset_6 = -1
                                                         break
 
+                                                    _re = re.compile('[0-1]')
+                                                    # _match = name.match(buf, offset_6)
+                                                    # if _match:
+                                                    #     _end = _match.end()
+                                                    #     column_6 += (_end - offset_6)
+                                                    #     offset_6 = _end
+                                                    # else:
+                                                    #     offset_6 = -1
+                                                    #     break
                                                     if offset_6 == buf_eof:
                                                         offset_6 = -1
                                                         break
@@ -1599,6 +1990,7 @@ class Parser:
                                                     else:
                                                         offset_6 = -1
                                                         break
+
 
                                                     break
                                                 if offset_6 != -1:
@@ -1619,6 +2011,15 @@ class Parser:
                                                         offset_6 = -1
                                                         break
 
+                                                    _re = re.compile('(?:D|d)')
+                                                    # _match = name.match(buf, offset_6)
+                                                    # if _match:
+                                                    #     _end = _match.end()
+                                                    #     column_6 += (_end - offset_6)
+                                                    #     offset_6 = _end
+                                                    # else:
+                                                    #     offset_6 = -1
+                                                    #     break
                                                     if buf[offset_6:offset_6+1] == 'D':
                                                         offset_6 += 1
                                                         column_6 += 1
@@ -1629,6 +2030,16 @@ class Parser:
                                                         offset_6 = -1
                                                         break
 
+
+                                                    _re = re.compile('[8-9A-F]')
+                                                    # _match = name.match(buf, offset_6)
+                                                    # if _match:
+                                                    #     _end = _match.end()
+                                                    #     column_6 += (_end - offset_6)
+                                                    #     offset_6 = _end
+                                                    # else:
+                                                    #     offset_6 = -1
+                                                    #     break
                                                     if offset_6 == buf_eof:
                                                         offset_6 = -1
                                                         break
@@ -1645,11 +2056,21 @@ class Parser:
                                                         offset_6 = -1
                                                         break
 
+
                                                     break
                                                 if offset_6 != -1:
                                                     offset_5 = -1
                                                     break
 
+                                                _re = re.compile('[0-9a-fA-F]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -1669,6 +2090,16 @@ class Parser:
                                                     offset_5 = -1
                                                     break
 
+
+                                                _re = re.compile('[0-9a-fA-F]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -1688,6 +2119,16 @@ class Parser:
                                                     offset_5 = -1
                                                     break
 
+
+                                                _re = re.compile('[0-9a-fA-F]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -1707,6 +2148,16 @@ class Parser:
                                                     offset_5 = -1
                                                     break
 
+
+                                                _re = re.compile('[0-9a-fA-F]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -1726,6 +2177,16 @@ class Parser:
                                                     offset_5 = -1
                                                     break
 
+
+                                                _re = re.compile('[0-9a-fA-F]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -1745,6 +2206,16 @@ class Parser:
                                                     offset_5 = -1
                                                     break
 
+
+                                                _re = re.compile('[0-9a-fA-F]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -1764,6 +2235,16 @@ class Parser:
                                                     offset_5 = -1
                                                     break
 
+
+                                                _re = re.compile('[0-9a-fA-F]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -1783,6 +2264,16 @@ class Parser:
                                                     offset_5 = -1
                                                     break
 
+
+                                                _re = re.compile('[0-9a-fA-F]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -1801,6 +2292,7 @@ class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
+
 
 
                                                 break
@@ -1828,6 +2320,15 @@ class Parser:
                                                     offset_5 = -1
                                                     break
 
+                                                _re = re.compile('[\"\\\/bfnrt\'\n]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -1867,6 +2368,7 @@ class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
+
 
 
                                                 break
@@ -1977,6 +2479,15 @@ class Parser:
                                     partial_tab_width_3 = partial_tab_width_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
+                                        _re = re.compile('[\-\+]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -1992,6 +2503,7 @@ class Parser:
                                         else:
                                             offset_4 = -1
                                             break
+
 
                                         break
                                     if offset_4 == -1:
@@ -2016,6 +2528,15 @@ class Parser:
                                     offset_3 = -1
                                     break
 
+                                _re = re.compile('[0-9A-Fa-f]')
+                                # _match = name.match(buf, offset_3)
+                                # if _match:
+                                #     _end = _match.end()
+                                #     column_3 += (_end - offset_3)
+                                #     offset_3 = _end
+                                # else:
+                                #     offset_3 = -1
+                                #     break
                                 if offset_3 == buf_eof:
                                     offset_3 = -1
                                     break
@@ -2035,6 +2556,7 @@ class Parser:
                                     offset_3 = -1
                                     break
 
+
                                 count_0 = 0
                                 while True:
                                     offset_4 = offset_3
@@ -2044,6 +2566,15 @@ class Parser:
                                     partial_tab_width_3 = partial_tab_width_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
+                                        _re = re.compile('[0-9A-Fa-f_]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -2065,6 +2596,7 @@ class Parser:
                                         else:
                                             offset_4 = -1
                                             break
+
 
                                         break
                                     if offset_4 == -1:
@@ -2109,6 +2641,15 @@ class Parser:
                                     partial_tab_width_3 = partial_tab_width_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
+                                        _re = re.compile('[\-\+]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -2124,6 +2665,7 @@ class Parser:
                                         else:
                                             offset_4 = -1
                                             break
+
 
                                         break
                                     if offset_4 == -1:
@@ -2148,6 +2690,15 @@ class Parser:
                                     offset_3 = -1
                                     break
 
+                                _re = re.compile('[0-8]')
+                                # _match = name.match(buf, offset_3)
+                                # if _match:
+                                #     _end = _match.end()
+                                #     column_3 += (_end - offset_3)
+                                #     offset_3 = _end
+                                # else:
+                                #     offset_3 = -1
+                                #     break
                                 if offset_3 == buf_eof:
                                     offset_3 = -1
                                     break
@@ -2161,6 +2712,7 @@ class Parser:
                                     offset_3 = -1
                                     break
 
+
                                 count_0 = 0
                                 while True:
                                     offset_4 = offset_3
@@ -2170,6 +2722,15 @@ class Parser:
                                     partial_tab_width_3 = partial_tab_width_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
+                                        _re = re.compile('[0-8_]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -2185,6 +2746,7 @@ class Parser:
                                         else:
                                             offset_4 = -1
                                             break
+
 
                                         break
                                     if offset_4 == -1:
@@ -2229,6 +2791,15 @@ class Parser:
                                     partial_tab_width_3 = partial_tab_width_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
+                                        _re = re.compile('[\-\+]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -2244,6 +2815,7 @@ class Parser:
                                         else:
                                             offset_4 = -1
                                             break
+
 
                                         break
                                     if offset_4 == -1:
@@ -2268,6 +2840,15 @@ class Parser:
                                     offset_3 = -1
                                     break
 
+                                _re = re.compile('[0-1]')
+                                # _match = name.match(buf, offset_3)
+                                # if _match:
+                                #     _end = _match.end()
+                                #     column_3 += (_end - offset_3)
+                                #     offset_3 = _end
+                                # else:
+                                #     offset_3 = -1
+                                #     break
                                 if offset_3 == buf_eof:
                                     offset_3 = -1
                                     break
@@ -2281,6 +2862,7 @@ class Parser:
                                     offset_3 = -1
                                     break
 
+
                                 count_0 = 0
                                 while True:
                                     offset_4 = offset_3
@@ -2290,6 +2872,15 @@ class Parser:
                                     partial_tab_width_3 = partial_tab_width_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
+                                        _re = re.compile('[0-1_]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -2305,6 +2896,7 @@ class Parser:
                                         else:
                                             offset_4 = -1
                                             break
+
 
                                         break
                                     if offset_4 == -1:
@@ -2349,6 +2941,15 @@ class Parser:
                                     partial_tab_width_3 = partial_tab_width_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
+                                        _re = re.compile('[\-\+]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -2364,6 +2965,7 @@ class Parser:
                                         else:
                                             offset_4 = -1
                                             break
+
 
                                         break
                                     if offset_4 == -1:
@@ -2415,6 +3017,15 @@ class Parser:
                                     partial_tab_width_3 = partial_tab_width_2
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
+                                        _re = re.compile('[1-9]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -2428,6 +3039,7 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+
                                         count_0 = 0
                                         while True:
                                             offset_5 = offset_4
@@ -2437,6 +3049,15 @@ class Parser:
                                             partial_tab_width_4 = partial_tab_width_3
                                             children_5 = [] if children_4 is not None else None
                                             while True:
+                                                _re = re.compile('[0-9]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -2449,6 +3070,7 @@ class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
+
 
                                                 break
                                             if offset_5 == -1:
@@ -2507,6 +3129,15 @@ class Parser:
                                             partial_tab_width_4 = partial_tab_width_3
                                             children_5 = [] if children_4 is not None else None
                                             while True:
+                                                _re = re.compile('[0-9]')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if offset_5 == buf_eof:
                                                     offset_5 = -1
                                                     break
@@ -2519,6 +3150,7 @@ class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
+
 
                                                 break
                                             if offset_5 == -1:
@@ -2560,6 +3192,15 @@ class Parser:
                                     partial_tab_width_3 = partial_tab_width_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
+                                        _re = re.compile('(?:e|E)')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if buf[offset_4:offset_4+1] == 'e':
                                             offset_4 += 1
                                             column_4 += 1
@@ -2570,6 +3211,7 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+
                                         count_1 = 0
                                         while count_1 < 1:
                                             offset_5 = offset_4
@@ -2579,6 +3221,15 @@ class Parser:
                                             partial_tab_width_4 = partial_tab_width_3
                                             children_5 = [] if children_4 is not None else None
                                             while True:
+                                                _re = re.compile('(?:\+|\-)')
+                                                # _match = name.match(buf, offset_5)
+                                                # if _match:
+                                                #     _end = _match.end()
+                                                #     column_5 += (_end - offset_5)
+                                                #     offset_5 = _end
+                                                # else:
+                                                #     offset_5 = -1
+                                                #     break
                                                 if buf[offset_5:offset_5+1] == '+':
                                                     offset_5 += 1
                                                     column_5 += 1
@@ -2589,6 +3240,7 @@ class Parser:
                                                     offset_5 = -1
                                                     break
 
+
                                                 count_2 = 0
                                                 while True:
                                                     offset_6 = offset_5
@@ -2598,6 +3250,15 @@ class Parser:
                                                     partial_tab_width_5 = partial_tab_width_4
                                                     children_6 = [] if children_5 is not None else None
                                                     while True:
+                                                        _re = re.compile('[0-9]')
+                                                        # _match = name.match(buf, offset_6)
+                                                        # if _match:
+                                                        #     _end = _match.end()
+                                                        #     column_6 += (_end - offset_6)
+                                                        #     offset_6 = _end
+                                                        # else:
+                                                        #     offset_6 = -1
+                                                        #     break
                                                         if offset_6 == buf_eof:
                                                             offset_6 = -1
                                                             break
@@ -2610,6 +3271,7 @@ class Parser:
                                                         else:
                                                             offset_6 = -1
                                                             break
+
 
                                                         break
                                                     if offset_6 == -1:
@@ -2875,6 +3537,15 @@ class Parser:
                                     partial_tab_width_3 = partial_tab_width_2
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
+                                        _re = re.compile('[^\x00-\x1f\\\"\ud800-\udfff]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -2896,6 +3567,7 @@ class Parser:
                                         else:
                                             offset_4 += 1
                                             column_4 += 1
+
 
 
                                         break
@@ -2930,6 +3602,15 @@ class Parser:
                                             indent_column_4 = list(indent_column_3)
                                             partial_tab_offset_4 = partial_tab_offset_3
                                             partial_tab_width_4 = partial_tab_width_3
+                                            _re = re.compile('[0-1]')
+                                            # _match = name.match(buf, offset_5)
+                                            # if _match:
+                                            #     _end = _match.end()
+                                            #     column_5 += (_end - offset_5)
+                                            #     offset_5 = _end
+                                            # else:
+                                            #     offset_5 = -1
+                                            #     break
                                             if offset_5 == buf_eof:
                                                 offset_5 = -1
                                                 break
@@ -2943,11 +3624,21 @@ class Parser:
                                                 offset_5 = -1
                                                 break
 
+
                                             break
                                         if offset_5 != -1:
                                             offset_4 = -1
                                             break
 
+                                        _re = re.compile('[0-9a-fA-F]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -2967,6 +3658,16 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+
+                                        _re = re.compile('[0-9a-fA-F]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -2985,6 +3686,7 @@ class Parser:
                                         else:
                                             offset_4 = -1
                                             break
+
 
 
                                         break
@@ -3026,6 +3728,15 @@ class Parser:
                                                 offset_5 = -1
                                                 break
 
+                                            _re = re.compile('[0-1]')
+                                            # _match = name.match(buf, offset_5)
+                                            # if _match:
+                                            #     _end = _match.end()
+                                            #     column_5 += (_end - offset_5)
+                                            #     offset_5 = _end
+                                            # else:
+                                            #     offset_5 = -1
+                                            #     break
                                             if offset_5 == buf_eof:
                                                 offset_5 = -1
                                                 break
@@ -3039,6 +3750,7 @@ class Parser:
                                                 offset_5 = -1
                                                 break
 
+
                                             break
                                         if offset_5 != -1:
                                             offset_4 = -1
@@ -3051,6 +3763,15 @@ class Parser:
                                             indent_column_4 = list(indent_column_3)
                                             partial_tab_offset_4 = partial_tab_offset_3
                                             partial_tab_width_4 = partial_tab_width_3
+                                            _re = re.compile('(?:D|d)')
+                                            # _match = name.match(buf, offset_5)
+                                            # if _match:
+                                            #     _end = _match.end()
+                                            #     column_5 += (_end - offset_5)
+                                            #     offset_5 = _end
+                                            # else:
+                                            #     offset_5 = -1
+                                            #     break
                                             if buf[offset_5:offset_5+1] == 'D':
                                                 offset_5 += 1
                                                 column_5 += 1
@@ -3061,6 +3782,16 @@ class Parser:
                                                 offset_5 = -1
                                                 break
 
+
+                                            _re = re.compile('[8-9A-F]')
+                                            # _match = name.match(buf, offset_5)
+                                            # if _match:
+                                            #     _end = _match.end()
+                                            #     column_5 += (_end - offset_5)
+                                            #     offset_5 = _end
+                                            # else:
+                                            #     offset_5 = -1
+                                            #     break
                                             if offset_5 == buf_eof:
                                                 offset_5 = -1
                                                 break
@@ -3077,11 +3808,21 @@ class Parser:
                                                 offset_5 = -1
                                                 break
 
+
                                             break
                                         if offset_5 != -1:
                                             offset_4 = -1
                                             break
 
+                                        _re = re.compile('[0-9a-fA-F]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -3101,6 +3842,16 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+
+                                        _re = re.compile('[0-9a-fA-F]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -3120,6 +3871,16 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+
+                                        _re = re.compile('[0-9a-fA-F]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -3139,6 +3900,16 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+
+                                        _re = re.compile('[0-9a-fA-F]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -3157,6 +3928,7 @@ class Parser:
                                         else:
                                             offset_4 = -1
                                             break
+
 
 
                                         break
@@ -3198,6 +3970,15 @@ class Parser:
                                                 offset_5 = -1
                                                 break
 
+                                            _re = re.compile('[0-1]')
+                                            # _match = name.match(buf, offset_5)
+                                            # if _match:
+                                            #     _end = _match.end()
+                                            #     column_5 += (_end - offset_5)
+                                            #     offset_5 = _end
+                                            # else:
+                                            #     offset_5 = -1
+                                            #     break
                                             if offset_5 == buf_eof:
                                                 offset_5 = -1
                                                 break
@@ -3210,6 +3991,7 @@ class Parser:
                                             else:
                                                 offset_5 = -1
                                                 break
+
 
                                             break
                                         if offset_5 != -1:
@@ -3230,6 +4012,15 @@ class Parser:
                                                 offset_5 = -1
                                                 break
 
+                                            _re = re.compile('(?:D|d)')
+                                            # _match = name.match(buf, offset_5)
+                                            # if _match:
+                                            #     _end = _match.end()
+                                            #     column_5 += (_end - offset_5)
+                                            #     offset_5 = _end
+                                            # else:
+                                            #     offset_5 = -1
+                                            #     break
                                             if buf[offset_5:offset_5+1] == 'D':
                                                 offset_5 += 1
                                                 column_5 += 1
@@ -3240,6 +4031,16 @@ class Parser:
                                                 offset_5 = -1
                                                 break
 
+
+                                            _re = re.compile('[8-9A-F]')
+                                            # _match = name.match(buf, offset_5)
+                                            # if _match:
+                                            #     _end = _match.end()
+                                            #     column_5 += (_end - offset_5)
+                                            #     offset_5 = _end
+                                            # else:
+                                            #     offset_5 = -1
+                                            #     break
                                             if offset_5 == buf_eof:
                                                 offset_5 = -1
                                                 break
@@ -3256,11 +4057,21 @@ class Parser:
                                                 offset_5 = -1
                                                 break
 
+
                                             break
                                         if offset_5 != -1:
                                             offset_4 = -1
                                             break
 
+                                        _re = re.compile('[0-9a-fA-F]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -3280,6 +4091,16 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+
+                                        _re = re.compile('[0-9a-fA-F]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -3299,6 +4120,16 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+
+                                        _re = re.compile('[0-9a-fA-F]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -3318,6 +4149,16 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+
+                                        _re = re.compile('[0-9a-fA-F]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -3337,6 +4178,16 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+
+                                        _re = re.compile('[0-9a-fA-F]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -3356,6 +4207,16 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+
+                                        _re = re.compile('[0-9a-fA-F]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -3375,6 +4236,16 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+
+                                        _re = re.compile('[0-9a-fA-F]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -3394,6 +4265,16 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+
+                                        _re = re.compile('[0-9a-fA-F]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -3412,6 +4293,7 @@ class Parser:
                                         else:
                                             offset_4 = -1
                                             break
+
 
 
                                         break
@@ -3439,6 +4321,15 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+                                        _re = re.compile('[\"\\\/bfnrt\'\n]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -3478,6 +4369,7 @@ class Parser:
                                         else:
                                             offset_4 = -1
                                             break
+
 
 
                                         break
@@ -3578,6 +4470,15 @@ class Parser:
                                     partial_tab_width_3 = partial_tab_width_2
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
+                                        _re = re.compile('[^\x00-\x1f\\\'\ud800-\udfff]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -3599,6 +4500,7 @@ class Parser:
                                         else:
                                             offset_4 += 1
                                             column_4 += 1
+
 
 
                                         break
@@ -3633,6 +4535,15 @@ class Parser:
                                             indent_column_4 = list(indent_column_3)
                                             partial_tab_offset_4 = partial_tab_offset_3
                                             partial_tab_width_4 = partial_tab_width_3
+                                            _re = re.compile('[0-1]')
+                                            # _match = name.match(buf, offset_5)
+                                            # if _match:
+                                            #     _end = _match.end()
+                                            #     column_5 += (_end - offset_5)
+                                            #     offset_5 = _end
+                                            # else:
+                                            #     offset_5 = -1
+                                            #     break
                                             if offset_5 == buf_eof:
                                                 offset_5 = -1
                                                 break
@@ -3646,11 +4557,21 @@ class Parser:
                                                 offset_5 = -1
                                                 break
 
+
                                             break
                                         if offset_5 != -1:
                                             offset_4 = -1
                                             break
 
+                                        _re = re.compile('[0-9a-fA-F]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -3670,6 +4591,16 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+
+                                        _re = re.compile('[0-9a-fA-F]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -3688,6 +4619,7 @@ class Parser:
                                         else:
                                             offset_4 = -1
                                             break
+
 
 
                                         break
@@ -3729,6 +4661,15 @@ class Parser:
                                                 offset_5 = -1
                                                 break
 
+                                            _re = re.compile('[0-1]')
+                                            # _match = name.match(buf, offset_5)
+                                            # if _match:
+                                            #     _end = _match.end()
+                                            #     column_5 += (_end - offset_5)
+                                            #     offset_5 = _end
+                                            # else:
+                                            #     offset_5 = -1
+                                            #     break
                                             if offset_5 == buf_eof:
                                                 offset_5 = -1
                                                 break
@@ -3742,6 +4683,7 @@ class Parser:
                                                 offset_5 = -1
                                                 break
 
+
                                             break
                                         if offset_5 != -1:
                                             offset_4 = -1
@@ -3754,6 +4696,15 @@ class Parser:
                                             indent_column_4 = list(indent_column_3)
                                             partial_tab_offset_4 = partial_tab_offset_3
                                             partial_tab_width_4 = partial_tab_width_3
+                                            _re = re.compile('(?:D|d)')
+                                            # _match = name.match(buf, offset_5)
+                                            # if _match:
+                                            #     _end = _match.end()
+                                            #     column_5 += (_end - offset_5)
+                                            #     offset_5 = _end
+                                            # else:
+                                            #     offset_5 = -1
+                                            #     break
                                             if buf[offset_5:offset_5+1] == 'D':
                                                 offset_5 += 1
                                                 column_5 += 1
@@ -3764,6 +4715,16 @@ class Parser:
                                                 offset_5 = -1
                                                 break
 
+
+                                            _re = re.compile('[8-9A-F]')
+                                            # _match = name.match(buf, offset_5)
+                                            # if _match:
+                                            #     _end = _match.end()
+                                            #     column_5 += (_end - offset_5)
+                                            #     offset_5 = _end
+                                            # else:
+                                            #     offset_5 = -1
+                                            #     break
                                             if offset_5 == buf_eof:
                                                 offset_5 = -1
                                                 break
@@ -3780,11 +4741,21 @@ class Parser:
                                                 offset_5 = -1
                                                 break
 
+
                                             break
                                         if offset_5 != -1:
                                             offset_4 = -1
                                             break
 
+                                        _re = re.compile('[0-9a-fA-F]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -3804,6 +4775,16 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+
+                                        _re = re.compile('[0-9a-fA-F]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -3823,6 +4804,16 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+
+                                        _re = re.compile('[0-9a-fA-F]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -3842,6 +4833,16 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+
+                                        _re = re.compile('[0-9a-fA-F]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -3860,6 +4861,7 @@ class Parser:
                                         else:
                                             offset_4 = -1
                                             break
+
 
 
                                         break
@@ -3901,6 +4903,15 @@ class Parser:
                                                 offset_5 = -1
                                                 break
 
+                                            _re = re.compile('[0-1]')
+                                            # _match = name.match(buf, offset_5)
+                                            # if _match:
+                                            #     _end = _match.end()
+                                            #     column_5 += (_end - offset_5)
+                                            #     offset_5 = _end
+                                            # else:
+                                            #     offset_5 = -1
+                                            #     break
                                             if offset_5 == buf_eof:
                                                 offset_5 = -1
                                                 break
@@ -3913,6 +4924,7 @@ class Parser:
                                             else:
                                                 offset_5 = -1
                                                 break
+
 
                                             break
                                         if offset_5 != -1:
@@ -3933,6 +4945,15 @@ class Parser:
                                                 offset_5 = -1
                                                 break
 
+                                            _re = re.compile('(?:D|d)')
+                                            # _match = name.match(buf, offset_5)
+                                            # if _match:
+                                            #     _end = _match.end()
+                                            #     column_5 += (_end - offset_5)
+                                            #     offset_5 = _end
+                                            # else:
+                                            #     offset_5 = -1
+                                            #     break
                                             if buf[offset_5:offset_5+1] == 'D':
                                                 offset_5 += 1
                                                 column_5 += 1
@@ -3943,6 +4964,16 @@ class Parser:
                                                 offset_5 = -1
                                                 break
 
+
+                                            _re = re.compile('[8-9A-F]')
+                                            # _match = name.match(buf, offset_5)
+                                            # if _match:
+                                            #     _end = _match.end()
+                                            #     column_5 += (_end - offset_5)
+                                            #     offset_5 = _end
+                                            # else:
+                                            #     offset_5 = -1
+                                            #     break
                                             if offset_5 == buf_eof:
                                                 offset_5 = -1
                                                 break
@@ -3959,11 +4990,21 @@ class Parser:
                                                 offset_5 = -1
                                                 break
 
+
                                             break
                                         if offset_5 != -1:
                                             offset_4 = -1
                                             break
 
+                                        _re = re.compile('[0-9a-fA-F]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -3983,6 +5024,16 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+
+                                        _re = re.compile('[0-9a-fA-F]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -4002,6 +5053,16 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+
+                                        _re = re.compile('[0-9a-fA-F]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -4021,6 +5082,16 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+
+                                        _re = re.compile('[0-9a-fA-F]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -4040,6 +5111,16 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+
+                                        _re = re.compile('[0-9a-fA-F]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -4059,6 +5140,16 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+
+                                        _re = re.compile('[0-9a-fA-F]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -4078,6 +5169,16 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+
+                                        _re = re.compile('[0-9a-fA-F]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -4097,6 +5198,16 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+
+                                        _re = re.compile('[0-9a-fA-F]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -4115,6 +5226,7 @@ class Parser:
                                         else:
                                             offset_4 = -1
                                             break
+
 
 
                                         break
@@ -4142,6 +5254,15 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+                                        _re = re.compile('[\"\\\/bfnrt\'\n]')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -4181,6 +5302,7 @@ class Parser:
                                         else:
                                             offset_4 = -1
                                             break
+
 
 
                                         break
@@ -4297,6 +5419,15 @@ class Parser:
                         offset_1 = -1
                         break
 
+                    _re = re.compile('(?:[^\n])^{0, }')
+                    # _match = name.match(buf, offset_1)
+                    # if _match:
+                    #     _end = _match.end()
+                    #     column_1 += (_end - offset_1)
+                    #     offset_1 = _end
+                    # else:
+                    #     offset_1 = -1
+                    #     break
                     count_1 = 0
                     while True:
                         offset_2 = offset_1
@@ -4333,6 +5464,7 @@ class Parser:
                         count_1 += 1
                     if offset_1 == -1:
                         break
+
 
                     count_1 = 0
                     while offset_1 < buf_eof:
@@ -4450,6 +5582,15 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+                                        _re = re.compile('(?:[^\n])^{0, }')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         count_3 = 0
                                         while True:
                                             offset_5 = offset_4
@@ -4486,6 +5627,7 @@ class Parser:
                                             count_3 += 1
                                         if offset_4 == -1:
                                             break
+
 
                                         count_3 = 0
                                         while offset_4 < buf_eof:
@@ -4583,6 +5725,15 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+                                        _re = re.compile('(?:[^\n])^{0, }')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         count_3 = 0
                                         while True:
                                             offset_5 = offset_4
@@ -4619,6 +5770,7 @@ class Parser:
                                             count_3 += 1
                                         if offset_4 == -1:
                                             break
+
 
                                         count_3 = 0
                                         while offset_4 < buf_eof:
@@ -4728,6 +5880,15 @@ class Parser:
                                     offset_3 = -1
                                     break
 
+                                _re = re.compile('(?:[^\n])^{0, }')
+                                # _match = name.match(buf, offset_3)
+                                # if _match:
+                                #     _end = _match.end()
+                                #     column_3 += (_end - offset_3)
+                                #     offset_3 = _end
+                                # else:
+                                #     offset_3 = -1
+                                #     break
                                 count_2 = 0
                                 while True:
                                     offset_4 = offset_3
@@ -4764,6 +5925,7 @@ class Parser:
                                     count_2 += 1
                                 if offset_3 == -1:
                                     break
+
 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
@@ -4870,6 +6032,15 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+                                        _re = re.compile('(?:[^\n])^{0, }')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         count_3 = 0
                                         while True:
                                             offset_5 = offset_4
@@ -4906,6 +6077,7 @@ class Parser:
                                             count_3 += 1
                                         if offset_4 == -1:
                                             break
+
 
                                         count_3 = 0
                                         while offset_4 < buf_eof:
@@ -5060,6 +6232,15 @@ class Parser:
                         offset_1 = -1
                         break
 
+                    _re = re.compile('(?:[^\n])^{0, }')
+                    # _match = name.match(buf, offset_1)
+                    # if _match:
+                    #     _end = _match.end()
+                    #     column_1 += (_end - offset_1)
+                    #     offset_1 = _end
+                    # else:
+                    #     offset_1 = -1
+                    #     break
                     count_1 = 0
                     while True:
                         offset_2 = offset_1
@@ -5096,6 +6277,7 @@ class Parser:
                         count_1 += 1
                     if offset_1 == -1:
                         break
+
 
                     count_1 = 0
                     while offset_1 < buf_eof:
@@ -5209,6 +6391,15 @@ class Parser:
                                         offset_4 = -1
                                         break
 
+                                    _re = re.compile('(?:[^\n])^{0, }')
+                                    # _match = name.match(buf, offset_4)
+                                    # if _match:
+                                    #     _end = _match.end()
+                                    #     column_4 += (_end - offset_4)
+                                    #     offset_4 = _end
+                                    # else:
+                                    #     offset_4 = -1
+                                    #     break
                                     count_2 = 0
                                     while True:
                                         offset_5 = offset_4
@@ -5245,6 +6436,7 @@ class Parser:
                                         count_2 += 1
                                     if offset_4 == -1:
                                         break
+
 
                                     count_2 = 0
                                     while offset_4 < buf_eof:
@@ -5342,6 +6534,15 @@ class Parser:
                                         offset_4 = -1
                                         break
 
+                                    _re = re.compile('(?:[^\n])^{0, }')
+                                    # _match = name.match(buf, offset_4)
+                                    # if _match:
+                                    #     _end = _match.end()
+                                    #     column_4 += (_end - offset_4)
+                                    #     offset_4 = _end
+                                    # else:
+                                    #     offset_4 = -1
+                                    #     break
                                     count_2 = 0
                                     while True:
                                         offset_5 = offset_4
@@ -5378,6 +6579,7 @@ class Parser:
                                         count_2 += 1
                                     if offset_4 == -1:
                                         break
+
 
                                     count_2 = 0
                                     while offset_4 < buf_eof:
@@ -5484,6 +6686,15 @@ class Parser:
                                     offset_3 = -1
                                     break
 
+                                _re = re.compile('(?:[^\n])^{0, }')
+                                # _match = name.match(buf, offset_3)
+                                # if _match:
+                                #     _end = _match.end()
+                                #     column_3 += (_end - offset_3)
+                                #     offset_3 = _end
+                                # else:
+                                #     offset_3 = -1
+                                #     break
                                 count_2 = 0
                                 while True:
                                     offset_4 = offset_3
@@ -5520,6 +6731,7 @@ class Parser:
                                     count_2 += 1
                                 if offset_3 == -1:
                                     break
+
 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
@@ -5626,6 +6838,15 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+                                        _re = re.compile('(?:[^\n])^{0, }')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         count_3 = 0
                                         while True:
                                             offset_5 = offset_4
@@ -5662,6 +6883,7 @@ class Parser:
                                             count_3 += 1
                                         if offset_4 == -1:
                                             break
+
 
                                         count_3 = 0
                                         while offset_4 < buf_eof:
@@ -5761,6 +6983,15 @@ class Parser:
                                                 offset_5 = -1
                                                 break
 
+                                            _re = re.compile('(?:[^\n])^{0, }')
+                                            # _match = name.match(buf, offset_5)
+                                            # if _match:
+                                            #     _end = _match.end()
+                                            #     column_5 += (_end - offset_5)
+                                            #     offset_5 = _end
+                                            # else:
+                                            #     offset_5 = -1
+                                            #     break
                                             count_3 = 0
                                             while True:
                                                 offset_6 = offset_5
@@ -5797,6 +7028,7 @@ class Parser:
                                                 count_3 += 1
                                             if offset_5 == -1:
                                                 break
+
 
                                             count_3 = 0
                                             while offset_5 < buf_eof:
@@ -5894,6 +7126,15 @@ class Parser:
                                                 offset_5 = -1
                                                 break
 
+                                            _re = re.compile('(?:[^\n])^{0, }')
+                                            # _match = name.match(buf, offset_5)
+                                            # if _match:
+                                            #     _end = _match.end()
+                                            #     column_5 += (_end - offset_5)
+                                            #     offset_5 = _end
+                                            # else:
+                                            #     offset_5 = -1
+                                            #     break
                                             count_3 = 0
                                             while True:
                                                 offset_6 = offset_5
@@ -5930,6 +7171,7 @@ class Parser:
                                                 count_3 += 1
                                             if offset_5 == -1:
                                                 break
+
 
                                             count_3 = 0
                                             while offset_5 < buf_eof:
@@ -6036,6 +7278,15 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+                                        _re = re.compile('(?:[^\n])^{0, }')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         count_3 = 0
                                         while True:
                                             offset_5 = offset_4
@@ -6072,6 +7323,7 @@ class Parser:
                                             count_3 += 1
                                         if offset_4 == -1:
                                             break
+
 
                                         count_3 = 0
                                         while offset_4 < buf_eof:
@@ -6193,6 +7445,15 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+                                        _re = re.compile('(?:[^\n])^{0, }')
+                                        # _match = name.match(buf, offset_4)
+                                        # if _match:
+                                        #     _end = _match.end()
+                                        #     column_4 += (_end - offset_4)
+                                        #     offset_4 = _end
+                                        # else:
+                                        #     offset_4 = -1
+                                        #     break
                                         count_3 = 0
                                         while True:
                                             offset_5 = offset_4
@@ -6229,6 +7490,7 @@ class Parser:
                                             count_3 += 1
                                         if offset_4 == -1:
                                             break
+
 
                                         count_3 = 0
                                         while offset_4 < buf_eof:
