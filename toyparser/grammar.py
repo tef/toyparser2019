@@ -79,8 +79,9 @@ def build_class_dict(attrs, start, whitespace, newline, tabstop, capture):
 
     rules = {k:r.canonical(builder).make_rule() for k,r in rules.items()}
 
-    rules = process_rules(start, rules, rule_options)
+    rules, extra_attrs = process_rules(start, rules, rule_options)
     
+    new_attrs.update(extra_attrs)
 
     new_attrs['rules'] = rules
     new_attrs['rule_options'] = rule_options
@@ -219,6 +220,7 @@ VARIABLE = 'variable'
 UNTIL = 'until'
 SET_VAR = 'set-variable'
 SHUNT = 'shunt'
+REGULAR ='regular'
 
 RULE = 'rule'
 LITERAL = 'literal'
@@ -720,6 +722,20 @@ class ParserRule:
                 r.visit_head(visitor)
         visitor(self)
 
+    def transform_head(self, visitor):
+        self = visitor(self)
+        if self.rules:
+            self.rules = [r.transform_head(visitor) for r in self.rules]
+        return self 
+
+    def transform_tail(self, visitor):
+        if self.rules:
+            rules = [r.transform_tail(visitor) for r in self.rules]
+            return visitor(self, rules)
+        else:
+            return visitor(self, self.rules)
+
+
     def inline(self, name, rule, rule_options):
         if self.kind == RULE:
             if self.args['name'] == name and (self.args['inline'] or rule_options.get('inline')):
@@ -734,6 +750,7 @@ class ParserRule:
             
 def process_rules(start, rules, rule_options):
     rules = dict(rules)
+    extras = {}
     rule_childs = {}
     dont_pop = set()
     if start:
@@ -799,8 +816,32 @@ def process_rules(start, rules, rule_options):
             if safe:
                 rules.pop(n)
 
-    def _nullable(
-    return rules
+    def _regular(rule):
+        if rule.kind == LITERAL:
+            rule.regular = all(isinstance(l, str) for l in rule.args['literals'])
+        elif rule.kind == RANGE:
+            if any(v for v in rule.args['named_ranges'].values()):
+                rule.regular = False
+            else:
+                rule.regular = all(isinstance(l, str) for l in rule.args['range']) 
+        elif rule.kind == REPEAT:
+            rule.regular = all(r.regular for r in rule.rules)
+        elif rule.kind == SEQUENCE:
+            rule.regular = all(r.regular for r in rule.rules)
+        elif rule.kind == CHOICE:
+            rule.regular = all(r.regular for r in rule.rules)
+        else:
+            rule.regular = False
+    def _lift_regular(rule):
+        if rule.regular:
+            return ParserRule(REGULAR, args=dict(rule=rule))
+        return rule
+
+    for name in list(rules):
+        rules[name].visit_tail(_regular)
+        rules[name] = rules[name].transform_head(_lift_regular)
+
+    return rules, extras
 
 # Parser
 
@@ -855,6 +896,7 @@ class VarBuilder:
 
 def compile_python(grammar, cython=False, wrap=False):
     memoized = {}
+    regexes = {}
     node = "Node"
     if cython:
         wrap = False
@@ -865,7 +907,21 @@ def compile_python(grammar, cython=False, wrap=False):
 
     def build_steps(rule, steps, offset, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children, count, values):
         # steps.append(f"print('start', {repr(str(rule))})")
-        if rule.kind == SEQUENCE:
+        if rule.kind == REGULAR:
+            regexes
+            build_steps(rule.args['rule'], steps, offset, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children, count, values)
+        elif rule.kind == SEQUENCE:
+            regex_name = "name"
+            steps.extend((
+                f"# _match = {regex_name}.match(buf, {offset})",
+                f"# if _match:",
+                f"#     _end = _match.end()",
+                f"#     {column} += (_end - {offset})",
+                f"#     {offset} = _end",
+                f"# else:",
+                f"#     {offset} = -1",
+                f"#     break",
+            ))
             build_subrules(rule.rules, steps, offset, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children, count, values)
 
         elif rule.kind == MEMOIZE:

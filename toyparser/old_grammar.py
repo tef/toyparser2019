@@ -14,6 +14,7 @@ ACCEPT_IF = 'accept-if'
 REJECT_IF = 'reject-if'
 COUNT = 'count'
 VALUE = 'value'
+REGULAR = 'regular'
 
 RULE = 'rule'
 LITERAL = 'literal'
@@ -246,6 +247,8 @@ class Parser:
                     return None
             print('trace', 'ok', state.offset)
             return state
+        elif rule.kind == REGULAR:
+            return self.parse_rule(rule.args['rule'], state)
 
         elif rule.kind == RULE:
             name = rule.args['name']
@@ -470,7 +473,9 @@ def compile(grammar, builder=None):
 
     def build_steps(rule, steps, state, count):
         # steps.append(f"print('start', {repr(str(rule))})")
-        if rule.kind == SEQUENCE:
+        if rule.kind == REGULAR:
+            build_steps(rule.args['rule'], steps, state, count)
+        elif rule.kind == SEQUENCE:
             build_subrules(rule.rules, steps, state, count)
 
         elif rule.kind == CAPTURE:
