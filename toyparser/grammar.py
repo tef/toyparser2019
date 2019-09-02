@@ -694,7 +694,7 @@ class Builtins:
     newline = GrammarNode(NEWLINE)
 
 class ParserRule:
-    def __init__(self, kind, *, key=None,  args=None, rules=None, nullable=True, regular=False):
+    def __init__(self, kind, *, key=None,  args=None, rules=None, nullable=None, regular=None):
         self.kind = kind
         self.args = args if args else None
         self.rules = rules if rules else None
@@ -708,11 +708,17 @@ class ParserRule:
 
         return "({} {})".format(self.kind, rules or args)
 
-    def visit(self, visitor):
+    def visit_head(self, visitor):
         visitor(self)
         if self.rules:
             for r in self.rules:
-                r.visit(visitor)
+                r.visit_head(visitor)
+
+    def visit_tail(self, visitor):
+        if self.rules:
+            for r in self.rules:
+                r.visit_head(visitor)
+        visitor(self)
 
     def inline(self, name, rule, rule_options):
         if self.kind == RULE:
@@ -743,7 +749,7 @@ def process_rules(start, rules, rule_options):
                 if indent: dont_pop.add(indent)
                 if dedent: dont_pop.add(dedent)
             
-        rule.visit(visits)
+        rule.visit_head(visits)
         rule_childs[name] = seen
 
     inlineable = {}
@@ -788,10 +794,12 @@ def process_rules(start, rules, rule_options):
                         safe = False
                     if rule.kind == SET_LINE_PREFIX and rule.args.get('dedent') == n:
                         safe = False
-                rule.visit(_visit)
+                rule.visit_head(_visit)
                 if not safe: break
             if safe:
                 rules.pop(n)
+
+    def _nullable(
     return rules
 
 # Parser
