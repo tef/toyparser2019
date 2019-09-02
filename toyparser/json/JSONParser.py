@@ -1,3 +1,5 @@
+import unicodedata, re
+
 class Node:
     def __init__(self, name, start, end, start_column, end_column, children, value):
         self.name = name
@@ -15,11 +17,15 @@ class Node:
         if self.name == "value": return self.value
         return builder[self.name](buf, self, children)
 
+regex_0 = re.compile('(?:\\[|\\{)')
+regex_1 = re.compile('[0-9a-fA-F]')
+regex_2 = re.compile('[\\"\\\\\\/bfnrt]')
+regex_3 = re.compile('[^\\\\\\"]')
+regex_4 = re.compile('[1-9]')
+regex_5 = re.compile('[0-9]')
+regex_6 = re.compile('(?:e|E)')
+regex_7 = re.compile('(?:\\+|\\-)')
 
-class Indent:
-    def __init__(self, value, parent=None):
-        self.value = value
-        self.parent = parent
 class Parser:
     def __init__(self, tabstop=None, allow_mixed_indent=False):
          self.tabstop = tabstop or 8
@@ -76,6 +82,7 @@ class Parser:
                 else:
                     offset_1 = -1
                     break
+
 
                 break
             if offset_1 == -1:
@@ -249,24 +256,6 @@ class Parser:
                                             offset_4 = -1
                                             break
 
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if 48 <= codepoint <= 57:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 97 <= codepoint <= 102:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 65 <= codepoint <= 70:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        else:
-                                            offset_4 = -1
-                                            break
 
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
@@ -287,6 +276,7 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+
                                         if offset_4 == buf_eof:
                                             offset_4 = -1
                                             break
@@ -305,6 +295,27 @@ class Parser:
                                         else:
                                             offset_4 = -1
                                             break
+
+
+                                        if offset_4 == buf_eof:
+                                            offset_4 = -1
+                                            break
+
+                                        codepoint = ord(buf[offset_4])
+
+                                        if 48 <= codepoint <= 57:
+                                            offset_4 += 1
+                                            column_4 += 1
+                                        elif 97 <= codepoint <= 102:
+                                            offset_4 += 1
+                                            column_4 += 1
+                                        elif 65 <= codepoint <= 70:
+                                            offset_4 += 1
+                                            column_4 += 1
+                                        else:
+                                            offset_4 = -1
+                                            break
+
 
 
                                         break
@@ -367,6 +378,7 @@ class Parser:
                                             break
 
 
+
                                         break
                                     if offset_4 != -1:
                                         offset_3 = offset_4
@@ -400,6 +412,7 @@ class Parser:
                                         else:
                                             offset_4 += 1
                                             column_4 += 1
+
 
 
                                         break
@@ -556,6 +569,7 @@ class Parser:
                                     offset_3 = -1
                                     break
 
+
                                 count_0 = 0
                                 while True:
                                     offset_4 = offset_3
@@ -577,6 +591,7 @@ class Parser:
                                         else:
                                             offset_4 = -1
                                             break
+
 
                                         break
                                     if offset_4 == -1:
@@ -648,6 +663,7 @@ class Parser:
                                             offset_4 = -1
                                             break
 
+
                                         break
                                     if offset_4 == -1:
                                         break
@@ -698,6 +714,7 @@ class Parser:
                                     offset_3 = -1
                                     break
 
+
                                 count_1 = 0
                                 while count_1 < 1:
                                     offset_4 = offset_3
@@ -716,6 +733,7 @@ class Parser:
                                         else:
                                             offset_4 = -1
                                             break
+
 
                                         count_2 = 0
                                         while True:
@@ -738,6 +756,7 @@ class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
+
 
                                                 break
                                             if offset_5 == -1:
@@ -1004,24 +1023,6 @@ class Parser:
                                     offset_3 = -1
                                     break
 
-                                if offset_3 == buf_eof:
-                                    offset_3 = -1
-                                    break
-
-                                codepoint = ord(buf[offset_3])
-
-                                if 48 <= codepoint <= 57:
-                                    offset_3 += 1
-                                    column_3 += 1
-                                elif 97 <= codepoint <= 102:
-                                    offset_3 += 1
-                                    column_3 += 1
-                                elif 65 <= codepoint <= 70:
-                                    offset_3 += 1
-                                    column_3 += 1
-                                else:
-                                    offset_3 = -1
-                                    break
 
                                 if offset_3 == buf_eof:
                                     offset_3 = -1
@@ -1042,6 +1043,7 @@ class Parser:
                                     offset_3 = -1
                                     break
 
+
                                 if offset_3 == buf_eof:
                                     offset_3 = -1
                                     break
@@ -1060,6 +1062,27 @@ class Parser:
                                 else:
                                     offset_3 = -1
                                     break
+
+
+                                if offset_3 == buf_eof:
+                                    offset_3 = -1
+                                    break
+
+                                codepoint = ord(buf[offset_3])
+
+                                if 48 <= codepoint <= 57:
+                                    offset_3 += 1
+                                    column_3 += 1
+                                elif 97 <= codepoint <= 102:
+                                    offset_3 += 1
+                                    column_3 += 1
+                                elif 65 <= codepoint <= 70:
+                                    offset_3 += 1
+                                    column_3 += 1
+                                else:
+                                    offset_3 = -1
+                                    break
+
 
 
                                 break
@@ -1122,6 +1145,7 @@ class Parser:
                                     break
 
 
+
                                 break
                             if offset_3 != -1:
                                 offset_2 = offset_3
@@ -1155,6 +1179,7 @@ class Parser:
                                 else:
                                     offset_3 += 1
                                     column_3 += 1
+
 
 
                                 break
@@ -1471,24 +1496,6 @@ class Parser:
                                                     offset_6 = -1
                                                     break
 
-                                                if offset_6 == buf_eof:
-                                                    offset_6 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_6])
-
-                                                if 48 <= codepoint <= 57:
-                                                    offset_6 += 1
-                                                    column_6 += 1
-                                                elif 97 <= codepoint <= 102:
-                                                    offset_6 += 1
-                                                    column_6 += 1
-                                                elif 65 <= codepoint <= 70:
-                                                    offset_6 += 1
-                                                    column_6 += 1
-                                                else:
-                                                    offset_6 = -1
-                                                    break
 
                                                 if offset_6 == buf_eof:
                                                     offset_6 = -1
@@ -1509,6 +1516,7 @@ class Parser:
                                                     offset_6 = -1
                                                     break
 
+
                                                 if offset_6 == buf_eof:
                                                     offset_6 = -1
                                                     break
@@ -1527,6 +1535,27 @@ class Parser:
                                                 else:
                                                     offset_6 = -1
                                                     break
+
+
+                                                if offset_6 == buf_eof:
+                                                    offset_6 = -1
+                                                    break
+
+                                                codepoint = ord(buf[offset_6])
+
+                                                if 48 <= codepoint <= 57:
+                                                    offset_6 += 1
+                                                    column_6 += 1
+                                                elif 97 <= codepoint <= 102:
+                                                    offset_6 += 1
+                                                    column_6 += 1
+                                                elif 65 <= codepoint <= 70:
+                                                    offset_6 += 1
+                                                    column_6 += 1
+                                                else:
+                                                    offset_6 = -1
+                                                    break
+
 
 
                                                 break
@@ -1589,6 +1618,7 @@ class Parser:
                                                     break
 
 
+
                                                 break
                                             if offset_6 != -1:
                                                 offset_5 = offset_6
@@ -1622,6 +1652,7 @@ class Parser:
                                                 else:
                                                     offset_6 += 1
                                                     column_6 += 1
+
 
 
                                                 break

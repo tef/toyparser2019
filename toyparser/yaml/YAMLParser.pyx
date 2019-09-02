@@ -1,5 +1,6 @@
 #cython: language_level=3, bounds_check=False
-import unicodedata
+import unicodedata, re
+
 class Node:
     def __init__(self, name, start, end, start_column, end_column, children, value):
         self.name = name
@@ -17,12 +18,16 @@ class Node:
         if self.name == "value": return self.value
         return builder[self.name](buf, self, children)
 
-cdef class Indent:
-    cdef int value
-    cdef Indent parent
-    def __init__(self, value, parent=None):
-        self.value = value
-        self.parent = parent
+regex_0 = re.compile('[a-zA-Z_]')
+regex_1 = re.compile('[\\-\\+]')
+regex_2 = re.compile('[0-9]')
+regex_3 = re.compile('(?:e|E)')
+regex_4 = re.compile('(?:\\+|\\-)')
+regex_5 = re.compile('[0-9a-fA-F]')
+regex_6 = re.compile('[\\"\\\\\\/bfnrt]')
+regex_7 = re.compile('[^\\\\\\"]')
+regex_8 = re.compile('[^\\n]')
+
 cdef class Parser:
     cdef dict cache
     cdef int tabstop
@@ -386,6 +391,7 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
 
+
                                 break
                             if offset_3 == -1:
                                 break
@@ -500,6 +506,7 @@ cdef class Parser:
                             offset_2 = -1
                             break
 
+
                         break
                     if offset_2 == -1:
                         break
@@ -537,6 +544,7 @@ cdef class Parser:
                         else:
                             offset_2 = -1
                             break
+
 
                         break
                     if offset_2 == -1:
@@ -594,6 +602,7 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
 
+
                                 break
                             if offset_3 == -1:
                                 break
@@ -644,6 +653,7 @@ cdef class Parser:
                             offset_2 = -1
                             break
 
+
                         count_1 = 0
                         while count_1 < 1:
                             offset_3 = offset_2
@@ -662,6 +672,7 @@ cdef class Parser:
                                 else:
                                     offset_3 = -1
                                     break
+
 
                                 count_2 = 0
                                 while True:
@@ -684,6 +695,7 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
+
 
                                         break
                                     if offset_4 == -1:
@@ -813,24 +825,6 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
 
-                                if offset_3 == buf_eof:
-                                    offset_3 = -1
-                                    break
-
-                                codepoint = (buf[offset_3])
-
-                                if 48 <= codepoint <= 57:
-                                    offset_3 += 1
-                                    column_3 += 1
-                                elif 97 <= codepoint <= 102:
-                                    offset_3 += 1
-                                    column_3 += 1
-                                elif 65 <= codepoint <= 70:
-                                    offset_3 += 1
-                                    column_3 += 1
-                                else:
-                                    offset_3 = -1
-                                    break
 
                                 if offset_3 == buf_eof:
                                     offset_3 = -1
@@ -851,6 +845,7 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
 
+
                                 if offset_3 == buf_eof:
                                     offset_3 = -1
                                     break
@@ -869,6 +864,27 @@ cdef class Parser:
                                 else:
                                     offset_3 = -1
                                     break
+
+
+                                if offset_3 == buf_eof:
+                                    offset_3 = -1
+                                    break
+
+                                codepoint = (buf[offset_3])
+
+                                if 48 <= codepoint <= 57:
+                                    offset_3 += 1
+                                    column_3 += 1
+                                elif 97 <= codepoint <= 102:
+                                    offset_3 += 1
+                                    column_3 += 1
+                                elif 65 <= codepoint <= 70:
+                                    offset_3 += 1
+                                    column_3 += 1
+                                else:
+                                    offset_3 = -1
+                                    break
+
 
 
                                 break
@@ -931,6 +947,7 @@ cdef class Parser:
                                     break
 
 
+
                                 break
                             if offset_3 != -1:
                                 offset_2 = offset_3
@@ -964,6 +981,7 @@ cdef class Parser:
                                 else:
                                     offset_3 += 1
                                     column_3 += 1
+
 
 
                                 break
@@ -1830,6 +1848,7 @@ cdef class Parser:
                                     else:
                                         offset_3 += 1
                                         column_3 += 1
+
 
                                     break
                                 if offset_3 == -1:

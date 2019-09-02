@@ -860,8 +860,7 @@ def process_rules(start, rules, rule_options):
     def _lift_regular(rule):
         if rule.regular:
             if rule.kind != LITERAL or len(rule.args['literals']) > 1:
-                regex= _build_regex(rule)
-                return ParserRule(REGULAR, args=dict(regex=regex, rule=rule))
+                return ParserRule(REGULAR, args=dict(rule=rule))
         return rule
 
     for name in list(rules):
@@ -923,11 +922,11 @@ class VarBuilder:
 
 def compile_python(grammar, cython=False, wrap=False):
     memoized = {}
-    regexes = []
+    regexes = {}
     node = "Node"
     if cython:
         wrap = False
-            
+
     def build_subrules(rules, steps, offset, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children, count, values):
         for subrule in rules:
             build_steps(subrule, steps, offset, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children, count, values)
@@ -935,18 +934,18 @@ def compile_python(grammar, cython=False, wrap=False):
     def build_steps(rule, steps, offset, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children, count, values):
         # steps.append(f"print('start', {repr(str(rule))})")
         if rule.kind == REGULAR:
-            print(rule.args['regex'].replace('\\','_').encode('ascii',errors="replace"))
-            regex_name = "name"
-            steps.extend((
-                f"_re = re.compile('{rule.args['regex']}')",
-                f"# _match = {regex_name}.match(buf, {offset})",
-                f"# if _match:",
-                f"#     _end = _match.end()",
-                f"#     {column} += (_end - {offset})",
-                f"#     {offset} = _end",
-                f"# else:",
-                f"#     {offset} = -1",
-                f"#     break",
+            regex = rule.args['name']
+            if 0:steps.extend((
+                f"_match = {regex}.match(buf, {offset})",
+                f"print({repr(rule.args['regex'])})",
+                f"print(('no: ' + buf[{offset}:{offset}+15]) if not _match else buf[{offset}:_match.end()])",
+                f"if _match:",
+                f"    _end = _match.end()",
+                f"    {column} += (_end - {offset})",
+                f"    {offset} = _end",
+                f"else:",
+                f"    {offset} = -1",
+                f"    break",
             ))
             build_steps(rule.args['rule'], steps, offset, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children, count, values)
         elif rule.kind == SEQUENCE:
@@ -1969,6 +1968,43 @@ def compile_python(grammar, cython=False, wrap=False):
         steps.append("")
         return steps
 
+    def _build_regex(rule):
+        if rule.kind == LITERAL:
+            return f'(?:{"|".join(re.escape(l) for l in rule.args["literals"])})'
+        if rule.kind == RANGE:
+            out = []
+            def _f(x):
+                if 32 < ord(x)< 127 :return re.escape(x)
+                return repr(x)[1:-1]
+            for r in rule.args['range']:
+                if len(r) == 1:
+                    out.append(_f(r))
+                else:
+                    out.append(f"{_f(r[0])}-{_f(r[2])}")
+            if rule.args['invert']:
+                return f"[^{''.join(out)}]"
+            return f"[{''.join(out)}]"
+        if rule.kind == SEQUENCE:
+            return "".join(_build_regex(r) for r in self.rules)
+        if rule.kind == CHOICE:
+            return f'(?:{"|".join(_build_regex(r) for r in self.rules)})'
+        if rule.kind == REPEAT:
+            num = f"{rule.args['min'] or 0}, {rule.args['max'] or''}"
+            return f'(?:{"".join(_build_regex(r) for r in rule.rules)})^' '{' f'{num}' '}'
+    def _visit(node):
+        if node.kind ==REGULAR:
+            regex = _build_regex(node.args['rule'])
+            if regex not in regexes:
+                name = VarBuilder('regex', n=len(regexes))
+                regexes[regex] = name
+            else:
+                name = regexes[regex]
+            node.args['regex'] = regex
+            node.args['name'] = name
+    for rule in grammar.rules.values():
+        rule.visit_tail(_visit)
+            
+
     output = ParserBuilder([], 0, {})
     grammar_newline = tuple(n for n in grammar.newline if n!='\r\n') if grammar.newline else ()
     newline = repr(tuple(grammar.newline)) if grammar.newline else '()'
@@ -1979,9 +2015,14 @@ def compile_python(grammar, cython=False, wrap=False):
     if wrap:
         output.append("def _build():")
         output = output.add_indent()
+    if cython:
+        output.append('#cython: language_level=3, bounds_check=False')
 
     old_output = output
-    parse_node = (
+
+    output.extend((
+        f"import unicodedata, re",
+        f"",
         f"class Node:",
         f"    def __init__(self, name, start, end, start_column, end_column, children, value):",
         f"        self.name = name",
@@ -1999,19 +2040,14 @@ def compile_python(grammar, cython=False, wrap=False):
         f'        if self.name == "value": return self.value',
         f'        return builder[self.name](buf, self, children)',
         f'',
-    )
-    if cython:
-        output.append('#cython: language_level=3, bounds_check=False')
-        output.append("import unicodedata, re")
+    ))
+
+    for regex, value in regexes.items():
+        output.append(f"{value} = re.compile({repr(regex)})")
+    if regexes:
         output.append("")
-        output.extend(parse_node)
+    if cython:
         output.extend((
-            f"cdef class Indent:",
-            f"    cdef int value",
-            f"    cdef Indent parent", 
-            f"    def __init__(self, value, parent=None):",
-            f"        self.value = value",
-            f"        self.parent = parent",
             f"cdef class Parser:",
             f"    cdef dict cache",
             f"    cdef int tabstop",
@@ -2026,16 +2062,7 @@ def compile_python(grammar, cython=False, wrap=False):
         output = output.add_indent(4)
 
     else:
-        output.append("import unicodedata, re")
-        output.append("")
-        output.extend(parse_node)
-        output.append("")
-
         output.extend((
-            f"class Indent:",
-            f"    def __init__(self, value, parent=None):",
-            f"        self.value = value",
-            f"        self.parent = parent",
             f"class Parser:",
             f"    def __init__(self, tabstop=None, allow_mixed_indent=False):",
             f"         self.tabstop = tabstop or {grammar.tabstop}",
@@ -2045,8 +2072,6 @@ def compile_python(grammar, cython=False, wrap=False):
         ))
 
         output = output.add_indent(4)
-        if wrap:
-            output.extend(parse_node)
 
     start_rule = grammar.start
     output.extend((
@@ -2118,8 +2143,7 @@ def parser(grammar):
     output = compile_python(grammar, wrap=True)
     glob, loc = {}, {}
     exec(output, glob, loc)
-    import unicodedata
-    return loc['_build'](unicodedata)()
+    return loc['_build']()()
 
 class Grammar(metaclass=Metaclass):
     pass

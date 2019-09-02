@@ -98,7 +98,7 @@ class RSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n", "\uFEFF
             with self.case(), self.capture_node('tagged'):
                 self.literal('@')
                 with self.capture_node('identifier', nested=False):
-                    self.range("a-z", "a-Z")
+                    self.range("a-z", "A-Z")
                     with self.repeat():
                         self.range("0-9", "a-z","A-Z","_")
                 self.literal(' ')
