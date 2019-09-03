@@ -459,52 +459,6 @@ class Parser:
             break
         return offset_0, column_0, partial_tab_offset_0, partial_tab_width_0
 
-    def parse_json_string(self, buf, buf_start, buf_eof, offset_0, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
-        while True: # note: return at end of loop
-            if buf[offset_0:offset_0+1] == '"':
-                offset_0 += 1
-                column_0 += 1
-            else:
-                offset_0 = -1
-                break
-
-            offset_1 = offset_0
-            column_1 = column_0
-            children_1 = None
-            value_0 = Node(None, offset_0, offset_0, column_0, column_0, children_1, None)
-            while True: # start capture
-                _match = regex_1.match(buf, offset_1)
-                if _match:
-                    _end = _match.end()
-                    column_1 += (_end - offset_1)
-                    offset_1 = _end
-                else:
-                    offset_1 = -1
-                    break
-
-                break
-            if offset_1 == -1:
-                offset_0 = -1
-                break
-            value_0.name = 'string'
-            value_0.end = offset_1
-            value_0.end_column = column_1
-            value_0.value = None
-            children_0.append(value_0)
-            offset_0 = offset_1
-            column_0 = column_1
-
-            if buf[offset_0:offset_0+1] == '"':
-                offset_0 += 1
-                column_0 += 1
-            else:
-                offset_0 = -1
-                break
-
-
-            break
-        return offset_0, column_0, partial_tab_offset_0, partial_tab_width_0
-
     def parse_json_list(self, buf, buf_start, buf_eof, offset_0, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
         while True: # note: return at end of loop
             if buf[offset_0:offset_0+1] == '[':
@@ -871,8 +825,45 @@ class Parser:
                                 children_4 = []
                                 value_3 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
                                 while True: # start capture
-                                    offset_4, column_4, partial_tab_offset_2, partial_tab_width_2 = self.parse_json_string(buf, buf_start, buf_eof, offset_4, column_4, indent_column_2, prefix_0, children_4, partial_tab_offset_2, partial_tab_width_2)
-                                    if offset_4 == -1: break
+                                    if buf[offset_4:offset_4+1] == '"':
+                                        offset_4 += 1
+                                        column_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
+
+                                    offset_5 = offset_4
+                                    column_5 = column_4
+                                    children_5 = None
+                                    value_4 = Node(None, offset_4, offset_4, column_4, column_4, children_5, None)
+                                    while True: # start capture
+                                        _match = regex_1.match(buf, offset_5)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_5 += (_end - offset_5)
+                                            offset_5 = _end
+                                        else:
+                                            offset_5 = -1
+                                            break
+
+                                        break
+                                    if offset_5 == -1:
+                                        offset_4 = -1
+                                        break
+                                    value_4.name = 'string'
+                                    value_4.end = offset_5
+                                    value_4.end_column = column_5
+                                    value_4.value = None
+                                    children_4.append(value_4)
+                                    offset_4 = offset_5
+                                    column_4 = column_5
+
+                                    if buf[offset_4:offset_4+1] == '"':
+                                        offset_4 += 1
+                                        column_4 += 1
+                                    else:
+                                        offset_4 = -1
+                                        break
 
 
                                     count_2 = 0

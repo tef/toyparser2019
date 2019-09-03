@@ -15,7 +15,7 @@ builder = {
     'null': (lambda buf, node, children: None),
 }
 
-class JSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n"]):
+class JSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n"], inline=True):
     @rule()
     def document(self):
         self.whitespace()
@@ -75,7 +75,7 @@ class JSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n"]):
     @rule()
     def json_string(self):
         self.literal("\"")
-        with self.capture_node("string", nested=False), self.repeat(), self.choice():
+        with self.capture_node("string", nested=False), self.regular(), self.repeat(), self.choice():
             with self.case():
                 self.literal("\\u")
                 self.range("0-9", "a-f", "A-F")

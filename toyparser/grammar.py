@@ -40,59 +40,9 @@ class Metaclass(type):
     @classmethod
     def __prepare__(metacls, name, bases, **args):
         return GrammarDict({k:v for k,v in Builtins.__dict__.items() if not k.startswith("_")})
-    def __new__(metacls, name, bases, attrs, start=None, whitespace=None, newline=None, tabstop=None, capture=None, **args):
-        attrs = build_class_dict(attrs, start, whitespace, newline, tabstop, capture)
+    def __new__(metacls, name, bases, attrs, **args):
+        attrs = build_grammar_rules(attrs, args)
         return super().__new__(metacls, name, bases, attrs)
-
-def build_class_dict(attrs, start, whitespace, newline, tabstop, capture):
-    for name in attrs.named_rules:
-        if name not in attrs:
-            raise BadGrammar('missing rule', name)
-    if whitespace:
-        for x in whitespace:
-            if len(x) != 1: raise BadGrammar('Whitespace characters must be exactly one codepoint.')
-    if newline:
-        for x in newline:
-            if len(x) != 1 and x != "\r\n": raise BadGrammar('Newline characters must be exactly one codepoint, or CRLF.')
-    rules = {}
-    new_attrs = {}
-    for key, value in attrs.items():
-        if key.startswith("_"):
-            new_attrs[key] = value
-        elif value == Builtins.__dict__.get(key):
-            pass # decorators need to be kept as called afterwards, lol
-        elif isinstance(value, GrammarRuleSet):
-            rules[key] = value
-        else:
-            new_attrs[key] = value
-
-    names = {name:attrs.named_rules.get(name, NamedNode(name)) for name in rules}
-
-    builder = FunctionBuilder(names)
-    rule_options = {k:r.options() for k,r in rules.items()}
-    if start is None:
-        candidates = []
-        for name, options in rule_options.items():
-            if options.get('start'):
-                candidates.append(name)
-        if len(candidates)==1:
-            start = candidates[0]
-
-    rules = {k:r.canonical(builder).make_rule() for k,r in rules.items()}
-
-    rules, extra_attrs = process_rules(start, rules, rule_options)
-    
-    new_attrs.update(extra_attrs)
-
-    new_attrs['rules'] = rules
-    new_attrs['rule_options'] = rule_options
-    new_attrs['start'] = start
-    new_attrs['capture'] = capture or start
-    new_attrs['whitespace'] = whitespace
-    new_attrs['newline'] = newline
-    new_attrs['tabstop'] = tabstop or 8
-
-    return new_attrs
 
 class GrammarRule:
     """ Wraps rules that are assigned to the class dictionary"""
@@ -213,14 +163,11 @@ SET_LINE_PREFIX = 'set-line-prefix'
 
 LOOKAHEAD = 'lookahead'
 REJECT = 'reject'
-ACCEPT_IF = 'accept-if'
-REJECT_IF = 'reject-if'
 COUNT = 'count'
 VALUE = 'value'
 VARIABLE = 'variable'
 UNTIL = 'until'
 SET_VAR = 'set-variable'
-SHUNT = 'shunt'
 REGULAR ='regular'
 
 RULE = 'rule'
@@ -236,6 +183,9 @@ CHOICE = 'choice'
 REPEAT = 'repeat'
 MEMOIZE = 'memoize'
 
+SHUNT = 'shunt'
+ACCEPT_IF = 'accept-if'
+REJECT_IF = 'reject-if'
 PRINT = 'print'
 TRACE = 'trace'
 
@@ -519,6 +469,15 @@ class FunctionBuilder:
         self.rules.append(node)
 
     @contextmanager
+    def regular(self, name=None):
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
+        rules = self.rules
+        self.rules = []
+        node = GrammarNode(REGULAR, args=dict(name=name), rules=self.rules)
+        yield node.key
+        rules.append(node)
+        self.rules = rules
+    @contextmanager
     def until(self, offset):
         if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         rules = self.rules
@@ -699,6 +658,176 @@ class Builtins:
     start_of_line = GrammarNode(START_OF_LINE)
     newline = GrammarNode(NEWLINE)
 
+
+def build_grammar_rules(attrs, args):
+    start = args.get('start')
+    whitespace = args.get('whitespace')
+    newline = args.get('newline')
+    capture = args.get('capture')
+    tabstop = args.get('tabstop')
+
+    for name in attrs.named_rules:
+        if name not in attrs:
+            raise BadGrammar('missing rule', name)
+    if whitespace:
+        for x in whitespace:
+            if len(x) != 1: raise BadGrammar('Whitespace characters must be exactly one codepoint.')
+    if newline:
+        for x in newline:
+            if len(x) != 1 and x != "\r\n": raise BadGrammar('Newline characters must be exactly one codepoint, or CRLF.')
+    rules = {}
+    new_attrs = {}
+    for key, value in attrs.items():
+        if key.startswith("_"):
+            new_attrs[key] = value
+        elif value == Builtins.__dict__.get(key):
+            pass # decorators need to be kept as called afterwards, lol
+        elif isinstance(value, GrammarRuleSet):
+            rules[key] = value
+        else:
+            new_attrs[key] = value
+
+    names = {name:attrs.named_rules.get(name, NamedNode(name)) for name in rules}
+
+    builder = FunctionBuilder(names)
+    rule_options = {k:r.options() for k,r in rules.items()}
+    if start is None:
+        candidates = []
+        for name, options in rule_options.items():
+            if options.get('start'):
+                candidates.append(name)
+        if len(candidates)==1:
+            start = candidates[0]
+
+    rules = {k:r.canonical(builder).make_rule() for k,r in rules.items()}
+    
+    grammar_options = {
+            'start' : start,
+            'capture': capture or start,
+            'whitespace': whitespace,
+            'newline': newline,
+            'tabstop': tabstop or 8,
+            'inline': args.get('inline', False)
+    }
+
+    ## inline transform
+
+    rule_childs = {}
+    dont_pop = set()
+    if start:
+        dont_pop.add(start)
+    for name, rule in rules.items():
+        seen = set()
+        def visits(rule):
+            if rule.kind == RULE:
+                seen.add(rule.args['name'])
+            if rule.kind == SET_LINE_PREFIX:
+                indent = rule.args['indent']
+                dedent = rule.args['dedent']
+                if indent: dont_pop.add(indent)
+                if dedent: dont_pop.add(dedent)
+            
+        rule.visit_head(visits)
+        rule_childs[name] = seen
+
+    inlineable = {}
+    to_inline = []
+
+    for name, child in rule_childs.items():
+        seen = set((name,))
+        def walk(childs):
+            for c in childs:
+                if c in seen: return False
+                seen.add(c)
+                if not walk(rule_childs[c]):
+                    return False
+            return True
+        if child:
+            inlineable[name] = walk(child)
+        else:
+            inlineable[name] = True
+            to_inline.append(name)
+        
+    all_rules = set(rules.keys())
+    while to_inline:
+        n = to_inline.pop(0)
+        all_rules.remove(n)
+        for name in all_rules:
+            if name == n: continue
+            if n not in rule_childs[name]: continue
+            rules[name] = rules[name].inline(n, rules[n], rule_options[n], grammar_options)
+            
+            rule_childs[name].remove(n)
+            if not rule_childs[name]:
+                to_inline.append(name)
+        if n not in dont_pop: 
+            safe = True
+            for name, rule in rules.items():
+                if name == n: continue
+                def _visit(rule):
+                    nonlocal safe
+                    if rule.kind == RULE and rule.args['name'] == n:
+                        safe = False
+                    if rule.kind == SET_LINE_PREFIX and rule.args['indent'] == n:
+                        safe = False
+                    if rule.kind == SET_LINE_PREFIX and rule.args.get('dedent') == n:
+                        safe = False
+                rule.visit_head(_visit)
+                if not safe: break
+            if safe:
+                rules.pop(n)
+
+    ## regular
+
+    def _regular(rule):
+        if rule.kind == LITERAL:
+            rule.regular = all(isinstance(l, str) for l in rule.args['literals'])
+        elif rule.kind == RANGE:
+            if any(v for v in rule.args['named_ranges'].values()):
+                rule.regular = False
+            else:
+                rule.regular = all(isinstance(l, str) for l in rule.args['range']) 
+        elif rule.kind == REPEAT:
+            _min,_max= rule.args['min'], rule.args['max'] 
+            rule.regular = all((
+                _min is None or isinstance(_min, int), 
+                _max is None or isinstance(_max, int), 
+                all(r.regular for r in rule.rules)))
+        elif rule.kind == SEQUENCE:
+            rule.regular = all(r.regular for r in rule.rules)
+        elif rule.kind == REGULAR:
+            rule.regular = all(r.regular for r in rule.rules)
+        elif rule.kind == CHOICE:
+            rule.regular = all(r.regular for r in rule.rules)
+        else:
+            rule.regular = False
+    def _lift_regular(rule):
+        if rule.regular:
+            if rule.kind == REGULAR:
+                rule.args['rule'] = ParserRule(SEQUENCE, rules=rule.rules)
+                rule.rules = None
+                return rule
+            if rule.kind == LITERAL and len(rule.args['literals']) == 1:
+                return rule
+            return ParserRule(REGULAR, args=dict(rule=rule, name=None))
+        elif rule.kind == REGULAR:
+            raise Exception('no')
+        return rule
+
+    for name in list(rules):
+        rules[name].visit_tail(_regular)
+        rules[name] = rules[name].transform_head(_lift_regular)
+
+    
+    ## build attrs
+
+    new_attrs.update(grammar_options)
+
+    new_attrs['rules'] = rules
+    new_attrs['rule_options'] = rule_options
+
+    return new_attrs
+
 class ParserRule:
     def __init__(self, kind, *, key=None,  args=None, rules=None, nullable=None, regular=None):
         self.kind = kind
@@ -762,118 +891,17 @@ class ParserRule:
         else:
             return visitor(self, self.rules)
 
-    def inline(self, name, rule, rule_options):
+    def inline(self, name, rule, rule_options, grammar_options):
         if self.kind == RULE:
-            if self.args['name'] == name and (self.args['inline'] or rule_options.get('inline')):
+            if self.args['name'] == name and (grammar_options.get('inline') or self.args['inline'] or rule_options.get('inline')):
                 r = rule.re_key()
                 return r
             else:
                 return self
         if not self.rules:
             return self
-        self.rules = [r.inline(name, rule, rule_options) for r in self.rules]
+        self.rules = [r.inline(name, rule, rule_options, grammar_options) for r in self.rules]
         return self
-
-            
-def process_rules(start, rules, rule_options):
-    rules = dict(rules)
-    extras = {}
-    rule_childs = {}
-    dont_pop = set()
-    if start:
-        dont_pop.add(start)
-    for name, rule in rules.items():
-        seen = set()
-        def visits(rule):
-            if rule.kind == RULE:
-                seen.add(rule.args['name'])
-            if rule.kind == SET_LINE_PREFIX:
-                indent = rule.args['indent']
-                dedent = rule.args['dedent']
-                if indent: dont_pop.add(indent)
-                if dedent: dont_pop.add(dedent)
-            
-        rule.visit_head(visits)
-        rule_childs[name] = seen
-
-    inlineable = {}
-    to_inline = []
-
-    for name, child in rule_childs.items():
-        seen = set((name,))
-        def walk(childs):
-            for c in childs:
-                if c in seen: return False
-                seen.add(c)
-                if not walk(rule_childs[c]):
-                    return False
-            return True
-        if child:
-            inlineable[name] = walk(child)
-        else:
-            inlineable[name] = True
-            to_inline.append(name)
-        
-    all_rules = set(rules.keys())
-    while to_inline:
-        n = to_inline.pop(0)
-        all_rules.remove(n)
-        for name in all_rules:
-            if name == n: continue
-            if n not in rule_childs[name]: continue
-            rules[name] = rules[name].inline(n, rules[n], rule_options[n])
-            
-            rule_childs[name].remove(n)
-            if not rule_childs[name]:
-                to_inline.append(name)
-        if n not in dont_pop: 
-            safe = True
-            for name, rule in rules.items():
-                if name == n: continue
-                def _visit(rule):
-                    nonlocal safe
-                    if rule.kind == RULE and rule.args['name'] == n:
-                        safe = False
-                    if rule.kind == SET_LINE_PREFIX and rule.args['indent'] == n:
-                        safe = False
-                    if rule.kind == SET_LINE_PREFIX and rule.args.get('dedent') == n:
-                        safe = False
-                rule.visit_head(_visit)
-                if not safe: break
-            if safe:
-                rules.pop(n)
-
-    def _regular(rule):
-        if rule.kind == LITERAL:
-            rule.regular = all(isinstance(l, str) for l in rule.args['literals'])
-        elif rule.kind == RANGE:
-            if any(v for v in rule.args['named_ranges'].values()):
-                rule.regular = False
-            else:
-                rule.regular = all(isinstance(l, str) for l in rule.args['range']) 
-        elif rule.kind == REPEAT:
-            _min,_max= rule.args['min'], rule.args['max'] 
-            rule.regular = all((
-                _min is None or isinstance(_min, int), 
-                _max is None or isinstance(_max, int), 
-                all(r.regular for r in rule.rules)))
-        elif rule.kind == SEQUENCE:
-            rule.regular = all(r.regular for r in rule.rules)
-        elif rule.kind == CHOICE:
-            rule.regular = all(r.regular for r in rule.rules)
-        else:
-            rule.regular = False
-    def _lift_regular(rule):
-        if rule.regular:
-            if rule.kind != LITERAL or len(rule.args['literals']) > 1:
-                return ParserRule(REGULAR, args=dict(rule=rule))
-        return rule
-
-    for name in list(rules):
-        rules[name].visit_tail(_regular)
-        rules[name] = rules[name].transform_head(_lift_regular)
-
-    return rules, extras
 
 # Parser
 
@@ -929,7 +957,7 @@ class VarBuilder:
 def compile_python(grammar, cython=False, wrap=False):
     memoized = {}
     regexes = {}
-    use_regexes=False
+    use_regexes = not cython
     node = "Node"
     if cython:
         wrap = False
@@ -2015,7 +2043,11 @@ def compile_python(grammar, cython=False, wrap=False):
         if node.kind ==REGULAR:
             regex = _build_regex(node.args['rule'])
             if regex not in regexes:
-                name = VarBuilder('regex', n=len(regexes))
+                name = node.args.get('name')
+                if not name:
+                    name = VarBuilder('regex', n=len(regexes))
+                else:
+                    name = f"regex_{name}"
                 regexes[regex] = name
             else:
                 name = regexes[regex]
