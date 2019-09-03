@@ -17,26 +17,17 @@ class Node:
         if self.name == "value": return self.value
         return builder[self.name](buf, self, children)
 
-regex_0 = re.compile('(?:[^\\n])^{0, }')
-regex_1 = re.compile('[a-zA-Z]')
-regex_2 = re.compile('[0-9a-zA-Z_]')
-regex_3 = re.compile('[^\\x00-\\x1f\\\\\\"\\ud800-\\udfff]')
-regex_4 = re.compile('[0-1]')
-regex_5 = re.compile('[0-9a-fA-F]')
-regex_6 = re.compile('(?:D|d)')
-regex_7 = re.compile('[8-9A-F]')
-regex_8 = re.compile('[\\"\\\\\\/bfnrt\\\'\\n]')
-regex_9 = re.compile("[^\\x00-\\x1f\\\\\\'\\ud800-\\udfff]")
-regex_10 = re.compile('[\\-\\+]')
-regex_11 = re.compile('[0-9A-Fa-f]')
-regex_12 = re.compile('[0-9A-Fa-f_]')
-regex_13 = re.compile('[0-8]')
-regex_14 = re.compile('[0-8_]')
-regex_15 = re.compile('[0-1_]')
-regex_16 = re.compile('[1-9]')
-regex_17 = re.compile('[0-9]')
-regex_18 = re.compile('(?:e|E)')
-regex_19 = re.compile('(?:\\+|\\-)')
+regex_0 = re.compile(r'(?:[^\n])*')
+regex_1 = re.compile(r'[a-zA-Z]')
+regex_2 = re.compile(r'(?:[0-9a-zA-Z_])*')
+regex_3 = re.compile(r'[^\x00-\x1f\\\"\ud800-\udfff]')
+regex_4 = re.compile(r'[0-1]')
+regex_5 = re.compile(r'[0-9a-fA-F]')
+regex_6 = re.compile(r'(?:D|d)')
+regex_7 = re.compile(r'[8-9A-F]')
+regex_8 = re.compile(r'(?:\\)[\"\\\/bfnrt\'\n]')
+regex_9 = re.compile(r'[^\x00-\x1f\\\'\ud800-\udfff]')
+regex_10 = re.compile(r'(?:(?:(?:[\-\+])?(?:0x)[0-9A-Fa-f](?:[0-9A-Fa-f_])*)|(?:(?:[\-\+])?(?:0o)[0-8](?:[0-8_])*)|(?:(?:[\-\+])?(?:0b)[0-1](?:[0-1_])*)|(?:(?:[\-\+])?(?:(?:(?:0))|(?:[1-9](?:[0-9])*))(?:(?:\.)(?:[0-9])*)?(?:(?:e|E)(?:(?:\+|\-)(?:[0-9])*)?)?))')
 
 class Parser:
     def __init__(self, tabstop=None, allow_mixed_indent=False):
@@ -94,43 +85,14 @@ class Parser:
                         offset_1 = -1
                         break
 
-                    count_1 = 0
-                    while True:
-                        offset_2 = offset_1
-                        column_2 = column_1
-                        indent_column_2 = list(indent_column_1)
-                        partial_tab_offset_2 = partial_tab_offset_1
-                        partial_tab_width_2 = partial_tab_width_1
-                        children_2 = [] if children_1 is not None else None
-                        while True:
-                            if offset_2 == buf_eof:
-                                offset_2 = -1
-                                break
-
-                            codepoint = ord(buf[offset_2])
-
-                            if codepoint == 10:
-                                offset_2 = -1
-                                break
-                            else:
-                                offset_2 += 1
-                                column_2 += 1
-
-                            break
-                        if offset_2 == -1:
-                            break
-                        if offset_1 == offset_2: break
-                        if children_2 is not None and children_2 is not None:
-                            children_1.extend(children_2)
-                        offset_1 = offset_2
-                        column_1 = column_2
-                        indent_column_1 = indent_column_2
-                        partial_tab_offset_1 = partial_tab_offset_2
-                        partial_tab_width_1 = partial_tab_width_2
-                        count_1 += 1
-                    if offset_1 == -1:
+                    _match = regex_0.match(buf, offset_1)
+                    if _match:
+                        _end = _match.end()
+                        column_1 += (_end - offset_1)
+                        offset_1 = _end
+                    else:
+                        offset_1 = -1
                         break
-
 
                     count_1 = 0
                     while offset_1 < buf_eof:
@@ -225,43 +187,14 @@ class Parser:
                         offset_1 = -1
                         break
 
-                    count_1 = 0
-                    while True:
-                        offset_2 = offset_1
-                        column_2 = column_1
-                        indent_column_2 = list(indent_column_1)
-                        partial_tab_offset_2 = partial_tab_offset_1
-                        partial_tab_width_2 = partial_tab_width_1
-                        children_2 = [] if children_1 is not None else None
-                        while True:
-                            if offset_2 == buf_eof:
-                                offset_2 = -1
-                                break
-
-                            codepoint = ord(buf[offset_2])
-
-                            if codepoint == 10:
-                                offset_2 = -1
-                                break
-                            else:
-                                offset_2 += 1
-                                column_2 += 1
-
-                            break
-                        if offset_2 == -1:
-                            break
-                        if offset_1 == offset_2: break
-                        if children_2 is not None and children_2 is not None:
-                            children_1.extend(children_2)
-                        offset_1 = offset_2
-                        column_1 = column_2
-                        indent_column_1 = indent_column_2
-                        partial_tab_offset_1 = partial_tab_offset_2
-                        partial_tab_width_1 = partial_tab_width_2
-                        count_1 += 1
-                    if offset_1 == -1:
+                    _match = regex_0.match(buf, offset_1)
+                    if _match:
+                        _end = _match.end()
+                        column_1 += (_end - offset_1)
+                        offset_1 = _end
+                    else:
+                        offset_1 = -1
                         break
-
 
                     count_1 = 0
                     while offset_1 < buf_eof:
@@ -348,68 +281,22 @@ class Parser:
                         children_3 = None
                         value_1 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
                         while True: # start capture
-                            if offset_3 == buf_eof:
-                                offset_3 = -1
-                                break
-
-                            codepoint = ord(buf[offset_3])
-
-                            if 97 <= codepoint <= 122:
-                                offset_3 += 1
-                                column_3 += 1
-                            elif 65 <= codepoint <= 90:
-                                offset_3 += 1
-                                column_3 += 1
+                            _match = regex_1.match(buf, offset_3)
+                            if _match:
+                                _end = _match.end()
+                                column_3 += (_end - offset_3)
+                                offset_3 = _end
                             else:
                                 offset_3 = -1
                                 break
 
-
-                            count_0 = 0
-                            while True:
-                                offset_4 = offset_3
-                                column_4 = column_3
-                                indent_column_2 = list(indent_column_1)
-                                partial_tab_offset_2 = partial_tab_offset_1
-                                partial_tab_width_2 = partial_tab_width_1
-                                children_4 = [] if children_3 is not None else None
-                                while True:
-                                    if offset_4 == buf_eof:
-                                        offset_4 = -1
-                                        break
-
-                                    codepoint = ord(buf[offset_4])
-
-                                    if 48 <= codepoint <= 57:
-                                        offset_4 += 1
-                                        column_4 += 1
-                                    elif 97 <= codepoint <= 122:
-                                        offset_4 += 1
-                                        column_4 += 1
-                                    elif 65 <= codepoint <= 90:
-                                        offset_4 += 1
-                                        column_4 += 1
-                                    elif codepoint == 95:
-                                        offset_4 += 1
-                                        column_4 += 1
-                                    else:
-                                        offset_4 = -1
-                                        break
-
-
-                                    break
-                                if offset_4 == -1:
-                                    break
-                                if offset_3 == offset_4: break
-                                if children_4 is not None and children_4 is not None:
-                                    children_3.extend(children_4)
-                                offset_3 = offset_4
-                                column_3 = column_4
-                                indent_column_1 = indent_column_2
-                                partial_tab_offset_1 = partial_tab_offset_2
-                                partial_tab_width_1 = partial_tab_width_2
-                                count_0 += 1
-                            if offset_3 == -1:
+                            _match = regex_2.match(buf, offset_3)
+                            if _match:
+                                _end = _match.end()
+                                column_3 += (_end - offset_3)
+                                offset_3 = _end
+                            else:
+                                offset_3 = -1
                                 break
 
                             break
@@ -583,29 +470,14 @@ class Parser:
                                             partial_tab_width_4 = partial_tab_width_3
                                             children_5 = [] if children_4 is not None else None
                                             while True: # case
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if codepoint <= 31:
-                                                    offset_5 = -1
-                                                    break
-                                                elif codepoint == 92:
-                                                    offset_5 = -1
-                                                    break
-                                                elif codepoint == 34:
-                                                    offset_5 = -1
-                                                    break
-                                                elif 55296 <= codepoint <= 57343:
-                                                    offset_5 = -1
-                                                    break
+                                                _match = regex_3.match(buf, offset_5)
+                                                if _match:
+                                                    _end = _match.end()
+                                                    column_5 += (_end - offset_5)
+                                                    offset_5 = _end
                                                 else:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-
-
+                                                    offset_5 = -1
+                                                    break
 
                                                 break
                                             if offset_5 != -1:
@@ -639,64 +511,37 @@ class Parser:
                                                     indent_column_5 = list(indent_column_4)
                                                     partial_tab_offset_5 = partial_tab_offset_4
                                                     partial_tab_width_5 = partial_tab_width_4
-                                                    if offset_6 == buf_eof:
-                                                        offset_6 = -1
-                                                        break
-
-                                                    codepoint = ord(buf[offset_6])
-
-                                                    if 48 <= codepoint <= 49:
-                                                        offset_6 += 1
-                                                        column_6 += 1
+                                                    _match = regex_4.match(buf, offset_6)
+                                                    if _match:
+                                                        _end = _match.end()
+                                                        column_6 += (_end - offset_6)
+                                                        offset_6 = _end
                                                     else:
                                                         offset_6 = -1
                                                         break
-
 
                                                     break
                                                 if offset_6 != -1:
                                                     offset_5 = -1
                                                     break
 
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if 48 <= codepoint <= 57:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 97 <= codepoint <= 102:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 65 <= codepoint <= 70:
-                                                    offset_5 += 1
-                                                    column_5 += 1
+                                                _match = regex_5.match(buf, offset_5)
+                                                if _match:
+                                                    _end = _match.end()
+                                                    column_5 += (_end - offset_5)
+                                                    offset_5 = _end
                                                 else:
                                                     offset_5 = -1
                                                     break
 
-
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if 48 <= codepoint <= 57:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 97 <= codepoint <= 102:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 65 <= codepoint <= 70:
-                                                    offset_5 += 1
-                                                    column_5 += 1
+                                                _match = regex_5.match(buf, offset_5)
+                                                if _match:
+                                                    _end = _match.end()
+                                                    column_5 += (_end - offset_5)
+                                                    offset_5 = _end
                                                 else:
                                                     offset_5 = -1
                                                     break
-
 
 
                                                 break
@@ -738,19 +583,14 @@ class Parser:
                                                         offset_6 = -1
                                                         break
 
-                                                    if offset_6 == buf_eof:
-                                                        offset_6 = -1
-                                                        break
-
-                                                    codepoint = ord(buf[offset_6])
-
-                                                    if 48 <= codepoint <= 49:
-                                                        offset_6 += 1
-                                                        column_6 += 1
+                                                    _match = regex_4.match(buf, offset_6)
+                                                    if _match:
+                                                        _end = _match.end()
+                                                        column_6 += (_end - offset_6)
+                                                        offset_6 = _end
                                                     else:
                                                         offset_6 = -1
                                                         break
-
 
                                                     break
                                                 if offset_6 != -1:
@@ -764,118 +604,64 @@ class Parser:
                                                     indent_column_5 = list(indent_column_4)
                                                     partial_tab_offset_5 = partial_tab_offset_4
                                                     partial_tab_width_5 = partial_tab_width_4
-                                                    if buf[offset_6:offset_6+1] == 'D':
-                                                        offset_6 += 1
-                                                        column_6 += 1
-                                                    elif buf[offset_6:offset_6+1] == 'd':
-                                                        offset_6 += 1
-                                                        column_6 += 1
+                                                    _match = regex_6.match(buf, offset_6)
+                                                    if _match:
+                                                        _end = _match.end()
+                                                        column_6 += (_end - offset_6)
+                                                        offset_6 = _end
                                                     else:
                                                         offset_6 = -1
                                                         break
 
-
-                                                    if offset_6 == buf_eof:
-                                                        offset_6 = -1
-                                                        break
-
-                                                    codepoint = ord(buf[offset_6])
-
-                                                    if 56 <= codepoint <= 57:
-                                                        offset_6 += 1
-                                                        column_6 += 1
-                                                    elif 65 <= codepoint <= 70:
-                                                        offset_6 += 1
-                                                        column_6 += 1
+                                                    _match = regex_7.match(buf, offset_6)
+                                                    if _match:
+                                                        _end = _match.end()
+                                                        column_6 += (_end - offset_6)
+                                                        offset_6 = _end
                                                     else:
                                                         offset_6 = -1
                                                         break
-
 
                                                     break
                                                 if offset_6 != -1:
                                                     offset_5 = -1
                                                     break
 
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if 48 <= codepoint <= 57:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 97 <= codepoint <= 102:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 65 <= codepoint <= 70:
-                                                    offset_5 += 1
-                                                    column_5 += 1
+                                                _match = regex_5.match(buf, offset_5)
+                                                if _match:
+                                                    _end = _match.end()
+                                                    column_5 += (_end - offset_5)
+                                                    offset_5 = _end
                                                 else:
                                                     offset_5 = -1
                                                     break
 
-
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if 48 <= codepoint <= 57:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 97 <= codepoint <= 102:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 65 <= codepoint <= 70:
-                                                    offset_5 += 1
-                                                    column_5 += 1
+                                                _match = regex_5.match(buf, offset_5)
+                                                if _match:
+                                                    _end = _match.end()
+                                                    column_5 += (_end - offset_5)
+                                                    offset_5 = _end
                                                 else:
                                                     offset_5 = -1
                                                     break
 
-
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if 48 <= codepoint <= 57:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 97 <= codepoint <= 102:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 65 <= codepoint <= 70:
-                                                    offset_5 += 1
-                                                    column_5 += 1
+                                                _match = regex_5.match(buf, offset_5)
+                                                if _match:
+                                                    _end = _match.end()
+                                                    column_5 += (_end - offset_5)
+                                                    offset_5 = _end
                                                 else:
                                                     offset_5 = -1
                                                     break
 
-
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if 48 <= codepoint <= 57:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 97 <= codepoint <= 102:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 65 <= codepoint <= 70:
-                                                    offset_5 += 1
-                                                    column_5 += 1
+                                                _match = regex_5.match(buf, offset_5)
+                                                if _match:
+                                                    _end = _match.end()
+                                                    column_5 += (_end - offset_5)
+                                                    offset_5 = _end
                                                 else:
                                                     offset_5 = -1
                                                     break
-
 
 
                                                 break
@@ -917,19 +703,14 @@ class Parser:
                                                         offset_6 = -1
                                                         break
 
-                                                    if offset_6 == buf_eof:
-                                                        offset_6 = -1
-                                                        break
-
-                                                    codepoint = ord(buf[offset_6])
-
-                                                    if 48 <= codepoint <= 49:
-                                                        offset_6 += 1
-                                                        column_6 += 1
+                                                    _match = regex_4.match(buf, offset_6)
+                                                    if _match:
+                                                        _end = _match.end()
+                                                        column_6 += (_end - offset_6)
+                                                        offset_6 = _end
                                                     else:
                                                         offset_6 = -1
                                                         break
-
 
                                                     break
                                                 if offset_6 != -1:
@@ -950,198 +731,100 @@ class Parser:
                                                         offset_6 = -1
                                                         break
 
-                                                    if buf[offset_6:offset_6+1] == 'D':
-                                                        offset_6 += 1
-                                                        column_6 += 1
-                                                    elif buf[offset_6:offset_6+1] == 'd':
-                                                        offset_6 += 1
-                                                        column_6 += 1
+                                                    _match = regex_6.match(buf, offset_6)
+                                                    if _match:
+                                                        _end = _match.end()
+                                                        column_6 += (_end - offset_6)
+                                                        offset_6 = _end
                                                     else:
                                                         offset_6 = -1
                                                         break
 
-
-                                                    if offset_6 == buf_eof:
-                                                        offset_6 = -1
-                                                        break
-
-                                                    codepoint = ord(buf[offset_6])
-
-                                                    if 56 <= codepoint <= 57:
-                                                        offset_6 += 1
-                                                        column_6 += 1
-                                                    elif 65 <= codepoint <= 70:
-                                                        offset_6 += 1
-                                                        column_6 += 1
+                                                    _match = regex_7.match(buf, offset_6)
+                                                    if _match:
+                                                        _end = _match.end()
+                                                        column_6 += (_end - offset_6)
+                                                        offset_6 = _end
                                                     else:
                                                         offset_6 = -1
                                                         break
-
 
                                                     break
                                                 if offset_6 != -1:
                                                     offset_5 = -1
                                                     break
 
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if 48 <= codepoint <= 57:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 97 <= codepoint <= 102:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 65 <= codepoint <= 70:
-                                                    offset_5 += 1
-                                                    column_5 += 1
+                                                _match = regex_5.match(buf, offset_5)
+                                                if _match:
+                                                    _end = _match.end()
+                                                    column_5 += (_end - offset_5)
+                                                    offset_5 = _end
                                                 else:
                                                     offset_5 = -1
                                                     break
 
-
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if 48 <= codepoint <= 57:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 97 <= codepoint <= 102:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 65 <= codepoint <= 70:
-                                                    offset_5 += 1
-                                                    column_5 += 1
+                                                _match = regex_5.match(buf, offset_5)
+                                                if _match:
+                                                    _end = _match.end()
+                                                    column_5 += (_end - offset_5)
+                                                    offset_5 = _end
                                                 else:
                                                     offset_5 = -1
                                                     break
 
-
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if 48 <= codepoint <= 57:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 97 <= codepoint <= 102:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 65 <= codepoint <= 70:
-                                                    offset_5 += 1
-                                                    column_5 += 1
+                                                _match = regex_5.match(buf, offset_5)
+                                                if _match:
+                                                    _end = _match.end()
+                                                    column_5 += (_end - offset_5)
+                                                    offset_5 = _end
                                                 else:
                                                     offset_5 = -1
                                                     break
 
-
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if 48 <= codepoint <= 57:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 97 <= codepoint <= 102:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 65 <= codepoint <= 70:
-                                                    offset_5 += 1
-                                                    column_5 += 1
+                                                _match = regex_5.match(buf, offset_5)
+                                                if _match:
+                                                    _end = _match.end()
+                                                    column_5 += (_end - offset_5)
+                                                    offset_5 = _end
                                                 else:
                                                     offset_5 = -1
                                                     break
 
-
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if 48 <= codepoint <= 57:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 97 <= codepoint <= 102:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 65 <= codepoint <= 70:
-                                                    offset_5 += 1
-                                                    column_5 += 1
+                                                _match = regex_5.match(buf, offset_5)
+                                                if _match:
+                                                    _end = _match.end()
+                                                    column_5 += (_end - offset_5)
+                                                    offset_5 = _end
                                                 else:
                                                     offset_5 = -1
                                                     break
 
-
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if 48 <= codepoint <= 57:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 97 <= codepoint <= 102:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 65 <= codepoint <= 70:
-                                                    offset_5 += 1
-                                                    column_5 += 1
+                                                _match = regex_5.match(buf, offset_5)
+                                                if _match:
+                                                    _end = _match.end()
+                                                    column_5 += (_end - offset_5)
+                                                    offset_5 = _end
                                                 else:
                                                     offset_5 = -1
                                                     break
 
-
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if 48 <= codepoint <= 57:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 97 <= codepoint <= 102:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 65 <= codepoint <= 70:
-                                                    offset_5 += 1
-                                                    column_5 += 1
+                                                _match = regex_5.match(buf, offset_5)
+                                                if _match:
+                                                    _end = _match.end()
+                                                    column_5 += (_end - offset_5)
+                                                    offset_5 = _end
                                                 else:
                                                     offset_5 = -1
                                                     break
 
-
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if 48 <= codepoint <= 57:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 97 <= codepoint <= 102:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 65 <= codepoint <= 70:
-                                                    offset_5 += 1
-                                                    column_5 += 1
+                                                _match = regex_5.match(buf, offset_5)
+                                                if _match:
+                                                    _end = _match.end()
+                                                    column_5 += (_end - offset_5)
+                                                    offset_5 = _end
                                                 else:
                                                     offset_5 = -1
                                                     break
-
 
 
                                                 break
@@ -1162,54 +845,14 @@ class Parser:
                                             partial_tab_width_4 = partial_tab_width_3
                                             children_5 = [] if children_4 is not None else None
                                             while True: # case
-                                                if buf[offset_5:offset_5+1] == '\\':
-                                                    offset_5 += 1
-                                                    column_5 += 1
+                                                _match = regex_8.match(buf, offset_5)
+                                                if _match:
+                                                    _end = _match.end()
+                                                    column_5 += (_end - offset_5)
+                                                    offset_5 = _end
                                                 else:
                                                     offset_5 = -1
                                                     break
-
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if codepoint == 34:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif codepoint == 92:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif codepoint == 47:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif codepoint == 98:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif codepoint == 102:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif codepoint == 110:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif codepoint == 114:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif codepoint == 116:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif codepoint == 39:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif codepoint == 10:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                else:
-                                                    offset_5 = -1
-                                                    break
-
-
 
                                                 break
                                             if offset_5 != -1:
@@ -1309,29 +952,14 @@ class Parser:
                                             partial_tab_width_4 = partial_tab_width_3
                                             children_5 = [] if children_4 is not None else None
                                             while True: # case
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if codepoint <= 31:
-                                                    offset_5 = -1
-                                                    break
-                                                elif codepoint == 92:
-                                                    offset_5 = -1
-                                                    break
-                                                elif codepoint == 39:
-                                                    offset_5 = -1
-                                                    break
-                                                elif 55296 <= codepoint <= 57343:
-                                                    offset_5 = -1
-                                                    break
+                                                _match = regex_9.match(buf, offset_5)
+                                                if _match:
+                                                    _end = _match.end()
+                                                    column_5 += (_end - offset_5)
+                                                    offset_5 = _end
                                                 else:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-
-
+                                                    offset_5 = -1
+                                                    break
 
                                                 break
                                             if offset_5 != -1:
@@ -1365,64 +993,37 @@ class Parser:
                                                     indent_column_5 = list(indent_column_4)
                                                     partial_tab_offset_5 = partial_tab_offset_4
                                                     partial_tab_width_5 = partial_tab_width_4
-                                                    if offset_6 == buf_eof:
-                                                        offset_6 = -1
-                                                        break
-
-                                                    codepoint = ord(buf[offset_6])
-
-                                                    if 48 <= codepoint <= 49:
-                                                        offset_6 += 1
-                                                        column_6 += 1
+                                                    _match = regex_4.match(buf, offset_6)
+                                                    if _match:
+                                                        _end = _match.end()
+                                                        column_6 += (_end - offset_6)
+                                                        offset_6 = _end
                                                     else:
                                                         offset_6 = -1
                                                         break
-
 
                                                     break
                                                 if offset_6 != -1:
                                                     offset_5 = -1
                                                     break
 
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if 48 <= codepoint <= 57:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 97 <= codepoint <= 102:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 65 <= codepoint <= 70:
-                                                    offset_5 += 1
-                                                    column_5 += 1
+                                                _match = regex_5.match(buf, offset_5)
+                                                if _match:
+                                                    _end = _match.end()
+                                                    column_5 += (_end - offset_5)
+                                                    offset_5 = _end
                                                 else:
                                                     offset_5 = -1
                                                     break
 
-
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if 48 <= codepoint <= 57:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 97 <= codepoint <= 102:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 65 <= codepoint <= 70:
-                                                    offset_5 += 1
-                                                    column_5 += 1
+                                                _match = regex_5.match(buf, offset_5)
+                                                if _match:
+                                                    _end = _match.end()
+                                                    column_5 += (_end - offset_5)
+                                                    offset_5 = _end
                                                 else:
                                                     offset_5 = -1
                                                     break
-
 
 
                                                 break
@@ -1464,19 +1065,14 @@ class Parser:
                                                         offset_6 = -1
                                                         break
 
-                                                    if offset_6 == buf_eof:
-                                                        offset_6 = -1
-                                                        break
-
-                                                    codepoint = ord(buf[offset_6])
-
-                                                    if 48 <= codepoint <= 49:
-                                                        offset_6 += 1
-                                                        column_6 += 1
+                                                    _match = regex_4.match(buf, offset_6)
+                                                    if _match:
+                                                        _end = _match.end()
+                                                        column_6 += (_end - offset_6)
+                                                        offset_6 = _end
                                                     else:
                                                         offset_6 = -1
                                                         break
-
 
                                                     break
                                                 if offset_6 != -1:
@@ -1490,118 +1086,64 @@ class Parser:
                                                     indent_column_5 = list(indent_column_4)
                                                     partial_tab_offset_5 = partial_tab_offset_4
                                                     partial_tab_width_5 = partial_tab_width_4
-                                                    if buf[offset_6:offset_6+1] == 'D':
-                                                        offset_6 += 1
-                                                        column_6 += 1
-                                                    elif buf[offset_6:offset_6+1] == 'd':
-                                                        offset_6 += 1
-                                                        column_6 += 1
+                                                    _match = regex_6.match(buf, offset_6)
+                                                    if _match:
+                                                        _end = _match.end()
+                                                        column_6 += (_end - offset_6)
+                                                        offset_6 = _end
                                                     else:
                                                         offset_6 = -1
                                                         break
 
-
-                                                    if offset_6 == buf_eof:
-                                                        offset_6 = -1
-                                                        break
-
-                                                    codepoint = ord(buf[offset_6])
-
-                                                    if 56 <= codepoint <= 57:
-                                                        offset_6 += 1
-                                                        column_6 += 1
-                                                    elif 65 <= codepoint <= 70:
-                                                        offset_6 += 1
-                                                        column_6 += 1
+                                                    _match = regex_7.match(buf, offset_6)
+                                                    if _match:
+                                                        _end = _match.end()
+                                                        column_6 += (_end - offset_6)
+                                                        offset_6 = _end
                                                     else:
                                                         offset_6 = -1
                                                         break
-
 
                                                     break
                                                 if offset_6 != -1:
                                                     offset_5 = -1
                                                     break
 
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if 48 <= codepoint <= 57:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 97 <= codepoint <= 102:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 65 <= codepoint <= 70:
-                                                    offset_5 += 1
-                                                    column_5 += 1
+                                                _match = regex_5.match(buf, offset_5)
+                                                if _match:
+                                                    _end = _match.end()
+                                                    column_5 += (_end - offset_5)
+                                                    offset_5 = _end
                                                 else:
                                                     offset_5 = -1
                                                     break
 
-
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if 48 <= codepoint <= 57:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 97 <= codepoint <= 102:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 65 <= codepoint <= 70:
-                                                    offset_5 += 1
-                                                    column_5 += 1
+                                                _match = regex_5.match(buf, offset_5)
+                                                if _match:
+                                                    _end = _match.end()
+                                                    column_5 += (_end - offset_5)
+                                                    offset_5 = _end
                                                 else:
                                                     offset_5 = -1
                                                     break
 
-
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if 48 <= codepoint <= 57:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 97 <= codepoint <= 102:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 65 <= codepoint <= 70:
-                                                    offset_5 += 1
-                                                    column_5 += 1
+                                                _match = regex_5.match(buf, offset_5)
+                                                if _match:
+                                                    _end = _match.end()
+                                                    column_5 += (_end - offset_5)
+                                                    offset_5 = _end
                                                 else:
                                                     offset_5 = -1
                                                     break
 
-
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if 48 <= codepoint <= 57:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 97 <= codepoint <= 102:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 65 <= codepoint <= 70:
-                                                    offset_5 += 1
-                                                    column_5 += 1
+                                                _match = regex_5.match(buf, offset_5)
+                                                if _match:
+                                                    _end = _match.end()
+                                                    column_5 += (_end - offset_5)
+                                                    offset_5 = _end
                                                 else:
                                                     offset_5 = -1
                                                     break
-
 
 
                                                 break
@@ -1643,19 +1185,14 @@ class Parser:
                                                         offset_6 = -1
                                                         break
 
-                                                    if offset_6 == buf_eof:
-                                                        offset_6 = -1
-                                                        break
-
-                                                    codepoint = ord(buf[offset_6])
-
-                                                    if 48 <= codepoint <= 49:
-                                                        offset_6 += 1
-                                                        column_6 += 1
+                                                    _match = regex_4.match(buf, offset_6)
+                                                    if _match:
+                                                        _end = _match.end()
+                                                        column_6 += (_end - offset_6)
+                                                        offset_6 = _end
                                                     else:
                                                         offset_6 = -1
                                                         break
-
 
                                                     break
                                                 if offset_6 != -1:
@@ -1676,198 +1213,100 @@ class Parser:
                                                         offset_6 = -1
                                                         break
 
-                                                    if buf[offset_6:offset_6+1] == 'D':
-                                                        offset_6 += 1
-                                                        column_6 += 1
-                                                    elif buf[offset_6:offset_6+1] == 'd':
-                                                        offset_6 += 1
-                                                        column_6 += 1
+                                                    _match = regex_6.match(buf, offset_6)
+                                                    if _match:
+                                                        _end = _match.end()
+                                                        column_6 += (_end - offset_6)
+                                                        offset_6 = _end
                                                     else:
                                                         offset_6 = -1
                                                         break
 
-
-                                                    if offset_6 == buf_eof:
-                                                        offset_6 = -1
-                                                        break
-
-                                                    codepoint = ord(buf[offset_6])
-
-                                                    if 56 <= codepoint <= 57:
-                                                        offset_6 += 1
-                                                        column_6 += 1
-                                                    elif 65 <= codepoint <= 70:
-                                                        offset_6 += 1
-                                                        column_6 += 1
+                                                    _match = regex_7.match(buf, offset_6)
+                                                    if _match:
+                                                        _end = _match.end()
+                                                        column_6 += (_end - offset_6)
+                                                        offset_6 = _end
                                                     else:
                                                         offset_6 = -1
                                                         break
-
 
                                                     break
                                                 if offset_6 != -1:
                                                     offset_5 = -1
                                                     break
 
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if 48 <= codepoint <= 57:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 97 <= codepoint <= 102:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 65 <= codepoint <= 70:
-                                                    offset_5 += 1
-                                                    column_5 += 1
+                                                _match = regex_5.match(buf, offset_5)
+                                                if _match:
+                                                    _end = _match.end()
+                                                    column_5 += (_end - offset_5)
+                                                    offset_5 = _end
                                                 else:
                                                     offset_5 = -1
                                                     break
 
-
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if 48 <= codepoint <= 57:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 97 <= codepoint <= 102:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 65 <= codepoint <= 70:
-                                                    offset_5 += 1
-                                                    column_5 += 1
+                                                _match = regex_5.match(buf, offset_5)
+                                                if _match:
+                                                    _end = _match.end()
+                                                    column_5 += (_end - offset_5)
+                                                    offset_5 = _end
                                                 else:
                                                     offset_5 = -1
                                                     break
 
-
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if 48 <= codepoint <= 57:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 97 <= codepoint <= 102:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 65 <= codepoint <= 70:
-                                                    offset_5 += 1
-                                                    column_5 += 1
+                                                _match = regex_5.match(buf, offset_5)
+                                                if _match:
+                                                    _end = _match.end()
+                                                    column_5 += (_end - offset_5)
+                                                    offset_5 = _end
                                                 else:
                                                     offset_5 = -1
                                                     break
 
-
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if 48 <= codepoint <= 57:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 97 <= codepoint <= 102:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 65 <= codepoint <= 70:
-                                                    offset_5 += 1
-                                                    column_5 += 1
+                                                _match = regex_5.match(buf, offset_5)
+                                                if _match:
+                                                    _end = _match.end()
+                                                    column_5 += (_end - offset_5)
+                                                    offset_5 = _end
                                                 else:
                                                     offset_5 = -1
                                                     break
 
-
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if 48 <= codepoint <= 57:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 97 <= codepoint <= 102:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 65 <= codepoint <= 70:
-                                                    offset_5 += 1
-                                                    column_5 += 1
+                                                _match = regex_5.match(buf, offset_5)
+                                                if _match:
+                                                    _end = _match.end()
+                                                    column_5 += (_end - offset_5)
+                                                    offset_5 = _end
                                                 else:
                                                     offset_5 = -1
                                                     break
 
-
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if 48 <= codepoint <= 57:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 97 <= codepoint <= 102:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 65 <= codepoint <= 70:
-                                                    offset_5 += 1
-                                                    column_5 += 1
+                                                _match = regex_5.match(buf, offset_5)
+                                                if _match:
+                                                    _end = _match.end()
+                                                    column_5 += (_end - offset_5)
+                                                    offset_5 = _end
                                                 else:
                                                     offset_5 = -1
                                                     break
 
-
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if 48 <= codepoint <= 57:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 97 <= codepoint <= 102:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 65 <= codepoint <= 70:
-                                                    offset_5 += 1
-                                                    column_5 += 1
+                                                _match = regex_5.match(buf, offset_5)
+                                                if _match:
+                                                    _end = _match.end()
+                                                    column_5 += (_end - offset_5)
+                                                    offset_5 = _end
                                                 else:
                                                     offset_5 = -1
                                                     break
 
-
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if 48 <= codepoint <= 57:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 97 <= codepoint <= 102:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif 65 <= codepoint <= 70:
-                                                    offset_5 += 1
-                                                    column_5 += 1
+                                                _match = regex_5.match(buf, offset_5)
+                                                if _match:
+                                                    _end = _match.end()
+                                                    column_5 += (_end - offset_5)
+                                                    offset_5 = _end
                                                 else:
                                                     offset_5 = -1
                                                     break
-
 
 
                                                 break
@@ -1888,54 +1327,14 @@ class Parser:
                                             partial_tab_width_4 = partial_tab_width_3
                                             children_5 = [] if children_4 is not None else None
                                             while True: # case
-                                                if buf[offset_5:offset_5+1] == '\\':
-                                                    offset_5 += 1
-                                                    column_5 += 1
+                                                _match = regex_8.match(buf, offset_5)
+                                                if _match:
+                                                    _end = _match.end()
+                                                    column_5 += (_end - offset_5)
+                                                    offset_5 = _end
                                                 else:
                                                     offset_5 = -1
                                                     break
-
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if codepoint == 34:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif codepoint == 92:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif codepoint == 47:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif codepoint == 98:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif codepoint == 102:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif codepoint == 110:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif codepoint == 114:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif codepoint == 116:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif codepoint == 39:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif codepoint == 10:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                else:
-                                                    offset_5 = -1
-                                                    break
-
-
 
                                                 break
                                             if offset_5 != -1:
@@ -2028,735 +1427,13 @@ class Parser:
                     children_2 = None
                     value_2 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
-                        while True: # start choice
-                            offset_3 = offset_2
-                            column_3 = column_2
-                            indent_column_2 = list(indent_column_1)
-                            partial_tab_offset_2 = partial_tab_offset_1
-                            partial_tab_width_2 = partial_tab_width_1
-                            children_3 = [] if children_2 is not None else None
-                            while True: # case
-                                count_0 = 0
-                                while count_0 < 1:
-                                    offset_4 = offset_3
-                                    column_4 = column_3
-                                    indent_column_3 = list(indent_column_2)
-                                    partial_tab_offset_3 = partial_tab_offset_2
-                                    partial_tab_width_3 = partial_tab_width_2
-                                    children_4 = [] if children_3 is not None else None
-                                    while True:
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if codepoint == 45:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif codepoint == 43:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        else:
-                                            offset_4 = -1
-                                            break
-
-
-                                        break
-                                    if offset_4 == -1:
-                                        break
-                                    if offset_3 == offset_4: break
-                                    if children_4 is not None and children_4 is not None:
-                                        children_3.extend(children_4)
-                                    offset_3 = offset_4
-                                    column_3 = column_4
-                                    indent_column_2 = indent_column_3
-                                    partial_tab_offset_2 = partial_tab_offset_3
-                                    partial_tab_width_2 = partial_tab_width_3
-                                    count_0 += 1
-                                    break
-                                if offset_3 == -1:
-                                    break
-
-                                if buf[offset_3:offset_3+2] == '0x':
-                                    offset_3 += 2
-                                    column_3 += 2
-                                else:
-                                    offset_3 = -1
-                                    break
-
-                                if offset_3 == buf_eof:
-                                    offset_3 = -1
-                                    break
-
-                                codepoint = ord(buf[offset_3])
-
-                                if 48 <= codepoint <= 57:
-                                    offset_3 += 1
-                                    column_3 += 1
-                                elif 65 <= codepoint <= 70:
-                                    offset_3 += 1
-                                    column_3 += 1
-                                elif 97 <= codepoint <= 102:
-                                    offset_3 += 1
-                                    column_3 += 1
-                                else:
-                                    offset_3 = -1
-                                    break
-
-
-                                count_0 = 0
-                                while True:
-                                    offset_4 = offset_3
-                                    column_4 = column_3
-                                    indent_column_3 = list(indent_column_2)
-                                    partial_tab_offset_3 = partial_tab_offset_2
-                                    partial_tab_width_3 = partial_tab_width_2
-                                    children_4 = [] if children_3 is not None else None
-                                    while True:
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if 48 <= codepoint <= 57:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 65 <= codepoint <= 70:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 97 <= codepoint <= 102:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif codepoint == 95:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        else:
-                                            offset_4 = -1
-                                            break
-
-
-                                        break
-                                    if offset_4 == -1:
-                                        break
-                                    if offset_3 == offset_4: break
-                                    if children_4 is not None and children_4 is not None:
-                                        children_3.extend(children_4)
-                                    offset_3 = offset_4
-                                    column_3 = column_4
-                                    indent_column_2 = indent_column_3
-                                    partial_tab_offset_2 = partial_tab_offset_3
-                                    partial_tab_width_2 = partial_tab_width_3
-                                    count_0 += 1
-                                if offset_3 == -1:
-                                    break
-
-
-                                break
-                            if offset_3 != -1:
-                                offset_2 = offset_3
-                                column_2 = column_3
-                                indent_column_1 = indent_column_2
-                                partial_tab_offset_1 = partial_tab_offset_2
-                                partial_tab_width_1 = partial_tab_width_2
-                                if children_3 is not None and children_3 is not None:
-                                    children_2.extend(children_3)
-                                break
-                            # end case
-                            offset_3 = offset_2
-                            column_3 = column_2
-                            indent_column_2 = list(indent_column_1)
-                            partial_tab_offset_2 = partial_tab_offset_1
-                            partial_tab_width_2 = partial_tab_width_1
-                            children_3 = [] if children_2 is not None else None
-                            while True: # case
-                                count_0 = 0
-                                while count_0 < 1:
-                                    offset_4 = offset_3
-                                    column_4 = column_3
-                                    indent_column_3 = list(indent_column_2)
-                                    partial_tab_offset_3 = partial_tab_offset_2
-                                    partial_tab_width_3 = partial_tab_width_2
-                                    children_4 = [] if children_3 is not None else None
-                                    while True:
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if codepoint == 45:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif codepoint == 43:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        else:
-                                            offset_4 = -1
-                                            break
-
-
-                                        break
-                                    if offset_4 == -1:
-                                        break
-                                    if offset_3 == offset_4: break
-                                    if children_4 is not None and children_4 is not None:
-                                        children_3.extend(children_4)
-                                    offset_3 = offset_4
-                                    column_3 = column_4
-                                    indent_column_2 = indent_column_3
-                                    partial_tab_offset_2 = partial_tab_offset_3
-                                    partial_tab_width_2 = partial_tab_width_3
-                                    count_0 += 1
-                                    break
-                                if offset_3 == -1:
-                                    break
-
-                                if buf[offset_3:offset_3+2] == '0o':
-                                    offset_3 += 2
-                                    column_3 += 2
-                                else:
-                                    offset_3 = -1
-                                    break
-
-                                if offset_3 == buf_eof:
-                                    offset_3 = -1
-                                    break
-
-                                codepoint = ord(buf[offset_3])
-
-                                if 48 <= codepoint <= 56:
-                                    offset_3 += 1
-                                    column_3 += 1
-                                else:
-                                    offset_3 = -1
-                                    break
-
-
-                                count_0 = 0
-                                while True:
-                                    offset_4 = offset_3
-                                    column_4 = column_3
-                                    indent_column_3 = list(indent_column_2)
-                                    partial_tab_offset_3 = partial_tab_offset_2
-                                    partial_tab_width_3 = partial_tab_width_2
-                                    children_4 = [] if children_3 is not None else None
-                                    while True:
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if 48 <= codepoint <= 56:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif codepoint == 95:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        else:
-                                            offset_4 = -1
-                                            break
-
-
-                                        break
-                                    if offset_4 == -1:
-                                        break
-                                    if offset_3 == offset_4: break
-                                    if children_4 is not None and children_4 is not None:
-                                        children_3.extend(children_4)
-                                    offset_3 = offset_4
-                                    column_3 = column_4
-                                    indent_column_2 = indent_column_3
-                                    partial_tab_offset_2 = partial_tab_offset_3
-                                    partial_tab_width_2 = partial_tab_width_3
-                                    count_0 += 1
-                                if offset_3 == -1:
-                                    break
-
-
-                                break
-                            if offset_3 != -1:
-                                offset_2 = offset_3
-                                column_2 = column_3
-                                indent_column_1 = indent_column_2
-                                partial_tab_offset_1 = partial_tab_offset_2
-                                partial_tab_width_1 = partial_tab_width_2
-                                if children_3 is not None and children_3 is not None:
-                                    children_2.extend(children_3)
-                                break
-                            # end case
-                            offset_3 = offset_2
-                            column_3 = column_2
-                            indent_column_2 = list(indent_column_1)
-                            partial_tab_offset_2 = partial_tab_offset_1
-                            partial_tab_width_2 = partial_tab_width_1
-                            children_3 = [] if children_2 is not None else None
-                            while True: # case
-                                count_0 = 0
-                                while count_0 < 1:
-                                    offset_4 = offset_3
-                                    column_4 = column_3
-                                    indent_column_3 = list(indent_column_2)
-                                    partial_tab_offset_3 = partial_tab_offset_2
-                                    partial_tab_width_3 = partial_tab_width_2
-                                    children_4 = [] if children_3 is not None else None
-                                    while True:
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if codepoint == 45:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif codepoint == 43:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        else:
-                                            offset_4 = -1
-                                            break
-
-
-                                        break
-                                    if offset_4 == -1:
-                                        break
-                                    if offset_3 == offset_4: break
-                                    if children_4 is not None and children_4 is not None:
-                                        children_3.extend(children_4)
-                                    offset_3 = offset_4
-                                    column_3 = column_4
-                                    indent_column_2 = indent_column_3
-                                    partial_tab_offset_2 = partial_tab_offset_3
-                                    partial_tab_width_2 = partial_tab_width_3
-                                    count_0 += 1
-                                    break
-                                if offset_3 == -1:
-                                    break
-
-                                if buf[offset_3:offset_3+2] == '0b':
-                                    offset_3 += 2
-                                    column_3 += 2
-                                else:
-                                    offset_3 = -1
-                                    break
-
-                                if offset_3 == buf_eof:
-                                    offset_3 = -1
-                                    break
-
-                                codepoint = ord(buf[offset_3])
-
-                                if 48 <= codepoint <= 49:
-                                    offset_3 += 1
-                                    column_3 += 1
-                                else:
-                                    offset_3 = -1
-                                    break
-
-
-                                count_0 = 0
-                                while True:
-                                    offset_4 = offset_3
-                                    column_4 = column_3
-                                    indent_column_3 = list(indent_column_2)
-                                    partial_tab_offset_3 = partial_tab_offset_2
-                                    partial_tab_width_3 = partial_tab_width_2
-                                    children_4 = [] if children_3 is not None else None
-                                    while True:
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if 48 <= codepoint <= 49:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif codepoint == 95:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        else:
-                                            offset_4 = -1
-                                            break
-
-
-                                        break
-                                    if offset_4 == -1:
-                                        break
-                                    if offset_3 == offset_4: break
-                                    if children_4 is not None and children_4 is not None:
-                                        children_3.extend(children_4)
-                                    offset_3 = offset_4
-                                    column_3 = column_4
-                                    indent_column_2 = indent_column_3
-                                    partial_tab_offset_2 = partial_tab_offset_3
-                                    partial_tab_width_2 = partial_tab_width_3
-                                    count_0 += 1
-                                if offset_3 == -1:
-                                    break
-
-
-                                break
-                            if offset_3 != -1:
-                                offset_2 = offset_3
-                                column_2 = column_3
-                                indent_column_1 = indent_column_2
-                                partial_tab_offset_1 = partial_tab_offset_2
-                                partial_tab_width_1 = partial_tab_width_2
-                                if children_3 is not None and children_3 is not None:
-                                    children_2.extend(children_3)
-                                break
-                            # end case
-                            offset_3 = offset_2
-                            column_3 = column_2
-                            indent_column_2 = list(indent_column_1)
-                            partial_tab_offset_2 = partial_tab_offset_1
-                            partial_tab_width_2 = partial_tab_width_1
-                            children_3 = [] if children_2 is not None else None
-                            while True: # case
-                                count_0 = 0
-                                while count_0 < 1:
-                                    offset_4 = offset_3
-                                    column_4 = column_3
-                                    indent_column_3 = list(indent_column_2)
-                                    partial_tab_offset_3 = partial_tab_offset_2
-                                    partial_tab_width_3 = partial_tab_width_2
-                                    children_4 = [] if children_3 is not None else None
-                                    while True:
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if codepoint == 45:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif codepoint == 43:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        else:
-                                            offset_4 = -1
-                                            break
-
-
-                                        break
-                                    if offset_4 == -1:
-                                        break
-                                    if offset_3 == offset_4: break
-                                    if children_4 is not None and children_4 is not None:
-                                        children_3.extend(children_4)
-                                    offset_3 = offset_4
-                                    column_3 = column_4
-                                    indent_column_2 = indent_column_3
-                                    partial_tab_offset_2 = partial_tab_offset_3
-                                    partial_tab_width_2 = partial_tab_width_3
-                                    count_0 += 1
-                                    break
-                                if offset_3 == -1:
-                                    break
-
-                                while True: # start choice
-                                    offset_4 = offset_3
-                                    column_4 = column_3
-                                    indent_column_3 = list(indent_column_2)
-                                    partial_tab_offset_3 = partial_tab_offset_2
-                                    partial_tab_width_3 = partial_tab_width_2
-                                    children_4 = [] if children_3 is not None else None
-                                    while True: # case
-                                        if buf[offset_4:offset_4+1] == '0':
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        else:
-                                            offset_4 = -1
-                                            break
-
-
-                                        break
-                                    if offset_4 != -1:
-                                        offset_3 = offset_4
-                                        column_3 = column_4
-                                        indent_column_2 = indent_column_3
-                                        partial_tab_offset_2 = partial_tab_offset_3
-                                        partial_tab_width_2 = partial_tab_width_3
-                                        if children_4 is not None and children_4 is not None:
-                                            children_3.extend(children_4)
-                                        break
-                                    # end case
-                                    offset_4 = offset_3
-                                    column_4 = column_3
-                                    indent_column_3 = list(indent_column_2)
-                                    partial_tab_offset_3 = partial_tab_offset_2
-                                    partial_tab_width_3 = partial_tab_width_2
-                                    children_4 = [] if children_3 is not None else None
-                                    while True: # case
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if 49 <= codepoint <= 57:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        else:
-                                            offset_4 = -1
-                                            break
-
-
-                                        count_0 = 0
-                                        while True:
-                                            offset_5 = offset_4
-                                            column_5 = column_4
-                                            indent_column_4 = list(indent_column_3)
-                                            partial_tab_offset_4 = partial_tab_offset_3
-                                            partial_tab_width_4 = partial_tab_width_3
-                                            children_5 = [] if children_4 is not None else None
-                                            while True:
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if 48 <= codepoint <= 57:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                else:
-                                                    offset_5 = -1
-                                                    break
-
-
-                                                break
-                                            if offset_5 == -1:
-                                                break
-                                            if offset_4 == offset_5: break
-                                            if children_5 is not None and children_5 is not None:
-                                                children_4.extend(children_5)
-                                            offset_4 = offset_5
-                                            column_4 = column_5
-                                            indent_column_3 = indent_column_4
-                                            partial_tab_offset_3 = partial_tab_offset_4
-                                            partial_tab_width_3 = partial_tab_width_4
-                                            count_0 += 1
-                                        if offset_4 == -1:
-                                            break
-
-
-                                        break
-                                    if offset_4 != -1:
-                                        offset_3 = offset_4
-                                        column_3 = column_4
-                                        indent_column_2 = indent_column_3
-                                        partial_tab_offset_2 = partial_tab_offset_3
-                                        partial_tab_width_2 = partial_tab_width_3
-                                        if children_4 is not None and children_4 is not None:
-                                            children_3.extend(children_4)
-                                        break
-                                    # end case
-                                    offset_3 = -1 # no more choices
-                                    break # end choice
-                                if offset_3 == -1:
-                                    break
-
-                                count_0 = 0
-                                while count_0 < 1:
-                                    offset_4 = offset_3
-                                    column_4 = column_3
-                                    indent_column_3 = list(indent_column_2)
-                                    partial_tab_offset_3 = partial_tab_offset_2
-                                    partial_tab_width_3 = partial_tab_width_2
-                                    children_4 = [] if children_3 is not None else None
-                                    while True:
-                                        if buf[offset_4:offset_4+1] == '.':
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        else:
-                                            offset_4 = -1
-                                            break
-
-                                        count_1 = 0
-                                        while True:
-                                            offset_5 = offset_4
-                                            column_5 = column_4
-                                            indent_column_4 = list(indent_column_3)
-                                            partial_tab_offset_4 = partial_tab_offset_3
-                                            partial_tab_width_4 = partial_tab_width_3
-                                            children_5 = [] if children_4 is not None else None
-                                            while True:
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if 48 <= codepoint <= 57:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                else:
-                                                    offset_5 = -1
-                                                    break
-
-
-                                                break
-                                            if offset_5 == -1:
-                                                break
-                                            if offset_4 == offset_5: break
-                                            if children_5 is not None and children_5 is not None:
-                                                children_4.extend(children_5)
-                                            offset_4 = offset_5
-                                            column_4 = column_5
-                                            indent_column_3 = indent_column_4
-                                            partial_tab_offset_3 = partial_tab_offset_4
-                                            partial_tab_width_3 = partial_tab_width_4
-                                            count_1 += 1
-                                        if offset_4 == -1:
-                                            break
-
-                                        break
-                                    if offset_4 == -1:
-                                        break
-                                    if offset_3 == offset_4: break
-                                    if children_4 is not None and children_4 is not None:
-                                        children_3.extend(children_4)
-                                    offset_3 = offset_4
-                                    column_3 = column_4
-                                    indent_column_2 = indent_column_3
-                                    partial_tab_offset_2 = partial_tab_offset_3
-                                    partial_tab_width_2 = partial_tab_width_3
-                                    count_0 += 1
-                                    break
-                                if offset_3 == -1:
-                                    break
-
-                                count_0 = 0
-                                while count_0 < 1:
-                                    offset_4 = offset_3
-                                    column_4 = column_3
-                                    indent_column_3 = list(indent_column_2)
-                                    partial_tab_offset_3 = partial_tab_offset_2
-                                    partial_tab_width_3 = partial_tab_width_2
-                                    children_4 = [] if children_3 is not None else None
-                                    while True:
-                                        if buf[offset_4:offset_4+1] == 'e':
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif buf[offset_4:offset_4+1] == 'E':
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        else:
-                                            offset_4 = -1
-                                            break
-
-
-                                        count_1 = 0
-                                        while count_1 < 1:
-                                            offset_5 = offset_4
-                                            column_5 = column_4
-                                            indent_column_4 = list(indent_column_3)
-                                            partial_tab_offset_4 = partial_tab_offset_3
-                                            partial_tab_width_4 = partial_tab_width_3
-                                            children_5 = [] if children_4 is not None else None
-                                            while True:
-                                                if buf[offset_5:offset_5+1] == '+':
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                elif buf[offset_5:offset_5+1] == '-':
-                                                    offset_5 += 1
-                                                    column_5 += 1
-                                                else:
-                                                    offset_5 = -1
-                                                    break
-
-
-                                                count_2 = 0
-                                                while True:
-                                                    offset_6 = offset_5
-                                                    column_6 = column_5
-                                                    indent_column_5 = list(indent_column_4)
-                                                    partial_tab_offset_5 = partial_tab_offset_4
-                                                    partial_tab_width_5 = partial_tab_width_4
-                                                    children_6 = [] if children_5 is not None else None
-                                                    while True:
-                                                        if offset_6 == buf_eof:
-                                                            offset_6 = -1
-                                                            break
-
-                                                        codepoint = ord(buf[offset_6])
-
-                                                        if 48 <= codepoint <= 57:
-                                                            offset_6 += 1
-                                                            column_6 += 1
-                                                        else:
-                                                            offset_6 = -1
-                                                            break
-
-
-                                                        break
-                                                    if offset_6 == -1:
-                                                        break
-                                                    if offset_5 == offset_6: break
-                                                    if children_6 is not None and children_6 is not None:
-                                                        children_5.extend(children_6)
-                                                    offset_5 = offset_6
-                                                    column_5 = column_6
-                                                    indent_column_4 = indent_column_5
-                                                    partial_tab_offset_4 = partial_tab_offset_5
-                                                    partial_tab_width_4 = partial_tab_width_5
-                                                    count_2 += 1
-                                                if offset_5 == -1:
-                                                    break
-
-                                                break
-                                            if offset_5 == -1:
-                                                break
-                                            if offset_4 == offset_5: break
-                                            if children_5 is not None and children_5 is not None:
-                                                children_4.extend(children_5)
-                                            offset_4 = offset_5
-                                            column_4 = column_5
-                                            indent_column_3 = indent_column_4
-                                            partial_tab_offset_3 = partial_tab_offset_4
-                                            partial_tab_width_3 = partial_tab_width_4
-                                            count_1 += 1
-                                            break
-                                        if offset_4 == -1:
-                                            break
-
-                                        break
-                                    if offset_4 == -1:
-                                        break
-                                    if offset_3 == offset_4: break
-                                    if children_4 is not None and children_4 is not None:
-                                        children_3.extend(children_4)
-                                    offset_3 = offset_4
-                                    column_3 = column_4
-                                    indent_column_2 = indent_column_3
-                                    partial_tab_offset_2 = partial_tab_offset_3
-                                    partial_tab_width_2 = partial_tab_width_3
-                                    count_0 += 1
-                                    break
-                                if offset_3 == -1:
-                                    break
-
-
-                                break
-                            if offset_3 != -1:
-                                offset_2 = offset_3
-                                column_2 = column_3
-                                indent_column_1 = indent_column_2
-                                partial_tab_offset_1 = partial_tab_offset_2
-                                partial_tab_width_1 = partial_tab_width_2
-                                if children_3 is not None and children_3 is not None:
-                                    children_2.extend(children_3)
-                                break
-                            # end case
-                            offset_2 = -1 # no more choices
-                            break # end choice
-                        if offset_2 == -1:
+                        _match = regex_10.match(buf, offset_2)
+                        if _match:
+                            _end = _match.end()
+                            column_2 += (_end - offset_2)
+                            offset_2 = _end
+                        else:
+                            offset_2 = -1
                             break
 
                         break
@@ -2959,29 +1636,14 @@ class Parser:
                                     partial_tab_width_3 = partial_tab_width_2
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if codepoint <= 31:
-                                            offset_4 = -1
-                                            break
-                                        elif codepoint == 92:
-                                            offset_4 = -1
-                                            break
-                                        elif codepoint == 34:
-                                            offset_4 = -1
-                                            break
-                                        elif 55296 <= codepoint <= 57343:
-                                            offset_4 = -1
-                                            break
+                                        _match = regex_3.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
                                         else:
-                                            offset_4 += 1
-                                            column_4 += 1
-
-
+                                            offset_4 = -1
+                                            break
 
                                         break
                                     if offset_4 != -1:
@@ -3015,64 +1677,37 @@ class Parser:
                                             indent_column_4 = list(indent_column_3)
                                             partial_tab_offset_4 = partial_tab_offset_3
                                             partial_tab_width_4 = partial_tab_width_3
-                                            if offset_5 == buf_eof:
-                                                offset_5 = -1
-                                                break
-
-                                            codepoint = ord(buf[offset_5])
-
-                                            if 48 <= codepoint <= 49:
-                                                offset_5 += 1
-                                                column_5 += 1
+                                            _match = regex_4.match(buf, offset_5)
+                                            if _match:
+                                                _end = _match.end()
+                                                column_5 += (_end - offset_5)
+                                                offset_5 = _end
                                             else:
                                                 offset_5 = -1
                                                 break
-
 
                                             break
                                         if offset_5 != -1:
                                             offset_4 = -1
                                             break
 
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if 48 <= codepoint <= 57:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 97 <= codepoint <= 102:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 65 <= codepoint <= 70:
-                                            offset_4 += 1
-                                            column_4 += 1
+                                        _match = regex_5.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
                                         else:
                                             offset_4 = -1
                                             break
 
-
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if 48 <= codepoint <= 57:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 97 <= codepoint <= 102:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 65 <= codepoint <= 70:
-                                            offset_4 += 1
-                                            column_4 += 1
+                                        _match = regex_5.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
                                         else:
                                             offset_4 = -1
                                             break
-
 
 
                                         break
@@ -3114,19 +1749,14 @@ class Parser:
                                                 offset_5 = -1
                                                 break
 
-                                            if offset_5 == buf_eof:
-                                                offset_5 = -1
-                                                break
-
-                                            codepoint = ord(buf[offset_5])
-
-                                            if 48 <= codepoint <= 49:
-                                                offset_5 += 1
-                                                column_5 += 1
+                                            _match = regex_4.match(buf, offset_5)
+                                            if _match:
+                                                _end = _match.end()
+                                                column_5 += (_end - offset_5)
+                                                offset_5 = _end
                                             else:
                                                 offset_5 = -1
                                                 break
-
 
                                             break
                                         if offset_5 != -1:
@@ -3140,118 +1770,64 @@ class Parser:
                                             indent_column_4 = list(indent_column_3)
                                             partial_tab_offset_4 = partial_tab_offset_3
                                             partial_tab_width_4 = partial_tab_width_3
-                                            if buf[offset_5:offset_5+1] == 'D':
-                                                offset_5 += 1
-                                                column_5 += 1
-                                            elif buf[offset_5:offset_5+1] == 'd':
-                                                offset_5 += 1
-                                                column_5 += 1
+                                            _match = regex_6.match(buf, offset_5)
+                                            if _match:
+                                                _end = _match.end()
+                                                column_5 += (_end - offset_5)
+                                                offset_5 = _end
                                             else:
                                                 offset_5 = -1
                                                 break
 
-
-                                            if offset_5 == buf_eof:
-                                                offset_5 = -1
-                                                break
-
-                                            codepoint = ord(buf[offset_5])
-
-                                            if 56 <= codepoint <= 57:
-                                                offset_5 += 1
-                                                column_5 += 1
-                                            elif 65 <= codepoint <= 70:
-                                                offset_5 += 1
-                                                column_5 += 1
+                                            _match = regex_7.match(buf, offset_5)
+                                            if _match:
+                                                _end = _match.end()
+                                                column_5 += (_end - offset_5)
+                                                offset_5 = _end
                                             else:
                                                 offset_5 = -1
                                                 break
-
 
                                             break
                                         if offset_5 != -1:
                                             offset_4 = -1
                                             break
 
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if 48 <= codepoint <= 57:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 97 <= codepoint <= 102:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 65 <= codepoint <= 70:
-                                            offset_4 += 1
-                                            column_4 += 1
+                                        _match = regex_5.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
                                         else:
                                             offset_4 = -1
                                             break
 
-
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if 48 <= codepoint <= 57:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 97 <= codepoint <= 102:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 65 <= codepoint <= 70:
-                                            offset_4 += 1
-                                            column_4 += 1
+                                        _match = regex_5.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
                                         else:
                                             offset_4 = -1
                                             break
 
-
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if 48 <= codepoint <= 57:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 97 <= codepoint <= 102:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 65 <= codepoint <= 70:
-                                            offset_4 += 1
-                                            column_4 += 1
+                                        _match = regex_5.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
                                         else:
                                             offset_4 = -1
                                             break
 
-
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if 48 <= codepoint <= 57:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 97 <= codepoint <= 102:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 65 <= codepoint <= 70:
-                                            offset_4 += 1
-                                            column_4 += 1
+                                        _match = regex_5.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
                                         else:
                                             offset_4 = -1
                                             break
-
 
 
                                         break
@@ -3293,19 +1869,14 @@ class Parser:
                                                 offset_5 = -1
                                                 break
 
-                                            if offset_5 == buf_eof:
-                                                offset_5 = -1
-                                                break
-
-                                            codepoint = ord(buf[offset_5])
-
-                                            if 48 <= codepoint <= 49:
-                                                offset_5 += 1
-                                                column_5 += 1
+                                            _match = regex_4.match(buf, offset_5)
+                                            if _match:
+                                                _end = _match.end()
+                                                column_5 += (_end - offset_5)
+                                                offset_5 = _end
                                             else:
                                                 offset_5 = -1
                                                 break
-
 
                                             break
                                         if offset_5 != -1:
@@ -3326,198 +1897,100 @@ class Parser:
                                                 offset_5 = -1
                                                 break
 
-                                            if buf[offset_5:offset_5+1] == 'D':
-                                                offset_5 += 1
-                                                column_5 += 1
-                                            elif buf[offset_5:offset_5+1] == 'd':
-                                                offset_5 += 1
-                                                column_5 += 1
+                                            _match = regex_6.match(buf, offset_5)
+                                            if _match:
+                                                _end = _match.end()
+                                                column_5 += (_end - offset_5)
+                                                offset_5 = _end
                                             else:
                                                 offset_5 = -1
                                                 break
 
-
-                                            if offset_5 == buf_eof:
-                                                offset_5 = -1
-                                                break
-
-                                            codepoint = ord(buf[offset_5])
-
-                                            if 56 <= codepoint <= 57:
-                                                offset_5 += 1
-                                                column_5 += 1
-                                            elif 65 <= codepoint <= 70:
-                                                offset_5 += 1
-                                                column_5 += 1
+                                            _match = regex_7.match(buf, offset_5)
+                                            if _match:
+                                                _end = _match.end()
+                                                column_5 += (_end - offset_5)
+                                                offset_5 = _end
                                             else:
                                                 offset_5 = -1
                                                 break
-
 
                                             break
                                         if offset_5 != -1:
                                             offset_4 = -1
                                             break
 
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if 48 <= codepoint <= 57:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 97 <= codepoint <= 102:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 65 <= codepoint <= 70:
-                                            offset_4 += 1
-                                            column_4 += 1
+                                        _match = regex_5.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
                                         else:
                                             offset_4 = -1
                                             break
 
-
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if 48 <= codepoint <= 57:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 97 <= codepoint <= 102:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 65 <= codepoint <= 70:
-                                            offset_4 += 1
-                                            column_4 += 1
+                                        _match = regex_5.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
                                         else:
                                             offset_4 = -1
                                             break
 
-
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if 48 <= codepoint <= 57:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 97 <= codepoint <= 102:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 65 <= codepoint <= 70:
-                                            offset_4 += 1
-                                            column_4 += 1
+                                        _match = regex_5.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
                                         else:
                                             offset_4 = -1
                                             break
 
-
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if 48 <= codepoint <= 57:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 97 <= codepoint <= 102:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 65 <= codepoint <= 70:
-                                            offset_4 += 1
-                                            column_4 += 1
+                                        _match = regex_5.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
                                         else:
                                             offset_4 = -1
                                             break
 
-
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if 48 <= codepoint <= 57:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 97 <= codepoint <= 102:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 65 <= codepoint <= 70:
-                                            offset_4 += 1
-                                            column_4 += 1
+                                        _match = regex_5.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
                                         else:
                                             offset_4 = -1
                                             break
 
-
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if 48 <= codepoint <= 57:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 97 <= codepoint <= 102:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 65 <= codepoint <= 70:
-                                            offset_4 += 1
-                                            column_4 += 1
+                                        _match = regex_5.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
                                         else:
                                             offset_4 = -1
                                             break
 
-
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if 48 <= codepoint <= 57:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 97 <= codepoint <= 102:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 65 <= codepoint <= 70:
-                                            offset_4 += 1
-                                            column_4 += 1
+                                        _match = regex_5.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
                                         else:
                                             offset_4 = -1
                                             break
 
-
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if 48 <= codepoint <= 57:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 97 <= codepoint <= 102:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 65 <= codepoint <= 70:
-                                            offset_4 += 1
-                                            column_4 += 1
+                                        _match = regex_5.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
                                         else:
                                             offset_4 = -1
                                             break
-
 
 
                                         break
@@ -3538,54 +2011,14 @@ class Parser:
                                     partial_tab_width_3 = partial_tab_width_2
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
-                                        if buf[offset_4:offset_4+1] == '\\':
-                                            offset_4 += 1
-                                            column_4 += 1
+                                        _match = regex_8.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
                                         else:
                                             offset_4 = -1
                                             break
-
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if codepoint == 34:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif codepoint == 92:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif codepoint == 47:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif codepoint == 98:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif codepoint == 102:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif codepoint == 110:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif codepoint == 114:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif codepoint == 116:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif codepoint == 39:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif codepoint == 10:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        else:
-                                            offset_4 = -1
-                                            break
-
-
 
                                         break
                                     if offset_4 != -1:
@@ -3685,29 +2118,14 @@ class Parser:
                                     partial_tab_width_3 = partial_tab_width_2
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if codepoint <= 31:
-                                            offset_4 = -1
-                                            break
-                                        elif codepoint == 92:
-                                            offset_4 = -1
-                                            break
-                                        elif codepoint == 39:
-                                            offset_4 = -1
-                                            break
-                                        elif 55296 <= codepoint <= 57343:
-                                            offset_4 = -1
-                                            break
+                                        _match = regex_9.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
                                         else:
-                                            offset_4 += 1
-                                            column_4 += 1
-
-
+                                            offset_4 = -1
+                                            break
 
                                         break
                                     if offset_4 != -1:
@@ -3741,64 +2159,37 @@ class Parser:
                                             indent_column_4 = list(indent_column_3)
                                             partial_tab_offset_4 = partial_tab_offset_3
                                             partial_tab_width_4 = partial_tab_width_3
-                                            if offset_5 == buf_eof:
-                                                offset_5 = -1
-                                                break
-
-                                            codepoint = ord(buf[offset_5])
-
-                                            if 48 <= codepoint <= 49:
-                                                offset_5 += 1
-                                                column_5 += 1
+                                            _match = regex_4.match(buf, offset_5)
+                                            if _match:
+                                                _end = _match.end()
+                                                column_5 += (_end - offset_5)
+                                                offset_5 = _end
                                             else:
                                                 offset_5 = -1
                                                 break
-
 
                                             break
                                         if offset_5 != -1:
                                             offset_4 = -1
                                             break
 
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if 48 <= codepoint <= 57:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 97 <= codepoint <= 102:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 65 <= codepoint <= 70:
-                                            offset_4 += 1
-                                            column_4 += 1
+                                        _match = regex_5.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
                                         else:
                                             offset_4 = -1
                                             break
 
-
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if 48 <= codepoint <= 57:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 97 <= codepoint <= 102:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 65 <= codepoint <= 70:
-                                            offset_4 += 1
-                                            column_4 += 1
+                                        _match = regex_5.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
                                         else:
                                             offset_4 = -1
                                             break
-
 
 
                                         break
@@ -3840,19 +2231,14 @@ class Parser:
                                                 offset_5 = -1
                                                 break
 
-                                            if offset_5 == buf_eof:
-                                                offset_5 = -1
-                                                break
-
-                                            codepoint = ord(buf[offset_5])
-
-                                            if 48 <= codepoint <= 49:
-                                                offset_5 += 1
-                                                column_5 += 1
+                                            _match = regex_4.match(buf, offset_5)
+                                            if _match:
+                                                _end = _match.end()
+                                                column_5 += (_end - offset_5)
+                                                offset_5 = _end
                                             else:
                                                 offset_5 = -1
                                                 break
-
 
                                             break
                                         if offset_5 != -1:
@@ -3866,118 +2252,64 @@ class Parser:
                                             indent_column_4 = list(indent_column_3)
                                             partial_tab_offset_4 = partial_tab_offset_3
                                             partial_tab_width_4 = partial_tab_width_3
-                                            if buf[offset_5:offset_5+1] == 'D':
-                                                offset_5 += 1
-                                                column_5 += 1
-                                            elif buf[offset_5:offset_5+1] == 'd':
-                                                offset_5 += 1
-                                                column_5 += 1
+                                            _match = regex_6.match(buf, offset_5)
+                                            if _match:
+                                                _end = _match.end()
+                                                column_5 += (_end - offset_5)
+                                                offset_5 = _end
                                             else:
                                                 offset_5 = -1
                                                 break
 
-
-                                            if offset_5 == buf_eof:
-                                                offset_5 = -1
-                                                break
-
-                                            codepoint = ord(buf[offset_5])
-
-                                            if 56 <= codepoint <= 57:
-                                                offset_5 += 1
-                                                column_5 += 1
-                                            elif 65 <= codepoint <= 70:
-                                                offset_5 += 1
-                                                column_5 += 1
+                                            _match = regex_7.match(buf, offset_5)
+                                            if _match:
+                                                _end = _match.end()
+                                                column_5 += (_end - offset_5)
+                                                offset_5 = _end
                                             else:
                                                 offset_5 = -1
                                                 break
-
 
                                             break
                                         if offset_5 != -1:
                                             offset_4 = -1
                                             break
 
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if 48 <= codepoint <= 57:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 97 <= codepoint <= 102:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 65 <= codepoint <= 70:
-                                            offset_4 += 1
-                                            column_4 += 1
+                                        _match = regex_5.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
                                         else:
                                             offset_4 = -1
                                             break
 
-
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if 48 <= codepoint <= 57:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 97 <= codepoint <= 102:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 65 <= codepoint <= 70:
-                                            offset_4 += 1
-                                            column_4 += 1
+                                        _match = regex_5.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
                                         else:
                                             offset_4 = -1
                                             break
 
-
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if 48 <= codepoint <= 57:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 97 <= codepoint <= 102:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 65 <= codepoint <= 70:
-                                            offset_4 += 1
-                                            column_4 += 1
+                                        _match = regex_5.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
                                         else:
                                             offset_4 = -1
                                             break
 
-
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if 48 <= codepoint <= 57:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 97 <= codepoint <= 102:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 65 <= codepoint <= 70:
-                                            offset_4 += 1
-                                            column_4 += 1
+                                        _match = regex_5.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
                                         else:
                                             offset_4 = -1
                                             break
-
 
 
                                         break
@@ -4019,19 +2351,14 @@ class Parser:
                                                 offset_5 = -1
                                                 break
 
-                                            if offset_5 == buf_eof:
-                                                offset_5 = -1
-                                                break
-
-                                            codepoint = ord(buf[offset_5])
-
-                                            if 48 <= codepoint <= 49:
-                                                offset_5 += 1
-                                                column_5 += 1
+                                            _match = regex_4.match(buf, offset_5)
+                                            if _match:
+                                                _end = _match.end()
+                                                column_5 += (_end - offset_5)
+                                                offset_5 = _end
                                             else:
                                                 offset_5 = -1
                                                 break
-
 
                                             break
                                         if offset_5 != -1:
@@ -4052,198 +2379,100 @@ class Parser:
                                                 offset_5 = -1
                                                 break
 
-                                            if buf[offset_5:offset_5+1] == 'D':
-                                                offset_5 += 1
-                                                column_5 += 1
-                                            elif buf[offset_5:offset_5+1] == 'd':
-                                                offset_5 += 1
-                                                column_5 += 1
+                                            _match = regex_6.match(buf, offset_5)
+                                            if _match:
+                                                _end = _match.end()
+                                                column_5 += (_end - offset_5)
+                                                offset_5 = _end
                                             else:
                                                 offset_5 = -1
                                                 break
 
-
-                                            if offset_5 == buf_eof:
-                                                offset_5 = -1
-                                                break
-
-                                            codepoint = ord(buf[offset_5])
-
-                                            if 56 <= codepoint <= 57:
-                                                offset_5 += 1
-                                                column_5 += 1
-                                            elif 65 <= codepoint <= 70:
-                                                offset_5 += 1
-                                                column_5 += 1
+                                            _match = regex_7.match(buf, offset_5)
+                                            if _match:
+                                                _end = _match.end()
+                                                column_5 += (_end - offset_5)
+                                                offset_5 = _end
                                             else:
                                                 offset_5 = -1
                                                 break
-
 
                                             break
                                         if offset_5 != -1:
                                             offset_4 = -1
                                             break
 
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if 48 <= codepoint <= 57:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 97 <= codepoint <= 102:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 65 <= codepoint <= 70:
-                                            offset_4 += 1
-                                            column_4 += 1
+                                        _match = regex_5.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
                                         else:
                                             offset_4 = -1
                                             break
 
-
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if 48 <= codepoint <= 57:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 97 <= codepoint <= 102:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 65 <= codepoint <= 70:
-                                            offset_4 += 1
-                                            column_4 += 1
+                                        _match = regex_5.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
                                         else:
                                             offset_4 = -1
                                             break
 
-
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if 48 <= codepoint <= 57:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 97 <= codepoint <= 102:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 65 <= codepoint <= 70:
-                                            offset_4 += 1
-                                            column_4 += 1
+                                        _match = regex_5.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
                                         else:
                                             offset_4 = -1
                                             break
 
-
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if 48 <= codepoint <= 57:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 97 <= codepoint <= 102:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 65 <= codepoint <= 70:
-                                            offset_4 += 1
-                                            column_4 += 1
+                                        _match = regex_5.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
                                         else:
                                             offset_4 = -1
                                             break
 
-
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if 48 <= codepoint <= 57:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 97 <= codepoint <= 102:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 65 <= codepoint <= 70:
-                                            offset_4 += 1
-                                            column_4 += 1
+                                        _match = regex_5.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
                                         else:
                                             offset_4 = -1
                                             break
 
-
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if 48 <= codepoint <= 57:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 97 <= codepoint <= 102:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 65 <= codepoint <= 70:
-                                            offset_4 += 1
-                                            column_4 += 1
+                                        _match = regex_5.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
                                         else:
                                             offset_4 = -1
                                             break
 
-
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if 48 <= codepoint <= 57:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 97 <= codepoint <= 102:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 65 <= codepoint <= 70:
-                                            offset_4 += 1
-                                            column_4 += 1
+                                        _match = regex_5.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
                                         else:
                                             offset_4 = -1
                                             break
 
-
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if 48 <= codepoint <= 57:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 97 <= codepoint <= 102:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif 65 <= codepoint <= 70:
-                                            offset_4 += 1
-                                            column_4 += 1
+                                        _match = regex_5.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
                                         else:
                                             offset_4 = -1
                                             break
-
 
 
                                         break
@@ -4264,54 +2493,14 @@ class Parser:
                                     partial_tab_width_3 = partial_tab_width_2
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
-                                        if buf[offset_4:offset_4+1] == '\\':
-                                            offset_4 += 1
-                                            column_4 += 1
+                                        _match = regex_8.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
                                         else:
                                             offset_4 = -1
                                             break
-
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if codepoint == 34:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif codepoint == 92:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif codepoint == 47:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif codepoint == 98:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif codepoint == 102:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif codepoint == 110:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif codepoint == 114:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif codepoint == 116:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif codepoint == 39:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        elif codepoint == 10:
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        else:
-                                            offset_4 = -1
-                                            break
-
-
 
                                         break
                                     if offset_4 != -1:
@@ -4427,43 +2616,14 @@ class Parser:
                         offset_1 = -1
                         break
 
-                    count_1 = 0
-                    while True:
-                        offset_2 = offset_1
-                        column_2 = column_1
-                        indent_column_2 = list(indent_column_1)
-                        partial_tab_offset_2 = partial_tab_offset_1
-                        partial_tab_width_2 = partial_tab_width_1
-                        children_2 = [] if children_1 is not None else None
-                        while True:
-                            if offset_2 == buf_eof:
-                                offset_2 = -1
-                                break
-
-                            codepoint = ord(buf[offset_2])
-
-                            if codepoint == 10:
-                                offset_2 = -1
-                                break
-                            else:
-                                offset_2 += 1
-                                column_2 += 1
-
-                            break
-                        if offset_2 == -1:
-                            break
-                        if offset_1 == offset_2: break
-                        if children_2 is not None and children_2 is not None:
-                            children_1.extend(children_2)
-                        offset_1 = offset_2
-                        column_1 = column_2
-                        indent_column_1 = indent_column_2
-                        partial_tab_offset_1 = partial_tab_offset_2
-                        partial_tab_width_1 = partial_tab_width_2
-                        count_1 += 1
-                    if offset_1 == -1:
+                    _match = regex_0.match(buf, offset_1)
+                    if _match:
+                        _end = _match.end()
+                        column_1 += (_end - offset_1)
+                        offset_1 = _end
+                    else:
+                        offset_1 = -1
                         break
-
 
                     count_1 = 0
                     while offset_1 < buf_eof:
@@ -4581,43 +2741,14 @@ class Parser:
                                             offset_4 = -1
                                             break
 
-                                        count_3 = 0
-                                        while True:
-                                            offset_5 = offset_4
-                                            column_5 = column_4
-                                            indent_column_4 = list(indent_column_3)
-                                            partial_tab_offset_4 = partial_tab_offset_3
-                                            partial_tab_width_4 = partial_tab_width_3
-                                            children_5 = [] if children_4 is not None else None
-                                            while True:
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if codepoint == 10:
-                                                    offset_5 = -1
-                                                    break
-                                                else:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-
-                                                break
-                                            if offset_5 == -1:
-                                                break
-                                            if offset_4 == offset_5: break
-                                            if children_5 is not None and children_5 is not None:
-                                                children_4.extend(children_5)
-                                            offset_4 = offset_5
-                                            column_4 = column_5
-                                            indent_column_3 = indent_column_4
-                                            partial_tab_offset_3 = partial_tab_offset_4
-                                            partial_tab_width_3 = partial_tab_width_4
-                                            count_3 += 1
-                                        if offset_4 == -1:
+                                        _match = regex_0.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
+                                        else:
+                                            offset_4 = -1
                                             break
-
 
                                         count_3 = 0
                                         while offset_4 < buf_eof:
@@ -4715,43 +2846,14 @@ class Parser:
                                             offset_4 = -1
                                             break
 
-                                        count_3 = 0
-                                        while True:
-                                            offset_5 = offset_4
-                                            column_5 = column_4
-                                            indent_column_4 = list(indent_column_3)
-                                            partial_tab_offset_4 = partial_tab_offset_3
-                                            partial_tab_width_4 = partial_tab_width_3
-                                            children_5 = [] if children_4 is not None else None
-                                            while True:
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if codepoint == 10:
-                                                    offset_5 = -1
-                                                    break
-                                                else:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-
-                                                break
-                                            if offset_5 == -1:
-                                                break
-                                            if offset_4 == offset_5: break
-                                            if children_5 is not None and children_5 is not None:
-                                                children_4.extend(children_5)
-                                            offset_4 = offset_5
-                                            column_4 = column_5
-                                            indent_column_3 = indent_column_4
-                                            partial_tab_offset_3 = partial_tab_offset_4
-                                            partial_tab_width_3 = partial_tab_width_4
-                                            count_3 += 1
-                                        if offset_4 == -1:
+                                        _match = regex_0.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
+                                        else:
+                                            offset_4 = -1
                                             break
-
 
                                         count_3 = 0
                                         while offset_4 < buf_eof:
@@ -4861,43 +2963,14 @@ class Parser:
                                     offset_3 = -1
                                     break
 
-                                count_2 = 0
-                                while True:
-                                    offset_4 = offset_3
-                                    column_4 = column_3
-                                    indent_column_3 = list(indent_column_2)
-                                    partial_tab_offset_3 = partial_tab_offset_2
-                                    partial_tab_width_3 = partial_tab_width_2
-                                    children_4 = [] if children_3 is not None else None
-                                    while True:
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if codepoint == 10:
-                                            offset_4 = -1
-                                            break
-                                        else:
-                                            offset_4 += 1
-                                            column_4 += 1
-
-                                        break
-                                    if offset_4 == -1:
-                                        break
-                                    if offset_3 == offset_4: break
-                                    if children_4 is not None and children_4 is not None:
-                                        children_3.extend(children_4)
-                                    offset_3 = offset_4
-                                    column_3 = column_4
-                                    indent_column_2 = indent_column_3
-                                    partial_tab_offset_2 = partial_tab_offset_3
-                                    partial_tab_width_2 = partial_tab_width_3
-                                    count_2 += 1
-                                if offset_3 == -1:
+                                _match = regex_0.match(buf, offset_3)
+                                if _match:
+                                    _end = _match.end()
+                                    column_3 += (_end - offset_3)
+                                    offset_3 = _end
+                                else:
+                                    offset_3 = -1
                                     break
-
 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
@@ -5004,43 +3077,14 @@ class Parser:
                                             offset_4 = -1
                                             break
 
-                                        count_3 = 0
-                                        while True:
-                                            offset_5 = offset_4
-                                            column_5 = column_4
-                                            indent_column_4 = list(indent_column_3)
-                                            partial_tab_offset_4 = partial_tab_offset_3
-                                            partial_tab_width_4 = partial_tab_width_3
-                                            children_5 = [] if children_4 is not None else None
-                                            while True:
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if codepoint == 10:
-                                                    offset_5 = -1
-                                                    break
-                                                else:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-
-                                                break
-                                            if offset_5 == -1:
-                                                break
-                                            if offset_4 == offset_5: break
-                                            if children_5 is not None and children_5 is not None:
-                                                children_4.extend(children_5)
-                                            offset_4 = offset_5
-                                            column_4 = column_5
-                                            indent_column_3 = indent_column_4
-                                            partial_tab_offset_3 = partial_tab_offset_4
-                                            partial_tab_width_3 = partial_tab_width_4
-                                            count_3 += 1
-                                        if offset_4 == -1:
+                                        _match = regex_0.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
+                                        else:
+                                            offset_4 = -1
                                             break
-
 
                                         count_3 = 0
                                         while offset_4 < buf_eof:
@@ -5195,43 +3239,14 @@ class Parser:
                         offset_1 = -1
                         break
 
-                    count_1 = 0
-                    while True:
-                        offset_2 = offset_1
-                        column_2 = column_1
-                        indent_column_2 = list(indent_column_1)
-                        partial_tab_offset_2 = partial_tab_offset_1
-                        partial_tab_width_2 = partial_tab_width_1
-                        children_2 = [] if children_1 is not None else None
-                        while True:
-                            if offset_2 == buf_eof:
-                                offset_2 = -1
-                                break
-
-                            codepoint = ord(buf[offset_2])
-
-                            if codepoint == 10:
-                                offset_2 = -1
-                                break
-                            else:
-                                offset_2 += 1
-                                column_2 += 1
-
-                            break
-                        if offset_2 == -1:
-                            break
-                        if offset_1 == offset_2: break
-                        if children_2 is not None and children_2 is not None:
-                            children_1.extend(children_2)
-                        offset_1 = offset_2
-                        column_1 = column_2
-                        indent_column_1 = indent_column_2
-                        partial_tab_offset_1 = partial_tab_offset_2
-                        partial_tab_width_1 = partial_tab_width_2
-                        count_1 += 1
-                    if offset_1 == -1:
+                    _match = regex_0.match(buf, offset_1)
+                    if _match:
+                        _end = _match.end()
+                        column_1 += (_end - offset_1)
+                        offset_1 = _end
+                    else:
+                        offset_1 = -1
                         break
-
 
                     count_1 = 0
                     while offset_1 < buf_eof:
@@ -5345,43 +3360,14 @@ class Parser:
                                         offset_4 = -1
                                         break
 
-                                    count_2 = 0
-                                    while True:
-                                        offset_5 = offset_4
-                                        column_5 = column_4
-                                        indent_column_3 = list(indent_column_2)
-                                        partial_tab_offset_3 = partial_tab_offset_2
-                                        partial_tab_width_3 = partial_tab_width_2
-                                        children_5 = [] if children_4 is not None else None
-                                        while True:
-                                            if offset_5 == buf_eof:
-                                                offset_5 = -1
-                                                break
-
-                                            codepoint = ord(buf[offset_5])
-
-                                            if codepoint == 10:
-                                                offset_5 = -1
-                                                break
-                                            else:
-                                                offset_5 += 1
-                                                column_5 += 1
-
-                                            break
-                                        if offset_5 == -1:
-                                            break
-                                        if offset_4 == offset_5: break
-                                        if children_5 is not None and children_5 is not None:
-                                            children_4.extend(children_5)
-                                        offset_4 = offset_5
-                                        column_4 = column_5
-                                        indent_column_2 = indent_column_3
-                                        partial_tab_offset_2 = partial_tab_offset_3
-                                        partial_tab_width_2 = partial_tab_width_3
-                                        count_2 += 1
-                                    if offset_4 == -1:
+                                    _match = regex_0.match(buf, offset_4)
+                                    if _match:
+                                        _end = _match.end()
+                                        column_4 += (_end - offset_4)
+                                        offset_4 = _end
+                                    else:
+                                        offset_4 = -1
                                         break
-
 
                                     count_2 = 0
                                     while offset_4 < buf_eof:
@@ -5479,43 +3465,14 @@ class Parser:
                                         offset_4 = -1
                                         break
 
-                                    count_2 = 0
-                                    while True:
-                                        offset_5 = offset_4
-                                        column_5 = column_4
-                                        indent_column_3 = list(indent_column_2)
-                                        partial_tab_offset_3 = partial_tab_offset_2
-                                        partial_tab_width_3 = partial_tab_width_2
-                                        children_5 = [] if children_4 is not None else None
-                                        while True:
-                                            if offset_5 == buf_eof:
-                                                offset_5 = -1
-                                                break
-
-                                            codepoint = ord(buf[offset_5])
-
-                                            if codepoint == 10:
-                                                offset_5 = -1
-                                                break
-                                            else:
-                                                offset_5 += 1
-                                                column_5 += 1
-
-                                            break
-                                        if offset_5 == -1:
-                                            break
-                                        if offset_4 == offset_5: break
-                                        if children_5 is not None and children_5 is not None:
-                                            children_4.extend(children_5)
-                                        offset_4 = offset_5
-                                        column_4 = column_5
-                                        indent_column_2 = indent_column_3
-                                        partial_tab_offset_2 = partial_tab_offset_3
-                                        partial_tab_width_2 = partial_tab_width_3
-                                        count_2 += 1
-                                    if offset_4 == -1:
+                                    _match = regex_0.match(buf, offset_4)
+                                    if _match:
+                                        _end = _match.end()
+                                        column_4 += (_end - offset_4)
+                                        offset_4 = _end
+                                    else:
+                                        offset_4 = -1
                                         break
-
 
                                     count_2 = 0
                                     while offset_4 < buf_eof:
@@ -5622,43 +3579,14 @@ class Parser:
                                     offset_3 = -1
                                     break
 
-                                count_2 = 0
-                                while True:
-                                    offset_4 = offset_3
-                                    column_4 = column_3
-                                    indent_column_3 = list(indent_column_2)
-                                    partial_tab_offset_3 = partial_tab_offset_2
-                                    partial_tab_width_3 = partial_tab_width_2
-                                    children_4 = [] if children_3 is not None else None
-                                    while True:
-                                        if offset_4 == buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        codepoint = ord(buf[offset_4])
-
-                                        if codepoint == 10:
-                                            offset_4 = -1
-                                            break
-                                        else:
-                                            offset_4 += 1
-                                            column_4 += 1
-
-                                        break
-                                    if offset_4 == -1:
-                                        break
-                                    if offset_3 == offset_4: break
-                                    if children_4 is not None and children_4 is not None:
-                                        children_3.extend(children_4)
-                                    offset_3 = offset_4
-                                    column_3 = column_4
-                                    indent_column_2 = indent_column_3
-                                    partial_tab_offset_2 = partial_tab_offset_3
-                                    partial_tab_width_2 = partial_tab_width_3
-                                    count_2 += 1
-                                if offset_3 == -1:
+                                _match = regex_0.match(buf, offset_3)
+                                if _match:
+                                    _end = _match.end()
+                                    column_3 += (_end - offset_3)
+                                    offset_3 = _end
+                                else:
+                                    offset_3 = -1
                                     break
-
 
                                 count_2 = 0
                                 while offset_3 < buf_eof:
@@ -5765,43 +3693,14 @@ class Parser:
                                             offset_4 = -1
                                             break
 
-                                        count_3 = 0
-                                        while True:
-                                            offset_5 = offset_4
-                                            column_5 = column_4
-                                            indent_column_4 = list(indent_column_3)
-                                            partial_tab_offset_4 = partial_tab_offset_3
-                                            partial_tab_width_4 = partial_tab_width_3
-                                            children_5 = [] if children_4 is not None else None
-                                            while True:
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if codepoint == 10:
-                                                    offset_5 = -1
-                                                    break
-                                                else:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-
-                                                break
-                                            if offset_5 == -1:
-                                                break
-                                            if offset_4 == offset_5: break
-                                            if children_5 is not None and children_5 is not None:
-                                                children_4.extend(children_5)
-                                            offset_4 = offset_5
-                                            column_4 = column_5
-                                            indent_column_3 = indent_column_4
-                                            partial_tab_offset_3 = partial_tab_offset_4
-                                            partial_tab_width_3 = partial_tab_width_4
-                                            count_3 += 1
-                                        if offset_4 == -1:
+                                        _match = regex_0.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
+                                        else:
+                                            offset_4 = -1
                                             break
-
 
                                         count_3 = 0
                                         while offset_4 < buf_eof:
@@ -5901,43 +3800,14 @@ class Parser:
                                                 offset_5 = -1
                                                 break
 
-                                            count_3 = 0
-                                            while True:
-                                                offset_6 = offset_5
-                                                column_6 = column_5
-                                                indent_column_4 = list(indent_column_3)
-                                                partial_tab_offset_4 = partial_tab_offset_3
-                                                partial_tab_width_4 = partial_tab_width_3
-                                                children_6 = [] if children_5 is not None else None
-                                                while True:
-                                                    if offset_6 == buf_eof:
-                                                        offset_6 = -1
-                                                        break
-
-                                                    codepoint = ord(buf[offset_6])
-
-                                                    if codepoint == 10:
-                                                        offset_6 = -1
-                                                        break
-                                                    else:
-                                                        offset_6 += 1
-                                                        column_6 += 1
-
-                                                    break
-                                                if offset_6 == -1:
-                                                    break
-                                                if offset_5 == offset_6: break
-                                                if children_6 is not None and children_6 is not None:
-                                                    children_5.extend(children_6)
-                                                offset_5 = offset_6
-                                                column_5 = column_6
-                                                indent_column_3 = indent_column_4
-                                                partial_tab_offset_3 = partial_tab_offset_4
-                                                partial_tab_width_3 = partial_tab_width_4
-                                                count_3 += 1
-                                            if offset_5 == -1:
+                                            _match = regex_0.match(buf, offset_5)
+                                            if _match:
+                                                _end = _match.end()
+                                                column_5 += (_end - offset_5)
+                                                offset_5 = _end
+                                            else:
+                                                offset_5 = -1
                                                 break
-
 
                                             count_3 = 0
                                             while offset_5 < buf_eof:
@@ -6035,43 +3905,14 @@ class Parser:
                                                 offset_5 = -1
                                                 break
 
-                                            count_3 = 0
-                                            while True:
-                                                offset_6 = offset_5
-                                                column_6 = column_5
-                                                indent_column_4 = list(indent_column_3)
-                                                partial_tab_offset_4 = partial_tab_offset_3
-                                                partial_tab_width_4 = partial_tab_width_3
-                                                children_6 = [] if children_5 is not None else None
-                                                while True:
-                                                    if offset_6 == buf_eof:
-                                                        offset_6 = -1
-                                                        break
-
-                                                    codepoint = ord(buf[offset_6])
-
-                                                    if codepoint == 10:
-                                                        offset_6 = -1
-                                                        break
-                                                    else:
-                                                        offset_6 += 1
-                                                        column_6 += 1
-
-                                                    break
-                                                if offset_6 == -1:
-                                                    break
-                                                if offset_5 == offset_6: break
-                                                if children_6 is not None and children_6 is not None:
-                                                    children_5.extend(children_6)
-                                                offset_5 = offset_6
-                                                column_5 = column_6
-                                                indent_column_3 = indent_column_4
-                                                partial_tab_offset_3 = partial_tab_offset_4
-                                                partial_tab_width_3 = partial_tab_width_4
-                                                count_3 += 1
-                                            if offset_5 == -1:
+                                            _match = regex_0.match(buf, offset_5)
+                                            if _match:
+                                                _end = _match.end()
+                                                column_5 += (_end - offset_5)
+                                                offset_5 = _end
+                                            else:
+                                                offset_5 = -1
                                                 break
-
 
                                             count_3 = 0
                                             while offset_5 < buf_eof:
@@ -6178,43 +4019,14 @@ class Parser:
                                             offset_4 = -1
                                             break
 
-                                        count_3 = 0
-                                        while True:
-                                            offset_5 = offset_4
-                                            column_5 = column_4
-                                            indent_column_4 = list(indent_column_3)
-                                            partial_tab_offset_4 = partial_tab_offset_3
-                                            partial_tab_width_4 = partial_tab_width_3
-                                            children_5 = [] if children_4 is not None else None
-                                            while True:
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if codepoint == 10:
-                                                    offset_5 = -1
-                                                    break
-                                                else:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-
-                                                break
-                                            if offset_5 == -1:
-                                                break
-                                            if offset_4 == offset_5: break
-                                            if children_5 is not None and children_5 is not None:
-                                                children_4.extend(children_5)
-                                            offset_4 = offset_5
-                                            column_4 = column_5
-                                            indent_column_3 = indent_column_4
-                                            partial_tab_offset_3 = partial_tab_offset_4
-                                            partial_tab_width_3 = partial_tab_width_4
-                                            count_3 += 1
-                                        if offset_4 == -1:
+                                        _match = regex_0.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
+                                        else:
+                                            offset_4 = -1
                                             break
-
 
                                         count_3 = 0
                                         while offset_4 < buf_eof:
@@ -6336,43 +4148,14 @@ class Parser:
                                             offset_4 = -1
                                             break
 
-                                        count_3 = 0
-                                        while True:
-                                            offset_5 = offset_4
-                                            column_5 = column_4
-                                            indent_column_4 = list(indent_column_3)
-                                            partial_tab_offset_4 = partial_tab_offset_3
-                                            partial_tab_width_4 = partial_tab_width_3
-                                            children_5 = [] if children_4 is not None else None
-                                            while True:
-                                                if offset_5 == buf_eof:
-                                                    offset_5 = -1
-                                                    break
-
-                                                codepoint = ord(buf[offset_5])
-
-                                                if codepoint == 10:
-                                                    offset_5 = -1
-                                                    break
-                                                else:
-                                                    offset_5 += 1
-                                                    column_5 += 1
-
-                                                break
-                                            if offset_5 == -1:
-                                                break
-                                            if offset_4 == offset_5: break
-                                            if children_5 is not None and children_5 is not None:
-                                                children_4.extend(children_5)
-                                            offset_4 = offset_5
-                                            column_4 = column_5
-                                            indent_column_3 = indent_column_4
-                                            partial_tab_offset_3 = partial_tab_offset_4
-                                            partial_tab_width_3 = partial_tab_width_4
-                                            count_3 += 1
-                                        if offset_4 == -1:
+                                        _match = regex_0.match(buf, offset_4)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_4 += (_end - offset_4)
+                                            offset_4 = _end
+                                        else:
+                                            offset_4 = -1
                                             break
-
 
                                         count_3 = 0
                                         while offset_4 < buf_eof:

@@ -19,7 +19,7 @@ if __name__ == "__main__":
     old_python_parser = compile(RSON)
 
     def p(buf):
-        return cython_parser.parse(buf, err=rsonlib.ParserErr, builder=builder)
+        return python_parser.parse(buf, err=rsonlib.ParserErr, builder=builder)
 
     rsonlib.run_tests(p, rsonlib.dump)
 

@@ -18,26 +18,17 @@ class Node:
         if self.name == "value": return self.value
         return builder[self.name](buf, self, children)
 
-regex_0 = re.compile('(?:[^\\n])^{0, }')
-regex_1 = re.compile('[a-zA-Z]')
-regex_2 = re.compile('[0-9a-zA-Z_]')
-regex_3 = re.compile('[^\\x00-\\x1f\\\\\\"\\ud800-\\udfff]')
-regex_4 = re.compile('[0-1]')
-regex_5 = re.compile('[0-9a-fA-F]')
-regex_6 = re.compile('(?:D|d)')
-regex_7 = re.compile('[8-9A-F]')
-regex_8 = re.compile('[\\"\\\\\\/bfnrt\\\'\\n]')
-regex_9 = re.compile("[^\\x00-\\x1f\\\\\\'\\ud800-\\udfff]")
-regex_10 = re.compile('[\\-\\+]')
-regex_11 = re.compile('[0-9A-Fa-f]')
-regex_12 = re.compile('[0-9A-Fa-f_]')
-regex_13 = re.compile('[0-8]')
-regex_14 = re.compile('[0-8_]')
-regex_15 = re.compile('[0-1_]')
-regex_16 = re.compile('[1-9]')
-regex_17 = re.compile('[0-9]')
-regex_18 = re.compile('(?:e|E)')
-regex_19 = re.compile('(?:\\+|\\-)')
+regex_0 = re.compile(r'(?:[^\n])*')
+regex_1 = re.compile(r'[a-zA-Z]')
+regex_2 = re.compile(r'(?:[0-9a-zA-Z_])*')
+regex_3 = re.compile(r'[^\x00-\x1f\\\"\ud800-\udfff]')
+regex_4 = re.compile(r'[0-1]')
+regex_5 = re.compile(r'[0-9a-fA-F]')
+regex_6 = re.compile(r'(?:D|d)')
+regex_7 = re.compile(r'[8-9A-F]')
+regex_8 = re.compile(r'(?:\\)[\"\\\/bfnrt\'\n]')
+regex_9 = re.compile(r'[^\x00-\x1f\\\'\ud800-\udfff]')
+regex_10 = re.compile(r'(?:(?:(?:[\-\+])?(?:0x)[0-9A-Fa-f](?:[0-9A-Fa-f_])*)|(?:(?:[\-\+])?(?:0o)[0-8](?:[0-8_])*)|(?:(?:[\-\+])?(?:0b)[0-1](?:[0-1_])*)|(?:(?:[\-\+])?(?:(?:(?:0))|(?:[1-9](?:[0-9])*))(?:(?:\.)(?:[0-9])*)?(?:(?:e|E)(?:(?:\+|\-)(?:[0-9])*)?)?))')
 
 cdef class Parser:
     cdef dict cache
@@ -419,7 +410,6 @@ cdef class Parser:
                                         offset_4 = -1
                                         break
 
-
                                     break
                                 if offset_4 == -1:
                                     break
@@ -434,6 +424,7 @@ cdef class Parser:
                                 count_0 += 1
                             if offset_3 == -1:
                                 break
+
 
                             break
                         if offset_3 == -1:
@@ -2093,7 +2084,6 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-
                                         break
                                     if offset_4 == -1:
                                         break
@@ -2136,7 +2126,6 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
 
-
                                 count_0 = 0
                                 while True:
                                     offset_4 = offset_3
@@ -2167,7 +2156,6 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-
 
                                         break
                                     if offset_4 == -1:
@@ -2227,7 +2215,6 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-
 
                                         break
                                     if offset_4 == -1:
@@ -2265,7 +2252,6 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
 
-
                                 count_0 = 0
                                 while True:
                                     offset_4 = offset_3
@@ -2290,7 +2276,6 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-
 
                                         break
                                     if offset_4 == -1:
@@ -2350,7 +2335,6 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-
 
                                         break
                                     if offset_4 == -1:
@@ -2388,7 +2372,6 @@ cdef class Parser:
                                     offset_3 = -1
                                     break
 
-
                                 count_0 = 0
                                 while True:
                                     offset_4 = offset_3
@@ -2413,7 +2396,6 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-
 
                                         break
                                     if offset_4 == -1:
@@ -2473,7 +2455,6 @@ cdef class Parser:
                                         else:
                                             offset_4 = -1
                                             break
-
 
                                         break
                                     if offset_4 == -1:
@@ -2538,7 +2519,6 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-
                                         count_0 = 0
                                         while True:
                                             offset_5 = offset_4
@@ -2560,7 +2540,6 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-
 
                                                 break
                                             if offset_5 == -1:
@@ -2632,7 +2611,6 @@ cdef class Parser:
                                                     offset_5 = -1
                                                     break
 
-
                                                 break
                                             if offset_5 == -1:
                                                 break
@@ -2683,7 +2661,6 @@ cdef class Parser:
                                             offset_4 = -1
                                             break
 
-
                                         count_1 = 0
                                         while count_1 < 1:
                                             offset_5 = offset_4
@@ -2702,7 +2679,6 @@ cdef class Parser:
                                                 else:
                                                     offset_5 = -1
                                                     break
-
 
                                                 count_2 = 0
                                                 while True:
@@ -2725,7 +2701,6 @@ cdef class Parser:
                                                         else:
                                                             offset_6 = -1
                                                             break
-
 
                                                         break
                                                     if offset_6 == -1:
@@ -2790,6 +2765,7 @@ cdef class Parser:
                             break # end choice
                         if offset_2 == -1:
                             break
+
 
                         break
                     if offset_2 == -1:

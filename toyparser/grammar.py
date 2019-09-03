@@ -720,7 +720,7 @@ class ParserRule:
     def visit_tail(self, visitor):
         if self.rules:
             for r in self.rules:
-                r.visit_head(visitor)
+                r.visit_tail(visitor)
         visitor(self)
 
     def transform_head(self, visitor):
@@ -826,37 +826,17 @@ def process_rules(start, rules, rule_options):
             else:
                 rule.regular = all(isinstance(l, str) for l in rule.args['range']) 
         elif rule.kind == REPEAT:
-            rule.regular = all(r.regular for r in rule.rules)
+            _min,_max= rule.args['min'], rule.args['max'] 
+            rule.regular = all((
+                _min is None or isinstance(_min, int), 
+                _max is None or isinstance(_max, int), 
+                all(r.regular for r in rule.rules)))
         elif rule.kind == SEQUENCE:
             rule.regular = all(r.regular for r in rule.rules)
         elif rule.kind == CHOICE:
             rule.regular = all(r.regular for r in rule.rules)
         else:
             rule.regular = False
-    def _build_regex(rule):
-        if rule.kind == LITERAL:
-            return f'(?:{"|".join(re.escape(l) for l in rule.args["literals"])})'
-        if rule.kind == RANGE:
-            out = []
-            def _f(x):
-                if 32 < ord(x)< 127 :return re.escape(x)
-                return repr(x)[1:-1]
-            for r in rule.args['range']:
-                if len(r) == 1:
-                    out.append(_f(r))
-                else:
-                    out.append(f"{_f(r[0])}-{_f(r[2])}")
-            if rule.args['invert']:
-                return f"[^{''.join(out)}]"
-            return f"[{''.join(out)}]"
-        if rule.kind == SEQUENCE:
-            return "".join(_build_regex(r) for r in self.rules)
-        if rule.kind == CHOICE:
-            return f'(?:{"|".join(_build_regex(r) for r in self.rules)})'
-        if rule.kind == REPEAT:
-            num = f"{rule.args['min'] or 0}, {rule.args['max'] or''}"
-            return f'(?:{"".join(_build_regex(r) for r in rule.rules)})^' '{' f'{num}' '}'
-
     def _lift_regular(rule):
         if rule.regular:
             if rule.kind != LITERAL or len(rule.args['literals']) > 1:
@@ -923,6 +903,7 @@ class VarBuilder:
 def compile_python(grammar, cython=False, wrap=False):
     memoized = {}
     regexes = {}
+    use_regexes=False
     node = "Node"
     if cython:
         wrap = False
@@ -934,20 +915,22 @@ def compile_python(grammar, cython=False, wrap=False):
     def build_steps(rule, steps, offset, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children, count, values):
         # steps.append(f"print('start', {repr(str(rule))})")
         if rule.kind == REGULAR:
-            regex = rule.args['name']
-            if 0:steps.extend((
-                f"_match = {regex}.match(buf, {offset})",
-                f"print({repr(rule.args['regex'])})",
-                f"print(('no: ' + buf[{offset}:{offset}+15]) if not _match else buf[{offset}:_match.end()])",
-                f"if _match:",
-                f"    _end = _match.end()",
-                f"    {column} += (_end - {offset})",
-                f"    {offset} = _end",
-                f"else:",
-                f"    {offset} = -1",
-                f"    break",
-            ))
-            build_steps(rule.args['rule'], steps, offset, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children, count, values)
+            if not use_regexes:
+                build_steps(rule.args['rule'], steps, offset, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children, count, values)
+            else:
+                regex = rule.args['name']
+                steps.extend((
+                    f"_match = {regex}.match(buf, {offset})",
+                    #f"print({repr(rule.args['regex'])})",
+                    #f"print(('no: ' + buf[{offset}:{offset}+15]) if not _match else buf[{offset}:_match.end()])",
+                    f"if _match:",
+                    f"    _end = _match.end()",
+                    f"    {column} += (_end - {offset})",
+                    f"    {offset} = _end",
+                    f"else:",
+                    f"    {offset} = -1",
+                    f"    break",
+                ))
         elif rule.kind == SEQUENCE:
             build_subrules(rule.rules, steps, offset, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children, count, values)
 
@@ -1985,12 +1968,22 @@ def compile_python(grammar, cython=False, wrap=False):
                 return f"[^{''.join(out)}]"
             return f"[{''.join(out)}]"
         if rule.kind == SEQUENCE:
-            return "".join(_build_regex(r) for r in self.rules)
+            return "".join(_build_regex(r) for r in rule.rules)
         if rule.kind == CHOICE:
-            return f'(?:{"|".join(_build_regex(r) for r in self.rules)})'
+            return f'(?:(?:{")|(?:".join(_build_regex(r) for r in rule.rules)}))'
         if rule.kind == REPEAT:
-            num = f"{rule.args['min'] or 0}, {rule.args['max'] or''}"
-            return f'(?:{"".join(_build_regex(r) for r in rule.rules)})^' '{' f'{num}' '}'
+            _min, _max = rule.args['min'], rule.args['max']
+            if not _min  and _max == 1:
+                num = "?"
+            elif not _min and not _max:
+                num = "*"
+            elif _min ==1 and _max == None:
+                num = "+"
+            elif _min == _max:
+                num = "{" + str(_max) + "}"
+            else:
+                num = "{" +f"{_min or ''}"+","+f"{_max or ''}"+ "}"
+            return f'(?:{"".join(_build_regex(r) for r in rule.rules)}){num}'
     def _visit(node):
         if node.kind ==REGULAR:
             regex = _build_regex(node.args['rule'])
@@ -2042,10 +2035,11 @@ def compile_python(grammar, cython=False, wrap=False):
         f'',
     ))
 
-    for regex, value in regexes.items():
-        output.append(f"{value} = re.compile({repr(regex)})")
-    if regexes:
-        output.append("")
+    if use_regexes:
+        for regex, value in regexes.items():
+            output.append(f"{value} = re.compile(r'{(regex)}')")
+        if regexes:
+            output.append("")
     if cython:
         output.extend((
             f"cdef class Parser:",
@@ -2130,8 +2124,8 @@ def compile_python(grammar, cython=False, wrap=False):
         output.append("")
     if wrap:
         old_output.append("return Parser")
-    # for lineno, line in enumerate(output.output):
-    #   print(lineno, '\t', line)
+    #for lineno, line in enumerate(output.output):
+    #  print(lineno, '\t', line)
     return output.as_string()
 
 

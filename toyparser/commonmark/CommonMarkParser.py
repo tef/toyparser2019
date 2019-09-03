@@ -17,54 +17,6 @@ class Node:
         if self.name == "value": return self.value
         return builder[self.name](buf, self, children)
 
-regex_0 = re.compile('(?:(?:\\#))^{0, }')
-regex_1 = re.compile('[^\\n]')
-regex_2 = re.compile('[\\!-\\/\\:-\\@\\[-\\`\\{-\\~]')
-regex_3 = re.compile('[0-9]')
-regex_4 = re.compile('[xX]')
-regex_5 = re.compile('[0-9a-fA-F]')
-regex_6 = re.compile('[a-zA-Z]')
-regex_7 = re.compile('[0-9a-zA-Z]')
-regex_8 = re.compile('[^\\n\\\\\\&\\`]')
-regex_9 = re.compile('[^\\n\\\\\\&]')
-regex_10 = re.compile('[\\-\\*\\+]')
-regex_11 = re.compile('[\\.\\)]')
-regex_12 = re.compile('[^\\>\\<\\n]')
-regex_13 = re.compile('[^\\)\\(\\n ]')
-regex_14 = re.compile('[^\\[\\]]')
-regex_15 = re.compile('[a-zA-Z0-9\\+\\.\\-]')
-regex_16 = re.compile('[^\\x00- \\>\\<]')
-regex_17 = re.compile("[a-zA-Z0-9\\.\\!\\#\\$\\%\\&\\'\\*\\+\\/\\=\\?\\^_\\`\\{\\|\\}\\~\\-]")
-regex_18 = re.compile('[a-zA-Z0-9]')
-regex_19 = re.compile('[^ \\n\\\\]')
-regex_20 = re.compile('[^ \\n\\\\\\<\\`\\&\\*_\\[\\]\\(\\)\\!]')
-regex_21 = re.compile('(?:\\\\\\[|\\\\\\])')
-regex_22 = re.compile('[^\\[\\]\\n]')
-regex_23 = re.compile('(?:\\[\\]|\\(\\))')
-regex_24 = re.compile('(?:\\<|\\ )')
-regex_25 = re.compile('[^\\"\\n]')
-regex_26 = re.compile("[^\\'\\n]")
-regex_27 = re.compile('[^\\)\\(\\n]')
-regex_28 = re.compile('[_\\*]')
-regex_29 = re.compile('[\\*]')
-regex_30 = re.compile('[^\\n\\`]')
-regex_31 = re.compile('[^\\`]')
-regex_32 = re.compile('(?:\\<script|\\<pre|\\<style)')
-regex_33 = re.compile('(?:\\<\\?|\\<\\!\\[CDATA\\[)')
-regex_34 = re.compile('[A-Z]')
-regex_35 = re.compile('(?:\\<\\/|\\<)')
-regex_36 = re.compile('(?:address|article|aside|base|basefont|blockquote|body|caption|center|col|colgroup|dd|details|dialog|dir|div|dl|dt|fieldset|figcaption|figure|footer|form|frame|frameset|h1|h2|h3|h4|h5|h6|head|header|hr|html|iframe|legend|li|link|main|menu|menuitem|nav|noframes|ol|optgroup|option|p|param|section|source|summary|table|tbody|td|tfoot|th|thead|title|tr|track|ul)')
-regex_37 = re.compile('(?:\\-\\-|\\-\\>|\\>|\\-\\-\\-)')
-regex_38 = re.compile('[^\\>\\n]')
-regex_39 = re.compile('[a-zA-Z\\-0-9]')
-regex_40 = re.compile('[a-zA-Z\\:_]')
-regex_41 = re.compile('[a-zA-Z\\:_0-9\\-]')
-regex_42 = re.compile('[^\\"\\\'\\=\\<\\>\\`\\t \\n\\r]')
-regex_43 = re.compile('(?:\\/\\>|\\>)')
-regex_44 = re.compile('(?:\\<\\/script\\>|\\<\\/pre\\>|\\<\\/style\\>)')
-regex_45 = re.compile('(?:pre|script|style)')
-regex_46 = re.compile('(?:\\>|\\/\\>)')
-
 class Parser:
     def __init__(self, tabstop=None, allow_mixed_indent=False):
          self.tabstop = tabstop or 4
@@ -951,6 +903,7 @@ class Parser:
                         if offset_3 == -1:
                             break
 
+
                         break
                     if offset_3 == -1:
                         offset_2 = -1; break
@@ -1665,7 +1618,6 @@ class Parser:
                                     offset_3 += 1
                                     column_3 += 1
 
-
                                 break
                             if offset_3 == -1:
                                 break
@@ -1683,6 +1635,7 @@ class Parser:
                             break
                         if offset_2 == -1:
                             break
+
 
                         break
                     if offset_2 == -1:
@@ -1987,7 +1940,6 @@ class Parser:
                                                     offset_5 += 1
                                                     column_5 += 1
 
-
                                                 break
                                             if offset_5 == -1:
                                                 break
@@ -2005,6 +1957,7 @@ class Parser:
                                             break
                                         if offset_4 == -1:
                                             break
+
 
                                         break
                                     if offset_4 == -1:
@@ -2168,6 +2121,7 @@ class Parser:
                 break
 
 
+
             break
         return offset_0, column_0, partial_tab_offset_0, partial_tab_width_0
 
@@ -2250,6 +2204,7 @@ class Parser:
                         break
                     if offset_2 == -1:
                         break
+
 
                     break
                 if offset_2 == -1:
@@ -2540,7 +2495,6 @@ class Parser:
                                                             offset_7 = -1
                                                             break
 
-
                                                         break
                                                     if offset_7 == -1:
                                                         break
@@ -2558,6 +2512,7 @@ class Parser:
                                                     break
                                                 if offset_6 == -1:
                                                     break
+
 
                                                 break
                                             if offset_6 == -1:
@@ -2674,7 +2629,6 @@ class Parser:
                                                             offset_7 = -1
                                                             break
 
-
                                                         break
                                                     if offset_7 == -1:
                                                         break
@@ -2689,6 +2643,7 @@ class Parser:
                                                     count_1 += 1
                                                 if offset_6 == -1:
                                                     break
+
 
                                                 break
                                             if offset_6 == -1:
@@ -2778,7 +2733,6 @@ class Parser:
                                                             offset_7 = -1
                                                             break
 
-
                                                         break
                                                     if offset_7 == -1:
                                                         break
@@ -2796,6 +2750,7 @@ class Parser:
                                                     break
                                                 if offset_6 == -1:
                                                     break
+
 
                                                 break
                                             if offset_6 == -1:
@@ -2903,7 +2858,6 @@ class Parser:
                                                     offset_6 += 1
                                                     column_6 += 1
 
-
                                                 break
                                             if offset_6 == -1:
                                                 break
@@ -2918,6 +2872,7 @@ class Parser:
                                             count_1 += 1
                                         if offset_5 == -1:
                                             break
+
 
                                         break
                                     if offset_5 == -1:
@@ -3187,7 +3142,6 @@ class Parser:
                                         offset_4 += 1
                                         column_4 += 1
 
-
                                     break
                                 if offset_4 == -1:
                                     break
@@ -3202,6 +3156,7 @@ class Parser:
                                 count_1 += 1
                             if offset_3 == -1:
                                 break
+
 
                             break
                         if offset_3 == -1:
@@ -3620,6 +3575,7 @@ class Parser:
                     if offset_2 == -1:
                         break
 
+
                     break
                 if offset_2 == -1:
                     offset_1 = -1; break
@@ -3890,7 +3846,6 @@ class Parser:
                                                             offset_7 = -1
                                                             break
 
-
                                                         break
                                                     if offset_7 == -1:
                                                         break
@@ -3908,6 +3863,7 @@ class Parser:
                                                     break
                                                 if offset_6 == -1:
                                                     break
+
 
                                                 break
                                             if offset_6 == -1:
@@ -4024,7 +3980,6 @@ class Parser:
                                                             offset_7 = -1
                                                             break
 
-
                                                         break
                                                     if offset_7 == -1:
                                                         break
@@ -4039,6 +3994,7 @@ class Parser:
                                                     count_1 += 1
                                                 if offset_6 == -1:
                                                     break
+
 
                                                 break
                                             if offset_6 == -1:
@@ -4128,7 +4084,6 @@ class Parser:
                                                             offset_7 = -1
                                                             break
 
-
                                                         break
                                                     if offset_7 == -1:
                                                         break
@@ -4146,6 +4101,7 @@ class Parser:
                                                     break
                                                 if offset_6 == -1:
                                                     break
+
 
                                                 break
                                             if offset_6 == -1:
@@ -4250,7 +4206,6 @@ class Parser:
                                                     offset_6 += 1
                                                     column_6 += 1
 
-
                                                 break
                                             if offset_6 == -1:
                                                 break
@@ -4265,6 +4220,7 @@ class Parser:
                                             count_1 += 1
                                         if offset_5 == -1:
                                             break
+
 
                                         break
                                     if offset_5 == -1:
@@ -4524,7 +4480,6 @@ class Parser:
                                         offset_4 += 1
                                         column_4 += 1
 
-
                                     break
                                 if offset_4 == -1:
                                     break
@@ -4539,6 +4494,7 @@ class Parser:
                                 count_1 += 1
                             if offset_3 == -1:
                                 break
+
 
                             break
                         if offset_3 == -1:
@@ -5529,7 +5485,6 @@ class Parser:
                         break
 
 
-
                     break
                 if offset_1 != -1:
                     offset_0 = offset_1
@@ -5570,7 +5525,6 @@ class Parser:
                                 offset_2 = -1
                                 break
 
-
                             break
                         if offset_2 == -1:
                             break
@@ -5606,7 +5560,6 @@ class Parser:
                         break
 
 
-
                     break
                 if offset_1 != -1:
                     offset_0 = offset_1
@@ -5622,6 +5575,7 @@ class Parser:
                 break # end choice
             if offset_0 == -1:
                 break
+
 
             while True: # start choice
                 offset_1 = offset_0
@@ -7533,7 +7487,6 @@ class Parser:
                                 offset_3 = -1
                                 break
 
-
                             break
                         if offset_3 == -1:
                             break
@@ -7551,6 +7504,7 @@ class Parser:
                         break
                     if offset_2 == -1:
                         break
+
 
                     break
                 if offset_2 == -1:
@@ -8054,7 +8008,6 @@ class Parser:
                                                 offset_5 = -1
                                                 break
 
-
                                             break
                                         if offset_5 == -1:
                                             break
@@ -8072,6 +8025,7 @@ class Parser:
                                         break
                                     if offset_4 == -1:
                                         break
+
 
                                     if buf[offset_4:offset_4+len(value_2)] == value_2:
                                         offset_4 += len(value_2)
@@ -8152,7 +8106,6 @@ class Parser:
                                             offset_4 = -1
                                             break
 
-
                                         break
                                     if offset_4 == -1:
                                         break
@@ -8170,6 +8123,7 @@ class Parser:
                                     break
                                 if offset_3 == -1:
                                     break
+
 
                                 if buf[offset_3:offset_3+len(value_2)] == value_2:
                                     offset_3 += len(value_2)
@@ -10369,7 +10323,6 @@ class Parser:
                                 break
 
 
-
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
@@ -10412,7 +10365,6 @@ class Parser:
                                 break
 
 
-
                             break
                         if offset_2 != -1:
                             offset_1 = offset_2
@@ -10428,6 +10380,7 @@ class Parser:
                         break # end choice
                     if offset_1 == -1:
                         break
+
 
                     count_0 = 0
                     while offset_1 < buf_eof:
@@ -10577,6 +10530,7 @@ class Parser:
                             else:
                                 offset_2 = -1
                                 break
+
 
 
                             break
@@ -10941,6 +10895,7 @@ class Parser:
                 break # end choice
             if offset_0 == -1:
                 break
+
 
             count_0 = 0
             while offset_0 < buf_eof:
@@ -11321,6 +11276,7 @@ class Parser:
                                         if offset_5 == -1:
                                             break
 
+
                                         value_1 = 1
 
 
@@ -11375,6 +11331,7 @@ class Parser:
                                             break
                                         if offset_5 == -1:
                                             break
+
 
                                         value_1 = 2
 
@@ -11811,7 +11768,6 @@ class Parser:
                                     offset_3 = -1
                                     break
 
-
                                 break
                             if offset_3 == -1:
                                 break
@@ -11829,6 +11785,7 @@ class Parser:
                             break
                         if offset_2 == -1:
                             break
+
 
                         if buf[offset_2:offset_2+1] == ':':
                             offset_2 += 1
@@ -11865,7 +11822,6 @@ class Parser:
                                     offset_3 += 1
                                     column_3 += 1
 
-
                                 break
                             if offset_3 == -1:
                                 break
@@ -11880,6 +11836,7 @@ class Parser:
                             count_0 += 1
                         if offset_2 == -1:
                             break
+
 
                         break
                     if offset_2 == -1:
@@ -12019,7 +11976,6 @@ class Parser:
                                     offset_3 = -1
                                     break
 
-
                                 break
                             if offset_3 == -1:
                                 break
@@ -12037,6 +11993,7 @@ class Parser:
                             break
                         if offset_2 == -1:
                             break
+
 
                         if buf[offset_2:offset_2+1] == '@':
                             offset_2 += 1
@@ -12111,7 +12068,6 @@ class Parser:
                                                     break
 
 
-
                                                 break
                                             if offset_5 != -1:
                                                 offset_4 = offset_5
@@ -12184,7 +12140,6 @@ class Parser:
                                                     break
 
 
-
                                                 break
                                             if offset_5 != -1:
                                                 offset_4 = offset_5
@@ -12232,6 +12187,7 @@ class Parser:
                         if offset_2 == -1:
                             break
 
+
                         count_0 = 0
                         while True:
                             offset_3 = offset_2
@@ -12266,7 +12222,6 @@ class Parser:
                                 else:
                                     offset_3 = -1
                                     break
-
 
                                 count_1 = 0
                                 while count_1 < 1:
@@ -12312,7 +12267,6 @@ class Parser:
                                                         else:
                                                             offset_6 = -1
                                                             break
-
 
 
                                                         break
@@ -12387,7 +12341,6 @@ class Parser:
                                                             break
 
 
-
                                                         break
                                                     if offset_6 != -1:
                                                         offset_5 = offset_6
@@ -12449,6 +12402,7 @@ class Parser:
                             count_0 += 1
                         if offset_2 == -1:
                             break
+
 
                         break
                     if offset_2 == -1:
@@ -12629,7 +12583,6 @@ class Parser:
                                             offset_4 = -1
                                             break
 
-
                                         break
                                     if offset_4 == -1:
                                         break
@@ -12647,6 +12600,7 @@ class Parser:
                                     break
                                 if offset_3 == -1:
                                     break
+
 
                                 break
                             if offset_3 == -1:
@@ -12763,7 +12717,6 @@ class Parser:
                                             offset_4 = -1
                                             break
 
-
                                         break
                                     if offset_4 == -1:
                                         break
@@ -12778,6 +12731,7 @@ class Parser:
                                     count_0 += 1
                                 if offset_3 == -1:
                                     break
+
 
                                 break
                             if offset_3 == -1:
@@ -12867,7 +12821,6 @@ class Parser:
                                             offset_4 = -1
                                             break
 
-
                                         break
                                     if offset_4 == -1:
                                         break
@@ -12885,6 +12838,7 @@ class Parser:
                                     break
                                 if offset_3 == -1:
                                     break
+
 
                                 break
                             if offset_3 == -1:
@@ -13173,6 +13127,7 @@ class Parser:
                         if offset_2 == -1:
                             break
 
+
                         break
                     if offset_2 == -1:
                         offset_1 = -1
@@ -13242,6 +13197,7 @@ class Parser:
                             break
                         if offset_2 == -1:
                             break
+
 
                         break
                     if offset_2 == -1:
@@ -13475,6 +13431,7 @@ class Parser:
                                             break
                                         if offset_4 == -1:
                                             break
+
 
 
                                         break
@@ -13961,7 +13918,6 @@ class Parser:
                                                                     break
 
 
-
                                                                 break
                                                             if offset_9 != -1:
                                                                 offset_8 = offset_9
@@ -14000,7 +13956,6 @@ class Parser:
                                                                     column_8 += 1
 
 
-
                                                                 break
                                                             if offset_9 != -1:
                                                                 offset_8 = offset_9
@@ -14034,6 +13989,7 @@ class Parser:
                                                     break
                                                 if offset_7 == -1:
                                                     break
+
 
                                                 break
                                             if offset_7 == -1:
@@ -15074,7 +15030,6 @@ class Parser:
                                                                 break
 
 
-
                                                             break
                                                         if offset_9 != -1:
                                                             offset_8 = offset_9
@@ -15113,7 +15068,6 @@ class Parser:
                                                                 column_8 += 1
 
 
-
                                                             break
                                                         if offset_9 != -1:
                                                             offset_8 = offset_9
@@ -15147,6 +15101,7 @@ class Parser:
                                                 break
                                             if offset_7 == -1:
                                                 break
+
 
                                             break
                                         if offset_7 == -1:
@@ -19292,7 +19247,6 @@ class Parser:
                                     offset_3 = -1
                                     break
 
-
                                 break
                             if offset_3 == -1:
                                 break
@@ -19310,6 +19264,7 @@ class Parser:
                             break
                         if offset_2 == -1:
                             break
+
 
                         break
                     if offset_2 == -1:
@@ -19426,7 +19381,6 @@ class Parser:
                                     offset_3 = -1
                                     break
 
-
                                 break
                             if offset_3 == -1:
                                 break
@@ -19441,6 +19395,7 @@ class Parser:
                             count_0 += 1
                         if offset_2 == -1:
                             break
+
 
                         break
                     if offset_2 == -1:
@@ -19530,7 +19485,6 @@ class Parser:
                                     offset_3 = -1
                                     break
 
-
                                 break
                             if offset_3 == -1:
                                 break
@@ -19548,6 +19502,7 @@ class Parser:
                             break
                         if offset_2 == -1:
                             break
+
 
                         break
                     if offset_2 == -1:
@@ -20586,6 +20541,7 @@ class Parser:
                         if offset_2 == -1:
                             break
 
+
                         break
                     if offset_2 == -1:
                         offset_1 = -1; break
@@ -20662,7 +20618,6 @@ class Parser:
                                                         offset_6 += 1
                                                         column_6 += 1
 
-
                                                     break
                                                 if offset_6 == -1:
                                                     break
@@ -20677,6 +20632,7 @@ class Parser:
                                                 count_1 += 1
                                             if offset_5 == -1:
                                                 break
+
 
                                             break
                                         if offset_5 == -1:
@@ -20930,6 +20886,7 @@ class Parser:
                                             if offset_5 == -1:
                                                 break
 
+
                                             break
                                         if offset_5 == -1:
                                             offset_4 = -1
@@ -21099,6 +21056,7 @@ class Parser:
                             break
                         if offset_2 == -1:
                             break
+
 
                         break
                     if offset_2 == -1:
@@ -21700,6 +21658,7 @@ class Parser:
                                 else:
                                     offset_3 = -1
                                     break
+
 
 
                                 break
@@ -22414,7 +22373,6 @@ class Parser:
                                     offset_3 += 1
                                     column_3 += 1
 
-
                                 break
                             if offset_3 == -1:
                                 break
@@ -22429,6 +22387,7 @@ class Parser:
                             count_0 += 1
                         if offset_2 == -1:
                             break
+
 
                         break
                     if offset_2 == -1:
@@ -22539,7 +22498,6 @@ class Parser:
                                             offset_4 += 1
                                             column_4 += 1
 
-
                                         break
                                     if offset_4 == -1:
                                         break
@@ -22554,6 +22512,7 @@ class Parser:
                                     count_1 += 1
                                 if offset_3 == -1:
                                     break
+
 
                                 break
                             if offset_3 == -1:
@@ -22965,7 +22924,6 @@ class Parser:
                                     offset_3 = -1
                                     break
 
-
                                 break
                             if offset_3 == -1:
                                 break
@@ -22980,6 +22938,7 @@ class Parser:
                             count_0 += 1
                         if offset_2 == -1:
                             break
+
 
                         break
                     if offset_2 == -1:
@@ -23290,7 +23249,6 @@ class Parser:
                                             offset_4 = -1
                                             break
 
-
                                         break
                                     if offset_4 == -1:
                                         break
@@ -23308,6 +23266,7 @@ class Parser:
                                     break
                                 if offset_3 == -1:
                                     break
+
 
                                 break
                             if offset_3 == -1:
@@ -23652,7 +23611,6 @@ class Parser:
                                                             offset_6 += 1
                                                             column_6 += 1
 
-
                                                         break
                                                     if offset_6 == -1:
                                                         break
@@ -23670,6 +23628,7 @@ class Parser:
                                                     break
                                                 if offset_5 == -1:
                                                     break
+
 
                                                 break
                                             if offset_5 == -1:
@@ -23739,7 +23698,6 @@ class Parser:
                                                             offset_6 += 1
                                                             column_6 += 1
 
-
                                                         break
                                                     if offset_6 == -1:
                                                         break
@@ -23754,6 +23712,7 @@ class Parser:
                                                     count_2 += 1
                                                 if offset_5 == -1:
                                                     break
+
 
                                                 break
                                             if offset_5 == -1:
@@ -23864,7 +23823,6 @@ class Parser:
                                                                     offset_7 += 1
                                                                     column_7 += 1
 
-
                                                                 break
                                                             if offset_7 == -1:
                                                                 break
@@ -23879,6 +23837,7 @@ class Parser:
                                                             count_3 += 1
                                                         if offset_6 == -1:
                                                             break
+
 
                                                         break
                                                     if offset_6 == -1:
@@ -23987,7 +23946,6 @@ class Parser:
                                                             offset_6 += 1
                                                             column_6 += 1
 
-
                                                         break
                                                     if offset_6 == -1:
                                                         break
@@ -24002,6 +23960,7 @@ class Parser:
                                                     count_2 += 1
                                                 if offset_5 == -1:
                                                     break
+
 
                                                 break
                                             if offset_5 == -1:
@@ -24112,7 +24071,6 @@ class Parser:
                                                                     offset_7 += 1
                                                                     column_7 += 1
 
-
                                                                 break
                                                             if offset_7 == -1:
                                                                 break
@@ -24127,6 +24085,7 @@ class Parser:
                                                             count_3 += 1
                                                         if offset_6 == -1:
                                                             break
+
 
                                                         break
                                                     if offset_6 == -1:
@@ -24638,7 +24597,6 @@ class Parser:
                                     offset_3 = -1
                                     break
 
-
                                 break
                             if offset_3 == -1:
                                 break
@@ -24653,6 +24611,7 @@ class Parser:
                             count_0 += 1
                         if offset_2 == -1:
                             break
+
 
                         count_0 = 0
                         while offset_2 < buf_eof:
@@ -24826,6 +24785,7 @@ class Parser:
                                 else:
                                     offset_4 = -1
                                     break
+
 
 
                                 break
@@ -25192,7 +25152,6 @@ class Parser:
                                         offset_4 += 1
                                         column_4 += 1
 
-
                                     break
                                 if offset_4 == -1:
                                     break
@@ -25207,6 +25166,7 @@ class Parser:
                                 count_0 += 1
                             if offset_3 == -1:
                                 break
+
 
                             break
                         if offset_3 == -1:
@@ -25713,7 +25673,6 @@ class Parser:
                                         offset_4 += 1
                                         column_4 += 1
 
-
                                     break
                                 if offset_4 == -1:
                                     break
@@ -25728,6 +25687,7 @@ class Parser:
                                 count_0 += 1
                             if offset_3 == -1:
                                 break
+
 
                             break
                         if offset_3 == -1:
@@ -26227,7 +26187,6 @@ class Parser:
                                         offset_4 += 1
                                         column_4 += 1
 
-
                                     break
                                 if offset_4 == -1:
                                     break
@@ -26242,6 +26201,7 @@ class Parser:
                                 count_0 += 1
                             if offset_3 == -1:
                                 break
+
 
                             break
                         if offset_3 == -1:
@@ -26755,7 +26715,6 @@ class Parser:
                                         offset_4 += 1
                                         column_4 += 1
 
-
                                     break
                                 if offset_4 == -1:
                                     break
@@ -26770,6 +26729,7 @@ class Parser:
                                 count_0 += 1
                             if offset_3 == -1:
                                 break
+
 
                             break
                         if offset_3 == -1:
@@ -27269,7 +27229,6 @@ class Parser:
                                         offset_4 += 1
                                         column_4 += 1
 
-
                                     break
                                 if offset_4 == -1:
                                     break
@@ -27284,6 +27243,7 @@ class Parser:
                                 count_0 += 1
                             if offset_3 == -1:
                                 break
+
 
                             break
                         if offset_3 == -1:
@@ -27749,6 +27709,7 @@ class Parser:
                                     break
 
 
+
                                 break
                             if offset_4 != -1:
                                 offset_3 = offset_4
@@ -27821,7 +27782,6 @@ class Parser:
                                 offset_3 += 1
                                 column_3 += 1
 
-
                             break
                         if offset_3 == -1:
                             break
@@ -27836,6 +27796,7 @@ class Parser:
                         count_0 += 1
                     if offset_2 == -1:
                         break
+
 
                     break
                 if offset_2 == -1:
@@ -27975,7 +27936,6 @@ class Parser:
                                         offset_4 += 1
                                         column_4 += 1
 
-
                                     break
                                 if offset_4 == -1:
                                     break
@@ -27990,6 +27950,7 @@ class Parser:
                                 count_1 += 1
                             if offset_3 == -1:
                                 break
+
 
                             break
                         if offset_3 == -1:
@@ -28346,7 +28307,6 @@ class Parser:
                                         offset_4 = -1
                                         break
 
-
                                     break
                                 if offset_4 == -1:
                                     break
@@ -28361,6 +28321,7 @@ class Parser:
                                 count_0 += 1
                             if offset_3 == -1:
                                 break
+
 
                             count_0 = 0
                             while offset_3 < buf_eof:
@@ -28474,7 +28435,6 @@ class Parser:
                                         offset_4 = -1
                                         break
 
-
                                     break
                                 if offset_4 == -1:
                                     break
@@ -28489,6 +28449,7 @@ class Parser:
                                 count_0 += 1
                             if offset_3 == -1:
                                 break
+
 
                             count_0 = 0
                             while True:
@@ -28581,7 +28542,6 @@ class Parser:
                                                 offset_5 = -1
                                                 break
 
-
                                             break
                                         if offset_5 == -1:
                                             break
@@ -28599,6 +28559,7 @@ class Parser:
                                         break
                                     if offset_4 == -1:
                                         break
+
 
                                     count_1 = 0
                                     while count_1 < 1:
@@ -28711,7 +28672,6 @@ class Parser:
                                                                 offset_7 += 1
                                                                 column_7 += 1
 
-
                                                             break
                                                         if offset_7 == -1:
                                                             break
@@ -28780,7 +28740,6 @@ class Parser:
                                                             else:
                                                                 offset_7 += 1
                                                                 column_7 += 1
-
 
                                                             break
                                                         if offset_7 == -1:
@@ -28855,7 +28814,6 @@ class Parser:
                                                                 offset_7 += 1
                                                                 column_7 += 1
 
-
                                                             break
                                                         if offset_7 == -1:
                                                             break
@@ -28894,6 +28852,7 @@ class Parser:
                                                 break # end choice
                                             if offset_5 == -1:
                                                 break
+
 
                                             break
                                         if offset_5 == -1:
@@ -29130,7 +29089,6 @@ class Parser:
                                         offset_4 += 1
                                         column_4 += 1
 
-
                                     break
                                 if offset_4 == -1:
                                     break
@@ -29145,6 +29103,7 @@ class Parser:
                                 count_1 += 1
                             if offset_3 == -1:
                                 break
+
 
                             break
                         if offset_3 == -1:
