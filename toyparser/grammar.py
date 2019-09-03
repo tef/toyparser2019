@@ -239,12 +239,15 @@ MEMOIZE = 'memoize'
 PRINT = 'print'
 TRACE = 'trace'
 
+class Key:
+    pass
+
 class GrammarNode:
     def __init__(self, kind, *, key=None, rules=None, args=None):
         self.kind = kind
         self.rules = rules
         self.args = args
-        self.key = key if key else object()
+        self.key = key if key else Key()
 
     def __str__(self):
         rules = ' '.join(str(x) for x in self.rules) if self.rules else ''
@@ -711,6 +714,29 @@ class ParserRule:
 
         return "({} {})".format(self.kind, rules or args)
 
+    def re_key(self):
+        keys = {}
+        def _visitor(node):
+            new_key = Key()
+            old_key = node.key
+            keys[old_key] = new_key
+        self.visit_head(_visitor)
+
+        def _re_key(node, children):
+
+            def r(v):
+                if isinstance(v, Key): return keys[v]
+                if isinstance(v, tuple): return tuple(r(x) for x in v)
+                if isinstance(v, list): return list(r(x) for x in v)
+                if isinstance(v, dict): return {k:r(x) for k,x in v.items()}
+                return v
+
+            args = {k: r(v) for k,v in node.args.items()} if node.args else None
+            key = keys[node.key]
+            node = ParserRule( node.kind, key=key, rules=children,  args = args, nullable=node.nullable, regular=node.regular)
+            return node
+        return self.transform_tail(_re_key)
+
     def visit_head(self, visitor):
         visitor(self)
         if self.rules:
@@ -736,11 +762,11 @@ class ParserRule:
         else:
             return visitor(self, self.rules)
 
-
     def inline(self, name, rule, rule_options):
         if self.kind == RULE:
             if self.args['name'] == name and (self.args['inline'] or rule_options.get('inline')):
-                return rule
+                r = rule.re_key()
+                return r
             else:
                 return self
         if not self.rules:
@@ -955,7 +981,7 @@ def compile_python(grammar, cython=False, wrap=False):
             build_subrules(rule.rules, steps_0.add_indent(), offset_0, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children_0, count.incr(), values)
             steps_0.append(f"    break")
 
-            steps_0.append(f"self.cache[{count}] = ({offset_0}, {column}, list({indent_column}, {children_0}, {partial_tab_offset},{partial_tab_width})")
+            steps_0.append(f"self.cache[{count}] = ({offset_0}, {column}, list({indent_column}), {children_0}, {partial_tab_offset},{partial_tab_width})")
 
             steps.append(f"{offset} = {offset_0}")
             steps.append(f"if {children_0} is not None and {children_0} is not None:")
@@ -1000,6 +1026,7 @@ def compile_python(grammar, cython=False, wrap=False):
             steps.append(f"{column_0} = {column}")
 
             value = VarBuilder('value', n=len(values))
+            if rule.key in values: raise Exception('what', rule.key)
             values[rule.key] = value
 
             if rule.args['nested']:

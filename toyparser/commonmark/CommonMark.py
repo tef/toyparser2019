@@ -41,22 +41,31 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
 
     # 3. Block and Inline Elemnts
 
-    block_element = rule(
-        html_block |
-        indented_code_block | 
-        tilde_code_block |
-        backtick_code_block |
-        blockquote | 
-        atx_heading |  
-            # 4.1 Ex 29. Headers take precidence over thematic breaks
-        thematic_break |  
-            # 4.1 Ex 30. Thematic Breaks take precidence over lists
-        # Link reference_definiton
-        ordered_list |
-        unordered_list |
-        link_definition | 
-        para 
-    )
+    @rule()
+    def block_element(self):
+        with self.choice():
+            with self.case():
+                self.html_block()
+            with self.case():
+                self.indented_code_block()
+            with self.case():
+                self.tilde_code_block()
+            with self.case():
+                self.backtick_code_block()
+            with self.case():
+                self.blockquote()
+            with self.case():
+                self.atx_heading()
+            with self.case():
+                self.thematic_break()
+            with self.case():
+                self.ordered_list()
+            with self.case():
+                self.unordered_list()
+            with self.case():
+                self.link_definition()
+            with self.case():
+                self.para()
 
     @rule() # 4.1
     def thematic_break(self):
@@ -100,12 +109,13 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
 
     @rule(inline=True)
     def atx_heading_end(self):
-        with self.optional():
-            self.whitespace(min=1)
-            with self.repeat():
-                self.literal("#")
-        self.whitespace()
-        self.end_of_line()
+        with self.memoize():
+            with self.optional():
+                self.whitespace(min=1)
+                with self.repeat():
+                    self.literal("#")
+            self.whitespace()
+            self.end_of_line()
 
 
     @rule()
