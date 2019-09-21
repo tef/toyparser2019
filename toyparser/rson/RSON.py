@@ -75,7 +75,7 @@ def untag(buf, node, children):
 
 builder['tagged'] = untag
 
-class RSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n", "\uFEFF"]):
+class RSON(Grammar, start="document", inline=True):
     @rule()
     def document(self):
         self.comment.inline()
@@ -83,14 +83,19 @@ class RSON(Grammar, start="document", whitespace=[" ", "\t", "\r", "\n", "\uFEFF
         self.comment.inline()
 
     @rule()
+    def rson_whitespace(self):
+        with self.repeat():
+            self.range(" ", "\t", "\r", "\n", "\uFEFF")
+
+    @rule()
     def comment(self):
-        self.whitespace()
+        self.rson_whitespace()
         with self.repeat(min=0):
             self.literal("#")
             with self.repeat(min=0):
                 self.range("\n", invert=True)
-            self.whitespace()
-        self.whitespace()
+            self.rson_whitespace()
+        self.rson_whitespace()
 
     @rule()
     def rson_value(self):

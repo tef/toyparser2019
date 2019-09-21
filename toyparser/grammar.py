@@ -1048,11 +1048,6 @@ def compile_python(grammar, cython=False, wrap=False):
 
         elif rule.kind == CAPTURE:
             children_0 = children.incr()
-            offset_0 = offset.incr()
-            column_0 = column.incr()
-            steps.append(f"{offset_0} = {offset}")
-            steps.append(f"{column_0} = {column}")
-
             value = VarBuilder('value', n=len(values))
             if rule.key in values: raise Exception('what', rule.key)
             values[rule.key] = value
@@ -1065,10 +1060,9 @@ def compile_python(grammar, cython=False, wrap=False):
             steps.append(f"{value} = {node}(None, {offset}, {offset}, {column}, {column}, {children_0}, None)")
             if rule.rules:
                 steps.append(f"while True: # start capture")
-                build_subrules(rule.rules, steps.add_indent(), offset_0, column_0, indent_column, partial_tab_offset, partial_tab_width, prefix, children_0, count, values)
+                build_subrules(rule.rules, steps.add_indent(), offset, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children_0, count, values)
                 steps.append(f"    break")
-                steps.append(f"if {offset_0} == -1:")
-                steps.append(f"    {offset} = -1")
+                steps.append(f"if {offset} == -1:")
                 steps.append(f"    break")
 
             name = rule.args['name']
@@ -1080,8 +1074,8 @@ def compile_python(grammar, cython=False, wrap=False):
             steps.extend((
                 # f"print(len(buf), {offset}, {offset_0}, {children})",
                 f"{value}.name = {name}",
-                f"{value}.end = {offset_0}",
-                f"{value}.end_column = {column_0}",
+                f"{value}.end = {offset}",
+                f"{value}.end_column = {column}",
                 f"{value}.value = {captured_value}",
             ))
 
@@ -1093,9 +1087,6 @@ def compile_python(grammar, cython=False, wrap=False):
                 parent = children
 
             steps.append(f"{parent}.append({value})")
-
-            steps.append(f"{offset} = {offset_0}")
-            steps.append(f"{column} = {column_0}")
 
         elif rule.kind == CHOICE:
             children_0 = children.incr()
