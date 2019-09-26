@@ -28,16 +28,22 @@ if __name__ == "__main__":
             "@Tag [1,2,3]",
             ""
         ]),
+        "\n".join([
+            "# header",
+            "para1",
+            "",
+            "para2",
+        ]),
     ]
 
     for testcase in tests:
         for line in testcase.splitlines():
             print("> ", line)
 
-        o1, cython_t = timeit("cython", (lambda b: cython_parser.parse(b)), testcase)
-        o2, python_t = timeit("python-compiled", (lambda b: python_parser.parse(b)), testcase)
+        o1, python_t = timeit("python-compiled", (lambda b: python_parser.parse(b)), testcase)
+        #o2, cython_t = timeit("cython", (lambda b: cython_parser.parse(b)), testcase)
 
-        if o1.end != o2.end: raise Exception(o1,o2)
+        # if not o1 or not o2 or o1.end != o2.end: raise Exception(o1,o2)
 
         walk(o1)
         print()
