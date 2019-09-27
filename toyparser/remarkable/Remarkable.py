@@ -134,8 +134,8 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 self.atx_heading()
             with self.case():
                 self.thematic_break()
-            #with self.case():
-            #    self.unordered_list()
+            with self.case():
+                self.unordered_list()
             with self.case():
                 self.para()
 
@@ -197,29 +197,126 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             with self.repeat():
                 self.indent()
                 with self.reject():
-                    self.whitespace(max=3)
                     with self.repeat(min=c):
                         self.literal(fence)
-                        self.whitespace()
                     self.end_of_line()
                 with self.capture_node('text'), self.repeat(min=0):
                     self.range("\n", invert=True)
                 self.line_end()
+            self.indent()
+            with self.repeat(min=c):
+                self.literal(fence)
+            self.whitespace()
+            self.line_end()
+
+    @rule()
+    def start_list(self):
+        self.whitespace(max=8)
+        self.literal("-")
+        with self.choice():
+            with self.case(), self.lookahead():
+                self.whitespace()
+                self.end_of_line()
+            with self.case():
+                self.whitespace(min=1, max=1, newline=True)
+
+    @rule()
+    def list_interrupts(self):
+        with self.choice():
+            with self.case(): self.thematic_break()
+            with self.case(): self.atx_heading()
+            with self.case(): self.start_fenced_block()
+            with self.case(): self.start_list()
+            # with self.case(): self.start_blockquote()
+
+
+    @rule()
+    def list_item(self):
             with self.choice():
                 with self.case():
-                    with self.reject():
-                        self.indent()
-                with self.case(): 
                     self.whitespace()
-                    self.end_of_file()
+                    with self.reject(): 
+                        self.newline()
                 with self.case():
-                    self.indent()
-                    self.whitespace(max=3)
-                    with self.repeat(min=c):
+                    with self.lookahead():
                         self.whitespace()
-                        self.literal(fence)
+                        self.newline()
+
+                    with self.indented():
+                        self.whitespace()
+                        self.newline()
+                        self.indent()
+                    self.whitespace(min=1, max=1)
+
+            self.block_element()
+            with self.repeat():
+                self.indent()
+                with self.optional():
+                    with self.repeat():
+                        self.whitespace()
+                        with self.capture_node("empty"):
+                            self.newline()
+                        self.indent()
+                    with self.lookahead():
+                        self.whitespace()
+                        self.range("\n", invert=True)
+                self.block_element()
+
+    @rule()
+    def unordered_list(self):
+        with self.capture_node("unordered_list"):
+            with self.count(columns=True) as w:
+                with self.count(columns=True) as i:
+                    self.whitespace(max=8)
+                delimiter = "-"
+                self.literal(delimiter)
+
+            with self.choice():
+                with self.case(), self.lookahead():
                     self.whitespace()
-                    self.line_end()
+                    self.end_of_line()
+                with self.case():
+                    self.whitespace(min=1, max=1, newline=True)
+
+            with self.choice():
+                with self.case():
+                    with self.capture_node("list_item"):
+                        with self.indented(count=w, dedent=self.list_interrupts):
+                            self.list_item()
+                with self.case():
+                    with self.capture_node("list_item"):
+                        self.whitespace()
+                    self.end_of_line()
+
+            with self.repeat():
+                self.indent()
+                with self.optional():
+                    with self.capture_node('empty'):
+                        self.whitespace()
+                        self.newline()
+                    self.indent()
+                    with self.lookahead():
+                        self.whitespace(min=i, max=i)
+                        self.literal(delimiter)
+
+                self.whitespace(min=i, max=i)
+                self.literal(delimiter)
+                with self.choice():
+                    with self.case(), self.lookahead():
+                        self.whitespace()
+                        self.end_of_line()
+                    with self.case():
+                        self.whitespace(min=1, max=1, newline=True)
+
+                with self.choice():
+                    with self.case():
+                        with self.capture_node("list_item"):
+                            with self.indented(count=w, dedent=self.list_interrupts):
+                                self.list_item()
+                    with self.case():
+                        with self.capture_node("list_item"):
+                            self.whitespace()
+                        self.end_of_line()
 
 
 
@@ -230,6 +327,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
         with self.choice():
             with self.case(): self.thematic_break()
             with self.case(): self.atx_heading()
+            with self.case(): self.start_list()
             with self.case(): self.start_fenced_block()
             
     @rule(inline=True)
@@ -670,139 +768,6 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                         with self.indented(indent=self.start_blockquote, dedent=self.blockquote_interrupt):
                             self.block_element()
                         
-
-    @rule()
-    def start_list(self):
-        self.whitespace(max=3)
-        with self.choice():
-            with self.case():
-                self.range('-', '*', '+') 
-            with self.case():
-                with self.repeat(min=1, max=9): self.range("0-9")
-                self.range(".", ")")
-
-        with self.choice():
-            with self.case(), self.lookahead():
-                self.whitespace()
-                self.end_of_line()
-            with self.case():
-                self.whitespace(min=1, max=1, newline=True)
-
-    @rule()
-    def list_interrupts(self):
-        with self.choice():
-            with self.case(): self.thematic_break()
-            with self.case(): self.atx_heading()
-            with self.case(): self.start_fenced_block()
-            with self.case(): self.start_blockquote()
-            with self.case(): self.start_html_block()
-            with self.case():
-                self.start_list()
-
-
-    @rule()
-    def list_item(self):
-        with self.choice():
-            with self.case():
-                with self.lookahead():
-                    self.whitespace(min=4, max=4)
-                    with self.reject():
-                        self.line_end()
-            with self.case():
-                with self.lookahead():
-                    self.start_fenced_block()
-            
-            with self.case():
-                self.whitespace()
-                with self.reject(): 
-                    self.newline()
-            with self.case():
-                with self.lookahead():
-                    self.whitespace()
-                    self.newline()
-
-                with self.indented():
-                    self.whitespace()
-                    self.newline()
-                    self.indent()
-                self.whitespace(min=1, max=1)
-
-        with self.list_interrupts.as_dedent():
-            self.block_element()
-            with self.repeat():
-                self.indent(partial=True)
-                with self.optional():
-                    with self.repeat():
-                        self.whitespace()
-                        with self.capture_node("empty"):
-                            self.newline()
-                        self.indent()
-                    with self.lookahead():
-                        self.whitespace()
-                        self.range("\n", invert=True)
-                self.block_element()
-
-    @rule()
-    def unordered_list(self):
-        with self.reject():
-            self.thematic_break()
-        with self.capture_node("unordered_list"):
-            self.whitespace(max=3)
-            with self.backref() as delimiter:
-                self.range('-', '*', '+') 
-
-            with self.choice():
-                with self.case(), self.lookahead():
-                    self.whitespace()
-                    self.end_of_line()
-                with self.case():
-                    self.whitespace(min=1, max=1, newline=True)
-
-            with self.choice():
-                with self.case():
-                    with self.capture_node("list_item"):
-                        self.list_item()
-                with self.case():
-                    with self.capture_node("list_item"):
-                        self.whitespace()
-                    self.end_of_line()
-
-            with self.repeat():
-                self.indent()
-                with self.choice():
-                    with self.case():
-                        self.whitespace()
-                        self.newline()
-                        with self.capture_node('empty'), self.repeat():
-                            self.indent()
-                            self.whitespace()
-                            self.newline()
-                        with self.lookahead():
-                            self.indent()
-                            self.whitespace(max=3)
-                            self.literal(delimiter)
-                    with self.case():
-                        with self.reject():
-                            self.thematic_break()
-                        self.whitespace(max=3)
-
-                        self.literal(delimiter)
-
-                        with self.choice():
-                            with self.case(), self.lookahead():
-                                self.whitespace()
-                                self.end_of_line()
-                            with self.case():
-                                self.whitespace(min=1, max=1, newline=True)
-
-                        with self.choice():
-                            with self.case():
-                                with self.capture_node("list_item"):
-                                    self.list_item()
-                            with self.case():
-                                with self.capture_node("list_item"):
-                                    self.whitespace()
-                                self.end_of_line()
 
     @rule()
     def left_flank(self):

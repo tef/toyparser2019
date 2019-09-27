@@ -1469,49 +1469,7 @@ def compile_python(grammar, cython=False, wrap=False):
 
                 if not rule.args['dedent']:
                     steps.extend((
-                        f"def _dedent(buf, buf_start, buf_eof, offset, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count={count}, allow_mixed_indent=self.allow_mixed_indent):",
-                        f"    saw_tab, saw_not_tab = False, False",
-                        f"    start_column, start_offset = column, offset",
-                        f"    while count > 0 and offset < buf_eof:",
-                        f"        codepoint = buf[offset]",
-                        f"        if {cond}:",
-                        f"            if not allow_mixed_indent:",
-                        f"                if codepoint == '\\t': saw_tab = True",
-                        f"                else: saw_not_tab = True",
-                        f"                if saw_tab and saw_not_tab:",
-                        f"                    offset = start_offset; break",
-                        f"            if codepoint != '\\t':",
-                        f"                column += 1",
-                        f"                offset += 1",
-                        f"                count -=1",
-                        f"            else:",
-                        f"                if offset == partial_tab_offset and partial_tab_width > 0:",
-                        f"                    width = partial_tab_width",
-                        f"                else:",
-                        f"                    width  = (self.tabstop-(column%self.tabstop))",
-                        f"                if width <= count:",
-                        f"                    column += width",
-                        f"                    offset += 1",
-                        f"                    count -= width",
-                        f"                else: # we have indent, so break" ,
-                        f"                    offset = -1; break",
-                    ))
-                    if newline_rn:
-                        steps.extend((
-                        f"        elif codepoint == '\\r' and {offset} + 1 < buf_eof and buf[{offset}+1] == '\\n':", 
-                        f"            offset = -1; break",
-                        ))
-                    steps.extend((
-                        f"        elif {cond2}:",
-                        f"            offset = -1; break",
-                        f"        else:",
-                        f"            offset = start_offset",
-                        f"    if count == 0:",
-                        f"            offset = -1",
-                        f"    return offset, column, partial_tab_offset, partial_tab_width",
-                    ))
-                    steps.extend((
-                        f'{prefix}.append((_indent, _dedent))',
+                        f'{prefix}.append((_indent, None))',
                     ))
 
                 else:
