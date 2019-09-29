@@ -257,7 +257,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             with self.case():
                 self.thematic_break()
             with self.case():
-                self.unordered_list()
+                self.block_group()
             with self.case():
                 self.para()
 
@@ -332,7 +332,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             self.line_end()
 
     @rule()
-    def start_list(self):
+    def start_group(self):
         self.whitespace(max=8)
         self.literal("-")
         with self.choice():
@@ -348,12 +348,12 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             with self.case(): self.thematic_break()
             with self.case(): self.atx_heading()
             with self.case(): self.start_fenced_block()
-            with self.case(): self.start_list()
+            with self.case(): self.start_group()
             # with self.case(): self.start_blockquote()
 
 
     @rule()
-    def list_item(self):
+    def group_item(self):
             with self.choice():
                 with self.case():
                     self.whitespace()
@@ -386,13 +386,18 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 self.block_element()
 
     @rule()
-    def unordered_list(self):
-        with self.capture_node("unordered_list"):
+    def block_group(self):
+        with self.variable('group') as kind, self.capture_node(kind):
             with self.count(columns=True) as w:
                 with self.count(columns=True) as i:
                     self.whitespace(max=8)
-                delimiter = "-"
-                self.literal(delimiter)
+                with self.backref() as delimiter, self.choice():
+                    with self.case():
+                        self.literal("-")
+                        self.set_variable(kind, "list")
+                    with self.case():
+                        self.literal(">")
+                        self.set_variable(kind, "quote")
 
             with self.choice():
                 with self.case(), self.lookahead():
@@ -403,11 +408,11 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
 
             with self.choice():
                 with self.case():
-                    with self.capture_node("list_item"):
+                    with self.capture_node("item"):
                         with self.indented(count=w, dedent=self.list_interrupts):
-                            self.list_item()
+                            self.group_item()
                 with self.case():
-                    with self.capture_node("list_item"):
+                    with self.capture_node("item"):
                         self.whitespace()
                     self.end_of_line()
 
@@ -433,11 +438,11 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
 
                 with self.choice():
                     with self.case():
-                        with self.capture_node("list_item"):
+                        with self.capture_node("item"):
                             with self.indented(count=w, dedent=self.list_interrupts):
-                                self.list_item()
+                                self.group_item()
                     with self.case():
-                        with self.capture_node("list_item"):
+                        with self.capture_node("item"):
                             self.whitespace()
                         self.end_of_line()
 
@@ -450,7 +455,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
         with self.choice():
             with self.case(): self.thematic_break()
             with self.case(): self.atx_heading()
-            with self.case(): self.start_list()
+            with self.case(): self.start_group()
             with self.case(): self.start_fenced_block()
             # with self.case(): self.start_blockquote()
             
@@ -847,52 +852,6 @@ if __name__ == "__main__":
 
 '''
 class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["\n"], tabstop=4):
-    @rule()
-    def start_blockquote(self):
-        self.literal('> ')
-        with self.choice():
-            with self.case(), self.lookahead():
-                self.whitespace()
-                self.end_of_line()
-            with self.case():
-                self.whitespace(min=0, max=1)
-                with self.lookahead():
-                    self.range("\n", invert=True)
-
-    @rule()
-    def blockquote_interrupt(self):
-        with self.choice():
-            with self.case(): 
-                self.whitespace()
-                self.newline()
-            with self.case(): self.thematic_break()
-            with self.case(): self.atx_heading()
-            with self.case(): self.start_fenced_block()
-            with self.case(): self.start_list()
-            with self.case(): self.start_html_block()
-
-    @rule()
-    def blockquote(self):
-        with self.capture_node("blockquote"):
-            self.start_blockquote()
-            with self.choice():
-                with self.case():
-                    self.whitespace()
-                    self.end_of_line()
-                with self.case():
-                    with self.indented(indent=self.start_blockquote, dedent=self.blockquote_interrupt):
-                        self.block_element()
-            with self.repeat():
-                self.indent()
-                self.start_blockquote()
-                with self.choice():
-                    with self.case():
-                        self.whitespace()
-                        self.end_of_line()
-                    with self.case():
-                        with self.indented(indent=self.start_blockquote, dedent=self.blockquote_interrupt):
-                            self.block_element()
-                        
 
     @rule()
     def left_flank(self):
