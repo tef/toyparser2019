@@ -2087,7 +2087,7 @@ def compile_python(grammar, cython=False, wrap=False):
         f"    if children and new_offset == end:",
         f"         if builder is None: return {node}({repr(grammar.capture)}, offset, new_offset, 0, column, children, None)",
         f"         return children[-1].build(buf, builder)",
-        f"    print('no', offset, new_offset, end, buf[new_offset:])",
+        f"#     print('no', offset, new_offset, end)",
         f"    if err is not None: raise err(buf, new_offset, 'no')",
         f"",
     ))

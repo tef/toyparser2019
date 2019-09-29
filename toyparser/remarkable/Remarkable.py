@@ -1,7 +1,132 @@
+"""
+# Remarkable, a restructured markup format.
+
+## The summary
+
+The syntax sugar is very similar to markdown
+
+- Words seperated by whitespace, empty line is paragraph break
+- `# Header`, `## Subheader` 
+- *\*strong\**, _\_emphasis\__
+- `---` Horizonal Rule
+- `- indented list item`, `> indented quote item`, with at most one empty line between items
+- ``` `raw text` ```, ` ```raw text``` `
+- `\*`, `\_`, `\#`, `\>`, ```\```` to get those characters, even `\\`
+- `\` at the end of a line forces a line break
+
+Every piece of ascii-art has a more canonical longer form, called a directive:
+
+- `\heading[1]{text}`, or `\h[2]{text}`
+- `\emphasis{text}`, `\strong{text}`
+- `\hr`, `\br` 
+- `\list{\item{text}}`, 
+
+For example, `# My heading` can be expressed in several different ways:
+
+- `\heading[1]: My Heading`
+- `\heading[1]{My Heading}`
+- `\heading[level:1]{My Heading}`,
+- `\heading[level:1]{{{My Heading}}}`
+- ```
+  @heading {
+      level: 1,
+      text: ["My Heading", ],
+  }
+  ```
+
+Directives can take parameters, alongside text:
+
+- `\foo[key: "value", "key": "value"]{text}`
+- `\foo[bare_key, "value with no key"]{text}`
+- `\foo[a,b,c]` is `\foo["a": null, "b":null, "c":null]`
+
+Keys can be quoted strings, or identifier like bare words. Values can take numerous JSON like forms:
+
+- `0x123`, `0b111`, `0o123`, `123` 
+- `123.456`, `123e45`,floats
+- `"strings"`, `'or single quoted'`
+- `[lists]`, `{key:value}`
+
+Directives also have an 'argument only form', somewhat like JSON:
+
+```
+@metadata {
+    author: "tef",
+    date: 2019-09-30T12:00Z,
+}
+```
+
+Finally, directives can take list, quote, or code blocks as arguments, along with text:
+
+```
+\code``` ... ```
+
+\list:
+- 1 
+- 2
+
+\quote:
+> para
+
+\para: Until the next paragraph break,
+which includes trailing lines
+
+\section:
+    This text is indented
+```
+
+## Example Document
+
+Putting it all together, here's a larger example:
+
+```
+@metadata {
+    author: "tef",
+    version: "123",
+}
+
+# A title
+
+A paragraph is split
+over  multiple lines
+
+Although this one \
+Contains a line break
+
+- here is a list item with `raw text`
+
+- here is the next list item
+
+
+- this is a new list
+
+  > this is a quoted paragraph inside the list
+
+  > this is a new paragraph inside the blockquote
+
+
+  > this is a new blockquote
+
+This paragraph contains _emphasis_ and *strong text*. As well as ___emphasis over
+multiple lines___ and `inline code`, too.
+
+\list[start: 1]:
+- a final list
+- that starts at 1
+  - with an unnumbered
+  - sublist inside, that has text that
+continues on the next line.
+
+This is the last paragraph, which contains a non-breaking\ space.
+```
+
+"""
+
 import base64, codecs
 from datetime import datetime, timedelta, timezone
 
 from ..grammar import Grammar, compile_python, sibling
+
 
 def unescape(string):
     return codecs.decode(string.replace('\\/', '/'), 'unicode_escape')
@@ -82,13 +207,10 @@ def builder(buf, node, children):
         elif identifier == "unknown":
             raise Exception('bad')
         return {identifier: literal}
+    return {node.kind: node.children}
 
 
 class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r", "\n", "\r\n"], tabstop=8):
-    @rule()
-    def document(self):
-        self.empty_lines()
-
     # block
     @rule(start="document")
     def document(self):
@@ -97,9 +219,10 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             with self.choice():
                 with self.case(): self.block_element()
                 with self.case(): self.empty_lines()
-        self.print(2)
+                with self.case(): self.end_of_file()
         self.whitespace()
         self.end_of_file()
+        self.print(3)
 
     @rule(inline=True)
     def empty_lines(self):
@@ -124,7 +247,6 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
         with self.choice():
             with self.case():
                 self.tagged_rson_value()
-                self.print(1)
                 self.line_end()
             with self.case():
                 self.backtick_code_block()
@@ -252,7 +374,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             with self.repeat():
                 self.indent()
                 with self.optional():
-                    with self.repeat():
+                    with self.repeat(max=2):
                         self.whitespace()
                         with self.capture_node("empty"):
                             self.newline()
@@ -260,6 +382,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                     with self.lookahead():
                         self.whitespace()
                         self.range("\n", invert=True)
+                self.whitespace(min=1, max=1)
                 self.block_element()
 
     @rule()
@@ -291,7 +414,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             with self.repeat():
                 self.indent()
                 with self.optional():
-                    with self.capture_node('empty'):
+                    with self.capture_node('emptylist'):
                         self.whitespace()
                         self.newline()
                     self.indent()
@@ -329,6 +452,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             with self.case(): self.atx_heading()
             with self.case(): self.start_list()
             with self.case(): self.start_fenced_block()
+            # with self.case(): self.start_blockquote()
             
     @rule(inline=True)
     def linebreak(self):
@@ -389,7 +513,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                     with self.repeat(min=0):
                         with self.choice():
                             with self.case():
-                                self.range(" ", "\n", "\\", "<", "`", "&", "*", "_", "[", "]", "(", ")", "!", invert=True)
+                                self.range(" ", "\n", "`", invert=True)
                             with self.case():
                                 with self.reject(offset=-1):
                                     self.range(unicode_punctuation=True)
@@ -565,6 +689,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 self.range("0-9", "A-F", "a-f")
                 with self.repeat():
                     self.range("0-9","A-F","a-f","_")
+                # hexfloat?
             with self.case():
                 with self.optional():
                     self.range("-", "+")

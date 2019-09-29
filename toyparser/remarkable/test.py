@@ -3,7 +3,7 @@ from datetime import datetime, timedelta, timezone
 
 from ..grammar import Grammar, compile_python
 from .RemarkableParser import Parser as RemarkableParser
-from .Remarkable import Remarkable, builder
+from .Remarkable import Remarkable, builder, __doc__ as Readme
 
 def walk(node, indent="- "):
     print(indent, node)
@@ -48,6 +48,7 @@ if __name__ == "__main__":
 - 1
   - 2
     - 3
+    - 4
   - 4
 - 5
 
@@ -60,6 +61,43 @@ if __name__ == "__main__":
 
 
 - 9
+""",
+"""\
+- 1
+
+  2
+
+  a
+
+  3
+
+  
+  4
+
+- 1
+
+- 2
+
+
+- 3
+
+""",
+"""\
+# Heading
+
+Para
+
+## Subheading
+
+Para
+""",
+"""
+> quote
+
+> new para
+
+
+> new quote
 """,
     ]
 
@@ -74,6 +112,12 @@ if __name__ == "__main__":
 
         walk(o1)
         print()
+
+    print()
+
+    out = python_parser.parse(Readme)
+    # walk(out)
+    print()
 
 
 
