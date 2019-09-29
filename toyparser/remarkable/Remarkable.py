@@ -150,6 +150,7 @@ from datetime import datetime, timedelta, timezone
 from ..grammar import Grammar, compile_python, sibling
 
 
+
 def unescape(string):
     return codecs.decode(string.replace('\\/', '/'), 'unicode_escape')
 
@@ -165,7 +166,30 @@ def parse_datetime(v):
 bools = {'false': False, 'true':True}
 
 def builder(buf, node, children):
-    kind = node.kind
+    kind = node.name
+    if kind == "text":
+        return {"t":buf[node.start:node.end]}
+    if kind == "para":
+        return children
+    if kind == "span":
+        if node.value == "_":
+            return {"emphasis": children}
+        if node.value == "*":
+            return {"strong": children}
+
+    if kind == "document":
+        return [c for c in children if c]
+
+    if kind == "whitespace":
+        return " "
+    if kind == "softbreak":
+        return " "
+    if kind == "hardbreak":
+        return "\n"
+    if kind in ('empty', 'empty_line'):
+        return ()
+    if kind == 'atx_heading':
+        return {'heading': dict(level=node.value, text=children)}
 
     if kind == 'number': 
         return eval(buf[node.start:node.end])
@@ -177,8 +201,6 @@ def builder(buf, node, children):
         return dict(children)
     if kind == 'pair':
         return children
-    if kind == 'document': 
-        return children[0]
     if kind =='bool': 
         return bools[buf[node.start:node.end]]
     if kind == 'null': 
@@ -229,7 +251,7 @@ def builder(buf, node, children):
         elif identifier == "unknown":
             raise Exception('bad')
         return {identifier: literal}
-    return {node.kind: node.children}
+    return {node.name: children}
 
 
 class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r", "\n", "\r\n"], tabstop=8):
@@ -245,6 +267,13 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
         self.whitespace()
         self.end_of_file()
         self.print(3)
+
+    @rule()
+    def identifier(self):
+        with self.capture_node('identifier', nested=False):
+            self.range("a-z", "A-Z")
+            with self.repeat():
+                self.range("0-9", "a-z","A-Z","_")
 
     @rule(inline=True)
     def empty_lines(self):
@@ -272,12 +301,12 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 self.line_end()
             with self.case():
                 self.backtick_code_block()
-            #with self.case():
-            #    self.blockquote()
             with self.case():
                 self.atx_heading()
             with self.case():
                 self.thematic_break()
+            with self.case():
+                self.block_directive()
             with self.case():
                 self.block_group()
             with self.case():
@@ -314,8 +343,6 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                         self.capture_value("\\")
                     self.line_end()
 
-
-
     @rule()
     def start_fenced_block(self):
         self.literal("```")
@@ -326,17 +353,6 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             fence = "`"
             with self.count(char=fence) as c, self.repeat(min=3):
                 self.literal(fence)
-            with self.capture_node('info'), self.repeat(min=0):
-                with self.reject(): # Example 115
-                    self.literal(fence)
-                with self.choice():
-                    with self.case(): self.escaped_text()
-                    with self.case(): self.html_entity()
-                    with self.case():
-                        with self.capture_node('text'):
-                            self.range("\n", invert=True)
-                            with self.repeat(min=0):
-                                self.range("\n", "\\", "&", "`", invert=True)
             self.line_end()
             with self.repeat():
                 self.indent()
@@ -376,50 +392,50 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
 
     @rule()
     def group_item(self):
-            with self.choice():
-                with self.case():
+        with self.choice():
+            with self.case():
+                self.whitespace()
+                with self.reject(): 
+                    self.newline()
+            with self.case():
+                with self.lookahead():
                     self.whitespace()
-                    with self.reject(): 
-                        self.newline()
-                with self.case():
-                    with self.lookahead():
-                        self.whitespace()
-                        self.newline()
+                    self.newline()
 
-                    with self.indented():
-                        self.whitespace()
-                        self.newline()
-                        self.indent()
-                    self.whitespace(min=1, max=1)
-
-            self.block_element()
-            with self.repeat():
-                self.indent()
-                with self.optional():
-                    with self.repeat(max=2):
-                        self.whitespace()
-                        with self.capture_node("empty"):
-                            self.newline()
-                        self.indent()
-                    with self.lookahead():
-                        self.whitespace()
-                        self.range("\n", invert=True)
+                with self.indented():
+                    self.whitespace()
+                    self.newline()
+                    self.indent()
                 self.whitespace(min=1, max=1)
-                self.block_element()
+
+        self.block_element()
+        with self.repeat():
+            self.indent()
+            with self.optional():
+                with self.repeat(min=1):
+                    self.whitespace()
+                    with self.capture_node("empty"):
+                        self.newline()
+                    self.indent()
+                with self.lookahead():
+                    self.whitespace()
+                    self.range("\n", invert=True)
+            self.whitespace(min=1, max=1)
+            self.block_element()
 
     @rule()
     def block_group(self):
-        with self.variable('group') as kind, self.capture_node(kind):
+        with self.variable('group') as kind, self.variable('tight') as spacing, self.capture_node(kind):
             with self.count(columns=True) as w:
                 with self.count(columns=True) as i:
                     self.whitespace(max=8)
                 with self.backref() as delimiter, self.choice():
                     with self.case():
                         self.literal("-")
-                        self.set_variable(kind, "list")
+                        self.set_variable(kind, "blocklist")
                     with self.case():
                         self.literal(">")
-                        self.set_variable(kind, "quote")
+                        self.set_variable(kind, "blockquote")
 
             with self.choice():
                 with self.case(), self.lookahead():
@@ -441,7 +457,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             with self.repeat():
                 self.indent()
                 with self.optional():
-                    with self.capture_node('emptylist'):
+                    with self.capture_node('empty'):
                         self.whitespace()
                         self.newline()
                     self.indent()
@@ -469,8 +485,11 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                         self.end_of_line()
 
 
+    @rule()
+    def block_directive(self):
+        self.literal("~~~~~NOT YET")
 
-    # inlines
+    # inlines/paras
 
     @rule()
     def para_interrupt(self):
@@ -527,12 +546,15 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
 
     @rule()
     def inline_element(self):
+        self.print('>')
         with self.choice():
             with self.case():
-                self.code_span()
+                self.inline_directive()
+            with self.case():
+                self.inline_span()
 
             with self.case():
-                self.escaped_text()
+                self.code_span()
 
             with self.case():
                 with self.capture_node('text'):
@@ -540,20 +562,21 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                     with self.repeat(min=0):
                         with self.choice():
                             with self.case():
-                                self.range(" ", "\n", "`", invert=True)
+                                self.range(" ", "\n", "`", "_", "*", invert=True)
                             with self.case():
-                                with self.reject(offset=-1):
-                                    self.range(unicode_punctuation=True)
                                 with self.repeat(min=1): 
                                     self.literal("_") 
+                                with self.reject():
+                                    self.whitespace(newline=True)
+        self.print('<')
 
     @rule(inline=True)
-    def escaped_text(self):
+    def inline_directive(self):
         with self.choice():
             with self.case():
                 self.literal("\\")
                 with self.capture_node("text"):
-                    self.range("!-/",":-@","[-`","{-~")
+                    self.range("*", "_","!-/",":-@","[-`","{-~")
 
             with self.case(), self.capture_node("text"):
                 self.literal("\\")
@@ -562,30 +585,38 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                     self.whitespace()
                     self.range('\n', invert=True)
 
-    @rule(inline=True)
-    def html_entity(self):
-        self.literal("&");
-        with self.choice():
-            with self.case():
-                self.literal("#")
-                with self.capture_node("html_entity", value="decimal"), self.repeat(min=1, max=7):
-                    self.range("0-9")
-                self.literal(";")
-            with self.case():
-                self.literal("#")
-                self.range("x","X")
-                with self.capture_node("html_entity", value="hex"):
-                    self.range("0-9", "a-f","A-F")
-                    with self.repeat(min=0, max=6):
-                        self.range("0-9", "a-f","A-F")
-                self.literal(";")
-            with self.case():
-                with self.capture_node("html_entity", value="named"):
-                    self.range("a-z","A-Z")
-                    with self.repeat(min=1):
-                        self.range("0-9","a-z","A-Z")
-                self.literal(";")
+    @rule()
+    def inline_span(self):
+        with self.count(columns=True) as n, self.variable('') as fence:
+            with self.backref() as chr:
+                self.range("_", "*")
+            with self.repeat(min=0):
+                self.literal(chr)
+            with self.reject():
+                self.whitespace(newline=True, min=1)
+            self.set_variable(fence, chr)
 
+        self.print(1)
+
+        with self.capture_node('span', value=fence):
+            self.inline_element()
+            self.print(3)
+
+            with self.repeat(min=0):
+                with self.choice():
+                    with self.case():
+                        self.linebreak()
+                    with self.case():
+                        with self.capture_node("whitespace"):
+                            self.whitespace()
+
+                self.inline_element()
+                self.print(2)
+
+        self.print(2)
+        with self.repeat(min=n, max=n):
+            self.literal(fence)
+                
     @rule()
     def code_span(self):
         with self.choice():
@@ -632,10 +663,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
     def tagged_rson_value(self):
         with self.capture_node('tagged'):
             self.literal('@')
-            with self.capture_node('identifier', nested=False):
-                self.range("a-z", "A-Z")
-                with self.repeat():
-                    self.range("0-9", "a-z","A-Z","_")
+            self.identifier()
             self.literal(' ')
             self.rson_literal()
     @rule()
@@ -875,66 +903,6 @@ if __name__ == "__main__":
 '''
 class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["\n"], tabstop=4):
 
-    @rule()
-    def left_flank(self):
-        with self.capture_node("left_flank"), self.choice():
-            with self.case():
-                with self.lookahead(offset=-1):
-                    self.range(unicode_whitespace=True, unicode_newline=True, unicode_punctuation=True)
-                with self.count(columns=True) as n:
-                    with self.backref() as chr:
-                        self.range("_", "*")
-                    with self.repeat(min=0):
-                        self.literal(chr)
-                with self.reject():
-                    self.range(unicode_whitespace=True, unicode_newline=True)
-                self.capture_value("left")
-                self.capture_value(chr)
-                self.capture_value(n)
-
-            with self.case():
-                with self.reject(offset=-1):
-                    self.range(unicode_punctuation=True)
-                with self.count(columns=True) as n:
-                    with self.backref() as chr:
-                        self.range("_", "*")
-                    with self.repeat(min=0):
-                        self.literal(chr)
-                with self.reject():
-                    self.range(unicode_whitespace=True, unicode_newline=True, unicode_punctuation=True)
-                self.capture_value('left')
-                self.capture_value(chr)
-                self.capture_value(n)
-                    
-    @rule()
-    def right_flank(self):
-        with self.capture_node("right_flank"), self.choice():
-            with self.case():
-                with self.reject(offset=-1):
-                    self.range(unicode_whitespace=True, unicode_newline=True, unicode_punctuation=True)
-                with self.count(columns=True) as n:
-                    with self.backref() as chr:
-                        self.range("_", "*")
-                    with self.repeat(min=0):
-                        self.literal(chr)
-                self.capture_value("right")
-                self.capture_value(chr)
-                self.capture_value(n)
-
-            with self.case():
-                with self.reject(offset=-1):
-                    self.range(unicode_whitespace=True, unicode_newline=True)
-                with self.count(columns=True) as n:
-                    with self.backref() as chr:
-                        self.range("_", "*")
-                    with self.repeat(min=0):
-                        self.literal(chr)
-                with self.lookahead():
-                    self.range(unicode_whitespace=True, unicode_newline=True, unicode_punctuation=True)
-                self.capture_value("right")
-                self.capture_value(chr)
-                self.capture_value(n)
-                
     @rule()
     def dual_flank(self):
         with self.capture_node("dual_flank"), self.choice():

@@ -1022,6 +1022,10 @@ def compile_python(grammar, cython=False, wrap=False):
             steps.append(f"{offset_0} = {offset}")
             if not rule.rules:
                 raise Exception('empty rules')
+
+            value = VarBuilder('value', n=len(values))
+            values[rule.key] = value
+
             steps.append(f"while True: # start backref")
             build_subrules(rule.rules, steps.add_indent(), offset_0, column, indent_column, partial_tab_offset, partial_tab_width, prefix, children, count, values)
             steps.append(f"    break")
@@ -1029,8 +1033,6 @@ def compile_python(grammar, cython=False, wrap=False):
             steps.append(f"    {offset} = -1")
             steps.append(f"    break")
 
-            value = VarBuilder('value', n=len(values))
-            values[rule.key] = value
 
             steps.extend((
                 f"{value} = buf[{offset}:{offset_0}]",
@@ -1140,7 +1142,7 @@ def compile_python(grammar, cython=False, wrap=False):
             else: _maxv = repr(_max)
 
             cond = "True"
-            if _max:
+            if _max is not None:
                 cond = f"{count} < {_maxv}"
 
 
@@ -1165,9 +1167,12 @@ def compile_python(grammar, cython=False, wrap=False):
 
 
             steps_0.append("while True:")
+            steps_0.append(f"    print('entry rep rule', {offset}, {offset_0})")
             for subrule in rule.rules:
                     build_steps(subrule, steps_0.add_indent(), offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0, prefix, children_0, new_count, values)
+            steps_0.append(f"    print('safe exit rep rule', {offset}, {offset_0})")
             steps_0.append("    break")
+            steps_0.append(f"print('exit rep rule', {offset}, {offset_0})")
             steps_0.append(f"if {offset_0} == -1:")
             steps_0.append(f"    break")
 
@@ -1183,12 +1188,14 @@ def compile_python(grammar, cython=False, wrap=False):
             if _max == 1:
                 steps_0.append(f"break")
 
-            if _min:
+            if _min is not None:
                 steps.extend((
                     f"if {count} < {_minv}:",
+                    f"    print('min exit', {offset})",
                     f"    {offset} = -1",
                     f"    break",
                 ))
+            steps.append(f"print('exit', {offset})")
             steps.append(f"if {offset} == -1:")
             steps.append(f"    break")
 
@@ -1344,6 +1351,9 @@ def compile_python(grammar, cython=False, wrap=False):
             steps.append(f'raise Exception("{rule.kind} missing") # unfinished {rule}')
 
         elif rule.kind == COUNT:
+            # find var name
+            var_name = VarBuilder('value',n=len(values))
+            values[rule.key] = var_name
             offset_0 = offset.incr()
             column_0 = column.incr()
             steps.append(f"{offset_0} = {offset}")
@@ -1353,9 +1363,6 @@ def compile_python(grammar, cython=False, wrap=False):
             steps.append("    break")
             steps.append(f"if {offset_0} == -1:")
             steps.append(f"    {offset} = -1; break")
-            # find var name
-            var_name = VarBuilder('value',n=len(values))
-            values[rule.key] = var_name
 
             if rule.args['columns']:
                 value = f"{column_0} - {column}"

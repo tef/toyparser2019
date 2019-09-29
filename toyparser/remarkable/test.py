@@ -99,6 +99,13 @@ Para
 
 > new quote
 """,
+"""
+*strong*, _emph_
+
+**strong still**
+
+__emph still__
+""",
     ]
 
     for testcase in tests:
@@ -115,8 +122,9 @@ Para
 
     print()
 
-    out = python_parser.parse(Readme)
-    # walk(out)
+    # out = python_parser.parse(Readme).build(Readme, builder)
+    import pprint
+    #pprint.pprint(out)
     print()
 
 
