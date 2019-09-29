@@ -9,17 +9,34 @@ The syntax sugar is very similar to markdown
 - `# Header`, `## Subheader` 
 - *\*strong\**, _\_emphasis\__
 - `---` Horizonal Rule
-- `- indented list item`, `> indented quote item`, with at most one empty line between items
 - ``` `raw text` ```, ` ```raw text``` `
 - `\*`, `\_`, `\#`, `\>`, ```\```` to get those characters, even `\\`
 - `\` at the end of a line forces a line break
 
-Every piece of ascii-art has a more canonical longer form, called a directive:
+Lists, quotes work by the same rules, with at most one empty line between blocks
+
+```
+- A list
+that spans lines
+- With two items
+  - and a sublist
+
+
+- A new list
+  > With a block quote
+that spans lines
+  > And a second paragraph
+```
+
+Like markdown, if there is only one item,  no empty lines between items, the list is considered 'tight'. This means
+entries are not wrapped in paragraphs. Blockquotes are processed similarly. 
+
+Unlike markdown, every piece of ascii-art has a more canonical longer form, called a directive:
 
 - `\heading[1]{text}`, or `\h[2]{text}`
 - `\emphasis{text}`, `\strong{text}`
 - `\hr`, `\br` 
-- `\list{\item{text}}`, 
+- `\list[spacing: "loose"]{\item{text}}`, 
 
 For example, `# My heading` can be expressed in several different ways:
 
@@ -59,7 +76,12 @@ Directives also have an 'argument only form', somewhat like JSON:
 Finally, directives can take list, quote, or code blocks as arguments, along with text:
 
 ```
-\code``` ... ```
+\code{text}
+\code`raw text` 
+
+\code```
+block
+```
 
 \list:
 - 1 
@@ -71,8 +93,8 @@ Finally, directives can take list, quote, or code blocks as arguments, along wit
 \para: Until the next paragraph break,
 which includes trailing lines
 
-\section:
-    This text is indented
+\heading:
+This text is not indented
 ```
 
 ## Example Document
@@ -343,7 +365,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 self.whitespace(min=1, max=1, newline=True)
 
     @rule()
-    def list_interrupts(self):
+    def group_interrupts(self):
         with self.choice():
             with self.case(): self.thematic_break()
             with self.case(): self.atx_heading()
@@ -409,7 +431,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             with self.choice():
                 with self.case():
                     with self.capture_node("item"):
-                        with self.indented(count=w, dedent=self.list_interrupts):
+                        with self.indented(count=w, dedent=self.group_interrupts):
                             self.group_item()
                 with self.case():
                     with self.capture_node("item"):
@@ -439,7 +461,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 with self.choice():
                     with self.case():
                         with self.capture_node("item"):
-                            with self.indented(count=w, dedent=self.list_interrupts):
+                            with self.indented(count=w, dedent=self.group_interrupts):
                                 self.group_item()
                     with self.case():
                         with self.capture_node("item"):
