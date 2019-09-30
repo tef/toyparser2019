@@ -147,8 +147,6 @@ Contains a line break
 
 - here is the next list item
 
-a
-
   > this is a quoted paragraph inside the list
 
   > this is a new paragraph inside the blockquote
@@ -171,11 +169,11 @@ This is the last paragraph, which contains a non-breaking\ space.
 - 1
 
   - 2
+
   - 3
 
-  
 
-   - 4
+  - 4
 
 - 5
 """

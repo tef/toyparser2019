@@ -432,7 +432,6 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                     self.whitespace()
                     self.newline()
                     self.indent()
-                self.whitespace(min=1, max=1)
 
         self.block_element()
         with self.repeat():
@@ -446,7 +445,6 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 with self.lookahead():
                     self.whitespace()
                     self.range("\n", invert=True)
-            self.whitespace(min=1, max=1)
             self.block_element()
 
     @rule()
@@ -473,7 +471,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             with self.choice():
                 with self.case():
                     with self.capture_node("item"):
-                        with self.indented(count=w, dedent=self.group_interrupts):
+                        with self.indented(count=1, dedent=self.group_interrupts), self.indented(count=w, dedent=self.group_interrupts):
                             self.group_item()
                 with self.case():
                     with self.capture_node("item"):
@@ -491,7 +489,6 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                         self.whitespace(min=i, max=i)
                         self.literal(delimiter)
 
-                self.print(222, i)
                 self.whitespace(min=i, max=i)
                 self.literal(delimiter)
                 with self.choice():
@@ -504,8 +501,9 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 with self.choice():
                     with self.case():
                         with self.capture_node("item"):
-                            with self.indented(count=w, dedent=self.group_interrupts):
-                                self.group_item()
+                            with self.indented(count=1, dedent=self.group_interrupts):
+                                with self.indented(count=w, dedent=self.group_interrupts):
+                                    self.group_item()
                     with self.case():
                         with self.capture_node("item"):
                             self.whitespace()
