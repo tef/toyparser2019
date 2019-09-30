@@ -141,6 +141,7 @@ Contains a line break
   > this is a new paragraph inside the blockquote
 
 
+
   > this is a new blockquote
 
 This paragraph contains _emphasis_ and *strong text*. As well as ___emphasis over
@@ -206,6 +207,16 @@ def builder(buf, node, children):
         return ()
     if kind == 'atx_heading':
         return {'heading': dict(level=node.value, text=children)}
+    if kind == "value":
+        return node.value
+    if kind == "arg":
+        return children
+    if kind == "directive_args":
+        return children
+    if kind == "directive_name":
+        return buf[node.start:node.end]
+    if kind == "directive":
+        return {children[0]: children[1:]}
 
     if kind == 'number': 
         return eval(buf[node.start:node.end])
@@ -355,8 +366,8 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                             self.whitespace()
                         self.inline_element()
                     with self.optional():
-                        self.literal("\\")
-                        self.capture_value("\\")
+                        with self.capture_node("text"):
+                            self.literal("\\")
                     self.line_end()
 
     @rule()
@@ -480,6 +491,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                         self.whitespace(min=i, max=i)
                         self.literal(delimiter)
 
+                self.print(222, i)
                 self.whitespace(min=i, max=i)
                 self.literal(delimiter)
                 with self.choice():
@@ -506,12 +518,10 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
         with self.capture_node("directive"):
             with self.capture_node("directive_name"):
                 self.identifier()
-            self.print(1)
             with self.capture_node("directive_args"), self.optional():
                 self.literal("[")
                 self.directive_args()
                 self.literal("]")
-            self.print(2)
             with self.optional(), self.choice():
                 with self.case():
                     self.literal(";")
@@ -544,13 +554,10 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                     with self.repeat(min=n, max=n):
                         self.literal("}")
                 with self.case():
-                    self.print(3)
                     self.code_block()
                 with self.case():
-                    self.print(3)
                     self.code_span()
                 with self.case():
-                    self.print(3)
                     self.literal(":")
                     with self.choice():
                         with self.case():
@@ -834,13 +841,13 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
 
     @rule(inline=True)
     def rson_comment(self):
-        self.whitespace()
         with self.repeat(min=0):
+            self.whitespace()
             self.literal("#")
             with self.repeat(min=0):
                 self.range("\n", invert=True)
-            self.whitespace()
-        self.whitespace()
+            self.newline()
+        self.whitespace(newline=True)
 
     @rule()
     def rson_list(self):
@@ -860,12 +867,17 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
         self.literal("]")
 
     @rule()
+    def rson_key(self):
+        with self.choice():
+            with self.case(): self.rson_string()
+            with self.case(): self.identifier()
+    @rule()
     def rson_object(self):
         self.literal("{")
         self.rson_comment.inline()
         with self.capture_node("object"), self.optional():
             with self.capture_node("pair"):
-                self.rson_string()
+                self.rson_key()
                 self.rson_comment.inline()
                 self.literal(":")
                 self.rson_comment.inline()
@@ -875,7 +887,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 self.literal(",")
                 self.rson_comment.inline()
                 with self.capture_node("pair"):
-                    self.rson_string()
+                    self.rson_key()
                     self.rson_comment.inline()
                     self.literal(":")
                     self.rson_comment.inline()

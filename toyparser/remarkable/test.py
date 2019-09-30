@@ -109,7 +109,27 @@ __emph
 
 still__
 """, 
-r"""
+    ]
+
+    for testcase in tests:
+        for line in testcase.splitlines():
+            print("> ", line)
+
+        o1, python_t = timeit("python-compiled", (lambda b: python_parser.parse(b)), testcase)
+        #o2, cython_t = timeit("cython", (lambda b: cython_parser.parse(b)), testcase)
+
+        # if not o1 or not o2 or o1.end != o2.end: raise Exception(o1,o2)
+
+        walk(o1)
+        print()
+
+    print()
+
+    out = python_parser.parse(Readme).build(Readme, builder)
+    import pprint
+    pprint.pprint(out)
+    print()
+    raw= r"""
 @metadata {
     author: "tef",
     version: "123",
@@ -127,8 +147,7 @@ Contains a line break
 
 - here is the next list item
 
-
-- this is a new list
+a
 
   > this is a quoted paragraph inside the list
 
@@ -148,24 +167,19 @@ multiple lines___ and `inline code`, too.
 continues on the next line.
 
 This is the last paragraph, which contains a non-breaking\ space.
+
+- 1
+
+  - 2
+  - 3
+
+  
+
+   - 4
+
+- 5
 """
-    ]
-
-    for testcase in tests:
-        for line in testcase.splitlines():
-            print("> ", line)
-
-        o1, python_t = timeit("python-compiled", (lambda b: python_parser.parse(b)), testcase)
-        #o2, cython_t = timeit("cython", (lambda b: cython_parser.parse(b)), testcase)
-
-        # if not o1 or not o2 or o1.end != o2.end: raise Exception(o1,o2)
-
-        walk(o1)
-        print()
-
-    print()
-
-    out = python_parser.parse(Readme).build(Readme, builder)
+    out = python_parser.parse(raw).build(raw, builder)
     import pprint
     pprint.pprint(out)
     print()
