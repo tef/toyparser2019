@@ -318,7 +318,6 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
         self.whitespace()
         self.end_of_line()
 
-
     # blocks
     @rule()
     def block_element(self):
@@ -331,7 +330,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             with self.case():
                 self.atx_heading()
             with self.case():
-                self.thematic_break()
+                self.horizontal_rule()
             with self.case():
                 self.block_directive()
             with self.case():
@@ -339,9 +338,9 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             with self.case():
                 self.para()
 
-    @rule() # 4.1
-    def thematic_break(self):
-        with self.capture_node('thematic_break'):
+    @rule() 
+    def horizontal_rule(self):
+        with self.capture_node('horizontal_rule'):
             with self.repeat(min=3):
                 self.literal("-")
         self.line_end()
@@ -410,7 +409,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
     @rule()
     def group_interrupts(self):
         with self.choice():
-            with self.case(): self.thematic_break()
+            with self.case(): self.horizontal_rule()
             with self.case(): self.atx_heading()
             with self.case(): self.start_code_block()
             with self.case(): self.start_group()
@@ -610,14 +609,6 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 self.rson_value()
 
     # inlines/paras
-
-    @rule()
-    def para_interrupt(self):
-        with self.choice():
-            with self.case(): self.thematic_break()
-            with self.case(): self.atx_heading()
-            with self.case(): self.start_group()
-            with self.case(): self.start_code_block()
             
     @rule(inline=True)
     def linebreak(self):
@@ -634,8 +625,12 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                     self.newline()
 
         self.indent(partial=True)
-        with self.reject(): 
-            self.para_interrupt()
+        # allow missing indents if no interrupts
+        with self.reject(), self.choice(): 
+            with self.case(): self.horizontal_rule()
+            with self.case(): self.atx_heading()
+            with self.case(): self.start_group()
+            with self.case(): self.start_code_block()
         self.whitespace()
         with self.reject(): 
             self.newline()
@@ -654,7 +649,6 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                         with self.capture_node("whitespace"):
                             self.whitespace()
 
-                # 4.1 Ex 27, 28. Thematic Breaks can interrupt a paragraph
                 self.inline_element()
 
             self.whitespace()
@@ -678,10 +672,8 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 self.inline_directive()
             with self.case():
                 self.inline_span()
-
             with self.case():
                 self.code_span()
-
             with self.case():
                 with self.capture_node('text'):
                     self.range(" ", "\n", "\\", invert=True)
@@ -870,31 +862,31 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             with self.case(): self.rson_string()
             with self.case(): self.identifier()
     @rule()
+    def rson_pair(self):
+        with self.capture_node("pair"):
+            self.rson_key()
+            self.rson_comment.inline()
+            self.literal(":")
+            self.rson_comment.inline()
+            self.rson_value()
+
+    @rule()
     def rson_object(self):
         self.literal("{")
         self.rson_comment.inline()
         with self.capture_node("object"), self.optional():
-            with self.capture_node("pair"):
-                self.rson_key()
-                self.rson_comment.inline()
-                self.literal(":")
-                self.rson_comment.inline()
-                self.rson_value()
+            self.rson_pair()
             self.rson_comment.inline()
             with self.repeat(min=0):
                 self.literal(",")
                 self.rson_comment.inline()
-                with self.capture_node("pair"):
-                    self.rson_key()
-                    self.rson_comment.inline()
-                    self.literal(":")
-                    self.rson_comment.inline()
-                    self.rson_value()
+                self.rson_pair()
                 self.rson_comment.inline()
             with self.optional():
                 self.literal(",")
                 self.rson_comment.inline()
         self.literal("}")
+
     rson_true = rule(literal("true"), capture="bool")
     rson_false = rule(literal("false"), capture="bool")
     rson_null = rule(literal("null"), capture="null")
@@ -1062,40 +1054,3 @@ if __name__ == "__main__":
         fh.write(code)
 
     subprocess.run(f"python3 `which cythonize` -i {filename}", shell=True).check_returncode()
-
-
-
-'''
-class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["\n"], tabstop=4):
-
-    @rule()
-    def dual_flank(self):
-        with self.capture_node("dual_flank"), self.choice():
-            with self.case():
-                with self.lookahead(offset=-1):
-                    self.range(unicode_punctuation=True)
-                with self.count(columns=True) as n:
-                    with self.backref() as chr:
-                        self.range("_", "*")
-                    with self.repeat(min=0):
-                        self.literal(chr)
-                with self.lookahead():
-                    self.range(unicode_punctuation=True)
-                self.capture_value("dual")
-                self.capture_value(chr)
-                self.capture_value(n)
-
-            with self.case():
-                with self.reject(offset=-1):
-                    self.range(unicode_whitespace=True, unicode_newline=True, unicode_punctuation=True)
-                with self.count(columns=True) as n:
-                    with self.backref() as chr:
-                        self.range( "*")
-                    with self.repeat(min=0):
-                        self.literal(chr)
-                with self.reject():
-                    self.range(unicode_whitespace=True, unicode_newline=True, unicode_punctuation=True)
-                self.capture_value('dual')
-                self.capture_value(chr)
-                self.capture_value(n)
-'''
