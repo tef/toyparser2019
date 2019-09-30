@@ -1167,12 +1167,12 @@ def compile_python(grammar, cython=False, wrap=False):
 
 
             steps_0.append("while True:")
-            steps_0.append(f"    print('entry rep rule', {offset}, {offset_0})")
+            steps_0.append(f"    #print('entry rep rule', {offset}, {offset_0})")
             for subrule in rule.rules:
                     build_steps(subrule, steps_0.add_indent(), offset_0, column_0, indent_column_0, partial_tab_offset_0, partial_tab_width_0, prefix, children_0, new_count, values)
-            steps_0.append(f"    print('safe exit rep rule', {offset}, {offset_0})")
+            steps_0.append(f"    #print('safe exit rep rule', {offset}, {offset_0})")
             steps_0.append("    break")
-            steps_0.append(f"print('exit rep rule', {offset}, {offset_0})")
+            steps_0.append(f"#print('exit rep rule', {offset}, {offset_0})")
             steps_0.append(f"if {offset_0} == -1:")
             steps_0.append(f"    break")
 
@@ -1188,14 +1188,14 @@ def compile_python(grammar, cython=False, wrap=False):
             if _max == 1:
                 steps_0.append(f"break")
 
-            if _min is not None:
+            if _min is not None and _min != 0:
                 steps.extend((
                     f"if {count} < {_minv}:",
-                    f"    print('min exit', {offset})",
+                    f"#    print('min exit', {offset})",
                     f"    {offset} = -1",
                     f"    break",
                 ))
-            steps.append(f"print('exit', {offset})")
+            steps.append(f"#print('exit', {offset})")
             steps.append(f"if {offset} == -1:")
             steps.append(f"    break")
 

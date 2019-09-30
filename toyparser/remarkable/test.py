@@ -102,10 +102,53 @@ Para
 """
 *strong*, _emph_
 
-**strong still**
+**strong
+still**
 
-__emph still__
-""",
+__emph 
+
+still__
+""", 
+r"""
+@metadata {
+    author: "tef",
+    version: "123",
+}
+
+# A title
+
+A paragraph is split
+over  multiple lines
+
+Although this one \
+Contains a line break
+
+- here is a list item with `raw text`
+
+- here is the next list item
+
+
+- this is a new list
+
+  > this is a quoted paragraph inside the list
+
+  > this is a new paragraph inside the blockquote
+
+
+  > this is a new blockquote
+
+This paragraph contains _emphasis_ and *strong text*. As well as ___emphasis over
+multiple lines___ and `inline code`, too.
+
+\list[start: 1]:
+- a final list
+- that starts at 1
+  - with an unnumbered
+  - sublist inside, that has text that
+continues on the next line.
+
+This is the last paragraph, which contains a non-breaking\ space.
+"""
     ]
 
     for testcase in tests:
@@ -122,9 +165,9 @@ __emph still__
 
     print()
 
-    # out = python_parser.parse(Readme).build(Readme, builder)
+    out = python_parser.parse(Readme).build(Readme, builder)
     import pprint
-    #pprint.pprint(out)
+    pprint.pprint(out)
     print()
 
 

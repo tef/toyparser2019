@@ -11,25 +11,39 @@ The syntax sugar is very similar to markdown
 - `---` Horizonal Rule
 - ``` `raw text` ```, ` ```raw text``` `
 - `\*`, `\_`, `\#`, `\>`, ```\```` to get those characters, even `\\`
-- `\` at the end of a line forces a line break
+- `\` at the end of a line forces a line break, `\ ` is a non breaking space.
 
-Lists, quotes work by the same rules, with at most one empty line between blocks
+Lists work like markdown, with at most one empty line between items.
 
 ```
-- A list
-that spans lines
-- With two items
+- A list with one element
+that spans two lines
+
+
+- Another List
   - and a sublist
-
-
-- A new list
-  > With a block quote
-that spans lines
-  > And a second paragraph
 ```
 
-Like markdown, if there is only one item,  no empty lines between items, the list is considered 'tight'. This means
-entries are not wrapped in paragraphs. Blockquotes are processed similarly. 
+Unlike markdown, `>` works under the same rules as `-`:
+
+```
+> A block quote
+that spans lines
+> And a second paragraph
+> and a third
+
+
+> A new block quote
+
+> A second Paragraph
+
+> A third
+```
+
+Like markdown, if there is only one item or no empty lines between items, the block is considered 'tight'. This means
+entries are not wrapped in paragraphs. This applies to blockquotes, and lists.
+
+## Directives
 
 Unlike markdown, every piece of ascii-art has a more canonical longer form, called a directive:
 
@@ -75,7 +89,7 @@ Directives also have an 'argument only form', somewhat like JSON:
 
 Finally, directives can take list, quote, or code blocks as arguments, along with text:
 
-```
+````
 \code{text}
 \code`raw text` 
 
@@ -95,13 +109,13 @@ which includes trailing lines
 
 \heading:
 This text is not indented
-```
+````
 
 ## Example Document
 
 Putting it all together, here's a larger example:
 
-```
+````
 @metadata {
     author: "tef",
     version: "123",
@@ -140,7 +154,7 @@ multiple lines___ and `inline code`, too.
 continues on the next line.
 
 This is the last paragraph, which contains a non-breaking\ space.
-```
+````
 
 """
 
@@ -168,19 +182,21 @@ bools = {'false': False, 'true':True}
 def builder(buf, node, children):
     kind = node.name
     if kind == "text":
-        return {"t":buf[node.start:node.end]}
+        return buf[node.start:node.end]
     if kind == "para":
-        return children
+        return [c for c in children if c is not None]
     if kind == "span":
         if node.value == "_":
-            return {"emphasis": children}
+            return {"emphasis": [c for c in children if c is not None]}
         if node.value == "*":
-            return {"strong": children}
+            return {"strong": [c for c in children if c is not None]}
 
     if kind == "document":
-        return [c for c in children if c]
+        return [c for c in children if c is not ()]
 
     if kind == "whitespace":
+        if node.end == node.start:
+            return None
         return " "
     if kind == "softbreak":
         return " "
@@ -300,7 +316,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 self.tagged_rson_value()
                 self.line_end()
             with self.case():
-                self.backtick_code_block()
+                self.code_block()
             with self.case():
                 self.atx_heading()
             with self.case():
@@ -344,11 +360,11 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                     self.line_end()
 
     @rule()
-    def start_fenced_block(self):
+    def start_code_block(self):
         self.literal("```")
 
     @rule()
-    def backtick_code_block(self):
+    def code_block(self):
         with self.capture_node('fenced_code'):
             fence = "`"
             with self.count(char=fence) as c, self.repeat(min=3):
@@ -385,9 +401,8 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
         with self.choice():
             with self.case(): self.thematic_break()
             with self.case(): self.atx_heading()
-            with self.case(): self.start_fenced_block()
+            with self.case(): self.start_code_block()
             with self.case(): self.start_group()
-            # with self.case(): self.start_blockquote()
 
 
     @rule()
@@ -487,7 +502,107 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
 
     @rule()
     def block_directive(self):
-        self.literal("~~~~~NOT YET")
+        self.literal("\\")
+        with self.capture_node("directive"):
+            with self.capture_node("directive_name"):
+                self.identifier()
+            self.print(1)
+            with self.capture_node("directive_args"), self.optional():
+                self.literal("[")
+                self.directive_args()
+                self.literal("]")
+            self.print(2)
+            with self.optional(), self.choice():
+                with self.case():
+                    self.literal(";")
+                with self.case():
+                    with self.count(columns=True) as n, self.repeat(min=1):
+                        self.literal("{")
+
+                    with self.capture_node("directive_text"):
+                        with self.optional():
+                            self.inline_element()
+
+                            with self.repeat(min=0):
+                                with self.choice():
+                                    with self.case():
+                                        self.linebreak()
+                                    with self.case():
+                                        with self.capture_node("whitespace"):
+                                            self.whitespace()
+
+                                with self.reject():
+                                    with self.repeat(min=n, max=n):
+                                        self.literal("}")
+                                self.inline_element()
+                        with self.choice():
+                            with self.case():
+                                self.linebreak()
+                            with self.case():
+                                with self.capture_node("whitespace"):
+                                    self.whitespace()
+                    with self.repeat(min=n, max=n):
+                        self.literal("}")
+                with self.case():
+                    self.print(3)
+                    self.code_block()
+                with self.case():
+                    self.print(3)
+                    self.code_span()
+                with self.case():
+                    self.print(3)
+                    self.literal(":")
+                    with self.choice():
+                        with self.case():
+                            with self.reject():
+                                self.whitespace
+                                self.newline()
+                            self.para()
+                        with self.case():
+                            self.whitespace()
+                            self.newline()
+                            self.indent()
+                            with self.choice():
+                                with self.case():
+                                    self.block_group()
+                                with self.case():
+                                    self.para()
+                        with self.case():
+                            self.empty_lines()
+
+    @rule()
+    def directive_args(self):
+        self.whitespace(newline=True)
+        with self.optional():
+            self.directive_arg()
+            self.whitespace()
+            with self.repeat(min=0):
+                self.literal(",")
+                self.whitespace(newline=True)
+                self.directive_arg()
+                self.whitespace()
+            with self.optional():
+                self.literal(",")
+            self.whitespace(newline=True)
+
+    @rule(inline=True)
+    def directive_arg(self):
+        with self.capture_node("arg"), self.choice():
+            with self.case():
+                self.identifier()
+                with self.optional():
+                    self.whitespace()
+                    self.literal(":")
+                    self.whitespace(newline=True)
+                    self.rson_value()
+            with self.case():
+                self.rson_string()
+                self.whitespace()
+                self.literal(":")
+                self.whitespace(newline=True)
+                self.rson_value()
+            with self.case():
+                self.rson_value()
 
     # inlines/paras
 
@@ -497,8 +612,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             with self.case(): self.thematic_break()
             with self.case(): self.atx_heading()
             with self.case(): self.start_group()
-            with self.case(): self.start_fenced_block()
-            # with self.case(): self.start_blockquote()
+            with self.case(): self.start_code_block()
             
     @rule(inline=True)
     def linebreak(self):
@@ -546,8 +660,15 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
 
     @rule()
     def inline_element(self):
-        self.print('>')
         with self.choice():
+            with self.case():
+                self.literal("\\")
+                with self.capture_node("text"):
+                    self.range("*", "_","!-/",":-@","[-`","{-~")
+            with self.case():
+                self.literal("\\")
+                with self.capture_node("text"):
+                    self.whitespace(min=1)
             with self.case():
                 self.inline_directive()
             with self.case():
@@ -562,28 +683,57 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                     with self.repeat(min=0):
                         with self.choice():
                             with self.case():
-                                self.range(" ", "\n", "`", "_", "*", invert=True)
+                                self.range(" ", "\n", "`", "_", "*", "\\",invert=True)
                             with self.case():
                                 with self.repeat(min=1): 
                                     self.literal("_") 
                                 with self.reject():
                                     self.whitespace(newline=True)
-        self.print('<')
 
     @rule(inline=True)
     def inline_directive(self):
-        with self.choice():
-            with self.case():
-                self.literal("\\")
-                with self.capture_node("text"):
-                    self.range("*", "_","!-/",":-@","[-`","{-~")
+        self.literal("\\")
+        with self.capture_node("directive"):
+            with self.capture_node("directive_name"):
+                self.identifier()
+            with self.capture_node("directive_args"), self.optional():
+                self.literal("[")
+                self.directive_args()
+                self.literal("]")
+            with self.optional(), self.choice():
+                with self.case():
+                    self.literal(";")
+                with self.case():
+                    with self.count(columns=True) as n, self.repeat():
+                        self.literal("{")
 
-            with self.case(), self.capture_node("text"):
-                self.literal("\\")
-                with self.reject(): # hardbreaks
-                    self.newline()
-                    self.whitespace()
-                    self.range('\n', invert=True)
+                    with self.capture_node("directive_text"):
+                        with self.optional():
+                            self.inline_element()
+
+                            with self.repeat(min=0):
+                                with self.choice():
+                                    with self.case():
+                                        self.linebreak()
+                                    with self.case():
+                                        with self.capture_node("whitespace"):
+                                            self.whitespace()
+
+                                with self.reject():
+                                    with self.repeat(min=n, max=n):
+                                        self.literal("}")
+                                self.inline_element()
+                        with self.choice():
+                            with self.case():
+                                self.linebreak()
+                            with self.case():
+                                with self.capture_node("whitespace"):
+                                    self.whitespace()
+
+                    with self.repeat(min=n, max=n):
+                        self.literal("}")
+                with self.case():
+                    self.code_span()
 
     @rule()
     def inline_span(self):
@@ -596,11 +746,9 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 self.whitespace(newline=True, min=1)
             self.set_variable(fence, chr)
 
-        self.print(1)
 
         with self.capture_node('span', value=fence):
             self.inline_element()
-            self.print(3)
 
             with self.repeat(min=0):
                 with self.choice():
@@ -610,10 +758,17 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                         with self.capture_node("whitespace"):
                             self.whitespace()
 
+                with self.reject():
+                    with self.repeat(min=n, max=n):
+                        self.literal(fence)
                 self.inline_element()
-                self.print(2)
 
-        self.print(2)
+            with self.choice():
+                with self.case():
+                    self.linebreak()
+                with self.case():
+                    with self.capture_node("whitespace"):
+                        self.whitespace()
         with self.repeat(min=n, max=n):
             self.literal(fence)
                 
