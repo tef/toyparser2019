@@ -83,7 +83,7 @@ Directives also have an 'argument only form', somewhat like JSON:
 ```
 @metadata {
     author: "tef",
-    date: 2019-09-30T12:00Z,
+    date: "2019-09-30T12:00Z",
 }
 ```
 
