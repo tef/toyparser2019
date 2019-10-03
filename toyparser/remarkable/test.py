@@ -108,6 +108,8 @@ still**
 __emph 
 
 still__
+
+~strike~
 """, 
     ]
 
@@ -129,6 +131,11 @@ still__
     import pprint
     pprint.pprint(out)
     print()
+
+
+
+
+
     raw= r"""
 @metadata {
     author: "tef",
@@ -166,6 +173,8 @@ continues on the next line.
 
 This is the last paragraph, which contains a non-breaking\ space.
 
+---
+
 - 1
 
   - 2
@@ -178,9 +187,11 @@ This is the last paragraph, which contains a non-breaking\ space.
 - 5
 """
     out = python_parser.parse(raw).build(raw, builder)
-    import pprint
-    pprint.pprint(out)
-    print()
+    txt = out.to_text()
+    print(txt)
+    out2 = python_parser.parse(txt).build(txt, builder)
+    text = out2.to_text()
+    print(text)
 
 
 
