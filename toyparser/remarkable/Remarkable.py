@@ -22,7 +22,7 @@ The syntax sugar is very similar to markdown, github's especially.
 
 - Words are seperated by whitespace, and empty line is paragraph break. 
 
-- `#` marked headers: `# Header`, `## Subheader` and continue on till the end of the paragraph.
+- `#` marked headings: `# heading`, `## Subheading` and continue on till the end of the paragraph.
 
 - *\*strong\**, _\_emphasis\__ ~\~strike through\~~, \code{\`code\`}, and `:emoij:`
 
@@ -32,7 +32,7 @@ The syntax sugar is very similar to markdown, github's especially.
 
 - `\` at the end of a line forces a line break, `\ ` is a non breaking space.
 
-- Starting a new list, quote, code block, header, or horizontal rule is also a paragraph break.
+- Starting a new list, quote, code block, heading, or horizontal rule is also a paragraph break.
 
 Everything else is a bit different. Doubling or tripling markers doesn't change
 their meaning:
@@ -52,8 +52,10 @@ example
 ```
 ````
 
-Lists can have one empty line, or no empty lines between items. Like markdown, if there
+Code blocks, headings cannot have leading whitespace. Lists, quotes can have up to 8 leading spaces, and
+at most one blank line between items.  Like markdown, if there
 is only one item or no empty line between items, the block is considered 'tight'. 
+
 Two empty lines between list items means two lists with one item each.
 
 ````
@@ -97,7 +99,22 @@ foo
 ### [h:7] Foo
 ````
 
-Whitespace is mandatory for blocks, but forbidden for inline forms.
+Whitespace before args is mandatory for blocks, but forbidden for inline forms.
+
+Markdown like tables exist, too:
+
+```
+
+| header | header |
+| ------ | ------ |
+| cell   | cell   |
+```
+
+No leading space. Header cells, row cells, can be empty. All but the last `|` are optional.
+
+The header row has a division row, underneath, which *must* match the number of columns. 
+Subsequent rows do not need to.
+
 ## Tables
 
 ## The LaTeX-like Directives
@@ -155,9 +172,12 @@ a raw block
 
 ````
 
+Like `# headings`, and  \code{\`\`\`}, `\directive:` or \code{\\directive\`\`\`} must be 
+at the beginning of a line.
+
 ## Raw Nodes
 
-If you want to skip the text processing and just dump data inside, you can. A header
+If you want to skip the text processing and just dump data inside, you can. A heading
 can be specified as a raw node, instead of using a directive, or `#` shorthand.
 
 ```
@@ -348,7 +368,7 @@ def builder(buf, node, children):
     if kind == "block_directive":
         args = children[1]
         text = [children[2]] if children[2] is not None else []
-        if text and text[0].name in ('directive_group', 'directive_para'):
+        if text and text[0].name in ('directive_group', 'directive_para', 'directive_table'):
             if text[0].name == "directive_group":
                 args = args + text[0].args
             text = text[0].text
@@ -371,11 +391,31 @@ def builder(buf, node, children):
 
     if kind == "directive_para":
         return Block('directive_para',[],[c for c in children if c is not None])
+    if kind == "directive_table":
+        return Block('directive_table',[],[c for c in children if c is not None])
     if kind == "directive_group":
         marker = children[0]
         spacing = children[1]
         return Block("directive_group", [("marker", marker), ("spacing", spacing)], [c for c in children[2:] if c is not None])
 
+    if kind == "table":
+        return Block('table',[],[c for c in children if c is not None])
+        
+    if kind == "table_cell":
+        return Inline('cell', [], children)
+    if kind == "cell_align":
+        left = buf[node.start] == ":"
+        right = buf[node.end-1] == ":"
+        if left and right: return "\\center;"
+        if left: return "\\left;"
+        if right: return "\\right;"
+        return "\\default;"
+    if kind == "table_row":
+        return Block('row', [], children)
+    if kind == "table_heading":
+        return Block('thead', [], children)
+    if kind == "table_division":
+        return Block('division',[], children)
 
     if kind == 'block_rson':
         text = []
@@ -467,7 +507,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 self.whitespace(newline=True)
                 self.end_of_file()
             with self.case():
-                with self.repeat(min=0):
+                with self.repeat(min=0) as n:
                     self.indent()
                     with self.choice():
                         with self.case(): self.block_element()
@@ -476,6 +516,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                         with self.case(): self.end_of_file()
                 self.whitespace()
                 self.end_of_file()
+                self.print(n)
 
     @rule(inline=True)
     def empty_lines(self):
@@ -504,6 +545,8 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 self.block_directive()
             with self.case():
                 self.block_group()
+            with self.case():
+                self.table()
 
     @rule()
     def paragraph_breaks(self):
@@ -512,6 +555,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             with self.case(): self.atx_heading()
             with self.case(): self.start_code_block()
             with self.case(): self.start_group()
+            with self.case(): self.start_table()
 
 
     @rule(inline=True)
@@ -639,6 +683,9 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                                 with self.case():
                                     with self.capture_node("directive_group"):
                                         self.inner_group()
+                                with self.case():
+                                    with self.capture_node("directive_table"):
+                                        self.inner_table()
                                 with self.case():
                                     with self.capture_node("directive_para"):
                                         self.inner_para()
@@ -893,7 +940,77 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             self.inner_group()
 
 
+    @rule()
+    def start_table(self):
+        self.literal("|")
 
+
+    @rule()
+    def table_cell(self):
+        with self.capture_node("table_cell"):
+            with self.choice():
+                with self.case(), self.lookahead():
+                    self.literal("|")
+                with self.case():
+                    with self.reject():
+                        self.literal("|")
+                    self.inline_element()
+                    with self.repeat():
+                        with self.capture_node("whitespace"):
+                            self.whitespace()
+                        with self.reject():
+                            self.literal("|")
+                        self.inline_element()
+
+    @rule()
+    def table(self):
+        with self.capture_node('table'):
+            self.inner_table()
+
+
+    @rule()
+    def inner_table(self):
+        with self.variable(0) as rows:
+            with self.capture_node('table_heading'):
+                with self.repeat(min=1) as c:
+                    self.literal("|")
+                    self.whitespace()
+                    self.table_cell()
+                    self.whitespace()
+                with self.optional():
+                    self.literal("|")
+                    self.whitespace()
+                self.newline()
+            
+            self.indent()
+
+            with self.capture_node('table_division'):
+                with self.repeat(min=c, max=c):
+                    self.literal("|")
+                    self.whitespace()
+                    with self.capture_node("cell_align"):
+                        self.whitespace()
+                        with self.optional(): self.literal(":")
+                        with self.repeat(min=1): self.literal("-")
+                        with self.optional(): self.literal(":")
+                    self.whitespace()
+                with self.optional():
+                    self.literal("|")
+                    self.whitespace()
+                self.newline()
+        with self.repeat():
+            self.indent()
+            with self.capture_node("table_row"):
+                with self.repeat(max=c):
+                    self.literal("|")
+                    self.whitespace()
+                    self.table_cell()
+                    self.whitespace()
+                with self.optional():
+                    self.literal("|")
+                    self.whitespace()
+                self.newline()
+            
     @rule()
     def inline_element(self):
         with self.choice():

@@ -138,6 +138,12 @@ nice
 
 ### [but:1] foo
 
+""", """
+
+| a | b |
+| - | - |
+| 1 | 2 |
+| 3 | 4 |
 """
 
 
@@ -235,6 +241,10 @@ nice
 
 ### [but:1] foo
 
+| a | b |
+| - | - |
+| 1 | 2 |
+| 3 | 4 |
 """
     out = python_parser.parse(raw).build(raw, builder)
     txt = out.to_text()
