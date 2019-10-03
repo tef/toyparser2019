@@ -134,6 +134,10 @@ nice
         name: \para{butt},
 }
 
+*foo*[v:4] `foo`[c:3]
+
+### [but:1] foo
+
 """
 
 
@@ -212,6 +216,25 @@ This is the last paragraph, which contains a non-breaking\ space.
 - :butt:
 
 \foo: what
+
+- [a: 1] foo
+
+> [b: 2] foo
+
+``` [c: 2]
+foo
+```
+
+```butt
+nice
+```
+
+--- [a:3]
+
+*foo*[v:4] `foo`[c:3]
+
+### [but:1] foo
+
 """
     out = python_parser.parse(raw).build(raw, builder)
     txt = out.to_text()

@@ -41,6 +41,7 @@ their meaning:
 _emphasis_ __emphasis__ ___emphasis___
 *strong* **strong** ***strong***
 ~strike~ ~~strike~~ ~~~strike~~~
+`code` ``code`` ```code```
 ```
 
 Code blocks can be tagged with a language identifier, like in markdown:
@@ -79,7 +80,7 @@ that spans lines
 > A second Paragraph
 ```
 
-Arguments can be passed to horizontal rules, lists, quotes, and code blocks too:
+Arguments can be passed to horizontal rules, lists, quotes, code blocks, code spans, and others too:
 
 ````
 --- [a:1]
@@ -90,8 +91,13 @@ Arguments can be passed to horizontal rules, lists, quotes, and code blocks too:
 ``` [d:4
 foo
 ```
+
+*one*[e:5] _two_[f:6] ~three~[g:7] `four`[g:8]
+
+### [h:7] Foo
 ````
 
+Whitespace is mandatory for blocks, but forbidden for inline forms.
 ## Tables
 
 ## The LaTeX-like Directives
@@ -309,23 +315,22 @@ def builder(buf, node, children):
 
     if kind == 'horizontal_rule':
         return Block("hr", children[0], [])
-    if kind == "hr_args":
-        return children
     if kind == 'atx_heading':
-        return Block("heading", [("level", node.value)], [c for c in children if c is not None])
+        args = children[0]
+        return Block("heading", [("level", node.value)] + args, [c for c in children[1:] if c is not None])
 
     if kind == "para":
         return Block("para", [], [c for c in children if c is not None])
     if kind == "span":
-        return Inline("span", [("marker", node.value)],[c for c in children if c is not None])
+        args = children[-1]
+        return Inline("span", [("marker", node.value)] +args,[c for c in children[:-1] if c is not None])
     if kind == 'code_span':
-        return Inline("code", [], [c for c in children if c is not None])
+        args = children[-1]
+        return Inline("code",args, [c for c in children[:-1] if c is not None])
 
     if kind == 'code_block':
         arg = children[0] if children[0] is not None else []
         return Block("code", arg, [c for c in children[1:] if c is not None])
-    if kind == "code_args":
-        return children
     if kind == "code_string":
         return [("language", children)]
 
@@ -339,8 +344,6 @@ def builder(buf, node, children):
         return node.value
     if kind == 'item':
         return Block("item", children[0] , [c for c in children[1:] if c is not None])
-    if kind == 'item_args':
-        return children 
 
     if kind == "block_directive":
         args = children[1]
@@ -568,6 +571,40 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 self.range("0-9", "a-z","A-Z","_")
 
     @rule()
+    def directive_args(self):
+        self.whitespace(newline=True)
+        with self.optional():
+            self.directive_arg()
+            self.whitespace()
+            with self.repeat(min=0):
+                self.literal(",")
+                self.whitespace(newline=True)
+                self.directive_arg()
+                self.whitespace()
+            with self.optional():
+                self.literal(",")
+            self.whitespace(newline=True)
+
+    @rule(inline=True)
+    def directive_arg(self):
+        with self.capture_node("arg"), self.choice():
+            with self.case():
+                self.identifier()
+                with self.optional():
+                    self.whitespace()
+                    self.literal(":")
+                    self.whitespace(newline=True)
+                    self.rson_value()
+            with self.case():
+                self.rson_string()
+                self.whitespace()
+                self.literal(":")
+                self.whitespace(newline=True)
+                self.rson_value()
+            with self.case():
+                self.rson_value()
+
+    @rule()
     def block_directive(self):
         self.literal("\\")
         with self.capture_node("block_directive"):
@@ -610,40 +647,6 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 with self.case():
                     self.line_end()
                     self.capture_value(None)
-
-    @rule()
-    def directive_args(self):
-        self.whitespace(newline=True)
-        with self.optional():
-            self.directive_arg()
-            self.whitespace()
-            with self.repeat(min=0):
-                self.literal(",")
-                self.whitespace(newline=True)
-                self.directive_arg()
-                self.whitespace()
-            with self.optional():
-                self.literal(",")
-            self.whitespace(newline=True)
-
-    @rule(inline=True)
-    def directive_arg(self):
-        with self.capture_node("arg"), self.choice():
-            with self.case():
-                self.identifier()
-                with self.optional():
-                    self.whitespace()
-                    self.literal(":")
-                    self.whitespace(newline=True)
-                    self.rson_value()
-            with self.case():
-                self.rson_string()
-                self.whitespace()
-                self.literal(":")
-                self.whitespace(newline=True)
-                self.rson_value()
-            with self.case():
-                self.rson_value()
 
     # inlines/paras
             
@@ -700,7 +703,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
         with self.capture_node('horizontal_rule'):
             with self.repeat(min=3):
                 self.literal("-")
-            with self.capture_node("hr_args"), self.optional():
+            with self.capture_node("directive_args"), self.optional():
                 self.whitespace(min=1)
                 self.literal("[")
                 self.directive_args()
@@ -714,6 +717,12 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 with self.repeat(min=1, max=9):
                     self.literal("#")
             self.set_variable(num, level)
+            with self.capture_node("directive_args"):
+                with self.optional():
+                    self.whitespace(min=1)
+                    self.literal("[")
+                    self.directive_args()
+                    self.literal("]")
             with self.choice():
                 with self.case():
                     self.line_end()
@@ -732,12 +741,12 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             with self.count(char=fence) as c, self.repeat(min=3):
                 self.literal(fence)
             with self.choice():
-                with self.case(), self.capture_node("code_args"):
+                with self.case(), self.capture_node("directive_args"):
                     self.whitespace(min=1)
                     self.literal("[")
                     self.directive_args()
                     self.literal("]")
-                with self.case(), self.capture_node("code_info"):
+                with self.case(), self.capture_node("code_string"):
                     self.whitespace()
                     self.identifier()
                 with self.case():
@@ -809,11 +818,6 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 with self.case(): self.inner_para()
 
     @rule()
-    def block_group(self):
-        with self.capture_node('group'):
-            self.inner_group()
-
-    @rule()
     def inner_group(self):
         with self.variable('tight') as spacing:
             with self.count(columns=True) as w:
@@ -833,7 +837,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                     self.whitespace(min=1, max=1, newline=True)
 
             with self.capture_node("item"):
-                with self.capture_node("item_args"):
+                with self.capture_node("directive_args"):
                     with self.optional():
                         self.literal("[")
                         self.directive_args()
@@ -868,7 +872,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                         self.whitespace(min=1, max=1, newline=True)
 
                 with self.capture_node("item"):
-                    with self.capture_node("item_args"):
+                    with self.capture_node("directive_args"):
                         with self.optional():
                             self.literal("[")
                             self.directive_args()
@@ -882,6 +886,11 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                             with self.capture_node("item"):
                                 self.whitespace()
                             self.end_of_line()
+
+    @rule()
+    def block_group(self):
+        with self.capture_node('group'):
+            self.inner_group()
 
 
 
@@ -926,17 +935,16 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
 
     @rule()
     def inline_span(self):
-        with self.count(columns=True) as n, self.variable('') as fence:
-            with self.backref() as chr:
-                self.range("_", "*", "~")
-            with self.repeat(min=0):
-                self.literal(chr)
-            with self.reject():
-                self.whitespace(newline=True, min=1)
-            self.set_variable(fence, chr)
+        with self.variable('') as fence, self.capture_node('span', value=fence):
+            with self.count(columns=True) as n:
+                with self.backref() as chr:
+                    self.range("_", "*", "~")
+                with self.repeat(min=0):
+                    self.literal(chr)
+                with self.reject():
+                    self.whitespace(newline=True, min=1)
+                self.set_variable(fence, chr)
 
-
-        with self.capture_node('span', value=fence):
             self.inline_element()
 
             with self.repeat(min=0):
@@ -958,41 +966,45 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 with self.case():
                     with self.capture_node("whitespace"):
                         self.whitespace()
-        with self.repeat(min=n, max=n):
-            self.literal(fence)
+            with self.repeat(min=n, max=n):
+                self.literal(fence)
+            with self.capture_node("directive_args"), self.optional():
+                self.literal("[")
+                self.directive_args()
+                self.literal("]")
                 
     @rule()
     def code_span(self):
-        with self.choice():
-            with self.case():
-                with self.count(char="`") as c, self.repeat(min=1):
-                    self.literal("`")
-                with self.capture_node('code_span') as span, self.repeat(min=1), self.choice():
-                    with self.case():
-                        with self.capture_node('text'):
+        with self.capture_node('code_span') as span: 
+            with self.count(char="`") as c, self.repeat(min=1):
+                self.literal("`")
+            with self.repeat(min=1), self.choice():
+                with self.case():
+                    with self.capture_node('text'):
+                        self.range("\n", "`", invert=True)
+                        with self.repeat(min=0):
                             self.range("\n", "`", invert=True)
-                            with self.repeat(min=0):
-                                self.range("\n", "`", invert=True)
-                    with self.case():
-                        with self.capture_node("text"):
-                            self.newline()
-                        self.indent(partial=True)
-                    with self.case():
-                        with self.reject():
-                            with self.repeat(min=c, max=c):
-                                self.literal("`")
-                            with self.choice():
-                                with self.case(): self.range('`', invert=True)
-                                with self.case(): self.end_of_file()
-                        with self.capture_node("text"), self.repeat():
+                with self.case():
+                    with self.capture_node("text"):
+                        self.newline()
+                    self.indent(partial=True)
+                with self.case():
+                    with self.reject():
+                        with self.repeat(min=c, max=c):
                             self.literal("`")
-                with self.repeat(min=c, max=c):
-                    self.literal("`")
-                with self.reject():
-                    self.literal("`")
-            with self.case():
-                with self.capture_node('text'), self.repeat(min=1):
-                    self.literal("`")
+                        with self.choice():
+                            with self.case(): self.range('`', invert=True)
+                            with self.case(): self.end_of_file()
+                    with self.capture_node("text"), self.repeat():
+                        self.literal("`")
+            with self.repeat(min=c, max=c):
+                self.literal("`")
+            with self.reject():
+                self.literal("`")
+            with self.capture_node("directive_args"), self.optional():
+                self.literal("[")
+                self.directive_args()
+                self.literal("]")
 
     @rule()
     def block_rson(self):
