@@ -166,6 +166,8 @@ nice
     out = python_parser.parse(Readme).build(Readme, builder)
     import pprint
     pprint.pprint(out)
+    txt = out.to_text()
+    print(txt)
     print()
 
 

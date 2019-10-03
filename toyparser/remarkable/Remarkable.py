@@ -846,7 +846,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
 
         with self.choice():
             with self.case(): self.block_element()
-            with self.case(): self.inner_para()
+            with self.case(): self.para()
 
 
         with self.repeat():
@@ -862,7 +862,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                     self.range("\n", invert=True)
             with self.choice():
                 with self.case(): self.block_element()
-                with self.case(): self.inner_para()
+                with self.case(): self.para()
 
     @rule()
     def inner_group(self):
