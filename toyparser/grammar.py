@@ -1128,6 +1128,10 @@ def compile_python(grammar, cython=False, wrap=False):
             steps.append(f"    break")
 
         elif rule.kind == REPEAT:
+            value = VarBuilder('value', n=len(values))
+            if rule.key in values: raise Exception('what', rule.key)
+            values[rule.key] = value
+
             _min = rule.args['min']
             _max = rule.args['max']
 
@@ -1195,9 +1199,9 @@ def compile_python(grammar, cython=False, wrap=False):
                     f"    {offset} = -1",
                     f"    break",
                 ))
-            steps.append(f"#print('exit', {offset})")
             steps.append(f"if {offset} == -1:")
             steps.append(f"    break")
+            steps.append(f"{value} = {count}")
 
         elif rule.kind == PARSEAHEAD:
             steps_0 = steps.add_indent()

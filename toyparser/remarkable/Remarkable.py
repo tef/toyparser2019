@@ -1,51 +1,97 @@
 """
 # Remarkable, a restructured markup format.
 
-## The summary
+Remarkable has three different ways to specify data. You only care about one, maybe two, 
+but there's a third, too. 
 
-The syntax sugar is very similar to markdown
+The first is markdown like ascii art: `*like this*`
 
-- Words seperated by whitespace, empty line is paragraph break
-- `# Header`, `## Subheader` 
-- *\*strong\**, _\_emphasis\__ ~\~strike through\~~
-- `---` Horizonal Rule
-- ``` `raw text` ```, ` ```raw text``` `
-- `\*`, `\_`, `\#`, `\>`, ```\```` to get those characters, even `\\`
+The second is LaTeX like directives: `\like{this}`
+
+The third?, JSON like raw nodes: `@like {text: "this"}`
+
+You can't always get what you want with the ascii-art, but you can use the directives.
+You can use the directives, but it isn't always easy to embed data, or be horrifyingly exact, 
+so you can embed raw nodes too. 
+
+You are very unlikely to need raw nodes, but if you ever dump the AST, you'll see it.
+
+## The Markdown like Ascii-Art
+
+The syntax sugar is very similar to markdown, github's especially.
+
+- Words are seperated by whitespace, and empty line is paragraph break
+
+- `#` marked headers: `# Header`, `## Subheader` 
+- *\*strong\**, _\_emphasis\__ ~\~strike through\~~, \code{\`code\`}, and `:emoij:`
+- `---` for a horizonal rule
+- use `\*`, `\_`, `\#`, `\>`, \code{\`} to get those characters, even `\\`
 - `\` at the end of a line forces a line break, `\ ` is a non breaking space.
 
-Lists work like markdown, with at most one empty line between items.
+Everything else is a bit different. Doubling or tripling markers doesn't change
+their meaning:
 
 ```
+_emphasis_ __emphasis__ ___emphasis___
+*strong* **strong** ***strong***
+~strike~ ~~strike~~ ~~~strike~~~
+```
+
+Code blocks can be tagged with a language identifier, like in markdown:
+
+````
+```foo
+example
+```
+````
+
+Lists can have one empty line, or no empty lines between items. Like markdown, if there
+is only one item or no empty line between items, the block is considered 'tight'. 
+Two empty lines between list items means two lists with one item each.
+
+````
 - A list with one element
 that spans two lines
 
 
-- Another List
-  - and a sublist
-```
+- A new List
+  
+  - A sublist
+````
 
-Unlike markdown, `>` works under the same rules as `-`:
+Unlike markdown, `>` works under the same rules as `-`. In other words, only the start of a paragraph gets a `>`, 
+and anything indented underneath is included. Using a `>` starts a new paragraph.
 
 ```
 > A block quote
 that spans lines
 > And a second paragraph
-> and a third
 
 
 > A new block quote
 
 > A second Paragraph
-
-> A third
 ```
 
-Like markdown, if there is only one item or no empty lines between items, the block is considered 'tight'. This means
-entries are not wrapped in paragraphs. This applies to blockquotes, and lists.
+Arguments can be passed to horizontal rules, lists, quotes, and code blocks too:
 
-## Directives
+````
+--- [a:1]
 
-Unlike markdown, every piece of ascii-art has a more canonical longer form, called a directive:
+- [b:2] foo
+> [c:3] foo
+
+``` [d:4
+foo
+```
+````
+
+## Tables
+
+## The LaTeX-like Directives
+
+Unlike markdown, every piece of ascii-art has a more canonical longer form, called a directive.
+A directive has a name, optional parameters, and an argument, usually text:
 
 - `\heading[1]{text}`, or `\h[2]{text}`
 - `\emphasis{text}`, `\strong{text}`
@@ -54,23 +100,17 @@ Unlike markdown, every piece of ascii-art has a more canonical longer form, call
 
 For example, `# My heading` can be expressed in several different ways:
 
-- `\heading[1]: My Heading`
-- `\heading[1]{My Heading}`
-- `\heading[level:1]{My Heading}`,
-- `\heading[level:1]{{{My Heading}}}`
-- ```
-  @heading {
-      level: 1,
-      text: ["My Heading", ],
-  }
-  ```
+- `\heading[level: 1]: My Heading`
+- `\heading[level: 1]{My Heading}`,
+- `\heading[level: 1]{{{My Heading}}}`
 
-Directives can take parameters, alongside text:
+Like the block forms above, directives can take parameters, alongside text:
 
 - `\foo[key: "value", "key": "value"]{text}`
 - `\foo[bare_key, "value with no key"]{text}`
-- `\foo[a,b,c]` is `\foo["a": null, "b":null, "c":null]`
+- `\foo[a,b,c]` is `\foo["a": null, "b":null, "c":null]`. 
 
+Parameters are lists of (key,value) pairs, where one or both are given. non null keys must be unique. 
 Keys can be quoted strings, or identifier like bare words. Values can take numerous JSON like forms:
 
 - `0x123`, `0b111`, `0o123`, `123` 
@@ -78,23 +118,20 @@ Keys can be quoted strings, or identifier like bare words. Values can take numer
 - `"strings"`, `'or single quoted'`
 - `[lists]`, `{key:value}`
 
-Directives also have an 'argument only form', somewhat like JSON:
-
-```
-@metadata {
-    author: "tef",
-    date: "2019-09-30T12:00Z",
-}
-```
-
-Finally, directives can take list, quote, or code blocks as arguments, along with text:
+Finally, directives can take list, quote, or code blocks as arguments, or a paragraph:
 
 ````
-\code{text}
-\code`raw text` 
+\para: This will include all text on this line
+and this line too.
+
+\heading:
+It can start on the next line and continues
+until the end of the paragraph
+
+You can use \code{text} or \code`raw text`, but text in \code{\`} is escaped. 
 
 \code```
-block
+a raw block
 ```
 
 \list:
@@ -104,18 +141,37 @@ block
 \quote:
 > para
 
-\para: Until the next paragraph break,
-which includes trailing lines
-
-\heading:
-This text is not indented
 ````
 
-## Example Document
+## Raw Nodes
+
+If you want to skip the text processing and just dump data inside, you can. A header
+can be specified as a raw node, instead of using a directive, or `#` shorthand.
+
+```
+  @heading {
+      level: 1,
+      text: ["My Heading", ],
+  }
+```
+
+Raw nodes can also be used to specify metadata, although `\metadata[author:"tef", date:"..."]` works just as well.
+
+```
+@metadata {
+    author: "tef",
+    date: "2019-09-30T12:00Z",
+}
+```
+
+Really they're so things can emit dom nodes in a simpler, canonical form, and you can still paste it midway into another
+document. Yes, that's a terrible idea, but stopping it happening doesn't prevent the need.
+
+## An Example Document
 
 Putting it all together, here's a larger example:
 
-````
+````````
 @metadata {
     author: "tef",
     version: "123",
@@ -132,6 +188,10 @@ Contains a line break
 - here is a list item with `raw text`
 
 - here is the next list item
+ 
+  ```` [language: "python"]
+  and a code block inside
+  ````
 
 
 - this is a new list
@@ -155,7 +215,10 @@ multiple lines___ and `inline code`, too.
 continues on the next line.
 
 This is the last paragraph, which contains a non-breaking\ space.
-````
+````````
+
+
+
 """
 
 import base64, codecs
@@ -233,35 +296,71 @@ def builder(buf, node, children):
 
 
     if kind == 'horizontal_rule':
-        return Block("hr", [], [])
+        return Block("hr", children[0], [])
+    if kind == "hr_args":
+        return children
+    if kind == 'atx_heading':
+        return Block("heading", [("level", node.value)], [c for c in children if c is not None])
 
     if kind == "para":
         return Block("para", [], [c for c in children if c is not None])
     if kind == "span":
-        if node.value == "_":
-            return Inline("span", [("style", "emphasis")],[c for c in children if c is not None])
-        if node.value == "*":
-            return Inline("span", [("style", "strong")],[c for c in children if c is not None])
-        if node.value == "~":
-            return Inline("span", [("style","strikethrough")],[c for c in children if c is not None])
-
-    if kind == 'code_block':
-        return Block("code", [], [c for c in children if c is not None])
+        return Inline("span", [("marker", node.value)],[c for c in children if c is not None])
     if kind == 'code_span':
         return Inline("code", [], [c for c in children if c is not None])
-    if kind == 'atx_heading':
-        return Block("heading", [("level", node.value)], [c for c in children if c is not None])
+
+    if kind == 'code_block':
+        arg = children[0] if children[0] is not None else []
+        return Block("code", arg, [c for c in children[1:] if c is not None])
+    if kind == "code_args":
+        return children
+    if kind == "code_string":
+        return [("language", children)]
 
     if kind == 'group':
-        delimiter = children[0]
-        if delimiter == '>':
-            return Block("quote", [("spacing", node.value)], [c for c in children[1:] if c is not None])
-        elif delimiter == '-':
-            return Block("list", [("spacing", node.value)], [c for c in children[1:] if c is not None])
-    if kind == 'item':
-        return Block("item", [], [c for c in children if c is not None])
-    if kind == 'group_delimiter':
+        marker = children[0]
+        spacing = children[1]
+        return Block("group", [("marker", marker), ("spacing", spacing)], [c for c in children[2:] if c is not None])
+    if kind == 'group_marker':
         return buf[node.start:node.end]
+    if kind == 'group_spacing':
+        return node.value
+    if kind == 'item':
+        return Block("item", children[0] , [c for c in children[1:] if c is not None])
+    if kind == 'item_args':
+        return children 
+
+    if kind == "block_directive":
+        args = children[1]
+        text = [children[2]] if children[2] is not None else []
+        if text and text[0].name in ('directive_group', 'directive_para'):
+            if text[0].name == "directive_group":
+                args = args + text[0].args
+            text = text[0].text
+        return Block(children[0], args, text)
+    if kind == "inline_directive":
+        args = children[1]
+        text = [children[2]] if children[2:] and children[2] is not None else []
+        if text and text[0].name == 'directive_span':
+            text = text[0].text
+        return Inline(children[0], args, text)
+    if kind == "arg":
+        return children
+    if kind == "directive_args":
+        return children
+    if kind == "directive_name":
+        return buf[node.start:node.end]
+
+    if kind == "directive_span":
+        return Directive('directive_span',[],[c for c in children if c is not None])
+
+    if kind == "directive_para":
+        return Directive('directive_para',[],[c for c in children if c is not None])
+    if kind == "directive_group":
+        marker = children[0]
+        spacing = children[1]
+        return Block("directive_group", [("marker", marker), ("spacing", spacing)], [c for c in children[2:] if c is not None])
+
 
     if kind == 'block_rson':
         text = []
@@ -270,21 +369,6 @@ def builder(buf, node, children):
             text = args.pop('text')
         args = list(args.items())
         return Block(children[0], args, text)
-
-    if kind == "directive":
-        text = [children[2]] if children[2:] and children[2] is not None else []
-        if text and text[0].name in ('directive_span', 'quote', 'list'):
-            text = text[0].text
-        return Directive(children[0], children[1], text)
-    if kind == "arg":
-        return children
-    if kind == "directive_args":
-        return children
-    if kind == "directive_name":
-        return buf[node.start:node.end]
-    if kind == "directive_text":
-        return Directive('directive_span',[],[c for c in children if c is not None])
-
 
     if kind == 'rson_number': 
         return eval(buf[node.start:node.end])
@@ -429,6 +513,11 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
         with self.capture_node('horizontal_rule'):
             with self.repeat(min=3):
                 self.literal("-")
+            with self.capture_node("hr_args"), self.optional():
+                self.whitespace(min=1)
+                self.literal("[")
+                self.directive_args()
+                self.literal("]")
         self.line_end()
 
     @rule()
@@ -465,6 +554,18 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             fence = "`"
             with self.count(char=fence) as c, self.repeat(min=3):
                 self.literal(fence)
+            with self.choice():
+                with self.case(), self.capture_node("code_args"):
+                    self.whitespace(min=1)
+                    self.literal("[")
+                    self.directive_args()
+                    self.literal("]")
+                with self.case(), self.capture_node("code_info"):
+                    self.whitespace()
+                    self.identifier()
+                with self.case():
+                    self.capture_value(None)
+
             self.line_end()
             with self.repeat():
                 self.indent()
@@ -534,12 +635,20 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
 
     @rule()
     def block_group(self):
-        with self.variable('tight') as spacing, self.capture_node('group', value=spacing):
+        with self.capture_node('group'):
+            self.inner_group()
+
+    @rule()
+    def inner_group(self):
+        with self.variable('tight') as spacing:
             with self.count(columns=True) as w:
                 with self.count(columns=True) as i:
                     self.whitespace(max=8)
-                with self.capture_node('group_delimiter'), self.backref() as delimiter:
+                with self.capture_node('group_marker'), self.backref() as marker:
                     self.range("-", ">")
+            with self.capture_node('group_spacing', value=spacing):
+                pass
+
 
             with self.choice():
                 with self.case(), self.lookahead():
@@ -571,11 +680,11 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                     self.indent()
                     with self.lookahead():
                         self.whitespace(min=i, max=i)
-                        self.literal(delimiter)
+                        self.literal(marker)
                     self.set_variable(spacing, 'loose')
 
                 self.whitespace(min=i, max=i)
-                self.literal(delimiter)
+                self.literal(marker)
                 with self.choice():
                     with self.case(), self.lookahead():
                         self.whitespace()
@@ -583,22 +692,27 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                     with self.case():
                         self.whitespace(min=1, max=1, newline=True)
 
-                with self.choice():
-                    with self.case():
-                        with self.capture_node("item"):
+                with self.capture_node("item"):
+                    with self.capture_node("item_args"):
+                        with self.optional():
+                            self.literal("[")
+                            self.directive_args()
+                            self.literal("] ")
+                    with self.choice():
+                        with self.case():
                             with self.indented(count=1, dedent=self.group_interrupts):
                                 with self.indented(count=w, dedent=self.group_interrupts):
                                     self.group_item()
-                    with self.case():
-                        with self.capture_node("item"):
-                            self.whitespace()
-                        self.end_of_line()
+                        with self.case():
+                            with self.capture_node("item"):
+                                self.whitespace()
+                            self.end_of_line()
 
 
     @rule()
     def block_directive(self):
         self.literal("\\")
-        with self.capture_node("directive"):
+        with self.capture_node("block_directive"):
             with self.capture_node("directive_name"):
                 self.identifier()
             with self.capture_node("directive_args"), self.optional():
@@ -617,18 +731,22 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                     with self.choice():
                         with self.case():
                             with self.reject():
-                                self.whitespace
+                                self.whitespace()
                                 self.newline()
-                            self.para()
+                            with self.capture_node("directive_para"):
+                                self.print('inner')
+                                self.inner_para()
                         with self.case():
                             self.whitespace()
                             self.newline()
                             self.indent()
                             with self.choice():
                                 with self.case():
-                                    self.block_group()
+                                    with self.capture_node("directive_group"):
+                                        self.inner_group()
                                 with self.case():
-                                    self.para()
+                                    with self.capture_node("directive_para"):
+                                        self.inner_para()
                         with self.case():
                             self.empty_lines()
                 with self.case():
@@ -697,25 +815,29 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
 
     @rule()
     def para(self):
-        self.whitespace()
         with self.capture_node("para"):
+            self.inner_para()
+
+    @rule()
+    def inner_para(self):
+        self.whitespace()
+        self.inline_element()
+
+        with self.repeat():
+            with self.choice():
+                with self.case():
+                    self.linebreak()
+                with self.case():
+                    with self.capture_node("whitespace"):
+                        self.whitespace()
+
             self.inline_element()
 
-            with self.repeat():
-                with self.choice():
-                    with self.case():
-                        self.linebreak()
-                    with self.case():
-                        with self.capture_node("whitespace"):
-                            self.whitespace()
-
-                self.inline_element()
-
-            self.whitespace()
-            with self.optional():
-                self.literal("\\")
-                self.capture_value("\\")
-            self.end_of_line()
+        self.whitespace()
+        with self.optional():
+            self.literal("\\")
+            self.capture_value("\\")
+        self.end_of_line()
 
     @rule()
     def inline_element(self):
@@ -755,7 +877,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
     @rule(inline=True)
     def inline_directive(self):
         self.literal("\\")
-        with self.capture_node("directive"):
+        with self.capture_node("inline_directive"):
             with self.capture_node("directive_name"):
                 self.identifier()
             with self.capture_node("directive_args"), self.optional():
@@ -770,7 +892,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                     with self.count(columns=True) as n, self.repeat(min=1):
                         self.literal("{")
 
-                    with self.capture_node("directive_text"):
+                    with self.capture_node("directive_span"):
                         with self.optional():
                             with self.reject():
                                 with self.repeat(min=n, max=n):

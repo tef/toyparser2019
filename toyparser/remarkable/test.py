@@ -110,7 +110,29 @@ __emph
 still__
 
 ~strike~
-""", 
+
+:emoji:
+
+\emoji: what
+""",
+"""
+- [a: 1] foo
+
+> [b: 2] foo
+
+``` [c: 2]
+foo
+```
+
+```butt
+nice
+```
+
+--- [a:3]
+
+"""
+
+
     ]
 
     for testcase in tests:
@@ -139,7 +161,7 @@ still__
     raw= r"""
 @metadata {
     author: "tef",
-    version: "123",
+    version: 23,
 }
 
 # A title
@@ -150,16 +172,15 @@ over  multiple lines
 Although this one \
 Contains a line break
 
-- here is a list item with `raw text`
+- here 1
 
-- here is the next list item
+- here 2
 
-  > this is a quoted paragraph inside the list
+  > 2.1
 
-  > this is a new paragraph inside the blockquote
+  > 2.2
 
-
-  > this is a new blockquote
+  > 2.3
 
 This paragraph contains _emphasis_ and *strong text*. As well as ___emphasis over
 multiple lines___ and `inline code`, too.
@@ -185,6 +206,8 @@ This is the last paragraph, which contains a non-breaking\ space.
   - 4
 
 - :butt:
+
+\foo: what
 """
     out = python_parser.parse(raw).build(raw, builder)
     txt = out.to_text()
