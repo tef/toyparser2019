@@ -242,6 +242,9 @@ class Block(Directive):
 class Inline(Directive):
     pass
 
+class Raw(Directive):
+    pass
+
 def to_text(obj):
     if isinstance(obj, str): return obj
 
@@ -272,7 +275,7 @@ def builder(buf, node, children):
         return node.value
 
     if kind == "document":
-        return Directive("document", [], [c for c in children if c is not None])
+        return Block("document", [], [c for c in children if c is not None])
 
     if kind == 'identifier':
         return buf[node.start:node.end]
@@ -352,10 +355,10 @@ def builder(buf, node, children):
         return buf[node.start:node.end]
 
     if kind == "directive_span":
-        return Directive('directive_span',[],[c for c in children if c is not None])
+        return Inline('directive_span',[],[c for c in children if c is not None])
 
     if kind == "directive_para":
-        return Directive('directive_para',[],[c for c in children if c is not None])
+        return Block('directive_para',[],[c for c in children if c is not None])
     if kind == "directive_group":
         marker = children[0]
         spacing = children[1]
@@ -368,7 +371,7 @@ def builder(buf, node, children):
         if isinstance(args, dict) and 'text' in args:
             text = args.pop('text')
         args = list(args.items())
-        return Block(children[0], args, text)
+        return Raw(children[0], args, text)
 
     if kind == 'rson_number': 
         return eval(buf[node.start:node.end])
@@ -1017,6 +1020,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             with self.case(): self.rson_true.inline()
             with self.case(): self.rson_false.inline()
             with self.case(): self.rson_null.inline()
+            with self.case(): self.inline_directive()
 
     @rule(inline=True)
     def rson_comment(self):

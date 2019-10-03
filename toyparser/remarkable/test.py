@@ -130,6 +130,10 @@ nice
 
 --- [a:3]
 
+@foo {
+        name: \para{butt},
+}
+
 """
 
 
