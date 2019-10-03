@@ -228,6 +228,10 @@ def builder(buf, node, children):
     if kind in ('empty', 'empty_line'):
         return None
 
+    if kind == "emoji":
+        return Inline("emoij", [],[c for c in children if c is not None])
+
+
     if kind == 'horizontal_rule':
         return Block("hr", [], [])
 
@@ -720,6 +724,11 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 self.literal("\\")
                 with self.capture_node("text"):
                     self.whitespace(min=1)
+            with self.case():
+                self.literal(":")
+                with self.capture_node("emoji"):
+                    self.identifier()
+                self.literal(":")
             with self.case():
                 self.inline_directive()
             with self.case():

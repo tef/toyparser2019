@@ -184,7 +184,7 @@ This is the last paragraph, which contains a non-breaking\ space.
 
   - 4
 
-- 5
+- :butt:
 """
     out = python_parser.parse(raw).build(raw, builder)
     txt = out.to_text()
