@@ -445,6 +445,11 @@ def builder(buf, node, children):
 
 
 class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r", "\n", "\r\n"], tabstop=8):
+    @rule(inline=True) # 2.1 line ends by newline or end_of_file
+    def line_end(self):
+        self.whitespace()
+        self.end_of_line()
+
     # block
     @rule(start="document")
     def document(self):
@@ -469,6 +474,17 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 self.whitespace()
                 self.end_of_file()
 
+    @rule(inline=True)
+    def empty_lines(self):
+        self.whitespace()
+        self.newline()
+        with self.repeat():
+            self.indent()
+            self.whitespace()
+            self.newline()
+        with self.capture_node("empty_line"):
+            pass
+
     # blocks
     @rule()
     def block_element(self):
@@ -487,62 +503,13 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 self.block_group()
 
     @rule()
-    def inline_element(self):
+    def paragraph_breaks(self):
         with self.choice():
-            with self.case():
-                self.literal("\\")
-                with self.capture_node("text"):
-                    self.range("*", "_","!-/",":-@","[-`","{-~")
-            with self.case():
-                self.literal("\\")
-                with self.capture_node("text"):
-                    self.whitespace(min=1)
-            with self.case():
-                self.literal(":")
-                with self.capture_node("emoji"):
-                    self.identifier()
-                self.literal(":")
-            with self.case():
-                self.inline_directive()
-            with self.case():
-                self.inline_span()
-            with self.case():
-                self.code_span()
-            with self.case():
-                with self.capture_node('text'):
-                    self.range(" ", "\n", "\\", invert=True)
-                    with self.repeat(min=0):
-                        with self.choice():
-                            with self.case():
-                                self.range(" ", "\n", "`", "_", "*", "~", "\\", "}",invert=True)
-                            with self.case():
-                                with self.repeat(min=1): 
-                                    self.literal("_") 
-                                with self.reject():
-                                    self.whitespace(newline=True)
+            with self.case(): self.horizontal_rule()
+            with self.case(): self.atx_heading()
+            with self.case(): self.start_code_block()
+            with self.case(): self.start_group()
 
-    @rule()
-    def identifier(self):
-        with self.capture_node('identifier', nested=False):
-            self.range("a-z", "A-Z")
-            with self.repeat():
-                self.range("0-9", "a-z","A-Z","_")
-
-    @rule(inline=True)
-    def empty_lines(self):
-        self.whitespace()
-        self.newline()
-        with self.repeat():
-            self.indent()
-            self.whitespace()
-            self.newline()
-        with self.capture_node("empty_line"):
-            pass
-
-    @rule(inline=True) # 2.1 line ends by newline or end_of_file
-    def line_end(self):
-        self.whitespace()
-        self.end_of_line()
 
     @rule(inline=True)
     def linebreak(self):
@@ -566,20 +533,6 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             self.newline()
 
     @rule()
-    def paragraph_breaks(self):
-        with self.choice():
-            with self.case(): self.horizontal_rule()
-            with self.case(): self.atx_heading()
-            with self.case(): self.start_code_block()
-            with self.case(): self.start_group()
-
-
-    @rule()
-    def para(self):
-        with self.capture_node("para"):
-            self.inner_para()
-
-    @rule()
     def inner_para(self):
         self.whitespace()
         self.inline_element()
@@ -601,6 +554,147 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
         self.end_of_line()
 
 
+
+    @rule()
+    def para(self):
+        with self.capture_node("para"):
+            self.inner_para()
+
+    @rule()
+    def identifier(self):
+        with self.capture_node('identifier', nested=False):
+            self.range("a-z", "A-Z")
+            with self.repeat():
+                self.range("0-9", "a-z","A-Z","_")
+
+    @rule()
+    def block_directive(self):
+        self.literal("\\")
+        with self.capture_node("block_directive"):
+            with self.capture_node("directive_name"):
+                self.identifier()
+            with self.capture_node("directive_args"), self.optional():
+                self.literal("[")
+                self.directive_args()
+                self.literal("]")
+            with self.choice():
+                with self.case():
+                    self.literal(";")
+                    self.capture_value(None)
+                    self.newline()
+                with self.case():
+                    self.code_block()
+                with self.case():
+                    self.literal(":")
+                    with self.choice():
+                        with self.case():
+                            with self.reject():
+                                self.whitespace()
+                                self.newline()
+                            with self.capture_node("directive_para"):
+                                self.print('inner')
+                                self.inner_para()
+                        with self.case():
+                            self.whitespace()
+                            self.newline()
+                            self.indent()
+                            with self.choice():
+                                with self.case():
+                                    with self.capture_node("directive_group"):
+                                        self.inner_group()
+                                with self.case():
+                                    with self.capture_node("directive_para"):
+                                        self.inner_para()
+                        with self.case():
+                            self.empty_lines()
+                with self.case():
+                    self.line_end()
+                    self.capture_value(None)
+
+    @rule()
+    def directive_args(self):
+        self.whitespace(newline=True)
+        with self.optional():
+            self.directive_arg()
+            self.whitespace()
+            with self.repeat(min=0):
+                self.literal(",")
+                self.whitespace(newline=True)
+                self.directive_arg()
+                self.whitespace()
+            with self.optional():
+                self.literal(",")
+            self.whitespace(newline=True)
+
+    @rule(inline=True)
+    def directive_arg(self):
+        with self.capture_node("arg"), self.choice():
+            with self.case():
+                self.identifier()
+                with self.optional():
+                    self.whitespace()
+                    self.literal(":")
+                    self.whitespace(newline=True)
+                    self.rson_value()
+            with self.case():
+                self.rson_string()
+                self.whitespace()
+                self.literal(":")
+                self.whitespace(newline=True)
+                self.rson_value()
+            with self.case():
+                self.rson_value()
+
+    # inlines/paras
+            
+    @rule(inline=True)
+    def inline_directive(self):
+        self.literal("\\")
+        with self.capture_node("inline_directive"):
+            with self.capture_node("directive_name"):
+                self.identifier()
+            with self.capture_node("directive_args"), self.optional():
+                self.literal("[")
+                self.directive_args()
+                self.literal("]")
+            with self.optional(), self.choice():
+                with self.case():
+                    self.literal(";")
+                    self.capture_value(None)
+                with self.case():
+                    with self.count(columns=True) as n, self.repeat(min=1):
+                        self.literal("{")
+
+                    with self.capture_node("directive_span"):
+                        with self.optional():
+                            with self.reject():
+                                with self.repeat(min=n, max=n):
+                                    self.literal("}")
+                            self.inline_element()
+
+                            with self.repeat(min=0):
+                                with self.choice():
+                                    with self.case():
+                                        self.linebreak()
+                                    with self.case():
+                                        with self.capture_node("whitespace"):
+                                            self.whitespace()
+
+                                with self.reject():
+                                    with self.repeat(min=n, max=n):
+                                        self.literal("}")
+                                self.inline_element()
+                        with self.choice():
+                            with self.case():
+                                self.linebreak()
+                            with self.case():
+                                with self.capture_node("whitespace"):
+                                    self.whitespace()
+
+                    with self.repeat(min=n, max=n):
+                        self.literal("}")
+                with self.case():
+                    self.code_span()
     @rule() 
     def horizontal_rule(self):
         with self.capture_node('horizontal_rule'):
@@ -790,134 +884,45 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                             self.end_of_line()
 
 
-    @rule()
-    def block_directive(self):
-        self.literal("\\")
-        with self.capture_node("block_directive"):
-            with self.capture_node("directive_name"):
-                self.identifier()
-            with self.capture_node("directive_args"), self.optional():
-                self.literal("[")
-                self.directive_args()
-                self.literal("]")
-            with self.choice():
-                with self.case():
-                    self.literal(";")
-                    self.capture_value(None)
-                    self.newline()
-                with self.case():
-                    self.code_block()
-                with self.case():
-                    self.literal(":")
-                    with self.choice():
-                        with self.case():
-                            with self.reject():
-                                self.whitespace()
-                                self.newline()
-                            with self.capture_node("directive_para"):
-                                self.print('inner')
-                                self.inner_para()
-                        with self.case():
-                            self.whitespace()
-                            self.newline()
-                            self.indent()
-                            with self.choice():
-                                with self.case():
-                                    with self.capture_node("directive_group"):
-                                        self.inner_group()
-                                with self.case():
-                                    with self.capture_node("directive_para"):
-                                        self.inner_para()
-                        with self.case():
-                            self.empty_lines()
-                with self.case():
-                    self.line_end()
-                    self.capture_value(None)
 
     @rule()
-    def directive_args(self):
-        self.whitespace(newline=True)
-        with self.optional():
-            self.directive_arg()
-            self.whitespace()
-            with self.repeat(min=0):
-                self.literal(",")
-                self.whitespace(newline=True)
-                self.directive_arg()
-                self.whitespace()
-            with self.optional():
-                self.literal(",")
-            self.whitespace(newline=True)
-
-    @rule(inline=True)
-    def directive_arg(self):
-        with self.capture_node("arg"), self.choice():
+    def inline_element(self):
+        with self.choice():
             with self.case():
-                self.identifier()
-                with self.optional():
-                    self.whitespace()
-                    self.literal(":")
-                    self.whitespace(newline=True)
-                    self.rson_value()
+                self.literal("\\")
+                with self.capture_node("text"):
+                    self.range("*", "_","!-/",":-@","[-`","{-~")
             with self.case():
-                self.rson_string()
-                self.whitespace()
+                self.literal("\\")
+                with self.capture_node("text"):
+                    self.whitespace(min=1)
+            with self.case():
                 self.literal(":")
-                self.whitespace(newline=True)
-                self.rson_value()
+                with self.capture_node("emoji"):
+                    self.identifier()
+                self.literal(":")
             with self.case():
-                self.rson_value()
+                self.inline_directive()
+            with self.case():
+                self.inline_span()
+            with self.case():
+                self.code_span()
+            with self.case():
+                self.word.inline()
 
-    # inlines/paras
-            
-    @rule(inline=True)
-    def inline_directive(self):
-        self.literal("\\")
-        with self.capture_node("inline_directive"):
-            with self.capture_node("directive_name"):
-                self.identifier()
-            with self.capture_node("directive_args"), self.optional():
-                self.literal("[")
-                self.directive_args()
-                self.literal("]")
-            with self.optional(), self.choice():
-                with self.case():
-                    self.literal(";")
-                    self.capture_value(None)
-                with self.case():
-                    with self.count(columns=True) as n, self.repeat(min=1):
-                        self.literal("{")
-
-                    with self.capture_node("directive_span"):
-                        with self.optional():
-                            with self.reject():
-                                with self.repeat(min=n, max=n):
-                                    self.literal("}")
-                            self.inline_element()
-
-                            with self.repeat(min=0):
-                                with self.choice():
-                                    with self.case():
-                                        self.linebreak()
-                                    with self.case():
-                                        with self.capture_node("whitespace"):
-                                            self.whitespace()
-
-                                with self.reject():
-                                    with self.repeat(min=n, max=n):
-                                        self.literal("}")
-                                self.inline_element()
-                        with self.choice():
-                            with self.case():
-                                self.linebreak()
-                            with self.case():
-                                with self.capture_node("whitespace"):
-                                    self.whitespace()
-
-                    with self.repeat(min=n, max=n):
-                        self.literal("}")
-                with self.case():
-                    self.code_span()
+    @rule()
+    def word(self):
+        with self.capture_node('text'):
+            self.range(" ", "\n", "\\", invert=True)
+            with self.repeat(min=0):
+                with self.choice():
+                    with self.case():
+                        self.range(" ", "\n", "`", "_", "*", "~", "\\", "}",invert=True)
+                    with self.case():
+                        with self.repeat(min=1): 
+                            self.literal("_") 
+                        with self.reject():
+                            self.whitespace(newline=True)
 
     @rule()
     def inline_span(self):
