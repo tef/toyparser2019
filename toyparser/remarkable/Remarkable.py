@@ -20,13 +20,19 @@ You are very unlikely to need raw nodes, but if you ever dump the AST, you'll se
 
 The syntax sugar is very similar to markdown, github's especially.
 
-- Words are seperated by whitespace, and empty line is paragraph break
+- Words are seperated by whitespace, and empty line is paragraph break. 
 
-- `#` marked headers: `# Header`, `## Subheader` 
+- `#` marked headers: `# Header`, `## Subheader` and continue on till the end of the paragraph.
+
 - *\*strong\**, _\_emphasis\__ ~\~strike through\~~, \code{\`code\`}, and `:emoij:`
+
 - `---` for a horizonal rule
+
 - use `\*`, `\_`, `\#`, `\>`, \code{\`} to get those characters, even `\\`
+
 - `\` at the end of a line forces a line break, `\ ` is a non breaking space.
+
+- Starting a new list, quote, code block, header, or horizontal rule is also a paragraph break.
 
 Everything else is a bit different. Doubling or tripling markers doesn't change
 their meaning:
@@ -161,11 +167,14 @@ Raw nodes can also be used to specify metadata, although `\metadata[author:"tef"
 @metadata {
     author: "tef",
     date: "2019-09-30T12:00Z",
+    example: \para{...},
 }
 ```
 
 Really they're so things can emit dom nodes in a simpler, canonical form, and you can still paste it midway into another
 document. Yes, that's a terrible idea, but stopping it happening doesn't prevent the need.
+
+The subset of Remarkable that's only `@foo{}` with no directives or markup or bare identifiers, is called RSON.
 
 ## An Example Document
 
@@ -214,7 +223,7 @@ multiple lines___ and `inline code`, too.
   - sublist inside, that has text that
 continues on the next line.
 
-This is the last paragraph, which contains a non-breaking\ space.
+This is the last paragraph, which contains a non-breaking\ space, and :emoji:.
 ````````
 
 
@@ -441,7 +450,6 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
     def document(self):
         with self.choice():
             with self.case():
-                self.print("2233")
                 self.literal("\\document{")
                 with self.repeat():
                     self.whitespace()
@@ -455,10 +463,63 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                     self.indent()
                     with self.choice():
                         with self.case(): self.block_element()
+                        with self.case(): self.para()
                         with self.case(): self.empty_lines()
                         with self.case(): self.end_of_file()
                 self.whitespace()
                 self.end_of_file()
+
+    # blocks
+    @rule()
+    def block_element(self):
+        with self.choice():
+            with self.case():
+                self.block_rson()
+            with self.case():
+                self.code_block()
+            with self.case():
+                self.atx_heading()
+            with self.case():
+                self.horizontal_rule()
+            with self.case():
+                self.block_directive()
+            with self.case():
+                self.block_group()
+
+    @rule()
+    def inline_element(self):
+        with self.choice():
+            with self.case():
+                self.literal("\\")
+                with self.capture_node("text"):
+                    self.range("*", "_","!-/",":-@","[-`","{-~")
+            with self.case():
+                self.literal("\\")
+                with self.capture_node("text"):
+                    self.whitespace(min=1)
+            with self.case():
+                self.literal(":")
+                with self.capture_node("emoji"):
+                    self.identifier()
+                self.literal(":")
+            with self.case():
+                self.inline_directive()
+            with self.case():
+                self.inline_span()
+            with self.case():
+                self.code_span()
+            with self.case():
+                with self.capture_node('text'):
+                    self.range(" ", "\n", "\\", invert=True)
+                    with self.repeat(min=0):
+                        with self.choice():
+                            with self.case():
+                                self.range(" ", "\n", "`", "_", "*", "~", "\\", "}",invert=True)
+                            with self.case():
+                                with self.repeat(min=1): 
+                                    self.literal("_") 
+                                with self.reject():
+                                    self.whitespace(newline=True)
 
     @rule()
     def identifier(self):
@@ -483,33 +544,62 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
         self.whitespace()
         self.end_of_line()
 
-    # blocks
-    @rule()
-    def block_element(self):
+    @rule(inline=True)
+    def linebreak(self):
         with self.choice():
             with self.case():
-                self.block_rson()
+                self.whitespace()
+                self.literal("\\")
+                with self.capture_node("hardbreak"):
+                    self.newline()
             with self.case():
-                self.code_block()
-            with self.case():
-                self.atx_heading()
-            with self.case():
-                self.horizontal_rule()
-            with self.case():
-                self.block_directive()
-            with self.case():
-                self.block_group()
-            with self.case():
-                self.para()
+                self.whitespace()
+                with self.capture_node("softbreak"):
+                    self.newline()
+
+        self.indent(partial=True)
+        # allow missing indents if no interrupts
+        with self.reject():
+            self.paragraph_breaks()
+        self.whitespace()
+        with self.reject(): 
+            self.newline()
 
     @rule()
-    def block_rson(self):
-        with self.capture_node('block_rson'):
-            self.literal('@')
-            self.identifier()
-            self.literal(' ')
-            self.rson_literal()
-            self.line_end()
+    def paragraph_breaks(self):
+        with self.choice():
+            with self.case(): self.horizontal_rule()
+            with self.case(): self.atx_heading()
+            with self.case(): self.start_code_block()
+            with self.case(): self.start_group()
+
+
+    @rule()
+    def para(self):
+        with self.capture_node("para"):
+            self.inner_para()
+
+    @rule()
+    def inner_para(self):
+        self.whitespace()
+        self.inline_element()
+
+        with self.repeat():
+            with self.choice():
+                with self.case():
+                    self.linebreak()
+                with self.case():
+                    with self.capture_node("whitespace"):
+                        self.whitespace()
+
+            self.inline_element()
+
+        self.whitespace()
+        with self.optional():
+            self.literal("\\")
+            self.capture_value("\\")
+        self.end_of_line()
+
 
     @rule() 
     def horizontal_rule(self):
@@ -535,17 +625,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                     self.line_end()
                 with self.case():
                     self.whitespace(min=1)
-                    self.inline_element()
-                    with self.repeat():
-                        with self.reject():
-                            self.line_end()
-                        with self.capture_node("whitespace"):
-                            self.whitespace()
-                        self.inline_element()
-                    with self.optional():
-                        with self.capture_node("text"):
-                            self.literal("\\")
-                    self.line_end()
+                    self.inner_para()
 
     @rule()
     def start_code_block(self):
@@ -596,14 +676,6 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             with self.case():
                 self.whitespace(min=1, max=1, newline=True)
 
-    @rule()
-    def group_interrupts(self):
-        with self.choice():
-            with self.case(): self.horizontal_rule()
-            with self.case(): self.atx_heading()
-            with self.case(): self.start_code_block()
-            with self.case(): self.start_group()
-
 
     @rule()
     def group_item(self):
@@ -622,7 +694,11 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                     self.newline()
                     self.indent()
 
-        self.block_element()
+        with self.choice():
+            with self.case(): self.block_element()
+            with self.case(): self.inner_para()
+
+
         with self.repeat():
             self.indent()
             with self.optional():
@@ -634,7 +710,9 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 with self.lookahead():
                     self.whitespace()
                     self.range("\n", invert=True)
-            self.block_element()
+            with self.choice():
+                with self.case(): self.block_element()
+                with self.case(): self.inner_para()
 
     @rule()
     def block_group(self):
@@ -668,7 +746,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                         self.literal("] ")
                 with self.choice():
                     with self.case():
-                        with self.indented(count=1, dedent=self.group_interrupts), self.indented(count=w, dedent=self.group_interrupts):
+                        with self.indented(count=1, dedent=self.paragraph_breaks), self.indented(count=w, dedent=self.paragraph_breaks):
                             self.group_item()
                     with self.case():
                         self.whitespace()
@@ -703,8 +781,8 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                             self.literal("] ")
                     with self.choice():
                         with self.case():
-                            with self.indented(count=1, dedent=self.group_interrupts):
-                                with self.indented(count=w, dedent=self.group_interrupts):
+                            with self.indented(count=1, dedent=self.paragraph_breaks):
+                                with self.indented(count=w, dedent=self.paragraph_breaks):
                                     self.group_item()
                         with self.case():
                             with self.capture_node("item"):
@@ -792,91 +870,6 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
 
     # inlines/paras
             
-    @rule(inline=True)
-    def linebreak(self):
-        with self.choice():
-            with self.case():
-                self.whitespace()
-                self.literal("\\")
-                with self.capture_node("hardbreak"):
-                    self.newline()
-            with self.case():
-                self.whitespace()
-                with self.capture_node("softbreak"):
-                    self.newline()
-
-        self.indent(partial=True)
-        # allow missing indents if no interrupts
-        with self.reject(), self.choice(): 
-            with self.case(): self.horizontal_rule()
-            with self.case(): self.atx_heading()
-            with self.case(): self.start_group()
-            with self.case(): self.start_code_block()
-        self.whitespace()
-        with self.reject(): 
-            self.newline()
-
-    @rule()
-    def para(self):
-        with self.capture_node("para"):
-            self.inner_para()
-
-    @rule()
-    def inner_para(self):
-        self.whitespace()
-        self.inline_element()
-
-        with self.repeat():
-            with self.choice():
-                with self.case():
-                    self.linebreak()
-                with self.case():
-                    with self.capture_node("whitespace"):
-                        self.whitespace()
-
-            self.inline_element()
-
-        self.whitespace()
-        with self.optional():
-            self.literal("\\")
-            self.capture_value("\\")
-        self.end_of_line()
-
-    @rule()
-    def inline_element(self):
-        with self.choice():
-            with self.case():
-                self.literal("\\")
-                with self.capture_node("text"):
-                    self.range("*", "_","!-/",":-@","[-`","{-~")
-            with self.case():
-                self.literal("\\")
-                with self.capture_node("text"):
-                    self.whitespace(min=1)
-            with self.case():
-                self.literal(":")
-                with self.capture_node("emoji"):
-                    self.identifier()
-                self.literal(":")
-            with self.case():
-                self.inline_directive()
-            with self.case():
-                self.inline_span()
-            with self.case():
-                self.code_span()
-            with self.case():
-                with self.capture_node('text'):
-                    self.range(" ", "\n", "\\", invert=True)
-                    with self.repeat(min=0):
-                        with self.choice():
-                            with self.case():
-                                self.range(" ", "\n", "`", "_", "*", "~", "\\", "}",invert=True)
-                            with self.case():
-                                with self.repeat(min=1): 
-                                    self.literal("_") 
-                                with self.reject():
-                                    self.whitespace(newline=True)
-
     @rule(inline=True)
     def inline_directive(self):
         self.literal("\\")
@@ -995,6 +988,15 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             with self.case():
                 with self.capture_node('text'), self.repeat(min=1):
                     self.literal("`")
+
+    @rule()
+    def block_rson(self):
+        with self.capture_node('block_rson'):
+            self.literal('@')
+            self.identifier()
+            self.literal(' ')
+            self.rson_literal()
+            self.line_end()
 
     # rson
 
