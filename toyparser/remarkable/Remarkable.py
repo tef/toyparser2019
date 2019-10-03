@@ -548,15 +548,19 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 with self.case():
                     self.whitespace(min=1, max=1, newline=True)
 
-            with self.choice():
-                with self.case():
-                    with self.capture_node("item"):
+            with self.capture_node("item"):
+                with self.capture_node("item_args"):
+                    with self.optional():
+                        self.literal("[")
+                        self.directive_args()
+                        self.literal("] ")
+                with self.choice():
+                    with self.case():
                         with self.indented(count=1, dedent=self.group_interrupts), self.indented(count=w, dedent=self.group_interrupts):
                             self.group_item()
-                with self.case():
-                    with self.capture_node("item"):
+                    with self.case():
                         self.whitespace()
-                    self.end_of_line()
+                        self.end_of_line()
 
             with self.repeat():
                 self.indent()
