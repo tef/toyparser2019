@@ -1,0 +1,272 @@
+# Remarkable, a restructured markup format.
+
+Remarkable has three different ways to specify data. You only care about one, maybe two, 
+but there's a third, too. 
+
+The first is markdown like ascii art: `*like this*`
+
+The second is LaTeX like directives: `\like{this}`
+
+The third?, JSON like raw nodes: `@like {text: "this"}`
+
+You can't always get what you want with the ascii-art, but you can use the directives.
+You can use the directives, but it isn't always easy to embed data, or be horrifyingly exact, 
+so you can embed raw nodes too. 
+
+You are very unlikely to need raw nodes, but if you ever dump the AST, you'll see it.
+
+## The Markdown like Ascii-Art
+
+The syntax sugar is very similar to markdown, github's especially.
+
+- Words are seperated by whitespace, and empty line is paragraph break. 
+
+- `#` marked headings: `# heading`, `## Subheading` and continue on till the end of the paragraph.
+
+- *\*strong\**, _\_emphasis\__ ~\~strike through\~~, \code{\`code\`}, and `:emoij:`
+
+- `---` for a horizonal rule
+
+- use `\*`, `\_`, `\#`, `\>`, \code{\`} to get those characters, even `\\`
+
+- `\` at the end of a line forces a line break, `\ ` is a non breaking space.
+
+- Starting a new list, quote, code block, heading, or horizontal rule is also a paragraph break.
+
+Everything else is a bit different. Doubling or tripling markers doesn't change
+their meaning:
+
+```
+_emphasis_ __emphasis__ ___emphasis___
+*strong* **strong** ***strong***
+~strike~ ~~strike~~ ~~~strike~~~
+`code` ``code`` ```code```
+```
+
+Code blocks can be tagged with a language identifier, like in markdown:
+
+````
+```foo
+example
+```
+````
+
+Code blocks, headings cannot have leading whitespace. Lists, quotes, on the other hand,
+can have up to 8 leading spaces.
+
+## Groups: Lists and Blockquotes
+
+Lists and quotes can have at most one blank line between
+items, i.e two empty lines between list items means two lists with one item each.
+
+````
+- A list with one element
+that spans two lines
+
+
+- A new List
+  
+  - A sublist
+````
+
+Unlike markdown, `>` works under the same rules as `-`. In other words, only the start of a paragraph gets a `>`, 
+and anything indented underneath is included. Using a `>` starts a new paragraph.
+
+```
+> A block quote
+that spans lines
+> And a second paragraph
+
+
+> A new block quote
+
+> A second Paragraph
+```
+
+Finally, if there are no blank lines between items, or one item, and every item is a solitary paragraph,
+then the list is considered 'tight':
+
+
+```buu
+- a
+- b
+- c
+
+
+```
+The above will render without `<p>..</p>` around the item contents.
+
+## Tables
+
+Markdown like tables exist, too:
+
+```
+
+| header | header |
+| ------ | ------ |
+| cell   | cell   |
+```
+
+No leading space. Header cells, row cells, can be empty. All but the last `|` are optional.
+
+The header row has a division row, underneath, which *must* match the number of columns. 
+Subsequent rows do not need to.
+
+
+## The LaTeX-like Directives
+
+Unlike markdown, every piece of ascii-art has a more canonical longer form, called a directive.
+A directive has a name, optional parameters, and an argument, usually text:
+
+- `\heading[1]{text}`, or `\h[2]{text}`
+- `\emphasis{text}`, `\strong{text}`
+- `\hr`, `\br` 
+- `\list[spacing: "loose"]{\item{text}}`, 
+
+For example, `# My heading` can be expressed in several different ways:
+
+- `\heading[level: 1]: My Heading`
+- `\heading[level: 1]{My Heading}`,
+- `\heading[level: 1]{{{My Heading}}}`
+
+Like the block forms above, directives can take parameters, alongside text:
+
+- `\foo[key: "value", "key": "value"]{text}`
+- `\foo[bare_key, "value with no key"]{text}`
+- `\foo[a,b,c]` is `\foo["a": null, "b":null, "c":null]`. 
+
+Parameters are lists of (key,value) pairs, where one or both are given. non null keys must be unique. 
+Keys can be quoted strings, or identifier like bare words. Values can take numerous JSON like forms:
+
+- `0x123`, `0b111`, `0o123`, `123` 
+- `123.456`, `123e45`,floats
+- `"strings"`, `'or single quoted'`
+- `[lists]`, `{key:value}`
+
+Finally, directives can take list, quote, or code blocks as arguments, or a paragraph:
+
+````
+\para: This will include all text on this line
+and this line too.
+
+\heading:
+It can start on the next line and continues
+until the end of the paragraph
+
+You can use \code{text} or \code`raw text`, but text in \code{\`} is escaped. 
+
+\code```
+a raw block
+```
+
+\list:
+- 1 
+- 2
+
+\quote:
+> para
+
+````
+
+Like `# headings`, and  \code{\`\`\`}, `\directive:` or \code{\\directive\`\`\`} must be 
+at the beginning of a line.
+
+Arguments can be passed to horizontal rules, lists, quotes, code blocks, code spans, and others too:
+
+````
+--- [a:1]
+
+- [b:2] foo
+> [c:3] foo
+
+``` [d:4
+foo
+```
+
+*one*[e:5] _two_[f:6] ~three~[g:7] `four`[g:8]
+
+### [h:7] Foo
+````
+
+Whitespace before args is mandatory for blocks, but forbidden for inline forms.
+
+
+## Raw Nodes
+
+If you want to skip the text processing and just dump data inside, you can. A heading
+can be specified as a raw node, instead of using a directive, or `#` shorthand.
+
+```
+  @heading {
+      level: 1,
+      text: ["My Heading", ],
+  }
+```
+
+Raw nodes can also be used to specify metadata, although `\metadata[author:"tef", date:"..."]` works just as well.
+
+```
+@metadata {
+    author: "tef",
+    date: "2019-09-30T12:00Z",
+    example: \para{...},
+}
+```
+
+Really they're so things can emit dom nodes in a simpler, canonical form, and you can still paste it midway into another
+document. Yes, that's a terrible idea, but stopping it happening doesn't prevent the need.
+
+The subset of Remarkable that's only `@foo{}` with no directives or markup or bare identifiers, is called RSON.
+
+## An Example Document
+
+Putting it all together, here's a larger example:
+
+````````
+@metadata {
+    author: "tef",
+    version: "123",
+}
+
+# A title
+
+A paragraph is split
+over  multiple lines
+
+Although this one \
+Contains a line break
+
+- here is a list item with `raw text`
+
+- here is the next list item
+ 
+  ```` [language: "python"]
+  and a code block inside
+  ````
+
+
+- this is a new list
+
+  > this is a quoted paragraph inside the list
+
+  > this is a new paragraph inside the blockquote
+
+
+
+  > this is a new blockquote
+
+This paragraph contains _emphasis_ and *strong text*. As well as ___emphasis over
+multiple lines___ and `inline code`, too.
+
+\list[start: 1]:
+- a final list
+- that starts at 1
+  - with an unnumbered
+  - sublist inside, that has text that
+continues on the next line.
+
+This is the last paragraph, which contains a non-breaking\ space, and :emoji:.
+````````
+
+
+

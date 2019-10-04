@@ -144,6 +144,22 @@ nice
 | - | - |
 | 1 | 2 |
 | 3 | 4 |
+""",
+"""
+- 
+    a 
+    b
+- 
+    c
+    d
+
+    e
+    f
+
+-
+-
+
+-
 """
 
 
@@ -167,8 +183,8 @@ nice
     import pprint
     pprint.pprint(out)
     txt = out.to_text()
-    print(txt)
-    print()
+    #print(txt)
+    #print()
 
 
 
@@ -250,10 +266,10 @@ nice
 """
     out = python_parser.parse(raw).build(raw, builder)
     txt = out.to_text()
-    print(txt)
+    print(len(txt))
     out2 = python_parser.parse(txt).build(txt, builder)
     text = out2.to_text()
-    print(text)
+    print((text))
 
 
 
