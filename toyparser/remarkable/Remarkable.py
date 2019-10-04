@@ -68,7 +68,7 @@ class Block(Directive):
             name = "tr"
 
 
-        text = "".join(to_html(x, inside=name) for x in self.text) if self.text else ""
+        text = "".join(to_html(x, inside=name) for x in self.text if x is not None) if self.text else ""
         args = " ".join(f"{key}={repr(value)}" for key, value in args.items())
 
         if name =="item":
@@ -122,7 +122,7 @@ class Inline(Directive):
         if name == "nbsp":
             return "&nbsp;"
 
-        text = "".join(to_html(x, inside=name) for x in self.text) if self.text else ""
+        text = "".join(to_html(x, inside=name) for x in self.text if x is not None) if self.text else ""
         args = " ".join(f"{key}={repr(value)}" for key, value in args.items())
 
         if text:
@@ -696,7 +696,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
     @rule()
     def start_group(self):
         self.whitespace(max=8)
-        self.literal("-")
+        self.literal("-", ">")
         with self.choice():
             with self.case(), self.lookahead():
                 self.whitespace()

@@ -1,40 +1,88 @@
-# Remarkable, a restructured markup format.
+# Remark(able), a restructured markup format.
 
-Remarkable has three different ways to specify data. You only care about one, maybe two, 
-but there's a third, too. 
+> I also dream about a modern replacement for LaTeX designed from the ground up
+to target multiple output formats (at least PDF, HTML, EPUB).
+> \em{John MacFarlane, author of Pandoc, editor of CommonMark.}
 
-The first is markdown like ascii art: `*like this*`
+## Remark In A Nutshell.
 
-The second is LaTeX like directives: `\like{this}`
+Commonmark like shorthand, LaTeX like directives, JSON like data.
 
-The third?, JSON like raw nodes: `@like {text: "this"}`
+| Remark | Result | Raw |
+| ------ | ------ | --- |
+| `*text*`, `**text**`, or `***text***` | *text* | `<strong>text</strong>` |
+| `_text_`, `__text__`, or `___text___` | _text_ | `<em>text</em>` |
+| `~text~`, `~~text~~`, or `~~~text~~~` | ~text~ | `<del>text</del>` | 
+| \code{\`raw\`}, \code{\`\`raw\`\`}, or \code{\`\`\`raw\`\`\`} | `raw` |  `<code>raw</code>` |
+| `# Heading` | Heading | `<h1>Heading</h1>` |
+| `---` | \hr | `<hr/>` | 
+| `> text` | text | `<blockquote>text</blockquote>`
+| `- text` | \list{\item{text}} | `<ul><li>text</li></ul>` |
+| `text     text` | text text | `text text` |
+| `text\     text` | text\nbsp;text | `text&nbsp;text` |
+| \code{text\\\br;text} | text\br;text | `text<br/>text` |
+| ``\* \` \> \# \\`` | \* \` \> \# \\ | ``* ` &gt; # \`` |
+| `:emoji_name:` | :emoji_name: | `<span class="emoji">emoji_name</span>` |
 
-You can't always get what you want with the ascii-art, but you can use the directives.
-You can use the directives, but it isn't always easy to embed data, or be horrifyingly exact, 
-so you can embed raw nodes too. 
+Every shorthand has a longer `\name[args]{text}` equivilent. There's even a 
+raw `@name {arg: ..., text: [ ... ]}` form too, but you probably don't care 
+about it. 
 
-You are very unlikely to need raw nodes, but if you ever dump the AST, you'll see it.
+## Overview
 
-## The Markdown like Ascii-Art
+Every Remark document is a series of block structures, which may contain other blocks, or inline structures.
 
-The syntax sugar is very similar to markdown, github's especially.
+- Blocks
+	- Paragraphs
+	- Headings
+	- Lists
+	- Blockquotes
+	- Horizonal Rules
+	- Code Blocks
+	- Tables
+	- Raw Nodes
+	- Directive (`\name[...]: ...`)
 
-- Words are seperated by whitespace, and empty line is paragraph break. 
+- Inlines
+	- Emphasis
+	- Strong
+	- Strikethrough
+	- Code Span
+	- Plain text
+	- Directive (`\name[...]{...}`)
+
+## Paragraphs
+
+- Words are seperated by whitespace. The number of spaces is not preserved.
+
+- Two newlines end a paragraph. 
+
+- Paragraphs also end if there's one of the following blocks on the next line:
+	- Header
+	- Horizonal Rule
+	- Code Block
+	- List, Quote
+	- Table 
+
+- `\` is the escape character, use `\\` for a literal `\`
+
+- A `\` before spaces creates a non breaking space. 
+
+- A `\` before newline creates a hardbreak
+
+- Use `\*`, `\_`, `\#`, `\>`, \code{\`} to get those characters.
+
+## Headings, Rules
 
 - `#` marked headings: `# heading`, `## Subheading` and continue on till the end of the paragraph.
 
-- *\*strong\**, _\_emphasis\__ ~\~strike through\~~, \code{\`code\`}, and `:emoij:`
-
 - `---` for a horizonal rule
 
-- use `\*`, `\_`, `\#`, `\>`, \code{\`} to get those characters, even `\\`
+## Inlines
 
-- `\` at the end of a line forces a line break, `\ ` is a non breaking space.
+- *\*strong\**, _\_emphasis\__ ~\~strike through\~~, \code{\`code\`}, and `:emoij:`
 
-- Starting a new list, quote, code block, heading, or horizontal rule is also a paragraph break.
-
-Everything else is a bit different. Doubling or tripling markers doesn't change
-their meaning:
+ Doubling or tripling markers doesn't change their meaning:
 
 ```
 _emphasis_ __emphasis__ ___emphasis___
@@ -42,6 +90,8 @@ _emphasis_ __emphasis__ ___emphasis___
 ~strike~ ~~strike~~ ~~~strike~~~
 `code` ``code`` ```code```
 ```
+
+## Code Blocks
 
 Code blocks can be tagged with a language identifier, like in markdown:
 
@@ -171,6 +221,8 @@ a raw block
 Like `# headings`, and  \code{\`\`\`}, `\directive:` or \code{\\directive\`\`\`} must be 
 at the beginning of a line.
 
+## Arguments
+
 Arguments can be passed to horizontal rules, lists, quotes, code blocks, code spans, and others too:
 
 ````
@@ -216,7 +268,7 @@ Raw nodes can also be used to specify metadata, although `\metadata[author:"tef"
 Really they're so things can emit dom nodes in a simpler, canonical form, and you can still paste it midway into another
 document. Yes, that's a terrible idea, but stopping it happening doesn't prevent the need.
 
-The subset of Remarkable that's only `@foo{}` with no directives or markup or bare identifiers, is called RSON.
+The subset of Remark that's only `@foo{}` with no directives or markup or bare identifiers, is called RSON.
 
 ## An Example Document
 
