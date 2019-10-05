@@ -247,7 +247,7 @@ def builder(buf, node, children):
     if kind == "block_directive":
         args = children[1]
         text = [children[2]] if children[2] is not None else []
-        if text and text[0].name in ('directive_group', 'directive_para', 'directive_table'):
+        if text and text[0].name in ('directive_group', 'directive_para', 'directive_table', 'directive_block'):
             if text[0].name == "directive_group":
                 args = args + text[0].args
             text = text[0].text
@@ -272,6 +272,8 @@ def builder(buf, node, children):
         return Block('directive_para',[],[c for c in children if c is not None])
     if kind == "directive_table":
         return Block('directive_table',[],[c for c in children if c is not None])
+    if kind == "directive_block":
+        return Block('directive_block',[],[c for c in children if c is not None])
     if kind == "directive_group":
         marker = children[0]
         spacing = children[1]
@@ -530,7 +532,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
     def block_directive(self):
         self.literal("\\")
         with self.capture_node("block_directive"):
-            with self.capture_node("directive_name"):
+            with self.capture_node("directive_name"), self.backref() as name:
                 self.identifier()
             with self.capture_node("directive_args"), self.optional():
                 self.literal("[")
@@ -546,6 +548,38 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 with self.case():
                     self.literal(":")
                     with self.choice():
+                        with self.case(), self.variable("") as fence:
+                            self.literal(":begin")
+                            with self.optional():
+                                self.whitespace()
+                                with self.backref() as b:
+                                    self.identifier()
+                                self.set_variable(fence, b)
+                            self.line_end()
+                            with self.capture_node("directive_block"):
+                                with self.repeat(min=0) as n:
+                                    self.indent()
+                                    with self.reject():
+                                        self.literal("\\")
+                                        self.literal(name)
+                                        self.literal("::end")
+                                        self.whitespace()
+                                        self.literal(fence)
+                                        self.line_end()
+                                    with self.choice():
+
+                                        with self.case(): self.block_element()
+                                        with self.case(): self.para()
+                                        with self.case(): self.empty_lines()
+                            self.indent()
+                            self.literal("\\")
+                            self.literal(name)
+                            self.literal("::end")
+                            self.whitespace()
+                            self.literal(fence)
+                            self.line_end()
+
+
                         with self.case():
                             with self.reject():
                                 self.whitespace()

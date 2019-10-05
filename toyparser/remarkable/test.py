@@ -160,7 +160,12 @@ nice
 -
 
 -
-"""
+""","""
+\section::begin
+Foo
+
+\section::end
+""",
 
 
     ]
@@ -181,7 +186,7 @@ nice
 
     out = python_parser.parse(Readme).build(Readme, builder)
     import pprint
-    pprint.pprint(out)
+    #pprint.pprint(out)
     txt = out.to_text()
     #print(txt)
     #print()
@@ -266,10 +271,10 @@ nice
 """
     out = python_parser.parse(raw).build(raw, builder)
     txt = out.to_text()
-    print(len(txt))
+    #print(len(txt))
     out2 = python_parser.parse(txt).build(txt, builder)
     text = out2.to_text()
-    print((text))
+    #print((text))
 
 
 
