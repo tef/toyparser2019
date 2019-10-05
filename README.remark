@@ -16,19 +16,87 @@ Commonmark like shorthand, LaTeX like directives, JSON like data.
 | \code{\`raw\`}, \code{\`\`raw\`\`}, or \code{\`\`\`raw\`\`\`} | `raw` |  `<code>raw</code>` |
 | `# Heading` | Heading | `<h1>Heading</h1>` |
 | `---` | \hr | `<hr/>` | 
-| `> text` | text | `<blockquote>text</blockquote>`
-| `- text` | \list{\item{text}} | `<ul><li>text</li></ul>` |
 | `text     text` | text text | `text text` |
 | `text\     text` | text\nbsp;text | `text&nbsp;text` |
 | \code{text\\\br;text} | text\br;text | `text<br/>text` |
 | ``\* \` \> \# \\`` | \* \` \> \# \\ | ``* ` &gt; # \`` |
 | `:emoji_name:` | :emoji_name: | `<span class="emoji">emoji_name</span>` |
 
+There's Lists, Blockquotes, and Codeblocks, too:
+
+```
+- A List
+  - A Sublist
+- A second item
+
+- A New List
+```
+
+```
+> A Paragraph inside a blockquote
+> A New Paragraph.
+that continues onto the next line
+
+> - A list inside the same blockquote
+
+> A new paragraph in a new blockquote
+```
+
+````
+```python
+print("hello")
+```
+````
+
+There's also directives, too:
+
 Every shorthand has a longer `\name[args]{text}` equivilent. There's even a 
 raw `@name {arg: ..., text: [ ... ]}` form too, but you probably don't care 
 about it. 
 
-## Overview
+````
+\heading[level:1]: This is a header
+that continues until a paragraph break
+
+\list[start: 1]:
+- A Numbered List with \code{inline code}.
+````
+
+Almost everything takes arguments, too:
+
+```
+# [arg: 1] A Header with args, including **strong**[args:2] inline args.
+```
+
+## Example
+
+````
+# A Heading
+
+A paragraph with a non\ breaking space, some \em{inline} text,\
+and a hard line break.
+
+---
+
+\list[start:1]:
+  - A Numbered List
+    > A block quote
+
+    > A New Paragraph
+
+---
+
+```bash
+echo "hello world
+```
+
+| Heading |
+| :-----: |
+|  Cell   |
+
+````
+
+## Overview of markup directives:
 
 Every Remark document is a series of block structures, which may contain other blocks, or inline structures.
 
@@ -220,6 +288,19 @@ a raw block
 
 Like `# headings`, and  \code{\`\`\`}, `\directive:` or \code{\\directive\`\`\`} must be 
 at the beginning of a line.
+
+Directives can also take a delimited block, with an optional name:
+
+```
+\blockquote::begin
+A para
+\blockquote::begin named
+Inner
+\blockquote::end named
+
+Another
+\blockquote::end
+```
 
 ## Arguments
 
