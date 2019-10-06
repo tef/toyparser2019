@@ -251,7 +251,7 @@ Blocks can contain other blocks and paragraphs. Paragraphs can contain inline di
 
 ## Inlines
 
-- *\*strong\**, _\_emphasis\__ ~\~strike through\~~, \code{\`code\`}, and `:emoij:`
+- *\*strong\**, _\_emphasis\__ ~\~strike through\~~, \code{\`code\`}, and `:emoji:`
 
  Doubling or tripling markers doesn't change their meaning:
 
@@ -445,7 +445,7 @@ foo
 Whitespace before args is mandatory for blocks, but forbidden for inline forms.
 
 
-## Raw Nodes
+## Data Nodes
 
 If you want to skip the text processing and just dump data inside, you can. A heading
 can be specified as a raw node, instead of using a directive, or `#` shorthand.

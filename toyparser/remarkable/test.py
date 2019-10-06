@@ -171,6 +171,24 @@ Foo
    fooo
     fofofo
   ```
+""",
+"""\
+- [a: 1]
+  foo
+- boo
+""", """
+\\table:
+-   
+  # X
+  # Y
+- 
+  - a
+  - b
+-
+  - 1
+  - 2
+
+
 """
     ]
 
@@ -288,11 +306,14 @@ nice
   - 1
   - 2
 
+\raw```
+foo
+```
 
 """
     out = python_parser.parse(raw).build(raw, builder)
     txt = out.to_text()
-    #print(len(txt))
+    print(txt)
     out2 = python_parser.parse(txt).build(txt, builder)
     text = out2.to_text()
     print((text))

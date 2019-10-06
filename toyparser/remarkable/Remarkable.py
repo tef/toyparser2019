@@ -36,10 +36,17 @@ class Directive:
     def to_text(self):
         return to_text(self)
     def to_html(self, inside=None):
-        args = " ".join(f"{key}={repr(value)}" for key, value in self.args)
-        args = f" {args}" if args else ""
-        text = "".join(to_html(x) for x in self.text) if self.text else ""
+        text = "".join(to_html(x, inside=name) for x in self.text if x is not None) if self.text else ""
+        args = " ".join(f"{key}={repr(value)}" for key, value in args.items())
 
+        if name in html_tags:
+            return html_tags[name].format(name=name, args=args, text=text)
+        if text:
+            args = f" {args}" if args else ""
+            return f"<{name}{args}>{text}</{name}>"
+        else:
+            args = f" {args} " if args else ""
+            return f"<{name}{args}/>"
 
 class Block(Directive):
     def to_html(self, inside=None):
@@ -114,6 +121,8 @@ class Inline(Directive):
                 name ="li"
         if name == "nbsp":
             return "&nbsp;"
+        if name == "code":
+            name = "code_span"
 
         text = "".join(to_html(x, inside=name) for x in self.text if x is not None) if self.text else ""
         args = " ".join(f"{key}={repr(value)}" for key, value in args.items())
@@ -138,7 +147,10 @@ def to_text(obj):
     args = ", ".join(f"{key}: {repr(value)}" for key, value in obj.args)
     args = f"[{args}]" if args else ""
     text = "".join(to_text(x) for x in obj.text) if obj.text else ""
-    text = "{" f"{text}" "}" if text else ";"
+    if obj.name in ('code', 'code_span'):
+        text = "`" f"{text}" "`" if text else ";"
+    else:
+        text = "{" f"{text}" "}" if text else ";"
     return f"\\{obj.name}{args}{text}"
 
 def unescape(string):
@@ -196,7 +208,16 @@ def builder(buf, node, children):
         return Block("para", [], [c for c in children if c is not None])
     if kind == "span":
         args = children[-1]
-        return Inline("span", [("marker", node.value)] +args,[c for c in children[:-1] if c is not None])
+        marker = node.value
+        if marker == "*":
+            return Inline("strong", args,[c for c in children[:-1] if c is not None])
+        if marker == "_":
+            return Inline("emph", args,[c for c in children[:-1] if c is not None])
+        if marker == "~":
+            return Inline("strike", args,[c for c in children[:-1] if c is not None])
+        if marker:
+            return Inline("span", [("marker", node.value)] +args,[c for c in children[:-1] if c is not None])
+        return Inline("span", args,[c for c in children[:-1] if c is not None])
     if kind == 'code_span':
         args = children[-1]
         return Inline("code_span",args, [c for c in children[:-1] if c is not None])
@@ -210,9 +231,19 @@ def builder(buf, node, children):
     if kind == 'group':
         marker = children[0]
         spacing = children[1]
+        name = 'group'
+        args = [("marker", marker)]
+
+        if marker == '>':
+            name = "blockquote"
+            args = []
+        elif marker == '*':
+            name = "list"
+            args = []
+
         if spacing == "tight":
             if all(c and c.name == "item_span" for c in children[2:]):
-                return Block("para_group", [("marker", marker)], [c for c in children[2:] if c is not None])
+                return Block(name, args, [c for c in children[2:] if c is not None])
         new_children = []
         for c in children[2:]:
             if c is None: continue
@@ -220,7 +251,7 @@ def builder(buf, node, children):
                 text = [Block("para", [], c.text)] if c.text else []
                 c = Block("item", c.args, text)
             new_children.append(c)
-        return Block("group", [("marker", marker)], new_children)
+        return Block(name, args, new_children)
     if kind == 'group_marker':
         return buf[node.start:node.end]
     if kind == 'group_spacing':
@@ -243,7 +274,7 @@ def builder(buf, node, children):
         args = children[1]
         text = [children[2]] if children[2] is not None else []
         name = children[0]
-        if text and text[0].name in ('directive_group', 'directive_para', 'directive_table', 'directive_block'):
+        if text and text[0].name in ('directive_group', 'directive_para', 'directive_table', 'directive_block', 'directive_code', 'directive_code_span'):
             if name in ('list', 'blockquote') and text[0].name == "directive_group":
                 args = args + text[0].args # pull up spacing
             if name == 'table' and text[0].name == "directive_group":
@@ -256,7 +287,7 @@ def builder(buf, node, children):
                         return d
 
                 def transform_cols(name, d):
-                    if len(d) == 1 and d[0].name in ('para_group', 'group'):
+                    if len(d) == 1 and d[0].name in ('para_group', 'group', 'list', 'blockquote'):
                         return "row", [Inline('cell', [], t.text) for t in d[0].text]
                     elif all(getattr(t,'name', '') == 'heading' for t in d):
                         return "thead", [Inline('cell', [], t.text) for t in d]
@@ -285,6 +316,10 @@ def builder(buf, node, children):
 
     if kind == "directive_para":
         return Block('directive_para',[],[c for c in children if c is not None])
+    if kind == "directive_code":
+        return Block('directive_code',[],[c for c in children if c is not None])
+    if kind == "directive_code_span":
+        return Block('directive_code',[],[c for c in children if c is not None])
     if kind == "directive_table":
         return Block('directive_table',[],[c for c in children if c is not None])
     if kind == "directive_block":
@@ -410,7 +445,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                         with self.case(): self.para()
                         with self.case(): self.empty_lines()
                         with self.case(): self.end_of_file()
-                self.whitespace()
+                self.whitespace(newline=True)
                 self.end_of_file()
 
     @rule(inline=True)
@@ -560,7 +595,8 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                     self.capture_value(None)
                     self.newline()
                 with self.case():
-                    self.code_block()
+                    with self.capture_node('directive_code'): 
+                        self.inner_code_block()
                 with self.case():
                     self.literal(":")
                     with self.choice():
@@ -594,7 +630,6 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                             self.whitespace()
                             self.literal(fence)
                             self.line_end()
-
 
                         with self.case():
                             with self.reject():
@@ -641,6 +676,17 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 with self.case():
                     with self.count(columns=True) as n, self.repeat(min=1):
                         self.literal("{")
+                    with self.capture_node("directive_para"):
+                        with self.repeat():
+                            self.whitespace(newline=True)
+                            self.inline_directive()
+                            self.whitespace(newline=True)
+                    self.whitespace(newline=True)
+                    with self.repeat(min=n, max=n):
+                        self.literal("}")
+                with self.case():
+                    with self.count(columns=True) as n, self.repeat(min=1):
+                        self.literal("{")
 
                     with self.capture_node("directive_span"):
                         with self.optional():
@@ -661,7 +707,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                                     with self.repeat(min=n, max=n):
                                         self.literal("}")
                                 self.inline_element()
-                        with self.choice():
+                        with self.repeat(), self.choice():
                             with self.case():
                                 self.linebreak()
                             with self.case():
@@ -671,7 +717,8 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                     with self.repeat(min=n, max=n):
                         self.literal("}")
                 with self.case():
-                    self.code_span()
+                    with self.capture_node('directive_code_span') as span: 
+                        self.inner_code_span()
     @rule() 
     def horizontal_rule(self):
         self.whitespace(max=8)
@@ -746,6 +793,28 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 self.literal(fence)
             self.whitespace()
             self.line_end()
+
+    @rule()
+    def inner_code_block(self):
+        fence = "`"
+        with self.count(char=fence) as c, self.repeat(min=3):
+            self.literal(fence)
+        self.line_end()
+        with self.repeat():
+            self.indent()
+            with self.reject():
+                with self.repeat(min=c):
+                    self.literal(fence)
+                self.line_end()
+            with self.capture_node('text'):
+                with self.repeat(min=0):
+                    self.range("\n", invert=True)
+                self.line_end()
+        self.indent()
+        with self.repeat(min=c):
+            self.literal(fence)
+        self.whitespace()
+        self.line_end()
 
     @rule()
     def start_group(self):
@@ -1036,10 +1105,8 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 self.literal("[")
                 self.directive_args()
                 self.literal("]")
-                
     @rule()
-    def code_span(self):
-        with self.capture_node('code_span') as span: 
+    def inner_code_span(self):
             with self.count(char="`") as c, self.repeat(min=1):
                 self.literal("`")
             with self.repeat(min=1), self.choice():
@@ -1065,6 +1132,10 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 self.literal("`")
             with self.reject():
                 self.literal("`")
+    @rule()
+    def code_span(self):
+        with self.capture_node('code_span') as span: 
+            self.inner_code_span()
             with self.capture_node("directive_args"), self.optional():
                 self.literal("[")
                 self.directive_args()
@@ -1317,28 +1388,6 @@ def parse(buf):
     # lift into document block
     # use metadata block to set up default transforms
     node = parser.parse(buf)
-    def lift(buf, node, children):
-        name = node.name
-        if name =="group" or name =="para_group":
-            if args['marker'] == '-':
-                node.name = "list" 
-                node.args.pop('marker')
-            elif args['marker'] == '>':
-                node.name = "blockquote"
-                node.args.pop('marker')
-
-        if name =="span":
-            if args['marker'] == '*':
-                node.name = "strong"
-                args.pop('marker')
-            elif args['marker'] == '~':
-                node.name = "strike"
-                args.pop('marker')
-            elif args['marker'] == '_':
-                name = "emph"
-                args.pop('marker')
-
-        return node
     if node:
         tree = node.build(buf, builder)
         return tree
