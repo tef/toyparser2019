@@ -166,8 +166,12 @@ Foo
 
 \section::end
 """,
-
-
+"""
+- ```
+   fooo
+    fofofo
+  ```
+"""
     ]
 
     for testcase in tests:
@@ -268,13 +272,30 @@ nice
 | - | - |
 | 1 | 2 |
 | 3 | 4 |
+
+-
+  # a
+  # b
+
+\table:
+-   
+  # X
+  # Y
+- 
+  - a
+  - b
+-
+  - 1
+  - 2
+
+
 """
     out = python_parser.parse(raw).build(raw, builder)
     txt = out.to_text()
     #print(len(txt))
     out2 = python_parser.parse(txt).build(txt, builder)
     text = out2.to_text()
-    #print((text))
+    print((text))
 
 
 

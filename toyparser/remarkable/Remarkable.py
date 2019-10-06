@@ -13,6 +13,20 @@ def to_html(obj, inside=None):
     if isinstance(obj, str): return html.escape(obj)
     return obj.to_html(inside=inside)
 
+html_tags = {
+       "document": "<html>\n{text}</html>",
+       "code": "<pre><code>{text}</code></pre>\n",
+       "code_span": "<code>{text}</code>",
+       "thead": "<thead><tr>{text}</tr></thead>\n",
+       "para": "<p>{text}</p>\n",
+       "br": "<br/>\n",
+       "nbsp": "&nbsp;",
+       "strike": "<del>{text}</del>",
+       "strong": "<strong>{text}</strong>",
+       "emph": "<em>{text}</em>",
+}
+
+
 class Directive:
     def __init__(self, name, args, text):
         self.name = name
@@ -21,14 +35,10 @@ class Directive:
 
     def to_text(self):
         return to_text(self)
-    def to_html(self):
+    def to_html(self, inside=None):
         args = " ".join(f"{key}={repr(value)}" for key, value in self.args)
         args = f" {args}" if args else ""
         text = "".join(to_html(x) for x in self.text) if self.text else ""
-        if text:
-            return f"<{self.name}{args}>{text}</{self.name}>"
-        else:
-            return f"<{self.name}{args} />"
 
 
 class Block(Directive):
@@ -37,10 +47,8 @@ class Block(Directive):
         name = self.name
 
         if name == "heading":
-            name = f"h{args['level']}"
-            args.pop('level')
-        elif name =="para":
-            name = "p"
+            name = f"h{args.get('level',1)}"
+            if 'level' in args: args.pop('level')
         if name =="group" or name =="para_group":
             if args['marker'] == '-':
                 if 'start' in args:
@@ -77,13 +85,8 @@ class Block(Directive):
             else:
                 name ="li"
 
-        if name == "document":
-            return f"<html>\n{text}</html>"
-        if name == "code":
-            return f"<pre><code>{text}</code></pre>"
-        if name == "thead":
-            return f"<thead><tr>{text}</tr></thead>"
-
+        if name in html_tags:
+            return html_tags[name].format(name=name, args=args, text=text)
         if text:
             args = f" {args}" if args else ""
             return f"<{name}{args}>{text}</{name}>\n"
@@ -99,16 +102,6 @@ class Inline(Directive):
 
         if name == "cell":
             name = "td"
-        if name =="span":
-            if args['marker'] == '*':
-                name = "strong"
-                args.pop('marker')
-            elif args['marker'] == '~':
-                name = "del"
-                args.pop('marker')
-            elif args['marker'] == '_':
-                name = "em"
-                args.pop('marker')
         if name == "emoij":
             name = "span"
             args['class'] = "emoji"
@@ -125,6 +118,8 @@ class Inline(Directive):
         text = "".join(to_html(x, inside=name) for x in self.text if x is not None) if self.text else ""
         args = " ".join(f"{key}={repr(value)}" for key, value in args.items())
 
+        if name in html_tags:
+            return html_tags[name].format(name=name, args=args, text=text)
         if text:
             args = f" {args}" if args else ""
             return f"<{name}{args}>{text}</{name}>"
@@ -204,7 +199,7 @@ def builder(buf, node, children):
         return Inline("span", [("marker", node.value)] +args,[c for c in children[:-1] if c is not None])
     if kind == 'code_span':
         args = children[-1]
-        return Inline("code",args, [c for c in children[:-1] if c is not None])
+        return Inline("code_span",args, [c for c in children[:-1] if c is not None])
 
     if kind == 'code_block':
         arg = children[0] if children[0] is not None else []
@@ -247,10 +242,30 @@ def builder(buf, node, children):
     if kind == "block_directive":
         args = children[1]
         text = [children[2]] if children[2] is not None else []
+        name = children[0]
         if text and text[0].name in ('directive_group', 'directive_para', 'directive_table', 'directive_block'):
-            if text[0].name == "directive_group":
-                args = args + text[0].args
-            text = text[0].text
+            if name in ('list', 'blockquote') and text[0].name == "directive_group":
+                args = args + text[0].args # pull up spacing
+            if name == 'table' and text[0].name == "directive_group":
+                new_text = []
+                def transform_row(r):
+                    if r.name in ('item', 'item_span'):
+                        name, text = transform_cols(r.name, r.text)
+                        return Block(name, [], text)
+                    else:
+                        return d
+
+                def transform_cols(name, d):
+                    if len(d) == 1 and d[0].name in ('para_group', 'group'):
+                        return "row", [Inline('cell', [], t.text) for t in d[0].text]
+                    elif all(getattr(t,'name', '') == 'heading' for t in d):
+                        return "thead", [Inline('cell', [], t.text) for t in d]
+
+                    return name, d
+                    
+                text = [transform_row(r) for r in text[0].text]
+            else:
+                text = text[0].text
         return Block(children[0], args, text)
     if kind == "inline_directive":
         args = children[1]
@@ -530,6 +545,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
 
     @rule()
     def block_directive(self):
+        self.whitespace(max=8)
         self.literal("\\")
         with self.capture_node("block_directive"):
             with self.capture_node("directive_name"), self.backref() as name:
@@ -658,6 +674,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                     self.code_span()
     @rule() 
     def horizontal_rule(self):
+        self.whitespace(max=8)
         with self.capture_node('horizontal_rule'):
             with self.repeat(min=3):
                 self.literal("-")
@@ -670,6 +687,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
 
     @rule()
     def atx_heading(self):
+        self.whitespace(max=8)
         with self.variable(0) as num, self.capture_node("atx_heading", value=num):
             with self.count(char='#') as level:
                 with self.repeat(min=1, max=9):
@@ -690,10 +708,12 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
 
     @rule()
     def start_code_block(self):
+        self.whitespace(max=8)
         self.literal("```")
 
     @rule()
     def code_block(self):
+        self.whitespace(max=8)
         with self.capture_node('code_block'):
             fence = "`"
             with self.count(char=fence) as c, self.repeat(min=3):
@@ -865,6 +885,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
 
     @rule()
     def start_table(self):
+        self.whitespace(max=8)
         self.literal("|")
 
 
@@ -893,46 +914,49 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
 
     @rule()
     def inner_table(self):
-        with self.variable(0) as rows:
-            with self.capture_node('table_heading'):
-                with self.repeat(min=1) as c:
-                    self.literal("|")
-                    self.whitespace()
-                    self.table_cell()
-                    self.whitespace()
-                with self.optional():
-                    self.literal("|")
-                    self.whitespace()
-                self.newline()
-            
-            self.indent()
-
-            with self.capture_node('table_division'):
-                with self.repeat(min=c, max=c):
-                    self.literal("|")
-                    self.whitespace()
-                    with self.capture_node("cell_align"):
+        with self.count(columns=True) as c:
+            self.whitespace(max=8)
+        with self.indented(count=c):
+            with self.variable(0) as rows:
+                with self.capture_node('table_heading'):
+                    with self.repeat(min=1) as c:
+                        self.literal("|")
                         self.whitespace()
-                        with self.optional(): self.literal(":")
-                        with self.repeat(min=1): self.literal("-")
-                        with self.optional(): self.literal(":")
-                    self.whitespace()
-                with self.optional():
-                    self.literal("|")
-                    self.whitespace()
-                self.newline()
-        with self.repeat():
-            self.indent()
-            with self.capture_node("table_row"):
-                with self.repeat(max=c):
-                    self.literal("|")
-                    self.whitespace()
-                    self.table_cell()
-                    self.whitespace()
-                with self.optional():
-                    self.literal("|")
-                    self.whitespace()
-                self.newline()
+                        self.table_cell()
+                        self.whitespace()
+                    with self.optional():
+                        self.literal("|")
+                        self.whitespace()
+                    self.newline()
+                
+                self.indent()
+
+                with self.capture_node('table_division'):
+                    with self.repeat(min=c, max=c):
+                        self.literal("|")
+                        self.whitespace()
+                        with self.capture_node("cell_align"):
+                            self.whitespace()
+                            with self.optional(): self.literal(":")
+                            with self.repeat(min=1): self.literal("-")
+                            with self.optional(): self.literal(":")
+                        self.whitespace()
+                    with self.optional():
+                        self.literal("|")
+                        self.whitespace()
+                    self.newline()
+            with self.repeat():
+                self.indent()
+                with self.capture_node("table_row"):
+                    with self.repeat(max=c):
+                        self.literal("|")
+                        self.whitespace()
+                        self.table_cell()
+                        self.whitespace()
+                    with self.optional():
+                        self.literal("|")
+                        self.whitespace()
+                    self.newline()
             
     @rule()
     def inline_element(self):
@@ -1289,7 +1313,35 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
 
 parser = Remarkable().parser()
 def parse(buf):
-    return parser.parse(buf).build(buf, builder)
+    # remove metadata block
+    # lift into document block
+    # use metadata block to set up default transforms
+    node = parser.parse(buf)
+    def lift(buf, node, children):
+        name = node.name
+        if name =="group" or name =="para_group":
+            if args['marker'] == '-':
+                node.name = "list" 
+                node.args.pop('marker')
+            elif args['marker'] == '>':
+                node.name = "blockquote"
+                node.args.pop('marker')
+
+        if name =="span":
+            if args['marker'] == '*':
+                node.name = "strong"
+                args.pop('marker')
+            elif args['marker'] == '~':
+                node.name = "strike"
+                args.pop('marker')
+            elif args['marker'] == '_':
+                name = "emph"
+                args.pop('marker')
+
+        return node
+    if node:
+        tree = node.build(buf, builder)
+        return tree
 
 if __name__ == "__main__":
     import subprocess

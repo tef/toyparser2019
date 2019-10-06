@@ -4,101 +4,199 @@
 to target multiple output formats (at least PDF, HTML, EPUB).
 > \em{John MacFarlane, author of Pandoc, editor of CommonMark.}
 
-## Remark In A Nutshell.
+Remark: Commonmark like shorthand. LaTeX like directives. HTML like DOM Nodes. JSON like attributes.
 
-Commonmark like shorthand, LaTeX like directives, JSON like data.
+## Why Remark?
 
-| Remark | Result | Raw |
+Markdown is great for small comments, or blog posts. LaTeX is good for writing
+a book on Mathematics. RST is good for technical documentation, and HTML is good
+for webpages. So why Remark?
+
+I want a simple document markup language that has a consistent verbose escape hatch, 
+for when I need it do a thing and I can't remember the ascii art incantation. 
+I want something like CommonMark, but meaningfully tied into something like HTML. 
+
+```
+              +
+  Extensible  | LaTeX
+              |
+              |          ReStructuredText  
+              |
+              |  HTML
+  Fixed       |                    Markdown
+              |
+              +------------------------------+
+                
+                Verbose             Shorthand
+```
+
+- TeX is too tied to raw typesetting, and has baroque rules. How do you write a 
+  \?. LaTeX is powerful, but also barqoue in different ways. 
+- HTML is better for text, but awful for data. The escaping rules vary between 
+  ampersands, or backslashes, or percents. 
+- ReStructured Text is ok in design but clumsy to use. Markdown forms a more
+  humane interface, except for the magic trailing whitespace or precisely 
+  counted indentation
+- Markdown in particular is hard to extend, and hard to parse correctly. 
+
+
+## Remark In A Nutshell
+
+Remark has markdown-like rules for annotating text:
+
+| Remark | Result | Raw HTML |
 | ------ | ------ | --- |
+| ``\* \` \> \# \\`` | \* \` \> \# \\ | ``* ` &gt; # \`` |
 | `*text*`, `**text**`, or `***text***` | *text* | `<strong>text</strong>` |
 | `_text_`, `__text__`, or `___text___` | _text_ | `<em>text</em>` |
 | `~text~`, `~~text~~`, or `~~~text~~~` | ~text~ | `<del>text</del>` | 
 | \code{\`raw\`}, \code{\`\`raw\`\`}, or \code{\`\`\`raw\`\`\`} | `raw` |  `<code>raw</code>` |
-| `# Heading` | Heading | `<h1>Heading</h1>` |
-| `---` | \hr | `<hr/>` | 
+| `:emoji_name:` | :emoji_name: | `<span class="emoji">emoji_name</span>` |
+
+A remark document is a collection of blocks, which contain paragraphs. Inside a paragraph, multiple
+spaces are treated as one, and a paragraph ends when a new block starts, or after two newlines.
+
+| Remark | Result | Raw HTML |
+| ------ | ------ | --- |
 | `text     text` | text text | `text text` |
 | `text\     text` | text\nbsp;text | `text&nbsp;text` |
 | \code{text\\\br;text} | text\br;text | `text<br/>text` |
-| ``\* \` \> \# \\`` | \* \` \> \# \\ | ``* ` &gt; # \`` |
-| `:emoji_name:` | :emoji_name: | `<span class="emoji">emoji_name</span>` |
 
-There's Lists, Blockquotes, and Codeblocks, too:
+Blocks are also quite similar to markdown. Headings, Lists, Code Blocks, Blockquotes, and Horizonal Rules
+work almost exactly the same. Unlike markdown, a list cannot have more than one blank line between items, 
+and a blockquote only has a `>` at the start.
 
-```
-- A List
-  - A Sublist
-- A second item
+\table:
+  - # Remark
+    # Result
+    # HTML
 
-- A New List
-```
+  - 
+    - `# Heading`
+    - Heading 
+    - `<h1>Heading</h1>` 
+  -
+    - `---`
+    -  \hr 
+    - `<hr/>`  
+  -
+    - ```
+      - 1
+      - 2
+      ```
+    -
+      - 1
+      - 2 
+    -
+      ```
+      <ul>
+      <li>1</li>
+      <li>2</li>
+      </ul>
+      ```
+  - - ````
+      ```
+      1 + 2
+      ```
+      ````
+    - ```
+      1 + 2
+      ```
+    - ```
+      <pre><code>1 + 2</code></pre>
+      ```
+  - - ```
+      > 1
 
-```
-> A Paragraph inside a blockquote
-> A New Paragraph.
-that continues onto the next line
+      > 2
+      ```
+    -
+      > 1
 
-> - A list inside the same blockquote
+      > 2 
+    -
+      ```
+      <blockquote>
+      <p>1</p>
+      <p>2</p>
+      </blockquote>
+      ```
+  - - ```
+      | header 1 | header 2 |
+      | :------: | :------: |
+      | cell 1   | cell 2   |
+      ```
+    - ```
+      \table:
+        - # Header 1
+          # Header 2
+        - - cell 1
+          - cell 2
+      ```
+    - ```
+      <table><thead><tr><td>header 1 ....
+      .... <td>cell 2</td></tr></table> 
+      ```
 
-> A new paragraph in a new blockquote
-```
+Unlike markdown, and a little more like LaTeX, Remark has a standard form for directives, `\name[args]{text}`.
+
+\table:
+   > # Shorthand
+     # Longhand
+      
+   > - `*text*`, `_text_`, `~text~`
+     - `\strong{text}`, `\em{text}`, `\strike{text}`
+
+   > - `# Heading`
+     - `\heading[level: 1]: Heading`
+   > -  ````
+        - 1
+        - 2
+        ````
+     -  ````
+        \list{\item{1}\item{2}}
+	````
+   > - ````
+       ```python
+       1 + 2
+       ```
+       ````
+     - ````
+       \code[language: "python"]```
+       1 + 2
+       ```
+       ````
+
+Block directives and inline directives accept arguments, too.
 
 ````
-```python
-print("hello")
-```
-````
+# [arg: 1] A Header with args, including **strong**[args:2] inline args.
 
-There's also directives, too:
-
-Every shorthand has a longer `\name[args]{text}` equivilent. There's even a 
-raw `@name {arg: ..., text: [ ... ]}` form too, but you probably don't care 
-about it. 
-
-````
-\heading[level:1]: This is a header
-that continues until a paragraph break
+--- [another: 4]
 
 \list[start: 1]:
-- A Numbered List with \code{inline code}.
-````
+  - [args: 4.5] A Numbered List
+    > [args: 5] A block quote
 
-Almost everything takes arguments, too:
+    > A New Paragraph in the same blockquote
 
-```
-# [arg: 1] A Header with args, including **strong**[args:2] inline args.
-```
-
-## Example
-
-````
-# A Heading
-
-A paragraph with a non\ breaking space, some \em{inline} text,\
-and a hard line break.
-
----
-
-\list[start:1]:
-  - A Numbered List
-    > A block quote
-
-    > A New Paragraph
-
----
-
-```bash
-echo "hello world
-```
-
+\table[args:3]:
 | Heading |
 | :-----: |
 |  Cell   |
 
 ````
 
-## Overview of markup directives:
+There's even a way to embed raw data inside a document, too:
 
-Every Remark document is a series of block structures, which may contain other blocks, or inline structures.
+```
+@metadata {name: "tef", title: "Remark README"}
+```
+
+## An Overview of Remark:
+
+A Remark document is, well, very like an HTML document. A document contains a list of blocks and paragraphs.
+Blocks can contain other blocks and paragraphs. Paragraphs can contain inline directives, but not block directives.
 
 - Blocks
 	- Paragraphs
@@ -108,8 +206,8 @@ Every Remark document is a series of block structures, which may contain other b
 	- Horizonal Rules
 	- Code Blocks
 	- Tables
-	- Raw Nodes
-	- Directive (`\name[...]: ...`)
+	- Data Nodes
+	- Named Block Directive (`\name[...]: ...`)
 
 - Inlines
 	- Emphasis
@@ -117,7 +215,12 @@ Every Remark document is a series of block structures, which may contain other b
 	- Strikethrough
 	- Code Span
 	- Plain text
-	- Directive (`\name[...]{...}`)
+	- Named Inline Directive (`\name[...]{...}`)
+
+## Documents
+
+ - Can have a metadata block
+ - Can be `\document{...}`
 
 ## Paragraphs
 
@@ -230,6 +333,22 @@ No leading space. Header cells, row cells, can be empty. All but the last `|` ar
 The header row has a division row, underneath, which *must* match the number of columns. 
 Subsequent rows do not need to.
 
+You can also specify tables another way:
+````
+- # Heading
+  # Heading
+- - Cell
+  - Cell
+- - Cell
+  - Cell
+````
+
+Or the long way:
+````
+\table::begin
+   \row: \cell{1} \cell{2}
+\table::end
+````
 
 ## The LaTeX-like Directives
 
@@ -288,6 +407,8 @@ a raw block
 
 Like `# headings`, and  \code{\`\`\`}, `\directive:` or \code{\\directive\`\`\`} must be 
 at the beginning of a line.
+
+## Block Directives
 
 Directives can also take a delimited block, with an optional name:
 
