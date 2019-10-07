@@ -13,8 +13,148 @@ def to_html(obj, inside=None):
     if isinstance(obj, str): return html.escape(obj)
     return obj.to_html(inside=inside)
 
+template = """\
+<html>
+<head>
+<title>{title}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style type="text/css">
+* {{
+    -webkit-box-sizing: border-box; 
+    -moz-box-sizing: border-box;  
+    box-sizing: border-box;   
+}}
+
+body {{
+    background: #fdfdfd;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Verdana, Arial, Helvetica, sans-serif;
+    /*color: #000000;*/
+    font-size: 0.9rem;
+}}
+i, em {{
+    font-family: Georgia, serif;
+}}
+
+h1.title {{font-weight: normal; margin-top: 0; font-size: 1.8rem;}}
+h1 {{font-weight: normal; margin-top: 0; font-size: 1.3rem;}}
+h2 {{font-weight: normal; margin-top: 0; font-size: 1.1rem; }}
+
+section {{
+    margin-bottom: 2em;
+}}
+
+blockquote {{
+    font-style: italic;
+}}
+
+blockquote em {{
+    font-style: normal; 
+}}
+
+a {{ color: #0000ff; text-decoration: none; }} 
+a:hover {{ color: #ff0000; text-decoration: underline; }}
+a img {{ outline: 0; border: none; }}
+
+hr {{
+    height: 0;
+    border: solid 1px;
+    color: #cccccc;
+    width: 100%;
+    max-width: 36rem;
+}}
+
+footer {{
+    text-align: center;
+
+}}
+footer ul {{
+    padding-left: 0;
+}}
+footer li {{
+    display: inline-block;
+    list-style-type: none;
+}}
+footer li:after {{
+    content: "&mdash;";
+}}
+footer li:last-child:after {{
+    content: "";
+}}
+
+
+@media all and (max-width: 600px)  {{
+  article {{
+      padding-top: 1rem;
+    }}
+    nav {{
+        border-top: solid 1px;
+        width: 100%;
+    }}
+    body {{
+        padding-left:3px;
+        padding-right:3px;
+    }}
+    blockquote, pre, ul, ol {{
+        padding-left:1rem;
+        margin-left: 0;
+        padding-right: 0;
+        margin-right: 0;
+    }}
+
+}}
+
+@media all and (min-width: 600px)  {{
+    blockquote, pre {{ 
+        margin-left: 0rem; 
+        padding-left: 1rem; 
+        margin-top: 0; 
+        border-left: dotted 1px ;
+    }}
+    blockquote blockquote {{ 
+        margin-left: 0; 
+    }}
+
+    blockquote ul, blockquote ol {{
+        padding-left: 1rem;
+    }}
+
+    ul, ol {{
+        padding-left: 1rem;
+    }}
+    
+    body {{
+        padding-left:5rem;
+        max-width:37rem;
+    }}
+}}
+
+
+h1,h2,h3 {{  padding-top:1rem;}}
+
+p {{padding-bottom: 0.2rem;}}
+
+p {{ -webkit-hyphens: none; -moz-hyphens: none; hyphens: none; }}
+
+table {{
+    border-spacing: 0;
+    border-collapse: collapse;
+}}
+td {{
+
+          border: 1px solid black;
+          padding: 6px 13px;
+}}
+
+code {{
+        white-space: pre;
+}}
+</style>
+</head>
+<body>
+{text}
+</html>"""
 html_tags = {
-       "document": "<html>\n{text}</html>",
+       "document": template,
        "code": "<pre><code>{text}</code></pre>\n",
        "code_span": "<code>{text}</code>",
        "thead": "<thead><tr>{text}</tr></thead>\n",
@@ -38,10 +178,10 @@ class Directive:
         return to_text(self)
     def to_html(self, inside=None):
         text = "".join(to_html(x, inside=name) for x in self.text if x is not None) if self.text else ""
-        args = " ".join(f"{key}={repr(value)}" for key, value in args.items())
 
         if name in html_tags:
-            return html_tags[name].format(name=name, args=args, text=text)
+            return html_tags[name].format(name=name, text=text, **args)
+        args = " ".join(f"{key}={repr(value)}" for key, value in args.items())
         if text:
             args = f" {args}" if args else ""
             return f"<{name}{args}>{text}</{name}>"
@@ -73,7 +213,7 @@ class Block(Directive):
                 name = "ol"
             else:
                 name = "ul"
-            args.pop('marker')
+            if 'marker' in args: args.pop('marker')
 
         if name == "table":
             # pull out alignment
@@ -85,7 +225,6 @@ class Block(Directive):
 
 
         text = "".join(to_html(x, inside=name) for x in self.text if x is not None) if self.text else ""
-        args = " ".join(f"{key}={repr(value)}" for key, value in args.items())
 
         if name =="item":
             if inside == "blockquote":
@@ -94,7 +233,8 @@ class Block(Directive):
                 name ="li"
 
         if name in html_tags:
-            return html_tags[name].format(name=name, args=args, text=text)
+            return html_tags[name].format(name=name, text=text, **args)
+        args = " ".join(f"{key}={repr(value)}" for key, value in args.items())
         if text:
             args = f" {args}" if args else ""
             return f"<{name}{args}>{text}</{name}>\n"
@@ -126,10 +266,10 @@ class Inline(Directive):
             name = "code_span"
 
         text = "".join(to_html(x, inside=name) for x in self.text if x is not None) if self.text else ""
-        args = " ".join(f"{key}={repr(value)}" for key, value in args.items())
 
         if name in html_tags:
-            return html_tags[name].format(name=name, args=args, text=text)
+            return html_tags[name].format(name=name, text=text, **args)
+        args = " ".join(f"{key}={repr(value)}" for key, value in args.items())
         if text:
             args = f" {args}" if args else ""
             return f"<{name}{args}>{text}</{name}>"
