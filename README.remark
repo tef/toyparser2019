@@ -346,7 +346,7 @@ You can also specify tables another way:
 Or the long way:
 ````
 \table::begin
-   \row: \cell{1} \cell{2}
+\row: \cell{1}\cell{2}
 \table::end
 ````
 

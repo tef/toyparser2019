@@ -6,7 +6,8 @@ from .RemarkableParser import Parser as RemarkableParser
 from .Remarkable import Remarkable, builder, __doc__ as Readme
 
 def walk(node, indent="- "):
-    print(indent, node)
+    text = ""
+    print(indent, node, node.value, text)
     for child in node.children:
         walk(child, indent+ "  ")
 
@@ -189,6 +190,16 @@ Foo
   - 2
 
 
+""",r"""
+\table::begin
+\row: \cell{1}\cell{2}
+\table::end
+
+\foo`foo`
+
+\foo```
+foo
+```
 """
     ]
 
@@ -310,6 +321,14 @@ nice
 foo
 ```
 
+| a | b |
+| - | - |
+| 1 | 2 |
+| 3 | 4 |
+
+\table::begin
+\row: \cell{1}\cell{2}
+\table::end
 """
     out = python_parser.parse(raw).build(raw, builder)
     txt = out.to_text()

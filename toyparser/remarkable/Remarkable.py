@@ -20,6 +20,7 @@ html_tags = {
        "thead": "<thead><tr>{text}</tr></thead>\n",
        "para": "<p>{text}</p>\n",
        "br": "<br/>\n",
+       "n": "\n",
        "nbsp": "&nbsp;",
        "strike": "<del>{text}</del>",
        "strong": "<strong>{text}</strong>",
@@ -141,16 +142,25 @@ class Raw(Directive):
     pass
 
 def to_text(obj):
-    if isinstance(obj, str): return obj
+    if isinstance(obj, str): 
+        escape = "~_*\\-#`{}[]|@<>"
+        return "".join(('\\'+t if t in escape else t) for t in obj).replace("\n", "\\n;")
+    if isinstance(obj, Raw):
+        args = ", ".join(f"{key}: {repr(value)}" for key, value in obj.args)
+        return f"@{obj.name}" "{" f"{args}" "}\n"
+
 
     end = "\n" if isinstance(obj, Block) else ""
     args = ", ".join(f"{key}: {repr(value)}" for key, value in obj.args)
-    args = f"[{args}]" if args else ""
+    #if obj.name in ('code', 'code_span') and obj.text:
+    #    text = repr("".join(obj.text))
+    #    args = f"text: {text}, {args}"
+    #    text = ""
+    #else:
     text = "".join(to_text(x) for x in obj.text) if obj.text else ""
-    if obj.name in ('code', 'code_span'):
-        text = "`" f"{text}" "`" if text else ";"
-    else:
-        text = "{" f"{text}" "}" if text else ";"
+
+    args = f"[{args}]" if args else ""
+    text = "{" f"{text}" "}" if text else ";"
     return f"\\{obj.name}{args}{text}"
 
 def unescape(string):
@@ -173,7 +183,20 @@ def builder(buf, node, children):
         return node.value
 
     if kind == "document":
-        return Block("document", [], [c for c in children if c is not None])
+        text = []
+        metadata = None
+        for c in children:
+            if c is None: continue
+            if metadata is None and getattr(c, "name", "") == "metadata":
+                metadata = c.args
+                continue
+            text.append(c)
+
+        metadata = metadata or []
+
+        if len(text) == 1 and getattr(text[0], "name", "") == "document":
+            return text[0]
+        return Block("document", metadata, text)
 
     if kind == 'identifier':
         return buf[node.start:node.end]
@@ -237,7 +260,7 @@ def builder(buf, node, children):
         if marker == '>':
             name = "blockquote"
             args = []
-        elif marker == '*':
+        elif marker == '-':
             name = "list"
             args = []
 
@@ -330,17 +353,25 @@ def builder(buf, node, children):
         return Block("directive_group", [("marker", marker), ("spacing", spacing)], [c for c in children[2:] if c is not None])
 
     if kind == "table":
-        return Block('table',[],[c for c in children if c is not None])
+        text = []
+        args = []
+        for c in children:
+            if c is None: continue
+            if getattr(c, 'name', '') == "division":
+                args.append(('column_align', c.text))
+            else:
+                text.append(c)
+        return Block('table',args,text)
         
     if kind == "table_cell":
         return Inline('cell', [], children)
-    if kind == "cell_align":
+    if kind == "column_align":
         left = buf[node.start] == ":"
         right = buf[node.end-1] == ":"
-        if left and right: return "\\center;"
-        if left: return "\\left;"
-        if right: return "\\right;"
-        return "\\default;"
+        if left and right: return "center"
+        if left: return "left"
+        if right: return "right"
+        return "default"
     if kind == "table_row":
         return Block('row', [], children)
     if kind == "table_heading":
@@ -351,8 +382,6 @@ def builder(buf, node, children):
     if kind == 'block_rson':
         text = []
         args = children[1]
-        if isinstance(args, dict) and 'text' in args:
-            text = args.pop('text')
         args = list(args.items())
         return Raw(children[0], args, text)
 
@@ -429,12 +458,8 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
     def document(self):
         with self.choice():
             with self.case():
-                self.literal("\\document{")
-                with self.repeat():
-                    self.whitespace()
-                    self.inline_directive()
-                    self.whitespace()
-                self.literal("}")
+                self.whitespace(newline=True)
+                self.inline_directive()
                 self.whitespace(newline=True)
                 self.end_of_file()
             with self.case():
@@ -633,8 +658,11 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
 
                         with self.case():
                             with self.reject():
+                                self.literal(":")
+                            with self.reject():
                                 self.whitespace()
                                 self.newline()
+                            self.whitespace(min=1)
                             with self.capture_node("directive_para"):
                                 self.inner_para()
                         with self.case():
@@ -669,21 +697,23 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 self.literal("[")
                 self.directive_args()
                 self.literal("]")
+            with self.reject():
+                self.literal(":")
             with self.optional(), self.choice():
                 with self.case():
                     self.literal(";")
                     self.capture_value(None)
-                with self.case():
-                    with self.count(columns=True) as n, self.repeat(min=1):
-                        self.literal("{")
-                    with self.capture_node("directive_para"):
-                        with self.repeat():
-                            self.whitespace(newline=True)
-                            self.inline_directive()
-                            self.whitespace(newline=True)
-                    self.whitespace(newline=True)
-                    with self.repeat(min=n, max=n):
-                        self.literal("}")
+                #with self.case():
+                #    with self.count(columns=True) as n, self.repeat(min=1):
+                #        self.literal("{")
+                #    with self.capture_node("directive_span"):
+                #        with self.repeat():
+                #            self.whitespace(newline=True)
+                #            self.inline_directive()
+                #            self.whitespace(newline=True)
+                #    self.whitespace(newline=True)
+                #    with self.repeat(min=n, max=n):
+                #        self.literal("}")
                 with self.case():
                     with self.count(columns=True) as n, self.repeat(min=1):
                         self.literal("{")
@@ -1004,7 +1034,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                     with self.repeat(min=c, max=c):
                         self.literal("|")
                         self.whitespace()
-                        with self.capture_node("cell_align"):
+                        with self.capture_node("column_align"):
                             self.whitespace()
                             with self.optional(): self.literal(":")
                             with self.repeat(min=1): self.literal("-")
@@ -1017,7 +1047,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             with self.repeat():
                 self.indent()
                 with self.capture_node("table_row"):
-                    with self.repeat(max=c):
+                    with self.repeat(min=1,max=c):
                         self.literal("|")
                         self.whitespace()
                         self.table_cell()
