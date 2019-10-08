@@ -251,8 +251,12 @@ class App:
                 for m in self.PREFIX:
                     if m.startswith(prefix[1]):
                         out.append('{} '.format(m))
-
-        out.extend(self.command.complete(self, prefix))
+        if len(prefix) > 1:
+            base_ctx = dict()
+            base_ctx['app'] = self
+            base_ctx['name'] = self.name
+            request = Request(base_ctx, "complete", "", prefix[1:])
+            out.extend(self.command(request, lambda code: 0))
         out.sort()
         return out
 
@@ -302,6 +306,9 @@ class Router:
     
     def __call__(self, request, _code):
         ctx, mode, path, args = request.ctx, request.mode, request.path, request.args
+        if mode == "complete":
+            return self.complete(args, ctx)
+
         if request.path == "" and request.args and request.args[0][0] is None:
             route = request.args.pop(0)
             request.path = request.path + route[1]
@@ -328,21 +335,11 @@ class Router:
         return self.routes[request.path](request, _code)
 
 
-    def complete(self, app, prefix):
+    def complete(self, prefix, ctx):
         out = []
-        if '' in self.routes:
-            while len(prefix) > 2 and prefix[1].startswith('--') and prefix[1] != '--':
-                prefix.pop(1)
-            if len(prefix) == 1:
-                out.append('')
-            if len(prefix) == 2:
-                if prefix[1] in ('', '-', '--'):
-                    out.append('--')
-                if prefix[1].startswith('--'):
-                    out.extend(self.parser.complete_named(prefix))
 
-        if len(prefix) == 2:
-            p = prefix[1]
+        if len(prefix) == 1:
+            p = prefix[0]
             mask = 0 
             if not p:
                 out.append('help ')
@@ -357,10 +354,10 @@ class Router:
                 if isinstance(r, str) and r.startswith(p):
                     out.append("{} ".format(r[mask:]))
 
-        elif len(prefix) > 2:
-            path = prefix[1]
+        elif len(prefix) > 1:
+            path = prefix[0]
             if path in self.routes:
-                request = Request({}, "complete", "path", prefix[2:])
+                request = Request(ctx, "complete", "", prefix[1:])
                 out.extend(self.routes[path](request, None))
         return out
 
