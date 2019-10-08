@@ -6,12 +6,28 @@ from datetime import datetime, timedelta, timezone
 
 from ..grammar import Grammar, compile_python, sibling
 
+class Directive:
+    def __init__(self, name, args, text):
+        self.name = name
+        self.args = args
+        self.text = text
+
+    def to_text(self):
+        return to_text(self)
+    def to_html(self, inside=None):
+        return to_html(self, inside)
+
+class Block(Directive):
+    pass
+
+class Inline(Directive):
+    pass
+
+class Raw(Directive):
+    pass
+
 
 import html
-
-def to_html(obj, inside=None):
-    if isinstance(obj, str): return html.escape(obj)
-    return obj.to_html(inside=inside)
 
 template = """\
 <html>
@@ -161,125 +177,73 @@ html_tags = {
        "para": "<p>{text}</p>\n",
        "br": "<br/>\n",
        "n": "\n",
+       "table": "<table>\n{text}</table>\n",
+       "row": "<tr>{text}</tr>\n",
+       "division": "",
+       "cell": "<td>{text}</td>",
        "nbsp": "&nbsp;",
        "strike": "<del>{text}</del>",
        "strong": "<strong>{text}</strong>",
        "emph": "<em>{text}</em>",
 }
 
+def to_html(obj, inside=None):
+    if isinstance(obj, str): return html.escape(obj)
 
-class Directive:
-    def __init__(self, name, args, text):
-        self.name = name
-        self.args = args
-        self.text = text
+    args = dict(obj.args)
+    name = obj.name
+    text = "".join(to_html(x, inside=name) for x in obj.text if x is not None) if obj.text else ""
 
-    def to_text(self):
-        return to_text(self)
-    def to_html(self, inside=None):
-        text = "".join(to_html(x, inside=name) for x in self.text if x is not None) if self.text else ""
+    if name == "heading":
+        name = f"h{args.get('level',1)}"
+        if 'level' in args: args.pop('level')
 
-        if name in html_tags:
-            return html_tags[name].format(name=name, text=text, **args)
-        args = " ".join(f"{key}={repr(value)}" for key, value in args.items())
-        if text:
-            args = f" {args}" if args else ""
-            return f"<{name}{args}>{text}</{name}>"
+    if name == "item":
+        if inside in ('list','ul', 'ol'):
+            name = "li"
+        elif inside == "blockquote":
+            name == "div"
+
+    if name == "item_span":
+        if inside in ('list','ul', 'ol'):
+            name = "li"
+        elif inside == "blockquote":
+            name = "p"
+
+
+    if name == "emoij":
+        name = "span"
+        args['class'] = "emoji"
+        args['style'] = "border: 1px dotted red"
+
+    if name =="item_span":
+        if inside == "blockquote":
+            name = "p"
         else:
-            args = f" {args} " if args else ""
-            return f"<{name}{args}/>"
-
-class Block(Directive):
-    def to_html(self, inside=None):
-        args = dict(self.args)
-        name = self.name
-
-        if name == "heading":
-            name = f"h{args.get('level',1)}"
-            if 'level' in args: args.pop('level')
-        if name =="group" or name =="para_group":
-            if args['marker'] == '-':
-                if 'start' in args:
-                    name = "ol"
-                else:
-                    name = "ul"
-                args.pop('marker')
-            elif args['marker'] == '>':
-                name = "blockquote"
-                args.pop('marker')
-
-        if name =="list":
-            if 'start' in args:
-                name = "ol"
-            else:
-                name = "ul"
-            if 'marker' in args: args.pop('marker')
-
-        if name == "table":
-            # pull out alignment
-            pass
-        if name == "division":
-            return ""
-        if name == "row":
-            name = "tr"
+            name ="li"
 
 
-        text = "".join(to_html(x, inside=name) for x in self.text if x is not None) if self.text else ""
-
-        if name =="item":
-            if inside == "blockquote":
-                return text
-            else:
-                name ="li"
-
-        if name in html_tags:
-            return html_tags[name].format(name=name, text=text, **args)
-        args = " ".join(f"{key}={repr(value)}" for key, value in args.items())
-        if text:
-            args = f" {args}" if args else ""
-            return f"<{name}{args}>{text}</{name}>\n"
+    if name =="item":
+        if inside == "blockquote":
+            return text
+    if name =="list":
+        if 'start' in args:
+            name = "ol"
         else:
-            args = f" {args} " if args else ""
-            return f"<{name}{args}/>\n"
+            name = "ul"
+        if 'marker' in args: args.pop('marker')
 
-
-class Inline(Directive):
-    def to_html(self, inside=None):
-        args = dict(self.args)
-        name = self.name
-
-        if name == "cell":
-            name = "td"
-        if name == "emoij":
-            name = "span"
-            args['class'] = "emoji"
-            args['style'] = "border: 1px dotted red"
-
-        if name =="item_span":
-            if inside == "blockquote":
-                name = "p"
-            else:
-                name ="li"
-        if name == "nbsp":
-            return "&nbsp;"
-        if name == "code":
-            name = "code_span"
-
-        text = "".join(to_html(x, inside=name) for x in self.text if x is not None) if self.text else ""
-
-        if name in html_tags:
-            return html_tags[name].format(name=name, text=text, **args)
+    if name in html_tags:
+        return html_tags[name].format(name=name, text=text, **args)
         args = " ".join(f"{key}={repr(value)}" for key, value in args.items())
-        if text:
-            args = f" {args}" if args else ""
-            return f"<{name}{args}>{text}</{name}>"
-        else:
-            args = f" {args} " if args else ""
-            return f"<{name}{args}/>"
+    end = "" if isinstance(obj, Inline) else "\n"
+    if text:
+        args = f" {args}" if args else ""
+        return f"<{name}{args}>{text}</{name}>{end}"
+    else:
+        args = f" {args}" if args else ""
+        return f"<{name}{args}/>{end}"
 
-
-class Raw(Directive):
-    pass
 
 def to_text(obj):
     if isinstance(obj, str): 
@@ -302,6 +266,7 @@ def to_text(obj):
     args = f"[{args}]" if args else ""
     text = "{" f"{text}" "}" if text else ";"
     return f"\\{obj.name}{args}{text}"
+
 
 def unescape(string):
     return codecs.decode(string.replace('\\/', '/'), 'unicode_escape')
@@ -367,7 +332,7 @@ def builder(buf, node, children):
         args = children[0]
         return Block("heading", [("level", node.value)] + args, [c for c in children[1:] if c is not None])
 
-    if kind == "para":
+    if kind == "paragraph":
         return Block("para", [], [c for c in children if c is not None])
     if kind == "span":
         args = children[-1]
@@ -462,11 +427,14 @@ def builder(buf, node, children):
                 text = text[0].text
         return Block(children[0], args, text)
     if kind == "inline_directive":
+        name = children[0]
+        if name == 'code':
+            name == 'code_span'
         args = children[1]
         text = [children[2]] if children[2:] and children[2] is not None else []
         if text and text[0].name == 'directive_span':
             text = text[0].text
-        return Inline(children[0], args, text)
+        return Inline(name, args, text)
     if kind == "arg":
         return children
     if kind == "directive_args":
@@ -699,7 +667,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
 
     @rule()
     def para(self):
-        with self.capture_node("para"):
+        with self.capture_node("paragraph"):
             self.inner_para()
 
     @rule()
