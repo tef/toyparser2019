@@ -2,45 +2,41 @@
 
 import os
 
-from clgi import App, Bug, Error, Router, Routes, command
+from clgi import App, Bug, Error, Router, command
 from toyparser.remarkable.Remarkable import parse
 
 class AppError(Error):
     pass
 
+router = Router()
 
-class cli:
-    routes = Routes()
-    errors = Routes()
+@router.on_error(AppError)
+def app_error(request, code):
+    args = request.args
+    error_args, original_request = args['args'], args['request']
+    code(-1)
+    filename = error_args
+    if filename:
+        return ["app error: {}".format(filename)]
 
-    @errors.on(AppError)
-    def app_error(request, code):
-        args = request.args
-        error_args, original_request = args['args'], args['request']
-        code(-1)
-        filename = error_args
-        if filename:
-            return ["app error: {}".format(filename)]
+@router.on("convert") # no path given
+@command(args=dict(file="path"))
+def Remark(ctx, file):
+    app = ctx['app']
+    name = ctx['name']
+    filename = os.path.relpath(file)
+    with open(filename) as fh:
+        dom = parse(fh.read())
+        text = dom.to_html() 
+    return [text]
 
-    @routes.on("convert") # no path given
-    @command(args=dict(file="path"))
-    def Remark(ctx, file):
-        app = ctx['app']
-        name = ctx['name']
-        filename = os.path.relpath(file)
-        with open(filename) as fh:
-            dom = parse(fh.read())
-            text = dom.to_html() 
-        return [text]
-
-
-    app = App(
-        name="remark", 
-        version="0.0.1",
-        command=Router(routes, errors),
-        args={ },
-    )
+app = App(
+    name="remark", 
+    version="0.0.1",
+    command=Remark,
+    args={ },
+)
 
 
-# Generic exception handler here
-cli.app.main(__name__)
+
+app.main(__name__)

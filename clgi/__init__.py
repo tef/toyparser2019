@@ -91,26 +91,9 @@ class Redirect(Exception):
         self.request = request
         Exception.__init__(self)
 
-class Routes:
-    def __init__(self):
-        self.routes = {}
-
-    def on(self, *paths):
-        """ Add a function to handle a path,
-            @route("a:b", "a:c")
-            def handler(request, code):
-                code(0)
-                return response
-        """
-        def _decorator(fn):
-            for path in paths:
-                self.routes[path] = fn
-            return fn
-        return _decorator
-
 class App:
     PREFIX = set((
-        'help',
+        'help', 'profile', 'time',
     ))
     MODES = set((
         'call', 'help', 'error', 'usage', 'complete', 'version', 'debug', 'time', 'profile',
@@ -300,9 +283,36 @@ class App:
             return code, out
 
 class Router:
-    def __init__(self, routes, errors):
-        self.routes = routes.routes
-        self.error_routes = errors.routes
+    def __init__(self):
+        self.routes = {}
+        self.error_routes = {}
+
+    def on(self, *paths):
+        """ Add a function to handle a path,
+            @route("a:b", "a:c")
+            def handler(request, code):
+                code(0)
+                return response
+        """
+        def _decorator(fn):
+            for path in paths:
+                self.routes[path] = fn
+            return fn
+        return _decorator
+
+    def on_error(self, *paths):
+        """ Add a function to handle a path,
+            @route("a:b", "a:c")
+            def handler(request, code):
+                code(0)
+                return response
+        """
+        def _decorator(fn):
+            for path in paths:
+                self.error_routes[path] = fn
+            return fn
+        return _decorator
+
     
     def __call__(self, request, _code):
         ctx, mode, path, args = request.ctx, request.mode, request.path, request.args
@@ -376,7 +386,11 @@ class Command:
             return self.parser.complete(args, None)
         if mode == "help" or mode == "usage":
             doc = self.fn.__doc__ or ""
-            return 0, [doc]
+            code(0)
+            return [doc]
+        if mode == 'error':
+            code(-1)
+            return ["error: {}".format(args['args'])]
         args = self.parser.parse(args)
         request = Request(ctx, mode, path, args)
         code(0)
@@ -494,8 +508,11 @@ class ArgumentParser:
                 if rule in ('positional+', 'positional*'):
                     if name not in fn_args: fn_args[name] = []
                     fn_args[name].append(self.parse_argument(kind, value))
-                else:
+                elif name not in fn_args:
                     fn_args[name] = self.parse_argument(kind, value)
+                else:
+                    raise Error("Unexpected argument: {}".format(value))
+
             elif name not in argspec:
                 raise Error('unknown arg: --{}'.format(name))
             else:
