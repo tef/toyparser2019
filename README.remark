@@ -7,41 +7,21 @@
 to target multiple output formats (at least PDF, HTML, EPUB).
 > \em{John MacFarlane, author of Pandoc, editor of CommonMark.}
 
-Remark: Commonmark like shorthand. LaTeX like directives. HTML like DOM Nodes. JSON like attributes.
-
 ## Why Remark?
 
 Markdown is great for small comments, or blog posts. LaTeX is good for writing
 a book on Mathematics. RST is good for technical documentation, and HTML is good
 for webpages. So why Remark?
 
-I want a simple document markup language that has a consistent verbose escape hatch, 
-for when I need it do a thing and I can't remember the ascii art incantation. 
-I want something like CommonMark, but meaningfully tied into something like HTML. 
+- A consistent way to escape text
+- No magic trailing whitespace, but somethings are indented.
+- CommonMark like shortcuts
+- LaTeX like directives
+- Standard ways to embed structured data, too.
+- Not just HTML output
 
-```
-              +
-  Extensible  | LaTeX
-              |
-              |          ReStructuredText  
-              |
-              |  HTML
-  Fixed       |                    Markdown
-              |
-              +------------------------------+
-                
-                Verbose             Shorthand
-```
-
-- TeX is too tied to raw typesetting, and has baroque rules. How do you write a 
-  \?. LaTeX is powerful, but also barqoue in different ways. 
-- HTML is better for text, but awful for data. The escaping rules vary between 
-  ampersands, or backslashes, or percents. 
-- ReStructured Text is ok in design but clumsy to use. Markdown forms a more
-  humane interface, except for the magic trailing whitespace or precisely 
-  counted indentation
-- Markdown in particular is hard to extend, and hard to parse correctly. 
-
+Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented in terms
+of a parsing evaluation grammar. It weighs in about half the size of CommonMark.
 
 ## Remark In A Nutshell
 
@@ -70,9 +50,9 @@ work almost exactly the same. Unlike markdown, a list cannot have more than one 
 and a blockquote only has a `>` at the start.
 
 \table:
-  - # Remark
-    # Result
-    # HTML
+  - - # Remark
+    - # Result
+    - # HTML
 
   - 
     - `# Heading`
@@ -131,8 +111,8 @@ and a blockquote only has a `>` at the start.
       ```
     - ```
       \table:
-        - # Header 1
-          # Header 2
+        - - # Header 1
+          - # Header 2
         - - cell 1
           - cell 2
       ```
@@ -144,8 +124,8 @@ and a blockquote only has a `>` at the start.
 Unlike markdown, and a little more like LaTeX, Remark has a standard form for directives, `\name[args]{text}`.
 
 \table:
-   > # Shorthand
-     # Longhand
+   > - # Shorthand
+     - # Longhand
       
    > - `*text*`, `_text_`, `~text~`
      - `\strong{text}`, `\em{text}`, `\strike{text}`
@@ -250,20 +230,22 @@ Blocks can contain other blocks and paragraphs. Paragraphs can contain inline di
 
 - `#` marked headings: `# heading`, `## Subheading` and continue on till the end of the paragraph.
 
-- `---` for a horizonal rule
+- `# [args] text` to pass arguments
+
+- `---` for a horizonal rule, `--- [arguments]` with args, `----`,`-----`, at least 3 `-`s
 
 ## Inlines
 
 - *\*strong\**, _\_emphasis\__ ~\~strike through\~~, \code{\`code\`}, and `:emoji:`
 
- Doubling or tripling markers doesn't change their meaning:
+- Doubling or tripling markers doesn't change their meaning:
 
-```
-_emphasis_ __emphasis__ ___emphasis___
-*strong* **strong** ***strong***
-~strike~ ~~strike~~ ~~~strike~~~
-`code` ``code`` ```code```
-```
+	```
+	_emphasis_ __emphasis__ ___emphasis___
+	*strong* **strong** ***strong***
+	~strike~ ~~strike~~ ~~~strike~~~
+	`code` ``code`` ```code```
+	```
 
 ## Code Blocks
 
@@ -338,8 +320,8 @@ Subsequent rows do not need to.
 
 You can also specify tables another way:
 ````
-- # Heading
-  # Heading
+- - # Heading
+  - # Heading
 - - Cell
   - Cell
 - - Cell
@@ -383,29 +365,64 @@ Keys can be quoted strings, or identifier like bare words. Values can take numer
 - `"strings"`, `'or single quoted'`
 - `[lists]`, `{key:value}`
 
-Finally, directives can take list, quote, or code blocks as arguments, or a paragraph:
+Inline directives can take `\code{text}` or \code{\\code\`text\`} as arguments.
+
+Block directives can take several forms:
+
+A single paragraph:
 
 ````
 \para: This will include all text on this line
-and this line too.
+and this line too. The space after `:` is not optional.
+````
 
-\heading:
-It can start on the next line and continues
-until the end of the paragraph
+A code block (args must be `\code[args]`, not after opening delimiter):
 
-You can use \code{text} or \code`raw text`, but text in \code{\`} is escaped. 
-
+````
 \code```
 a raw block
 ```
+````
 
+An indented set of blocks:
+
+````
+\section:
+	It can start on the next line and continues
+	until the first unindented block
+
+````
+
+A delimited set of blocks
+
+````
+\section::begin
+Paragraph one
+
+Paragraph two
+\section::end
+````
+
+A list, or a blockquote
+
+````
 \list:
 - 1 
 - 2
+````
 
+````
 \quote:
 > para
 
+````
+
+Or even tables:
+````
+\table:
+| x | y |
+| - | - |
+| 1 | 2 |
 ````
 
 Like `# headings`, and  \code{\`\`\`}, `\directive:` or \code{\\directive\`\`\`} must be 

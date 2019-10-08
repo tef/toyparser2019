@@ -113,13 +113,12 @@ class App:
         'help',
     ))
     MODES = set((
-        'call', 'help', 'error', 'usage', 'complete', 'version'
+        'call', 'help', 'error', 'usage', 'complete', 'version', 'debug', 'time', 'profile',
     ))
-    def __init__(self, *, name, version, args, routes, errors):
+    def __init__(self, *, name, version, args, command):
         self.name = name
         self.version = version
-        self.routes = routes.routes
-        self.error_routes = errors.routes
+        self.command = command
         args = dict(args)
         args['help'] = '--bool*'
         args['version'] = '--bool?'
@@ -127,7 +126,7 @@ class App:
 
         self.parser = ArgumentParser(args)
         if self.parser.positional:
-            raise Bug('No Positional arguments for app otion parser')
+            raise Bug('No Positional arguments for app option parser')
 
     def main(self, name):
         if name != '__main__':
@@ -206,8 +205,8 @@ class App:
         app_args = []
         args = []
         
-        if argv and not argv[0].startswith('--'):
-            path = argv.pop(0)
+        #if argv and not argv[0].startswith('--'):
+        #    path = argv.pop(0)
 
         flags = True
         for arg in argv:
@@ -233,8 +232,12 @@ class App:
         ctx = self.parser.parse(app_args, named_args=True, defaults=False) 
         if 'help' in ctx:
             mode = 'usage'
+        if 'debug' in ctx:
+            mode = ctx['debug']
+        if 'version' in ctx:
+            mode = 'version'
         ctx.update(base_ctx)
-        return Request(ctx, mode, path, args)
+        return Request(ctx, mode, "", args)
 
     def complete(self, prefix):
         out = []
@@ -249,6 +252,84 @@ class App:
                     if m.startswith(prefix[1]):
                         out.append('{} '.format(m))
 
+        out.extend(self.command.complete(self, prefix))
+        out.sort()
+        return out
+
+    def run(self, request):
+        ctx, mode, path, args = request.ctx, request.mode, request.path, request.args
+
+        if request.ctx.get('version') or mode == 'version':
+            return 0, [str(self.version)]
+
+        code = 0
+        def _code(c):
+            nonlocal code
+            code = c
+
+        debug = request.ctx.get('debug')
+        if debug == 'time' or mode == 'time':
+            import time
+
+            start = time.monotonic()
+            out = self.command(request, _code)
+            end = time.monotonic()
+            out.extend(("", str(end-start)))
+
+            return code, out
+
+        elif debug == 'profile' or mode == 'profile':
+            import cProfile, pstats
+
+            pr = cProfile.Profile()
+            pr.enable()
+            out = self.command(request, _code)
+            pr.disable()
+            s = io.StringIO()
+            pstats.Stats(pr, stream=s).strip_dirs().sort_stats(-1).print_stats()
+            out.extend(("", s.getvalue()))
+
+            return code, out
+
+        else:
+            out = self.command(request, _code)
+            return code, out
+
+class Router:
+    def __init__(self, routes, errors):
+        self.routes = routes.routes
+        self.error_routes = errors.routes
+    
+    def __call__(self, request, _code):
+        ctx, mode, path, args = request.ctx, request.mode, request.path, request.args
+        if request.path == "" and request.args and request.args[0][0] is None:
+            route = request.args.pop(0)
+            request.path = request.path + route[1]
+
+        if request.mode == 'error':
+            fn = self.error_routes.get(request.path)
+            if fn:
+                return fn(request, _code)
+            else:
+                _code(-1)
+                return ["error: {}".format(args['args'])]
+
+        if request.path not in self.routes:
+            if request.path == '':
+                out = []
+                for r in self.routes:
+                    out.append("{} {}".format(ctx['name'], r))
+                _code(0)
+                return out
+            else:
+                raise Error('unknown command: {} {}'.format(app.name, path))
+
+
+        return self.routes[request.path](request, _code)
+
+
+    def complete(self, app, prefix):
+        out = []
         if '' in self.routes:
             while len(prefix) > 2 and prefix[1].startswith('--') and prefix[1] != '--':
                 prefix.pop(1)
@@ -281,64 +362,29 @@ class App:
             if path in self.routes:
                 request = Request({}, "complete", "path", prefix[2:])
                 out.extend(self.routes[path](request, None))
-        out.sort()
         return out
 
-    def run(self, request):
+
+class Command:
+    def __init__(self, args, fn, expected_args=None):
+        if args is None: args = {}
+        self.parser = ArgumentParser(args)
+        self.fn = fn
+        if expected_args and expected_args != self.parser.argspec.keys():
+            raise Bug("missing args in command: {}".format(expected_args-self.parser.argspec.keys()))
+
+    def __call__(self, request, code):
         ctx, mode, path, args = request.ctx, request.mode, request.path, request.args
-        code = 0
-        def _code(c):
-            nonlocal code
-            code = c
+        if mode == "complete":
+            return self.parser.complete(args, None)
+        if mode == "help" or mode == "usage":
+            doc = self.fn.__doc__ or ""
+            return 0, [doc]
+        args = self.parser.parse(args)
+        request = Request(ctx, mode, path, args)
+        code(0)
+        return self.fn(ctx, **args)
 
-        if request.mode == 'error':
-            fn = self.error_routes.get(request.path)
-            if fn:
-                response = fn(request, _code)
-                return code, response
-            else:
-                return -1, ["error: {}".format(args['args'])]
-        elif request.ctx.get('version'):
-            return 0, [str(self.version)]
-
-        if request.path not in self.routes:
-            if request.path == '':
-                out = []
-                for r in self.routes:
-                    out.append("{} {}".format(self.name, r))
-                return 0, out
-            else:
-                raise Error('unknown command: {} {}'.format(self.name, path))
-
-        debug = request.ctx.get('debug')
-        fn = self.routes[request.path]
-
-        if debug == 'time':
-            import time
-
-            start = time.monotonic()
-            out = fn(request, _code)
-            end = time.monotonic()
-            out.extend(("", str(end-start)))
-
-            return code, out
-
-        elif debug == 'profile':
-            import cProfile, pstats
-
-            pr = cProfile.Profile()
-            pr.enable()
-            out = fn(request, _code)
-            pr.disable()
-            s = io.StringIO()
-            pstats.Stats(pr, stream=s).strip_dirs().sort_stats(-1).print_stats()
-            out.extend(("", s.getvalue()))
-
-            return code, out
-
-        else:
-            out = fn(request, _code)
-            return code, out
 
 class ArgumentParser:
     """
@@ -597,26 +643,6 @@ class ArgumentParser:
             else:
                 out.extend(vals)
         return out
-
-class Command:
-    def __init__(self, args, fn, expected_args=None):
-        if args is None: args = {}
-        self.parser = ArgumentParser(args)
-        self.fn = fn
-        if expected_args and expected_args != self.parser.argspec.keys():
-            raise Bug("missing args in command: {}".format(expected_args-self.parser.argspec.keys()))
-
-    def __call__(self, request, code):
-        ctx, mode, path, args = request.ctx, request.mode, request.path, request.args
-        if mode == "complete":
-            return self.parser.complete(args, None)
-        if mode == "help" or mode == "usage":
-            doc = self.fn.__doc__ or ""
-            return 0, [doc]
-        args = self.parser.parse(args)
-        request = Request(ctx, mode, path, args)
-        code(0)
-        return self.fn(ctx, **args)
 
 def command(args=None):
     def _decorator(fn):

@@ -2,11 +2,12 @@
 
 import os
 
-from clgi import App, Bug, Error, Routes, command
+from clgi import App, Bug, Error, Router, Routes, command
 from toyparser.remarkable.Remarkable import parse
 
 class AppError(Error):
     pass
+
 
 class cli:
     routes = Routes()
@@ -32,13 +33,12 @@ class cli:
             text = dom.to_html() 
         return [text]
 
+
     app = App(
         name="remark", 
         version="0.0.1",
-        routes=routes,
-        errors=errors,
-        args={
-        },
+        command=Router(routes, errors),
+        args={ },
     )
 
 
