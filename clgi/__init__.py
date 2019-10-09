@@ -19,6 +19,7 @@ import io
 from datetime import datetime, timezone
 from uuid import uuid4
 
+from .tty import pager
 
 # Errors
 
@@ -70,12 +71,6 @@ def EDITOR(buffer):
             return fh.read()
     return None
 
-def RENDER(line, width):
-    if width is None:
-        return line
-    # if template type, do special behavior
-
-    return line
 
 # Request/App/Parser/Command libraries for CLI
 
@@ -90,6 +85,14 @@ class Redirect(Exception):
     def __init__(self, request):
         self.request = request
         Exception.__init__(self)
+
+class Plaintext:
+    def __init__(self, lines):
+        self.lines = []
+        for line in lines:
+            self.lines.extend(line.splitlines())
+    def render(self, width, height):
+        return self.lines
 
 class App:
     PREFIX = set((
@@ -163,11 +166,9 @@ class App:
             #    break
 
         if response:
-            with PAGER() as (stdout, width):
-                for line in response:
-                    if line is not None:
-                        line = RENDER(line, width)
-                        print(line, file=stdout)
+
+            response = Plaintext(response)
+            pager(response)
         sys.exit(code) 
 
     def parse(self, argv, environ):
