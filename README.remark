@@ -137,7 +137,7 @@ Unlike markdown, and a little more like LaTeX, Remark has a standard form for di
         - 2
         ````
      -  ````
-        \list{\item{1}\item{2}}
+        \list: \item{1}\item{2}
 	````
    > - ````
        ```python
@@ -205,26 +205,6 @@ Blocks can contain other blocks and paragraphs. Paragraphs can contain inline di
  - Can have a metadata block
  - Can be `\document{...}`
 
-## Paragraphs
-
-- Words are seperated by whitespace. The number of spaces is not preserved.
-
-- Two newlines end a paragraph. 
-
-- Paragraphs also end if there's one of the following blocks on the next line:
-	- Header
-	- Horizonal Rule
-	- Code Block
-	- List, Quote
-	- Table 
-
-- `\` is the escape character, use `\\` for a literal `\`
-
-- A `\` before spaces creates a non breaking space. 
-
-- A `\` before newline creates a hardbreak
-
-- Use `\*`, `\_`, `\#`, `\>`, \code{\`} to get those characters.
 
 ## Headings, Rules
 
@@ -233,19 +213,6 @@ Blocks can contain other blocks and paragraphs. Paragraphs can contain inline di
 - `# [args] text` to pass arguments
 
 - `---` for a horizonal rule, `--- [arguments]` with args, `----`,`-----`, at least 3 `-`s
-
-## Inlines
-
-- *\*strong\**, _\_emphasis\__ ~\~strike through\~~, \code{\`code\`}, and `:emoji:`
-
-- Doubling or tripling markers doesn't change their meaning:
-
-	```
-	_emphasis_ __emphasis__ ___emphasis___
-	*strong* **strong** ***strong***
-	~strike~ ~~strike~~ ~~~strike~~~
-	`code` ``code`` ```code```
-	```
 
 ## Code Blocks
 
@@ -259,6 +226,12 @@ example
 
 Code blocks, headings cannot have leading whitespace. Lists, quotes, on the other hand,
 can have up to 8 leading spaces.
+
+``````
+`````
+you can use longer delimiters
+`````
+``````
 
 ## Groups: Lists and Blockquotes
 
@@ -426,9 +399,7 @@ Or even tables:
 ````
 
 Like `# headings`, and  \code{\`\`\`}, `\directive:` or \code{\\directive\`\`\`} must be 
-at the beginning of a line.
-
-## Block Directives
+at most 8 spaces indented from the beginning of the line.
 
 Directives can also take a delimited block, with an optional name:
 
@@ -463,6 +434,41 @@ foo
 ````
 
 Whitespace before args is mandatory for blocks, but forbidden for inline forms.
+
+## Paragraphs
+
+- Words are seperated by whitespace. The number of spaces is not preserved.
+
+- Two newlines end a paragraph. 
+
+- Paragraphs also end if there's one of the following blocks on the next line:
+	- Header
+	- Horizonal Rule
+	- Code Block
+	- List, Quote
+	- Table 
+
+- `\` is the escape character, use `\\` for a literal `\`
+
+- A `\` before spaces creates a non breaking space. 
+
+- A `\` before newline creates a hardbreak
+
+- Use `\*`, `\_`, `\#`, `\>`, \code{\`} to get those characters.
+
+## Inlines
+
+- *\*strong\**, _\_emphasis\__ ~\~strike through\~~, \code{\`code\`}, and `:emoji:`
+
+- Doubling or tripling markers doesn't change their meaning:
+
+	```
+	_emphasis_ __emphasis__ ___emphasis___ \emph{emphasis}
+	*strong* **strong** ***strong*** \strong{strong}
+	~strike~ ~~strike~~ ~~~strike~~~ \strike{strike}
+	`code` ``code`` ```code``` \code{code} \code`code`
+	```
+
 
 
 ## Data Nodes

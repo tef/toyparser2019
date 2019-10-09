@@ -31,40 +31,117 @@ class Paragraph(Block):
     def __init__(self, args, text):
         Block.__init__(self, "paragraph", args, text)
 
+class HorizontalRule(Block):
+    def __init__(self, args, text=None):
+        if text: raise Exception('bad')
+        Block.__init__(self, "hr", args, [])
+
 class Heading(Block):
-    def __init__(self, level, args, text):
-        Block.__init__(self, "heading", [('level', level)]+ args, text)
+    def __init__(self, args, text):
+        Block.__init__(self, "heading", args, text)
 
 class CodeBlock(Block):
     def __init__(self, args, text):
         Block.__init__(self, "code_block", args, text)
 
-class BlockList(Block):
+class GroupBlock(Block):
+    def __init__(self, args, text):
+        Block.__init__(self, "group", args, text)
+class ListBlock(Block):
     def __init__(self, args, text):
         Block.__init__(self, "list", args, text)
+
+class QuoteBlock(Block):
+    def __init__(self, args, text):
+        Block.__init__(self, "blockquote", args, text)
 
 class BlockItem(Block):
     def __init__(self, args, text):
         Block.__init__(self, "block_item", args, text)
+class Table(Block):
+    def __init__(self, args, text):
+        Block.__init__(self, "table", args, text)
+class Row(Block):
+    def __init__(self, args, text):
+        Block.__init__(self, "row", args, text)
+
+class HeaderRow(Block):
+    def __init__(self, args, text):
+        Block.__init__(self, "thead", args, text)
 
 class Inline(Directive):
     pass
+class Cell(Inline):
+    def __init__(self, args, text):
+        Inline.__init__(self, "cell", args, text)
+
+class Span(Inline):
+    def __init__(self, args, text):
+        Inline.__init__(self, "span", args, text)
+
+class ItemSpan(Inline):
+    def __init__(self, args, text):
+        Inline.__init__(self, "span_item", args, text)
+
+class CodeSpan(Inline):
+    def __init__(self, args, text):
+        Inline.__init__(self, "code_span", args, text)
+
+class Strong(Inline):
+    def __init__(self, args, text):
+        Inline.__init__(self, "strong", args, text)
+
+class Emphasis(Inline):
+    def __init__(self, args, text):
+        Inline.__init__(self, "emph", args, text)
+
+class Strike(Inline):
+    def __init__(self, args, text):
+        Inline.__init__(self, "strike", args, text)
 
 class Hardbreak(Inline):
-    def __init__(self):
+    def __init__(self, args=None, text=None):
+        if args or text: raise Exception('bad')
         Inline.__init__(self, "hardbreak", [],[])
 
 class Softbreak(Inline):
-    def __init__(self):
+    def __init__(self, args=None, text=None):
+        if args or text: raise Exception('bad')
         Inline.__init__(self, "softbreak", [],[])
 
 class Nbsp(Inline):
-    def __init__(self):
+    def __init__(self, args=None, text=None):
+        if args or text: raise Exception('bad')
         Inline.__init__(self, "nbsp", [],[])
 
 class Emoji(Inline):
-    def __init__(self, text):
+    def __init__(self, args=None, text=None):
+        if args: raise Exception('bad')
         Inline.__init__(self, "emoji", [], text)
+
+block_directives = {
+        "para": Paragraph,
+        "p": Paragraph,
+        "hr": HorizontalRule,
+        "h": Heading,
+        "heading": Heading,
+        "code": CodeBlock,
+        "list": ListBlock,
+        "blockquote": QuoteBlock,
+        "item": BlockItem,
+}
+
+inline_directives = {
+        "strong": Strong,
+        "b": Strong,
+        "em": Emphasis,
+        "emph": Emphasis,
+        "emphasis": Emphasis,
+        "strike": Strike,
+        "code": CodeSpan,
+        "item": ItemSpan,
+}
+
         
 # --- Parse Tree Builder
 def unescape(string):
@@ -122,36 +199,36 @@ def builder(buf, node, children):
         return None
 
     if kind == "emoji":
-        return Emoji([c for c in children if c is not None])
+        return Emoji((), [c for c in children if c is not None])
 
 
     if kind == 'horizontal_rule':
-        return Block("hr", children[0], [])
+        return HorizonralRule(children[0], ())
     if kind == 'atx_heading':
-        args = children[0]
-        return Block("heading", [("level", node.value)] + args, [c for c in children[1:] if c is not None])
+        args = [('level', node.value)] + children[0]
+        return Heading(args, [c for c in children[1:] if c is not None])
 
     if kind == "paragraph":
-        return Block("para", [], [c for c in children if c is not None])
+        return Paragraph([], [c for c in children if c is not None])
     if kind == "span":
         args = children[-1]
         marker = node.value
         if marker == "*":
-            return Inline("strong", args,[c for c in children[:-1] if c is not None])
+            return Strong(args,[c for c in children[:-1] if c is not None])
         if marker == "_":
-            return Inline("emph", args,[c for c in children[:-1] if c is not None])
+            return Emphasis(args,[c for c in children[:-1] if c is not None])
         if marker == "~":
-            return Inline("strike", args,[c for c in children[:-1] if c is not None])
+            return Strike(args,[c for c in children[:-1] if c is not None])
         if marker:
-            return Inline("span", [("marker", node.value)] +args,[c for c in children[:-1] if c is not None])
-        return Inline("span", args,[c for c in children[:-1] if c is not None])
+            return Span([("marker", node.value)] +args,[c for c in children[:-1] if c is not None])
+        return Span(args,[c for c in children[:-1] if c is not None])
     if kind == 'code_span':
         args = children[-1]
-        return Inline("code_span",args, [c for c in children[:-1] if c is not None])
+        return CodeSpan(args, [c for c in children[:-1] if c is not None])
 
     if kind == 'code_block':
         arg = children[0] if children[0] is not None else []
-        return Block("code", arg, [c for c in children[1:] if c is not None])
+        return CodeBlock(arg, [c for c in children[1:] if c is not None])
     if kind == "code_string":
         return [("language", children)]
 
@@ -161,24 +238,31 @@ def builder(buf, node, children):
         name = 'group'
         args = [("marker", marker)]
 
+        block = GroupBlock
+
         if marker == '>':
             name = "blockquote"
+            block = QuoteBlock
             args = []
+
         elif marker == '-':
             name = "list"
+            block = ListBlock
             args = []
 
         if spacing == "tight":
-            if all(c and c.name == "para_item" for c in children[2:]):
-                return Block(name, args, [c for c in children[2:] if c is not None])
+            if all(c and c.name == "item_span" for c in children[2:]):
+                return block(args, [c for c in children[2:] if c is not None])
+
         new_children = []
         for c in children[2:]:
             if c is None: continue
-            if c.name == 'para_item':
-                text = [Block("para", [], c.text)] if c.text else []
-                c = Block("block_item", c.args, text)
+            if c.name == 'item_span':
+                text = [Paragraph([], c.text)] if c.text else []
+                c = BlockItem(c.args, text)
             new_children.append(c)
-        return Block(name, args, new_children)
+
+        return block(args, new_children)
     if kind == 'group_marker':
         return buf[node.start:node.end]
     if kind == 'group_spacing':
@@ -187,13 +271,13 @@ def builder(buf, node, children):
         spacing = children[1]
         if spacing == "tight":
             if not children[2:]:
-                return Block("para_item", children[0], [])
+                return ItemSpan(children[0], [])
             elif len(children) == 3 and children[2].name == "para" and not children[2].args:
-                return Block("para_item", children[0], children[2].text)
+                return ItemSpan(children[0], children[2].text)
             else:
-                return Block("block_item", children[0], [c for c in children[2:] if c is not None])
+                return BlockItem(children[0], [c for c in children[2:] if c is not None])
 
-        return Block("block_item", children[0], [c for c in children[2:] if c is not None])
+        return BlockItem(children[0], [c for c in children[2:] if c is not None])
     if kind == 'item_spacing':
         return node.value
 
@@ -207,22 +291,23 @@ def builder(buf, node, children):
             if name == 'table' and text[0].name == "directive_group":
                 new_text = []
                 def transform_row(r):
-                    if r.name in ('para_item', 'block_item'):
-                        name, text = transform_cols(r.name, r.text)
-                        return Block(name, [], text)
+                    if r.name == 'item_span':
+                        return transform_cols(r, r.text)
+                    if r.name == 'block_item':
+                        return transform_cols(r, r.text)
                     else:
-                        return d
+                        return r
 
                 def transform_cols(name, d):
                     if len(d) == 1 and d[0].name in ('para_group', 'group', 'list', 'blockquote'):
                         if all( len(e.text) == 1 and getattr(e.text[0],'name', '') == 'heading' for e in d[0].text):
-                            return "thead", [Inline('cell', [], t.text[0].text) for t in d[0].text]
+                            return HeaderRow([], [Cell([], t.text[0].text) for t in d[0].text])
 
-                        return "row", [Inline('cell', [], t.text) for t in d[0].text]
+                        return Row([], [Cell([], t.text) for t in d[0].text])
                     elif all(getattr(t,'name', '') == 'heading' for t in d):
-                        return "thead", [Inline('cell', [], t.text) for t in d]
+                        return HeaderRow([], [Cell([], t.text) for t in d])
 
-                    return name, d
+                    return name
                     
                 text = [transform_row(r) for r in text[0].text]
             else:
@@ -370,7 +455,7 @@ template = """\
     box-sizing: border-box;   
 }}
 
-body {{
+body, td {{
     background: white;
     font-family: "Lucida Sans Unicode", "Lucida Grande", Verdana, Arial, Helvetica, sans-serif;
     /*color: #000000;*/
@@ -453,7 +538,6 @@ footer li:last-child:after {{
         margin-left: 0rem; 
         padding-left: 1rem; 
         margin-top: 0; 
-        border: dotted 1px ;
     }}
     blockquote {{
         margin-left: 0rem; 
@@ -513,6 +597,7 @@ html_tags = {
        "code_span": "<code>{text}</code>",
        "thead": "<thead><tr>{text}</tr></thead>\n",
        "para": "<p>{text}</p>\n",
+       "paragraph": "<p>{text}</p>\n",
        "hardbreak": "<br/>\n",
        "softbreak": "\n",
        "n": "\n",
@@ -551,7 +636,7 @@ def to_html(obj, inside=None):
         elif inside == "blockquote":
             name == "div"
 
-    if name == "para_item":
+    if name == "item_span":
         if inside in ('list','ul', 'ol'):
             name = "li"
         elif inside == "blockquote":
@@ -773,6 +858,30 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                     with self.capture_node('directive_code'): 
                         self.inner_code_block()
                 with self.case():
+                    with self.count(columns=True) as n, self.repeat(min=3):
+                        self.literal("{")
+                        self.line_end()
+                        with self.capture_node("directive_block"):
+                            with self.repeat(min=0) as n:
+                                self.indent()
+                                with self.reject():
+                                    self.whitespace(max=8)
+                                    with self.repeat(max=n, min=n):
+                                        self.literal("}")
+                                    self.line_end()
+                                with self.choice():
+
+                                    with self.case(): self.block_element()
+                                    with self.case(): self.para()
+                                    with self.case(): self.empty_lines()
+                        self.indent()
+                        self.whitespace(max=8)
+                        with self.repeat(max=n, min=n):
+                            self.literal("}")
+                        self.line_end()
+
+
+                with self.case():
                     self.literal(":")
                     with self.choice():
                         with self.case(), self.variable("") as fence:
@@ -870,7 +979,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                     self.literal(";")
                     self.capture_value(None)
                 #with self.case():
-                #    with self.count(columns=True) as n, self.repeat(min=1):
+                #    with self.count(columns=True) as n, self.repeat(min=3):
                 #        self.literal("{")
                 #    with self.capture_node("directive_span"):
                 #        with self.repeat():
