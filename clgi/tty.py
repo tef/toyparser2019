@@ -4,11 +4,31 @@ import os
 import struct
 import fcntl
 import termios
+import shutil
 
 from contextlib import contextmanager 
 
 class Redraw(Exception):
     pass
+
+class Response:
+    pass
+
+class Plaintext(Response):
+    def __init__(self, lines):
+        self.lines = []
+        if isinstance(lines, str):
+            lines = (lines,)
+        for line in lines:
+            self.lines.extend(line.splitlines())
+    def render(self, width, height):
+        return self.lines
+
+class Document(Response):
+    def __init__(self, obj):
+        self.obj = obj
+    def render(self, width, height):
+        return self.obj.to_ansi(width=width, height=height)
 
 class Console:
     def __init__(self, stdin, stdout, stderr):
@@ -136,17 +156,19 @@ class Console:
 class LineConsole(Console):
     width = 80
     height = 24
+    def resize(self):
+        self.width, self.height = shutil.get_terminal_size((self.width, self.height))
 
     def render(self, obj):
         lines = obj.render(self.width, self.height)
-        self.stdout.write("\r\n".join(lines))
+        out = "\r\n".join(lines)
+        self.stdout.write(out)
+        if not out.endswith("\n"):
+            self.stdout.write("\n")
         self.stdout.flush()
 
     def get_event(self):
         return None
-
-    def resize(self):
-        pass
 
 class Event:
     def __init__(self, name, value):
@@ -271,8 +293,8 @@ class Viewport:
             return False
 
 
-def pager(obj):
-    if sys.stdin.isatty() and sys.stdout.isatty():
+def pager(obj, *, use_tty=True):
+    if use_tty and sys.stdin.isatty() and sys.stdout.isatty():
         with tty(sys.stdin, sys.stdout, sys.stderr) as console:
             running = True
             viewport = Viewport(obj, 0)
@@ -314,6 +336,7 @@ def pager(obj):
                     pass
     else:
         console = LineConsole(sys.stdin, sys.stdout, sys.stderr)
+        console.resize()
         console.render(obj)
 
 def main(name, argv=None, env=None):

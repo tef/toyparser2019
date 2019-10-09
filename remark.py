@@ -3,6 +3,7 @@
 import os
 
 from clgi import App, Bug, Error, Router, command
+from clgi.tty import Plaintext, Document
 from toyparser.remarkable.Remarkable import parse
 
 class AppError(Error):
@@ -28,12 +29,21 @@ def Remark(ctx, file):
     with open(filename) as fh:
         dom = parse(fh.read())
         text = dom.to_html() 
-    return [text]
+    return Plaintext(text)
 
+@router.on("view") # no path given
+@command(args=dict(file="path"))
+def Remark(ctx, file):
+    app = ctx['app']
+    name = ctx['name']
+    filename = os.path.relpath(file)
+    with open(filename) as fh:
+        dom = parse(fh.read())
+    return Document(dom)
 app = App(
     name="remark", 
     version="0.0.1",
-    command=Remark,
+    command=router,
     args={ },
 )
 

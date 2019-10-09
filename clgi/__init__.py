@@ -19,7 +19,7 @@ import io
 from datetime import datetime, timezone
 from uuid import uuid4
 
-from .tty import pager
+from .tty import pager, Response, Plaintext
 
 # Errors
 
@@ -85,14 +85,6 @@ class Redirect(Exception):
     def __init__(self, request):
         self.request = request
         Exception.__init__(self)
-
-class Plaintext:
-    def __init__(self, lines):
-        self.lines = []
-        for line in lines:
-            self.lines.extend(line.splitlines())
-    def render(self, width, height):
-        return self.lines
 
 class App:
     PREFIX = set((
@@ -166,9 +158,9 @@ class App:
             #    break
 
         if response:
-
-            response = Plaintext(response)
-            pager(response)
+            if not isinstance(response, Response):
+                response = Plaintext(response)
+            pager(response, use_tty=(code == 0))
         sys.exit(code) 
 
     def parse(self, argv, environ):
@@ -337,10 +329,10 @@ class Router:
                 out = []
                 for r in self.routes:
                     out.append("{} {}".format(ctx['name'], r))
-                _code(0)
+                _code(-1)
                 return out
             else:
-                raise Error('unknown command: {} {}'.format(app.name, path))
+                raise Error('unknown command: {} {}'.format(ctx['name'], request.path))
 
 
         return self.routes[request.path](request, _code)

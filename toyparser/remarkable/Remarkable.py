@@ -16,7 +16,8 @@ class Directive:
         return to_text(self)
     def to_html(self, inside=None):
         return to_html(self, inside)
-
+    def to_ansi(self, width=None, height=None, inside=None):
+        return to_ansi(self, 0, width, height, inside).splitlines()
 class Data(Directive):
     pass
 
@@ -252,26 +253,36 @@ def builder(buf, node, children):
         if marker == '>':
             name = "blockquote"
             block = QuoteBlock
-            args = []
+            new_children = []
+            for c in children[2:]:
+                if c is None:
+                    continue
+                elif c.name == 'item_span':
+                    new_children.append(Paragraph(c.args, c.text))
+                elif c.name == "block_item":
+                    new_children.extend(c.text)
+                else:
+                    new_children.append(c)
+            return QuoteBlock([], new_children)
+
 
         elif marker == '-':
             name = "list"
-            block = ListBlock
-            args = []
 
-        if spacing == "tight":
-            if all(c and c.name == "item_span" for c in children[2:]):
-                return block(args, [c for c in children[2:] if c is not None])
+            if spacing == "tight":
+                if all(c and c.name == "item_span" for c in children[2:]):
+                    return ListBlock([], [c for c in children[2:] if c is not None])
 
-        new_children = []
-        for c in children[2:]:
-            if c is None: continue
-            if c.name == 'item_span':
-                text = [Paragraph([], c.text)] if c.text else []
-                c = BlockItem(c.args, text)
-            new_children.append(c)
+            new_children = []
+            for c in children[2:]:
+                if c is None: continue
+                if c.name == 'item_span':
+                    text = [Paragraph([], c.text)] if c.text else []
+                    c = BlockItem(c.args, text)
+                new_children.append(c)
+            return ListBlock([], new_children)
 
-        return block(args, new_children)
+        return GroupBlock(args, new_children)
     if kind == 'group_marker':
         return buf[node.start:node.end]
     if kind == 'group_spacing':
@@ -679,6 +690,7 @@ def to_html(obj, inside=None):
 
 
 def to_text(obj):
+    if obj is None: return ""
     if isinstance(obj, str): 
         escape = "~_*\\-#`{}[]|@<>"
         return "".join(('\\'+t if t in escape else t) for t in obj).replace("\n", "\\n;")
@@ -688,7 +700,7 @@ def to_text(obj):
 
 
     end = "\n" if isinstance(obj, Block) else ""
-    args = ", ".join(f"{key}: {repr(value)}" for key, value in obj.args)
+    args = ", ".join(f"{key}: {repr(value)}" for key, value in obj.args) if obj.args else "NONE"
     #if obj.name in ('code', 'code_span') and obj.text:
     #    text = repr("".join(obj.text))
     #    args = f"text: {text}, {args}"
@@ -698,8 +710,25 @@ def to_text(obj):
 
     args = f"[{args}]" if args else ""
     text = "{" f"{text}" "}" if text else ";"
-    return f"\\{obj.name}{args}{text}"
+    return f"\\{obj.name}{args}{text}{end}"
 
+
+def to_ansi(obj, indent, width, height, inside):
+    if isinstance(obj, str): 
+        escape = "~_*\\-#`{}[]|@<>"
+        return "".join(('\\'+t if t in escape else t) for t in obj).replace("\n", "\\n;")
+    if isinstance(obj, Data):
+        args = ", ".join(f"{key}: {repr(value)}" for key, value in obj.args)
+        return f"@{obj.name}" "{" f"{args}" "}\n"
+
+
+    end = "\n" if isinstance(obj, Block) else ""
+    args = ", ".join(f"{key}: {repr(value)}" for key, value in obj.args) if obj.args else ""
+    text = "".join(to_ansi(x, indent, width, height, obj.name) for x in obj.text if x is not None) if obj.text else ""
+
+    args = f"[{args}]" if args else ""
+    text = "{" f"{text}" "}" if text else ";"
+    return f"\\{obj.name}{args}{text}{end}"
 
 class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r", "\n", "\r\n"], tabstop=8):
     @rule(inline=True) # 2.1 line ends by newline or end_of_file
