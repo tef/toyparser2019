@@ -583,6 +583,9 @@ td {{
 code {{
         white-space: pre;
 }}
+.emoji {{
+    border: 1px dotted red
+}}
 
 </style>
 </head>
@@ -600,6 +603,7 @@ html_tags = {
        "paragraph": "<p>{text}</p>\n",
        "hardbreak": "<br/>\n",
        "softbreak": "\n",
+       "emoji":"<span class='emoji'>{text}</span>",
        "n": "\n",
        "table": "<table>\n{text}</table>\n",
        "row": "<tr>{text}</tr>\n",
@@ -641,11 +645,6 @@ def to_html(obj, inside=None):
             name = "li"
         elif inside == "blockquote":
             name = "p"
-
-    if name == "emoij":
-        name = "span"
-        args['class'] = "emoji"
-        args['style'] = "border: 1px dotted red"
 
     if name in html_tags:
         return html_tags[name].format(name=name, text=text, **args)
