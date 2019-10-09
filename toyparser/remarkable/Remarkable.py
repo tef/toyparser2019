@@ -87,7 +87,7 @@ class Span(Inline):
 
 class ItemSpan(Inline):
     def __init__(self, args, text):
-        Inline.__init__(self, "span_item", args, text)
+        Inline.__init__(self, "item_span", args, text)
 
 class CodeSpan(Inline):
     def __init__(self, args, text):
