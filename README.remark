@@ -109,13 +109,13 @@ and a blockquote only has a `>` at the start.
       | :------: | :------: |
       | cell 1   | cell 2   |
       ```
-    - ```
+    - 
       \table:
         - - # Header 1
           - # Header 2
         - - cell 1
           - cell 2
-      ```
+      
     - ```
       <table><thead><tr><td>header 1 ....
       .... <td>cell 2</td></tr></table> 

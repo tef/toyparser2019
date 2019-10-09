@@ -69,8 +69,13 @@ class HeaderRow(Block):
     def __init__(self, args, text):
         Block.__init__(self, "thead", args, text)
 
+class BlockDirective(Block):
+    def __init__(self, args, text):
+        Block.__init__(self, "directive", args, text)
+
 class Inline(Directive):
     pass
+
 class Cell(Inline):
     def __init__(self, args, text):
         Inline.__init__(self, "cell", args, text)
@@ -118,6 +123,10 @@ class Emoji(Inline):
     def __init__(self, args=None, text=None):
         if args: raise Exception('bad')
         Inline.__init__(self, "emoji", [], text)
+
+class InlineDirective(Inline):
+    def __init__(self, args, text):
+        Inline.__init__(self, "directive", args, text)
 
 block_directives = {
         "para": Paragraph,
@@ -286,8 +295,12 @@ def builder(buf, node, children):
         text = [children[2]] if children[2] is not None else []
         name = children[0]
         if text and text[0].name in ('directive_group', 'directive_para', 'directive_table', 'directive_block', 'directive_code', 'directive_code_span'):
-            if name in ('list', 'blockquote') and text[0].name == "directive_group":
+            if name == 'list' and text[0].name == "directive_group":
                 args = args + text[0].args # pull up spacing
+                return BlockList([], args, text)
+            if name == 'blockquote' and text[0].name == "directive_group":
+                args = args + text[0].args # pull up spacing
+                return BlockQuote([], args, text)
             if name == 'table' and text[0].name == "directive_group":
                 new_text = []
                 def transform_row(r):
@@ -310,9 +323,14 @@ def builder(buf, node, children):
                     return name
                     
                 text = [transform_row(r) for r in text[0].text]
+                return Table(args, text)
             else:
                 text = text[0].text
-        return Block(children[0], args, text)
+        if name in block_directives:
+            return block_directives[name](args, text)
+        else:
+            return BlockDirective('directive', [('name', name)] + args, text)
+
     if kind == "inline_directive":
         name = children[0]
         if name == 'code':
@@ -321,7 +339,9 @@ def builder(buf, node, children):
         text = [children[2]] if children[2:] and children[2] is not None else []
         if text and text[0].name == 'directive_span':
             text = text[0].text
-        return Inline(name, args, text)
+        if name in inline_directives:
+            return inline_directives[name](args, text)
+        return InlineDirective([('name', name)]+ args, text)
     if kind == "arg":
         return children
     if kind == "directive_args":
