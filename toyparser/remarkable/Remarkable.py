@@ -14,10 +14,13 @@ class Directive:
 
     def to_text(self):
         return to_text(self)
+
     def to_html(self, inside=None):
         return to_html(self, inside)
+
     def to_ansi(self, width=None, height=None, inside=None):
         return to_ansi(self, 0, width, height, inside).splitlines()
+
 class Data(Directive):
     pass
 
@@ -59,9 +62,11 @@ class QuoteBlock(Block):
 class BlockItem(Block):
     def __init__(self, args, text):
         Block.__init__(self, "block_item", args, text)
+
 class Table(Block):
     def __init__(self, args, text):
         Block.__init__(self, "table", args, text)
+
 class Row(Block):
     def __init__(self, args, text):
         Block.__init__(self, "row", args, text)
@@ -70,9 +75,13 @@ class HeaderRow(Block):
     def __init__(self, args, text):
         Block.__init__(self, "thead", args, text)
 
-class BlockDirective(Block):
+class NamedBlockDirective(Block):
     def __init__(self, args, text):
         Block.__init__(self, "directive", args, text)
+
+class RawBlock(Block):
+    def __init__(self, args, text):
+        Block.__init__(self, "block_raw", args, text)
 
 class Inline(Directive):
     pass
@@ -84,6 +93,10 @@ class Cell(Inline):
 class Span(Inline):
     def __init__(self, args, text):
         Inline.__init__(self, "span", args, text)
+
+class RawSpan(Inline):
+    def __init__(self, args, text):
+        Inline.__init__(self, "raw_span", args, text)
 
 class ItemSpan(Inline):
     def __init__(self, args, text):
@@ -125,7 +138,7 @@ class Emoji(Inline):
         if args: raise Exception('bad')
         Inline.__init__(self, "emoji", [], text)
 
-class InlineDirective(Inline):
+class NamedInlineDirective(Inline):
     def __init__(self, args, text):
         Inline.__init__(self, "directive", args, text)
 
@@ -139,6 +152,7 @@ block_directives = {
         "list": ListBlock,
         "blockquote": QuoteBlock,
         "item": BlockItem,
+        "raw": RawBlock,
 }
 
 inline_directives = {
@@ -150,6 +164,7 @@ inline_directives = {
         "strike": Strike,
         "code": CodeSpan,
         "item": ItemSpan,
+        "raw": RawSpan
 }
 
         
@@ -213,7 +228,7 @@ def builder(buf, node, children):
 
 
     if kind == 'horizontal_rule':
-        return HorizonralRule(children[0], ())
+        return HorizontalRule(children[0], ())
     if kind == 'atx_heading':
         args = [('level', node.value)] + children[0]
         return Heading(args, [c for c in children[1:] if c is not None])
@@ -251,8 +266,6 @@ def builder(buf, node, children):
         block = GroupBlock
 
         if marker == '>':
-            name = "blockquote"
-            block = QuoteBlock
             new_children = []
             for c in children[2:]:
                 if c is None:
@@ -302,17 +315,27 @@ def builder(buf, node, children):
         return node.value
 
     if kind == "block_directive":
-        args = children[1]
-        text = [children[2]] if children[2] is not None else []
         name = children[0]
-        if text and text[0].name in ('directive_group', 'directive_para', 'directive_table', 'directive_block', 'directive_code', 'directive_code_span'):
-            if name == 'list' and text[0].name == "directive_group":
-                args = args + text[0].args # pull up spacing
-                return BlockList([], args, text)
-            if name == 'blockquote' and text[0].name == "directive_group":
-                args = args + text[0].args # pull up spacing
-                return BlockQuote([], args, text)
-            if name == 'table' and text[0].name == "directive_group":
+        args = children[1]
+        text = children[2] 
+        if text:
+            if name == 'list' and text.name == "directive_group":
+                args = args + text.args # pull up spacing
+                return ListBlock(args, [text])
+            if name == 'blockquote' and text.name == "directive_group":
+                new_children = []
+                for c in children[2:]:
+                    if c is None:
+                        continue
+                    elif c.name == 'item_span':
+                        new_children.append(Paragraph(c.args, c.text))
+                    elif c.name == "block_item":
+                        new_children.extend(c.text)
+                    else:
+                        new_children.append(c)
+                return QuoteBlock(args, new_children)
+
+            if name == 'table' and text.name == "directive_group":
                 new_text = []
                 def transform_row(r):
                     if r.name == 'item_span':
@@ -333,14 +356,26 @@ def builder(buf, node, children):
 
                     return name
                     
-                text = [transform_row(r) for r in text[0].text]
+                text = [transform_row(r) for r in text.text]
                 return Table(args, text)
+            if name == 'table' and text.name == "directive_table":
+                return Table(args, text.text)
+
+            if text.name in ('directive_para', 'directive_code', 'directive_block'):
+                text = text.text
+            elif text.name == 'directive_group':
+                text = [GroupBlock(text.args, text.text)]
+            elif text.name == 'directive_table':
+                text = [Table(text.args, text.text)]
             else:
-                text = text[0].text
+                text = [text]
+        else:
+            text = []
+
         if name in block_directives:
             return block_directives[name](args, text)
         else:
-            return BlockDirective('directive', [('name', name)] + args, text)
+            return NamedBlockDirective([('name', name)] + args, text)
 
     if kind == "inline_directive":
         name = children[0]
@@ -348,11 +383,11 @@ def builder(buf, node, children):
             name == 'code_span'
         args = children[1]
         text = [children[2]] if children[2:] and children[2] is not None else []
-        if text and text[0].name == 'directive_span':
+        if text:
             text = text[0].text
         if name in inline_directives:
             return inline_directives[name](args, text)
-        return InlineDirective([('name', name)]+ args, text)
+        return NamedInlineDirective([('name', name)]+ args, text)
     if kind == "arg":
         return children
     if kind == "directive_args":
@@ -646,6 +681,8 @@ html_tags = {
        "emph": "<em>{text}</em>",
        "block_item": "<li>{text}</li>",
        "item_span": "<li>{text}</li>",
+       "block_raw": "{text}",
+       "raw_span": "{text}",
 }
 
 def to_html(obj, inside=None):
@@ -653,7 +690,10 @@ def to_html(obj, inside=None):
 
     args = dict(obj.args)
     name = obj.name
-    text = "".join(to_html(x, inside=name) for x in obj.text if x is not None) if obj.text else ""
+    if name in ('block_raw', 'raw_span'):
+        text = "".join(obj.text)
+    else:
+        text = "".join(to_html(x, inside=name) for x in obj.text if x is not None) if obj.text else ""
 
     if name == "heading":
         name = f"h{args.get('level',1)}"
@@ -702,8 +742,16 @@ def to_text(obj):
     text = "{" f"{text}" "}" if text else ";"
     return f"\\{obj.name}{args}{text}{end}"
 
+class TextBuilder:
+    pass
+
+class LineBuilder:
+    pass
 
 def to_ansi(obj, indent, width, height, inside):
+    # lines = []
+    # current_line = []
+    # def walk(obj, indent, 
     if isinstance(obj, str): 
         escape = "~_*\\-#`{}[]|@<>"
         return "".join(('\\'+t if t in escape else t) for t in obj).replace("\n", "\\n;")
