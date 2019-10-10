@@ -1,3 +1,25 @@
+# untitled yak shave
+
+- clgi
+    - a command line framework
+    - autocomplete
+    - wsgi like interface/composition
+    - a dom for output, not plain text
+    - a pager for rendering output
+- toyparser
+    - a parser generator
+    - using parsing evaluation grammars
+    - supporting backrefs, indentation
+    - json, yaml
+    - even commonmark
+- rson
+    - json with `# ..comments`, tagged literals  `@name {}`, and trailing commas
+- remarkable
+    - commonmark/latex inspired markup language
+- `./remark.py`
+    - example clgi application
+    - converts remarkable files into html
+
 # untitled parser toy
 
 this is a parsing expression library for python 3
