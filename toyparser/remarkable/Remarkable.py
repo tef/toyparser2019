@@ -644,6 +644,8 @@ html_tags = {
        "strike": "<del>{text}</del>",
        "strong": "<strong>{text}</strong>",
        "emph": "<em>{text}</em>",
+       "block_item": "<li>{text}</li>",
+       "item_span": "<li>{text}</li>",
 }
 
 def to_html(obj, inside=None):
@@ -664,18 +666,6 @@ def to_html(obj, inside=None):
             name = "ul"
         if 'marker' in args: args.pop('marker')
 
-
-    if name == "block_item":
-        if inside in ('list','ul', 'ol'):
-            name = "li"
-        elif inside == "blockquote":
-            name == "div"
-
-    if name == "item_span":
-        if inside in ('list','ul', 'ol'):
-            name = "li"
-        elif inside == "blockquote":
-            name = "p"
 
     if name in html_tags:
         return html_tags[name].format(name=name, text=text, **args)

@@ -152,6 +152,9 @@ class Console:
             return Event("interrupt", None)
         else:
             return Event("text", buf)
+    def bell(self):
+        self.stdout.write("\07")
+        self.stdout.flush()
         
 class LineConsole(Console):
     width = 80
@@ -205,7 +208,7 @@ def tty(stdin, stdout, stderr, bracketed_paste=True):
     )
     # Dont wait for input
     new_term[-1][termios.VMIN] = 0
-    new_term[-1][termios.VTIME] = 1
+    new_term[-1][termios.VTIME] = 0
 
     def resizeHandler(signum, frame):
         raise Redraw()
@@ -266,15 +269,35 @@ class Viewport:
         self.width, self.height = None, None
         self.buf = []
         self.line = line
+        self.wide = 0
+        self.col = 0
 
     def render(self, width, height):
         if self.width != width or self.height != height:
             self.width, self.height = width, height
             self.buf = self.obj.render(width, height)
             self.line = min(self.line, len(self.buf))
+            self.col = 0
+            self.wide = max(len(b) for b in self.buf)
 
-        return self.buf[self.line:self.line+height]
+        return [line[self.col: self.col+width] for line in self.buf[self.line:self.line+height]]
 
+    def left(self, n=1):
+        if self.col > 0:
+            self.col = max(0, self.col -n) 
+            return True
+        else:
+            self.col = 0
+            return False
+
+    def right(self, n=1):
+        top = max(0, self.wide - self.width)
+        if self.col < top:
+            self.col = min(self.col +n, top)
+            return True
+        else:
+            self.col = top
+            return False
     def up(self, n=1):
         if self.line > 0:
             self.line = max(0, self.line -n) 
@@ -315,18 +338,36 @@ def pager(obj, *, use_tty=True):
                             elif e.name == "suspend":
                                 os.kill(0, signal.SIGTSTP)
                                 break
+                            elif e.name == "left":
+                                if viewport.left():
+                                    console.render(viewport)
+                                else:
+                                    console.bell()
+                            elif e.name == "right":
+                                if viewport.right():
+                                    console.render(viewport)
+                                else:
+                                    console.bell()
                             elif e.name == "up":
                                 if viewport.up():
                                     console.render(viewport)
+                                else:
+                                    console.bell()
                             elif e.name == "down":
                                 if viewport.down():
                                     console.render(viewport)
+                                else:
+                                    console.bell()
                             elif e.name == "text" and e.value == "\x00":
                                 if viewport.up(console.height):
                                     console.render(viewport)
+                                else:
+                                    console.bell()
                             elif e.name == "text" and e.value == " ":
                                 if viewport.down(console.height):
                                     console.render(viewport)
+                                else:
+                                    console.bell()
                             else:
                                 console.print("\r", e.name, repr(e.value), end="")
                                 console.flush()
