@@ -21,7 +21,7 @@ def app_error(request, code):
     if filename:
         return ["app error: {}".format(filename)]
 
-@router.on("convert") # no path given
+@router.on("convert", "convert:html") # no path given
 @command(args=dict(file="path"))
 def Remark(ctx, file):
     app = ctx['app']
@@ -30,6 +30,17 @@ def Remark(ctx, file):
     with open(filename) as fh:
         dom = parse(fh.read())
         text = dom.to_html() 
+    return Plaintext(text)
+
+@router.on("convert:ansi") # no path given
+@command(args=dict(file="path"))
+def Remark(ctx, file):
+    app = ctx['app']
+    name = ctx['name']
+    filename = os.path.relpath(file)
+    with open(filename) as fh:
+        dom = parse(fh.read())
+        text = dom.to_ansi(indent=0, width=80, height=24) 
     return Plaintext(text)
 
 @router.on("view") # no path given

@@ -18,8 +18,8 @@ class Directive:
     def to_html(self):
         return to_html(self)
 
-    def to_ansi(self, width=None, height=None):
-        return to_ansi(self, 0, width, height).splitlines()
+    def to_ansi(self, width=None, height=None, indent=0):
+        return to_ansi(self, indent, width, height).splitlines()
 
 class Data(Directive):
     pass
@@ -776,7 +776,7 @@ def to_ansi(obj, indent, width, height):
 
     end = "\n" if isinstance(obj, Block) else ""
     args = ", ".join(f"{key}: {repr(value)}" for key, value in obj.args) if obj.args else ""
-    text = "".join(to_ansi(x, indent, width, height, obj.name) for x in obj.text if x is not None) if obj.text else ""
+    text = "".join(to_ansi(x, indent, width, height) for x in obj.text if x is not None) if obj.text else ""
 
     args = f"[{args}]" if args else ""
     text = "{" f"{text}" "}" if text else ";"
