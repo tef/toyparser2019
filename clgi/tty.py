@@ -8,27 +8,33 @@ import shutil
 
 from contextlib import contextmanager 
 
+from .dom import Response
+
+
+def main(name, argv=None, env=None):
+    if name != '__main__': return
+
+    argv = sys.argv[1:] if argv is not None else argv
+    env = os.environ if env is not None else os.environ
+
+
+    class Box:
+        def render(self, width, height):
+            width = width-5 or 80
+            height = height*2 or 24
+            output = ["     +"+("-"*(width-10))+"+"]
+            for _ in range(height-2):
+                output.append("     |"+(" "*(width-10))+"| "+ str(_))
+            output.append("     +"+("-"*(width-10))+"+")
+            return output
+
+
+    obj = Box()
+    pager(obj)
+    sys.exit(0)
+
 class Redraw(Exception):
     pass
-
-class Response:
-    pass
-
-class Plaintext(Response):
-    def __init__(self, lines):
-        self.lines = []
-        if isinstance(lines, str):
-            lines = (lines,)
-        for line in lines:
-            self.lines.extend(line.splitlines())
-    def render(self, width, height):
-        return self.lines
-
-class Document(Response):
-    def __init__(self, obj):
-        self.obj = obj
-    def render(self, width, height):
-        return self.obj.to_ansi(width=width, height=height)
 
 class Console:
     def __init__(self, stdin, stdout, stderr):
@@ -253,16 +259,6 @@ def tty(stdin, stdout, stderr, bracketed_paste=True):
     finally:
         clear_term()
 
-class Box:
-    def render(self, width, height):
-        width = width-5 or 80
-        height = height*2 or 24
-        output = ["     +"+("-"*(width-10))+"+"]
-        for _ in range(height-2):
-            output.append("     |"+(" "*(width-10))+"| "+ str(_))
-        output.append("     +"+("-"*(width-10))+"+")
-        return output
-
 class Viewport:
     def __init__(self, obj, line=0):
         self.obj = obj
@@ -282,7 +278,7 @@ class Viewport:
 
         return [line[self.col: self.col+width] for line in self.buf[self.line:self.line+height]]
 
-    def left(self, n=1):
+    def left(self, n=8):
         if self.col > 0:
             self.col = max(0, self.col -n) 
             return True
@@ -290,7 +286,7 @@ class Viewport:
             self.col = 0
             return False
 
-    def right(self, n=1):
+    def right(self, n=8):
         top = max(0, self.wide - self.width)
         if self.col < top:
             self.col = min(self.col +n, top)
@@ -379,15 +375,5 @@ def pager(obj, *, use_tty=True):
         console = LineConsole(sys.stdin, sys.stdout, sys.stderr)
         console.resize()
         console.render(obj)
-
-def main(name, argv=None, env=None):
-    if name != '__main__': return
-
-    argv = sys.argv[1:] if argv is not None else argv
-    env = os.environ if env is not None else os.environ
-
-    obj = Box()
-    pager(obj)
-
 
 main(__name__)

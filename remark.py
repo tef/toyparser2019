@@ -2,8 +2,9 @@
 
 import os
 
-from clgi import App, Bug, Error, Router, command
-from clgi.tty import Plaintext, Document
+from clgi.errors import Bug, Error
+from clgi.dom import Plaintext, Document
+from clgi.app import App, Router, command
 from toyparser.remarkable.Remarkable import parse
 
 class AppError(Error):
