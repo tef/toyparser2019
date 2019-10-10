@@ -15,11 +15,11 @@ class Directive:
     def to_text(self):
         return to_text(self)
 
-    def to_html(self, inside=None):
-        return to_html(self, inside)
+    def to_html(self):
+        return to_html(self)
 
-    def to_ansi(self, width=None, height=None, inside=None):
-        return to_ansi(self, 0, width, height, inside).splitlines()
+    def to_ansi(self, width=None, height=None):
+        return to_ansi(self, 0, width, height).splitlines()
 
 class Data(Directive):
     pass
@@ -142,17 +142,23 @@ class NamedInlineDirective(Inline):
     def __init__(self, args, text):
         Inline.__init__(self, "directive", args, text)
 
-block_directives = {
-        "para": Paragraph,
-        "p": Paragraph,
+block_directives = { # \foo::begin
         "hr": HorizontalRule,
-        "h": Heading,
-        "heading": Heading,
-        "code": CodeBlock,
         "list": ListBlock,
         "blockquote": QuoteBlock,
         "item": BlockItem,
+        "table": Table,
+        "row": Row,
+}
+para_directives = { # \foo: ...
+        "para": Paragraph,
+        "p": Paragraph,
+        "h": Heading,
+        "heading": Heading,
+        "code": CodeBlock,
         "raw": RawBlock,
+        "row": Row,
+        "cell": Cell,
 }
 
 inline_directives = {
@@ -163,8 +169,10 @@ inline_directives = {
         "emphasis": Emphasis,
         "strike": Strike,
         "code": CodeSpan,
+        "code_span": CodeSpan,
         "item": ItemSpan,
-        "raw": RawSpan
+        "raw": RawSpan,
+        "cell": Cell,
 }
 
         
@@ -361,18 +369,24 @@ def builder(buf, node, children):
             if name == 'table' and text.name == "directive_table":
                 return Table(args, text.text)
 
-            if text.name in ('directive_para', 'directive_code', 'directive_block'):
-                text = text.text
-            elif text.name == 'directive_group':
+            if text.name == 'directive_group':
                 text = [GroupBlock(text.args, text.text)]
             elif text.name == 'directive_table':
                 text = [Table(text.args, text.text)]
+            elif text.name == 'directive_block':
+                text = text.text
+            elif text.name == 'directive_para': 
+                text = text.text if name in para_directives else [Paragraph([], text.text)]
+            elif text.name == 'directive_code':
+                text = text.text if name in para_directives else [CodeBlock([], text.text)]
             else:
-                text = [text]
+                raise Exception('no')
         else:
             text = []
 
-        if name in block_directives:
+        if name in para_directives:
+            return para_directives[name](args, text)
+        elif name in block_directives:
             return block_directives[name](args, text)
         else:
             return NamedBlockDirective([('name', name)] + args, text)
@@ -685,7 +699,7 @@ html_tags = {
        "raw_span": "{text}",
 }
 
-def to_html(obj, inside=None):
+def to_html(obj):
     if isinstance(obj, str): return html.escape(obj)
 
     args = dict(obj.args)
@@ -693,7 +707,7 @@ def to_html(obj, inside=None):
     if name in ('block_raw', 'raw_span'):
         text = "".join(obj.text)
     else:
-        text = "".join(to_html(x, inside=name) for x in obj.text if x is not None) if obj.text else ""
+        text = "".join(to_html(x) for x in obj.text if x is not None) if obj.text else ""
 
     if name == "heading":
         name = f"h{args.get('level',1)}"
@@ -709,7 +723,7 @@ def to_html(obj, inside=None):
 
     if name in html_tags:
         return html_tags[name].format(name=name, text=text, **args)
-        args = " ".join(f"{key}={repr(value)}" for key, value in args.items())
+    args = " ".join(f"{key}={repr(value)}" for key, value in args.items())
     end = "" if isinstance(obj, Inline) else "\n"
     if text:
         args = f" {args}" if args else ""
@@ -748,7 +762,7 @@ class TextBuilder:
 class LineBuilder:
     pass
 
-def to_ansi(obj, indent, width, height, inside):
+def to_ansi(obj, indent, width, height):
     # lines = []
     # current_line = []
     # def walk(obj, indent, 
