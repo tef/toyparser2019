@@ -7,6 +7,12 @@ class Directive:
     def build(self, builder):
         pass
 
+    def get_arg(self, key):
+        if key is None:
+            return [v for k,v in self.args if k is None]
+        for k,v in self.args:
+            if k == key: return v
+
 class Data(Directive):
     pass
 

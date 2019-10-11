@@ -51,8 +51,9 @@ class BlockBuilder:
         self.lines.append("")
 
     @contextmanager
-    def build_heading(self):
-        box = self.box.shrink()
+    def build_heading(self, level):
+        amount = [0.5, 0.6, 0.7, 0.8, 0.9, 0.9]
+        box = self.box.shrink(amount[level])
         builder = ParaBuilder(box)
         yield builder
         for line in builder.build():
@@ -60,6 +61,65 @@ class BlockBuilder:
             self.lines.append((" "*pad)+line)
         self.lines.append("")
         self.lines.append("")
+
+    @contextmanager
+    def build_para(self):
+        box = RenderBox(0, self.box.width, self.box.height)
+        builder = ParaBuilder(box)
+        builder.add_space()
+        yield builder
+        self.lines.extend(builder.build())
+        self.lines.append("")
+
+    @contextmanager
+    def build_list(self, start, num):
+        box = RenderBox(0, self.box.width, self.box.height)
+        builder = ListBuilder(box, start, num)
+        yield builder
+        self.lines.extend(builder.build())
+        self.lines.append("")
+
+class ListBuilder:
+    def __init__(self, box, start, num):
+        self.lines = []
+        self.box = box
+        self.numbered = start is not None
+        self.count = start if start is not None else 1
+        self.width = len(str(num))+2 if self.numbered else 6
+
+    def incr(self):
+        self.count +=1
+        if self.numbered:
+            n = str(self.count)+". "
+        else:
+            n = "\u2022 "
+        pad= max(0, self.width - len(n))
+        return (" "*pad) + n
+
+    def build(self):
+        return [(" "* self.box.indent)+line for line in self.lines]
+
+    @contextmanager
+    def build_block_item(self):
+        box = RenderBox(0, self.box.width-self.width, self.box.height)
+        builder = BlockBuilder(box)
+        yield builder
+        for i, line in enumerate(builder.build()):
+            if i == 0:
+                self.lines.append(self.incr() + line)
+            else:
+                self.lines.append((" "*self.width) + line)
+
+    @contextmanager
+    def build_item_span(self):
+        box = RenderBox(0, self.box.width-self.width, self.box.height)
+        builder = ParaBuilder(box)
+        yield builder
+        for i, line in enumerate(builder.build()):
+            if i == 0:
+                self.lines.append(self.incr() + line)
+            else:
+                self.lines.append((" "*self.width) + line)
 
 class ParaBuilder:
     def __init__(self, box):
@@ -112,9 +172,20 @@ def to_ansi(obj, indent, width, height):
                 for word in obj.text:
                     walk_inline(word, p)
         elif obj.name == "heading":
-            with builder.build_heading() as p:
+            with builder.build_heading(obj.get_arg('level')) as p:
                 for word in obj.text:
                     walk_inline(word, p)
+        elif obj.name == "list":
+            with builder.build_list(obj.get_arg('start'), len(obj.text)) as l:
+                for item in obj.text:
+                    if item.name == 'item_span':
+                        with l.build_item_span() as p:
+                            for word in item.text:   
+                                walk_inline(word, p)
+                    if item.name == 'block_item':
+                        with l.build_block_item() as p:
+                            for word in item.text:   
+                                walk(word, p)
 
 
     def walk_inline(obj, builder):
@@ -132,6 +203,7 @@ def to_ansi(obj, indent, width, height):
             for o in obj.text:
                 walk_inline(o, builder)
             builder.add_text("}")
+    
 
     if width > 80:
         indent = (width-80)//2
