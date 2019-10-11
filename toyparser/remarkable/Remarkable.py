@@ -208,18 +208,18 @@ def builder(buf, node, children):
             elif text.name == 'directive_block':
                 text = text.text
             elif text.name == 'directive_para': 
-                text = text.text if name in para_directives else [dom.Paragraph([], text.text)]
+                text = text.text if name in dom.para_directives else [dom.Paragraph([], text.text)]
             elif text.name == 'directive_code':
-                text = text.text if name in para_directives else [dom.CodeBlock([], text.text)]
+                text = text.text if name in dom.para_directives else [dom.CodeBlock([], text.text)]
             else:
                 raise Exception('no')
         else:
             text = []
 
-        if name in para_directives:
-            return para_directives[name](args, text)
-        elif name in block_directives:
-            return block_directives[name](args, text)
+        if name in dom.para_directives:
+            return dom.para_directives[name](args, text)
+        elif name in dom.block_directives:
+            return dom.block_directives[name](args, text)
         else:
             return dom.NamedBlockDirective([('name', name)] + args, text)
 
@@ -231,8 +231,8 @@ def builder(buf, node, children):
         text = [children[2]] if children[2:] and children[2] is not None else []
         if text:
             text = text[0].text
-        if name in inline_directives:
-            return inline_directives[name](args, text)
+        if name in dom.inline_directives:
+            return dom.inline_directives[name](args, text)
         return dom.NamedInlineDirective([('name', name)]+ args, text)
     if kind == "arg":
         return children
@@ -284,7 +284,7 @@ def builder(buf, node, children):
     if kind == "table_heading":
         return dom.HeaderRow([], children)
     if kind == "table_division":
-        return dom.Division(children)
+        return dom.Block('division', [], children)
 
     if kind == 'block_rson':
         text = []
@@ -352,8 +352,6 @@ def builder(buf, node, children):
         return {identifier: literal}
     raise Exception(node.name)
     return {node.name: children}
-
-
 
 template = """\
 <html>
@@ -556,7 +554,7 @@ def to_html(obj):
     if name in html_tags:
         return html_tags[name].format(name=name, text=text, **args)
     args = " ".join(f"{key}={repr(value)}" for key, value in args.items())
-    end = "" if isinstance(obj, Inline) else "\n"
+    end = "" if isinstance(obj, dom.Inline) else "\n"
     if text:
         args = f" {args}" if args else ""
         return f"<{name}{args}>{text}</{name}>{end}"

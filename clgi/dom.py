@@ -17,6 +17,9 @@ class Directive:
         self.args = args
         self.text = text
 
+    def build(self, builder):
+        pass
+
 class Data(Directive):
     pass
 

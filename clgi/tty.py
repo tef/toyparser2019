@@ -10,6 +10,7 @@ import random
 
 from contextlib import contextmanager 
 from . import dom
+from .render import render
 
 from toyparser.remarkable.Remarkable import to_ansi
 
@@ -59,10 +60,8 @@ class Console:
 
     def render(self, obj):
         self.stdout.write("\x1b[H\x1b[J")
-        if isinstance(obj, dom.Document):
-            lines = to_ansi(obj, indent=0, width=self.width, height=self.height)
-        else:
-            lines = obj.render(self.width, self.height)
+        lines = obj.render(width=self.width, height=self.height)
+
         if isinstance(lines, (tuple, list)):
             out = "\r\n".join(lines)
         else:
@@ -215,7 +214,7 @@ class LineConsole(Console):
         self.width, self.height = shutil.get_terminal_size((self.width, self.height))
 
     def render(self, obj):
-        lines = obj.render(self.width, self.height)
+        lines = render(obj, 0, self.width, self.height)
         if isinstance(lines, (tuple, list)):
             out = "\r\n".join(lines)
         else:
@@ -320,10 +319,7 @@ class Viewport:
     def render(self, width, height):
         if self.width != width or self.height != height:
             self.width, self.height = width, height
-            if isinstance(self.obj, dom.Document):
-                self.buf = to_ansi(self.obj, indent=0, width=self.width, height=self.height)
-            else:
-                self.buf = self.obj.render(width, height)
+            self.buf = render(self.obj, indent=0, width=self.width, height=self.height)
             self.line = min(self.line, len(self.buf))
             self.col = 0
             self.wide = max(len(b) for b in self.buf)
