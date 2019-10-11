@@ -21,9 +21,10 @@ class RenderBox:
         new_amount = (self.width - new_width)/2
         return RenderBox(new_amount, self.width-new_amount, self.height)
 
-    def shrink(self, scale=0.5):
+    def shrink(self, scale=0.5, indent=False):
         new_width = int(max(self.width * scale, self.min_width)) if self.width >= self.min_width else self.width
-        return RenderBox(0, new_width, self.height)
+        indent = (self.width - new_width)//2 if indent else 0
+        return RenderBox(indent, new_width, self.height)
 
 class BlockBuilder:
     def __init__(self, box):
@@ -33,12 +34,28 @@ class BlockBuilder:
     def build(self):
         return [(" "* self.box.indent)+line for line in self.lines]
 
+    def add_code_block(self, text):
+        lines = text.splitlines()
+        indent = 4
+        self.lines.extend((" "* indent)+line for line in lines)
+        self.lines.append("")
+
+
+
     def add_hr(self):
         width = int(self.box.width*0.3)*2
         pad = (self.box.width - width)//2
         
         line = (" "*pad) + ("-"*width) + (" "*pad)
         self.lines.append(line)
+        self.lines.append("")
+
+    @contextmanager
+    def build_blockquote(self):
+        box = self.box.shrink(0.8, indent=True)
+        builder = BlockBuilder(box)
+        yield builder
+        self.lines.extend(builder.build())
         self.lines.append("")
 
     @contextmanager
@@ -126,35 +143,48 @@ class ParaBuilder:
         self.lines = []
         self.box = box
         self.current_line = []
+        self.current_word = []
         self.current_width = 0
-        self.whitespace = True
 
     def build(self):
         self.add_break()
         return [(" "* self.box.indent)+line for line in self.lines]
         
-    def add_text(self, text):
+    def _add_text(self, text):
         l = len(text)
+        l = l +1 if self.current_line else l
         if l + self.current_width > self.box.width:
-            self.add_break()
+            self._add_break()
+        if self.current_line:
+            self.current_line.append(" ")
         self.current_line.append(text)
         self.current_width += l
-        self.whitespace = False
 
-    def add_space(self):
-        if not self.whitespace:
-            if self.current_width + 1 >= self.box.width:
-                self.add_break()
-            else:
-                self.current_line.append(" ")
-                self.current_width += 1
-                self.whitespace = True
-
-    def add_break(self):
+    def _add_break(self):
         self.lines.append("".join(self.current_line))
         self.current_line[:] = []
         self.current_width = 0
+
+    def add_space(self):
+        if self.current_word:
+            word = "".join(self.current_word)
+            self.current_word[:] = []
+            self._add_text(word)
         self.whitespace = True
+
+    def add_code_text(self, text):
+        self.add_text("`")
+        self.add_text(text)
+        self.add_text("`")
+
+
+    def add_break(self):
+        self.add_space()
+        self._add_break()
+        self.whitespace = False
+
+    def add_text(self, text):
+        self.current_word.append(text)
 
 
 
@@ -167,6 +197,13 @@ def to_ansi(obj, indent, width, height):
                 walk(o, builder)
         elif obj.name == "hr":
             builder.add_hr()
+        elif obj.name == "code_block":
+            text = "".join(obj.text)
+            builder.add_code_block(text)
+        elif obj.name == "blockquote":
+            with builder.build_blockquote() as b:
+                for o in obj.text:
+                    walk(o, b)
         elif obj.name == "paragraph":
             with builder.build_para() as p:
                 for word in obj.text:
@@ -198,6 +235,9 @@ def to_ansi(obj, indent, width, height):
             builder.add_break()
         elif obj.name == "softbreak":
             builder.add_space()
+        elif obj.name == 'code_span':
+            text = " ".join(obj.text).strip()
+            builder.add_code_text(text)
         else:
             builder.add_text(f"{obj.name}{{")
             for o in obj.text:

@@ -462,12 +462,12 @@ Whitespace before args is mandatory for blocks, but forbidden for inline forms.
 
 - Doubling or tripling markers doesn't change their meaning:
 
-	```
-	_emphasis_ __emphasis__ ___emphasis___ \emph{emphasis}
-	*strong* **strong** ***strong*** \strong{strong}
-	~strike~ ~~strike~~ ~~~strike~~~ \strike{strike}
-	`code` ``code`` ```code``` \code{code} \code`code`
-	```
+  ```
+  _emphasis_ __emphasis__ ___emphasis___ \emph{emphasis}
+  *strong* **strong** ***strong*** \strong{strong}
+  ~strike~ ~~strike~~ ~~~strike~~~ \strike{strike}
+  `code` ``code`` ```code``` \code{code} \code`code`
+  ```
 
 
 

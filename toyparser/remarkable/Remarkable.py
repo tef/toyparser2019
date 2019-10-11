@@ -1316,31 +1316,33 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 self.literal("]")
     @rule()
     def inner_code_span(self):
-            with self.count(char="`") as c, self.repeat(min=1):
-                self.literal("`")
-            with self.repeat(min=1), self.choice():
-                with self.case():
-                    with self.capture_node('text'):
+        with self.count(char="`") as c, self.repeat(min=1):
+            self.literal("`")
+        with self.reject():
+            self.whitespace()
+            self.newline()
+        with self.repeat(min=1), self.choice():
+            with self.case():
+                with self.capture_node('text'):
+                    self.range("\n", "`", invert=True)
+                    with self.repeat(min=0):
                         self.range("\n", "`", invert=True)
-                        with self.repeat(min=0):
-                            self.range("\n", "`", invert=True)
-                with self.case():
-                    with self.capture_node("text"):
-                        self.newline()
-                    self.indent(partial=True)
-                with self.case():
-                    with self.reject():
-                        with self.repeat(min=c, max=c):
-                            self.literal("`")
-                        with self.choice():
-                            with self.case(): self.range('`', invert=True)
-                            with self.case(): self.end_of_file()
-                    with self.capture_node("text"), self.repeat():
+            with self.case():
+                self.newline()
+                self.indent(partial=True)
+            with self.case():
+                with self.reject():
+                    with self.repeat(min=c, max=c):
                         self.literal("`")
-            with self.repeat(min=c, max=c):
-                self.literal("`")
-            with self.reject():
-                self.literal("`")
+                    with self.choice():
+                        with self.case(): self.range('`', invert=True)
+                        with self.case(): self.end_of_file()
+                with self.capture_node("text"), self.repeat():
+                    self.literal("`")
+        with self.repeat(min=c, max=c):
+            self.literal("`")
+        with self.reject():
+            self.literal("`")
     @rule()
     def code_span(self):
         with self.capture_node('code_span') as span: 
