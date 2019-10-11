@@ -1,14 +1,17 @@
 import signal
+import time
 import sys
 import os
 import struct
 import fcntl
 import termios
 import shutil
+import random
 
 from contextlib import contextmanager 
+from . import dom
 
-from .dom import Response
+from toyparser.remarkable.Remarkable import to_ansi
 
 
 def main(name, argv=None, env=None):
@@ -56,8 +59,51 @@ class Console:
 
     def render(self, obj):
         self.stdout.write("\x1b[H\x1b[J")
-        lines = obj.render(self.width, self.height)
-        self.stdout.write("\r\n".join(line[:self.width] for line in lines))
+        if isinstance(obj, dom.Document):
+            lines = to_ansi(obj, indent=0, width=self.width, height=self.height)
+        else:
+            lines = obj.render(self.width, self.height)
+        if isinstance(lines, (tuple, list)):
+            out = "\r\n".join(lines)
+        else:
+            out = lines
+        self.stdout.write(out)
+        self.stdout.flush()
+        return
+
+        if isinstance(lines, str):
+            lines = lines.splitlines()
+
+
+
+        lines = [line[:self.width] + " "*max(0, self.width-len(line)) for line in lines]
+        flash = []
+        new_lines = []
+        for row, line in enumerate(lines, 1):
+            for col, char in enumerate(line, 1):
+                new_lines.append(f"\x1b[{row};{col}H{char}")
+                flash.append(f"\x1b[{row};{col}H.")
+                flash.append(f"\x1b[{row};{col}H ")
+                flash.append(f"\x1b[{row};{col}H ")
+                flash.append(f"\x1b[{row};{col}H ")
+                flash.append(f"\x1b[{row};{col}H ")
+                flash.append(f"\x1b[{row};{col}H*")
+
+        random.shuffle(flash)
+        for chr in flash:
+            sys.stdout.write(chr)
+
+        self.stdout.flush()
+        random.shuffle(new_lines)
+        for chr in new_lines:
+            sys.stdout.write(chr)
+            self.stdout.flush()
+
+        #if isinstance(lines, (tuple, list)):
+        #    self.stdout.write("\r\n".join(line[:self.width] for line in lines))
+        #else:
+        #    self.stdout.write(lines)
+        self.stdout.write(f"\x1b[{self.height};{0}H")
         self.stdout.flush()
 
     def get_buf(self, size):
@@ -170,7 +216,10 @@ class LineConsole(Console):
 
     def render(self, obj):
         lines = obj.render(self.width, self.height)
-        out = "\r\n".join(lines)
+        if isinstance(lines, (tuple, list)):
+            out = "\r\n".join(lines)
+        else:
+            out = lines
         self.stdout.write(out)
         if not out.endswith("\n"):
             self.stdout.write("\n")
@@ -271,12 +320,17 @@ class Viewport:
     def render(self, width, height):
         if self.width != width or self.height != height:
             self.width, self.height = width, height
-            self.buf = self.obj.render(width, height)
+            if isinstance(self.obj, dom.Document):
+                self.buf = to_ansi(self.obj, indent=0, width=self.width, height=self.height)
+            else:
+                self.buf = self.obj.render(width, height)
             self.line = min(self.line, len(self.buf))
             self.col = 0
             self.wide = max(len(b) for b in self.buf)
 
-        return [line[self.col: self.col+width] for line in self.buf[self.line:self.line+height]]
+        lines = [line[self.col: self.col+width] for line in self.buf[self.line:self.line+height]]
+
+        return lines
 
     def left(self, n=8):
         if self.col > 0:

@@ -3,179 +3,11 @@
 
 import base64, codecs, html
 from datetime import datetime, timedelta, timezone
+from contextlib import contextmanager
 
 from ..grammar import Grammar, compile_python, sibling
+from clgi import dom
 
-class Directive:
-    def __init__(self, name, args, text):
-        self.name = name
-        self.args = args
-        self.text = text
-
-    def to_text(self):
-        return to_text(self)
-
-    def to_html(self):
-        return to_html(self)
-
-    def to_ansi(self, width=None, height=None, indent=0):
-        return to_ansi(self, indent, width, height).splitlines()
-
-class Data(Directive):
-    pass
-
-class Block(Directive):
-    pass
-
-class Document(Block):
-    def __init__(self, args, text):
-        Block.__init__(self, "document", args, text)
-
-class Paragraph(Block):
-    def __init__(self, args, text):
-        Block.__init__(self, "paragraph", args, text)
-
-class HorizontalRule(Block):
-    def __init__(self, args, text=None):
-        if text: raise Exception('bad')
-        Block.__init__(self, "hr", args, [])
-
-class Heading(Block):
-    def __init__(self, args, text):
-        Block.__init__(self, "heading", args, text)
-
-class CodeBlock(Block):
-    def __init__(self, args, text):
-        Block.__init__(self, "code_block", args, text)
-
-class GroupBlock(Block):
-    def __init__(self, args, text):
-        Block.__init__(self, "group", args, text)
-class ListBlock(Block):
-    def __init__(self, args, text):
-        Block.__init__(self, "list", args, text)
-
-class QuoteBlock(Block):
-    def __init__(self, args, text):
-        Block.__init__(self, "blockquote", args, text)
-
-class BlockItem(Block):
-    def __init__(self, args, text):
-        Block.__init__(self, "block_item", args, text)
-
-class Table(Block):
-    def __init__(self, args, text):
-        Block.__init__(self, "table", args, text)
-
-class Row(Block):
-    def __init__(self, args, text):
-        Block.__init__(self, "row", args, text)
-
-class HeaderRow(Block):
-    def __init__(self, args, text):
-        Block.__init__(self, "thead", args, text)
-
-class NamedBlockDirective(Block):
-    def __init__(self, args, text):
-        Block.__init__(self, "directive", args, text)
-
-class RawBlock(Block):
-    def __init__(self, args, text):
-        Block.__init__(self, "block_raw", args, text)
-
-class Inline(Directive):
-    pass
-
-class Cell(Inline):
-    def __init__(self, args, text):
-        Inline.__init__(self, "cell", args, text)
-
-class Span(Inline):
-    def __init__(self, args, text):
-        Inline.__init__(self, "span", args, text)
-
-class RawSpan(Inline):
-    def __init__(self, args, text):
-        Inline.__init__(self, "raw_span", args, text)
-
-class ItemSpan(Inline):
-    def __init__(self, args, text):
-        Inline.__init__(self, "item_span", args, text)
-
-class CodeSpan(Inline):
-    def __init__(self, args, text):
-        Inline.__init__(self, "code_span", args, text)
-
-class Strong(Inline):
-    def __init__(self, args, text):
-        Inline.__init__(self, "strong", args, text)
-
-class Emphasis(Inline):
-    def __init__(self, args, text):
-        Inline.__init__(self, "emph", args, text)
-
-class Strike(Inline):
-    def __init__(self, args, text):
-        Inline.__init__(self, "strike", args, text)
-
-class Hardbreak(Inline):
-    def __init__(self, args=None, text=None):
-        if args or text: raise Exception('bad')
-        Inline.__init__(self, "hardbreak", [],[])
-
-class Softbreak(Inline):
-    def __init__(self, args=None, text=None):
-        if args or text: raise Exception('bad')
-        Inline.__init__(self, "softbreak", [],[])
-
-class Nbsp(Inline):
-    def __init__(self, args=None, text=None):
-        if args or text: raise Exception('bad')
-        Inline.__init__(self, "nbsp", [],[])
-
-class Emoji(Inline):
-    def __init__(self, args=None, text=None):
-        if args: raise Exception('bad')
-        Inline.__init__(self, "emoji", [], text)
-
-class NamedInlineDirective(Inline):
-    def __init__(self, args, text):
-        Inline.__init__(self, "directive", args, text)
-
-block_directives = { # \foo::begin
-        "hr": HorizontalRule,
-        "list": ListBlock,
-        "blockquote": QuoteBlock,
-        "item": BlockItem,
-        "table": Table,
-        "row": Row,
-}
-para_directives = { # \foo: ...
-        "para": Paragraph,
-        "p": Paragraph,
-        "h": Heading,
-        "heading": Heading,
-        "code": CodeBlock,
-        "raw": RawBlock,
-        "row": Row,
-        "cell": Cell,
-}
-
-inline_directives = {
-        "strong": Strong,
-        "b": Strong,
-        "em": Emphasis,
-        "emph": Emphasis,
-        "emphasis": Emphasis,
-        "strike": Strike,
-        "code": CodeSpan,
-        "code_span": CodeSpan,
-        "item": ItemSpan,
-        "raw": RawSpan,
-        "cell": Cell,
-}
-
-        
 # --- Parse Tree Builder
 def unescape(string):
     return codecs.decode(string.replace('\\/', '/'), 'unicode_escape')
@@ -210,58 +42,58 @@ def builder(buf, node, children):
 
         if len(text) == 1 and getattr(text[0], "name", "") == "document":
             return text[0]
-        return Document(metadata, text)
+        return dom.Document(metadata, text)
 
     if kind == 'identifier':
         return buf[node.start:node.end]
     if kind == "text":
         return buf[node.start:node.end]
     if kind == "nbsp":
-        return Nbsp()
+        return dom.Nbsp()
     if kind == "whitespace":
         if node.end == node.start:
             return None
         return " "
 
     if kind == "softbreak":
-        return Softbreak()
+        return dom.Softbreak()
     if kind == "hardbreak":
-        return Hardbreak()
+        return dom.Hardbreak()
 
     if kind in ('empty', 'empty_line'):
         return None
 
     if kind == "emoji":
-        return Emoji((), [c for c in children if c is not None])
+        return dom.Emoji((), [c for c in children if c is not None])
 
 
     if kind == 'horizontal_rule':
-        return HorizontalRule(children[0], ())
+        return dom.HorizontalRule(children[0], ())
     if kind == 'atx_heading':
         args = [('level', node.value)] + children[0]
-        return Heading(args, [c for c in children[1:] if c is not None])
+        return dom.Heading(args, [c for c in children[1:] if c is not None])
 
     if kind == "paragraph":
-        return Paragraph([], [c for c in children if c is not None])
+        return dom.Paragraph([], [c for c in children if c is not None])
     if kind == "span":
         args = children[-1]
         marker = node.value
         if marker == "*":
-            return Strong(args,[c for c in children[:-1] if c is not None])
+            return dom.Strong(args,[c for c in children[:-1] if c is not None])
         if marker == "_":
-            return Emphasis(args,[c for c in children[:-1] if c is not None])
+            return dom.Emphasis(args,[c for c in children[:-1] if c is not None])
         if marker == "~":
-            return Strike(args,[c for c in children[:-1] if c is not None])
+            return dom.Strike(args,[c for c in children[:-1] if c is not None])
         if marker:
-            return Span([("marker", node.value)] +args,[c for c in children[:-1] if c is not None])
-        return Span(args,[c for c in children[:-1] if c is not None])
+            return dom.Span([("marker", node.value)] +args,[c for c in children[:-1] if c is not None])
+        return dom.Span(args,[c for c in children[:-1] if c is not None])
     if kind == 'code_span':
         args = children[-1]
-        return CodeSpan(args, [c for c in children[:-1] if c is not None])
+        return dom.CodeSpan(args, [c for c in children[:-1] if c is not None])
 
     if kind == 'code_block':
         arg = children[0] if children[0] is not None else []
-        return CodeBlock(arg, [c for c in children[1:] if c is not None])
+        return dom.CodeBlock(arg, [c for c in children[1:] if c is not None])
     if kind == "code_string":
         return [("language", children)]
 
@@ -271,7 +103,7 @@ def builder(buf, node, children):
         name = 'group'
         args = [("marker", marker)]
 
-        block = GroupBlock
+        block = dom.GroupBlock
 
         if marker == '>':
             new_children = []
@@ -279,12 +111,12 @@ def builder(buf, node, children):
                 if c is None:
                     continue
                 elif c.name == 'item_span':
-                    new_children.append(Paragraph(c.args, c.text))
+                    new_children.append(dom.Paragraph(c.args, c.text))
                 elif c.name == "block_item":
                     new_children.extend(c.text)
                 else:
                     new_children.append(c)
-            return QuoteBlock([], new_children)
+            return dom.QuoteBlock([], new_children)
 
 
         elif marker == '-':
@@ -292,18 +124,18 @@ def builder(buf, node, children):
 
             if spacing == "tight":
                 if all(c and c.name == "item_span" for c in children[2:]):
-                    return ListBlock([], [c for c in children[2:] if c is not None])
+                    return dom.ListBlock([], [c for c in children[2:] if c is not None])
 
             new_children = []
             for c in children[2:]:
                 if c is None: continue
                 if c.name == 'item_span':
-                    text = [Paragraph([], c.text)] if c.text else []
-                    c = BlockItem(c.args, text)
+                    text = [dom.Paragraph([], c.text)] if c.text else []
+                    c = dom.BlockItem(c.args, text)
                 new_children.append(c)
-            return ListBlock([], new_children)
+            return dom.ListBlock([], new_children)
 
-        return GroupBlock(args, new_children)
+        return dom.GroupBlock(args, new_children)
     if kind == 'group_marker':
         return buf[node.start:node.end]
     if kind == 'group_spacing':
@@ -312,13 +144,13 @@ def builder(buf, node, children):
         spacing = children[1]
         if spacing == "tight":
             if not children[2:]:
-                return ItemSpan(children[0], [])
+                return dom.ItemSpan(children[0], [])
             elif len(children) == 3 and children[2].name == "para" and not children[2].args:
-                return ItemSpan(children[0], children[2].text)
+                return dom.ItemSpan(children[0], children[2].text)
             else:
-                return BlockItem(children[0], [c for c in children[2:] if c is not None])
+                return dom.BlockItem(children[0], [c for c in children[2:] if c is not None])
 
-        return BlockItem(children[0], [c for c in children[2:] if c is not None])
+        return dom.BlockItem(children[0], [c for c in children[2:] if c is not None])
     if kind == 'item_spacing':
         return node.value
 
@@ -329,19 +161,19 @@ def builder(buf, node, children):
         if text:
             if name == 'list' and text.name == "directive_group":
                 args = args + text.args # pull up spacing
-                return ListBlock(args, [text])
+                return dom.ListBlock(args, [text])
             if name == 'blockquote' and text.name == "directive_group":
                 new_children = []
                 for c in children[2:]:
                     if c is None:
                         continue
                     elif c.name == 'item_span':
-                        new_children.append(Paragraph(c.args, c.text))
+                        new_children.append(dom.Paragraph(c.args, c.text))
                     elif c.name == "block_item":
                         new_children.extend(c.text)
                     else:
                         new_children.append(c)
-                return QuoteBlock(args, new_children)
+                return dom.QuoteBlock(args, new_children)
 
             if name == 'table' and text.name == "directive_group":
                 new_text = []
@@ -356,29 +188,29 @@ def builder(buf, node, children):
                 def transform_cols(name, d):
                     if len(d) == 1 and d[0].name in ('para_group', 'group', 'list', 'blockquote'):
                         if all( len(e.text) == 1 and getattr(e.text[0],'name', '') == 'heading' for e in d[0].text):
-                            return HeaderRow([], [Cell([], t.text[0].text) for t in d[0].text])
+                            return dom.HeaderRow([], [dom.Cell([], t.text[0].text) for t in d[0].text])
 
-                        return Row([], [Cell([], t.text) for t in d[0].text])
+                        return dom.Row([], [dom.Cell([], t.text) for t in d[0].text])
                     elif all(getattr(t,'name', '') == 'heading' for t in d):
-                        return HeaderRow([], [Cell([], t.text) for t in d])
+                        return dom.HeaderRow([], [Cell([], t.text) for t in d])
 
                     return name
                     
                 text = [transform_row(r) for r in text.text]
-                return Table(args, text)
+                return dom.Table(args, text)
             if name == 'table' and text.name == "directive_table":
-                return Table(args, text.text)
+                return dom.Table(args, text.text)
 
             if text.name == 'directive_group':
-                text = [GroupBlock(text.args, text.text)]
+                text = [dom.GroupBlock(text.args, text.text)]
             elif text.name == 'directive_table':
-                text = [Table(text.args, text.text)]
+                text = [dom.Table(text.args, text.text)]
             elif text.name == 'directive_block':
                 text = text.text
             elif text.name == 'directive_para': 
-                text = text.text if name in para_directives else [Paragraph([], text.text)]
+                text = text.text if name in para_directives else [dom.Paragraph([], text.text)]
             elif text.name == 'directive_code':
-                text = text.text if name in para_directives else [CodeBlock([], text.text)]
+                text = text.text if name in para_directives else [dom.CodeBlock([], text.text)]
             else:
                 raise Exception('no')
         else:
@@ -389,7 +221,7 @@ def builder(buf, node, children):
         elif name in block_directives:
             return block_directives[name](args, text)
         else:
-            return NamedBlockDirective([('name', name)] + args, text)
+            return dom.NamedBlockDirective([('name', name)] + args, text)
 
     if kind == "inline_directive":
         name = children[0]
@@ -401,7 +233,7 @@ def builder(buf, node, children):
             text = text[0].text
         if name in inline_directives:
             return inline_directives[name](args, text)
-        return NamedInlineDirective([('name', name)]+ args, text)
+        return dom.NamedInlineDirective([('name', name)]+ args, text)
     if kind == "arg":
         return children
     if kind == "directive_args":
@@ -410,22 +242,22 @@ def builder(buf, node, children):
         return buf[node.start:node.end]
 
     if kind == "directive_span":
-        return Inline('directive_span',[],[c for c in children if c is not None])
+        return dom.Inline('directive_span',[],[c for c in children if c is not None])
 
     if kind == "directive_para":
-        return Block('directive_para',[],[c for c in children if c is not None])
+        return dom.Block('directive_para',[],[c for c in children if c is not None])
     if kind == "directive_code":
-        return Block('directive_code',[],[c for c in children if c is not None])
+        return dom.Block('directive_code',[],[c for c in children if c is not None])
     if kind == "directive_code_span":
-        return Block('directive_code',[],[c for c in children if c is not None])
+        return dom.Block('directive_code',[],[c for c in children if c is not None])
     if kind == "directive_table":
-        return Block('directive_table',[],[c for c in children if c is not None])
+        return dom.Block('directive_table',[],[c for c in children if c is not None])
     if kind == "directive_block":
-        return Block('directive_block',[],[c for c in children if c is not None])
+        return dom.Block('directive_block',[],[c for c in children if c is not None])
     if kind == "directive_group":
         marker = children[0]
         spacing = children[1]
-        return Block("directive_group", [("marker", marker), ("spacing", spacing)], [c for c in children[2:] if c is not None])
+        return dom.Block("directive_group", [("marker", marker), ("spacing", spacing)], [c for c in children[2:] if c is not None])
 
     if kind == "table":
         text = []
@@ -436,10 +268,10 @@ def builder(buf, node, children):
                 args.append(('column_align', c.text))
             else:
                 text.append(c)
-        return Block('table',args,text)
+        return dom.Table(args,text)
         
     if kind == "table_cell":
-        return Inline('cell', [], children)
+        return dom.Cell([], children)
     if kind == "column_align":
         left = buf[node.start] == ":"
         right = buf[node.end-1] == ":"
@@ -448,17 +280,17 @@ def builder(buf, node, children):
         if right: return "right"
         return "default"
     if kind == "table_row":
-        return Block('row', [], children)
+        return dom.Row([], children)
     if kind == "table_heading":
-        return Block('thead', [], children)
+        return dom.HeaderRow([], children)
     if kind == "table_division":
-        return Block('division',[], children)
+        return dom.Division(children)
 
     if kind == 'block_rson':
         text = []
         args = children[1]
         args = list(args.items())
-        return Data(children[0], args, text)
+        return dom.Data(children[0], args, text)
 
     if kind == 'rson_number': 
         return eval(buf[node.start:node.end])
@@ -762,25 +594,118 @@ class TextBuilder:
 class LineBuilder:
     pass
 
+class RenderBox:
+    min_width = 40
+
+    def __init__(self, indent, width, height):
+        self.indent = indent
+        self.width = width
+        self.height = height
+
+
+    def margin(self, amount):
+        new_width = (self.width - amount*2, self.min_width)
+        new_amount = (self.width - new_width)/2
+        return RenderBox(self.indent+new_amount, self.width-new_amount, self._height)
+
+class BlockBuilder:
+    def __init__(self, box):
+        self.lines = []
+        self.box = box
+
+    def build(self):
+        return [(" "* self.box.indent)+line for line in self.lines]
+
+    def add_hr(self):
+        width = int(self.box.width*0.3)*2
+        pad = (self.box.width - width)//2
+        
+        line = (" "*pad) + ("-"*width) + (" "*pad)
+        self.lines.append(line)
+        self.lines.append("")
+
+    @contextmanager
+    def build_para(self):
+        box = RenderBox(0, self.box.width, self.box.height)
+        builder = ParaBuilder(box)
+        yield builder
+        self.lines.extend(builder.build())
+        self.lines.append("")
+
+class ParaBuilder:
+    def __init__(self, box):
+        self.lines = []
+        self.box = box
+        self.current_line = []
+        self.current_width = 0
+        self.whitespace = True
+
+    def build(self):
+        self.add_break()
+        return [(" "* self.box.indent)+line for line in self.lines]
+        
+    def add_text(self, text):
+        l = len(text)
+        if l + self.current_width > self.box.width:
+            self.add_break()
+        self.current_line.append(text)
+        self.current_width += l
+        self.whitespace = False
+
+    def add_space(self):
+        if not self.whitespace:
+            if self.current_width + 1 >= self.box.width:
+                self.add_break()
+            else:
+                self.current_line.append(" ")
+                self.current_width += 1
+                self.whitespace = True
+
+    def add_break(self):
+        self.lines.append("".join(self.current_line))
+        self.current_line[:] = []
+        self.current_width = 0
+        self.whitespace = True
+
 def to_ansi(obj, indent, width, height):
-    # lines = []
-    # current_line = []
-    # def walk(obj, indent, 
-    if isinstance(obj, str): 
-        escape = "~_*\\-#`{}[]|@<>"
-        return "".join(('\\'+t if t in escape else t) for t in obj).replace("\n", "\\n;")
-    if isinstance(obj, Data):
-        args = ", ".join(f"{key}: {repr(value)}" for key, value in obj.args)
-        return f"@{obj.name}" "{" f"{args}" "}\n"
 
+    def walk(obj, builder):
+        if obj is None: 
+            pass
+        if obj.name == "document":
+            for o in obj.text:
+                walk(o, builder)
+        elif obj.name == "hr":
+            builder.add_hr()
+        elif obj.name == "paragraph":
+            with builder.build_para() as p:
+                p.add_space()
+                for word in obj.text:
+                    walk_inline(word, p)
 
-    end = "\n" if isinstance(obj, Block) else ""
-    args = ", ".join(f"{key}: {repr(value)}" for key, value in obj.args) if obj.args else ""
-    text = "".join(to_ansi(x, indent, width, height) for x in obj.text if x is not None) if obj.text else ""
+    def walk_inline(obj, builder):
+        if obj == " ":
+            builder.add_space()
+        elif isinstance(obj, str):
+            if obj:
+                builder.add_text(obj)
+        elif obj.name == "hardbreak" or obj.name == "n":
+            builder.add_break()
+        elif obj.name == "softbreak":
+            builder.add_space()
+        else:
+            builder.add_word(f"{obj.name}{{")
+            for o in obj.text:
+                walk_inline(o, builder)
+            builder.add_word("}")
 
-    args = f"[{args}]" if args else ""
-    text = "{" f"{text}" "}" if text else ";"
-    return f"\\{obj.name}{args}{text}{end}"
+    if width > 80:
+        indent = (width-80)//2
+        width = 80
+    box = RenderBox(indent, width, height)
+    builder = BlockBuilder(box)
+    walk(obj, builder)
+    return builder.build()
 
 class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r", "\n", "\r\n"], tabstop=8):
     @rule(inline=True) # 2.1 line ends by newline or end_of_file

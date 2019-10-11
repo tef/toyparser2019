@@ -5,7 +5,7 @@ import os
 from clgi.errors import Bug, Error
 from clgi.dom import Plaintext, Document
 from clgi.app import App, Router, command
-from toyparser.remarkable.Remarkable import parse
+from toyparser.remarkable.Remarkable import parse, to_html, to_ansi
 
 class AppError(Error):
     pass
@@ -29,7 +29,7 @@ def Remark(ctx, file):
     filename = os.path.relpath(file)
     with open(filename) as fh:
         dom = parse(fh.read())
-        text = dom.to_html() 
+        text = to_html(dom) 
     return Plaintext(text)
 
 @router.on("convert:ansi") # no path given
@@ -51,7 +51,7 @@ def Remark(ctx, file):
     filename = os.path.relpath(file)
     with open(filename) as fh:
         dom = parse(fh.read())
-    return Document(dom)
+    return dom
 app = App(
     name="remark", 
     version="0.0.1",
