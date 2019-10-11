@@ -17,9 +17,13 @@ class RenderBox:
         self.height = height
 
     def margin(self, amount):
-        new_width = (self.width - amount*2, self.min_width)
+        new_width = max(self.width - amount*2) if self.width >= self.min_width else self.width
         new_amount = (self.width - new_width)/2
-        return RenderBox(self.indent+new_amount, self.width-new_amount, self._height)
+        return RenderBox(new_amount, self.width-new_amount, self.height)
+
+    def shrink(self, scale=0.5):
+        new_width = int(max(self.width * scale, self.min_width)) if self.width >= self.min_width else self.width
+        return RenderBox(0, new_width, self.height)
 
 class BlockBuilder:
     def __init__(self, box):
@@ -41,8 +45,20 @@ class BlockBuilder:
     def build_para(self):
         box = RenderBox(0, self.box.width, self.box.height)
         builder = ParaBuilder(box)
+        builder.add_space()
         yield builder
         self.lines.extend(builder.build())
+        self.lines.append("")
+
+    @contextmanager
+    def build_heading(self):
+        box = self.box.shrink()
+        builder = ParaBuilder(box)
+        yield builder
+        for line in builder.build():
+            pad = max(0, self.box.width-len(line)) //2
+            self.lines.append((" "*pad)+line)
+        self.lines.append("")
         self.lines.append("")
 
 class ParaBuilder:
@@ -93,9 +109,13 @@ def to_ansi(obj, indent, width, height):
             builder.add_hr()
         elif obj.name == "paragraph":
             with builder.build_para() as p:
-                p.add_space()
                 for word in obj.text:
                     walk_inline(word, p)
+        elif obj.name == "heading":
+            with builder.build_heading() as p:
+                for word in obj.text:
+                    walk_inline(word, p)
+
 
     def walk_inline(obj, builder):
         if obj == " ":
@@ -108,10 +128,10 @@ def to_ansi(obj, indent, width, height):
         elif obj.name == "softbreak":
             builder.add_space()
         else:
-            builder.add_word(f"{obj.name}{{")
+            builder.add_text(f"{obj.name}{{")
             for o in obj.text:
                 walk_inline(o, builder)
-            builder.add_word("}")
+            builder.add_text("}")
 
     if width > 80:
         indent = (width-80)//2
