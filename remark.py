@@ -3,8 +3,7 @@
 import os
 
 from clgi.errors import Bug, Error
-from clgi.dom import Plaintext, Document
-from clgi.app import App, Router, command
+from clgi.app import App, Router, command, Plaintext, Document
 from toyparser.remarkable.Remarkable import parse, to_html, to_ansi
 
 class AppError(Error):

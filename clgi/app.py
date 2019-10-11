@@ -13,9 +13,28 @@ import json
 import io
 
 from .errors import Bug, Error
-from .dom import Response, Plaintext
 from .argparser import ArgumentParser
 from .tty import pager
+from . import dom
+
+from .render import to_ansi
+
+class Response:
+    pass
+
+class Plaintext(Response):
+    def __init__(self, lines):
+        self.lines = lines
+    def render(self, width, height):
+        if isinstance(self.lines, str):
+            return self.lines.splitlines()
+        return self.lines
+
+class Document(Response):
+    def __init__(self, obj):
+        self.obj = obj
+    def render(self, width, height):
+        return to_ansi(self.obj, 0, width, height)
 
 # Errors
 
@@ -105,6 +124,8 @@ class App:
             #    break
 
         if response:
+            if isinstance(response, dom.Directive):
+                response = Document(response)
             if not isinstance(response, Response):
                 response = Plaintext(response)
             pager(response, use_tty=(code == 0))

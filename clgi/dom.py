@@ -1,16 +1,3 @@
-class Response:
-    pass
-
-class Plaintext(Response):
-    def __init__(self, lines):
-        self.lines = lines
-    def render(self, width, height):
-        return self.lines
-
-class Document(Response):
-    def __init__(self, obj):
-        self.obj = obj
-
 class Directive:
     def __init__(self, name, args, text):
         self.name = name
@@ -26,7 +13,7 @@ class Data(Directive):
 class Block(Directive):
     pass
 
-class Document(Block, Response):
+class Document(Block):
     def __init__(self, args, text):
         Block.__init__(self, "document", args, text)
 

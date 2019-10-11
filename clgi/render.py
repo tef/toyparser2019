@@ -81,18 +81,6 @@ class ParaBuilder:
         self.whitespace = True
 
 
-def render(obj, indent, width, height):
-    if isinstance(obj, (list, tuple)):
-        return obj
-    if isinstance(obj, dom.Document):
-        return to_ansi(obj, indent, width, height)
-    if isinstance(obj, dom.Plaintext):
-        return obj.lines.splitlines()
-    if isinstance(obj, str):
-        return obj
-    return obj.render(width=width, height=height)
-
-
 
 def to_ansi(obj, indent, width, height):
     def walk(obj, builder):
