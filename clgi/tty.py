@@ -210,7 +210,7 @@ class LineConsole(Console):
         self.width, self.height = shutil.get_terminal_size((self.width, self.height))
 
     def render(self, obj):
-        lines = obj.render(obj, self.width, self.height)
+        lines = obj.render(self.width, self.height)
         if isinstance(lines, (tuple, list)):
             out = "\r\n".join(lines)
         else:
