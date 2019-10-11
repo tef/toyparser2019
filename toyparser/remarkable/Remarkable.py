@@ -1176,13 +1176,14 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 with self.case():
                     with self.reject():
                         self.literal("|")
-                    self.inline_element()
-                    with self.repeat():
-                        with self.capture_node("whitespace"):
-                            self.whitespace()
-                        with self.reject():
-                            self.literal("|")
+                    with self.indented(count=-1):
                         self.inline_element()
+                        with self.repeat():
+                            with self.capture_node("whitespace"):
+                                self.whitespace()
+                            with self.reject():
+                                self.literal("|")
+                            self.inline_element()
 
     @rule()
     def table(self):

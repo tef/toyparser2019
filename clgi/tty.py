@@ -26,7 +26,7 @@ def main(name, argv=None, env=None):
             for _ in range(height-2):
                 output.append("     |"+(" "*(width-10))+"| "+ str(_))
             output.append("     +"+("-"*(width-10))+"+")
-            return output
+            return {}, output
 
 
     obj = Box()
@@ -56,12 +56,9 @@ class Console:
 
     def render(self, obj):
         self.stdout.write("\x1b[H\x1b[J")
-        lines = obj.render(width=self.width, height=self.height)
+        mapping, lines = obj.render(width=self.width, height=self.height)
 
-        if isinstance(lines, (tuple, list)):
-            out = "\r\n".join(lines)
-        else:
-            out = lines
+        out = "\r\n".join(lines)
         self.stdout.write(out)
         self.stdout.flush()
         return
@@ -210,11 +207,8 @@ class LineConsole(Console):
         self.width, self.height = shutil.get_terminal_size((self.width, self.height))
 
     def render(self, obj):
-        lines = obj.render(self.width, self.height)
-        if isinstance(lines, (tuple, list)):
-            out = "\r\n".join(lines)
-        else:
-            out = lines
+        mapping, lines = obj.render(self.width, self.height)
+        out = "\r\n".join(lines)
         self.stdout.write(out)
         if not out.endswith("\n"):
             self.stdout.write("\n")
@@ -308,6 +302,7 @@ class Viewport:
         self.obj = obj
         self.width, self.height = None, None
         self.buf = []
+        self.mapping = None
         self.line = line
         self.wide = 0
         self.col = 0
@@ -315,14 +310,20 @@ class Viewport:
     def render(self, width, height):
         if self.width != width or self.height != height:
             self.width, self.height = width, height
-            self.buf = self.obj.render(width=self.width, height=self.height)
+            if self.mapping:
+                position = self.mapping.index_of(self.line)
+            else:
+                position = None
+            self.mapping, self.buf = self.obj.render(width=self.width, height=self.height)
+            if position is not None and self.mapping:
+                self.line = self.mapping.line_of(position)
             self.line = min(self.line, len(self.buf))
             self.col = 0
             self.wide = max(len(b) for b in self.buf)
 
         lines = [line[self.col: self.col+width] for line in self.buf[self.line:self.line+height]]
 
-        return lines
+        return self.mapping, lines
 
     def left(self, n=8):
         if self.col > 0:

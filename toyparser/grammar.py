@@ -1436,6 +1436,7 @@ def compile_python(grammar, cython=False, wrap=False):
                         f"def _indent(buf, buf_start, buf_eof, offset, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count={count}, allow_mixed_indent=self.allow_mixed_indent):",
                         f"    saw_tab, saw_not_tab = False, False",
                         f"    start_column, start_offset = column, offset",
+                        f"    if count < 0: offset = -1",
                         f"    while count > 0 and offset < buf_eof:",
                         f"        codepoint = buf[offset]",
                         f"        if {cond}:",

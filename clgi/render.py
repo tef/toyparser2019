@@ -26,23 +26,61 @@ class RenderBox:
         indent = (self.width - new_width)//2 if indent else 0
         return RenderBox(indent, new_width, self.height)
 
+class Mapper:
+    def __init__(self, *, mapping=(), count=-1, offset=0):
+        self.mapping = mapping if mapping else []
+        self.count = count
+        self.offset = offset
+
+    def add_index(self, lineno):
+        lineno = lineno + self.offset
+        self.mapping.append((self.count, lineno))
+        self.count -=1
+
+    def add_mapper(self, lineno, mapper):
+        for i,x in mapper.mapping:
+            self.add_index(x+lineno)
+
+    def line_of(self, pos):
+        count, offset, old = pos
+        if count == 0: return old
+        for c, line in self.mapping:
+            if c == count:
+                return line-offset
+        return old
+
+    def index_of(self, lineno):
+        for count, line in self.mapping:
+            if line >= lineno:
+                return (count, line-lineno, lineno)
+        return (0, 0, lineno)
+
 class BlockBuilder:
     def __init__(self, box):
         self.lines = []
+        self.mapper = Mapper()
         self.box = box
+        self.count = -1
+        self.mapping = {}
+
+    def add_index(self):
+        self.mapper.add_index(len(self.lines))
+    def add_mapper(self, mapper):
+        self.mapper.add_mapper(len(self.lines), mapper)
+
 
     def build(self):
-        return [(" "* self.box.indent)+line for line in self.lines]
+        return self.mapper, [(" "* self.box.indent)+line for line in self.lines]
 
     def add_code_block(self, text):
+        self.add_index()
         lines = text.splitlines()
         indent = 4
         self.lines.extend((" "* indent)+line for line in lines)
         self.lines.append("")
 
-
-
     def add_hr(self):
+        self.add_index()
         width = int(self.box.width*0.3)*2
         pad = (self.box.width - width)//2
         
@@ -52,57 +90,67 @@ class BlockBuilder:
 
     @contextmanager
     def build_blockquote(self):
+        self.add_index()
         box = self.box.shrink(0.8, indent=True)
         builder = BlockBuilder(box)
         yield builder
-        self.lines.extend(builder.build())
+        mapper, lines = builder.build()
+        self.add_mapper(mapper)
+        self.lines.extend(lines)
         self.lines.append("")
 
     @contextmanager
     def build_para(self):
+        self.add_index()
         box = RenderBox(0, self.box.width, self.box.height)
         builder = ParaBuilder(box)
         builder.add_space()
         yield builder
-        self.lines.extend(builder.build())
+        mapper, lines= builder.build()
+        self.add_mapper(mapper)
+        self.lines.extend(lines)
         self.lines.append("")
 
     @contextmanager
     def build_heading(self, level):
+        self.add_index()
         amount = [0.5, 0.6, 0.7, 0.8, 0.9, 0.9]
         box = self.box.shrink(amount[level])
         builder = ParaBuilder(box)
         yield builder
-        for line in builder.build():
+        mapper, lines = builder.build()
+        self.add_mapper(mapper)
+        for line in lines:
             pad = max(0, self.box.width-len(line)) //2
             self.lines.append((" "*pad)+line)
         self.lines.append("")
         self.lines.append("")
 
     @contextmanager
-    def build_para(self):
-        box = RenderBox(0, self.box.width, self.box.height)
-        builder = ParaBuilder(box)
-        builder.add_space()
-        yield builder
-        self.lines.extend(builder.build())
-        self.lines.append("")
-
-    @contextmanager
     def build_list(self, start, num):
+        self.add_index()
         box = RenderBox(0, self.box.width, self.box.height)
         builder = ListBuilder(box, start, num)
         yield builder
-        self.lines.extend(builder.build())
+        mapper, lines = builder.build()
+        self.lines.extend(lines)
+        self.add_mapper(mapper)
         self.lines.append("")
 
 class ListBuilder:
     def __init__(self, box, start, num):
         self.lines = []
         self.box = box
+        self.mapper = Mapper()
         self.numbered = start is not None
         self.count = start if start is not None else 1
         self.width = len(str(num))+2 if self.numbered else 6
+
+    def add_index(self):
+        self.mapper.add_index(len(self.lines))
+
+    def add_mapper(self, mapper):
+        self.mapper.add_mapper(len(self.lines), mapper)
 
     def incr(self):
         self.count +=1
@@ -114,14 +162,17 @@ class ListBuilder:
         return (" "*pad) + n
 
     def build(self):
-        return [(" "* self.box.indent)+line for line in self.lines]
+        return self.mapper, [(" "* self.box.indent)+line for line in self.lines]
 
     @contextmanager
     def build_block_item(self):
+        self.add_index()
         box = RenderBox(0, self.box.width-self.width, self.box.height)
         builder = BlockBuilder(box)
         yield builder
-        for i, line in enumerate(builder.build()):
+        mapper, lines = builder.build()
+        self.add_mapper(mapper)
+        for i, line in enumerate(lines):
             if i == 0:
                 self.lines.append(self.incr() + line)
             else:
@@ -129,10 +180,13 @@ class ListBuilder:
 
     @contextmanager
     def build_item_span(self):
+        self.add_index()
         box = RenderBox(0, self.box.width-self.width, self.box.height)
         builder = ParaBuilder(box)
         yield builder
-        for i, line in enumerate(builder.build()):
+        mapper, lines = builder.build()
+        self.add_mapper(mapper)
+        for i, line in enumerate(lines):
             if i == 0:
                 self.lines.append(self.incr() + line)
             else:
@@ -142,13 +196,18 @@ class ParaBuilder:
     def __init__(self, box):
         self.lines = []
         self.box = box
+        self.mapper = Mapper()
         self.current_line = []
         self.current_word = []
         self.current_width = 0
+        self.count = 0
+
+    def add_index(self):
+        self.mapper.add_index(len(self.lines))
 
     def build(self):
         self.add_break()
-        return [(" "* self.box.indent)+line for line in self.lines]
+        return self.mapper, [(" "* self.box.indent)+line for line in self.lines]
         
     def _add_text(self, text):
         l = len(text)
@@ -181,6 +240,7 @@ class ParaBuilder:
     def add_break(self):
         self.add_space()
         self._add_break()
+        self.add_index()
         self.whitespace = False
 
     def add_text(self, text):
@@ -250,5 +310,7 @@ def to_ansi(obj, indent, width, height):
         width = 80
     box = RenderBox(indent, width, height)
     builder = BlockBuilder(box)
+    builder.add_index()
     walk(obj, builder)
+    builder.add_index()
     return builder.build()

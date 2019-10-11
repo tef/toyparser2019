@@ -27,8 +27,8 @@ class Plaintext(Response):
         self.lines = lines
     def render(self, width, height):
         if isinstance(self.lines, str):
-            return self.lines.splitlines()
-        return self.lines
+            return [], self.lines.splitlines()
+        return [], self.lines
 
 class Document(Response):
     def __init__(self, obj):
