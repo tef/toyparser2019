@@ -4,7 +4,8 @@ import os
 
 from clgi.errors import Bug, Error
 from clgi.app import App, Router, command, Plaintext, Document
-from toyparser.remarkable.Remarkable import parse, to_html, to_ansi
+from clgi.render import to_ansi
+from toyparser.remarkable.Remarkable import parse, to_html
 
 class AppError(Error):
     pass
