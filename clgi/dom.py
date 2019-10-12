@@ -73,7 +73,7 @@ class HeaderRow(Block):
 
 class NamedBlockDirective(Block):
     def __init__(self, args, text):
-        Block.__init__(self, "directive", args, text)
+        Block.__init__(self, "directive_block", args, text)
 
 class RawBlock(Block):
     def __init__(self, args, text):
@@ -157,6 +157,7 @@ para_directives = { # \foo: ...
         "para": Paragraph,
         "p": Paragraph,
         "h": Heading,
+        "list": ListBlock,
         "heading": Heading,
         "code": CodeBlock,
         "raw": RawBlock,

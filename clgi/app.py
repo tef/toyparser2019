@@ -128,7 +128,7 @@ class App:
                 response = Document(response)
             if not isinstance(response, Response):
                 response = Plaintext(response)
-            pager(response, use_tty=(code == 0))
+            pager(response, use_tty=(code == 0 and 'debug' not in request.ctx and request.mode not in ('debug', 'error')))
         sys.exit(code) 
 
     def parse(self, argv, environ):

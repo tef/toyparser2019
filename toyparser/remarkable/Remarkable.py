@@ -161,7 +161,7 @@ def builder(buf, node, children):
         if text:
             if name == 'list' and text.name == "directive_group":
                 args = args + text.args # pull up spacing
-                return dom.ListBlock(args, [text])
+                return dom.ListBlock(args, text.text)
             if name == 'blockquote' and text.name == "directive_group":
                 new_children = []
                 for c in children[2:]:
