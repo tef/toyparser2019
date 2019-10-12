@@ -51,7 +51,7 @@ class QuoteBlock(Block):
     def __init__(self, args, text):
         Block.__init__(self, "blockquote", args, text)
 
-class BlockItem(Block):
+class ItemBlock(Block):
     def __init__(self, args, text):
         Block.__init__(self, "block_item", args, text)
 
@@ -62,6 +62,10 @@ class Table(Block):
 class Row(Block):
     def __init__(self, args, text):
         Block.__init__(self, "row", args, text)
+
+class CellBlock(Block):
+    def __init__(self, args, text):
+        Block.__init__(self, "cell_block", args, text)
 
 class HeaderRow(Block):
     def __init__(self, args, text):
@@ -115,6 +119,11 @@ class Hardbreak(Inline):
         if args or text: raise Exception('bad')
         Inline.__init__(self, "hardbreak", [],[])
 
+class Newline(Inline):
+    def __init__(self, args=None, text=None):
+        if args or text: raise Exception('bad')
+        Inline.__init__(self, "n", [],[])
+
 class Softbreak(Inline):
     def __init__(self, args=None, text=None):
         if args or text: raise Exception('bad')
@@ -138,9 +147,11 @@ block_directives = { # \foo::begin
         "hr": HorizontalRule,
         "list": ListBlock,
         "blockquote": QuoteBlock,
-        "item": BlockItem,
+        "item": ItemBlock,
         "table": Table,
         "row": Row,
+        "cell": CellBlock,
+        "code": CodeBlock,
 }
 para_directives = { # \foo: ...
         "para": Paragraph,
@@ -156,6 +167,8 @@ para_directives = { # \foo: ...
 inline_directives = {
         "strong": Strong,
         "b": Strong,
+        "br": Hardbreak,
+        "n": Newline,
         "em": Emphasis,
         "emph": Emphasis,
         "emphasis": Emphasis,
@@ -165,5 +178,6 @@ inline_directives = {
         "item": ItemSpan,
         "raw": RawSpan,
         "cell": Cell,
+        "nbsp": Nbsp,
 }
 

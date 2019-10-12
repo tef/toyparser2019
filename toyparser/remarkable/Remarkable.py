@@ -131,7 +131,7 @@ def builder(buf, node, children):
                 if c is None: continue
                 if c.name == 'item_span':
                     text = [dom.Paragraph([], c.text)] if c.text else []
-                    c = dom.BlockItem(c.args, text)
+                    c = dom.ItemBlock(c.args, text)
                 new_children.append(c)
             return dom.ListBlock([], new_children)
 
@@ -148,9 +148,9 @@ def builder(buf, node, children):
             elif len(children) == 3 and children[2].name == "para" and not children[2].args:
                 return dom.ItemSpan(children[0], children[2].text)
             else:
-                return dom.BlockItem(children[0], [c for c in children[2:] if c is not None])
+                return dom.ItemBlock(children[0], [c for c in children[2:] if c is not None])
 
-        return dom.BlockItem(children[0], [c for c in children[2:] if c is not None])
+        return dom.ItemBlock(children[0], [c for c in children[2:] if c is not None])
     if kind == 'item_spacing':
         return node.value
 
@@ -190,7 +190,7 @@ def builder(buf, node, children):
                         if all( len(e.text) == 1 and getattr(e.text[0],'name', '') == 'heading' for e in d[0].text):
                             return dom.HeaderRow([], [dom.Cell([], t.text[0].text) for t in d[0].text])
 
-                        return dom.Row([], [dom.Cell([], t.text) for t in d[0].text])
+                        return dom.Row([], [(dom.CellBlock([], t.text) if t.name =='block_item' else dom.Cell([], t.text)) for t in d[0].text])
                     elif all(getattr(t,'name', '') == 'heading' for t in d):
                         return dom.HeaderRow([], [Cell([], t.text) for t in d])
 

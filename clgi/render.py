@@ -11,6 +11,13 @@ class LineBuilder:
 class RenderBox:
     min_width = 40
 
+    @classmethod
+    def max_width(self, indent, width, height, max_w):
+        if width > max_w:
+            indent = (width-max_w)//2
+            width = max_w
+        return self(indent, width, height)
+
     def __init__(self, indent, width, height):
         self.indent = indent
         self.width = width
@@ -68,15 +75,20 @@ class BlockBuilder:
     def add_mapper(self, mapper):
         self.mapper.add_mapper(len(self.lines), mapper)
 
-
     def build(self):
-        return self.mapper, [(" "* self.box.indent)+line for line in self.lines]
+        def indent(line):
+            if len(line) <= self.box.width:
+                return (" "*self.box.indent) + line
+            else:
+                w = self.box.indent - max(len(line) - self.box.width, 0)//2
+                return (" "*w) + line
+        return self.mapper, [indent(line) for line in self.lines]
 
     def add_code_block(self, text):
         self.add_index()
         lines = text.splitlines()
-        indent = 4
-        self.lines.extend((" "* indent)+line for line in lines)
+        indent = 2
+        self.lines.extend((" "* indent)+line+(" "*indent) for line in lines)
         self.lines.append("")
 
     def add_hr(self):
@@ -97,6 +109,18 @@ class BlockBuilder:
         mapper, lines = builder.build()
         self.add_mapper(mapper)
         self.lines.extend(lines)
+        self.lines.append("")
+
+    @contextmanager
+    def build_table(self, cols):
+        self.add_index()
+        builder = TableBuilder(self.box, cols)
+        yield builder
+        lines = builder.build()
+        for line in lines:
+            pad = max(0, self.box.width-len(line)) //2
+            self.lines.append((" "*pad)+line)
+
         self.lines.append("")
 
     @contextmanager
@@ -136,6 +160,88 @@ class BlockBuilder:
         self.lines.extend(lines)
         self.add_mapper(mapper)
         self.lines.append("")
+
+class TableBuilder:
+    def __init__(self, box, cols):
+        self.box = box
+        self.mapper = Mapper()
+        self.cols = cols
+        self.rows = []
+
+
+    def build(self):
+        max_widths = list(0 for _ in range(self.cols))
+        for r, row in enumerate(self.rows):
+            for c, col in enumerate(row):
+                for line in col:
+                    max_widths[c] = max(max_widths[c], len(line))
+        lines = []
+        line = []
+        line.append("+")
+        for x in range(self.cols):
+            pad = max_widths[x]+2
+            line.append("-"*pad)
+            line.append("+")
+        division = "".join(line)
+        lines.append(division)
+
+        for r, row in enumerate(self.rows):
+            for l in range(max(len(c) for c in row)):
+                line = []
+                for x, col in enumerate(row):
+                    line.append("| ")
+                    if l < len(col):
+                        cur = col[l]
+                        pad = max_widths[x]- len(cur) 
+                        line.append(" "*(pad//2))
+                        line.append(cur)
+                        line.append(" "*(pad-pad//2))
+                    else:
+                        pad = max_widths[x]
+                        line.append(" "*pad)
+
+
+                    line.append(" ")
+                line.append("|")
+                lines.append("".join(line))
+            lines.append(division)
+
+        return lines
+
+    @contextmanager
+    def add_row(self):
+        builder = RowBuilder(self.box, self.cols)
+        yield builder
+        cols = builder.build()
+        self.rows.append(cols)
+
+
+class RowBuilder:
+    def __init__(self, box, cols):
+        self.lines = []
+        self.box = box
+        self.width = max(10, (box.width-2) // cols)
+        self.columns = []
+
+    def build(self):
+        return self.columns
+
+    @contextmanager
+    def add_column(self):
+        box = RenderBox(0, self.width-2, self.box.height)
+        builder = ParaBuilder(box)
+        yield builder
+        mapper, lines = builder.build()
+        self.columns.append(lines)
+
+    @contextmanager
+    def add_block_column(self):
+        box = RenderBox(0, self.width-2, self.box.height)
+        builder = BlockBuilder(box)
+        yield builder
+        mapper, lines = builder.build()
+        self.columns.append(lines)
+
 
 class ListBuilder:
     def __init__(self, box, start, num):
@@ -212,7 +318,7 @@ class ParaBuilder:
     def _add_text(self, text):
         l = len(text)
         l = l +1 if self.current_line else l
-        if l + self.current_width > self.box.width:
+        if l + self.current_width > self.box.width and self.current_width > 0:
             self._add_break()
         if self.current_line:
             self.current_line.append(" ")
@@ -272,6 +378,21 @@ def to_ansi(obj, indent, width, height):
             with builder.build_heading(obj.get_arg('level')) as p:
                 for word in obj.text:
                     walk_inline(word, p)
+        elif obj.name == "table":
+            cols = len(obj.text[0].text)
+            with builder.build_table(cols) as t:
+                for row in obj.text:
+                    with t.add_row() as b:
+                        for cell in row.text:
+                            if cell.name == 'cell_block':
+                                with b.add_block_column() as c:
+                                    for x in cell.text:
+                                        walk(x, c)
+                            else:
+                                with b.add_column() as c:
+                                    for x in cell.text:
+                                        walk_inline(x, c)
+
         elif obj.name == "list":
             with builder.build_list(obj.get_arg('start'), len(obj.text)) as l:
                 for item in obj.text:
@@ -286,6 +407,7 @@ def to_ansi(obj, indent, width, height):
 
 
     def walk_inline(obj, builder):
+        if obj is None: return
         if obj == " ":
             builder.add_space()
         elif isinstance(obj, str):
@@ -293,22 +415,25 @@ def to_ansi(obj, indent, width, height):
                 builder.add_text(obj)
         elif obj.name == "hardbreak" or obj.name == "n":
             builder.add_break()
+        elif obj.name == "nbsp":
+            builder.add_text(" ")
         elif obj.name == "softbreak":
             builder.add_space()
         elif obj.name == 'code_span':
-            text = " ".join(obj.text).strip()
+            def walk_code(obj):
+                if isinstance(obj, str): return obj
+                return ""
+            text = " ".join(walk_code(c) for c in obj.text).strip()
             builder.add_code_text(text)
         else:
             builder.add_text(f"{obj.name}{{")
-            for o in obj.text:
-                walk_inline(o, builder)
+            if obj.text:
+                for o in obj.text:
+                    walk_inline(o, builder)
             builder.add_text("}")
     
 
-    if width > 80:
-        indent = (width-80)//2
-        width = 80
-    box = RenderBox(indent, width, height)
+    box = RenderBox.max_width(indent, width, height, 90)
     builder = BlockBuilder(box)
     builder.add_index()
     walk(obj, builder)
