@@ -60,13 +60,13 @@ class Console:
 
         out = "\r\n".join(lines)
         self.stdout.write(out)
+        self.stdout.write(f"\x1b[{self.height};{0}H")
         self.stdout.flush()
         return
 
+    def flash(self, lines):
         if isinstance(lines, str):
             lines = lines.splitlines()
-
-
 
         lines = [line[:self.width] + " "*max(0, self.width-len(line)) for line in lines]
         flash = []
@@ -95,7 +95,6 @@ class Console:
         #    self.stdout.write("\r\n".join(line[:self.width] for line in lines))
         #else:
         #    self.stdout.write(lines)
-        self.stdout.write(f"\x1b[{self.height};{0}H")
         self.stdout.flush()
 
     def get_buf(self, size):
