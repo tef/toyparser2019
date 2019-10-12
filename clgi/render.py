@@ -106,9 +106,15 @@ class BlockBuilder:
         box = self.box.shrink(0.8, indent=True)
         builder = BlockBuilder(box)
         yield builder
+        width = max(len(l) for l in builder.lines)
         mapper, lines = builder.build()
+        pad = (box.width - width)
+        line = (" "*(pad//2+box.indent)) + ("-"*width) + (" "*(pad-pad//2))
+        self.lines.append(line)
+        self.lines.append("")
         self.add_mapper(mapper)
         self.lines.extend(lines)
+        self.lines.append(line)
         self.lines.append("")
 
     @contextmanager
@@ -139,15 +145,18 @@ class BlockBuilder:
     def build_heading(self, level):
         self.add_index()
         amount = [0.5, 0.6, 0.7, 0.8, 0.9, 0.9]
+        wings = "*" *(6-level)
         box = self.box.shrink(amount[level])
+        box.width -= 2*len(wings)+2
         builder = ParaBuilder(box)
         yield builder
         mapper, lines = builder.build()
         self.add_mapper(mapper)
         for line in lines:
-            pad = max(0, self.box.width-len(line)) //2
-            self.lines.append((" "*pad)+line)
-        self.lines.append("")
+            pad = max(0, self.box.width-len(line)-2*len(wings)-2) 
+            line = ((" "*(pad//2)) + line + (" " * (pad-pad//2)) )
+            line = wings +" " + line + " "+wings
+            self.lines.append(line)
         self.lines.append("")
 
     @contextmanager
