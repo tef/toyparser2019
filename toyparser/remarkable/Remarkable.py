@@ -519,6 +519,7 @@ html_tags = {
        "row": "<tr>{text}</tr>\n",
        "division": "",
        "cell": "<td>{text}</td>",
+       "cell_block": "<td>{text}</td>",
        "nbsp": "&nbsp;",
        "strike": "<del>{text}</del>",
        "strong": "<strong>{text}</strong>",

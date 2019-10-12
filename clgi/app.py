@@ -19,8 +19,25 @@ from . import dom
 
 from .render import to_ansi
 
+def to_response(response):
+    if isinstance(response, dom.Directive):
+        response = Document(response)
+    if not isinstance(response, Response):
+        response = Plaintext(response)
+    return response
+
 class Response:
     pass
+
+class Multiple(Response):
+    def __init__(self, original, extra):
+        self.original = original
+        self.extra = extra
+
+    def render(self, width, height):
+        mapping1, lines1 = self.original.render(width, height)
+        mapping2, lines2 = self.original.render(width, height)
+        return {}, lines1 + lines2
 
 class Plaintext(Response):
     def __init__(self, lines):
@@ -123,11 +140,8 @@ class App:
             #    code, response = -1, ["".join(traceback.format_exception(*sys.exc_info()))]
             #    break
 
+        response = to_response(response)
         if response:
-            if isinstance(response, dom.Directive):
-                response = Document(response)
-            if not isinstance(response, Response):
-                response = Plaintext(response)
             pager(response, use_tty=(code == 0 and 'debug' not in request.ctx and request.mode not in ('debug', 'error')))
         sys.exit(code) 
 
@@ -222,7 +236,9 @@ class App:
             start = time.monotonic()
             out = self.command(request, _code)
             end = time.monotonic()
-            out.extend(("", str(end-start)))
+            out = to_response(out)
+            extra = Plaintext(f"{end-start}")
+            out = Multiple(out, extra)
 
             return code, out
 
@@ -235,7 +251,9 @@ class App:
             pr.disable()
             s = io.StringIO()
             pstats.Stats(pr, stream=s).strip_dirs().sort_stats(-1).print_stats()
-            out.extend(("", s.getvalue()))
+            out = to_response(out)
+            extra = Plaintext(s.getvalue())
+            out = Multiple(out, extra)
 
             return code, out
 
