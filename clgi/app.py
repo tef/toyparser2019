@@ -36,8 +36,8 @@ class Multiple(Response):
 
     def render(self, width, height):
         mapping1, lines1 = self.original.render(width, height)
-        mapping2, lines2 = self.original.render(width, height)
-        return {}, lines1 + lines2
+        mapping2, lines2 = self.extra.render(width, height)
+        return {}, lines1 + [""] + lines2
 
 class Plaintext(Response):
     def __init__(self, lines):
@@ -237,7 +237,7 @@ class App:
             out = self.command(request, _code)
             end = time.monotonic()
             out = to_response(out)
-            extra = Plaintext(f"{end-start}")
+            extra = Plaintext([f"{end-start}"])
             out = Multiple(out, extra)
 
             return code, out
