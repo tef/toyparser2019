@@ -240,6 +240,8 @@ class RowBuilder:
         builder = BlockBuilder(box)
         yield builder
         mapper, lines = builder.build()
+        while lines[-1] == "":
+            lines.pop()
         self.columns.append(lines)
 
 

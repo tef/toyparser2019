@@ -251,7 +251,7 @@ def tty(stdin, stdout, stderr, bracketed_paste=True):
     )
     # Dont wait for input
     new_term[-1][termios.VMIN] = 0
-    new_term[-1][termios.VTIME] = 0
+    new_term[-1][termios.VTIME] = 1
 
     def resizeHandler(signum, frame):
         raise Redraw()

@@ -3,9 +3,13 @@
 }
 # Remark(able), a restructured markup format.
 
+---
+
 > I also dream about a modern replacement for LaTeX designed from the ground up
 to target multiple output formats (at least PDF, HTML, EPUB).
 > \em{John MacFarlane, author of Pandoc, editor of CommonMark.}
+
+---
 
 ## Why Remark?
 
