@@ -276,8 +276,8 @@ def builder(buf, node, children):
         left = buf[node.start] == ":"
         right = buf[node.end-1] == ":"
         if left and right: return "center"
-        if left: return "left"
         if right: return "right"
+        if left: return "left"
         return "default"
     if kind == "table_row":
         return dom.Row([], children)
@@ -1215,7 +1215,6 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                         self.literal("|")
                         self.whitespace()
                         with self.capture_node("column_align"):
-                            self.whitespace()
                             with self.optional(): self.literal(":")
                             with self.repeat(min=1): self.literal("-")
                             with self.optional(): self.literal(":")

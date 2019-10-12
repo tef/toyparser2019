@@ -112,9 +112,9 @@ class BlockBuilder:
         self.lines.append("")
 
     @contextmanager
-    def build_table(self, cols):
+    def build_table(self, cols, align):
         self.add_index()
-        builder = TableBuilder(self.box, cols)
+        builder = TableBuilder(self.box, cols, align)
         yield builder
         lines = builder.build()
         for line in lines:
@@ -162,11 +162,12 @@ class BlockBuilder:
         self.lines.append("")
 
 class TableBuilder:
-    def __init__(self, box, cols):
+    def __init__(self, box, cols, align):
         self.box = box
         self.mapper = Mapper()
         self.cols = cols
         self.rows = []
+        self.align = align
 
 
     def build(self):
@@ -193,9 +194,17 @@ class TableBuilder:
                     if l < len(col):
                         cur = col[l]
                         pad = max_widths[x]- len(cur) 
-                        line.append(" "*(pad//2))
-                        line.append(cur)
-                        line.append(" "*(pad-pad//2))
+                        align = self.align.get(x, "default")
+                        if align == "left":
+                            line.append(cur)
+                            line.append(" "*pad)
+                        elif align == "right":
+                            line.append(" "*pad)
+                            line.append(cur)
+                        else:
+                            line.append(" "*(pad//2))
+                            line.append(cur)
+                            line.append(" "*(pad-pad//2))
                     else:
                         pad = max_widths[x]
                         line.append(" "*pad)
@@ -382,7 +391,8 @@ def to_ansi(obj, indent, width, height):
                     walk_inline(word, p)
         elif obj.name == "table":
             cols = len(obj.text[0].text)
-            with builder.build_table(cols) as t:
+            align = dict(enumerate(obj.get_arg('column_align') or ()))
+            with builder.build_table(cols, align) as t:
                 for row in obj.text:
                     with t.add_row() as b:
                         for cell in row.text:
@@ -425,7 +435,7 @@ def to_ansi(obj, indent, width, height):
             def walk_code(obj):
                 if isinstance(obj, str): return obj
                 return ""
-            text = " ".join(walk_code(c) for c in obj.text).strip()
+            text = "".join(walk_code(c) for c in obj.text).strip()
             builder.add_code_text(text)
         else:
             builder.add_text(f"{obj.name}{{")

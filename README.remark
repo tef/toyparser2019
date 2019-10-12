@@ -32,7 +32,7 @@ of a parsing evaluation grammar. It weighs in about half the size of CommonMark.
 Remark has markdown-like rules for annotating text:
 
 | Remark | Result | Raw HTML |
-| ------ | ------ | --- |
+| :-- | :----: | -------: |
 | ``\* \` \> \# \\`` | \* \` \> \# \\ | ``* ` &gt; # \`` |
 | `*text*`, `**text**`, or `***text***` | *text* | `<strong>text</strong>` |
 | `_text_`, `__text__`, or `___text___` | _text_ | `<em>text</em>` |
@@ -44,7 +44,7 @@ A remark document is a collection of blocks, which contain paragraphs. Inside a 
 spaces are treated as one, and a paragraph ends when a new block starts, or after two newlines.
 
 | Remark | Result | Raw HTML |
-| ------ | ------ | --- |
+| :----- | :----: | -------: |
 | `text     text` | text text | `text text` |
 | `text\     text` | text\nbsp;text | `text&nbsp;text` |
 | \code{text\\\br;text} | text\br;text | `text<br/>text` |
@@ -53,7 +53,7 @@ Blocks are also quite similar to markdown. Headings, Lists, Code Blocks, Blockqu
 work almost exactly the same. Unlike markdown, a list cannot have more than one blank line between items, 
 and a blockquote only has a `>` at the start.
 
-\table:
+\table[column_align: ["left", "left", "left"]]:
   - - # Remark
     - # Result
     - # HTML
