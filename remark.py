@@ -21,9 +21,9 @@ def app_error(request, code):
     if filename:
         return ["app error: {}".format(filename)]
 
-@router.on("convert", "convert:html") # no path given
+@router.on("convert", "convert:html") 
 @command(args=dict(file="path"))
-def Remark(ctx, file):
+def ConvertHtml(ctx, file):
     app = ctx['app']
     name = ctx['name']
     filename = os.path.relpath(file)
@@ -32,9 +32,9 @@ def Remark(ctx, file):
         text = to_html(dom) 
     return Plaintext(text)
 
-@router.on("convert:ansi") # no path given
+@router.on("convert:ansi") 
 @command(args=dict(heading="--str?", width="--int?", height="--int?", file="path"))
-def Remark(ctx, file, width, height, heading):
+def ConvertAnsi(ctx, file, width, height, heading):
     app = ctx['app']
     name = ctx['name']
     width = width or 80
@@ -45,9 +45,9 @@ def Remark(ctx, file, width, height, heading):
         mapping, text = to_ansi(dom, indent=0, width=width, height=height, double=(heading=="double"))
     return Plaintext(text)
 
-@router.on("view") # no path given
+@router.on("view") 
 @command(args=dict(file="path"))
-def Remark(ctx, file):
+def View(ctx, file):
     app = ctx['app']
     name = ctx['name']
     filename = os.path.relpath(file)
