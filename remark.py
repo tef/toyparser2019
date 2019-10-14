@@ -33,14 +33,16 @@ def Remark(ctx, file):
     return Plaintext(text)
 
 @router.on("convert:ansi") # no path given
-@command(args=dict(file="path"))
-def Remark(ctx, file):
+@command(args=dict(heading="--str?", width="--int?", height="--int?", file="path"))
+def Remark(ctx, file, width, height, heading):
     app = ctx['app']
     name = ctx['name']
+    width = width or 80
+    height = height or 24
     filename = os.path.relpath(file)
     with open(filename) as fh:
         dom = parse(fh.read())
-        text = dom.to_ansi(indent=0, width=80, height=24) 
+        mapping, text = to_ansi(dom, indent=0, width=width, height=height, double=(heading=="double"))
     return Plaintext(text)
 
 @router.on("view") # no path given

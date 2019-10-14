@@ -32,6 +32,14 @@ class HorizontalRule(Block):
         if text: raise Exception('bad')
         Block.__init__(self, "hr", args, [])
 
+class Section(Block):
+    def __init__(self, args, text):
+        Section.__init__(self, "section", args, text)
+
+class Division(Block):
+    def __init__(self, args, text):
+        Section.__init__(self, "division", args, text)
+
 class Heading(Block):
     def __init__(self, args, text):
         Block.__init__(self, "heading", args, text)
@@ -152,6 +160,8 @@ block_directives = { # \foo::begin
         "row": Row,
         "cell": CellBlock,
         "code": CodeBlock,
+        "section": Section,
+        "division": Division,
 }
 para_directives = { # \foo: ...
         "para": Paragraph,
@@ -163,6 +173,7 @@ para_directives = { # \foo: ...
         "raw": RawBlock,
         "row": Row,
         "cell": Cell,
+        "div": Division,
 }
 
 inline_directives = {
@@ -178,6 +189,7 @@ inline_directives = {
         "code_span": CodeSpan,
         "item": ItemSpan,
         "raw": RawSpan,
+        "span": Span,
         "cell": Cell,
         "nbsp": Nbsp,
 }

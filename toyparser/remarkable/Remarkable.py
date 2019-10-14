@@ -264,7 +264,7 @@ def builder(buf, node, children):
         args = []
         for c in children:
             if c is None: continue
-            if getattr(c, 'name', '') == "division":
+            if getattr(c, 'name', '') == "table_heading_rule":
                 args.append(('column_align', c.text))
             else:
                 text.append(c)
@@ -283,8 +283,8 @@ def builder(buf, node, children):
         return dom.Row([], children)
     if kind == "table_heading":
         return dom.HeaderRow([], children)
-    if kind == "table_division":
-        return dom.Block('division', [], children)
+    if kind == "table_heading_rule":
+        return dom.Block('table_heading_rule', [], children)
 
     if kind == 'block_rson':
         text = []
@@ -511,13 +511,14 @@ html_tags = {
        "thead": "<thead><tr>{text}</tr></thead>\n",
        "para": "<p>{text}</p>\n",
        "paragraph": "<p>{text}</p>\n",
+       "division": "<div>{text}</div>\n",
+       "section": "<section>{text}</section>\n",
        "hardbreak": "<br/>\n",
        "softbreak": "\n",
        "emoji":"<span class='emoji'>{text}</span>",
        "n": "\n",
        "table": "<table>\n{text}</table>\n",
        "row": "<tr>{text}</tr>\n",
-       "division": "",
        "cell": "<td>{text}</td>",
        "cell_block": "<td>{text}</td>",
        "nbsp": "&nbsp;",
@@ -528,6 +529,7 @@ html_tags = {
        "item_span": "<li>{text}</li>",
        "block_raw": "{text}",
        "raw_span": "{text}",
+       "span": "<span>{text}</span>\n",
 }
 
 def to_html(obj):
@@ -1211,7 +1213,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 
                 self.indent()
 
-                with self.capture_node('table_division'):
+                with self.capture_node('table_heading_rule'):
                     with self.repeat(min=c, max=c):
                         self.literal("|")
                         self.whitespace()

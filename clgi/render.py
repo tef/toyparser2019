@@ -30,7 +30,7 @@ def walk(obj, builder):
         align = dict(enumerate(obj.get_arg('column_align') or ()))
         with builder.build_table(cols, align) as t:
             for row in obj.text:
-                with t.add_row() as b:
+                with t.add_row(heading=row.name=='thead') as b:
                     for cell in row.text:
                         if cell.name == 'cell_block':
                             with b.add_block_column() as c:
@@ -42,7 +42,7 @@ def walk(obj, builder):
                                     walk_inline(x, c)
 
     elif obj.name == "list":
-        with builder.build_list(obj.get_arg('start'), len(obj.text)) as l:
+        with builder.build_list(obj.get_arg('start'), obj.get_arg('bullet'), len(obj.text)) as l:
             for item in obj.text:
                 if item.name == 'item_span':
                     with l.build_item_span() as p:
@@ -161,8 +161,125 @@ to_sans_italic = dict()
 to_sans_italic.update(zip(range(ord('a'), ord('z')+1),range(0x1d622, 0x1d63b+1)))
 to_sans_italic.update(zip(range(ord('A'), ord('Z')+1),range(0x1d608, 0x1d621+1)))
 
+class Box:
+    top_left  = "\u250c"
+    top_right = "\u2510"
+    bot_left  = "\u2514"
+    bot_right = "\u2518"
+    horizontal= "\u2500"
+    vertical  = "\u2502"
+    cross     = "\u253c"
+    top_mid   = "\u252c"
+    bot_mid   = "\u2534"
+    left_mid  = "\u251c"
+    right_mid = "\u2524"
+
+    top_left_bold = "\u250F"
+    top_mid_bold = "\u252F"
+    top_mid_left_bold = "\u2531"
+    top_right_bold = "\u2513"
+    left_mid_top_bold = "\u2521"
+    cross_top_bold = "\u2547"
+    right_mid_top_bold = "\u2529"
+    horizontal_bold = "\u2501"
+    vertical_bold = "\u2503"
+    left_mid_bold = "\u2523"
+    cross_bold = "\u254b"
+    cross_bold_left = "\u2549"
+    bot_left_bold = "\u2517"
+    bot_mid_left_bold = "\u2539"
+    bot_mid_left_bold = "\u2539"
+
+    @classmethod
+    def top_line(cls, col_widths, pad):
+        out = []
+        for n, col in enumerate(col_widths):
+            out.append(cls.top_left if n == 0 else cls.top_mid)
+            out.append(cls.horizontal* (col+pad))
+        out.append(cls.top_right)
+        return "".join(out)
+
+    @classmethod
+    def mid_line(cls, col_widths, pad):
+        out = []
+        for n, col in enumerate(col_widths):
+            out.append(cls.left_mid if n == 0 else cls.cross)
+            out.append(cls.horizontal* (col+pad))
+        out.append(cls.right_mid)
+        return "".join(out)
+
+    @classmethod
+    def bot_line(cls, col_widths, pad):
+        out = []
+        for n, col in enumerate(col_widths):
+            out.append(cls.bot_left if n == 0 else cls.bot_mid)
+            out.append(cls.horizontal* (col+pad))
+        out.append(cls.bot_right)
+        return "".join(out)
+    @classmethod
+    def sideways_top_line(cls, col_widths, pad):
+        out = []
+        for n, col in enumerate(col_widths[:-1]):
+            out.append(cls.top_left_bold if n == 0 else cls.top_mid_bold)
+            out.append(cls.horizontal_bold* (col+pad))
+        out.append(cls.top_mid_left_bold)
+        out.append(cls.horizontal* (col_widths[-1]+pad))
+        out.append(cls.top_right)
+        return "".join(out)
+
+    @classmethod
+    def sideways_mid_line(cls, col_widths, pad):
+        out = []
+        for n, col in enumerate(col_widths[:-1]):
+            out.append(cls.left_mid_bold if n == 0 else cls.cross_bold)
+            out.append(cls.horizontal_bold* (col+pad))
+        out.append(cls.cross_bold_left)
+        out.append(cls.horizontal* (pad+col_widths[-1]))
+        out.append(cls.right_mid)
+        return "".join(out)
+
+    @classmethod
+    def sideways_bot_line(cls, col_widths, pad):
+        out = []
+        for n, col in enumerate(col_widths[:-1]):
+            out.append(cls.bot_left_bold if n == 0 else cls.bot_mid_bold)
+            out.append(cls.horizontal_bold* (col+pad))
+        out.append(cls.bot_mid_left_bold)
+        out.append(cls.horizontal* (col_widths[-1]+pad))
+        out.append(cls.bot_right)
+        return "".join(out)
+
+    @classmethod
+    def head_top_line(cls, col_widths, pad):
+        out = []
+        for n, col in enumerate(col_widths):
+            out.append(cls.top_left_bold if n == 0 else cls.top_mid_bold)
+            out.append(cls.horizontal_bold* (col+pad))
+        out.append(cls.top_right_bold)
+        return "".join(out)
+
+    @classmethod
+    def head_mid_line(cls, col_widths, pad):
+        out = []
+        for n, col in enumerate(col_widths):
+            out.append(cls.left_mid if n == 0 else cls.cross)
+            out.append(cls.horizontal* (col+pad))
+        out.append(cls.right_mid)
+        return "".join(out)
+    @classmethod
+    def head_bot_line(cls, col_widths, pad):
+        out = []
+        for n, col in enumerate(col_widths):
+            out.append(cls.left_mid_top_bold if n == 0 else cls.cross_top_bold)
+            out.append(cls.horizontal_bold* (col+pad))
+        out.append(cls.right_mid_top_bold)
+        return "".join(out)
+BULLETS = ["\u2022", "\u25e6"]
+
+
 class BlockBuilder:
-    def __init__(self, box):
+    def __init__(self, settings, box):
+        self.settings = settings
         self.lines = []
         self.mapper = Mapper()
         self.box = box
@@ -176,11 +293,12 @@ class BlockBuilder:
 
     def build(self):
         def indent(line):
-            if len(line) <= self.box.width:
-                return (" "*self.box.indent) + line
-            else:
-                w = self.box.indent - max(len(line) - self.box.width, 0)//2
-                return (" "*w) + line
+            w = self.box.indent
+            if len(line) > self.box.width:
+                w = w - max(len(line) - self.box.width, 0)//2
+            if '\x1b#' in line:
+                w = w//2
+            return (" "*w) + line
         return self.mapper, [indent(line) for line in self.lines]
 
     def add_code_block(self, text):
@@ -203,25 +321,28 @@ class BlockBuilder:
     def build_blockquote(self):
         self.add_index()
         box = self.box.shrink(0.8, indent=True)
-        builder = BlockBuilder(box)
+        builder = BlockBuilder(self.settings, box)
         yield builder
         width = max(len(l) for l in builder.lines)
         mapper, lines = builder.build()
         pad = (box.width - width)
-        line = (" "*(pad//2+box.indent)) + ("-"*width) + (" "*(pad-pad//2))
-        self.lines.append(line)
+        mark_line = (" "*(pad//2+box.indent)) + ("-"*width) + (" "*(pad-pad//2))
+        self.lines.append(mark_line)
         self.lines.append("")
         self.add_mapper(mapper)
-        self.lines.extend(lines)
-        self.lines.append(line)
+        for line in lines:
+            pad = (box.width - len(line))
+            self.lines.append((" "*(pad//2)) + line + (" "*(pad-pad//2)))
+        self.lines.append(mark_line)
         self.lines.append("")
 
     @contextmanager
     def build_table(self, cols, align):
         self.add_index()
-        builder = TableBuilder(self.box, cols, align)
+        builder = TableBuilder(self.settings, self.box, cols, align)
         yield builder
-        lines = builder.build()
+        mapper, lines = builder.build()
+        self.add_mapper(mapper)
         for line in lines:
             pad = max(0, self.box.width-len(line)) //2
             self.lines.append((" "*pad)+line)
@@ -232,7 +353,7 @@ class BlockBuilder:
     def build_para(self):
         self.add_index()
         box = RenderBox(0, self.box.width, self.box.height)
-        builder = ParaBuilder(box)
+        builder = ParaBuilder(self.settings, box)
         builder.add_space()
         yield builder
         mapper, lines= builder.build()
@@ -244,25 +365,42 @@ class BlockBuilder:
     def build_heading(self, level):
         self.add_index()
         amount = [0.5, 0.6, 0.7, 0.8, 0.9, 0.9]
-        wings = "*" *(6-level)
-        box = self.box.shrink(amount[level])
-        box.width -= 2*len(wings)+2
-        builder = ParaBuilder(box)
-        yield builder
-        mapper, lines = builder.build()
-        self.add_mapper(mapper)
-        for line in lines:
-            pad = max(0, self.box.width-len(line)-2*len(wings)-2) 
-            line = ((" "*(pad//2)) + line + (" " * (pad-pad//2)) )
-            line = wings +" " + line + " "+wings
-            self.lines.append(line)
+        if self.settings.get("double") and self.box.width >40:
+            # wings = "*" *(6-level)
+            box = self.box.shrink(amount[level])
+            box.width = box.width //2
+            # box.width = a2*len(wings)+2
+            builder = ParaBuilder(self.settings, box)
+            yield builder
+            mapper, lines = builder.build()
+            self.add_mapper(mapper)
+            for line in lines:
+                pad = max(0, self.box.width-(len(line)*2))//2 # -2*len(wings)-2) 
+                line = ((" "*(pad//2)) + line + (" " * (pad-pad//2)) )
+                # line = wings +" " + line + " "+wings
+                self.lines.append("\x1b#3"+ line)
+                self.lines.append("\x1b#4"+ line)
+        else:
+            wings = "*" *(6-level)
+            box = self.box.shrink(amount[level])
+            box.width -= 2*len(wings)+2
+            builder = ParaBuilder(self.settings, box)
+            yield builder
+            mapper, lines = builder.build()
+            self.add_mapper(mapper)
+            for line in lines:
+                pad = max(0, self.box.width-len(line) -2*len(wings)-2) 
+                line = ((" "*(pad//2)) + line + (" " * (pad-pad//2)) )
+                line = wings +" " + line + " "+wings
+                self.lines.append(line)
+
         self.lines.append("")
 
     @contextmanager
-    def build_list(self, start, num):
+    def build_list(self, start, bullet, num):
         self.add_index()
         box = RenderBox(0, self.box.width, self.box.height)
-        builder = ListBuilder(box, start, num)
+        builder = ListBuilder(self.settings, box, start, bullet, num)
         yield builder
         mapper, lines = builder.build()
         self.lines.extend(lines)
@@ -270,35 +408,100 @@ class BlockBuilder:
         self.lines.append("")
 
 class TableBuilder:
-    def __init__(self, box, cols, align):
+    def __init__(self, settings, box, cols, align):
+        self.settings = settings
         self.box = box
         self.mapper = Mapper()
         self.cols = cols
         self.rows = []
+        self.headings = []
         self.align = align
 
+    def add_index(self, lines):
+        self.mapper.add_index(len(lines))
 
     def build(self):
         max_widths = list(0 for _ in range(self.cols))
-        for r, row in enumerate(self.rows):
+        for r, row in enumerate(self.headings + self.rows):
             for c, col in enumerate(row):
                 for line in col:
                     max_widths[c] = max(max_widths[c], len(line))
-        lines = []
-        line = []
-        line.append("+")
-        for x in range(self.cols):
-            pad = max_widths[x]+2
-            line.append("-"*pad)
-            line.append("+")
-        division = "".join(line)
-        lines.append(division)
+        total_width = sum(max_widths)+3*len(max_widths)+1
 
-        for r, row in enumerate(self.rows):
+        sideways = False
+        headings = len(self.headings)
+        if total_width + self.settings['indent'] > self.settings['width']:
+            headers_width = [max(max(len(l) for l in c) for c in r) for r in self.headings]
+            max_width_rows = max(max(max(len(l) for l in c) for c in r) for r in self.rows)
+            max_width_header = max(headers_width)
+            if max_width_header + max_width_rows + 7 < total_width:
+                new_rows = []
+                for r in self.rows:
+                    x = self.headings +[r] 
+                    new_rows.extend(zip(*x))
+                    new_rows.append(None)
+                if new_rows[-1] is None: new_rows.pop()
+                self.cols = len(self.headings) + 1
+                self.rows = new_rows
+                self.headings = []
+                max_widths = headers_width + [max_width_rows]
+                sideways = True
+                self.align = dict(enumerate((["left"] * headings) + ["right"], 0))
+
+        lines = []
+        if sideways:
+            top_line = Box.sideways_top_line(max_widths, 2)
+            mid_line = Box.sideways_mid_line(max_widths, 2)
+            bot_line = Box.sideways_bot_line(max_widths, 2)
+        else:
+            head_top_line = Box.head_top_line(max_widths, 2)
+            head_mid_line = Box.head_mid_line(max_widths, 2)
+            head_bot_line = Box.head_bot_line(max_widths, 2)
+            top_line = Box.top_line(max_widths, 2)
+            mid_line = Box.mid_line(max_widths, 2)
+            bot_line = Box.bot_line(max_widths, 2)
+
+
+        last_null = False
+        for r, row in enumerate(self.headings + self.rows):
+            if sideways:
+                if row is None:
+                    if r > 0: lines.append(bot_line)
+                    last_null = True
+                    continue
+                if r == 0:
+                    self.add_index(lines)
+                    lines.append(top_line)
+                elif last_null:
+                    self.add_index(lines)
+                    lines.append(top_line)
+                else:
+                    lines.append(mid_line)
+                last_null = False
+            elif self.headings:
+                if r == 0:
+                    self.add_index(lines)
+                    lines.append(head_top_line)
+                elif r < len(self.headings):
+                    lines.append(head_mid_line)
+                elif r == len(self.headings):
+                    lines.append(head_bot_line)
+                else:
+                    self.add_index(lines)
+                    lines.append(mid_line)
+            else:
+                if r == 0:
+                    lines.append(top_line)
+                else:
+                    lines.append(mid_line)
+
             for l in range(max(len(c) for c in row)):
                 line = []
                 for x, col in enumerate(row):
-                    line.append("| ")
+                    if sideways or r < len(self.headings):
+                        line.append(Box.vertical_bold+" ")
+                    else:
+                        line.append(Box.vertical+" ")
                     if l < len(col):
                         cur = col[l]
                         pad = max_widths[x]- len(cur) 
@@ -319,22 +522,29 @@ class TableBuilder:
 
 
                     line.append(" ")
-                line.append("|")
+                if r < len(self.headings):
+                    line.append(Box.vertical_bold)
+                else:
+                    line.append(Box.vertical)
                 lines.append("".join(line))
-            lines.append(division)
+        lines.append(bot_line)
 
-        return lines
+        return self.mapper, lines
 
     @contextmanager
-    def add_row(self):
-        builder = RowBuilder(self.box, self.cols)
+    def add_row(self,heading = False):
+        builder = RowBuilder(self.settings, self.box, self.cols)
         yield builder
         cols = builder.build()
-        self.rows.append(cols)
+        if heading:
+            self.headings.append(cols)
+        else:
+            self.rows.append(cols)
 
 
 class RowBuilder:
-    def __init__(self, box, cols):
+    def __init__(self, settings, box, cols):
+        self.settings = settings
         self.lines = []
         self.box = box
         self.width = max(10, (box.width-2) // cols)
@@ -346,7 +556,7 @@ class RowBuilder:
     @contextmanager
     def add_column(self):
         box = RenderBox(0, self.width-2, self.box.height)
-        builder = ParaBuilder(box)
+        builder = ParaBuilder(self.settings, box)
         yield builder
         mapper, lines = builder.build()
         self.columns.append(lines)
@@ -354,7 +564,7 @@ class RowBuilder:
     @contextmanager
     def add_block_column(self):
         box = RenderBox(0, self.width-2, self.box.height)
-        builder = BlockBuilder(box)
+        builder = BlockBuilder(self.settings, box)
         yield builder
         mapper, lines = builder.build()
         while lines[-1] == "":
@@ -363,13 +573,15 @@ class RowBuilder:
 
 
 class ListBuilder:
-    def __init__(self, box, start, num):
+    def __init__(self, settings, box, start, bullet, num):
+        self.settings = settings
         self.lines = []
         self.box = box
         self.mapper = Mapper()
-        self.numbered = start is not None
+        self.numbered = start is not None and bullet is None
         self.count = start if start is not None else 1
-        self.width = len(str(num))+2 if self.numbered else 6
+        self.bullet = bullet or BULLETS[self.settings.get('list_depth',0)%len(BULLETS)]
+        self.width = len(str(num))+2 if self.numbered else 7-len(self.bullet)
 
     def add_index(self):
         self.mapper.add_index(len(self.lines))
@@ -382,7 +594,7 @@ class ListBuilder:
         if self.numbered:
             n = str(self.count)+". "
         else:
-            n = "\u2022 "
+            n = f"{self.bullet} "
         pad= max(0, self.width - len(n))
         return (" "*pad) + n
 
@@ -393,8 +605,10 @@ class ListBuilder:
     def build_block_item(self):
         self.add_index()
         box = RenderBox(0, self.box.width-self.width, self.box.height)
-        builder = BlockBuilder(box)
+        builder = BlockBuilder(self.settings, box)
+        self.settings['list_depth'] = self.settings.get('list_depth',0) +1
         yield builder
+        self.settings['list_depth'] = self.settings['list_depth'] -1
         mapper, lines = builder.build()
         self.add_mapper(mapper)
         for i, line in enumerate(lines):
@@ -407,7 +621,7 @@ class ListBuilder:
     def build_item_span(self):
         self.add_index()
         box = RenderBox(0, self.box.width-self.width, self.box.height)
-        builder = ParaBuilder(box)
+        builder = ParaBuilder(self.settings, box)
         yield builder
         mapper, lines = builder.build()
         self.add_mapper(mapper)
@@ -418,7 +632,8 @@ class ListBuilder:
                 self.lines.append((" "*self.width) + line)
 
 class ParaBuilder:
-    def __init__(self, box):
+    def __init__(self, settings, box):
+        self.settings = settings
         self.lines = []
         self.box = box
         self.mapper = Mapper()
@@ -473,9 +688,10 @@ class ParaBuilder:
 
 
 
-def to_ansi(obj, indent, width, height):
+def to_ansi(obj, indent, width, height, double=True):
     box = RenderBox.max_width(indent, width, height, 90)
-    builder = BlockBuilder(box)
+    settings = {'double': double, 'width': width, 'height': height, 'indent': indent}
+    builder = BlockBuilder(settings, box)
     builder.add_index()
     walk(obj, builder)
     builder.add_index()

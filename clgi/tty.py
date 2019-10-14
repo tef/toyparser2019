@@ -56,7 +56,7 @@ class Console:
 
     def render(self, obj):
         self.stdout.write("\x1b[H\x1b[J")
-        mapping, lines = obj.render(width=self.width, height=self.height)
+        lines = obj.render(width=self.width, height=self.height)
 
         out = "\r\n".join(lines)
         self.stdout.write(out)
@@ -100,7 +100,7 @@ class Console:
     def get_buf(self, size):
         # fix me, pastebuf > readbuf gives utf8 errors
         if not self.buf:
-            self.buf = self.stdin.read()
+            self.buf = self.stdin.read(1)
 
         if self.buf:
             if not size:
@@ -206,7 +206,7 @@ class LineConsole(Console):
         self.width, self.height = shutil.get_terminal_size((self.width, self.height))
 
     def render(self, obj):
-        mapping, lines = obj.render(self.width, self.height)
+        lines = obj.render(self.width, self.height)
         out = "\r\n".join(lines)
         self.stdout.write(out)
         if not out.endswith("\n"):
@@ -322,7 +322,7 @@ class Viewport:
 
         lines = [line[self.col: self.col+width] for line in self.buf[self.line:self.line+height]]
 
-        return self.mapping, lines
+        return lines
 
     def left(self, n=8):
         if self.col > 0:
@@ -340,6 +340,15 @@ class Viewport:
         else:
             self.col = top
             return False
+    def scroll_to(self, lineno):
+        lineno = int(lineno)
+        lineno = max(0, min(lineno, len(self.buf)-self.height))
+        if lineno != self.line:
+            self.line = lineno
+            return True
+        else:
+            return False
+
     def up(self, n=1):
         if self.line > 0:
             self.line = max(0, self.line -n) 
@@ -356,6 +365,14 @@ class Viewport:
         else:
             self.line = top
             return False
+
+class NoViewport:
+    def __init__(self, obj, line=0):
+        self.obj = obj
+
+    def render(self, width, height):
+        mapping, buf = self.obj.render(width=width, height=height)
+        return buf
 
 
 def pager(obj, *, use_tty=True):
@@ -400,13 +417,18 @@ def pager(obj, *, use_tty=True):
                                     console.render(viewport)
                                 else:
                                     console.bell()
-                            elif e.name == "text" and e.value == "\x00":
+                            elif e.name == "text" and e.value in ("\x00", "-", "\x7f","\b"):
                                 if viewport.up(console.height):
                                     console.render(viewport)
                                 else:
                                     console.bell()
                             elif e.name == "text" and e.value == " ":
                                 if viewport.down(console.height):
+                                    console.render(viewport)
+                                else:
+                                    console.bell()
+                            elif e.name == "text" and e.value in "0123456789":
+                                if viewport.scroll_to(int(e.value)/10*len(viewport.buf)):
                                     console.render(viewport)
                                 else:
                                     console.bell()
@@ -420,6 +442,6 @@ def pager(obj, *, use_tty=True):
     else:
         console = LineConsole(sys.stdin, sys.stdout, sys.stderr)
         console.resize()
-        console.render(obj)
+        console.render(NoViewport(obj))
 
 main(__name__)
