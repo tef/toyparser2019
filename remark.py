@@ -43,18 +43,19 @@ def ConvertAnsi(ctx, file, width, height, heading):
     with open(filename) as fh:
         dom = parse(fh.read())
         box = RenderBox(indent=0, width=width, height=height)
-        mapping, text = to_ansi(dom, box, double=(heading=="double"))
+        settings = {'double': double, 'width': width, 'height': height}
+        mapping, text = to_ansi(dom, box, settings)
     return Plaintext(text)
 
 @router.on("view") 
-@command(args=dict(file="path"))
-def View(ctx, file):
+@command(args=dict(heading="--str?", width="--int?", height="--int?", file="path"))
+def View(ctx, file, width, height, heading):
     app = ctx['app']
     name = ctx['name']
     filename = os.path.relpath(file)
     with open(filename) as fh:
         dom = parse(fh.read())
-    return dom
+    return Document(dom, double=not (heading!="double"))
 app = App(
     name="remark", 
     version="0.0.1",

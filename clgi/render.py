@@ -434,7 +434,7 @@ class TableBuilder:
 
         sideways = False
         headings = len(self.headings)
-        if total_width + self.settings['indent'] > self.settings['width']:
+        if total_width  > self.settings['width']:
             headers_width = [max(max(line_len(l) for l in c) for c in r) for r in self.headings]
             max_width_rows = max(max(max(line_len(l) for l in c) for c in r) for r in self.rows)
             max_width_header = max(headers_width)
@@ -541,6 +541,7 @@ class TableBuilder:
         yield builder
         cols = builder.build()
         if heading:
+            cols = [[f"\x1b[1m{line}\x1b[0m" for line in lines] for lines in cols]
             self.headings.append(cols)
         else:
             self.rows.append(cols)
@@ -706,8 +707,7 @@ class ParaBuilder:
         self.current_word.append(self.end_code[name])
 
 
-def to_ansi(obj, box, double=True):
-    settings = {'double': double, 'width': box.width, 'height': box.height, 'indent': box.indent}
+def to_ansi(obj, box, settings):
     builder = BlockBuilder(settings, box)
     builder.add_index()
     walk(obj, builder)
