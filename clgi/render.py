@@ -175,7 +175,7 @@ class Box:
     right_mid = "\u2524"
 
     top_left_bold = "\u250F"
-    top_mid_bold = "\u252F"
+    top_mid_bold = "\u2533"
     top_mid_left_bold = "\u2531"
     top_right_bold = "\u2513"
     left_mid_top_bold = "\u2521"
@@ -688,9 +688,8 @@ class ParaBuilder:
 
 
 
-def to_ansi(obj, indent, width, height, double=True):
-    box = RenderBox.max_width(indent, width, height, 90)
-    settings = {'double': double, 'width': width, 'height': height, 'indent': indent}
+def to_ansi(obj, box, double=True):
+    settings = {'double': double, 'width': box.width, 'height': box.height, 'indent': box.indent}
     builder = BlockBuilder(settings, box)
     builder.add_index()
     walk(obj, builder)

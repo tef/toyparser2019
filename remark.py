@@ -4,7 +4,7 @@ import os
 
 from clgi.errors import Bug, Error
 from clgi.app import App, Router, command, Plaintext, Document
-from clgi.render import to_ansi
+from clgi.render import to_ansi, RenderBox
 from toyparser.remarkable.Remarkable import parse, to_html
 
 class AppError(Error):
@@ -42,7 +42,8 @@ def ConvertAnsi(ctx, file, width, height, heading):
     filename = os.path.relpath(file)
     with open(filename) as fh:
         dom = parse(fh.read())
-        mapping, text = to_ansi(dom, indent=0, width=width, height=height, double=(heading=="double"))
+        box = RenderBox(indent=0, width=width, height=height)
+        mapping, text = to_ansi(dom, box, double=(heading=="double"))
     return Plaintext(text)
 
 @router.on("view") 

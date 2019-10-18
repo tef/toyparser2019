@@ -17,7 +17,7 @@ from .argparser import ArgumentParser
 from .tty import pager
 from . import dom
 
-from .render import to_ansi
+from .render import to_ansi, RenderBox
 
 def to_response(response):
     if isinstance(response, dom.Directive):
@@ -48,10 +48,12 @@ class Plaintext(Response):
         return [], self.lines
 
 class Document(Response):
-    def __init__(self, obj):
+    def __init__(self, obj, **args):
         self.obj = obj
+        self.args = args
     def render(self, width, height):
-        return to_ansi(self.obj, 0, width, height)
+        box = RenderBox.max_width(0, width, height, 90)
+        return to_ansi(self.obj, box, **args)
 
 # Errors
 

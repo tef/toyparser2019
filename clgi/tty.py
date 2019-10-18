@@ -301,9 +301,10 @@ class Viewport:
         self.obj = obj
         self.width, self.height = None, None
         self.buf = []
+        self.wide = 0
+        self.sw = 8
         self.mapping = None
         self.line = line
-        self.wide = 0
         self.col = 0
 
     def render(self, width, height):
@@ -319,12 +320,34 @@ class Viewport:
             self.line = min(self.line, len(self.buf))
             self.col = 0
             self.wide = max(len(b) for b in self.buf)
-
-        lines = [line[self.col: self.col+width] for line in self.buf[self.line:self.line+height]]
-
+        
+        lines = []
+        for n in range(self.line, self.line+height):
+            line = []
+            col = 0
+            i = 0
+            buf_line = self.buf[n]
+            if '\x1b#3' in buf_line or  '\x1b#4' in buf_line:
+                w = 2
+            else:
+                w = 1
+            while i < len(buf_line):
+                if buf_line[i:i+4] in ('\x1b[0m', '\x1b[1m', '\x1b[2m', '\x1b[3m', '\x1b[4m'):
+                    line.append(buf_line[i:i+4])
+                    i+=4
+                elif buf_line[i:i+3] in ( '\x1b#3', '\x1b#4'):
+                    line.append(buf_line[i:i+3])
+                    i+=3
+                else:
+                    if self.col <= col < self.col + width:
+                        line.append(buf_line[i])
+                    i+=1
+                    col+=w # handle doublewidth chr
+            lines.append("".join(line))
         return lines
 
-    def left(self, n=8):
+    def left(self, n=None):
+        n = n or self.sw
         if self.col > 0:
             self.col = max(0, self.col -n) 
             return True
@@ -332,7 +355,8 @@ class Viewport:
             self.col = 0
             return False
 
-    def right(self, n=8):
+    def right(self, n=None):
+        n = n or self.sw
         top = max(0, self.wide - self.width)
         if self.col < top:
             self.col = min(self.col +n, top)
