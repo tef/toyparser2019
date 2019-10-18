@@ -55,7 +55,7 @@ def View(ctx, file, width, height, heading):
     filename = os.path.relpath(file)
     with open(filename) as fh:
         dom = parse(fh.read())
-    return Document(dom, double=not (heading!="double"))
+    return Document(dom, double=(heading!="single"))
 app = App(
     name="remark", 
     version="0.0.1",
