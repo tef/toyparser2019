@@ -34,11 +34,11 @@ class HorizontalRule(Block):
 
 class Section(Block):
     def __init__(self, args, text):
-        Section.__init__(self, "section", args, text)
+        Block.__init__(self, "section", args, text)
 
 class Division(Block):
     def __init__(self, args, text):
-        Section.__init__(self, "division", args, text)
+        Block.__init__(self, "division", args, text)
 
 class Heading(Block):
     def __init__(self, args, text):

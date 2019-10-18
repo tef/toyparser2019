@@ -667,9 +667,13 @@ class ParaBuilder:
         self.current_width += l
 
     def _add_break(self):
+        for name in self.effects[::-1]:
+            self.current_line.append(self.end_code[name])
         self.lines.append("".join(self.current_line))
         self.current_line[:] = []
         self.current_width = 0
+        for name in self.effects[::-1]:
+            self.current_line.append(self.start_code[name])
 
     def add_space(self):
         if self.current_word:

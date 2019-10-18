@@ -53,7 +53,7 @@ class Document(Response):
         self.args = args
     def render(self, width, height):
         box = RenderBox.max_width(0, width, height, 90)
-        return to_ansi(self.obj, box, **args)
+        return to_ansi(self.obj, box, **self.args)
 
 # Errors
 
