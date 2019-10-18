@@ -9,7 +9,6 @@ import shutil
 import random
 
 from contextlib import contextmanager 
-from . import dom
 
 def main(name, argv=None, env=None):
     if name != '__main__': return
@@ -318,11 +317,10 @@ class Viewport:
             if position is not None and self.mapping:
                 self.line = self.mapping.line_of(position)
             self.line = min(self.line, len(self.buf))
-            self.col = 0
-            self.wide = max(len(b) for b in self.buf)
         
         lines = []
-        for n in range(self.line, self.line+height):
+        widths = []
+        for n in range(self.line, min(self.line+height, len(self.buf))):
             line = []
             col = 0
             i = 0
@@ -343,7 +341,9 @@ class Viewport:
                         line.append(buf_line[i])
                     i+=1
                     col+=w # handle doublewidth chr
+            widths.append(col)
             lines.append("".join(line))
+        self.wide = max(widths)
         return lines
 
     def left(self, n=None):

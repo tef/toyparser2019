@@ -6,7 +6,7 @@ from datetime import datetime, timedelta, timezone
 from contextlib import contextmanager
 
 from ..grammar import Grammar, compile_python, sibling
-from clgi import dom
+from remarkable import dom
 
 # --- Parse Tree Builder
 def unescape(string):

@@ -15,9 +15,9 @@ import io
 from .errors import Bug, Error
 from .argparser import ArgumentParser
 from .tty import pager
-from . import dom
+from remarkable import dom
 
-from .render import to_ansi, RenderBox
+from remarkable.render import to_ansi, RenderBox
 
 def to_response(response):
     if isinstance(response, dom.Directive):
