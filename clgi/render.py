@@ -82,8 +82,9 @@ def walk_inline(obj, builder, filter=None):
         for o in obj.text:
             walk_inline(o, builder, filter)
     elif obj.name == 'strong':
-        for o in obj.text:
-            walk_inline(o, builder, filter)
+        with builder.effect('strong') as builder:
+            for o in obj.text:
+                walk_inline(o, builder, filter)
     elif obj.name == 'strike':
         for o in obj.text:
             walk_inline(o, builder, filter)
@@ -640,6 +641,9 @@ class ParaBuilder:
         self.current_line = []
         self.current_word = []
         self.current_width = 0
+        self.effects = []
+        self.start_code = { 'strong': '\x1b[1m',}
+        self.end_code = { 'strong': '\x1b[0m',}
         self.count = 0
 
     def add_index(self):
@@ -686,6 +690,13 @@ class ParaBuilder:
     def add_text(self, text):
         self.current_word.append(text)
 
+    @contextmanager
+    def effect(self, name):
+        self.current_word.append(self.start_code[name])
+        self.effects.append(name)
+        yield self
+        self.effects.pop()
+        self.current_word.append(self.end_code[name])
 
 
 def to_ansi(obj, box, double=True):
