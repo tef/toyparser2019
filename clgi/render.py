@@ -277,6 +277,9 @@ class Box:
         return "".join(out)
 BULLETS = ["\u2022", "\u25e6"]
 
+def line_len(text):
+    return len(text)-4*(text.count("\x1b[0m")+text.count("\x1b[1m"))
+
 
 class BlockBuilder:
     def __init__(self, settings, box):
@@ -295,8 +298,8 @@ class BlockBuilder:
     def build(self):
         def indent(line):
             w = self.box.indent
-            if len(line) > self.box.width:
-                w = w - max(len(line) - self.box.width, 0)//2
+            if line_len(line) > self.box.width:
+                w = w - max(line_len(line) - self.box.width, 0)//2
             if '\x1b#' in line:
                 w = w//2
             return (" "*w) + line
@@ -324,7 +327,7 @@ class BlockBuilder:
         box = self.box.shrink(0.8, indent=True)
         builder = BlockBuilder(self.settings, box)
         yield builder
-        width = max(len(l) for l in builder.lines)
+        width = max(line_len(l) for l in builder.lines)
         mapper, lines = builder.build()
         pad = (box.width - width)
         mark_line = (" "*(pad//2+box.indent)) + ("-"*width) + (" "*(pad-pad//2))
@@ -332,7 +335,7 @@ class BlockBuilder:
         self.lines.append("")
         self.add_mapper(mapper)
         for line in lines:
-            pad = (box.width - len(line))
+            pad = (box.width - line_len(line))
             self.lines.append((" "*(pad//2)) + line + (" "*(pad-pad//2)))
         self.lines.append(mark_line)
         self.lines.append("")
@@ -345,7 +348,7 @@ class BlockBuilder:
         mapper, lines = builder.build()
         self.add_mapper(mapper)
         for line in lines:
-            pad = max(0, self.box.width-len(line)) //2
+            pad = max(0, self.box.width-line_len(line)) //2
             self.lines.append((" "*pad)+line)
 
         self.lines.append("")
@@ -370,13 +373,13 @@ class BlockBuilder:
             # wings = "*" *(6-level)
             box = self.box.shrink(amount[level])
             box.width = box.width //2
-            # box.width = a2*len(wings)+2
+            # box.width = a2*line_len(wings)+2
             builder = ParaBuilder(self.settings, box)
             yield builder
             mapper, lines = builder.build()
             self.add_mapper(mapper)
             for line in lines:
-                pad = max(0, self.box.width-(len(line)*2))//2 # -2*len(wings)-2) 
+                pad = max(0, self.box.width-(line_len(line)*2))//2 # -2*line_len(wings)-2) 
                 line = ((" "*(pad//2)) + line + (" " * (pad-pad//2)) )
                 # line = wings +" " + line + " "+wings
                 self.lines.append("\x1b#3"+ line)
@@ -384,13 +387,13 @@ class BlockBuilder:
         else:
             wings = "*" *(6-level)
             box = self.box.shrink(amount[level])
-            box.width -= 2*len(wings)+2
+            box.width -= 2*line_len(wings)+2
             builder = ParaBuilder(self.settings, box)
             yield builder
             mapper, lines = builder.build()
             self.add_mapper(mapper)
             for line in lines:
-                pad = max(0, self.box.width-len(line) -2*len(wings)-2) 
+                pad = max(0, self.box.width-line_len(line) -2*line_len(wings)-2) 
                 line = ((" "*(pad//2)) + line + (" " * (pad-pad//2)) )
                 line = wings +" " + line + " "+wings
                 self.lines.append(line)
@@ -426,14 +429,14 @@ class TableBuilder:
         for r, row in enumerate(self.headings + self.rows):
             for c, col in enumerate(row):
                 for line in col:
-                    max_widths[c] = max(max_widths[c], len(line))
+                    max_widths[c] = max(max_widths[c], line_len(line))
         total_width = sum(max_widths)+3*len(max_widths)+1
 
         sideways = False
         headings = len(self.headings)
         if total_width + self.settings['indent'] > self.settings['width']:
-            headers_width = [max(max(len(l) for l in c) for c in r) for r in self.headings]
-            max_width_rows = max(max(max(len(l) for l in c) for c in r) for r in self.rows)
+            headers_width = [max(max(line_len(l) for l in c) for c in r) for r in self.headings]
+            max_width_rows = max(max(max(line_len(l) for l in c) for c in r) for r in self.rows)
             max_width_header = max(headers_width)
             if max_width_header + max_width_rows + 7 < total_width:
                 new_rows = []
@@ -505,7 +508,7 @@ class TableBuilder:
                         line.append(Box.vertical+" ")
                     if l < len(col):
                         cur = col[l]
-                        pad = max_widths[x]- len(cur) 
+                        pad = max_widths[x]- line_len(cur) 
                         align = self.align.get(x, "default")
                         if align == "left":
                             line.append(cur)
@@ -596,7 +599,7 @@ class ListBuilder:
             n = str(self.count)+". "
         else:
             n = f"{self.bullet} "
-        pad= max(0, self.width - len(n))
+        pad= max(0, self.width - line_len(n))
         return (" "*pad) + n
 
     def build(self):
