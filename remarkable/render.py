@@ -458,7 +458,7 @@ class RowBuilder:
         self.settings = settings
         self.lines = []
         self.box = box
-        self.width = max(10, (box.width-2) // cols)
+        self.width = max(1, (box.width-2) // cols)
         self.columns = []
 
     def build(self):
@@ -466,7 +466,7 @@ class RowBuilder:
 
     @contextmanager
     def add_column(self):
-        box = RenderBox(0, self.width-2, self.box.height)
+        box = RenderBox(0, self.width-4, self.box.height)
         builder = ParaBuilder(self.settings, box)
         yield builder
         mapper, lines = builder.build()
@@ -564,8 +564,8 @@ class ParaBuilder:
         return self.mapper, [(" "* self.box.indent)+line for line in self.lines]
         
     def _add_text(self, text):
-        l = len(text)
-        l = l +1 if self.current_line else l
+        l = line_len(text)
+        l = l +1 if self.current_width else l
         if l + self.current_width > self.box.width and self.current_width > 0:
             self._add_break()
         if self.current_line:

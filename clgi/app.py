@@ -48,13 +48,17 @@ class Plaintext(Response):
         return [], self.lines
 
 class Document(Response):
-    def __init__(self, obj, **args):
+    def __init__(self, obj, args):
         self.obj = obj
         self.args = args
     def render(self, width, height):
         settings = {'width': width, 'height': height}
         settings.update(self.args)
-        box = RenderBox.max_width(0, width, height, 90)
+        if 'width' in self.args:
+            indent = max(width-settings['width'],0)//2
+            box = RenderBox(indent, settings['width'], settings['height'])
+        else:
+            box = RenderBox.max_width(0, width, height, 90)
         return to_ansi(self.obj, box, settings)
 
 # Errors
