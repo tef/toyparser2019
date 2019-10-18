@@ -639,6 +639,8 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             with self.case():
                 self.horizontal_rule()
             with self.case():
+                self.begin_end_directive()
+            with self.case():
                 self.block_directive()
             with self.case():
                 self.block_group()
@@ -744,6 +746,47 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 self.rson_value()
             with self.case():
                 self.rson_value()
+    @rule()
+    def begin_end_directive(self):
+        self.whitespace(max=8)
+        self.literal("\\begin::")
+        with self.capture_node("block_directive"):
+            with self.capture_node("directive_name"), self.backref() as name:
+                self.identifier()
+            with self.variable("") as fence:
+                with self.optional():
+                    self.whitespace()
+                    with self.backref() as b:
+                        self.identifier()
+                    self.set_variable(fence, b)
+                self.whitespace()
+                with self.capture_node("directive_args"), self.optional():
+                    self.literal("[")
+                    self.directive_args()
+                    self.literal("]")
+                self.line_end()
+                with self.capture_node("directive_block"):
+                    with self.repeat(min=0) as n:
+                        self.indent()
+                        with self.reject():
+                            self.whitespace(max=8)
+                            self.literal("\\end::")
+                            self.literal(name)
+                            self.whitespace()
+                            self.literal(fence)
+                            self.line_end()
+                        with self.choice():
+
+                            with self.case(): self.block_element()
+                            with self.case(): self.para()
+                            with self.case(): self.empty_lines()
+                self.indent()
+                self.whitespace(max=8)
+                self.literal("\\end::")
+                self.literal(name)
+                self.whitespace()
+                self.literal(fence)
+                self.line_end()
 
     @rule()
     def block_directive(self):
@@ -767,66 +810,31 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 with self.case():
                     with self.count(columns=True) as n, self.repeat(min=3):
                         self.literal("{")
-                        self.line_end()
-                        with self.capture_node("directive_block"):
-                            with self.repeat(min=0) as n:
-                                self.indent()
-                                with self.reject():
-                                    self.whitespace(max=8)
-                                    with self.repeat(max=n, min=n):
-                                        self.literal("}")
-                                    self.line_end()
-                                with self.choice():
+                    self.line_end()
+                    with self.capture_node("directive_block"):
+                        with self.repeat(min=0) as n:
+                            self.indent()
+                            with self.reject():
+                                self.whitespace(max=8)
+                                with self.repeat(max=n, min=n):
+                                    self.literal("}")
+                                self.line_end()
+                            with self.choice():
 
-                                    with self.case(): self.block_element()
-                                    with self.case(): self.para()
-                                    with self.case(): self.empty_lines()
-                        self.indent()
-                        self.whitespace(max=8)
-                        with self.repeat(max=n, min=n):
-                            self.literal("}")
-                        self.line_end()
-
-
+                                with self.case(): self.block_element()
+                                with self.case(): self.para()
+                                with self.case(): self.empty_lines()
+                    self.indent()
+                    self.whitespace(max=8)
+                    with self.repeat(max=n, min=n):
+                        self.literal("}")
+                    self.line_end()
                 with self.case():
                     self.literal(":")
+                    with self.reject():
+                        self.literal(":")
                     with self.choice():
-                        with self.case(), self.variable("") as fence:
-                            self.literal(":begin")
-                            with self.optional():
-                                self.whitespace()
-                                with self.backref() as b:
-                                    self.identifier()
-                                self.set_variable(fence, b)
-                            self.line_end()
-                            with self.capture_node("directive_block"):
-                                with self.repeat(min=0) as n:
-                                    self.indent()
-                                    with self.reject():
-                                        self.whitespace(max=8)
-                                        self.literal("\\")
-                                        self.literal(name)
-                                        self.literal("::end")
-                                        self.whitespace()
-                                        self.literal(fence)
-                                        self.line_end()
-                                    with self.choice():
-
-                                        with self.case(): self.block_element()
-                                        with self.case(): self.para()
-                                        with self.case(): self.empty_lines()
-                            self.indent()
-                            self.whitespace(max=8)
-                            self.literal("\\")
-                            self.literal(name)
-                            self.literal("::end")
-                            self.whitespace()
-                            self.literal(fence)
-                            self.line_end()
-
                         with self.case():
-                            with self.reject():
-                                self.literal(":")
                             with self.reject():
                                 self.whitespace()
                                 self.newline()

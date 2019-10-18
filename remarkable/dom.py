@@ -243,7 +243,7 @@ def walk(obj, builder):
                     with l.build_block_item() as p:
                         for word in item.text:   
                             walk(word, p)
-    elif isinstance(obj, dom.Block):
+    elif isinstance(obj, Block):
         builder.lines.append(obj.name)
         for o in obj.text:
             builder.lines.append(getattr(obj,'name',''))

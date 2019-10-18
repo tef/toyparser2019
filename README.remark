@@ -303,9 +303,9 @@ You can also specify tables another way:
 
 Or the long way:
 ````
-\table::begin
+\begin::table
 \row: \cell{1}\cell{2}
-\table::end
+\end::table
 ````
 
 ## The LaTeX-like Directives
@@ -369,11 +369,11 @@ An indented set of blocks:
 A delimited set of blocks
 
 ````
-\section::begin
+\begin::section
 Paragraph one
 
 Paragraph two
-\section::end
+\end::section
 ````
 
 A list, or a blockquote
@@ -401,17 +401,17 @@ Or even tables:
 Like `# headings`, and  \code{\`\`\`}, `\directive:` or \code{\\directive\`\`\`} must be 
 at most 8 spaces indented from the beginning of the line.
 
-Directives can also take a delimited block, with an optional name:
+Directives can also take a delimited block, with an optional name (an identifier):
 
 ```
-\blockquote::begin
+\begin::blockquote
 A para
-\blockquote::begin named
+\begin::blockquote named
 Inner
-\blockquote::end named
+\end::blockquote named
 
 Another
-\blockquote::end
+\end::blockquote
 ```
 
 ## Arguments
@@ -430,7 +430,10 @@ foo
 
 *one*[e:5] _two_[f:6] ~three~[g:7] `four`[g:8]
 
-### [h:7] Foo
+### [h:9] Foo
+
+\begin::section [i:10]
+\end::section
 ````
 
 Whitespace before args is mandatory for blocks, but forbidden for inline forms.
