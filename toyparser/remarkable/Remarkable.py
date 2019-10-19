@@ -792,6 +792,8 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
     def block_directive(self):
         self.whitespace(max=8)
         self.literal("\\")
+        with self.reject():
+            self.literal("begin", "end")
         with self.capture_node("block_directive"):
             with self.capture_node("directive_name"), self.backref() as name:
                 self.identifier()
@@ -880,6 +882,8 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
     @rule(inline=True)
     def inline_directive(self):
         self.literal("\\")
+        with self.reject():
+            self.literal("begin", "end")
         with self.capture_node("inline_directive"):
             with self.capture_node("directive_name"):
                 self.identifier()

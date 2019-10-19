@@ -216,6 +216,11 @@ def walk(obj, builder):
         with builder.build_heading(obj.get_arg('level')) as p:
             for word in obj.text:
                 walk_inline(word, p)
+    elif obj.name == "section":
+        with builder.build_section() as b:
+            for o in obj.text:
+                walk(o, b)
+
     elif obj.name == "table":
         cols = len(obj.text[0].text)
         align = dict(enumerate(obj.get_arg('column_align') or ()))

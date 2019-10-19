@@ -43,18 +43,31 @@ class Mapper:
             self.add_index(x+lineno)
 
     def line_of(self, pos):
-        count, offset, old = pos
-        if count == 0: return old
-        for c, line in self.mapping:
-            if c == count:
-                return line-offset
+        before_c, after_c, percent, old = pos
+        before_l = None
+        after_l = None
+        for count, line in self.mapping:
+            if count <= before_c:
+                before_l = line
+            elif count >= after_c:
+                after_l = line
+                break
+        if after_l and before_l:
+            return before_l + int((after_l-before_l)*percent)
+
         return old
 
     def index_of(self, lineno):
+        before_c, before_l = self.mapping[0]
+        after_c, after_l = self.mapping[-1]
         for count, line in self.mapping:
-            if line >= lineno:
-                return (count, line-lineno, lineno)
-        return (0, 0, lineno)
+            if line <= lineno:
+                before_c, before_l = count, line
+            elif line > lineno:
+                after_c, after_l = count, line
+                break
+        percent = max(0, lineno-before_l) / max(1, after_l-before_l)
+        return (before_c, after_c, percent, lineno)
 
 to_monospace = dict()
 to_monospace.update(zip(range(ord('a'), ord('z')+1),range(0x1d68a, 0x1d6a4+1)))
@@ -478,7 +491,7 @@ class RowBuilder:
         builder = BlockBuilder(self.settings, box)
         yield builder
         mapper, lines = builder.build()
-        while lines[-1] == "":
+        while lines and lines[-1] == "":
             lines.pop()
         self.columns.append(lines)
 
