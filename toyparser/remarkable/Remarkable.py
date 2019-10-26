@@ -228,13 +228,13 @@ def to_text(obj):
     if isinstance(obj, str): 
         escape = "~_*\\-#`{}[]|@<>"
         return "".join(('\\'+t if t in escape else t) for t in obj).replace("\n", "\\n;")
-    if isinstance(obj, Data):
+    if isinstance(obj, dom.Data):
         args = ", ".join(f"{key}: {repr(value)}" for key, value in obj.args)
         return f"@{obj.name}" "{" f"{args}" "}\n"
 
 
-    end = "\n" if isinstance(obj, Block) else ""
-    args = ", ".join(f"{key}: {repr(value)}" for key, value in obj.args) if obj.args else "NONE"
+    end = "\n" if isinstance(obj, dom.Block) else ""
+    args = ", ".join(f"{key}: {repr(value)}" for key, value in obj.args) if obj.args else ""
     #if obj.name in ('code', 'code_span') and obj.text:
     #    text = repr("".join(obj.text))
     #    args = f"text: {text}, {args}"

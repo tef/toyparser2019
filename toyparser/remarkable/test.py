@@ -4,6 +4,15 @@ from datetime import datetime, timedelta, timezone
 from ..grammar import Grammar, compile_python
 from .RemarkableParser import Parser as RemarkableParser
 from .Remarkable import Remarkable, builder, __doc__ as Readme
+from remarkable.render import to_ansi, RenderBox
+
+def to_text(t):
+    settings = {'width':80, 'height':24}
+    box = RenderBox(0, 80, 24)
+
+    return to_ansi(t, box, settings)
+
+
 
 def walk(node, indent="- "):
     text = ""
@@ -162,10 +171,10 @@ nice
 
 -
 ""","""
-\section::begin
+\\begin::section
 Foo
 
-\section::end
+\end::section
 """,
 """
 - ```
@@ -191,9 +200,9 @@ Foo
 
 
 """,r"""
-\table::begin
+\begin::table
 \row: \cell{1}\cell{2}
-\table::end
+\end::table
 
 \foo`foo`
 
@@ -220,7 +229,7 @@ foo
     out = python_parser.parse(Readme).build(Readme, builder)
     import pprint
     #pprint.pprint(out)
-    txt = out.to_text()
+    txt = to_text(out)
     #print(txt)
     #print()
 
@@ -291,51 +300,10 @@ foo
 nice
 ```
 
---- [a:3]
-
-*foo*[v:4] `foo`[c:3]
-
-### [but:1] foo
-
-| a | b |
-| - | - |
-| 1 | 2 |
-| 3 | 4 |
-
--
-  # a
-  # b
-
-\table:
--   
-  # X
-  # Y
-- 
-  - a
-  - b
--
-  - 1
-  - 2
-
-\raw```
-foo
-```
-
-| a | b |
-| - | - |
-| 1 | 2 |
-| 3 | 4 |
-
-\table::begin
-\row: \cell{1}\cell{2}
-\table::end
 """
     out = python_parser.parse(raw).build(raw, builder)
-    txt = out.to_text()
+    txt = to_text(out)
     print(txt)
-    out2 = python_parser.parse(txt).build(txt, builder)
-    text = out2.to_text()
-    print((text))
 
 
 

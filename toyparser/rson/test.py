@@ -3,7 +3,7 @@ from datetime import datetime, timedelta, timezone
 
 from ..grammar import Grammar, compile_python
 from ..old_grammar import compile, Parser
-from . import rsonlib
+from remarkable import rson as rsonlib
 from .RSONParser import Parser as RSONParser
 from .RSON import RSON, builder
 
