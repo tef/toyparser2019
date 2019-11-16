@@ -1,3 +1,5 @@
+from .rson import Codec
+
 class Directive:
     def __init__(self, name, args, text):
         self.name = name
@@ -290,6 +292,26 @@ def walk_inline(obj, builder, filter=None):
             for o in obj.text:
                 walk_inline(o, builder, filter)
         builder.add_text("}")
+
+def object_to_tagged(obj):
+    args = {}
+    args.update(obj.args)
+    if obj.text:
+        args['text'] = obj.text
+    return obj.name, args
+
+def tagged_to_object(name, value):
+    if 'text' in value:
+        text = value.pop('text')
+    else:
+        text = []
+    return Directive(name, value, text)
+
+codec = Codec(object_to_tagged, tagged_to_object)
+
+dump = codec.dump
+parse = codec.parse
+
 
 
 

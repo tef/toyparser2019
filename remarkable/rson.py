@@ -22,7 +22,6 @@ else:
 
 from datetime import datetime, timedelta, timezone
 
-
 CONTENT_TYPE="application/rson"
 
 reserved_tags = set("""

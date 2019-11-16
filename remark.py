@@ -5,6 +5,7 @@ import os
 from clgi.errors import Bug, Error
 from clgi.app import App, Router, command, Plaintext, Document
 from remarkable.render import to_ansi, RenderBox
+from remarkable import dom
 from toyparser.remarkable.Remarkable import parse, to_html
 
 class AppError(Error):
@@ -28,8 +29,19 @@ def ConvertHtml(ctx, file):
     name = ctx['name']
     filename = os.path.relpath(file)
     with open(filename) as fh:
-        dom = parse(fh.read())
-        text = to_html(dom) 
+        doc = parse(fh.read())
+        text = to_html(doc) 
+    return Plaintext(text)
+
+@router.on("convert:rson") 
+@command(args=dict(file="path"))
+def ConvertHtml(ctx, file):
+    app = ctx['app']
+    name = ctx['name']
+    filename = os.path.relpath(file)
+    with open(filename) as fh:
+        doc = parse(fh.read())
+        text = dom.dump(doc)
     return Plaintext(text)
 
 @router.on("convert:ansi") 
@@ -41,10 +53,10 @@ def ConvertAnsi(ctx, file, width, height, heading):
     height = height or 24
     filename = os.path.relpath(file)
     with open(filename) as fh:
-        dom = parse(fh.read())
+        doc = parse(fh.read())
         box = RenderBox(indent=0, width=width, height=height)
         settings = {'double': (heading == 'double'), 'width': width, 'height': height}
-        mapping, text = to_ansi(dom, box, settings)
+        mapping, text = to_ansi(doc, box, settings)
     return Plaintext(text)
 
 @router.on("view") 
@@ -54,12 +66,12 @@ def View(ctx, file, width, height, heading):
     name = ctx['name']
     filename = os.path.relpath(file)
     with open(filename) as fh:
-        dom = parse(fh.read())
+        doc = parse(fh.read())
     settings = {}
     settings['double']=(heading!="single")
     if width: settings['width']=width
 
-    return Document(dom, settings)
+    return Document(doc, settings)
 app = App(
     name="remark", 
     version="0.0.1",
