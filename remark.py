@@ -43,7 +43,7 @@ def ConvertAnsi(ctx, file, width, height, heading):
     with open(filename) as fh:
         dom = parse(fh.read())
         box = RenderBox(indent=0, width=width, height=height)
-        settings = {'double': double, 'width': width, 'height': height}
+        settings = {'double': (heading == 'double'), 'width': width, 'height': height}
         mapping, text = to_ansi(dom, box, settings)
     return Plaintext(text)
 
