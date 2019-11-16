@@ -16,7 +16,8 @@ class Directive:
             if k == key: return v
 
 class Data(Directive):
-    pass
+    def __init__(self, name, args, text):
+        Directive.__init__(self, name, args, text)
 
 class Block(Directive):
     pass
@@ -55,7 +56,7 @@ class GroupBlock(Block):
         Block.__init__(self, "group", args, text)
 class ListBlock(Block):
     def __init__(self, args, text):
-        Block.__init__(self, "list", args, text)
+        Block.__init__(self, "blocklist", args, text)
 
 class QuoteBlock(Block):
     def __init__(self, args, text):
@@ -239,7 +240,7 @@ def walk(obj, builder):
                                 for x in cell.text:
                                     walk_inline(x, c)
 
-    elif obj.name == "list":
+    elif obj.name == "blocklist":
         with builder.build_list(obj.get_arg('start'), obj.get_arg('bullet'), len(obj.text)) as l:
             for item in obj.text:
                 if item.name == 'item_span':
@@ -302,9 +303,10 @@ def object_to_tagged(obj):
 
 def tagged_to_object(name, value):
     if 'text' in value:
-        text = value.pop('text')
+        text = value['text']
     else:
         text = []
+    value = list(value.items())
     return Directive(name, value, text)
 
 codec = Codec(object_to_tagged, tagged_to_object)

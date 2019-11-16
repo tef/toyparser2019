@@ -343,7 +343,7 @@ class Viewport:
                     col+=w # handle doublewidth chr
             widths.append(col)
             lines.append("".join(line))
-        self.wide = max(widths)
+        self.wide = max(widths) if widths else width
         return lines
 
     def left(self, n=None):

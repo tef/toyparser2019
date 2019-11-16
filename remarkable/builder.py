@@ -113,8 +113,6 @@ def builder(buf, node, children):
 
 
         elif marker == '-':
-            name = "list"
-
             if spacing == "tight":
                 if all(c and c.name == "item_span" for c in children[2:]):
                     return dom.ListBlock([], [c for c in children[2:] if c is not None])
@@ -152,7 +150,7 @@ def builder(buf, node, children):
         args = children[1]
         text = children[2] 
         if text:
-            if name == 'list' and text.name == "directive_group":
+            if name == 'blocklist' and text.name == "directive_group":
                 args = args + text.args # pull up spacing
                 return dom.ListBlock(args, text.text)
             if name == 'blockquote' and text.name == "directive_group":
@@ -179,7 +177,7 @@ def builder(buf, node, children):
                         return r
 
                 def transform_cols(name, d):
-                    if len(d) == 1 and d[0].name in ('para_group', 'group', 'list', 'blockquote'):
+                    if len(d) == 1 and d[0].name in ('para_group', 'group', 'blocklist', 'blockquote'):
                         if all( len(e.text) == 1 and getattr(e.text[0],'name', '') == 'heading' for e in d[0].text):
                             return dom.HeaderRow([], [dom.Cell([], t.text[0].text) for t in d[0].text])
 
@@ -280,8 +278,9 @@ def builder(buf, node, children):
         return dom.Block('table_heading_rule', [], children)
 
     if kind == 'block_rson':
-        text = []
+        # can't take raw rson, must be a data node!
         args = children[1]
+        text = args.pop('text') if 'text' in args else []
         args = list(args.items())
         return dom.Data(children[0], args, text)
 
@@ -342,7 +341,7 @@ def builder(buf, node, children):
             return timedelta(seconds=literal)
         elif identifier == "unknown":
             raise Exception('bad')
-        return {identifier: literal}
+        return dom.tagged_to_object(identifier, literal)
     raise Exception(node.name)
     return {node.name: children}
 
