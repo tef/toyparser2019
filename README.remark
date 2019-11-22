@@ -4,7 +4,7 @@
 # Remark(able), a restructured markup format.
 
 > I also dream about a modern replacement for LaTeX designed from the ground up
-to target multiple output formats (at least PDF, HTML, EPUB).
+> to target multiple output formats (at least PDF, HTML, EPUB).
 > \em{John MacFarlane, author of Pandoc, editor of CommonMark.}
 
 ## Why Remark?
@@ -43,11 +43,10 @@ spaces are treated as one, and a paragraph ends when a new block starts, or afte
 | :----- | :----: | -------: |
 | `text     text` | text text | `text text` |
 | `text\     text` | text\nbsp;text | `text&nbsp;text` |
-| \code{text\\\br;text} | text\br;text | `text<br/>text` |
+| \code{text\\\n;text} | text\br;text | `text<br/>text` |
 
 Blocks are also quite similar to markdown. Headings, Lists, Code Blocks, Blockquotes, and Horizonal Rules
-work almost exactly the same. Unlike markdown, a list cannot have more than one blank line between items, 
-and a blockquote only has a `>` at the start.
+work almost exactly the same. Unlike markdown, a list cannot have more than one blank line between items. A blockquote must have an `>` on every line, even empty lines.
 
 \table[column_align: ["left", "left", "left"]]:
   - - # Remark
@@ -124,22 +123,22 @@ and a blockquote only has a `>` at the start.
 Unlike markdown, and a little more like LaTeX, Remark has a standard form for directives, `\name[args]{text}`.
 
 \table:
-   > - # Shorthand
+   - - # Shorthand
      - # Longhand
       
-   > - `*text*`, `_text_`, `~text~`
+   - - `*text*`, `_text_`, `~text~`
      - `\strong{text}`, `\em{text}`, `\strike{text}`
 
-   > - `# Heading`
+   - - `# Heading`
      - `\heading[level: 1]: Heading`
-   > -  ````
+   - -  ````
         - 1
         - 2
         ````
      -  ````
         \list: \item{1}\item{2}
 	````
-   > - ````
+   - - ````
        ```python
        1 + 2
        ```
@@ -376,7 +375,7 @@ Paragraph two
 \end::section
 ````
 
-A list, or a blockquote
+A list, a blockquote
 
 ````
 \list:
@@ -387,6 +386,7 @@ A list, or a blockquote
 ````
 \quote:
 > para
+> continued
 
 ````
 
@@ -531,10 +531,8 @@ Contains a line break
 - this is a new list
 
   > this is a quoted paragraph inside the list
-
+  > 
   > this is a new paragraph inside the blockquote
-
-
 
   > this is a new blockquote
 

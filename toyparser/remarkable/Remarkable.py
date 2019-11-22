@@ -66,6 +66,8 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             with self.case():
                 self.block_group()
             with self.case():
+                self.blockquote()
+            with self.case():
                 self.table()
 
     @rule()
@@ -75,6 +77,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             with self.case(): self.atx_heading()
             with self.case(): self.start_code_block()
             with self.case(): self.start_group()
+            with self.case(): self.start_blockquote()
             with self.case(): self.start_table()
 
 
@@ -273,6 +276,9 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                                     with self.capture_node("directive_group"):
                                         self.inner_group()
                                 with self.case():
+                                    with self.capture_node("directive_quote"):
+                                        self.inner_blockquote()
+                                with self.case():
                                     with self.capture_node("directive_table"):
                                         self.inner_table()
                                 with self.case():
@@ -462,9 +468,53 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
         self.line_end()
 
     @rule()
+    def start_blockquote(self):
+        self.whitespace(max=8)
+        self.literal('>')
+        with self.choice():
+            with self.case(): self.whitespace(max=1, min=1)
+            with self.case(), self.lookahead():
+                self.newline()
+    @rule()
+    def blockquote(self):
+        with self.capture_node("blockquote"):
+            self.inner_blockquote()
+
+    @rule()
+    def inner_blockquote(self):
+        self.start_blockquote()
+        with self.capture_node("directive_args"):
+            with self.optional():
+                self.literal("[")
+                self.directive_args()
+                self.literal("] ")
+        with self.choice():
+            with self.case():
+                self.whitespace()
+                self.end_of_line()
+            with self.case():
+                with self.indented(indent=self.start_blockquote, dedent=None): # self.paragraph_breaks):
+                    with self.choice():
+                        with self.case(): self.block_element()
+                        with self.case(): self.para()
+        with self.repeat():
+            self.indent()
+            self.start_blockquote()
+            with self.choice():
+                with self.case():
+                    self.whitespace()
+                    self.end_of_line()
+                with self.case():
+                    with self.indented(indent=self.start_blockquote, dedent=None): # self.paragraph_breaks):
+                        with self.choice():
+                            with self.case(): self.block_element()
+                            with self.case(): self.para()
+                        
+
+    @rule()
     def start_group(self):
         self.whitespace(max=8)
-        self.literal("-", ">")
+        self.literal("--", "-")
         with self.choice():
             with self.case(), self.lookahead():
                 self.whitespace()
@@ -525,7 +575,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 with self.count(columns=True) as i:
                     self.whitespace(max=8)
                 with self.capture_node('group_marker'), self.backref() as marker:
-                    self.range("-", ">")
+                    self.literal("--", "-")
             with self.capture_node('group_spacing', value=spacing):
                 pass
 

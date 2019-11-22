@@ -89,7 +89,9 @@ def builder(buf, node, children):
         return dom.CodeBlock(arg, [c for c in children[1:] if c is not None])
     if kind == "code_string":
         return [("language", children)]
-
+    if kind == 'blockquote':
+        return dom.QuoteBlock(children[0], children[1:])
+        
     if kind == 'group':
         marker = children[0]
         spacing = children[1]
@@ -98,33 +100,18 @@ def builder(buf, node, children):
 
         block = dom.GroupBlock
 
-        if marker == '>':
-            new_children = []
-            for c in children[2:]:
-                if c is None:
-                    continue
-                elif c.name == 'item_span':
-                    new_children.append(dom.Paragraph(c.args, c.text))
-                elif c.name == "block_item":
-                    new_children.extend(c.text)
-                else:
-                    new_children.append(c)
-            return dom.QuoteBlock([], new_children)
+        if spacing == "tight":
+            if all(c and c.name == "item_span" for c in children[2:]):
+                return dom.ListBlock([], [c for c in children[2:] if c is not None])
 
-
-        elif marker == '-':
-            if spacing == "tight":
-                if all(c and c.name == "item_span" for c in children[2:]):
-                    return dom.ListBlock([], [c for c in children[2:] if c is not None])
-
-            new_children = []
-            for c in children[2:]:
-                if c is None: continue
-                if c.name == 'item_span':
-                    text = [dom.Paragraph([], c.text)] if c.text else []
-                    c = dom.ItemBlock(c.args, text)
-                new_children.append(c)
-            return dom.ListBlock([], new_children)
+        new_children = []
+        for c in children[2:]:
+            if c is None: continue
+            if c.name == 'item_span':
+                text = [dom.Paragraph([], c.text)] if c.text else []
+                c = dom.ItemBlock(c.args, text)
+            new_children.append(c)
+        return dom.ListBlock([], new_children)
 
         return dom.GroupBlock(args, new_children)
     if kind == 'group_marker':
@@ -150,9 +137,11 @@ def builder(buf, node, children):
         args = children[1]
         text = children[2] 
         if text:
-            if name == 'blocklist' and text.name == "directive_group":
+            if name == 'list' and text.name == "directive_group":
                 args = args + text.args # pull up spacing
                 return dom.ListBlock(args, text.text)
+            if name == 'blockquote' and text.name == "directive_quote":
+                return dom.QuoteBlock(args, text.text)
             if name == 'blockquote' and text.name == "directive_group":
                 new_children = []
                 for c in children[2:]:
@@ -196,6 +185,8 @@ def builder(buf, node, children):
                 text = [dom.GroupBlock(text.args, text.text)]
             elif text.name == 'directive_table':
                 text = [dom.Table(text.args, text.text)]
+            elif text.name == 'directive_quote':
+                text = text.text
             elif text.name == 'directive_block':
                 text = text.text
             elif text.name == 'directive_para': 
@@ -245,6 +236,8 @@ def builder(buf, node, children):
         return dom.Block('directive_table',[],[c for c in children if c is not None])
     if kind == "directive_block":
         return dom.Block('directive_block',[],[c for c in children if c is not None])
+    if kind == "directive_quote":
+        return dom.Block('directive_quote',children[0],[c for c in children[1:] if c is not None])
     if kind == "directive_group":
         marker = children[0]
         spacing = children[1]
