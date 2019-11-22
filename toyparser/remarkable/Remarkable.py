@@ -69,6 +69,8 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 self.blockquote()
             with self.case():
                 self.table()
+            with self.case():
+                self.prose_para()
 
     @rule()
     def paragraph_breaks(self):
@@ -104,7 +106,8 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
 
     @rule()
     def inner_para(self):
-        self.whitespace()
+        with self.capture_node("whitespace"):
+            self.whitespace()
         self.inline_element()
 
         with self.repeat():
@@ -117,11 +120,11 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
 
             self.inline_element()
 
-        self.whitespace()
+        with self.capture_node("whitespace"):
+            self.whitespace()
         with self.optional():
             self.literal("\\")
             self.capture_value("\\")
-        self.end_of_line()
 
 
 
@@ -129,6 +132,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
     def para(self):
         with self.capture_node("paragraph"):
             self.inner_para()
+        self.end_of_line()
 
     @rule()
     def identifier(self):
@@ -267,6 +271,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                             self.whitespace(min=1)
                             with self.capture_node("directive_para"):
                                 self.inner_para()
+                            self.end_of_line()
                         with self.case():
                             self.whitespace()
                             self.newline()
@@ -278,6 +283,9 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                                 with self.case():
                                     with self.capture_node("directive_quote"):
                                         self.inner_blockquote()
+                                with self.case():
+                                    with self.capture_node("directive_prose"):
+                                        self.inner_prose_para()
                                 with self.case():
                                     with self.capture_node("directive_table"):
                                         self.inner_table()
@@ -391,8 +399,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
 
         with self.choice():
             with self.case(): self.whitespace(max=1, min=1)
-            with self.case(), self.lookahead():
-                self.newline()
+            with self.case(), self.lookahead(): self.newline()
 
 
     @rule()
@@ -416,6 +423,44 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                     self.whitespace(min=1)
                     with self.indented(indent=self.atx_heading_indent):
                         self.inner_para()
+                    self.end_of_line()
+    @rule()
+    def start_prose_para(self):
+        self.whitespace(max=8)
+        self.literal("|")
+        with self.choice():
+            with self.case(): self.whitespace(max=1, min=1)
+            with self.case(), self.lookahead(): 
+                self.line_end()
+
+    @rule()
+    def prose_para(self):
+        with self.capture_node("prose"):
+            self.inner_prose_para()
+
+    @rule()
+    def inner_prose_para(self):
+        with self.capture_node("prose"):
+            self.start_prose_para()
+            with self.capture_node("directive_args"):
+                with self.optional():
+                    self.whitespace()
+                    self.literal("[")
+                    self.directive_args()
+                    self.literal("]")
+                    self.line_end()
+                    self.start_prose_para()
+
+            with self.indented(count=-1):
+                self.inner_para()
+            with self.repeat():
+                with self.capture_node("hardbreak"):
+                    self.newline()
+                self.indent()
+                self.start_prose_para()
+                with self.indented(count=-1):
+                    self.inner_para()
+            self.end_of_line()
 
     @rule()
     def start_code_block(self):

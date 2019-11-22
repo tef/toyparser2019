@@ -273,10 +273,10 @@ class BlockBuilder:
         self.lines.append("")
 
     @contextmanager
-    def build_para(self):
+    def build_para(self, prose=False):
         self.add_index()
         box = RenderBox(0, self.box.width, self.box.height)
-        builder = ParaBuilder(self.settings, box)
+        builder = ParaBuilder(self.settings, box, prose=prose)
         builder.add_space()
         yield builder
         mapper, lines= builder.build()
@@ -556,7 +556,7 @@ class ListBuilder:
                 self.lines.append((" "*self.width) + line)
 
 class ParaBuilder:
-    def __init__(self, settings, box):
+    def __init__(self, settings, box, prose=False):
         self.settings = settings
         self.lines = []
         self.box = box
@@ -568,6 +568,7 @@ class ParaBuilder:
         self.start_code = { 'strong': '\x1b[1m',}
         self.end_code = { 'strong': '\x1b[0m',}
         self.count = 0
+        self.prose = False
 
     def add_index(self):
         self.mapper.add_index(len(self.lines))

@@ -68,6 +68,8 @@ def builder(buf, node, children):
 
     if kind == "paragraph":
         return dom.Paragraph([], [c for c in children if c is not None])
+    if kind == "prose":
+        return dom.Prose(children[0], [c for c in children[1:] if c is not None])
     if kind == "span":
         args = children[-1]
         marker = node.value
@@ -191,6 +193,8 @@ def builder(buf, node, children):
                 text = text.text
             elif text.name == 'directive_para': 
                 text = text.text if name in dom.para_directives else [dom.Paragraph([], text.text)]
+            elif text.name == 'directive_prose': 
+                text = text.text if name in dom.para_directives else [dom.Prose(args, text.text)]
             elif text.name == 'directive_code':
                 text = text.text if name in dom.para_directives else [dom.CodeBlock([], text.text)]
             else:

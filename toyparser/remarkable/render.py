@@ -160,6 +160,7 @@ html_tags = {
        "thead": "<thead><tr>{text}</tr></thead>\n",
        "para": "<p>{text}</p>\n",
        "paragraph": "<p>{text}</p>\n",
+       "prose": '<p style="white-space: pre-wrap">{text}</p>\n',
        "division": "<div>{text}</div>\n",
        "section": "<section>{text}</section>\n",
        "hardbreak": "<br/>\n",

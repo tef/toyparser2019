@@ -30,6 +30,10 @@ class Paragraph(Block):
     def __init__(self, args, text):
         Block.__init__(self, "paragraph", args, text)
 
+class Prose(Block):
+    def __init__(self, args, text):
+        Block.__init__(self, "prose", args, text)
+
 class HorizontalRule(Block):
     def __init__(self, args, text=None):
         if text: raise Exception('bad')
@@ -213,6 +217,10 @@ def walk(obj, builder):
                 walk(o, b)
     elif obj.name == "paragraph":
         with builder.build_para() as p:
+            for word in obj.text:
+                walk_inline(word, p)
+    elif obj.name == "prose":
+        with builder.build_para(prose=True) as p:
             for word in obj.text:
                 walk_inline(word, p)
     elif obj.name == "heading":

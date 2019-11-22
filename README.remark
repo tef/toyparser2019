@@ -54,14 +54,20 @@ work almost exactly the same. Unlike markdown, a list cannot have more than one 
     - # HTML
 
   - 
-    - `# Heading`
-    - Heading 
-    - `<h1>Heading</h1>` 
+    - ```
+      # A multi-line
+      # Heading
+      ```
+    - 
+      # A multi-line
+      # Heading
+      
+    - `<h1>A multi-line Heading</h1>` 
   -
     - `---`
     -  \hr 
     - `<hr/>`  
-  -
+ -
     - ```
       - 1
       - 2
@@ -69,6 +75,21 @@ work almost exactly the same. Unlike markdown, a list cannot have more than one 
     -
       - 1
       - 2 
+    -
+      ```
+      <ul>
+      <li>1</li>
+      <li>2</li>
+      </ul>
+      ```
+  -
+    - ```
+      -- 1
+      -- 2
+      ```
+    -
+      -- 1
+      -- 2 
     -
       ```
       <ul>
@@ -88,19 +109,23 @@ work almost exactly the same. Unlike markdown, a list cannot have more than one 
       <pre><code>1 + 2</code></pre>
       ```
   - - ```
-      > 1
+      > A *bolded line
+      > that continues* 
 
-      > 2
+      > A second quote
       ```
     -
-      > 1
+      > A *bolded line
+      > that continues* 
 
-      > 2 
+      > A second quote
     -
       ```
       <blockquote>
-      <p>1</p>
-      <p>2</p>
+      <p>A <strong>bolded line that continues</strong></p>
+      </blockquote>
+      <blockquote>
+      <p>A Second Quote</p>
       </blockquote>
       ```
   - - ```
@@ -131,13 +156,13 @@ Unlike markdown, and a little more like LaTeX, Remark has a standard form for di
 
    - - `# Heading`
      - `\heading[level: 1]: Heading`
-   - -  ````
+   - - ````
         - 1
         - 2
-        ````
-     -  ````
-        \list: \item{1}\item{2}
-	````
+       ````
+     - ````
+       \list: \item{1}\item{2}
+       ````
    - - ````
        ```python
        1 + 2
