@@ -384,6 +384,18 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
         self.line_end()
 
     @rule()
+    def atx_heading_indent(self):
+        self.whitespace(max=8)
+        with self.repeat(min=1, max=9):
+            self.literal("#")
+
+        with self.choice():
+            with self.case(): self.whitespace(max=1, min=1)
+            with self.case(), self.lookahead():
+                self.newline()
+
+
+    @rule()
     def atx_heading(self):
         self.whitespace(max=8)
         with self.variable(0) as num, self.capture_node("atx_heading", value=num):
@@ -402,7 +414,8 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                     self.line_end()
                 with self.case():
                     self.whitespace(min=1)
-                    self.inner_para()
+                    with self.indented(indent=self.atx_heading_indent):
+                        self.inner_para()
 
     @rule()
     def start_code_block(self):
