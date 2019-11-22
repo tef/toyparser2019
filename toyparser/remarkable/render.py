@@ -195,7 +195,7 @@ def to_html(obj):
         name = f"h{args.get('level',1)}"
         if 'level' in args: args.pop('level')
 
-    if name =="list":
+    if name =="blocklist":
         if 'start' in args:
             name = "ol"
         else:
