@@ -440,27 +440,26 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
 
     @rule()
     def inner_prose_para(self):
-        with self.capture_node("prose"):
-            self.start_prose_para()
-            with self.capture_node("directive_args"):
-                with self.optional():
-                    self.whitespace()
-                    self.literal("[")
-                    self.directive_args()
-                    self.literal("]")
-                    self.line_end()
-                    self.start_prose_para()
+        self.start_prose_para()
+        with self.capture_node("directive_args"):
+            with self.optional():
+                self.whitespace()
+                self.literal("[")
+                self.directive_args()
+                self.literal("]")
+                self.line_end()
+                self.start_prose_para()
 
+        with self.indented(count=-1):
+            self.inner_para()
+        with self.repeat():
+            with self.capture_node("hardbreak"):
+                self.newline()
+            self.indent()
+            self.start_prose_para()
             with self.indented(count=-1):
                 self.inner_para()
-            with self.repeat():
-                with self.capture_node("hardbreak"):
-                    self.newline()
-                self.indent()
-                self.start_prose_para()
-                with self.indented(count=-1):
-                    self.inner_para()
-            self.end_of_line()
+        self.end_of_line()
 
     @rule()
     def start_code_block(self):
