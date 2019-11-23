@@ -78,8 +78,6 @@ class Paragraph(Block):
 @elements.add()
 class Prose(Block):
     name = "Prose"
-    def __init__(self, args, text):
-        Block.__init__(self, "prose", args, text)
 
 @elements.add()
 class HorizontalRule(Block):
@@ -301,17 +299,19 @@ def walk(obj, builder):
 def walk_inline(obj, builder, filter=None):
     if obj is None: return
     if obj == " ":
-        builder.add_space()
+        builder.add_space(" ")
     elif isinstance(obj, str):
         if obj:
             if filter: obj = filter(obj)
             builder.add_text(obj)
+    elif obj.name == Whitespace.name:
+        builder.add_space(obj.text[0]) 
     elif obj.name == Hardbreak.name:
         builder.add_break()
     elif obj.name == Nbsp.name:
         builder.add_text(" ")
     elif obj.name == Softbreak.name:
-        builder.add_space()
+        builder.add_softbreak()
     elif obj.name == CodeSpan.name:
         def walk_code(obj):
             if isinstance(obj, str): return obj

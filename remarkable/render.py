@@ -277,7 +277,6 @@ class BlockBuilder:
         self.add_index()
         box = RenderBox(0, self.box.width, self.box.height)
         builder = ParaBuilder(self.settings, box, prose=prose)
-        builder.add_space()
         yield builder
         mapper, lines= builder.build()
         self.add_mapper(mapper)
@@ -568,12 +567,17 @@ class ParaBuilder:
         self.start_code = { 'strong': '\x1b[1m',}
         self.end_code = { 'strong': '\x1b[0m',}
         self.count = 0
-        self.prose = False
+        self.prose = prose
+        self.whitespace = True
 
     def add_index(self):
         self.mapper.add_index(len(self.lines))
 
     def build(self):
+        if self.current_word:
+            word = "".join(self.current_word)
+            self.current_word[:] = []
+            self._add_text(word)
         self.add_break()
         return self.mapper, [(" "* self.box.indent)+line for line in self.lines]
         
@@ -596,21 +600,32 @@ class ParaBuilder:
         for name in self.effects[::-1]:
             self.current_line.append(self.start_code[name])
 
-    def add_space(self):
-        if self.current_word:
-            word = "".join(self.current_word)
-            self.current_word[:] = []
-            self._add_text(word)
-        self.whitespace = True
+    def add_space(self, text=" "):
+        if self.prose:
+            self.current_word.append(text)
+        else:
+            if self.current_word:
+                word = "".join(self.current_word)
+                self.current_word[:] = []
+                self._add_text(word)
+            self.whitespace = True
 
     def add_code_text(self, text):
         self.add_text("`")
         self.add_text(text)
         self.add_text("`")
 
+    def add_softbreak(self):
+        if self.prose:
+            self.add_break()
+        else:
+            self.add_space()
 
     def add_break(self):
-        self.add_space()
+        if self.current_word:
+            word = "".join(self.current_word)
+            self.current_word[:] = []
+            self._add_text(word)
         self._add_break()
         self.add_index()
         self.whitespace = False

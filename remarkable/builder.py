@@ -46,7 +46,9 @@ def builder(buf, node, children):
     if kind == "whitespace":
         if node.end == node.start:
             return None
-        return " "
+        text = buf[node.start:node.end]
+        if text == " ": return text
+        return dom.Whitespace((), [text])
 
     if kind == "softbreak":
         return dom.Softbreak([], [buf[node.start:node.end]])
