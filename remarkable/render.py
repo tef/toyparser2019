@@ -580,7 +580,7 @@ class ParaBuilder:
     def _add_text(self, text):
         l = line_len(text)
         l = l +1 if self.current_width else l
-        if l + self.current_width > self.box.width and self.current_width > 0:
+        if l + self.current_width >= self.box.width and self.current_width > 0:
             self._add_break()
         if self.current_line:
             self.current_line.append(" ")
@@ -623,8 +623,11 @@ class ParaBuilder:
         self.current_word.append(self.start_code[name])
         self.effects.append(name)
         yield self
-        self.effects.pop()
         self.current_word.append(self.end_code[name])
+        word = "".join(self.current_word)
+        self.current_word[:] = []
+        self._add_text(word)
+        self.effects.pop()
 
 
 def to_ansi(obj, box, settings):
