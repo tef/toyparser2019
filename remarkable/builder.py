@@ -33,7 +33,7 @@ def builder(buf, node, children):
 
         metadata = metadata or [('title', '')]
 
-        if len(text) == 1 and getattr(text[0], "name", "") == "document":
+        if len(text) == 1 and getattr(text[0], "name", "") == dom.Document.name:
             return text[0]
         return dom.Document(metadata, text)
 
@@ -42,16 +42,16 @@ def builder(buf, node, children):
     if kind == "text":
         return buf[node.start:node.end]
     if kind == "nbsp":
-        return dom.Nbsp()
+        return dom.Nbsp([],[ buf[node.start:node.end]])
     if kind == "whitespace":
         if node.end == node.start:
             return None
         return " "
 
     if kind == "softbreak":
-        return dom.Softbreak()
+        return dom.Softbreak([], [buf[node.start:node.end]])
     if kind == "hardbreak":
-        return dom.Hardbreak()
+        return dom.Hardbreak([],[buf[node.start:node.end]])
 
     if kind in ('empty', 'empty_line'):
         return None
@@ -78,7 +78,7 @@ def builder(buf, node, children):
         if marker == "_":
             return dom.Emphasis(args,[c for c in children[:-1] if c is not None])
         if marker == "~":
-            return dom.Strike(args,[c for c in children[:-1] if c is not None])
+            return dom.Strikethrough(args,[c for c in children[:-1] if c is not None])
         if marker:
             return dom.Span([("marker", node.value)] +args,[c for c in children[:-1] if c is not None])
         return dom.Span(args,[c for c in children[:-1] if c is not None])
@@ -92,30 +92,26 @@ def builder(buf, node, children):
     if kind == "code_string":
         return [("language", children)]
     if kind == 'blockquote':
-        return dom.QuoteBlock(children[0], children[1:])
+        return dom.Blockquote(children[0], children[1:])
         
-    if kind == 'group':
+    if kind == 'list':
         marker = children[0]
         spacing = children[1]
-        name = 'group'
         args = [("marker", marker)]
 
-        block = dom.GroupBlock
-
         if spacing == "tight":
-            if all(c and c.name == "item_span" for c in children[2:]):
+            if all(c and c.name == dom.ItemSpan.name for c in children[2:]):
                 return dom.ListBlock([], [c for c in children[2:] if c is not None])
 
         new_children = []
         for c in children[2:]:
             if c is None: continue
-            if c.name == 'item_span':
+            if c.name == dom.ItemSpan.name:
                 text = [dom.Paragraph([], c.text)] if c.text else []
                 c = dom.ItemBlock(c.args, text)
             new_children.append(c)
         return dom.ListBlock([], new_children)
 
-        return dom.GroupBlock(args, new_children)
     if kind == 'group_marker':
         return buf[node.start:node.end]
     if kind == 'group_spacing':
@@ -125,7 +121,7 @@ def builder(buf, node, children):
         if spacing == "tight":
             if not children[2:]:
                 return dom.ItemSpan(children[0], [])
-            elif len(children) == 3 and children[2].name == "para" and not children[2].args:
+            elif len(children) == 3 and children[2].name == dom.Paragraph and not children[2].args:
                 return dom.ItemSpan(children[0], children[2].text)
             else:
                 return dom.ItemBlock(children[0], [c for c in children[2:] if c is not None])
@@ -139,42 +135,42 @@ def builder(buf, node, children):
         args = children[1]
         text = children[2] 
         if text:
-            if name == 'list' and text.name == "directive_group":
+            if name == 'list' and text.name == "directive_list":
                 args = args + text.args # pull up spacing
                 return dom.ListBlock(args, text.text)
             if name == 'blockquote' and text.name == "directive_quote":
-                return dom.QuoteBlock(args, text.text)
-            if name == 'blockquote' and text.name == "directive_group":
+                return dom.Blockquote(args, text.text)
+            if name == 'blockquote' and text.name == "directive_list":
                 new_children = []
                 for c in children[2:]:
                     if c is None:
                         continue
-                    elif c.name == 'item_span':
+                    elif c.name == dom.ItemSpan.name:
                         new_children.append(dom.Paragraph(c.args, c.text))
-                    elif c.name == "block_item":
+                    elif c.name == dom.ItemBlock.name:
                         new_children.extend(c.text)
                     else:
                         new_children.append(c)
-                return dom.QuoteBlock(args, new_children)
+                return dom.Blockquote(args, new_children)
 
-            if name == 'table' and text.name == "directive_group":
+            if name == 'table' and text.name == "directive_list":
                 new_text = []
                 def transform_row(r):
-                    if r.name == 'item_span':
+                    if r.name == dom.ItemSpan.name:
                         return transform_cols(r, r.text)
-                    if r.name == 'block_item':
+                    if r.name == dom.ItemBlock.name:
                         return transform_cols(r, r.text)
                     else:
                         return r
 
                 def transform_cols(name, d):
-                    if len(d) == 1 and d[0].name in ('para_group', 'group', 'blocklist', 'blockquote'):
-                        if all( len(e.text) == 1 and getattr(e.text[0],'name', '') == 'heading' for e in d[0].text):
-                            return dom.HeaderRow([], [dom.Cell([], t.text[0].text) for t in d[0].text])
+                    if len(d) == 1 and d[0].name == dom.ListBlock.name:
+                        if all( len(e.text) == 1 and getattr(e.text[0],'name', '') == dom.Heading.name for e in d[0].text):
+                            return dom.TableHeader([], [dom.CellSpan([], t.text[0].text) for t in d[0].text])
 
-                        return dom.Row([], [(dom.CellBlock([], t.text) if t.name =='block_item' else dom.Cell([], t.text)) for t in d[0].text])
-                    elif all(getattr(t,'name', '') == 'heading' for t in d):
-                        return dom.HeaderRow([], [Cell([], t.text) for t in d])
+                        return dom.Row([], [(dom.CellBlock([], t.text) if t.name == dom.ItemBlock.name else dom.Cell([], t.text)) for t in d[0].text])
+                    elif all(getattr(t,'name', '') == dom.Heading.name for t in d):
+                        return dom.TableHeader([], [dom.CellSpan([], t.text) for t in d])
 
                     return name
                     
@@ -183,7 +179,7 @@ def builder(buf, node, children):
             if name == 'table' and text.name == "directive_table":
                 return dom.Table(args, text.text)
 
-            if text.name == 'directive_group':
+            if text.name == 'directive_list':
                 text = [dom.GroupBlock(text.args, text.text)]
             elif text.name == 'directive_table':
                 text = [dom.Table(text.args, text.text)]
@@ -211,8 +207,6 @@ def builder(buf, node, children):
 
     if kind == "inline_directive":
         name = children[0]
-        if name == 'code':
-            name == 'code_span'
         args = children[1]
         text = [children[2]] if children[2:] and children[2] is not None else []
         if text:
@@ -228,38 +222,38 @@ def builder(buf, node, children):
         return buf[node.start:node.end]
 
     if kind == "directive_span":
-        return dom.Inline('directive_span',[],[c for c in children if c is not None])
+        return dom.Node('directive_span',[],[c for c in children if c is not None])
 
     if kind == "directive_para":
-        return dom.Block('directive_para',[],[c for c in children if c is not None])
+        return dom.Node('directive_para',[],[c for c in children if c is not None])
     if kind == "directive_code":
-        return dom.Block('directive_code',[],[c for c in children if c is not None])
+        return dom.Node('directive_code',[],[c for c in children if c is not None])
     if kind == "directive_code_span":
-        return dom.Block('directive_code',[],[c for c in children if c is not None])
+        return dom.Node('directive_code',[],[c for c in children if c is not None])
     if kind == "directive_table":
-        return dom.Block('directive_table',[],[c for c in children if c is not None])
+        return dom.Node('directive_table',[],[c for c in children if c is not None])
     if kind == "directive_block":
-        return dom.Block('directive_block',[],[c for c in children if c is not None])
+        return dom.Node('directive_block',[],[c for c in children if c is not None])
     if kind == "directive_quote":
-        return dom.Block('directive_quote',children[0],[c for c in children[1:] if c is not None])
-    if kind == "directive_group":
+        return dom.Node('directive_quote',children[0],[c for c in children[1:] if c is not None])
+    if kind == "directive_list":
         marker = children[0]
         spacing = children[1]
-        return dom.Block("directive_group", [("marker", marker), ("spacing", spacing)], [c for c in children[2:] if c is not None])
+        return dom.Node("directive_list", [("marker", marker), ("spacing", spacing)], [c for c in children[2:] if c is not None])
 
     if kind == "table":
         text = []
         args = []
         for c in children:
             if c is None: continue
-            if getattr(c, 'name', '') == "table_heading_rule":
+            if getattr(c, 'name', '') ==  dom.TableRule.name:
                 args.append(('column_align', c.text))
             else:
                 text.append(c)
         return dom.Table(args,text)
         
     if kind == "table_cell":
-        return dom.Cell([], children)
+        return dom.CellSpan([], children)
     if kind == "column_align":
         left = buf[node.start] == ":"
         right = buf[node.end-1] == ":"
@@ -269,17 +263,21 @@ def builder(buf, node, children):
         return "default"
     if kind == "table_row":
         return dom.Row([], children)
-    if kind == "table_heading":
-        return dom.HeaderRow([], children)
-    if kind == "table_heading_rule":
-        return dom.Block('table_heading_rule', [], children)
+    if kind == "table_header":
+        return dom.TableHeader([], children)
+    if kind == "table_header_rule":
+        return dom.TableRule([], children)
 
     if kind == 'block_rson':
         # can't take raw rson, must be a data node!
+        name = children[0]
         args = children[1]
         text = args.pop('text') if 'text' in args else []
         args = list(args.items())
-        return dom.Data(children[0], args, text)
+        if name in dom.elements:
+            return dom.elements.make(name, args, text)
+        else:
+            return dom.Node(name, args, text)
 
     if kind == 'rson_number': 
         return eval(buf[node.start:node.end])

@@ -63,11 +63,11 @@ work almost exactly the same. Unlike markdown, a list cannot have more than one 
       # Heading
       
     - `<h1>A multi-line Heading</h1>` 
-  -
+  - 
     - `---`
     -  \hr 
     - `<hr/>`  
- -
+  -
     - ```
       - 1
       - 2

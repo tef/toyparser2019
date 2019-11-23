@@ -64,7 +64,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             with self.case():
                 self.block_directive()
             with self.case():
-                self.block_group()
+                self.list_block()
             with self.case():
                 self.blockquote()
             with self.case():
@@ -78,7 +78,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             with self.case(): self.horizontal_rule()
             with self.case(): self.atx_heading()
             with self.case(): self.start_code_block()
-            with self.case(): self.start_group()
+            with self.case(): self.start_list_block()
             with self.case(): self.start_blockquote()
             with self.case(): self.start_table()
 
@@ -278,8 +278,8 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                             self.indent()
                             with self.choice():
                                 with self.case():
-                                    with self.capture_node("directive_group"):
-                                        self.inner_group()
+                                    with self.capture_node("directive_list"):
+                                        self.inner_list()
                                 with self.case():
                                     with self.capture_node("directive_quote"):
                                         self.inner_blockquote()
@@ -569,7 +569,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                         
 
     @rule()
-    def start_group(self):
+    def start_list_block(self):
         self.whitespace(max=8)
         self.literal("--", "-")
         with self.choice():
@@ -626,7 +626,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 self.set_variable(spacing, 'loose')
 
     @rule()
-    def inner_group(self):
+    def inner_list(self):
         with self.variable('tight') as spacing:
             with self.count(columns=True) as w:
                 with self.count(columns=True) as i:
@@ -699,9 +699,9 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                                 pass
 
     @rule()
-    def block_group(self):
-        with self.capture_node('group'):
-            self.inner_group()
+    def list_block(self):
+        with self.capture_node('list'):
+            self.inner_list()
 
 
     @rule()
@@ -740,7 +740,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             self.whitespace(max=8)
         with self.indented(count=c):
             with self.variable(0) as rows:
-                with self.capture_node('table_heading'):
+                with self.capture_node('table_header'):
                     with self.repeat(min=1) as c:
                         self.literal("|")
                         self.whitespace()
@@ -753,7 +753,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 
                 self.indent()
 
-                with self.capture_node('table_heading_rule'):
+                with self.capture_node('table_header_rule'):
                     with self.repeat(min=c, max=c):
                         self.literal("|")
                         self.whitespace()

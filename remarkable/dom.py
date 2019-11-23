@@ -10,6 +10,12 @@ class Registry:
             self.register(cls.name, cls)
             return cls
         return _wrapper
+
+    def __contains__(self, name):
+        return name in self.classes
+
+    def make(self, name, args, text):
+        return self.classes[name](args, text)
     
     def register(self, name, cls):
         if name in self.classes or cls in self.names:
@@ -18,177 +24,177 @@ class Registry:
         self.names[cls] = name
 
 
-registry = Registry()
+elements = Registry()
 
-
-class Node:
-    def __init__(self, name, args, text):
-        self.name = name
-        self.args = args
-        self.text = text
-
-    def build(self, builder):
-        pass
-
+class Element:
     def get_arg(self, key):
         if key is None:
             return [v for k,v in self.args if k is None]
         for k,v in self.args:
             if k == key: return v
 
-class Data(Node):
+class Node(Element):
     def __init__(self, name, args, text):
-        Node.__init__(self, name, args, text)
+        self.name = name
+        self.args = args
+        self.text = text
 
-class Block(Node):
-    pass
+class Block(Element):
+    def __init__(self, args, text):
+        self.args = args
+        self.text = text
 
-@registry.add()
+class Inline(Element):
+    def __init__(self, args, text):
+        self.args = args
+        self.text = text
+
+@elements.add()
+class NamedInlineDirective(Inline):
+    name = "InlineDirective"
+    def __init__(self, name, args, text):
+        args = args + [('name', name)]
+        Inline.__init__(self, args, text)
+
+@elements.add()
+class NamedBlockDirective(Block):
+    name = "BlockDirective"
+    def __init__(self, name, args, text):
+        args = args + [('name', name)]
+        Block.__init__(self, args, text)
+
+@elements.add()
+class RawBlock(Block):
+    name = "RawBlock"
+
+@elements.add()
 class Document(Block):
-    name = "document"
-    def __init__(self, args, text):
-        Block.__init__(self, self.name, args, text)
+    name = "Document"
 
+@elements.add()
 class Paragraph(Block):
-    def __init__(self, args, text):
-        Block.__init__(self, "paragraph", args, text)
+    name = "Paragraph"
 
+@elements.add()
 class Prose(Block):
+    name = "Prose"
     def __init__(self, args, text):
         Block.__init__(self, "prose", args, text)
 
+@elements.add()
 class HorizontalRule(Block):
-    def __init__(self, args, text=None):
-        if text: raise Exception('bad')
-        Block.__init__(self, "hr", args, [])
+    name = "HorizontalRule"
 
+@elements.add()
 class Section(Block):
-    def __init__(self, args, text):
-        Block.__init__(self, "section", args, text)
+    name = "Section"
 
+@elements.add()
 class Division(Block):
-    def __init__(self, args, text):
-        Block.__init__(self, "division", args, text)
+    name = "Division"
 
+@elements.add()
 class Heading(Block):
-    def __init__(self, args, text):
-        Block.__init__(self, "heading", args, text)
+    name = "Heading"
 
+@elements.add()
 class CodeBlock(Block):
-    def __init__(self, args, text):
-        Block.__init__(self, "code_block", args, text)
+    name = "CodeBlock"
 
-class GroupBlock(Block):
-    def __init__(self, args, text):
-        Block.__init__(self, "group", args, text)
+@elements.add()
 class ListBlock(Block):
-    def __init__(self, args, text):
-        Block.__init__(self, "blocklist", args, text)
+    name = "ListBlock"
 
-class QuoteBlock(Block):
-    def __init__(self, args, text):
-        Block.__init__(self, "blockquote", args, text)
+@elements.add()
+class Blockquote(Block):
+    name = "Blockquote"
 
+@elements.add()
 class ItemBlock(Block):
-    def __init__(self, args, text):
-        Block.__init__(self, "block_item", args, text)
+    name = "ItemBlock"
 
+@elements.add()
 class Table(Block):
-    def __init__(self, args, text):
-        Block.__init__(self, "table", args, text)
+    name = "TableBlock"
 
-class Row(Block):
-    def __init__(self, args, text):
-        Block.__init__(self, "row", args, text)
+@elements.add()
+class Row(Inline):
+    name = "TableRow"
 
+@elements.add()
+class TableHeader(Inline):
+    name = "TableHeader"
+
+@elements.add()
+class TableRule(Inline):
+    name = "TableRule"
+
+@elements.add()
 class CellBlock(Block):
-    def __init__(self, args, text):
-        Block.__init__(self, "cell_block", args, text)
+    name = "TableCellBlock"
 
-class HeaderRow(Block):
-    def __init__(self, args, text):
-        Block.__init__(self, "thead", args, text)
+@elements.add()
+class CellSpan(Inline):
+    name = "TableCellSpan"
 
-class NamedBlockDirective(Block):
-    def __init__(self, args, text):
-        Block.__init__(self, "directive_block", args, text)
-
-class RawBlock(Block):
-    def __init__(self, args, text):
-        Block.__init__(self, "block_raw", args, text)
-
-class Inline(Node):
-    pass
-
-class Cell(Inline):
-    def __init__(self, args, text):
-        Inline.__init__(self, "cell", args, text)
-
+@elements.add()
 class Span(Inline):
-    def __init__(self, args, text):
-        Inline.__init__(self, "span", args, text)
+    name = "Span"
 
+@elements.add()
 class RawSpan(Inline):
-    def __init__(self, args, text):
-        Inline.__init__(self, "raw_span", args, text)
+    name = "RawSpan"
 
+@elements.add()
 class ItemSpan(Inline):
-    def __init__(self, args, text):
-        Inline.__init__(self, "item_span", args, text)
+    name = "ItemSpan"
 
+@elements.add()
 class CodeSpan(Inline):
-    def __init__(self, args, text):
-        Inline.__init__(self, "code_span", args, text)
+    name = "CodeSpan"
 
+@elements.add()
 class Strong(Inline):
-    def __init__(self, args, text):
-        Inline.__init__(self, "strong", args, text)
+    name = "Strong"
 
+@elements.add()
 class Emphasis(Inline):
-    def __init__(self, args, text):
-        Inline.__init__(self, "emph", args, text)
+    name = "Emphasis"
 
-class Strike(Inline):
-    def __init__(self, args, text):
-        Inline.__init__(self, "strike", args, text)
+@elements.add()
+class Strikethrough(Inline):
+    name = "Strikethrough"
 
+@elements.add()
 class Hardbreak(Inline):
-    def __init__(self, args=None, text=None):
-        if args or text: raise Exception('bad')
-        Inline.__init__(self, "hardbreak", [],[])
+    name ="HardBreak"
 
+
+@elements.add()
 class Newline(Inline):
-    def __init__(self, args=None, text=None):
-        if args or text: raise Exception('bad')
-        Inline.__init__(self, "n", [],[])
+    name = "Newline"
 
+@elements.add()
 class Softbreak(Inline):
-    def __init__(self, args=None, text=None):
-        if args or text: raise Exception('bad')
-        Inline.__init__(self, "softbreak", [],[])
+    name = "Softbreak"
 
+@elements.add()
 class Nbsp(Inline):
-    def __init__(self, args=None, text=None):
-        if args or text: raise Exception('bad')
-        Inline.__init__(self, "nbsp", [],[])
+    name = "Nbsp"
 
+@elements.add()
 class Emoji(Inline):
-    def __init__(self, args=None, text=None):
-        if args: raise Exception('bad')
-        Inline.__init__(self, "emoji", [], text)
+    name = "Emoji"
 
-class NamedInlineDirective(Inline):
-    def __init__(self, args, text):
-        Inline.__init__(self, "directive", args, text)
+@elements.add()
+class Whitespace(Inline):
+    name = "Whitespace"
 
-nodes = {
-
-}
 
 block_directives = { # \foo::begin
         "hr": HorizontalRule,
         "list": ListBlock,
-        "blockquote": QuoteBlock,
+        "blockquote": Blockquote,
         "item": ItemBlock,
         "table": Table,
         "row": Row,
@@ -201,13 +207,14 @@ para_directives = { # \foo: ...
         "para": Paragraph,
         "p": Paragraph,
         "h": Heading,
-        "list": ListBlock,
         "heading": Heading,
+        "list": ListBlock,
         "code": CodeBlock,
         "raw": RawBlock,
+        "table": Table,
         "row": Row,
-        "cell": Cell,
-        "div": Division,
+        "cell": CellSpan,
+        "span": Span,
 }
 
 inline_directives = {
@@ -218,55 +225,54 @@ inline_directives = {
         "em": Emphasis,
         "emph": Emphasis,
         "emphasis": Emphasis,
-        "strike": Strike,
+        "strike": Strikethrough,
         "code": CodeSpan,
-        "code_span": CodeSpan,
         "item": ItemSpan,
         "raw": RawSpan,
         "span": Span,
-        "cell": Cell,
+        "cell": CellSpan,
         "nbsp": Nbsp,
 }
 def walk(obj, builder):
     if obj is None: 
         pass
-    if obj.name == "document":
+    if obj.name == Document.name:
         for o in obj.text:
             walk(o, builder)
-    elif obj.name == "hr":
+    elif obj.name == HorizontalRule.name:
         builder.add_hr()
-    elif obj.name == "code_block":
+    elif obj.name == CodeBlock.name:
         text = "".join(obj.text)
         builder.add_code_block(text)
-    elif obj.name == "blockquote":
+    elif obj.name == Blockquote.name:
         with builder.build_blockquote() as b:
             for o in obj.text:
                 walk(o, b)
-    elif obj.name == "paragraph":
+    elif obj.name == Paragraph.name:
         with builder.build_para() as p:
             for word in obj.text:
                 walk_inline(word, p)
-    elif obj.name == "prose":
+    elif obj.name == Prose.name:
         with builder.build_para(prose=True) as p:
             for word in obj.text:
                 walk_inline(word, p)
-    elif obj.name == "heading":
+    elif obj.name == Heading.name:
         with builder.build_heading(obj.get_arg('level')) as p:
             for word in obj.text:
                 walk_inline(word, p)
-    elif obj.name == "section":
+    elif obj.name == Section.name:
         with builder.build_section() as b:
             for o in obj.text:
                 walk(o, b)
 
-    elif obj.name == "table":
+    elif obj.name ==  Table.name:
         cols = len(obj.text[0].text)
         align = dict(enumerate(obj.get_arg('column_align') or ()))
         with builder.build_table(cols, align) as t:
             for row in obj.text:
-                with t.add_row(heading=row.name=='thead') as b:
+                with t.add_row(heading=(row.name==TableHeader.name)) as b:
                     for cell in row.text:
-                        if cell.name == 'cell_block':
+                        if cell.name == CellBlock.name:
                             with b.add_block_column() as c:
                                 for x in cell.text:
                                     walk(x, c)
@@ -275,21 +281,21 @@ def walk(obj, builder):
                                 for x in cell.text:
                                     walk_inline(x, c)
 
-    elif obj.name == "blocklist":
+    elif obj.name == ListBlock.name:
         with builder.build_list(obj.get_arg('start'), obj.get_arg('bullet'), len(obj.text)) as l:
             for item in obj.text:
-                if item.name == 'item_span':
+                if item.name == ItemSpan.name:
                     with l.build_item_span() as p:
                         for word in item.text:   
                             walk_inline(word, p)
-                if item.name == 'block_item':
+                if item.name == ItemBlock.name:
                     with l.build_block_item() as p:
                         for word in item.text:   
                             walk(word, p)
     elif isinstance(obj, Block):
         builder.lines.append(obj.name)
         for o in obj.text:
-            builder.lines.append(getattr(obj,'name',''))
+            builder.lines.append(getattr(o,'name',''))
 
 
 def walk_inline(obj, builder, filter=None):
@@ -300,29 +306,35 @@ def walk_inline(obj, builder, filter=None):
         if obj:
             if filter: obj = filter(obj)
             builder.add_text(obj)
-    elif obj.name == "hardbreak" or obj.name == "n":
+    elif obj.name == Hardbreak.name:
         builder.add_break()
-    elif obj.name == "nbsp":
+    elif obj.name == Nbsp.name:
         builder.add_text(" ")
-    elif obj.name == "softbreak":
+    elif obj.name == Softbreak.name:
         builder.add_space()
-    elif obj.name == 'code_span':
+    elif obj.name == CodeSpan.name:
         def walk_code(obj):
             if isinstance(obj, str): return obj
             return ""
         text = "".join(walk_code(c) for c in obj.text).strip()
         builder.add_code_text(text)
-    elif obj.name == 'emph':
+    elif obj.name == Emphasis.name:
         for o in obj.text:
             walk_inline(o, builder, filter)
-    elif obj.name == 'strong':
-        with builder.effect('strong') as builder:
+    elif obj.name == Strong.name:
+        with builder.effect('strong') as b:
             for o in obj.text:
                 walk_inline(o, builder, filter)
-    elif obj.name == 'strike':
+    elif obj.name == Strikethrough.name:
         for o in obj.text:
             walk_inline(o, builder, filter)
+    elif obj.name == Emoji.name:
+        builder.add_text(":")
+        for o in obj.text:
+            walk_inline(o, builder, filter)
+        builder.add_text(":")
     else:
+        raise Exception(obj.name)
         builder.add_text(f"{obj.name}{{")
         if obj.text:
             for o in obj.text:
@@ -342,7 +354,10 @@ def tagged_to_object(name, value):
     else:
         text = []
     value = list(value.items())
-    return Data(name, value, text)
+    if name in elements:
+        return elements.make(name, value, text)
+    else:
+        return Node(name, value, text)
 
 codec = Codec(object_to_tagged, tagged_to_object)
 
