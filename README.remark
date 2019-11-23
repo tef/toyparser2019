@@ -144,6 +144,19 @@ work almost exactly the same. Unlike markdown, a list cannot have more than one 
       <table><thead><tr><td>header 1 ....
       .... <td>cell 2</td></tr></table> 
       ```
+  - - ```
+      | Prose blocks are special
+      |   line breaks and whitespace preserved
+      |      like foot prints in snow
+      ```
+    -
+      | Prose blocks are special
+      |   line breaks and whitespace preserved
+      |      like foot prints in snow
+    - ```
+      <p style="white-space: pre-wrap">...
+      ...</p>
+      ```
 
 Unlike markdown, and a little more like LaTeX, Remark has a standard form for directives, `\name[args]{text}`.
 

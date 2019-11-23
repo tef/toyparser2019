@@ -228,7 +228,9 @@ class BlockBuilder:
         self.add_index()
         lines = text.splitlines()
         indent = 2
-        self.lines.extend((" "* indent)+line+(" "*indent) for line in lines)
+        max_width = len(max(lines, key=len))
+        lines = [f"  {line}" + (" "*(max_width-len(line))) for line in lines]
+        self.lines.extend(lines)
         self.lines.append("")
 
     def add_hr(self):
@@ -579,7 +581,13 @@ class ParaBuilder:
             self.current_word[:] = []
             self._add_text(word)
         self.add_break()
-        return self.mapper, [(" "* self.box.indent)+line for line in self.lines]
+        if self.prose:
+            lines = [(" "* self.box.indent)+line for line in self.lines]
+            max_width = len(max(lines, key=len))
+            max_width = max(max_width, self.box.width)
+            return self.mapper, [line + (" "*(max_width-len(line))) for line in lines]
+        else:
+            return self.mapper, [(" "* self.box.indent)+line for line in self.lines]
         
     def _add_text(self, text):
         l = line_len(text)
