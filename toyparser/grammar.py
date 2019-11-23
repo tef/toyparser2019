@@ -2057,7 +2057,7 @@ def compile_python(grammar, cython=False, wrap=False):
 
     if use_regexes:
         for regex, value in regexes.items():
-            output.append(f"{value} = re.compile(r'{(regex)}')")
+            output.append(f"{value} = re.compile(r'''{(regex)}''')")
         if regexes:
             output.append("")
     if cython:

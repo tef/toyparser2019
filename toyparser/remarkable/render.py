@@ -163,7 +163,7 @@ html_tags = {
        "prose": '<p style="white-space: pre-wrap">{text}</p>\n',
        "division": "<div>{text}</div>\n",
        "section": "<section>{text}</section>\n",
-       "hardbreak": "<br/>\n",
+       "hardbreak": "<br/>",
        "softbreak": "\n",
        "emoji":"<span class='emoji'>{text}</span>",
        "n": "\n",
@@ -187,6 +187,9 @@ def to_html(obj):
 
     args = dict(obj.args)
     name = obj.name
+    text = obj.text 
+    if 'text' in args:
+        text = args.pop('text')
     if name in ('block_raw', 'raw_span'):
         text = "".join(obj.text)
     else:

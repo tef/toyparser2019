@@ -20,7 +20,7 @@ from remarkable import dom
 from remarkable.render import to_ansi, RenderBox
 
 def to_response(response):
-    if isinstance(response, dom.Directive):
+    if isinstance(response, dom.Node):
         response = Document(response)
     if not isinstance(response, Response):
         response = Plaintext(response)

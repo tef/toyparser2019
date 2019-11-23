@@ -1,6 +1,27 @@
 from .rson import Codec
 
-class Directive:
+class Registry:
+    def __init__(self):
+        self.classes = {}
+        self.names = {}
+
+    def add(self):
+        def _wrapper(cls):
+            self.register(cls.name, cls)
+            return cls
+        return _wrapper
+    
+    def register(self, name, cls):
+        if name in self.classes or cls in self.names:
+            raise Exception('no')
+        self.classes[name] = cls
+        self.names[cls] = name
+
+
+registry = Registry()
+
+
+class Node:
     def __init__(self, name, args, text):
         self.name = name
         self.args = args
@@ -15,16 +36,18 @@ class Directive:
         for k,v in self.args:
             if k == key: return v
 
-class Data(Directive):
+class Data(Node):
     def __init__(self, name, args, text):
-        Directive.__init__(self, name, args, text)
+        Node.__init__(self, name, args, text)
 
-class Block(Directive):
+class Block(Node):
     pass
 
+@registry.add()
 class Document(Block):
+    name = "document"
     def __init__(self, args, text):
-        Block.__init__(self, "document", args, text)
+        Block.__init__(self, self.name, args, text)
 
 class Paragraph(Block):
     def __init__(self, args, text):
@@ -94,7 +117,7 @@ class RawBlock(Block):
     def __init__(self, args, text):
         Block.__init__(self, "block_raw", args, text)
 
-class Inline(Directive):
+class Inline(Node):
     pass
 
 class Cell(Inline):
@@ -157,6 +180,10 @@ class Emoji(Inline):
 class NamedInlineDirective(Inline):
     def __init__(self, args, text):
         Inline.__init__(self, "directive", args, text)
+
+nodes = {
+
+}
 
 block_directives = { # \foo::begin
         "hr": HorizontalRule,
@@ -315,7 +342,7 @@ def tagged_to_object(name, value):
     else:
         text = []
     value = list(value.items())
-    return Directive(name, value, text)
+    return Data(name, value, text)
 
 codec = Codec(object_to_tagged, tagged_to_object)
 
