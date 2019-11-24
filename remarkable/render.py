@@ -566,6 +566,8 @@ class ListBuilder:
                 self.lines.append(self.incr() + line)
             else:
                 self.lines.append((" "*self.width) + line)
+        if len(lines) == 0:
+            self.lines.append(self.incr())
 
 class ParaBuilder:
     def __init__(self, settings, box, prose=False):
