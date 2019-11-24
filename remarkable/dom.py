@@ -241,11 +241,14 @@ def walk(obj, builder):
     if obj.name == Document.name:
         for o in obj.text:
             walk(o, builder)
+    elif obj.name == RawBlock:
+        builder.add_raw(obj.text)
     elif obj.name == HorizontalRule.name:
         builder.add_hr()
     elif obj.name == CodeBlock.name:
-        text = "".join(obj.text)
-        builder.add_code_block(text)
+        with builder.build_codeblock() as p:
+            for word in obj.text:
+                walk_inline(word, p)
     elif obj.name == Blockquote.name:
         with builder.build_blockquote() as b:
             for o in obj.text:
@@ -263,6 +266,10 @@ def walk(obj, builder):
             for word in obj.text:
                 walk_inline(word, p)
     elif obj.name == Section.name:
+        with builder.build_section() as b:
+            for o in obj.text:
+                walk(o, b)
+    elif obj.name == Division.name:
         with builder.build_section() as b:
             for o in obj.text:
                 walk(o, b)
@@ -294,11 +301,14 @@ def walk(obj, builder):
                     with l.build_block_item() as p:
                         for word in item.text:   
                             walk(word, p)
-    elif isinstance(obj, Block):
-        builder.lines.append(obj.name)
-        for o in obj.text:
-            builder.lines.append(getattr(o,'name',''))
-
+    elif obj.name == NamedBlockDirective:
+        with builder.build_directive(obj.get_arg('name'), obj.args) as b:
+            for t in obj.text:
+                walk(t, b)
+    else:
+        with builder.build_node(obj.name, obj.args) as b:
+            for t in obj.text:
+                walk(t, b)
 
 def walk_inline(obj, builder, filter=None):
     if obj is None: return
@@ -308,6 +318,8 @@ def walk_inline(obj, builder, filter=None):
         if obj:
             if filter: obj = filter(obj)
             builder.add_text(obj)
+    elif obj.name == RawSpan:
+        builder.add_raw(obj.text)
     elif obj.name == Wordbreak.name:
         builder.add_wordbreak()
     elif obj.name == Whitespace.name:
@@ -318,36 +330,36 @@ def walk_inline(obj, builder, filter=None):
         builder.add_text(" ")
     elif obj.name == Softbreak.name:
         builder.add_softbreak()
+    elif obj.name == Span.name:
+        with builder.build_codespan() as b:
+            for o in obj.text:
+                walk_inline(o, b, filter)
     elif obj.name == CodeSpan.name:
-        def walk_code(obj):
-            if isinstance(obj, str): return obj
-            if obj.name in (Softbreak.name, Hardbreak.name, Newline.name):
-                return "\n"
-            return ""
-        text = "".join(walk_code(c) for c in obj.text).strip()
-        builder.add_code_text(text)
+        with builder.build_codespan() as b:
+            for o in obj.text:
+                walk_inline(o, b, filter)
     elif obj.name == Emphasis.name:
-        for o in obj.text:
-            walk_inline(o, builder, filter)
+        with builder.effect('emphasis') as b:
+            for o in obj.text:
+                walk_inline(o, b, filter)
     elif obj.name == Strong.name:
         with builder.effect('strong') as b:
             for o in obj.text:
-                walk_inline(o, builder, filter)
+                walk_inline(o, b, filter)
     elif obj.name == Strikethrough.name:
-        for o in obj.text:
-            walk_inline(o, builder, filter)
-    elif obj.name == Emoji.name:
-        builder.add_text(":")
-        for o in obj.text:
-            walk_inline(o, builder, filter)
-        builder.add_text(":")
-    else:
-        raise Exception(obj.name)
-        builder.add_text(f"{obj.name}{{")
-        if obj.text:
+        with builder.effect('strikethrough') as b:
             for o in obj.text:
                 walk_inline(o, builder, filter)
-        builder.add_text("}")
+    elif obj.name == Emoji.name:
+        builder.add_emoji(obj.get_arg('name'))
+    elif obj.name == NamedInlineDirective:
+        with builder.build_directive(obj.get_args('name'), obj.args) as b:
+            for o in obj.text:
+                walk_inline(o, builder, filter)
+    else:
+        with builder.build_node(obj.name, obj.args) as b:
+            for o in obj.text:
+                walk_inline(o, builder, filter)
 
 def object_to_tagged(obj):
     args = {}

@@ -224,15 +224,6 @@ class BlockBuilder:
             return (" "*w) + line
         return self.mapper, [indent(line) for line in self.lines]
 
-    def add_code_block(self, text):
-        self.add_index()
-        lines = text.splitlines()
-        indent = 2
-        max_width = len(max(lines, key=len))
-        lines = [f"  {line}" + (" "*(max_width-len(line))) for line in lines]
-        self.lines.extend(lines)
-        self.lines.append("")
-
     def add_hr(self):
         self.add_index()
         width = int(self.box.width*0.3)*2
@@ -241,6 +232,13 @@ class BlockBuilder:
         line = (" "*pad) + ("-"*width) + (" "*pad)
         self.lines.append(line)
         self.lines.append("")
+
+    def add_node(self, name, args, text):
+        pass
+    def add_directive(self, name, args, text):
+        pass
+    def add_raw(self, text):
+        pass
 
     @contextmanager
     def build_blockquote(self):
@@ -272,6 +270,19 @@ class BlockBuilder:
             pad = max(0, self.box.width-line_len(line)) //2
             self.lines.append((" "*pad)+line)
 
+        self.lines.append("")
+
+    @contextmanager
+    def build_codeblock(self):
+        self.add_index()
+        box = RenderBox(2, self.box.width-2, self.box.height)
+        builder = ParaBuilder(self.settings, box, prose=True)
+        yield builder
+        mapper, lines= builder.build()
+        self.add_mapper(mapper)
+        max_width = len(max(lines, key=len))
+        lines = [line + (" "*(max_width-len(line))) for line in lines]
+        self.lines.extend(lines)
         self.lines.append("")
 
     @contextmanager
@@ -566,8 +577,8 @@ class ParaBuilder:
         self.current_word = []
         self.current_width = 0
         self.effects = []
-        self.start_code = { 'strong': '\x1b[1m',}
-        self.end_code = { 'strong': '\x1b[0m',}
+        self.start_code = { 'strong': '\x1b[1m', 'emphasis': '', 'strikethrough':''}
+        self.end_code = { 'strong': '\x1b[0m', 'emphasis':'', 'strikethrough':''}
         self.count = 0
         self.prose = prose
         self.whitespace = False
@@ -622,6 +633,7 @@ class ParaBuilder:
             self.whitespace = True
 
     def add_code_text(self, text):
+        self.add_wordbreak()
         self.add_text("`")
         for line in text.splitlines(keepends=True):
             if '\n' == line[-1]:
@@ -630,6 +642,7 @@ class ParaBuilder:
             else:
                 self.add_text(line)
         self.add_text("`")
+        self.add_wordbreak()
 
     def add_softbreak(self):
         if self.prose:
@@ -650,16 +663,45 @@ class ParaBuilder:
         self.whitespace = False
 
     def add_text(self, text):
-        self.current_word.append(text)
+        for line in text.splitlines(keepends=True):
+            if '\n' == line[-1]:
+                self.current_word.append(line[:-1])
+                self.add_break()
+            else:
+                self.current_word.append(line)
+    def add_node(self, name, args, text):
+        pass
+    def add_directive(self, name, args, text):
+        pass
+    def add_raw(self, text):
+        pass
+
+
+    def add_emoji(self, name):
+        self.add_wordbreak()
+        self.current_word.extend([':', name, ':'])
+        self.add_wordbreak()
+
 
     @contextmanager
     def effect(self, name):
+        self.add_wordbreak()
         self.current_word.append(self.start_code[name])
         self.effects.append(name)
         yield self
         self.current_word.append(self.end_code[name])
         self.add_current_word()
         self.effects.pop()
+
+    @contextmanager
+    def build_codespan(self):
+        self.add_wordbreak()
+        old_prose, self.prose = self.prose, True
+        self.current_word.append('`')
+        yield self
+        self.current_word.append('`')
+        self.add_current_word()
+        self.prose = old_prose
 
 
 def to_ansi(obj, box, settings):

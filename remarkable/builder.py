@@ -59,7 +59,8 @@ def builder(buf, node, children):
         return None
 
     if kind == "emoji":
-        return dom.Emoji((), [c for c in children if c is not None])
+        name = "".join(c for c in children if c is not None)
+        return dom.Emoji([('name', name),], [])
 
 
     if kind == 'horizontal_rule':
