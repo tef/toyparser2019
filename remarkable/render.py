@@ -570,17 +570,15 @@ class ParaBuilder:
         self.end_code = { 'strong': '\x1b[0m',}
         self.count = 0
         self.prose = prose
-        self.whitespace = True
+        self.whitespace = False
 
     def add_index(self):
         self.mapper.add_index(len(self.lines))
 
     def build(self):
-        if self.current_word:
-            word = "".join(self.current_word)
-            self.current_word[:] = []
-            self._add_text(word)
-        self.add_break()
+        self.add_current_word()
+        self.add_current_line()
+
         if self.prose:
             lines = [(" "* self.box.indent)+line for line in self.lines]
             max_width = len(max(lines, key=len))
@@ -588,18 +586,25 @@ class ParaBuilder:
             return self.mapper, [line + (" "*(max_width-len(line))) for line in lines]
         else:
             return self.mapper, [(" "* self.box.indent)+line for line in self.lines]
-        
-    def _add_text(self, text):
+
+    def add_current_word(self):
+        if not self.current_word:
+            return
+
+        text = "".join(self.current_word)
+        self.current_word[:] = []
+
         l = line_len(text)
         l = l +1 if self.current_width else l
         if l + self.current_width >= self.box.width and self.current_width > 0:
-            self._add_break()
-        if self.current_line:
+            self.add_current_line()
+        if self.whitespace:
             self.current_line.append(" ")
         self.current_line.append(text)
         self.current_width += l
+        self.whitespace = False
 
-    def _add_break(self):
+    def add_current_line(self):
         for name in self.effects[::-1]:
             self.current_line.append(self.end_code[name])
         self.lines.append("".join(self.current_line))
@@ -607,20 +612,23 @@ class ParaBuilder:
         self.current_width = 0
         for name in self.effects[::-1]:
             self.current_line.append(self.start_code[name])
+        self.whitespace = False
 
     def add_space(self, text=" "):
         if self.prose:
             self.current_word.append(text)
         else:
-            if self.current_word:
-                word = "".join(self.current_word)
-                self.current_word[:] = []
-                self._add_text(word)
+            self.add_current_word()
             self.whitespace = True
 
     def add_code_text(self, text):
         self.add_text("`")
-        self.add_text(text)
+        for line in text.splitlines(keepends=True):
+            if '\n' == line[-1]:
+                self.add_text(line[:-1])
+                self.add_break()
+            else:
+                self.add_text(line)
         self.add_text("`")
 
     def add_softbreak(self):
@@ -629,12 +637,15 @@ class ParaBuilder:
         else:
             self.add_space()
 
+    def add_wordbreak(self):
+        if self.whitespace:
+            self.add_text(' ')
+        self.add_current_word()
+        self.whitespace = False
+
     def add_break(self):
-        if self.current_word:
-            word = "".join(self.current_word)
-            self.current_word[:] = []
-            self._add_text(word)
-        self._add_break()
+        self.add_current_word()
+        self.add_current_line()
         self.add_index()
         self.whitespace = False
 
@@ -647,9 +658,7 @@ class ParaBuilder:
         self.effects.append(name)
         yield self
         self.current_word.append(self.end_code[name])
-        word = "".join(self.current_word)
-        self.current_word[:] = []
-        self._add_text(word)
+        self.add_current_word()
         self.effects.pop()
 
 

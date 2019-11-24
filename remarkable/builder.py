@@ -64,12 +64,19 @@ def builder(buf, node, children):
 
     if kind == 'horizontal_rule':
         return dom.HorizontalRule(children[0], ())
+    def trim_whitespace(node):
+        if isinstance(node, str):
+            return node
+        if node.name == dom.Whitespace.name:
+            return " "
+        node.text = [trim_whitespace(n) for n in node.text if n is not None]
+        return node
     if kind == 'atx_heading':
         args = [('level', node.value)] + children[0]
-        return dom.Heading(args, [c for c in children[1:] if c is not None])
+        return dom.Heading(args, [trim_whitespace(c) for c in children[1:] if c is not None])
 
     if kind == "paragraph":
-        return dom.Paragraph([], [c for c in children if c is not None])
+        return dom.Paragraph([], [trim_whitespace(c) for c in children if c is not None])
     if kind == "prose":
         return dom.Prose(children[0], [c for c in children[1:] if c is not None])
     if kind == "span":
@@ -124,7 +131,7 @@ def builder(buf, node, children):
             if not children[2:]:
                 return dom.ItemSpan(children[0], [])
             elif len(children) == 3 and children[2].name == dom.Paragraph and not children[2].args:
-                return dom.ItemSpan(children[0], children[2].text)
+                return dom.ItemSpan(children[0], [trim_whitepace(t) for t in children[2].text if t is not None])
             else:
                 return dom.ItemBlock(children[0], [c for c in children[2:] if c is not None])
 
@@ -227,7 +234,7 @@ def builder(buf, node, children):
         return dom.Node('directive_span',[],[c for c in children if c is not None])
 
     if kind == "directive_para":
-        return dom.Node('directive_para',[],[c for c in children if c is not None])
+        return dom.Node('directive_para',[],[trim_whitespace(c) for c in children if c is not None])
     if kind == "directive_code":
         return dom.Node('directive_code',[],[c for c in children if c is not None])
     if kind == "directive_code_span":
@@ -255,7 +262,7 @@ def builder(buf, node, children):
         return dom.Table(args,text)
         
     if kind == "table_cell":
-        return dom.CellSpan([], children)
+        return dom.CellSpan([], [trim_whitespace(c) for c in children if c is not None])
     if kind == "column_align":
         left = buf[node.start] == ":"
         right = buf[node.end-1] == ":"

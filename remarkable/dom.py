@@ -167,6 +167,9 @@ class Strikethrough(Inline):
 class Hardbreak(Inline):
     name ="HardBreak"
 
+@elements.add()
+class Wordbreak(Inline):
+    name ="WordBreak"
 
 @elements.add()
 class Newline(Inline):
@@ -230,6 +233,7 @@ inline_directives = {
         "span": Span,
         "cell": CellSpan,
         "nbsp": Nbsp,
+        "wbr": Wordbreak,
 }
 def walk(obj, builder):
     if obj is None: 
@@ -304,9 +308,11 @@ def walk_inline(obj, builder, filter=None):
         if obj:
             if filter: obj = filter(obj)
             builder.add_text(obj)
+    elif obj.name == Wordbreak.name:
+        builder.add_wordbreak()
     elif obj.name == Whitespace.name:
         builder.add_space(obj.text[0]) 
-    elif obj.name == Hardbreak.name:
+    elif obj.name == Hardbreak.name or obj.name == Newline.name:
         builder.add_break()
     elif obj.name == Nbsp.name:
         builder.add_text(" ")
@@ -315,6 +321,8 @@ def walk_inline(obj, builder, filter=None):
     elif obj.name == CodeSpan.name:
         def walk_code(obj):
             if isinstance(obj, str): return obj
+            if obj.name in (Softbreak.name, Hardbreak.name, Newline.name):
+                return "\n"
             return ""
         text = "".join(walk_code(c) for c in obj.text).strip()
         builder.add_code_text(text)
