@@ -4,9 +4,11 @@ import os
 
 from clgi.errors import Bug, Error
 from clgi.app import App, Router, command, Plaintext, Document
-from remarkable.render import to_ansi, RenderBox
+
 from remarkable import dom
-from toyparser.remarkable.Remarkable import parse, to_html
+from remarkable.parser import parse
+from remarkable.render_ansi import to_ansi, RenderBox
+from remarkable.render_html import to_html
 
 class AppError(Error):
     pass

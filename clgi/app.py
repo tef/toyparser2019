@@ -17,7 +17,7 @@ from .argparser import ArgumentParser
 from .tty import pager
 from remarkable import dom
 
-from remarkable.render import to_ansi, RenderBox
+from remarkable.render_ansi import to_ansi, RenderBox
 
 def to_response(response):
     if isinstance(response, dom.Node):

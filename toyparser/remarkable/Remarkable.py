@@ -1,14 +1,4 @@
-"""
-"""
-
-from datetime import datetime, timedelta, timezone
-from contextlib import contextmanager
-
 from ..grammar import Grammar, compile_python, sibling
-from remarkable import dom
-from remarkable.builder import builder
-
-from .render import to_html, to_text
 
 class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r", "\n", "\r\n"], tabstop=8):
     @rule(inline=True) # 2.1 line ends by newline or end_of_file
@@ -1135,16 +1125,6 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                             "f", "n", "r", "t", "'", "\n",
                         )
                 self.literal("\'")
-
-parser = Remarkable().parser()
-def parse(buf):
-    # remove metadata block
-    # lift into document block
-    # use metadata block to set up default transforms
-    node = parser.parse(buf)
-    if node:
-        tree = node.build(buf, builder)
-        return tree
 
 if __name__ == "__main__":
     import subprocess
