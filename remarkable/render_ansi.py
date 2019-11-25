@@ -251,12 +251,16 @@ class BlockBuilder:
         self.lines.extend(lines)
         self.lines.append("")
 
+    def build_node(self, obj):
+        self.add_index()
+        self.lines.append(dom.dump(obj))
+        self.lines.append("")
 
     @contextmanager
-    def build_node(self, name, args):
+    def build_directive(self, name, args):
         self.add_index()
-        builder = BlockBuilder(self.settings, self.box)
-        self.lines.append(dom.dump(dom.Node(name, args,())))
+        builder = BlockBuilder(self.settings, self.box.indent())
+        self.lines.append("\\{name}:")
         yield builder
         mapper, lines = builder.build(indent=False)
         self.add_mapper(mapper)

@@ -49,10 +49,14 @@ class Element:
             yield from o.select(name)
 
 class Node(Element):
-    def __init__(self, name, args, text):
+    def __init__(self, name, args):
         self.name = name
         self.args = args
-        self.text = text
+
+    @property
+    def text(self):
+        x = self.get_arg('text')
+        return x or ()
 
 class Block(Element):
     def __init__(self, args, text):
@@ -77,6 +81,14 @@ class NamedBlockDirective(Block):
     def __init__(self, name, args, text):
         args = args + [('name', name)]
         Block.__init__(self, args, text)
+
+
+class DirectiveNode(Element):
+    def __init__(self, name, args, text):
+        self.name = name
+        self.args = args
+        self.text = text
+
 
 @elements.add()
 class RawBlock(Block):
@@ -412,9 +424,7 @@ def walk(obj, builder):
             for t in obj.text:
                 walk(t, b)
     else:
-        with builder.build_node(obj.name, obj.args) as b:
-            for t in obj.text:
-                walk(t, b)
+        builder.build_node(obj)
 
 def walk_inline(obj, builder, filter=None):
     if obj is None: return
@@ -475,15 +485,16 @@ def object_to_tagged(obj):
     return obj.name, args
 
 def tagged_to_object(name, value):
-    if 'text' in value:
-        text = value['text']
-    else:
-        text = []
-    value = list(value.items())
     if name in elements:
+        if 'text' in value:
+            text = value['text']
+        else:
+            text = []
+        value = list(value.items())
         return elements.make(name, value, text)
     else:
-        return Node(name, value, text)
+        value = list(value.items())
+        return Node(name, value)
 
 codec = Codec(object_to_tagged, tagged_to_object)
 

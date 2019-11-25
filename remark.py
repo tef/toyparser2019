@@ -75,11 +75,26 @@ def View(ctx, file, width, height, heading):
         text = fh.read()
         doc = parse(text)
         tests = list(doc.select('TestCase'))
-        return Document(dom.Document((), tests), settings)
-        doc2 = parse(text)
-        if doc2 == doc:
-            return "welp"
-    return Document(doc, settings)
+        results = []
+        success = []
+        for test_case in tests:
+            raw_text = test_case.get_arg('input_text')
+            output_dom = test_case.get_arg('output_dom')
+            result_dom = parse(raw_text)
+            results.append(result_dom)
+            success.append(result_dom == output_dom)
+
+        fragments = []
+        for i, t in enumerate(tests):
+            fragments.append(t)
+            if success[i]:
+                fragments.append(dom.Paragraph((), ["worked"]))
+            else:
+                fragments.append(dom.Paragraph((), ["failed"]))
+                if result_dom:
+                    fragments.append(result_dom)
+
+    return Document(dom.Document((), fragments), settings)
 
 @router.on("view") 
 @command(args=dict(heading="--str?", width="--int?", height="--int?", file="path"))

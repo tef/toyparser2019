@@ -232,24 +232,24 @@ def builder(buf, node, children):
         return buf[node.start:node.end]
 
     if kind == "directive_span":
-        return dom.Node('directive_span',[],[c for c in children if c is not None])
+        return dom.DirectiveNode('directive_span',[],[c for c in children if c is not None])
 
     if kind == "directive_para":
-        return dom.Node('directive_para',[],[trim_whitespace(c) for c in children if c is not None])
+        return dom.DirectiveNode('directive_para',[],[trim_whitespace(c) for c in children if c is not None])
     if kind == "directive_code":
-        return dom.Node('directive_code',[],[c for c in children if c is not None])
+        return dom.DirectiveNode('directive_code',[],[c for c in children if c is not None])
     if kind == "directive_code_span":
-        return dom.Node('directive_code',[],[c for c in children if c is not None])
+        return dom.DirectiveNode('directive_code',[],[c for c in children if c is not None])
     if kind == "directive_table":
-        return dom.Node('directive_table',[],[c for c in children if c is not None])
+        return dom.DirectiveNode('directive_table',[],[c for c in children if c is not None])
     if kind == "directive_block":
-        return dom.Node('directive_block',[],[c for c in children if c is not None])
+        return dom.DirectiveNode('directive_block',[],[c for c in children if c is not None])
     if kind == "directive_quote":
-        return dom.Node('directive_quote',children[0],[c for c in children[1:] if c is not None])
+        return dom.DirectiveNode('directive_quote',children[0],[c for c in children[1:] if c is not None])
     if kind == "directive_list":
         marker = children[0]
         spacing = children[1]
-        return dom.Node("directive_list", [("marker", marker), ("spacing", spacing)], [c for c in children[2:] if c is not None])
+        return dom.DirectiveNode("directive_list", [("marker", marker), ("spacing", spacing)], [c for c in children[2:] if c is not None])
 
     if kind == "table":
         text = []
@@ -282,12 +282,13 @@ def builder(buf, node, children):
         # can't take raw rson, must be a data node!
         name = children[0]
         args = children[1]
-        text = args.pop('text') if 'text' in args else []
-        args = list(args.items())
         if name in dom.elements:
+            text = args.pop('text') if 'text' in args else []
+            args = list(args.items())
             return dom.elements.make(name, args, text)
         else:
-            return dom.Node(name, args, text)
+            args = list(args.items())
+            return dom.Node(name, args)
 
     if kind == 'rson_number': 
         return eval(buf[node.start:node.end])
