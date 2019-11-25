@@ -27,11 +27,26 @@ class Registry:
 elements = Registry()
 
 class Element:
+    def __eq__(self, other):
+        return (
+            self.name == other.name and
+            all(x == y for x,y in zip(self.args, other.args)) and
+            all(x == y for x,y in zip(self.text, other.text))
+        )
     def get_arg(self, key):
         if key is None:
             return [v for k,v in self.args if k is None]
         for k,v in self.args:
             if k == key: return v
+    def walk(self, builder):
+        pass
+
+    def select(self, name):
+        if name == self.name:
+            yield self
+        for o in self.text:
+            if isinstance(o, str): continue
+            yield from o.select(name)
 
 class Node(Element):
     def __init__(self, name, args, text):
@@ -275,6 +290,7 @@ block_directives = { # \foo::begin
         "note": NoteBlock,
         "comment": CommentBlock,
         "math": MathBlock,
+        "figure": Figure,
 }
 para_directives = { # \foo: ...
         "para": Paragraph,

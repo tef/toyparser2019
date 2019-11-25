@@ -61,6 +61,26 @@ def ConvertAnsi(ctx, file, width, height, heading):
         mapping, text = to_ansi(doc, box, settings)
     return Plaintext(text)
 
+@router.on("test") 
+@command(args=dict(heading="--str?", width="--int?", height="--int?", file="path"))
+def View(ctx, file, width, height, heading):
+    app = ctx['app']
+    name = ctx['name']
+    filename = os.path.relpath(file)
+    settings = {}
+    settings['double']=(heading!="single")
+    if width: settings['width']=width
+
+    with open(filename) as fh:
+        text = fh.read()
+        doc = parse(text)
+        tests = list(doc.select('TestCase'))
+        return Document(dom.Document((), tests), settings)
+        doc2 = parse(text)
+        if doc2 == doc:
+            return "welp"
+    return Document(doc, settings)
+
 @router.on("view") 
 @command(args=dict(heading="--str?", width="--int?", height="--int?", file="path"))
 def View(ctx, file, width, height, heading):

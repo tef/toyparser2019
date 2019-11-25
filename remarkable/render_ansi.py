@@ -238,12 +238,8 @@ class BlockBuilder:
         self.lines.append(line)
         self.lines.append("")
 
-    def add_node(self, name, args, text):
-        pass
-    def add_directive(self, name, args, text):
-        pass
     def add_raw(self, text):
-        pass
+        self.lines.extend(text.splitlines())
 
     @contextmanager
     def build_section(self):
@@ -260,6 +256,7 @@ class BlockBuilder:
     def build_node(self, name, args):
         self.add_index()
         builder = BlockBuilder(self.settings, self.box)
+        self.lines.append(dom.dump(dom.Node(name, args,())))
         yield builder
         mapper, lines = builder.build(indent=False)
         self.add_mapper(mapper)
