@@ -188,10 +188,12 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                         self.indent()
                         with self.reject():
                             self.whitespace(max=8)
-                            self.literal("\\end::")
-                            self.literal(name)
-                            self.whitespace()
-                            self.literal(fence)
+                            self.literal("\\end")
+                            with self.optional():
+                                self.literal("::")
+                                self.literal(name)
+                                self.whitespace()
+                                self.literal(fence)
                             self.line_end()
                         with self.choice():
 
@@ -200,10 +202,12 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                             with self.case(): self.empty_lines()
                 self.indent()
                 self.whitespace(max=8)
-                self.literal("\\end::")
-                self.literal(name)
-                self.whitespace()
-                self.literal(fence)
+                self.literal("\\end")
+                with self.optional():
+                    self.literal("::")
+                    self.literal(name)
+                    self.whitespace()
+                    self.literal(fence)
                 self.line_end()
 
     @rule()

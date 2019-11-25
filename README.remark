@@ -13,11 +13,10 @@ Markdown is great for small comments, or blog posts. LaTeX is good for writing
 a book on Mathematics. RST is good for technical documentation, and HTML is good
 for webpages. So why Remark?
 
-- A consistent way to escape text
-- No magic trailing whitespace, but somethings are indented.
 - CommonMark like shortcuts
 - LaTeX like directives
 - Standard ways to embed structured data, too.
+- A consistent way to escape text
 - Not just HTML output
 
 Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented in terms
@@ -225,9 +224,9 @@ Blocks can contain other blocks and paragraphs. Paragraphs can contain inline di
 	- Blockquotes
 	- Horizonal Rules
 	- Code Blocks
+	- Prose Blocks
 	- Tables
-	- Data Nodes
-	- Named Block Directive (`\name[...]: ...`)
+	- Named Directives (`\name[...]: ...`)
 
 - Inlines
 	- Emphasis
@@ -270,9 +269,22 @@ you can use longer delimiters
 `````
 ``````
 
-## Groups: Lists and Blockquotes
+## Blockquotes
 
-Lists and quotes can have at most one blank line between
+For a blockquote, every line must start with `>`:
+```
+> A paragraph
+> that spans lines
+> 
+> And a second paragraph
+
+
+> A new block quote
+```
+
+## Lists
+
+Lists can have at most one blank line between
 items, i.e two empty lines between list items means two lists with one item each.
 
 ````
@@ -285,23 +297,8 @@ that spans two lines
   - A sublist
 ````
 
-Unlike markdown, `>` works under the same rules as `-`. In other words, only the start of a paragraph gets a `>`, 
-and anything indented underneath is included. Using a `>` starts a new paragraph.
-
-```
-> A block quote
-that spans lines
-> And a second paragraph
-
-
-> A new block quote
-
-> A second Paragraph
-```
-
 Finally, if there are no blank lines between items, or one item, and every item is a solitary paragraph,
 then the list is considered 'tight':
-
 
 ```buu
 - a
@@ -410,7 +407,7 @@ A delimited set of blocks
 Paragraph one
 
 Paragraph two
-\end::section
+\end
 ````
 
 A list, a blockquote

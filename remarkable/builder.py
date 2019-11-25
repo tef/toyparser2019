@@ -26,7 +26,7 @@ def builder(buf, node, children):
         metadata = None
         for c in children:
             if c is None: continue
-            if metadata is None and getattr(c, "name", "") == "metadata":
+            if metadata is None and getattr(c, "name", "").lower() == "metadata":
                 metadata = c.args
                 continue
             text.append(c)

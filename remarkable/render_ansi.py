@@ -17,6 +17,9 @@ class RenderBox:
         self.width = width
         self.height = height
 
+    def zero(self):
+        return RenderBox(0, self.width-self.indent, self.height)
+
     def margin(self, amount):
         new_width = max(self.width - amount*2) if self.width >= self.min_width else self.width
         new_amount = (self.width - new_width)/2
@@ -214,15 +217,17 @@ class BlockBuilder:
     def add_mapper(self, mapper):
         self.mapper.add_mapper(len(self.lines), mapper)
 
-    def build(self):
-        def indent(line):
-            w = self.box.indent
-            if line_len(line) > self.box.width:
-                w = w - max(line_len(line) - self.box.width, 0)//2
-            if '\x1b#' in line:
-                w = w//2
-            return (" "*w) + line
-        return self.mapper, [indent(line) for line in self.lines]
+    def build(self, indent=True):
+        if indent:
+            def _indent(line):
+                w = self.box.indent
+                if line_len(line) > self.box.width:
+                    w = w - max(line_len(line) - self.box.width, 0)//2
+                if '\x1b#' in line:
+                    w = w//2
+                return (" "*w) + line
+            return self.mapper, [_indent(line) for line in self.lines]
+        return self.mapper, self.lines
 
     def add_hr(self):
         self.add_index()
@@ -239,6 +244,27 @@ class BlockBuilder:
         pass
     def add_raw(self, text):
         pass
+
+    @contextmanager
+    def build_section(self):
+        self.add_index()
+        builder = BlockBuilder(self.settings, self.box)
+        yield builder
+        mapper, lines = builder.build(indent=False)
+        self.add_mapper(mapper)
+        self.lines.extend(lines)
+        self.lines.append("")
+
+
+    @contextmanager
+    def build_node(self, name, args):
+        self.add_index()
+        builder = BlockBuilder(self.settings, self.box)
+        yield builder
+        mapper, lines = builder.build(indent=False)
+        self.add_mapper(mapper)
+        self.lines.extend(lines)
+        self.lines.append("")
 
     @contextmanager
     def build_blockquote(self):
@@ -341,6 +367,7 @@ class BlockBuilder:
         self.lines.extend(lines)
         self.add_mapper(mapper)
         self.lines.append("")
+    
 
 class TableBuilder:
     def __init__(self, settings, box, cols, align):

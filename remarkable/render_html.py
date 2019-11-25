@@ -154,32 +154,34 @@ code {{
 
 
 html_tags = {
-       "document": template,
-       "code_block": "<pre><code>{text}</code></pre>\n",
-       "code_span": "<code>{text}</code>",
-       "thead": "<thead><tr>{text}</tr></thead>\n",
-       "para": "<p>{text}</p>\n",
-       "paragraph": "<p>{text}</p>\n",
-       "prose": '<p style="white-space: pre-wrap">{text}</p>\n',
-       "division": "<div>{text}</div>\n",
-       "section": "<section>{text}</section>\n",
-       "hardbreak": "<br/>",
-       "softbreak": "\n",
-       "emoji":"<span class='emoji'>{text}</span>",
-       "n": "\n",
-       "table": "<table>\n{text}</table>\n",
-       "row": "<tr>{text}</tr>\n",
-       "cell": "<td>{text}</td>",
-       "cell_block": "<td>{text}</td>",
-       "nbsp": "&nbsp;",
-       "strike": "<del>{text}</del>",
-       "strong": "<strong>{text}</strong>",
-       "emph": "<em>{text}</em>",
-       "block_item": "<li>{text}</li>",
-       "item_span": "<li>{text}</li>",
-       "block_raw": "{text}",
-       "raw_span": "{text}",
-       "span": "<span>{text}</span>\n",
+       dom.Document.name: template,
+       dom.CommentBlock.name: "<!-- {text} -->\n",
+       dom.CommentSpan.name: "<!-- {text} -->\n",
+       dom.CodeBlock.name: "<pre><code>{text}</code></pre>\n",
+       dom.CodeSpan.name: "<code>{text}</code>",
+       dom.Blockquote.name: "<blockquote>{text}</blockquote>",
+       dom.TableHeader.name: "<thead><tr>{text}</tr></thead>\n",
+       dom.Paragraph.name: "<p>{text}</p>\n",
+       dom.Prose.name: '<p style="white-space: pre-wrap">{text}</p>\n',
+       dom.Division.name: "<div>{text}</div>\n",
+       dom.Section.name: "<section>{text}</section>\n",
+       dom.Hardbreak.name: "<br/>",
+       dom.Softbreak.name: "\n",
+       dom.Emoji.name: "<span class='emoji'>{text}</span>",
+       dom.Newline.name: "\n",
+       dom.Table.name: "<table>\n{text}</table>\n",
+       dom.Row.name: "<tr>{text}</tr>\n",
+       dom.CellSpan.name: "<td>{text}</td>",
+       dom.CellBlock.name: "<td>{text}</td>",
+       dom.Nbsp.name: "&nbsp;",
+       dom.Strikethrough.name: "<del>{text}</del>",
+       dom.Strong.name: "<strong>{text}</strong>",
+       dom.Emphasis.name: "<em>{text}</em>",
+       dom.ItemBlock.name: "<li>{text}</li>",
+       dom.ItemSpan.name: "<li>{text}</li>",
+       dom.RawBlock.name: "{text}",
+       dom.RawSpan.name: "{text}",
+       dom.Span.name: "<span>{text}</span>\n",
 }
 
 def to_html(obj):
@@ -190,16 +192,19 @@ def to_html(obj):
     text = obj.text 
     if 'text' in args:
         text = args.pop('text')
-    if name in ('block_raw', 'raw_span'):
+    if name in (dom.RawBlock.name, dom.RawSpan.name):
         text = "".join(obj.text)
     else:
         text = "".join(to_html(x) for x in obj.text if x is not None) if obj.text else ""
 
-    if name == "heading":
+    if name == dom.Emoji.name:
+        text = args.pop('name')
+
+    if name == dom.Heading.name:
         name = f"h{args.get('level',1)}"
         if 'level' in args: args.pop('level')
 
-    if name =="blocklist":
+    if name == dom.ListBlock.name:
         if 'start' in args:
             name = "ol"
         else:

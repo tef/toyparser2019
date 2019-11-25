@@ -100,6 +100,22 @@ class CodeBlock(Block):
     name = "CodeBlock"
 
 @elements.add()
+class Aside(Block):
+    name = "AsideBlock"
+
+@elements.add()
+class Warning(Block):
+    name = "WarningBlock"
+
+@elements.add()
+class NoteBlock(Block):
+    name = "NoteBlock"
+
+@elements.add()
+class Figure(Block):
+    name = "Figure"
+
+@elements.add()
 class ListBlock(Block):
     name = "ListBlock"
 
@@ -110,6 +126,10 @@ class Blockquote(Block):
 @elements.add()
 class ItemBlock(Block):
     name = "ItemBlock"
+
+@elements.add()
+class MathBlock(Block):
+    name = "MathBlock"
 
 @elements.add()
 class Table(Block):
@@ -188,9 +208,56 @@ class Emoji(Inline):
     name = "Emoji"
 
 @elements.add()
+class NoteSpan(Inline):
+    name = "NoteSpan"
+
+@elements.add()
+class Footnote(Inline):
+    name = "Footnote"
+
+@elements.add()
+class Sidenote(Inline):
+    name = "Sidenote"
+
+@elements.add()
+class Insertion(Inline):
+    name = "Insertion"
+
+@elements.add()
+class Deletion(Inline):
+    name = "Deletion"
+
+@elements.add()
+class Image(Inline):
+    name = "Image"
+
+@elements.add()
+class Link(Inline):
+    name = "Link"
+
+@elements.add()
+class Data(Inline):
+    name = "Data"
+
+@elements.add()
+class Quote(Inline):
+    name = "Quote"
+
+@elements.add()
+class MathSpan(Inline):
+    name = "MathSpan"
+
+@elements.add()
 class Whitespace(Inline):
     name = "Whitespace"
 
+@elements.add()
+class CommentSpan(Element):
+    name = "CommentSpan"
+
+@elements.add()
+class CommentBlock(Element):
+    name = "CommentBlock"
 
 block_directives = { # \foo::begin
         "hr": HorizontalRule,
@@ -203,10 +270,16 @@ block_directives = { # \foo::begin
         "code": CodeBlock,
         "section": Section,
         "division": Division,
+        "aside": Aside,
+        "warning": Warning,
+        "note": NoteBlock,
+        "comment": CommentBlock,
+        "math": MathBlock,
 }
 para_directives = { # \foo: ...
         "para": Paragraph,
         "p": Paragraph,
+        "prose": Prose,
         "h": Heading,
         "heading": Heading,
         "list": ListBlock,
@@ -216,6 +289,8 @@ para_directives = { # \foo: ...
         "row": Row,
         "cell": CellSpan,
         "span": Span,
+        "comment": CommentSpan,
+        "math": MathSpan,
 }
 
 inline_directives = {
@@ -234,6 +309,21 @@ inline_directives = {
         "cell": CellSpan,
         "nbsp": Nbsp,
         "wbr": Wordbreak,
+        "note": NoteSpan,
+        "footnote": Footnote,
+        "sidenote": Sidenote,
+        "ins": Insertion,
+        "insertion": Insertion,
+        "del": Deletion,
+        "deletion": Deletion,
+        "q": Quote,
+        "quote": Quote,
+        "img": Image,
+        "a": Link,
+        "link": Link,
+        "data": Data,
+        "comment": CommentSpan,
+        "math": MathSpan,
 }
 def walk(obj, builder):
     if obj is None: 

@@ -180,6 +180,7 @@ PARSEAHEAD = 'parseahead'
 BACKREF = 'backref'
 COLUMN = 'column'
 CHOICE = 'choice'
+SWITCH = 'switch'
 REPEAT = 'repeat'
 MEMOIZE = 'memoize'
 
@@ -564,6 +565,18 @@ class FunctionBuilder:
         self.rules = rules
 
     @contextmanager
+    def switch(self):
+        if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
+        rules = self.rules
+        self.rules = []
+        self.block_mode = "choice"
+        yield
+        if self.block_mode != "choice": raise Exception('Buggy code has wiped context')
+        self.block_mode = None
+        rules.append(GrammarNode(SWITCH, rules=self.rules))
+        self.rules = rules
+
+    @contextmanager
     def parallel(self):
         if self.block_mode: raise BadGrammar('Can\'t invoke rule inside', self.block_mode)
         rules = self.rules
@@ -577,7 +590,7 @@ class FunctionBuilder:
 
     @contextmanager
     def case(self):
-        if self.block_mode not in ("choice", "parallel"): raise BadGrammar('Case outside of choice')
+        if self.block_mode not in ("switch", "choice", "parallel"): raise BadGrammar('Case outside of choice')
         old = self.block_mode
         rules = self.rules
         self.rules = []
@@ -798,6 +811,8 @@ def build_grammar_rules(attrs, args):
         elif rule.kind == REGULAR:
             rule.regular = all(r.regular for r in rule.rules)
         elif rule.kind == CHOICE:
+            rule.regular = all(r.regular for r in rule.rules)
+        elif rule.kind == SWITCH:
             rule.regular = all(r.regular for r in rule.rules)
         else:
             rule.regular = False
@@ -1090,7 +1105,7 @@ def compile_python(grammar, cython=False, wrap=False):
 
             steps.append(f"{parent}.append({value})")
 
-        elif rule.kind == CHOICE:
+        elif rule.kind == CHOICE or rule.kind == SWITCH:
             children_0 = children.incr()
             offset_0 = offset.incr()
             column_0 = column.incr()
@@ -1985,7 +2000,7 @@ def compile_python(grammar, cython=False, wrap=False):
             return f"[{''.join(out)}]"
         if rule.kind == SEQUENCE:
             return "".join(_build_regex(r) for r in rule.rules)
-        if rule.kind == CHOICE:
+        if rule.kind == CHOICE or rule.kind == SWITCH:
             return f'(?:(?:{")|(?:".join(_build_regex(r) for r in rule.rules)}))'
         if rule.kind == REPEAT:
             _min, _max = rule.args['min'], rule.args['max']

@@ -206,7 +206,7 @@ class LineConsole(Console):
 
     def render(self, obj):
         lines = obj.render(self.width, self.height)
-        out = "\r\n".join(lines)
+        out = "\n".join(lines)
         self.stdout.write(out)
         if not out.endswith("\n"):
             self.stdout.write("\n")
