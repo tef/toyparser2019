@@ -202,6 +202,58 @@ BULLETS = ["\u2022", "\u25e6"]
 def line_len(text):
     return len(text)-4*(text.count("\x1b[0m")+text.count("\x1b[1m"))
 
+class DocumentBuilder:
+    def __init__(self, settings, box):
+        self.settings = settings
+        self.box = box
+        self.lines = []
+        self.mapper = Mapper()
+
+    @contextmanager
+    def build_fragment(self):
+        self.add_index()
+        builder = BlockBuilder(self.settings, self.box.zero())
+        yield builder
+        mapper, lines = builder.build()
+        self.add_mapper(mapper)
+        self.lines.extend(lines)
+        self.lines.append("")
+
+    @contextmanager
+    def build_document(self):
+        self.add_index()
+        builder = BlockBuilder(self.settings, self.box)
+        yield builder
+        mapper, lines = builder.build(indent=False)
+        self.add_mapper(mapper)
+        self.lines.extend(lines)
+        self.lines.append("")
+        
+    def build(self, indent=True):
+        if indent:
+            def _indent(line):
+                w = self.box.indent
+                if line_len(line) > self.box.width:
+                    w = w - max(line_len(line) - self.box.width, 0)//2
+                if '\x1b#' in line:
+                    w = w//2
+                return (" "*w) + line
+            return self.mapper, [_indent(line) for line in self.lines]
+        return self.mapper, self.lines
+
+    def build_fragment(self):
+        self.add_index()
+        builder = BlockBuilder(self.settings, self.box)
+        yield builder
+        mapper, lines = builder.build(indent=False)
+        self.add_mapper(mapper)
+        self.lines.extend(lines)
+        self.lines.append("")
+
+    def add_index(self):
+        self.mapper.add_index(len(self.lines))
+    def add_mapper(self, mapper):
+        self.mapper.add_mapper(len(self.lines), mapper)
 
 class BlockBuilder:
     def __init__(self, settings, box):
@@ -259,7 +311,7 @@ class BlockBuilder:
         self.lines.extend(lines)
         self.lines.append("")
 
-    def build_node(self, obj):
+    def add_node(self, obj):
         self.add_index()
         self.lines.append(dom.dump(obj))
         self.lines.append("")
@@ -394,6 +446,13 @@ class TableBuilder:
     def add_index(self, lines):
         self.mapper.add_index(len(lines))
 
+    def walk(self, text):
+        text.walk(self)
+
+    def walk_text(self, text):
+        for x in text:
+            self.walk(x)
+
     def build(self):
         max_widths = list(0 for _ in range(self.cols))
         for r, row in enumerate(self.headings + self.rows):
@@ -505,6 +564,8 @@ class TableBuilder:
 
         return self.mapper, lines
 
+    def add_table_header(self,heading = True):
+        return self.add_row(heading=heading)
     @contextmanager
     def add_row(self,heading = False):
         builder = RowBuilder(self.settings, self.box, self.cols)
@@ -527,6 +588,13 @@ class RowBuilder:
 
     def build(self):
         return self.columns
+
+    def walk(self, text):
+        text.walk(self)
+
+    def walk_text(self, text):
+        for x in text:
+            self.walk(x)
 
     @contextmanager
     def add_column(self):
@@ -762,7 +830,7 @@ class ParaBuilder:
 
 
 def to_ansi(obj, box, settings):
-    builder = BlockBuilder(settings, box)
+    builder = DocumentBuilder(settings, box)
     builder.add_index()
     obj.walk(builder)
     builder.add_index()

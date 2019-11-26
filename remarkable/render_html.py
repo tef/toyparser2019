@@ -155,6 +155,7 @@ code {{
 
 html_tags = {
        dom.Document.name: template,
+       dom.Fragment.name: "{text}",
        dom.CommentBlock.name: "<!-- {text} -->\n",
        dom.CommentSpan.name: "<!-- {text} -->\n",
        dom.CodeBlock.name: "<pre><code>{text}</code></pre>\n",

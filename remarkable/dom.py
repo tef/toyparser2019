@@ -60,7 +60,7 @@ class Node(Element):
         return x or ()
 
     def walk(self, builder):
-        builder.build_node(self)
+        builder.add_node(self)
 
 class Block(Element):
     def __init__(self, args, text):
@@ -116,8 +116,15 @@ class Document(Block):
     name = "Document"
 
     def walk(self, builder):
-        for o in self.text:
-            builder.walk(o)
+        with builder.build_document() as b:
+            b.walk_text(self.text)
+
+@elements.add()
+class Fragment(Block):
+    name = "Fragment"
+
+    def walk(self, builder):
+        builder.walk_text(self.text)
 
 @elements.add()
 class Paragraph(Block):
@@ -257,15 +264,8 @@ class Table(Block):
         cols = len(self.text[0].text)
         align = dict(enumerate(self.get_arg('column_align') or ()))
         with builder.build_table(cols, align) as t:
-            for row in self.text:
-                with t.add_row(heading=(row.name==TableHeader.name)) as b:
-                    for cell in row.text:
-                        if cell.name == CellBlock.name:
-                            with b.add_block_column() as c:
-                                c.walk_text(cell.text)
-                        else:
-                            with b.add_column() as c:
-                                c.walk_text(cell.text)
+            t.walk_text(self.text)
+
 
 
 
@@ -273,23 +273,27 @@ class Table(Block):
 class Row(Inline):
     name = "TableRow"
 
+    def walk(self, builder):
+        with builder.add_row() as b:
+            b.walk_text(self.text)
+
 @elements.add()
 class TableHeader(Inline):
     name = "TableHeader"
+    def walk(self, builder):
+        with builder.add_table_header() as b:
+            b.walk_text(self.text)
 
-
-@elements.add()
 class TableRule(Inline):
     name = "TableRule"
-
-
 
 @elements.add()
 class CellBlock(Block):
     name = "TableCellBlock"
 
     def walk(self, builder):
-        raise Exception('no')
+        with builder.add_block_column() as c:
+            c.walk_text(self.text)
 
 
 @elements.add()
@@ -297,7 +301,8 @@ class CellSpan(Inline):
     name = "TableCellSpan"
 
     def walk(self, builder):
-        raise Exception('no')
+        with builder.add_column() as c:
+            c.walk_text(self.text)
 
 
 @elements.add()
