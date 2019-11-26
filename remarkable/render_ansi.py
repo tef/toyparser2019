@@ -217,6 +217,14 @@ class BlockBuilder:
     def add_mapper(self, mapper):
         self.mapper.add_mapper(len(self.lines), mapper)
 
+    def walk(self, text):
+        text.walk(self)
+
+    def walk_text(self, text):
+        for x in text:
+            self.walk(x)
+
+        
     def build(self, indent=True):
         if indent:
             def _indent(line):
@@ -311,6 +319,9 @@ class BlockBuilder:
         lines = [line + (" "*(max_width-len(line))) for line in lines]
         self.lines.extend(lines)
         self.lines.append("")
+
+    def build_prose(self, prose=True):
+        return self.build_para(prose=prose)
 
     @contextmanager
     def build_para(self, prose=False):
@@ -616,6 +627,22 @@ class ParaBuilder:
     def add_index(self):
         self.mapper.add_index(len(self.lines))
 
+    def walk_text(self, text):
+        for x in text:
+            self.walk(x)
+
+    def walk(self, text):
+        if not text: 
+            return
+
+        if isinstance(text, str):
+            if text == " ":
+                self.add_space()
+            else:
+                self.add_text(text)
+        else:
+            text.walk(self)
+        
     def build(self):
         self.add_current_word()
         self.add_current_line()
@@ -737,6 +764,6 @@ class ParaBuilder:
 def to_ansi(obj, box, settings):
     builder = BlockBuilder(settings, box)
     builder.add_index()
-    dom.walk(obj, builder)
+    obj.walk(builder)
     builder.add_index()
     return builder.build()

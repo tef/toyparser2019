@@ -38,8 +38,9 @@ class Element:
             return [v for k,v in self.args if k is None]
         for k,v in self.args:
             if k == key: return v
+
     def walk(self, builder):
-        pass
+        raise Exception('no')
 
     def select(self, name):
         if name == self.name:
@@ -58,6 +59,9 @@ class Node(Element):
         x = self.get_arg('text')
         return x or ()
 
+    def walk(self, builder):
+        builder.build_node(self)
+
 class Block(Element):
     def __init__(self, args, text):
         self.args = args
@@ -75,6 +79,10 @@ class NamedInlineDirective(Inline):
         args = args + [('name', name)]
         Inline.__init__(self, args, text)
 
+    def walk(self, builder):
+        with builder.build_directive(self.get_arg('name'), self.args) as b:
+            b.walk_text(self.text)
+
 @elements.add()
 class NamedBlockDirective(Block):
     name = "BlockDirective"
@@ -82,6 +90,9 @@ class NamedBlockDirective(Block):
         args = args + [('name', name)]
         Block.__init__(self, args, text)
 
+    def walk(self, builder):
+        with builder.build_directive(self.get_arg('name'), self.args) as b:
+            b.walk_text(self.text)
 
 class DirectiveNode(Element):
     def __init__(self, name, args, text):
@@ -89,42 +100,87 @@ class DirectiveNode(Element):
         self.args = args
         self.text = text
 
+    def walk(self, builder):
+        raise Exception('bad')
+
 
 @elements.add()
 class RawBlock(Block):
     name = "RawBlock"
 
+    def walk(self, builder):
+        builder.add_raw(self.text)
+
 @elements.add()
 class Document(Block):
     name = "Document"
+
+    def walk(self, builder):
+        for o in self.text:
+            builder.walk(o)
 
 @elements.add()
 class Paragraph(Block):
     name = "Paragraph"
 
+    def walk(self, builder):
+        with builder.build_para() as b:
+            for o in self.text:
+                b.walk(o)
+
 @elements.add()
 class Prose(Block):
     name = "Prose"
+
+    def walk(self, builder):
+        with builder.build_prose() as b:
+            for o in self.text:
+                b.walk(o)
 
 @elements.add()
 class HorizontalRule(Block):
     name = "HorizontalRule"
 
+    def walk(self, builder):
+        builder.add_hr()
+
 @elements.add()
 class Section(Block):
     name = "Section"
+
+    def walk(self, builder):
+        with builder.build_section() as b:
+            b.walk_text(self.text)
 
 @elements.add()
 class Division(Block):
     name = "Division"
 
+    def walk(self, builder):
+        with builder.build_division() as b:
+            for o in self.text:
+                b.walk(o)
+
+
 @elements.add()
 class Heading(Block):
     name = "Heading"
 
+    def walk(self, builder):
+        with builder.build_heading(self.get_arg('level')) as b:
+            for o in self.text:
+                b.walk(o)
+
+
 @elements.add()
 class CodeBlock(Block):
     name = "CodeBlock"
+
+    def walk(self, builder):
+        with builder.build_codeblock() as p:
+            for word in self.text:
+                p.walk(word)
+
 
 @elements.add()
 class Aside(Block):
@@ -134,33 +190,84 @@ class Aside(Block):
 class Warning(Block):
     name = "WarningBlock"
 
+
 @elements.add()
 class NoteBlock(Block):
     name = "NoteBlock"
+
+    def walk(self, builder):
+        with builder.build_noteblock() as b:
+            b.walk_text(self.text)
+
 
 @elements.add()
 class Figure(Block):
     name = "Figure"
 
+    def walk(self, builder):
+        with builder.build_figure() as b:
+            b.walk_text(self.text)
+
+
 @elements.add()
 class ListBlock(Block):
     name = "ListBlock"
+
+    def walk(self, builder):
+        with builder.build_list(self.get_arg('start'), self.get_arg('bullet'), len(self.text)) as l:
+            for item in self.text:
+                if item.name == ItemSpan.name:
+                    with l.build_item_span() as p:
+                        p.walk_text(item.text)
+                if item.name == ItemBlock.name:
+                    with l.build_block_item() as p:
+                        p.walk_text(item.text)
 
 @elements.add()
 class Blockquote(Block):
     name = "Blockquote"
 
+    def walk(self, builder):
+        with builder.build_blockquote() as b:
+            b.walk_text(self.text)
+
+
 @elements.add()
 class ItemBlock(Block):
     name = "ItemBlock"
+
+    def walk(self, builder):
+        raise Exception('no')
+
 
 @elements.add()
 class MathBlock(Block):
     name = "MathBlock"
 
+    def walk(self, builder):
+        with builder.build_math() as b:
+            b.walk_text(self.text)
+
+
 @elements.add()
 class Table(Block):
     name = "TableBlock"
+
+    def walk(self, builder):
+        cols = len(self.text[0].text)
+        align = dict(enumerate(self.get_arg('column_align') or ()))
+        with builder.build_table(cols, align) as t:
+            for row in self.text:
+                with t.add_row(heading=(row.name==TableHeader.name)) as b:
+                    for cell in row.text:
+                        if cell.name == CellBlock.name:
+                            with b.add_block_column() as c:
+                                c.walk_text(cell.text)
+                        else:
+                            with b.add_column() as c:
+                                c.walk_text(cell.text)
+
+
 
 @elements.add()
 class Row(Inline):
@@ -170,121 +277,254 @@ class Row(Inline):
 class TableHeader(Inline):
     name = "TableHeader"
 
+
 @elements.add()
 class TableRule(Inline):
     name = "TableRule"
+
+
 
 @elements.add()
 class CellBlock(Block):
     name = "TableCellBlock"
 
+    def walk(self, builder):
+        raise Exception('no')
+
+
 @elements.add()
 class CellSpan(Inline):
     name = "TableCellSpan"
+
+    def walk(self, builder):
+        raise Exception('no')
+
 
 @elements.add()
 class Span(Inline):
     name = "Span"
 
+    def walk(self, builder):
+        with builder.build_span() as b:
+            b.walk_text(self.text)
+
+
 @elements.add()
 class RawSpan(Inline):
     name = "RawSpan"
+
+    def walk(self, builder):
+        builder.add_raw(self.text)
 
 @elements.add()
 class ItemSpan(Inline):
     name = "ItemSpan"
 
+    def walk(self, builder):
+        raise Exception('no')
+
+
 @elements.add()
 class CodeSpan(Inline):
     name = "CodeSpan"
+
+    def walk(self, builder):
+        with builder.build_codespan() as b:
+            b.walk_text(self.text)
+
 
 @elements.add()
 class Strong(Inline):
     name = "Strong"
 
+    def walk(self, builder):
+        with builder.effect('strong') as b:
+            b.walk_text(self.text)
+
+
 @elements.add()
 class Emphasis(Inline):
     name = "Emphasis"
+
+    def walk(self, builder):
+        with builder.effect('emphasis') as b:
+            b.walk_text(self.text)
+
 
 @elements.add()
 class Strikethrough(Inline):
     name = "Strikethrough"
 
+    def walk(self, builder):
+        with builder.effect('strikethrough') as b:
+            b.walk_text(self.text)
+
 @elements.add()
 class Hardbreak(Inline):
     name ="HardBreak"
+
+    def walk(self, builder):
+        builder.add_break()
+
 
 @elements.add()
 class Wordbreak(Inline):
     name ="WordBreak"
 
+    def walk(self, builder):
+        builder.add_wordbreak()
+
+
 @elements.add()
 class Newline(Inline):
     name = "Newline"
+
+    def walk(self, builder):
+        builder.add_break()
+
 
 @elements.add()
 class Softbreak(Inline):
     name = "Softbreak"
 
+    def walk(self, builder):
+        builder.add_softbreak()
+
+
 @elements.add()
 class Nbsp(Inline):
     name = "Nbsp"
+
+    def walk(self, builder):
+        builder.add_text(" ")
+
 
 @elements.add()
 class Emoji(Inline):
     name = "Emoji"
 
+    def walk(self, builder):
+        builder.add_emoji(self.get_arg('name'))
+
+
 @elements.add()
 class NoteSpan(Inline):
     name = "NoteSpan"
+
+    def walk(self, builder):
+        with builder.build_note() as b:
+            b.walk_text(self.text)
+
 
 @elements.add()
 class Footnote(Inline):
     name = "Footnote"
 
+    def walk(self, builder):
+        with builder.build_footnote() as b:
+            b.walk_text(self.text)
+
+
 @elements.add()
 class Sidenote(Inline):
     name = "Sidenote"
+
+    def walk(self, builder):
+        with builder.build_sidenote() as b:
+            b.walk_text(self.text)
+
 
 @elements.add()
 class Insertion(Inline):
     name = "Insertion"
 
+    def walk(self, builder):
+        with builder.build_insertion() as b:
+            b.walk_text(self.text)
+
+
 @elements.add()
 class Deletion(Inline):
     name = "Deletion"
+
+    def walk(self, builder):
+        with builder.build_deletion() as b:
+            b.walk_text(self.text)
+
 
 @elements.add()
 class Image(Inline):
     name = "Image"
 
+    def walk(self, builder):
+        with builder.build_image() as b:
+            b.walk_text(self.text)
+
+
 @elements.add()
 class Link(Inline):
     name = "Link"
+
+    def walk(self, builder):
+        with builder.build_link() as b:
+            b.walk_text(self.text)
+
 
 @elements.add()
 class Data(Inline):
     name = "Data"
 
+    def walk(self, builder):
+        with builder.build_data(self.get_arg('value')) as b:
+            b.walk_text(self.text)
+
+
 @elements.add()
 class Quote(Inline):
     name = "Quote"
+
+    def walk(self, builder):
+        with builder.build_quote() as b:
+            b.walk_text(self)
+
 
 @elements.add()
 class MathSpan(Inline):
     name = "MathSpan"
 
+    def walk(self, builder):
+        with builder.build_section() as b:
+            for o in self.text:
+                b.walk(o)
+        for o in self.text:
+            o.walk(builder)
+
+
 @elements.add()
 class Whitespace(Inline):
     name = "Whitespace"
+
+    def walk(self, builder):
+        builder.add_space(self.text[0]) 
+
 
 @elements.add()
 class CommentSpan(Element):
     name = "CommentSpan"
 
+    def walk(self, builder):
+        with builder.build_comment() as b:
+            b.walk_text(self.text)
+
+
 @elements.add()
 class CommentBlock(Element):
     name = "CommentBlock"
+
+    def walk(self, builder):
+        with builder.build_comment() as b:
+            b.walk_text(self.text)
+
 
 block_directives = { # \foo::begin
         "hr": HorizontalRule,
@@ -353,129 +593,6 @@ inline_directives = {
         "comment": CommentSpan,
         "math": MathSpan,
 }
-def walk(obj, builder):
-    if obj is None: 
-        pass
-    if obj.name == Document.name:
-        for o in obj.text:
-            walk(o, builder)
-    elif obj.name == RawBlock:
-        builder.add_raw(obj.text)
-    elif obj.name == HorizontalRule.name:
-        builder.add_hr()
-    elif obj.name == CodeBlock.name:
-        with builder.build_codeblock() as p:
-            for word in obj.text:
-                walk_inline(word, p)
-    elif obj.name == Blockquote.name:
-        with builder.build_blockquote() as b:
-            for o in obj.text:
-                walk(o, b)
-    elif obj.name == Paragraph.name:
-        with builder.build_para() as p:
-            for word in obj.text:
-                walk_inline(word, p)
-    elif obj.name == Prose.name:
-        with builder.build_para(prose=True) as p:
-            for word in obj.text:
-                walk_inline(word, p)
-    elif obj.name == Heading.name:
-        with builder.build_heading(obj.get_arg('level')) as p:
-            for word in obj.text:
-                walk_inline(word, p)
-    elif obj.name == Section.name:
-        with builder.build_section() as b:
-            for o in obj.text:
-                walk(o, b)
-    elif obj.name == Division.name:
-        with builder.build_section() as b:
-            for o in obj.text:
-                walk(o, b)
-
-    elif obj.name ==  Table.name:
-        cols = len(obj.text[0].text)
-        align = dict(enumerate(obj.get_arg('column_align') or ()))
-        with builder.build_table(cols, align) as t:
-            for row in obj.text:
-                with t.add_row(heading=(row.name==TableHeader.name)) as b:
-                    for cell in row.text:
-                        if cell.name == CellBlock.name:
-                            with b.add_block_column() as c:
-                                for x in cell.text:
-                                    walk(x, c)
-                        else:
-                            with b.add_column() as c:
-                                for x in cell.text:
-                                    walk_inline(x, c)
-
-    elif obj.name == ListBlock.name:
-        with builder.build_list(obj.get_arg('start'), obj.get_arg('bullet'), len(obj.text)) as l:
-            for item in obj.text:
-                if item.name == ItemSpan.name:
-                    with l.build_item_span() as p:
-                        for word in item.text:   
-                            walk_inline(word, p)
-                if item.name == ItemBlock.name:
-                    with l.build_block_item() as p:
-                        for word in item.text:   
-                            walk(word, p)
-    elif obj.name == NamedBlockDirective:
-        with builder.build_directive(obj.get_arg('name'), obj.args) as b:
-            for t in obj.text:
-                walk(t, b)
-    else:
-        builder.build_node(obj)
-
-def walk_inline(obj, builder, filter=None):
-    if obj is None: return
-    if obj == " ":
-        builder.add_space(" ")
-    elif isinstance(obj, str):
-        if obj:
-            if filter: obj = filter(obj)
-            builder.add_text(obj)
-    elif obj.name == RawSpan:
-        builder.add_raw(obj.text)
-    elif obj.name == Wordbreak.name:
-        builder.add_wordbreak()
-    elif obj.name == Whitespace.name:
-        builder.add_space(obj.text[0]) 
-    elif obj.name == Hardbreak.name or obj.name == Newline.name:
-        builder.add_break()
-    elif obj.name == Nbsp.name:
-        builder.add_text(" ")
-    elif obj.name == Softbreak.name:
-        builder.add_softbreak()
-    elif obj.name == Span.name:
-        with builder.build_codespan() as b:
-            for o in obj.text:
-                walk_inline(o, b, filter)
-    elif obj.name == CodeSpan.name:
-        with builder.build_codespan() as b:
-            for o in obj.text:
-                walk_inline(o, b, filter)
-    elif obj.name == Emphasis.name:
-        with builder.effect('emphasis') as b:
-            for o in obj.text:
-                walk_inline(o, b, filter)
-    elif obj.name == Strong.name:
-        with builder.effect('strong') as b:
-            for o in obj.text:
-                walk_inline(o, b, filter)
-    elif obj.name == Strikethrough.name:
-        with builder.effect('strikethrough') as b:
-            for o in obj.text:
-                walk_inline(o, builder, filter)
-    elif obj.name == Emoji.name:
-        builder.add_emoji(obj.get_arg('name'))
-    elif obj.name == NamedInlineDirective:
-        with builder.build_directive(obj.get_args('name'), obj.args) as b:
-            for o in obj.text:
-                walk_inline(o, builder, filter)
-    else:
-        with builder.build_node(obj.name, obj.args) as b:
-            for o in obj.text:
-                walk_inline(o, builder, filter)
 
 def object_to_tagged(obj):
     args = {}
