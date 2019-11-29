@@ -1,6 +1,7 @@
 @metadata {
     title: "Remark, a restructured markup format.",
 }
+
 # Remark(able), a restructured markup format.
 
 > I also dream about a modern replacement for LaTeX designed from the ground up
@@ -586,3 +587,9 @@ This is the last paragraph, which contains a non-breaking\ space, and :emoji:.
 
 
 
+## Writing CommonMark
+
+- `#` Headers, over a single line
+- `---` style hrs
+- `-` lists
+- 

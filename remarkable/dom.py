@@ -29,6 +29,7 @@ elements = Registry()
 class Element:
     def __eq__(self, other):
         return (
+            other is not None and 
             self.name == other.name and
             all(x == y for x,y in zip(self.args, other.args)) and
             all(x == y for x,y in zip(self.text, other.text))
@@ -75,9 +76,6 @@ class Inline(Element):
 @elements.add()
 class NamedInlineDirective(Inline):
     name = "InlineDirective"
-    def __init__(self, name, args, text):
-        args = args + [('name', name)]
-        Inline.__init__(self, args, text)
 
     def walk(self, builder):
         with builder.build_directive(self.get_arg('name'), self.args) as b:
@@ -86,9 +84,6 @@ class NamedInlineDirective(Inline):
 @elements.add()
 class NamedBlockDirective(Block):
     name = "BlockDirective"
-    def __init__(self, name, args, text):
-        args = args + [('name', name)]
-        Block.__init__(self, args, text)
 
     def walk(self, builder):
         with builder.build_directive(self.get_arg('name'), self.args) as b:
@@ -551,6 +546,7 @@ block_directives = { # \foo::begin
         "figure": Figure,
 }
 para_directives = { # \foo: ...
+        "paragraph": Paragraph,
         "para": Paragraph,
         "p": Paragraph,
         "prose": Prose,

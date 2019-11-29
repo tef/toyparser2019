@@ -2111,10 +2111,10 @@ def compile_python(grammar, cython=False, wrap=False):
         f"    column, indent_column = 0, [0]",
         f"    prefix, children = [], []",
         f"    new_offset, column, partial_tab_offset, partial_tab_width = self.parse_{start_rule}(buf, start, end, offset, column, indent_column, prefix, children, 0, 0)",
-        f"    if children and new_offset == end:",
+        f"    if new_offset == end:",
         f"         if builder is None: return {node}({repr(grammar.capture)}, offset, new_offset, 0, column, children, None)",
         f"         return children[-1].build(buf, builder)",
-        f"#     print('no', offset, new_offset, end)",
+        f"    # print('no', children, offset, new_offset, end)",
         f"    if err is not None: raise err(buf, new_offset, 'no')",
         f"",
     ))

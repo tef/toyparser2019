@@ -92,7 +92,10 @@ def View(ctx, file, width, height, heading):
             else:
                 fragments.append(dom.Paragraph((), ["failed"]))
                 if result_dom:
-                    fragments.append(result_dom)
+                    fragments.append(dom.Paragraph((), ["raw ast: ",dom.dump(results[i])]))
+                else:
+                    fragments.append(dom.Paragraph((), ["raw ast: null"]))
+            fragments.append(dom.HorizontalRule((), ()))
 
     return Document(dom.Document((), fragments), settings)
 

@@ -11,6 +11,8 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
     def document(self):
         with self.choice():
             with self.case():
+                self.end_of_file()
+            with self.case():
                 self.whitespace(newline=True)
                 self.inline_directive()
                 self.whitespace(newline=True)

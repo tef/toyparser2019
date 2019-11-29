@@ -806,12 +806,17 @@ class ParaBuilder:
                 self.add_break()
             else:
                 self.current_word.append(line)
-    def add_node(self, name, args, text):
-        pass
-    def add_directive(self, name, args, text):
-        pass
-    def add_raw(self, text):
-        pass
+
+    def add_node(self, obj):
+        self.add_wordbreak()
+        self.add_text(dom.dump(obj))
+        self.add_wordbreak()
+
+    @contextmanager
+    def build_directive(self, name, args):
+        self.add_text(f"\\{name}{{")
+        yield self
+        self.add_text("}")
 
 
     def add_emoji(self, name):
