@@ -252,10 +252,11 @@ class ArgumentParser:
     def complete_kind(self, kind, value):
         out = []
         if kind in ('path', 'dir', 'file'):
-            if value:
-                out.extend("{} ".format(p) for p in os.listdir() if p.startswith(value))
-            else:
-                out.extend("{} ".format(p) for p in os.listdir() if not p.startswith('.'))
+            pass
+            #if value:
+            #    out.extend("{} ".format(p) for p in os.listdir() if p.startswith(value))
+            #else:
+            #    out.extend("{} ".format(p) for p in os.listdir() if not p.startswith('.'))
         elif kind in ('bool', 'boolean'):
             vals = ('true ','false ')
             if value:

@@ -124,7 +124,8 @@ class Fragment(Block):
     name = "Fragment"
 
     def walk(self, builder):
-        builder.walk_text(self.text)
+        with builder.build_fragment() as b:
+            b.walk_text(self.text)
 
 @elements.add()
 class Paragraph(Block):

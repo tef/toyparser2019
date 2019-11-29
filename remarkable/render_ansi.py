@@ -18,7 +18,7 @@ class RenderBox:
         self.height = height
 
     def zero(self):
-        return RenderBox(0, self.width-self.indent, self.height)
+        return RenderBox(0, self.width, self.height)
 
     def margin(self, amount):
         new_width = max(self.width - amount*2) if self.width >= self.min_width else self.width
@@ -222,7 +222,7 @@ class DocumentBuilder:
     @contextmanager
     def build_document(self):
         self.add_index()
-        builder = BlockBuilder(self.settings, self.box)
+        builder = BlockBuilder(self.settings, self.box.zero())
         yield builder
         mapper, lines = builder.build(indent=False)
         self.add_mapper(mapper)
@@ -241,9 +241,10 @@ class DocumentBuilder:
             return self.mapper, [_indent(line) for line in self.lines]
         return self.mapper, self.lines
 
+    @contextmanager
     def build_fragment(self):
         self.add_index()
-        builder = BlockBuilder(self.settings, self.box)
+        builder = BlockBuilder(self.settings, self.box.zero())
         yield builder
         mapper, lines = builder.build(indent=False)
         self.add_mapper(mapper)
@@ -302,6 +303,16 @@ class BlockBuilder:
         self.lines.extend(text.splitlines())
 
     @contextmanager
+    def build_division(self):
+        self.add_index()
+        builder = BlockBuilder(self.settings, self.box)
+        yield builder
+        mapper, lines = builder.build(indent=False)
+        self.add_mapper(mapper)
+        self.lines.extend(lines)
+        self.lines.append("")
+
+    @contextmanager
     def build_section(self):
         self.add_index()
         builder = BlockBuilder(self.settings, self.box)
@@ -330,7 +341,8 @@ class BlockBuilder:
     @contextmanager
     def build_blockquote(self):
         self.add_index()
-        box = self.box.shrink(0.8, indent=True)
+        box = self.box.shrink(0.8)
+        box.indent = (self.box.width-box.width)//2
         builder = BlockBuilder(self.settings, box)
         yield builder
         width = max(line_len(l) for l in builder.lines)
