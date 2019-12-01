@@ -252,11 +252,23 @@ class ArgumentParser:
     def complete_kind(self, kind, value):
         out = []
         if kind in ('path', 'dir', 'file'):
-            pass
-            #if value:
-            #    out.extend("{} ".format(p) for p in os.listdir() if p.startswith(value))
-            #else:
-            #    out.extend("{} ".format(p) for p in os.listdir() if not p.startswith('.'))
+            def format(p):
+                if os.path.isdir(p):
+                    return f"{os.path.relpath(p)}/"
+                else:
+                    return f"{os.path.relpath(p)} "
+            def filter(p, path):
+                if path: return p.startswith(path)
+                return not (p.startswith('.') or p.endswith(("~", ".swp")))
+            if value:
+                value = os.path.normpath(os.path.join(os.getcwd(), value))
+                if os.path.isdir(value):
+                    dir, path = value, ''
+                else:
+                    dir, path = os.path.split(value)
+                out.extend(format(os.path.join(dir,p)) for p in os.listdir(dir) if filter(p, path))
+            else:
+                out.extend(format(os.path.join(os.getcwd(), p)) for p in os.listdir() if filter(p, None))
         elif kind in ('bool', 'boolean'):
             vals = ('true ','false ')
             if value:
