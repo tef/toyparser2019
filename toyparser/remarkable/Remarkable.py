@@ -12,11 +12,11 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
         with self.choice():
             with self.case():
                 self.end_of_file()
-            with self.case():
-                self.whitespace(newline=True)
-                self.inline_directive()
-                self.whitespace(newline=True)
-                self.end_of_file()
+            # with self.case():
+            #    self.whitespace(newline=True)
+            #    self.inline_directive()
+            #    self.whitespace(newline=True)
+            #    self.end_of_file()
             with self.case():
                 with self.repeat(min=0) as n:
                     self.indent()
@@ -238,7 +238,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                         self.literal("{")
                     self.line_end()
                     with self.capture_node("directive_block"):
-                        with self.repeat(min=0) as n:
+                        with self.repeat(min=0):
                             self.indent()
                             with self.reject():
                                 self.whitespace(max=8)

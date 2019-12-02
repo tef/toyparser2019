@@ -526,6 +526,81 @@ class CommentBlock(Element):
         with builder.build_comment() as b:
             b.walk_text(self.text)
 
+@elements.add()
+class TestReport(Element):
+    name = "TestReport"
+
+    def __init__(self, args, text):
+        self.args = args
+        self.text = text
+
+    def walk(self, builder):
+        with builder.build_table(3, {0: "left"}) as t:
+            with t.add_row() as r:
+                with r.add_column() as c, c.effect('strong') as s:
+                    s.add_text('Test')
+                    s.add_space()
+                    s.add_text('report:')
+                with r.add_column() as c:
+                    number = self.get_arg('working') or 0
+                    if number is not None:
+                        c.add_text('Working')
+                        c.add_space()
+                        c.add_text(str(number))
+                with r.add_column() as c:
+                    number = self.get_arg('total') or 0
+                    if number is not None:
+                        c.add_text('Total')
+                        c.add_space()
+                        c.add_text(str(number))
+@elements.add()
+class TestCase(Element):
+    name = "TestCase"
+
+    def __init__(self, args, text):
+        self.args = args
+        self.text = text
+
+    def walk(self, builder):
+        with builder.build_table(4, {0: "left"}) as t:
+            with t.add_row() as r:
+                with r.add_column() as c, c.effect('strong') as s:
+                    s.add_text('Testcase')
+                    number = self.get_arg('number')
+                    if number is not None:
+                        s.add_space()
+                        s.add_text(str(number))
+                with r.add_column() as c:
+                    c.add_code_text(self.get_arg('input_text'))
+                with r.add_column() as c:
+                    c.add_code_text(dump(self.get_arg('output_dom')))
+                with r.add_column() as c:
+                    result = self.get_arg('state')
+                    if result:
+                        c.add_text(result)
+
+
+def run_tests(doc, parse):
+    tests = list(doc.select(TestCase.name))
+    results = []
+    success = []
+    total = 0
+    working = 0
+    for n, test_case in enumerate(tests):
+        total += 1
+        raw_text = test_case.get_arg('input_text')
+        output_dom = test_case.get_arg('output_dom')
+        result_dom = parse(raw_text)
+
+        if result_dom == output_dom:
+            test_case.args.append( ('state', 'working'))
+            working+=1
+        else:
+            test_case.args.append( ('state', 'failed'))
+        test_case.args.append(('number', n))
+    for r in list(doc.select(TestReport.name)):
+        r.args.append(('total', total))
+        r.args.append(('working', working))
 
 block_directives = { # \foo::begin
         "hr": HorizontalRule,

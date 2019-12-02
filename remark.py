@@ -1,6 +1,10 @@
 #!/usr/bin/env python3 
 
 import os
+import sys
+import os.path
+
+old = set(sys.modules.keys())
 
 from clgi.errors import Bug, Error
 from clgi.app import App, Router, command, Plaintext, Document
@@ -9,6 +13,33 @@ from remarkable import dom
 from remarkable.parser import parse
 from remarkable.render_ansi import to_ansi, RenderBox
 from remarkable.render_html import to_html
+
+new = sys.modules.keys() - old
+
+path = os.path.dirname(os.path.abspath(__file__))
+files = [os.path.abspath(__file__)]
+
+for module in new:
+    m = sys.modules[module]
+    file = getattr(m, "__file__", "")
+    if file and os.path.commonprefix([file, path]) == path:
+        files.append(file)
+
+modified = []
+
+for file in files:
+    dir, p = os.path.split(file)
+    swapfile = os.path.join(dir, f".{p}.swp")
+    if os.path.exists(swapfile):
+        with open(swapfile,'rb') as fh:
+            contents = fh.read()
+            if contents[:5] != b"b0VIM": continue
+            fn = contents[108:1008].rsplit(b"\x00",1)[-1]
+            if fn.endswith(b"U"):
+                modified.append(file)
+
+for m in modified:
+    print("modified!", os.path.relpath(m), file=sys.stderr)
 
 class AppError(Error):
     pass
@@ -74,28 +105,25 @@ def View(ctx, file, width, height, heading):
     with open(filename) as fh:
         text = fh.read()
         doc = parse(text)
-        tests = list(doc.select('TestCase'))
-        results = []
-        success = []
-        for test_case in tests:
-            raw_text = test_case.get_arg('input_text')
-            output_dom = test_case.get_arg('output_dom')
-            result_dom = parse(raw_text)
-            results.append(result_dom)
-            success.append(result_dom == output_dom)
 
-        fragments = []
-        for i, t in enumerate(tests):
-            fragments.append(t)
-            if success[i]:
-                fragments.append(dom.Paragraph((), ["worked"]))
+    fragments = []
+    dom.run_tests(doc, parse)
+
+    tests = list(doc.select('TestCase'))
+
+    for t in tests:
+        fragments.append(t)
+        if t.get_arg('state') == 'working':
+            fragments.append(dom.Paragraph((), ["worked"]))
+        else:
+            fragments.append(dom.Paragraph((), ["failed"]))
+            result_dom = t.get_arg('result_dom')
+            if result_dom:
+                fragments.append(dom.Paragraph((), ["raw ast: ",dom.dump(results[i])]))
             else:
-                fragments.append(dom.Paragraph((), ["failed"]))
-                if result_dom:
-                    fragments.append(dom.Paragraph((), ["raw ast: ",dom.dump(results[i])]))
-                else:
-                    fragments.append(dom.Paragraph((), ["raw ast: null"]))
-            fragments.append(dom.HorizontalRule((), ()))
+                fragments.append(dom.Paragraph((), ["raw ast: null"]))
+        fragments.append(dom.HorizontalRule((), ()))
+
 
     return Document(dom.Document((), fragments), settings)
 
@@ -110,6 +138,7 @@ def View(ctx, file, width, height, heading):
     settings = {}
     settings['double']=(heading!="single")
     if width: settings['width']=width
+    dom.run_tests(doc, parse)
 
     return Document(doc, settings)
 app = App(
