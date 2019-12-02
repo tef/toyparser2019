@@ -17,78 +17,78 @@ class Node:
         if self.name == "value": return self.value
         return builder[self.name](buf, self, children)
 
-regex_regex_0 = re.compile(r'(?:(?:\#)){1,6}')
-regex_regex_1 = re.compile(r'(?:(?:\#))*')
-regex_regex_2 = re.compile(r'(?:[^\n])+')
-regex_regex_3 = re.compile(r'[^\n]')
-regex_regex_4 = re.compile(r'(?:(?:(?:\`\`\`))|(?:(?:\~\~\~)))')
-regex_regex_5 = re.compile(r'(?:(?:\`)){3,}')
-regex_regex_6 = re.compile(r'[\!-\/\:-\@\[-\`\{-\~]')
-regex_regex_7 = re.compile(r'(?:[0-9]){1,7}')
-regex_regex_8 = re.compile(r'[xX]')
-regex_regex_9 = re.compile(r'[0-9a-fA-F]')
-regex_regex_10 = re.compile(r'(?:[0-9a-fA-F]){,6}')
-regex_regex_11 = re.compile(r'[a-zA-Z]')
-regex_regex_12 = re.compile(r'(?:[0-9a-zA-Z])+')
-regex_regex_13 = re.compile(r'(?:[^\n\\\&\`])*')
-regex_regex_14 = re.compile(r'(?:[^\n])*')
-regex_regex_15 = re.compile(r'(?:(?:\~)){3,}')
-regex_regex_16 = re.compile(r'(?:[^\n\\\&])*')
-regex_regex_17 = re.compile(r'(?:(?:[\-\*\+])|(?:(?:[0-9]){1,9}[\.\)]))')
-regex_regex_18 = re.compile(r'[\-\*\+]')
-regex_regex_19 = re.compile(r'(?:[0-9]){1,9}')
-regex_regex_20 = re.compile(r'[\.\)]')
-regex_regex_21 = re.compile(r'[^\>\<\n]')
-regex_regex_22 = re.compile(r'[^\)\(\n ]')
-regex_regex_23 = re.compile(r'[^\[\]]')
-regex_regex_24 = re.compile(r'(?:(?:[\-\*\+])|(?:(?:1)[\.\)]))')
-regex_regex_25 = re.compile(r'(?:\\)')
-regex_regex_26 = re.compile(r'(?:(?:(?:(?:\=))+)|(?:(?:(?:\-))+))')
-regex_regex_27 = re.compile(r'(?:(?:\=))+')
-regex_regex_28 = re.compile(r'(?:(?:\-))+')
-regex_regex_29 = re.compile(r'(?:[a-zA-Z0-9\+\.\-])+')
-regex_regex_30 = re.compile(r'(?:[^\x00- \>\<])*')
-regex_regex_31 = re.compile(r'(?:[a-zA-Z0-9\.\!\#\$\%\&\'\*\+\/\=\?\^_\`\{\|\}\~\-])+')
-regex_regex_32 = re.compile(r'[a-zA-Z0-9]')
-regex_regex_33 = re.compile(r'(?:(?:(?:(?:[a-zA-Z0-9])|(?:(?:(?:\-))+[a-zA-Z0-9]))){,62})?')
-regex_regex_34 = re.compile(r'(?:(?:\.)[a-zA-Z0-9](?:(?:(?:(?:[a-zA-Z0-9])|(?:(?:(?:\-))+[a-zA-Z0-9]))){,61})?)*')
-regex_regex_35 = re.compile(r'(?:(?:_))+')
-regex_regex_36 = re.compile(r'(?:(?:\*))+')
-regex_regex_37 = re.compile(r'[^ \n\\]')
-regex_regex_38 = re.compile(r'[^ \n\\\<\`\&\*_\[\]\(\)\!]')
-regex_regex_39 = re.compile(r'(?:(?:(?:(?:\\\[|\\\]))|(?:[^\[\]\n])))+')
-regex_regex_40 = re.compile(r'(?:\[\]|\(\))')
-regex_regex_41 = re.compile(r'(?:\<|\ )')
-regex_regex_42 = re.compile(r'[^\"\n]')
-regex_regex_43 = re.compile(r'[^\'\n]')
-regex_regex_44 = re.compile(r'[^\)\(\n]')
-regex_regex_45 = re.compile(r'[_\*]')
-regex_regex_46 = re.compile(r'[\*]')
-regex_regex_47 = re.compile(r'(?:(?:\`))+')
-regex_regex_48 = re.compile(r'[^\n\`]')
-regex_regex_49 = re.compile(r'(?:[^\n\`])*')
-regex_regex_50 = re.compile(r'[^\`]')
-regex_regex_51 = re.compile(r'(?:(?:\`))*')
-regex_regex_52 = re.compile(r'(?:\<script|\<pre|\<style)')
-regex_regex_53 = re.compile(r'(?:\<\?|\<\!\[CDATA\[)')
-regex_regex_54 = re.compile(r'(?:\<\!)[A-Z]')
-regex_regex_55 = re.compile(r'(?:\<\/|\<)')
-regex_regex_56 = re.compile(r'(?:address|article|aside|base|basefont|blockquote|body|caption|center|col|colgroup|dd|details|dialog|dir|div|dl|dt|fieldset|figcaption|figure|footer|form|frame|frameset|h1|h2|h3|h4|h5|h6|head|header|hr|html|iframe|legend|li|link|main|menu|menuitem|nav|noframes|ol|optgroup|option|p|param|section|source|summary|table|tbody|td|tfoot|th|thead|title|tr|track|ul)')
-regex_regex_57 = re.compile(r'(?:\>)')
-regex_regex_58 = re.compile(r'(?:\-\-|\-\>|\>|\-\-\-)')
-regex_regex_59 = re.compile(r'[A-Z]')
-regex_regex_60 = re.compile(r'(?:[^\>\n])*')
-regex_regex_61 = re.compile(r'(?:[a-zA-Z\-0-9])*')
-regex_regex_62 = re.compile(r'[a-zA-Z\:_]')
-regex_regex_63 = re.compile(r'(?:[a-zA-Z\:_0-9\-])+')
-regex_regex_64 = re.compile(r'(?:[^\"\'\=\<\>\`\t \n\r])+')
-regex_regex_65 = re.compile(r'(?:[^\"\n])*')
-regex_regex_66 = re.compile(r'(?:[^\'\n])*')
-regex_regex_67 = re.compile(r'(?:\/\>|\>)')
-regex_regex_68 = re.compile(r'(?:\<\/script\>|\<\/pre\>|\<\/style\>)')
-regex_regex_69 = re.compile(r'(?:pre|script|style)')
-regex_regex_70 = re.compile(r'(?:(?:(?:[^\"\'\=\<\>\`\t \n\r])+)|(?:(?:\")(?:[^\"\n])*(?:\"))|(?:(?:\')(?:[^\'\n])*(?:\')))')
-regex_regex_71 = re.compile(r'(?:\>|\/\>)')
+regex_regex_0 = re.compile(r'''(?:(?:\#)){1,6}''')
+regex_regex_1 = re.compile(r'''(?:(?:\#))*''')
+regex_regex_2 = re.compile(r'''(?:[^\n])+''')
+regex_regex_3 = re.compile(r'''[^\n]''')
+regex_regex_4 = re.compile(r'''(?:(?:(?:```))|(?:(?:\~\~\~)))''')
+regex_regex_5 = re.compile(r'''(?:(?:`)){3,}''')
+regex_regex_6 = re.compile(r'''[!-/:-@\[-`\{-\~]''')
+regex_regex_7 = re.compile(r'''(?:[0-9]){1,7}''')
+regex_regex_8 = re.compile(r'''[xX]''')
+regex_regex_9 = re.compile(r'''[0-9a-fA-F]''')
+regex_regex_10 = re.compile(r'''(?:[0-9a-fA-F]){,6}''')
+regex_regex_11 = re.compile(r'''[a-zA-Z]''')
+regex_regex_12 = re.compile(r'''(?:[0-9a-zA-Z])+''')
+regex_regex_13 = re.compile(r'''(?:[^\n\\\&`])*''')
+regex_regex_14 = re.compile(r'''(?:[^\n])*''')
+regex_regex_15 = re.compile(r'''(?:(?:\~)){3,}''')
+regex_regex_16 = re.compile(r'''(?:[^\n\\\&])*''')
+regex_regex_17 = re.compile(r'''(?:(?:[\-\*\+])|(?:(?:[0-9]){1,9}[\.\)]))''')
+regex_regex_18 = re.compile(r'''[\-\*\+]''')
+regex_regex_19 = re.compile(r'''(?:[0-9]){1,9}''')
+regex_regex_20 = re.compile(r'''[\.\)]''')
+regex_regex_21 = re.compile(r'''[^><\n]''')
+regex_regex_22 = re.compile(r'''[^\)\(\n ]''')
+regex_regex_23 = re.compile(r'''[^\[\]]''')
+regex_regex_24 = re.compile(r'''(?:(?:[\-\*\+])|(?:(?:1)[\.\)]))''')
+regex_regex_25 = re.compile(r'''(?:\\)''')
+regex_regex_26 = re.compile(r'''(?:(?:(?:(?:=))+)|(?:(?:(?:\-))+))''')
+regex_regex_27 = re.compile(r'''(?:(?:=))+''')
+regex_regex_28 = re.compile(r'''(?:(?:\-))+''')
+regex_regex_29 = re.compile(r'''(?:[a-zA-Z0-9\+\.\-])+''')
+regex_regex_30 = re.compile(r'''(?:[^\x00- ><])*''')
+regex_regex_31 = re.compile(r'''(?:[a-zA-Z0-9\.!\#\$%\&'\*\+/=\?\^_`\{\|\}\~\-])+''')
+regex_regex_32 = re.compile(r'''[a-zA-Z0-9]''')
+regex_regex_33 = re.compile(r'''(?:(?:(?:(?:[a-zA-Z0-9])|(?:(?:(?:\-))+[a-zA-Z0-9]))){,62})?''')
+regex_regex_34 = re.compile(r'''(?:(?:\.)[a-zA-Z0-9](?:(?:(?:(?:[a-zA-Z0-9])|(?:(?:(?:\-))+[a-zA-Z0-9]))){,61})?)*''')
+regex_regex_35 = re.compile(r'''(?:(?:_))+''')
+regex_regex_36 = re.compile(r'''(?:(?:\*))+''')
+regex_regex_37 = re.compile(r'''[^ \n\\]''')
+regex_regex_38 = re.compile(r'''[^ \n\\<`\&\*_\[\]\(\)!]''')
+regex_regex_39 = re.compile(r'''(?:(?:(?:(?:\\\[|\\\]))|(?:[^\[\]\n])))+''')
+regex_regex_40 = re.compile(r'''(?:\[\]|\(\))''')
+regex_regex_41 = re.compile(r'''(?:<|\ )''')
+regex_regex_42 = re.compile(r'''[^"\n]''')
+regex_regex_43 = re.compile(r'''[^'\n]''')
+regex_regex_44 = re.compile(r'''[^\)\(\n]''')
+regex_regex_45 = re.compile(r'''[_\*]''')
+regex_regex_46 = re.compile(r'''[\*]''')
+regex_regex_47 = re.compile(r'''(?:(?:`))+''')
+regex_regex_48 = re.compile(r'''[^\n`]''')
+regex_regex_49 = re.compile(r'''(?:[^\n`])*''')
+regex_regex_50 = re.compile(r'''[^`]''')
+regex_regex_51 = re.compile(r'''(?:(?:`))*''')
+regex_regex_52 = re.compile(r'''(?:<script|<pre|<style)''')
+regex_regex_53 = re.compile(r'''(?:<\?|<!\[CDATA\[)''')
+regex_regex_54 = re.compile(r'''(?:<!)[A-Z]''')
+regex_regex_55 = re.compile(r'''(?:</|<)''')
+regex_regex_56 = re.compile(r'''(?:address|article|aside|base|basefont|blockquote|body|caption|center|col|colgroup|dd|details|dialog|dir|div|dl|dt|fieldset|figcaption|figure|footer|form|frame|frameset|h1|h2|h3|h4|h5|h6|head|header|hr|html|iframe|legend|li|link|main|menu|menuitem|nav|noframes|ol|optgroup|option|p|param|section|source|summary|table|tbody|td|tfoot|th|thead|title|tr|track|ul)''')
+regex_regex_57 = re.compile(r'''(?:>)''')
+regex_regex_58 = re.compile(r'''(?:\-\-|\->|>|\-\-\-)''')
+regex_regex_59 = re.compile(r'''[A-Z]''')
+regex_regex_60 = re.compile(r'''(?:[^>\n])*''')
+regex_regex_61 = re.compile(r'''(?:[a-zA-Z\-0-9])*''')
+regex_regex_62 = re.compile(r'''[a-zA-Z:_]''')
+regex_regex_63 = re.compile(r'''(?:[a-zA-Z:_0-9\-])+''')
+regex_regex_64 = re.compile(r'''(?:[^"'=<>`\t \n\r])+''')
+regex_regex_65 = re.compile(r'''(?:[^"\n])*''')
+regex_regex_66 = re.compile(r'''(?:[^'\n])*''')
+regex_regex_67 = re.compile(r'''(?:/>|>)''')
+regex_regex_68 = re.compile(r'''(?:</script>|</pre>|</style>)''')
+regex_regex_69 = re.compile(r'''(?:pre|script|style)''')
+regex_regex_70 = re.compile(r'''(?:(?:(?:[^"'=<>`\t \n\r])+)|(?:(?:")(?:[^"\n])*(?:"))|(?:(?:')(?:[^'\n])*(?:')))''')
+regex_regex_71 = re.compile(r'''(?:>|/>)''')
 
 class Parser:
     def __init__(self, tabstop=None, allow_mixed_indent=False):
@@ -103,10 +103,10 @@ class Parser:
         column, indent_column = 0, [0]
         prefix, children = [], []
         new_offset, column, partial_tab_offset, partial_tab_width = self.parse_document(buf, start, end, offset, column, indent_column, prefix, children, 0, 0)
-        if children and new_offset == end:
+        if new_offset == end:
              if builder is None: return Node('document', offset, new_offset, 0, column, children, None)
              return children[-1].build(buf, builder)
-        print('no', offset, new_offset, end, buf[new_offset:])
+        # print('no', children, offset, new_offset, end)
         if err is not None: raise err(buf, new_offset, 'no')
 
     def parse_document(self, buf, buf_start, buf_eof, offset_0, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
@@ -120,6 +120,7 @@ class Parser:
                 partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True:
+                    #print('entry rep rule', offset_0, offset_1)
                     if column_1 != 0:
                         offset_1 = -1
                         break
@@ -211,6 +212,7 @@ class Parser:
                                 partial_tab_width_3 = partial_tab_width_2
                                 children_3 = [] if children_2 is not None else None
                                 while True:
+                                    #print('entry rep rule', offset_2, offset_3)
                                     if column_3 != 0:
                                         offset_3 = -1
                                         break
@@ -262,7 +264,9 @@ class Parser:
                                         offset_3 = -1
                                         break
 
+                                    #print('safe exit rep rule', offset_2, offset_3)
                                     break
+                                #print('exit rep rule', offset_2, offset_3)
                                 if offset_3 == -1:
                                     break
                                 if offset_2 == offset_3: break
@@ -276,14 +280,15 @@ class Parser:
                                 count_1 += 1
                             if offset_2 == -1:
                                 break
+                            value_1 = count_1
 
                             children_3 = []
-                            value_0 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
-                            value_0.name = 'empty_line'
-                            value_0.end = offset_2
-                            value_0.end_column = column_2
-                            value_0.value = None
-                            children_2.append(value_0)
+                            value_2 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
+                            value_2.name = 'empty_line'
+                            value_2.end = offset_2
+                            value_2.end_column = column_2
+                            value_2.value = None
+                            children_2.append(value_2)
 
 
 
@@ -303,7 +308,9 @@ class Parser:
                     if offset_1 == -1:
                         break
 
+                    #print('safe exit rep rule', offset_0, offset_1)
                     break
+                #print('exit rep rule', offset_0, offset_1)
                 if offset_1 == -1:
                     break
                 if offset_0 == offset_1: break
@@ -317,6 +324,7 @@ class Parser:
                 count_0 += 1
             if offset_0 == -1:
                 break
+            value_0 = count_0
 
             count_0 = 0
             while offset_0 < buf_eof:
@@ -657,6 +665,7 @@ class Parser:
                             partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True:
+                                #print('entry rep rule', offset_1, offset_2)
                                 if buf[offset_2:offset_2+1] == '-':
                                     offset_2 += 1
                                     column_2 += 1
@@ -683,7 +692,9 @@ class Parser:
                                     else:
                                         break
 
+                                #print('safe exit rep rule', offset_1, offset_2)
                                 break
+                            #print('exit rep rule', offset_1, offset_2)
                             if offset_2 == -1:
                                 break
                             if offset_1 == offset_2: break
@@ -696,10 +707,12 @@ class Parser:
                             partial_tab_width_1 = partial_tab_width_2
                             count_0 += 1
                         if count_0 < 3:
+                        #    print('min exit', offset_1)
                             offset_1 = -1
                             break
                         if offset_1 == -1:
                             break
+                        value_1 = count_0
 
 
                         break
@@ -729,6 +742,7 @@ class Parser:
                             partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True:
+                                #print('entry rep rule', offset_1, offset_2)
                                 if buf[offset_2:offset_2+1] == '*':
                                     offset_2 += 1
                                     column_2 += 1
@@ -755,7 +769,9 @@ class Parser:
                                     else:
                                         break
 
+                                #print('safe exit rep rule', offset_1, offset_2)
                                 break
+                            #print('exit rep rule', offset_1, offset_2)
                             if offset_2 == -1:
                                 break
                             if offset_1 == offset_2: break
@@ -768,10 +784,12 @@ class Parser:
                             partial_tab_width_1 = partial_tab_width_2
                             count_0 += 1
                         if count_0 < 3:
+                        #    print('min exit', offset_1)
                             offset_1 = -1
                             break
                         if offset_1 == -1:
                             break
+                        value_2 = count_0
 
 
                         break
@@ -801,6 +819,7 @@ class Parser:
                             partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True:
+                                #print('entry rep rule', offset_1, offset_2)
                                 if buf[offset_2:offset_2+1] == '_':
                                     offset_2 += 1
                                     column_2 += 1
@@ -827,7 +846,9 @@ class Parser:
                                     else:
                                         break
 
+                                #print('safe exit rep rule', offset_1, offset_2)
                                 break
+                            #print('exit rep rule', offset_1, offset_2)
                             if offset_2 == -1:
                                 break
                             if offset_1 == offset_2: break
@@ -840,10 +861,12 @@ class Parser:
                             partial_tab_width_1 = partial_tab_width_2
                             count_0 += 1
                         if count_0 < 3:
+                        #    print('min exit', offset_1)
                             offset_1 = -1
                             break
                         if offset_1 == -1:
                             break
+                        value_3 = count_0
 
 
                         break
@@ -984,6 +1007,7 @@ class Parser:
                                         partial_tab_width_2 = partial_tab_width_1
                                         children_4 = [] if children_3 is not None else None
                                         while True:
+                                            #print('entry rep rule', offset_3, offset_4)
                                             count_2 = 0
                                             while offset_4 < buf_eof:
                                                 codepoint = buf[offset_4]
@@ -1015,7 +1039,9 @@ class Parser:
                                                 offset_4 = -1
                                                 break
 
+                                            #print('safe exit rep rule', offset_3, offset_4)
                                             break
+                                        #print('exit rep rule', offset_3, offset_4)
                                         if offset_4 == -1:
                                             break
                                         if offset_3 == offset_4: break
@@ -1030,6 +1056,7 @@ class Parser:
                                         break
                                     if offset_3 == -1:
                                         break
+                                    value_3 = count_1
 
                                     count_1 = 0
                                     while offset_3 < buf_eof:
@@ -1122,6 +1149,7 @@ class Parser:
                                 partial_tab_width_2 = partial_tab_width_1
                                 children_3 = [] if children_2 is not None else None
                                 while True:
+                                    #print('entry rep rule', offset_2, offset_3)
                                     while True: # start reject
                                         children_4 = []
                                         offset_4 = offset_3 + 0
@@ -1145,6 +1173,7 @@ class Parser:
                                                     partial_tab_width_4 = partial_tab_width_3
                                                     children_6 = [] if children_5 is not None else None
                                                     while True:
+                                                        #print('entry rep rule', offset_5, offset_6)
                                                         count_3 = 0
                                                         while offset_6 < buf_eof:
                                                             codepoint = buf[offset_6]
@@ -1176,7 +1205,9 @@ class Parser:
                                                             offset_6 = -1
                                                             break
 
+                                                        #print('safe exit rep rule', offset_5, offset_6)
                                                         break
+                                                    #print('exit rep rule', offset_5, offset_6)
                                                     if offset_6 == -1:
                                                         break
                                                     if offset_5 == offset_6: break
@@ -1191,6 +1222,7 @@ class Parser:
                                                     break
                                                 if offset_5 == -1:
                                                     break
+                                                value_5 = count_2
 
                                                 count_2 = 0
                                                 while offset_5 < buf_eof:
@@ -1235,7 +1267,7 @@ class Parser:
                                         break
 
                                     children_4 = []
-                                    value_3 = Node(None, offset_3, offset_3, column_2, column_2, children_4, None)
+                                    value_6 = Node(None, offset_3, offset_3, column_2, column_2, children_4, None)
                                     while True: # start capture
                                         count_1 = 0
                                         while offset_3 < buf_eof:
@@ -1259,17 +1291,19 @@ class Parser:
                                         break
                                     if offset_3 == -1:
                                         break
-                                    value_3.name = 'whitespace'
-                                    value_3.end = offset_3
-                                    value_3.end_column = column_2
-                                    value_3.value = None
-                                    children_3.append(value_3)
+                                    value_6.name = 'whitespace'
+                                    value_6.end = offset_3
+                                    value_6.end_column = column_2
+                                    value_6.value = None
+                                    children_3.append(value_6)
 
                                     offset_3, column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_inline_element(buf, buf_start, buf_eof, offset_3, column_2, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
                                     if offset_3 == -1: break
 
 
+                                    #print('safe exit rep rule', offset_2, offset_3)
                                     break
+                                #print('exit rep rule', offset_2, offset_3)
                                 if offset_3 == -1:
                                     break
                                 if offset_2 == offset_3: break
@@ -1283,6 +1317,7 @@ class Parser:
                                 count_0 += 1
                             if offset_2 == -1:
                                 break
+                            value_4 = count_0
 
                             count_0 = 0
                             while count_0 < 1:
@@ -1293,6 +1328,7 @@ class Parser:
                                 partial_tab_width_2 = partial_tab_width_1
                                 children_3 = [] if children_2 is not None else None
                                 while True:
+                                    #print('entry rep rule', offset_2, offset_3)
                                     if buf[offset_3:offset_3+1] == '\\':
                                         offset_3 += 1
                                         column_2 += 1
@@ -1302,7 +1338,9 @@ class Parser:
 
                                     children_3.append(Node('value', offset_3, offset_3, column_2, column_2, (), '\\'))
 
+                                    #print('safe exit rep rule', offset_2, offset_3)
                                     break
+                                #print('exit rep rule', offset_2, offset_3)
                                 if offset_3 == -1:
                                     break
                                 if offset_2 == offset_3: break
@@ -1317,6 +1355,7 @@ class Parser:
                                 break
                             if offset_2 == -1:
                                 break
+                            value_7 = count_0
 
                             offset_3 = offset_2
                             children_3 = [] if children_2 is not None else None
@@ -1334,6 +1373,7 @@ class Parser:
                                         partial_tab_width_2 = partial_tab_width_1
                                         children_4 = [] if children_3 is not None else None
                                         while True:
+                                            #print('entry rep rule', offset_3, offset_4)
                                             count_2 = 0
                                             while offset_4 < buf_eof:
                                                 codepoint = buf[offset_4]
@@ -1365,7 +1405,9 @@ class Parser:
                                                 offset_4 = -1
                                                 break
 
+                                            #print('safe exit rep rule', offset_3, offset_4)
                                             break
+                                        #print('exit rep rule', offset_3, offset_4)
                                         if offset_4 == -1:
                                             break
                                         if offset_3 == offset_4: break
@@ -1380,6 +1422,7 @@ class Parser:
                                         break
                                     if offset_3 == -1:
                                         break
+                                    value_8 = count_1
 
                                     count_1 = 0
                                     while offset_3 < buf_eof:
@@ -1493,6 +1536,7 @@ class Parser:
                 def _indent(buf, buf_start, buf_eof, offset, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
                     saw_tab, saw_not_tab = False, False
                     start_column, start_offset = column, offset
+                    if count < 0: offset = -1
                     while count > 0 and offset < buf_eof:
                         codepoint = buf[offset]
                         if codepoint in ' \t':
@@ -1525,40 +1569,7 @@ class Parser:
                             offset = -1
                             break
                     return offset, column, partial_tab_offset, partial_tab_width
-                def _dedent(buf, buf_start, buf_eof, offset, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
-                    saw_tab, saw_not_tab = False, False
-                    start_column, start_offset = column, offset
-                    while count > 0 and offset < buf_eof:
-                        codepoint = buf[offset]
-                        if codepoint in ' \t':
-                            if not allow_mixed_indent:
-                                if codepoint == '\t': saw_tab = True
-                                else: saw_not_tab = True
-                                if saw_tab and saw_not_tab:
-                                    offset = start_offset; break
-                            if codepoint != '\t':
-                                column += 1
-                                offset += 1
-                                count -=1
-                            else:
-                                if offset == partial_tab_offset and partial_tab_width > 0:
-                                    width = partial_tab_width
-                                else:
-                                    width  = (self.tabstop-(column%self.tabstop))
-                                if width <= count:
-                                    column += width
-                                    offset += 1
-                                    count -= width
-                                else: # we have indent, so break
-                                    offset = -1; break
-                        elif codepoint in '\n':
-                            offset = -1; break
-                        else:
-                            offset = start_offset
-                    if count == 0:
-                            offset = -1
-                    return offset, column, partial_tab_offset, partial_tab_width
-                prefix_0.append((_indent, _dedent))
+                prefix_0.append((_indent, None))
                 indent_column_0.append(column_0)
                 while True:
                     children_2 = []
@@ -1636,6 +1647,7 @@ class Parser:
                         partial_tab_width_1 = partial_tab_width_0
                         children_2 = [] if children_1 is not None else None
                         while True:
+                            #print('entry rep rule', offset_0, offset_1)
                             while True: # start choice
                                 offset_2 = offset_1
                                 column_2 = column_1
@@ -1653,6 +1665,7 @@ class Parser:
                                         partial_tab_width_3 = partial_tab_width_2
                                         children_4 = [] if children_3 is not None else None
                                         while True:
+                                            #print('entry rep rule', offset_2, offset_3)
                                             if column_3 != 0:
                                                 offset_3 = -1
                                                 break
@@ -1673,7 +1686,7 @@ class Parser:
                                                 break
 
                                             children_5 = []
-                                            value_3 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
+                                            value_5 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
                                             while True: # start capture
                                                 count_2 = 0
                                                 while offset_3 < buf_eof:
@@ -1697,11 +1710,11 @@ class Parser:
                                                 break
                                             if offset_3 == -1:
                                                 break
-                                            value_3.name = 'indented_code_line'
-                                            value_3.end = offset_3
-                                            value_3.end_column = column_3
-                                            value_3.value = None
-                                            children_4.append(value_3)
+                                            value_5.name = 'indented_code_line'
+                                            value_5.end = offset_3
+                                            value_5.end_column = column_3
+                                            value_5.value = None
+                                            children_4.append(value_5)
 
                                             if offset_3 < buf_eof:
                                                 codepoint = buf[offset_3]
@@ -1716,7 +1729,9 @@ class Parser:
                                                 offset_3 = -1
                                                 break
 
+                                            #print('safe exit rep rule', offset_2, offset_3)
                                             break
+                                        #print('exit rep rule', offset_2, offset_3)
                                         if offset_3 == -1:
                                             break
                                         if offset_2 == offset_3: break
@@ -1729,10 +1744,12 @@ class Parser:
                                         partial_tab_width_2 = partial_tab_width_3
                                         count_1 += 1
                                     if count_1 < 1:
+                                    #    print('min exit', offset_2)
                                         offset_2 = -1
                                         break
                                     if offset_2 == -1:
                                         break
+                                    value_4 = count_1
 
                                     while True: # start lookahed
                                         children_4 = []
@@ -1832,7 +1849,7 @@ class Parser:
                                         break
 
                                     children_4 = []
-                                    value_4 = Node(None, offset_2, offset_2, column_2, column_2, children_4, None)
+                                    value_6 = Node(None, offset_2, offset_2, column_2, column_2, children_4, None)
                                     while True: # start capture
                                         if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                             offset_2 += 1
@@ -1841,14 +1858,14 @@ class Parser:
                                         break
                                     if offset_2 == -1:
                                         break
-                                    value_4.name = 'partial_indent'
-                                    value_4.end = offset_2
-                                    value_4.end_column = column_2
-                                    value_4.value = None
-                                    children_3.append(value_4)
+                                    value_6.name = 'partial_indent'
+                                    value_6.end = offset_2
+                                    value_6.end_column = column_2
+                                    value_6.value = None
+                                    children_3.append(value_6)
 
                                     children_4 = []
-                                    value_5 = Node(None, offset_2, offset_2, column_2, column_2, children_4, None)
+                                    value_7 = Node(None, offset_2, offset_2, column_2, column_2, children_4, None)
                                     while True: # start capture
                                         count_1 = 0
                                         while offset_2 < buf_eof:
@@ -1881,11 +1898,11 @@ class Parser:
                                         break
                                     if offset_2 == -1:
                                         break
-                                    value_5.name = 'indented_code_line'
-                                    value_5.end = offset_2
-                                    value_5.end_column = column_2
-                                    value_5.value = None
-                                    children_3.append(value_5)
+                                    value_7.name = 'indented_code_line'
+                                    value_7.end = offset_2
+                                    value_7.end_column = column_2
+                                    value_7.value = None
+                                    children_3.append(value_7)
 
                                     if offset_2 < buf_eof:
                                         codepoint = buf[offset_2]
@@ -1914,7 +1931,9 @@ class Parser:
                             if offset_1 == -1:
                                 break
 
+                            #print('safe exit rep rule', offset_0, offset_1)
                             break
+                        #print('exit rep rule', offset_0, offset_1)
                         if offset_1 == -1:
                             break
                         if offset_0 == offset_1: break
@@ -1928,6 +1947,7 @@ class Parser:
                         count_0 += 1
                     if offset_0 == -1:
                         break
+                    value_3 = count_0
 
                     break
                 prefix_0.pop()
@@ -2060,6 +2080,7 @@ class Parser:
                         partial_tab_width_1 = partial_tab_width_0
                         children_3 = [] if children_2 is not None else None
                         while True:
+                            #print('entry rep rule', offset_0, offset_1)
                             while True: # start reject
                                 children_4 = []
                                 offset_2 = offset_1 + 0
@@ -2103,7 +2124,7 @@ class Parser:
                                                 break
 
                                             children_6 = []
-                                            value_4 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
+                                            value_5 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
                                             while True: # start capture
                                                 _match = regex_regex_6.match(buf, offset_3)
                                                 if _match:
@@ -2117,11 +2138,11 @@ class Parser:
                                                 break
                                             if offset_3 == -1:
                                                 break
-                                            value_4.name = 'text'
-                                            value_4.end = offset_3
-                                            value_4.end_column = column_3
-                                            value_4.value = None
-                                            children_5.append(value_4)
+                                            value_5.name = 'text'
+                                            value_5.end = offset_3
+                                            value_5.end_column = column_3
+                                            value_5.value = None
+                                            children_5.append(value_5)
 
 
                                             break
@@ -2143,7 +2164,7 @@ class Parser:
                                         children_5 = [] if children_4 is not None else None
                                         while True: # case
                                             children_6 = []
-                                            value_5 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
+                                            value_6 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
                                             while True: # start capture
                                                 if buf[offset_3:offset_3+1] == '\\':
                                                     offset_3 += 1
@@ -2208,11 +2229,11 @@ class Parser:
                                                 break
                                             if offset_3 == -1:
                                                 break
-                                            value_5.name = 'text'
-                                            value_5.end = offset_3
-                                            value_5.end_column = column_3
-                                            value_5.value = None
-                                            children_5.append(value_5)
+                                            value_6.name = 'text'
+                                            value_6.end = offset_3
+                                            value_6.end_column = column_3
+                                            value_6.value = None
+                                            children_5.append(value_6)
 
 
                                             break
@@ -2273,7 +2294,7 @@ class Parser:
                                                 break
 
                                             children_6 = []
-                                            value_6 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
+                                            value_7 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
                                             while True: # start capture
                                                 _match = regex_regex_7.match(buf, offset_3)
                                                 if _match:
@@ -2287,11 +2308,11 @@ class Parser:
                                                 break
                                             if offset_3 == -1:
                                                 break
-                                            value_6.name = 'html_entity'
-                                            value_6.end = offset_3
-                                            value_6.end_column = column_3
-                                            value_6.value = 'decimal'
-                                            children_5.append(value_6)
+                                            value_7.name = 'html_entity'
+                                            value_7.end = offset_3
+                                            value_7.end_column = column_3
+                                            value_7.value = 'decimal'
+                                            children_5.append(value_7)
 
                                             if buf[offset_3:offset_3+1] == ';':
                                                 offset_3 += 1
@@ -2336,7 +2357,7 @@ class Parser:
                                                 break
 
                                             children_6 = []
-                                            value_7 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
+                                            value_8 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
                                             while True: # start capture
                                                 _match = regex_regex_9.match(buf, offset_3)
                                                 if _match:
@@ -2359,11 +2380,11 @@ class Parser:
                                                 break
                                             if offset_3 == -1:
                                                 break
-                                            value_7.name = 'html_entity'
-                                            value_7.end = offset_3
-                                            value_7.end_column = column_3
-                                            value_7.value = 'hex'
-                                            children_5.append(value_7)
+                                            value_8.name = 'html_entity'
+                                            value_8.end = offset_3
+                                            value_8.end_column = column_3
+                                            value_8.value = 'hex'
+                                            children_5.append(value_8)
 
                                             if buf[offset_3:offset_3+1] == ';':
                                                 offset_3 += 1
@@ -2392,7 +2413,7 @@ class Parser:
                                         children_5 = [] if children_4 is not None else None
                                         while True: # case
                                             children_6 = []
-                                            value_8 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
+                                            value_9 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
                                             while True: # start capture
                                                 _match = regex_regex_11.match(buf, offset_3)
                                                 if _match:
@@ -2415,11 +2436,11 @@ class Parser:
                                                 break
                                             if offset_3 == -1:
                                                 break
-                                            value_8.name = 'html_entity'
-                                            value_8.end = offset_3
-                                            value_8.end_column = column_3
-                                            value_8.value = 'named'
-                                            children_5.append(value_8)
+                                            value_9.name = 'html_entity'
+                                            value_9.end = offset_3
+                                            value_9.end_column = column_3
+                                            value_9.value = 'named'
+                                            children_5.append(value_9)
 
                                             if buf[offset_3:offset_3+1] == ';':
                                                 offset_3 += 1
@@ -2466,7 +2487,7 @@ class Parser:
                                 children_4 = [] if children_3 is not None else None
                                 while True: # case
                                     children_5 = []
-                                    value_9 = Node(None, offset_2, offset_2, column_2, column_2, children_5, None)
+                                    value_10 = Node(None, offset_2, offset_2, column_2, column_2, children_5, None)
                                     while True: # start capture
                                         _match = regex_regex_3.match(buf, offset_2)
                                         if _match:
@@ -2489,11 +2510,11 @@ class Parser:
                                         break
                                     if offset_2 == -1:
                                         break
-                                    value_9.name = 'text'
-                                    value_9.end = offset_2
-                                    value_9.end_column = column_2
-                                    value_9.value = None
-                                    children_4.append(value_9)
+                                    value_10.name = 'text'
+                                    value_10.end = offset_2
+                                    value_10.end_column = column_2
+                                    value_10.value = None
+                                    children_4.append(value_10)
 
 
                                     break
@@ -2512,7 +2533,9 @@ class Parser:
                             if offset_1 == -1:
                                 break
 
+                            #print('safe exit rep rule', offset_0, offset_1)
                             break
+                        #print('exit rep rule', offset_0, offset_1)
                         if offset_1 == -1:
                             break
                         if offset_0 == offset_1: break
@@ -2526,6 +2549,7 @@ class Parser:
                         count_0 += 1
                     if offset_0 == -1:
                         break
+                    value_4 = count_0
 
                     break
                 if offset_0 == -1:
@@ -2575,6 +2599,7 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
+                        #print('entry rep rule', offset_0, offset_1)
                         if column_1 != 0:
                             offset_1 = -1
                             break
@@ -2636,6 +2661,7 @@ class Parser:
                                 partial_tab_width_3 = partial_tab_width_2
                                 children_4 = [] if children_3 is not None else None
                                 while True:
+                                    #print('entry rep rule', offset_2, offset_3)
                                     if buf[offset_3:offset_3+1] == '`':
                                         offset_3 += 1
                                         column_3 += 1
@@ -2662,7 +2688,9 @@ class Parser:
                                         else:
                                             break
 
+                                    #print('safe exit rep rule', offset_2, offset_3)
                                     break
+                                #print('exit rep rule', offset_2, offset_3)
                                 if offset_3 == -1:
                                     break
                                 if offset_2 == offset_3: break
@@ -2675,10 +2703,12 @@ class Parser:
                                 partial_tab_width_2 = partial_tab_width_3
                                 count_1 += 1
                             if count_1 < value_2:
+                            #    print('min exit', offset_2)
                                 offset_2 = -1
                                 break
                             if offset_2 == -1:
                                 break
+                            value_12 = count_1
 
                             if offset_2 < buf_eof:
                                 codepoint = buf[offset_2]
@@ -2722,7 +2752,7 @@ class Parser:
                                 break
 
                         children_3 = []
-                        value_10 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
+                        value_13 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
                             _match = regex_regex_14.match(buf, offset_1)
                             if _match:
@@ -2736,11 +2766,11 @@ class Parser:
                             break
                         if offset_1 == -1:
                             break
-                        value_10.name = 'text'
-                        value_10.end = offset_1
-                        value_10.end_column = column_1
-                        value_10.value = None
-                        children_2.append(value_10)
+                        value_13.name = 'text'
+                        value_13.end = offset_1
+                        value_13.end_column = column_1
+                        value_13.value = None
+                        children_2.append(value_13)
 
                         count_1 = 0
                         while offset_1 < buf_eof:
@@ -2772,7 +2802,9 @@ class Parser:
                                 break
 
 
+                        #print('safe exit rep rule', offset_0, offset_1)
                         break
+                    #print('exit rep rule', offset_0, offset_1)
                     if offset_1 == -1:
                         break
                     if offset_0 == offset_1: break
@@ -2786,6 +2818,7 @@ class Parser:
                     count_0 += 1
                 if offset_0 == -1:
                     break
+                value_11 = count_0
 
                 while True: # start choice
                     offset_1 = offset_0
@@ -2941,6 +2974,7 @@ class Parser:
                             partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True:
+                                #print('entry rep rule', offset_1, offset_2)
                                 count_1 = 0
                                 while offset_2 < buf_eof:
                                     codepoint = buf[offset_2]
@@ -2967,7 +3001,9 @@ class Parser:
                                     offset_2 = -1
                                     break
 
+                                #print('safe exit rep rule', offset_1, offset_2)
                                 break
+                            #print('exit rep rule', offset_1, offset_2)
                             if offset_2 == -1:
                                 break
                             if offset_1 == offset_2: break
@@ -2980,10 +3016,12 @@ class Parser:
                             partial_tab_width_1 = partial_tab_width_2
                             count_0 += 1
                         if count_0 < value_2:
+                        #    print('min exit', offset_1)
                             offset_1 = -1
                             break
                         if offset_1 == -1:
                             break
+                        value_14 = count_0
 
                         count_0 = 0
                         while offset_1 < buf_eof:
@@ -3136,6 +3174,7 @@ class Parser:
                         partial_tab_width_1 = partial_tab_width_0
                         children_3 = [] if children_2 is not None else None
                         while True:
+                            #print('entry rep rule', offset_0, offset_1)
                             while True: # start choice
                                 offset_2 = offset_1
                                 column_2 = column_1
@@ -3160,7 +3199,7 @@ class Parser:
                                                 break
 
                                             children_6 = []
-                                            value_4 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
+                                            value_5 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
                                             while True: # start capture
                                                 _match = regex_regex_6.match(buf, offset_3)
                                                 if _match:
@@ -3174,11 +3213,11 @@ class Parser:
                                                 break
                                             if offset_3 == -1:
                                                 break
-                                            value_4.name = 'text'
-                                            value_4.end = offset_3
-                                            value_4.end_column = column_3
-                                            value_4.value = None
-                                            children_5.append(value_4)
+                                            value_5.name = 'text'
+                                            value_5.end = offset_3
+                                            value_5.end_column = column_3
+                                            value_5.value = None
+                                            children_5.append(value_5)
 
 
                                             break
@@ -3200,7 +3239,7 @@ class Parser:
                                         children_5 = [] if children_4 is not None else None
                                         while True: # case
                                             children_6 = []
-                                            value_5 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
+                                            value_6 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
                                             while True: # start capture
                                                 if buf[offset_3:offset_3+1] == '\\':
                                                     offset_3 += 1
@@ -3265,11 +3304,11 @@ class Parser:
                                                 break
                                             if offset_3 == -1:
                                                 break
-                                            value_5.name = 'text'
-                                            value_5.end = offset_3
-                                            value_5.end_column = column_3
-                                            value_5.value = None
-                                            children_5.append(value_5)
+                                            value_6.name = 'text'
+                                            value_6.end = offset_3
+                                            value_6.end_column = column_3
+                                            value_6.value = None
+                                            children_5.append(value_6)
 
 
                                             break
@@ -3330,7 +3369,7 @@ class Parser:
                                                 break
 
                                             children_6 = []
-                                            value_6 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
+                                            value_7 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
                                             while True: # start capture
                                                 _match = regex_regex_7.match(buf, offset_3)
                                                 if _match:
@@ -3344,11 +3383,11 @@ class Parser:
                                                 break
                                             if offset_3 == -1:
                                                 break
-                                            value_6.name = 'html_entity'
-                                            value_6.end = offset_3
-                                            value_6.end_column = column_3
-                                            value_6.value = 'decimal'
-                                            children_5.append(value_6)
+                                            value_7.name = 'html_entity'
+                                            value_7.end = offset_3
+                                            value_7.end_column = column_3
+                                            value_7.value = 'decimal'
+                                            children_5.append(value_7)
 
                                             if buf[offset_3:offset_3+1] == ';':
                                                 offset_3 += 1
@@ -3393,7 +3432,7 @@ class Parser:
                                                 break
 
                                             children_6 = []
-                                            value_7 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
+                                            value_8 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
                                             while True: # start capture
                                                 _match = regex_regex_9.match(buf, offset_3)
                                                 if _match:
@@ -3416,11 +3455,11 @@ class Parser:
                                                 break
                                             if offset_3 == -1:
                                                 break
-                                            value_7.name = 'html_entity'
-                                            value_7.end = offset_3
-                                            value_7.end_column = column_3
-                                            value_7.value = 'hex'
-                                            children_5.append(value_7)
+                                            value_8.name = 'html_entity'
+                                            value_8.end = offset_3
+                                            value_8.end_column = column_3
+                                            value_8.value = 'hex'
+                                            children_5.append(value_8)
 
                                             if buf[offset_3:offset_3+1] == ';':
                                                 offset_3 += 1
@@ -3449,7 +3488,7 @@ class Parser:
                                         children_5 = [] if children_4 is not None else None
                                         while True: # case
                                             children_6 = []
-                                            value_8 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
+                                            value_9 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
                                             while True: # start capture
                                                 _match = regex_regex_11.match(buf, offset_3)
                                                 if _match:
@@ -3472,11 +3511,11 @@ class Parser:
                                                 break
                                             if offset_3 == -1:
                                                 break
-                                            value_8.name = 'html_entity'
-                                            value_8.end = offset_3
-                                            value_8.end_column = column_3
-                                            value_8.value = 'named'
-                                            children_5.append(value_8)
+                                            value_9.name = 'html_entity'
+                                            value_9.end = offset_3
+                                            value_9.end_column = column_3
+                                            value_9.value = 'named'
+                                            children_5.append(value_9)
 
                                             if buf[offset_3:offset_3+1] == ';':
                                                 offset_3 += 1
@@ -3523,7 +3562,7 @@ class Parser:
                                 children_4 = [] if children_3 is not None else None
                                 while True: # case
                                     children_5 = []
-                                    value_9 = Node(None, offset_2, offset_2, column_2, column_2, children_5, None)
+                                    value_10 = Node(None, offset_2, offset_2, column_2, column_2, children_5, None)
                                     while True: # start capture
                                         _match = regex_regex_3.match(buf, offset_2)
                                         if _match:
@@ -3546,11 +3585,11 @@ class Parser:
                                         break
                                     if offset_2 == -1:
                                         break
-                                    value_9.name = 'text'
-                                    value_9.end = offset_2
-                                    value_9.end_column = column_2
-                                    value_9.value = None
-                                    children_4.append(value_9)
+                                    value_10.name = 'text'
+                                    value_10.end = offset_2
+                                    value_10.end_column = column_2
+                                    value_10.value = None
+                                    children_4.append(value_10)
 
 
                                     break
@@ -3569,7 +3608,9 @@ class Parser:
                             if offset_1 == -1:
                                 break
 
+                            #print('safe exit rep rule', offset_0, offset_1)
                             break
+                        #print('exit rep rule', offset_0, offset_1)
                         if offset_1 == -1:
                             break
                         if offset_0 == offset_1: break
@@ -3583,6 +3624,7 @@ class Parser:
                         count_0 += 1
                     if offset_0 == -1:
                         break
+                    value_4 = count_0
 
                     break
                 if offset_0 == -1:
@@ -3632,6 +3674,7 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
+                        #print('entry rep rule', offset_0, offset_1)
                         if column_1 != 0:
                             offset_1 = -1
                             break
@@ -3693,6 +3736,7 @@ class Parser:
                                 partial_tab_width_3 = partial_tab_width_2
                                 children_4 = [] if children_3 is not None else None
                                 while True:
+                                    #print('entry rep rule', offset_2, offset_3)
                                     if buf[offset_3:offset_3+1] == '~':
                                         offset_3 += 1
                                         column_3 += 1
@@ -3719,7 +3763,9 @@ class Parser:
                                         else:
                                             break
 
+                                    #print('safe exit rep rule', offset_2, offset_3)
                                     break
+                                #print('exit rep rule', offset_2, offset_3)
                                 if offset_3 == -1:
                                     break
                                 if offset_2 == offset_3: break
@@ -3732,10 +3778,12 @@ class Parser:
                                 partial_tab_width_2 = partial_tab_width_3
                                 count_1 += 1
                             if count_1 < value_2:
+                            #    print('min exit', offset_2)
                                 offset_2 = -1
                                 break
                             if offset_2 == -1:
                                 break
+                            value_12 = count_1
 
                             break
                         if offset_2 != -1:
@@ -3769,7 +3817,7 @@ class Parser:
                                 break
 
                         children_3 = []
-                        value_10 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
+                        value_13 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
                             _match = regex_regex_14.match(buf, offset_1)
                             if _match:
@@ -3783,11 +3831,11 @@ class Parser:
                             break
                         if offset_1 == -1:
                             break
-                        value_10.name = 'text'
-                        value_10.end = offset_1
-                        value_10.end_column = column_1
-                        value_10.value = None
-                        children_2.append(value_10)
+                        value_13.name = 'text'
+                        value_13.end = offset_1
+                        value_13.end_column = column_1
+                        value_13.value = None
+                        children_2.append(value_13)
 
                         count_1 = 0
                         while offset_1 < buf_eof:
@@ -3819,7 +3867,9 @@ class Parser:
                                 break
 
 
+                        #print('safe exit rep rule', offset_0, offset_1)
                         break
+                    #print('exit rep rule', offset_0, offset_1)
                     if offset_1 == -1:
                         break
                     if offset_0 == offset_1: break
@@ -3833,6 +3883,7 @@ class Parser:
                     count_0 += 1
                 if offset_0 == -1:
                     break
+                value_11 = count_0
 
                 while True: # start choice
                     offset_1 = offset_0
@@ -3988,6 +4039,7 @@ class Parser:
                             partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True:
+                                #print('entry rep rule', offset_1, offset_2)
                                 count_1 = 0
                                 while offset_2 < buf_eof:
                                     codepoint = buf[offset_2]
@@ -4014,7 +4066,9 @@ class Parser:
                                     offset_2 = -1
                                     break
 
+                                #print('safe exit rep rule', offset_1, offset_2)
                                 break
+                            #print('exit rep rule', offset_1, offset_2)
                             if offset_2 == -1:
                                 break
                             if offset_1 == offset_2: break
@@ -4027,10 +4081,12 @@ class Parser:
                             partial_tab_width_1 = partial_tab_width_2
                             count_0 += 1
                         if count_0 < value_2:
+                        #    print('min exit', offset_1)
                             offset_1 = -1
                             break
                         if offset_1 == -1:
                             break
+                        value_14 = count_0
 
                         count_0 = 0
                         while offset_1 < buf_eof:
@@ -4562,6 +4618,7 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
+                        #print('entry rep rule', offset_0, offset_1)
                         if column_1 != 0:
                             offset_1 = -1
                             break
@@ -4670,7 +4727,9 @@ class Parser:
                         if offset_1 == -1:
                             break
 
+                        #print('safe exit rep rule', offset_0, offset_1)
                         break
+                    #print('exit rep rule', offset_0, offset_1)
                     if offset_1 == -1:
                         break
                     if offset_0 == offset_1: break
@@ -4684,6 +4743,7 @@ class Parser:
                     count_0 += 1
                 if offset_0 == -1:
                     break
+                value_1 = count_0
 
                 break
             if offset_0 == -1:
@@ -5265,6 +5325,7 @@ class Parser:
                     def _indent(buf, buf_start, buf_eof, offset, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
                         saw_tab, saw_not_tab = False, False
                         start_column, start_offset = column, offset
+                        if count < 0: offset = -1
                         while count > 0 and offset < buf_eof:
                             codepoint = buf[offset]
                             if codepoint in ' \t':
@@ -5297,40 +5358,7 @@ class Parser:
                                 offset = -1
                                 break
                         return offset, column, partial_tab_offset, partial_tab_width
-                    def _dedent(buf, buf_start, buf_eof, offset, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
-                        saw_tab, saw_not_tab = False, False
-                        start_column, start_offset = column, offset
-                        while count > 0 and offset < buf_eof:
-                            codepoint = buf[offset]
-                            if codepoint in ' \t':
-                                if not allow_mixed_indent:
-                                    if codepoint == '\t': saw_tab = True
-                                    else: saw_not_tab = True
-                                    if saw_tab and saw_not_tab:
-                                        offset = start_offset; break
-                                if codepoint != '\t':
-                                    column += 1
-                                    offset += 1
-                                    count -=1
-                                else:
-                                    if offset == partial_tab_offset and partial_tab_width > 0:
-                                        width = partial_tab_width
-                                    else:
-                                        width  = (self.tabstop-(column%self.tabstop))
-                                    if width <= count:
-                                        column += width
-                                        offset += 1
-                                        count -= width
-                                    else: # we have indent, so break
-                                        offset = -1; break
-                            elif codepoint in '\n':
-                                offset = -1; break
-                            else:
-                                offset = start_offset
-                        if count == 0:
-                                offset = -1
-                        return offset, column, partial_tab_offset, partial_tab_width
-                    prefix_0.append((_indent, _dedent))
+                    prefix_0.append((_indent, None))
                     indent_column_1.append(column_1)
                     while True:
                         count_0 = 0
@@ -5440,6 +5468,7 @@ class Parser:
             def _indent(buf, buf_start, buf_eof, offset, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
                 saw_tab, saw_not_tab = False, False
                 start_column, start_offset = column, offset
+                if count < 0: offset = -1
                 while count > 0 and offset < buf_eof:
                     codepoint = buf[offset]
                     if codepoint in ' \t':
@@ -5488,6 +5517,7 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_1 = [] if children_0 is not None else None
                     while True:
+                        #print('entry rep rule', offset_0, offset_1)
                         if column_1 != 0:
                             offset_1 = -1
                             break
@@ -5525,6 +5555,7 @@ class Parser:
                             partial_tab_width_2 = partial_tab_width_1
                             children_2 = [] if children_1 is not None else None
                             while True:
+                                #print('entry rep rule', offset_1, offset_2)
                                 count_2 = 0
                                 while True:
                                     offset_3 = offset_2
@@ -5534,6 +5565,7 @@ class Parser:
                                     partial_tab_width_3 = partial_tab_width_2
                                     children_3 = [] if children_2 is not None else None
                                     while True:
+                                        #print('entry rep rule', offset_2, offset_3)
                                         count_3 = 0
                                         while offset_3 < buf_eof:
                                             codepoint = buf[offset_3]
@@ -5554,7 +5586,7 @@ class Parser:
                                                 break
 
                                         children_4 = []
-                                        value_0 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
+                                        value_3 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
                                         while True: # start capture
                                             if offset_3 < buf_eof:
                                                 codepoint = buf[offset_3]
@@ -5572,11 +5604,11 @@ class Parser:
                                             break
                                         if offset_3 == -1:
                                             break
-                                        value_0.name = 'empty'
-                                        value_0.end = offset_3
-                                        value_0.end_column = column_3
-                                        value_0.value = None
-                                        children_3.append(value_0)
+                                        value_3.name = 'empty'
+                                        value_3.end = offset_3
+                                        value_3.end_column = column_3
+                                        value_3.value = None
+                                        children_3.append(value_3)
 
                                         if column_3 != 0:
                                             offset_3 = -1
@@ -5597,7 +5629,9 @@ class Parser:
                                         if offset_3 == -1:
                                             break
 
+                                        #print('safe exit rep rule', offset_2, offset_3)
                                         break
+                                    #print('exit rep rule', offset_2, offset_3)
                                     if offset_3 == -1:
                                         break
                                     if offset_2 == offset_3: break
@@ -5611,6 +5645,7 @@ class Parser:
                                     count_2 += 1
                                 if offset_2 == -1:
                                     break
+                                value_2 = count_2
 
                                 while True: # start lookahed
                                     children_3 = []
@@ -5652,7 +5687,9 @@ class Parser:
                                     offset_2 = -1
                                     break
 
+                                #print('safe exit rep rule', offset_1, offset_2)
                                 break
+                            #print('exit rep rule', offset_1, offset_2)
                             if offset_2 == -1:
                                 break
                             if offset_1 == offset_2: break
@@ -5667,12 +5704,15 @@ class Parser:
                             break
                         if offset_1 == -1:
                             break
+                        value_1 = count_1
 
                         offset_1, column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_block_element(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                         if offset_1 == -1: break
 
 
+                        #print('safe exit rep rule', offset_0, offset_1)
                         break
+                    #print('exit rep rule', offset_0, offset_1)
                     if offset_1 == -1:
                         break
                     if offset_0 == offset_1: break
@@ -5686,6 +5726,7 @@ class Parser:
                     count_0 += 1
                 if offset_0 == -1:
                     break
+                value_0 = count_0
 
                 break
             prefix_0.pop()
@@ -5990,6 +6031,7 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
+                        #print('entry rep rule', offset_0, offset_1)
                         if column_1 != 0:
                             offset_1 = -1
                             break
@@ -6050,7 +6092,7 @@ class Parser:
                                     break
 
                                 children_4 = []
-                                value_4 = Node(None, offset_2, offset_2, column_2, column_2, children_4, None)
+                                value_5 = Node(None, offset_2, offset_2, column_2, column_2, children_4, None)
                                 while True: # start capture
                                     count_1 = 0
                                     while True:
@@ -6061,6 +6103,7 @@ class Parser:
                                         partial_tab_width_3 = partial_tab_width_2
                                         children_5 = [] if children_4 is not None else None
                                         while True:
+                                            #print('entry rep rule', offset_2, offset_3)
                                             if column_3 != 0:
                                                 offset_3 = -1
                                                 break
@@ -6112,7 +6155,9 @@ class Parser:
                                                 offset_3 = -1
                                                 break
 
+                                            #print('safe exit rep rule', offset_2, offset_3)
                                             break
+                                        #print('exit rep rule', offset_2, offset_3)
                                         if offset_3 == -1:
                                             break
                                         if offset_2 == offset_3: break
@@ -6126,15 +6171,16 @@ class Parser:
                                         count_1 += 1
                                     if offset_2 == -1:
                                         break
+                                    value_6 = count_1
 
                                     break
                                 if offset_2 == -1:
                                     break
-                                value_4.name = 'empty'
-                                value_4.end = offset_2
-                                value_4.end_column = column_2
-                                value_4.value = None
-                                children_3.append(value_4)
+                                value_5.name = 'empty'
+                                value_5.end = offset_2
+                                value_5.end_column = column_2
+                                value_5.value = None
+                                children_3.append(value_5)
 
                                 while True: # start lookahed
                                     children_4 = []
@@ -6396,7 +6442,7 @@ class Parser:
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
                                         children_5 = []
-                                        value_5 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
+                                        value_7 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
                                         while True: # start capture
                                             offset_3, column_3, partial_tab_offset_3, partial_tab_width_3 = self.parse_list_item(buf, buf_start, buf_eof, offset_3, column_3, indent_column_3, prefix_0, children_5, partial_tab_offset_3, partial_tab_width_3)
                                             if offset_3 == -1: break
@@ -6405,11 +6451,11 @@ class Parser:
                                             break
                                         if offset_3 == -1:
                                             break
-                                        value_5.name = 'list_item'
-                                        value_5.end = offset_3
-                                        value_5.end_column = column_3
-                                        value_5.value = None
-                                        children_4.append(value_5)
+                                        value_7.name = 'list_item'
+                                        value_7.end = offset_3
+                                        value_7.end_column = column_3
+                                        value_7.value = None
+                                        children_4.append(value_7)
 
 
                                         break
@@ -6431,7 +6477,7 @@ class Parser:
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
                                         children_5 = []
-                                        value_6 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
+                                        value_8 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
                                         while True: # start capture
                                             count_1 = 0
                                             while offset_3 < buf_eof:
@@ -6455,11 +6501,11 @@ class Parser:
                                             break
                                         if offset_3 == -1:
                                             break
-                                        value_6.name = 'list_item'
-                                        value_6.end = offset_3
-                                        value_6.end_column = column_3
-                                        value_6.value = None
-                                        children_4.append(value_6)
+                                        value_8.name = 'list_item'
+                                        value_8.end = offset_3
+                                        value_8.end_column = column_3
+                                        value_8.value = None
+                                        children_4.append(value_8)
 
                                         if offset_3 < buf_eof:
                                             codepoint = buf[offset_3]
@@ -6505,7 +6551,9 @@ class Parser:
                         if offset_1 == -1:
                             break
 
+                        #print('safe exit rep rule', offset_0, offset_1)
                         break
+                    #print('exit rep rule', offset_0, offset_1)
                     if offset_1 == -1:
                         break
                     if offset_0 == offset_1: break
@@ -6519,6 +6567,7 @@ class Parser:
                     count_0 += 1
                 if offset_0 == -1:
                     break
+                value_4 = count_0
 
                 break
             if offset_0 == -1:
@@ -6832,6 +6881,7 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
+                        #print('entry rep rule', offset_0, offset_1)
                         if column_1 != 0:
                             offset_1 = -1
                             break
@@ -6892,7 +6942,7 @@ class Parser:
                                     break
 
                                 children_4 = []
-                                value_5 = Node(None, offset_2, offset_2, column_2, column_2, children_4, None)
+                                value_6 = Node(None, offset_2, offset_2, column_2, column_2, children_4, None)
                                 while True: # start capture
                                     count_1 = 0
                                     while True:
@@ -6903,6 +6953,7 @@ class Parser:
                                         partial_tab_width_3 = partial_tab_width_2
                                         children_5 = [] if children_4 is not None else None
                                         while True:
+                                            #print('entry rep rule', offset_2, offset_3)
                                             if column_3 != 0:
                                                 offset_3 = -1
                                                 break
@@ -6954,7 +7005,9 @@ class Parser:
                                                 offset_3 = -1
                                                 break
 
+                                            #print('safe exit rep rule', offset_2, offset_3)
                                             break
+                                        #print('exit rep rule', offset_2, offset_3)
                                         if offset_3 == -1:
                                             break
                                         if offset_2 == offset_3: break
@@ -6968,15 +7021,16 @@ class Parser:
                                         count_1 += 1
                                     if offset_2 == -1:
                                         break
+                                    value_7 = count_1
 
                                     break
                                 if offset_2 == -1:
                                     break
-                                value_5.name = 'empty'
-                                value_5.end = offset_2
-                                value_5.end_column = column_2
-                                value_5.value = None
-                                children_3.append(value_5)
+                                value_6.name = 'empty'
+                                value_6.end = offset_2
+                                value_6.end_column = column_2
+                                value_6.value = None
+                                children_3.append(value_6)
 
                                 while True: # start lookahed
                                     children_4 = []
@@ -7240,7 +7294,7 @@ class Parser:
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
                                         children_5 = []
-                                        value_6 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
+                                        value_8 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
                                         while True: # start capture
                                             offset_3, column_3, partial_tab_offset_3, partial_tab_width_3 = self.parse_list_item(buf, buf_start, buf_eof, offset_3, column_3, indent_column_3, prefix_0, children_5, partial_tab_offset_3, partial_tab_width_3)
                                             if offset_3 == -1: break
@@ -7249,11 +7303,11 @@ class Parser:
                                             break
                                         if offset_3 == -1:
                                             break
-                                        value_6.name = 'list_item'
-                                        value_6.end = offset_3
-                                        value_6.end_column = column_3
-                                        value_6.value = None
-                                        children_4.append(value_6)
+                                        value_8.name = 'list_item'
+                                        value_8.end = offset_3
+                                        value_8.end_column = column_3
+                                        value_8.value = None
+                                        children_4.append(value_8)
 
 
                                         break
@@ -7275,7 +7329,7 @@ class Parser:
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
                                         children_5 = []
-                                        value_7 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
+                                        value_9 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
                                         while True: # start capture
                                             count_1 = 0
                                             while offset_3 < buf_eof:
@@ -7299,11 +7353,11 @@ class Parser:
                                             break
                                         if offset_3 == -1:
                                             break
-                                        value_7.name = 'list_item'
-                                        value_7.end = offset_3
-                                        value_7.end_column = column_3
-                                        value_7.value = None
-                                        children_4.append(value_7)
+                                        value_9.name = 'list_item'
+                                        value_9.end = offset_3
+                                        value_9.end_column = column_3
+                                        value_9.value = None
+                                        children_4.append(value_9)
 
                                         if offset_3 < buf_eof:
                                             codepoint = buf[offset_3]
@@ -7349,7 +7403,9 @@ class Parser:
                         if offset_1 == -1:
                             break
 
+                        #print('safe exit rep rule', offset_0, offset_1)
                         break
+                    #print('exit rep rule', offset_0, offset_1)
                     if offset_1 == -1:
                         break
                     if offset_0 == offset_1: break
@@ -7363,6 +7419,7 @@ class Parser:
                     count_0 += 1
                 if offset_0 == -1:
                     break
+                value_5 = count_0
 
                 break
             if offset_0 == -1:
@@ -7405,6 +7462,7 @@ class Parser:
                             partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True:
+                                #print('entry rep rule', offset_1, offset_2)
                                 while True: # start choice
                                     offset_3 = offset_2
                                     column_3 = column_2
@@ -7465,49 +7523,9 @@ class Parser:
                                             break
 
                                         children_5 = []
-                                        value_1 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
-                                        while True: # start capture
-                                            _match = regex_regex_6.match(buf, offset_3)
-                                            if _match:
-                                                _end = _match.end()
-                                                column_3 += (_end - offset_3)
-                                                offset_3 = _end
-                                            else:
-                                                offset_3 = -1
-                                                break
-
-                                            break
-                                        if offset_3 == -1:
-                                            break
-                                        value_1.name = 'raw'
-                                        value_1.end = offset_3
-                                        value_1.end_column = column_3
-                                        value_1.value = None
-                                        children_4.append(value_1)
-
-
-                                        break
-                                    if offset_3 != -1:
-                                        offset_2 = offset_3
-                                        column_2 = column_3
-                                        indent_column_2 = indent_column_3
-                                        partial_tab_offset_2 = partial_tab_offset_3
-                                        partial_tab_width_2 = partial_tab_width_3
-                                        if children_4 is not None and children_4 is not None:
-                                            children_3.extend(children_4)
-                                        break
-                                    # end case
-                                    offset_3 = offset_2
-                                    column_3 = column_2
-                                    indent_column_3 = list(indent_column_2)
-                                    partial_tab_offset_3 = partial_tab_offset_2
-                                    partial_tab_width_3 = partial_tab_width_2
-                                    children_4 = [] if children_3 is not None else None
-                                    while True: # case
-                                        children_5 = []
                                         value_2 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
                                         while True: # start capture
-                                            _match = regex_regex_21.match(buf, offset_3)
+                                            _match = regex_regex_6.match(buf, offset_3)
                                             if _match:
                                                 _end = _match.end()
                                                 column_3 += (_end - offset_3)
@@ -7537,12 +7555,54 @@ class Parser:
                                             children_3.extend(children_4)
                                         break
                                     # end case
+                                    offset_3 = offset_2
+                                    column_3 = column_2
+                                    indent_column_3 = list(indent_column_2)
+                                    partial_tab_offset_3 = partial_tab_offset_2
+                                    partial_tab_width_3 = partial_tab_width_2
+                                    children_4 = [] if children_3 is not None else None
+                                    while True: # case
+                                        children_5 = []
+                                        value_3 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
+                                        while True: # start capture
+                                            _match = regex_regex_21.match(buf, offset_3)
+                                            if _match:
+                                                _end = _match.end()
+                                                column_3 += (_end - offset_3)
+                                                offset_3 = _end
+                                            else:
+                                                offset_3 = -1
+                                                break
+
+                                            break
+                                        if offset_3 == -1:
+                                            break
+                                        value_3.name = 'raw'
+                                        value_3.end = offset_3
+                                        value_3.end_column = column_3
+                                        value_3.value = None
+                                        children_4.append(value_3)
+
+
+                                        break
+                                    if offset_3 != -1:
+                                        offset_2 = offset_3
+                                        column_2 = column_3
+                                        indent_column_2 = indent_column_3
+                                        partial_tab_offset_2 = partial_tab_offset_3
+                                        partial_tab_width_2 = partial_tab_width_3
+                                        if children_4 is not None and children_4 is not None:
+                                            children_3.extend(children_4)
+                                        break
+                                    # end case
                                     offset_2 = -1 # no more choices
                                     break # end choice
                                 if offset_2 == -1:
                                     break
 
+                                #print('safe exit rep rule', offset_1, offset_2)
                                 break
+                            #print('exit rep rule', offset_1, offset_2)
                             if offset_2 == -1:
                                 break
                             if offset_1 == offset_2: break
@@ -7556,6 +7616,7 @@ class Parser:
                             count_0 += 1
                         if offset_1 == -1:
                             break
+                        value_1 = count_0
 
                         break
                     if offset_1 == -1:
@@ -7612,7 +7673,7 @@ class Parser:
                 children_1 = [] if children_0 is not None else None
                 while True: # case
                     children_2 = []
-                    value_3 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
+                    value_4 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
                         while True: # start reject
                             children_3 = []
@@ -7640,11 +7701,11 @@ class Parser:
                         break
                     if offset_1 == -1:
                         break
-                    value_3.name = 'link_url'
-                    value_3.end = offset_1
-                    value_3.end_column = column_1
-                    value_3.value = None
-                    children_1.append(value_3)
+                    value_4.name = 'link_url'
+                    value_4.end = offset_1
+                    value_4.end_column = column_1
+                    value_4.value = None
+                    children_1.append(value_4)
 
 
                     break
@@ -7677,6 +7738,7 @@ class Parser:
                 partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True:
+                    #print('entry rep rule', offset_0, offset_1)
                     count_1 = 0
                     while True:
                         offset_2 = offset_1
@@ -7686,6 +7748,7 @@ class Parser:
                         partial_tab_width_2 = partial_tab_width_1
                         children_2 = [] if children_1 is not None else None
                         while True:
+                            #print('entry rep rule', offset_1, offset_2)
                             while True: # start choice
                                 offset_3 = offset_2
                                 column_3 = column_2
@@ -7746,7 +7809,7 @@ class Parser:
                                         break
 
                                     children_4 = []
-                                    value_0 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
+                                    value_2 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
                                     while True: # start capture
                                         _match = regex_regex_6.match(buf, offset_3)
                                         if _match:
@@ -7760,11 +7823,11 @@ class Parser:
                                         break
                                     if offset_3 == -1:
                                         break
-                                    value_0.name = 'raw'
-                                    value_0.end = offset_3
-                                    value_0.end_column = column_3
-                                    value_0.value = None
-                                    children_3.append(value_0)
+                                    value_2.name = 'raw'
+                                    value_2.end = offset_3
+                                    value_2.end_column = column_3
+                                    value_2.value = None
+                                    children_3.append(value_2)
 
 
                                     break
@@ -7786,7 +7849,7 @@ class Parser:
                                 children_3 = [] if children_2 is not None else None
                                 while True: # case
                                     children_4 = []
-                                    value_1 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
+                                    value_3 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
                                     while True: # start capture
                                         _match = regex_regex_22.match(buf, offset_3)
                                         if _match:
@@ -7800,11 +7863,11 @@ class Parser:
                                         break
                                     if offset_3 == -1:
                                         break
-                                    value_1.name = 'raw'
-                                    value_1.end = offset_3
-                                    value_1.end_column = column_3
-                                    value_1.value = None
-                                    children_3.append(value_1)
+                                    value_3.name = 'raw'
+                                    value_3.end = offset_3
+                                    value_3.end_column = column_3
+                                    value_3.value = None
+                                    children_3.append(value_3)
 
 
                                     break
@@ -7826,7 +7889,7 @@ class Parser:
                                 children_3 = [] if children_2 is not None else None
                                 while True: # case
                                     children_4 = []
-                                    value_2 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
+                                    value_4 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
                                     while True: # start capture
                                         count_2 = 0
                                         while offset_3 < buf_eof:
@@ -7872,11 +7935,11 @@ class Parser:
                                         break
                                     if offset_3 == -1:
                                         break
-                                    value_2.name = 'raw'
-                                    value_2.end = offset_3
-                                    value_2.end_column = column_3
-                                    value_2.value = None
-                                    children_3.append(value_2)
+                                    value_4.name = 'raw'
+                                    value_4.end = offset_3
+                                    value_4.end_column = column_3
+                                    value_4.value = None
+                                    children_3.append(value_4)
 
 
                                     break
@@ -7895,7 +7958,9 @@ class Parser:
                             if offset_2 == -1:
                                 break
 
+                            #print('safe exit rep rule', offset_1, offset_2)
                             break
+                        #print('exit rep rule', offset_1, offset_2)
                         if offset_2 == -1:
                             break
                         if offset_1 == offset_2: break
@@ -7909,6 +7974,7 @@ class Parser:
                         count_1 += 1
                     if offset_1 == -1:
                         break
+                    value_1 = count_1
 
                     count_1 = 0
                     while True:
@@ -7919,8 +7985,9 @@ class Parser:
                         partial_tab_width_2 = partial_tab_width_1
                         children_2 = [] if children_1 is not None else None
                         while True:
+                            #print('entry rep rule', offset_1, offset_2)
                             children_3 = []
-                            value_3 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
+                            value_6 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
                             while True: # start capture
                                 if buf[offset_2:offset_2+1] == '(':
                                     offset_2 += 1
@@ -7932,18 +7999,18 @@ class Parser:
                                 break
                             if offset_2 == -1:
                                 break
-                            value_3.name = 'raw'
-                            value_3.end = offset_2
-                            value_3.end_column = column_2
-                            value_3.value = None
-                            children_2.append(value_3)
+                            value_6.name = 'raw'
+                            value_6.end = offset_2
+                            value_6.end_column = column_2
+                            value_6.value = None
+                            children_2.append(value_6)
 
                             offset_2, column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_balanced_list_url_spaces(buf, buf_start, buf_eof, offset_2, column_2, indent_column_2, prefix_0, children_2, partial_tab_offset_2, partial_tab_width_2)
                             if offset_2 == -1: break
 
 
                             children_3 = []
-                            value_4 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
+                            value_7 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
                             while True: # start capture
                                 if buf[offset_2:offset_2+1] == ')':
                                     offset_2 += 1
@@ -7955,13 +8022,15 @@ class Parser:
                                 break
                             if offset_2 == -1:
                                 break
-                            value_4.name = 'raw'
-                            value_4.end = offset_2
-                            value_4.end_column = column_2
-                            value_4.value = None
-                            children_2.append(value_4)
+                            value_7.name = 'raw'
+                            value_7.end = offset_2
+                            value_7.end_column = column_2
+                            value_7.value = None
+                            children_2.append(value_7)
 
+                            #print('safe exit rep rule', offset_1, offset_2)
                             break
+                        #print('exit rep rule', offset_1, offset_2)
                         if offset_2 == -1:
                             break
                         if offset_1 == offset_2: break
@@ -7975,8 +8044,11 @@ class Parser:
                         count_1 += 1
                     if offset_1 == -1:
                         break
+                    value_5 = count_1
 
+                    #print('safe exit rep rule', offset_0, offset_1)
                     break
+                #print('exit rep rule', offset_0, offset_1)
                 if offset_1 == -1:
                     break
                 if offset_0 == offset_1: break
@@ -7990,6 +8062,7 @@ class Parser:
                 count_0 += 1
             if offset_0 == -1:
                 break
+            value_0 = count_0
 
             break
         return offset_0, column_0, partial_tab_offset_0, partial_tab_width_0
@@ -8087,6 +8160,7 @@ class Parser:
                         partial_tab_width_1 = partial_tab_width_0
                         children_3 = [] if children_2 is not None else None
                         while True:
+                            #print('entry rep rule', offset_0, offset_1)
                             while True: # start choice
                                 offset_2 = offset_1
                                 column_2 = column_1
@@ -8147,49 +8221,9 @@ class Parser:
                                         break
 
                                     children_5 = []
-                                    value_2 = Node(None, offset_2, offset_2, column_2, column_2, children_5, None)
-                                    while True: # start capture
-                                        _match = regex_regex_6.match(buf, offset_2)
-                                        if _match:
-                                            _end = _match.end()
-                                            column_2 += (_end - offset_2)
-                                            offset_2 = _end
-                                        else:
-                                            offset_2 = -1
-                                            break
-
-                                        break
-                                    if offset_2 == -1:
-                                        break
-                                    value_2.name = 'raw'
-                                    value_2.end = offset_2
-                                    value_2.end_column = column_2
-                                    value_2.value = None
-                                    children_4.append(value_2)
-
-
-                                    break
-                                if offset_2 != -1:
-                                    offset_1 = offset_2
-                                    column_1 = column_2
-                                    indent_column_1 = indent_column_2
-                                    partial_tab_offset_1 = partial_tab_offset_2
-                                    partial_tab_width_1 = partial_tab_width_2
-                                    if children_4 is not None and children_4 is not None:
-                                        children_3.extend(children_4)
-                                    break
-                                # end case
-                                offset_2 = offset_1
-                                column_2 = column_1
-                                indent_column_2 = list(indent_column_1)
-                                partial_tab_offset_2 = partial_tab_offset_1
-                                partial_tab_width_2 = partial_tab_width_1
-                                children_4 = [] if children_3 is not None else None
-                                while True: # case
-                                    children_5 = []
                                     value_3 = Node(None, offset_2, offset_2, column_2, column_2, children_5, None)
                                     while True: # start capture
-                                        _match = regex_regex_23.match(buf, offset_2)
+                                        _match = regex_regex_6.match(buf, offset_2)
                                         if _match:
                                             _end = _match.end()
                                             column_2 += (_end - offset_2)
@@ -8219,12 +8253,54 @@ class Parser:
                                         children_3.extend(children_4)
                                     break
                                 # end case
+                                offset_2 = offset_1
+                                column_2 = column_1
+                                indent_column_2 = list(indent_column_1)
+                                partial_tab_offset_2 = partial_tab_offset_1
+                                partial_tab_width_2 = partial_tab_width_1
+                                children_4 = [] if children_3 is not None else None
+                                while True: # case
+                                    children_5 = []
+                                    value_4 = Node(None, offset_2, offset_2, column_2, column_2, children_5, None)
+                                    while True: # start capture
+                                        _match = regex_regex_23.match(buf, offset_2)
+                                        if _match:
+                                            _end = _match.end()
+                                            column_2 += (_end - offset_2)
+                                            offset_2 = _end
+                                        else:
+                                            offset_2 = -1
+                                            break
+
+                                        break
+                                    if offset_2 == -1:
+                                        break
+                                    value_4.name = 'raw'
+                                    value_4.end = offset_2
+                                    value_4.end_column = column_2
+                                    value_4.value = None
+                                    children_4.append(value_4)
+
+
+                                    break
+                                if offset_2 != -1:
+                                    offset_1 = offset_2
+                                    column_1 = column_2
+                                    indent_column_1 = indent_column_2
+                                    partial_tab_offset_1 = partial_tab_offset_2
+                                    partial_tab_width_1 = partial_tab_width_2
+                                    if children_4 is not None and children_4 is not None:
+                                        children_3.extend(children_4)
+                                    break
+                                # end case
                                 offset_1 = -1 # no more choices
                                 break # end choice
                             if offset_1 == -1:
                                 break
 
+                            #print('safe exit rep rule', offset_0, offset_1)
                             break
+                        #print('exit rep rule', offset_0, offset_1)
                         if offset_1 == -1:
                             break
                         if offset_0 == offset_1: break
@@ -8237,10 +8313,12 @@ class Parser:
                         partial_tab_width_0 = partial_tab_width_1
                         count_0 += 1
                     if count_0 < 1:
+                    #    print('min exit', offset_0)
                         offset_0 = -1
                         break
                     if offset_0 == -1:
                         break
+                    value_2 = count_0
 
                     break
                 if offset_0 == -1:
@@ -8474,6 +8552,7 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
+                        #print('entry rep rule', offset_0, offset_1)
                         while True: # start choice
                             offset_2 = offset_1
                             column_2 = column_1
@@ -8701,6 +8780,7 @@ class Parser:
                             partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True:
+                                #print('entry rep rule', offset_1, offset_2)
                                 count_2 = 0
                                 while offset_2 < buf_eof:
                                     codepoint = buf[offset_2]
@@ -8853,7 +8933,9 @@ class Parser:
                                     offset_2 = -1
                                     break
 
+                                #print('safe exit rep rule', offset_1, offset_2)
                                 break
+                            #print('exit rep rule', offset_1, offset_2)
                             if offset_2 == -1:
                                 break
                             if offset_1 == offset_2: break
@@ -8867,8 +8949,11 @@ class Parser:
                             count_1 += 1
                         if offset_1 == -1:
                             break
+                        value_6 = count_1
 
+                        #print('safe exit rep rule', offset_0, offset_1)
                         break
+                    #print('exit rep rule', offset_0, offset_1)
                     if offset_1 == -1:
                         break
                     if offset_0 == offset_1: break
@@ -8883,6 +8968,7 @@ class Parser:
                     break
                 if offset_0 == -1:
                     break
+                value_5 = count_0
 
                 break
             if offset_0 == -1:
@@ -9598,6 +9684,7 @@ class Parser:
                                 partial_tab_width_1 = partial_tab_width_0
                                 children_2 = [] if children_1 is not None else None
                                 while True:
+                                    #print('entry rep rule', offset_2, offset_3)
                                     while True: # start choice
                                         offset_4 = offset_3
                                         column_2 = column_1
@@ -9630,7 +9717,7 @@ class Parser:
                                         children_3 = [] if children_2 is not None else None
                                         while True: # case
                                             children_4 = []
-                                            value_3 = Node(None, offset_4, offset_4, column_2, column_2, children_4, None)
+                                            value_4 = Node(None, offset_4, offset_4, column_2, column_2, children_4, None)
                                             while True: # start capture
                                                 count_1 = 0
                                                 while offset_4 < buf_eof:
@@ -9654,11 +9741,11 @@ class Parser:
                                                 break
                                             if offset_4 == -1:
                                                 break
-                                            value_3.name = 'whitespace'
-                                            value_3.end = offset_4
-                                            value_3.end_column = column_2
-                                            value_3.value = None
-                                            children_3.append(value_3)
+                                            value_4.name = 'whitespace'
+                                            value_4.end = offset_4
+                                            value_4.end_column = column_2
+                                            value_4.value = None
+                                            children_3.append(value_4)
 
 
                                             break
@@ -9681,7 +9768,9 @@ class Parser:
                                     if offset_3 == -1: break
 
 
+                                    #print('safe exit rep rule', offset_2, offset_3)
                                     break
+                                #print('exit rep rule', offset_2, offset_3)
                                 if offset_3 == -1:
                                     break
                                 if offset_2 == offset_3: break
@@ -9695,6 +9784,7 @@ class Parser:
                                 count_0 += 1
                             if offset_2 == -1:
                                 break
+                            value_3 = count_0
 
                             break
                         prefix_0.pop()
@@ -9718,6 +9808,7 @@ class Parser:
                                     partial_tab_width_2 = partial_tab_width_1
                                     children_3 = [] if children_2 is not None else None
                                     while True:
+                                        #print('entry rep rule', offset_3, offset_4)
                                         if buf[offset_4:offset_4+1] == '\\':
                                             offset_4 += 1
                                             column_2 += 1
@@ -9727,7 +9818,9 @@ class Parser:
 
                                         children_3.append(Node('value', offset_4, offset_4, column_2, column_2, (), '\\'))
 
+                                        #print('safe exit rep rule', offset_3, offset_4)
                                         break
+                                    #print('exit rep rule', offset_3, offset_4)
                                     if offset_4 == -1:
                                         break
                                     if offset_3 == offset_4: break
@@ -9742,6 +9835,7 @@ class Parser:
                                     break
                                 if offset_3 == -1:
                                     break
+                                value_5 = count_0
 
                                 count_0 = 0
                                 while offset_3 < buf_eof:
@@ -9946,6 +10040,7 @@ class Parser:
                                     partial_tab_width_2 = partial_tab_width_1
                                     children_3 = [] if children_2 is not None else None
                                     while True:
+                                        #print('entry rep rule', offset_3, offset_4)
                                         while True: # start choice
                                             offset_5 = offset_4
                                             column_3 = column_2
@@ -9978,7 +10073,7 @@ class Parser:
                                             children_4 = [] if children_3 is not None else None
                                             while True: # case
                                                 children_5 = []
-                                                value_4 = Node(None, offset_5, offset_5, column_3, column_3, children_5, None)
+                                                value_7 = Node(None, offset_5, offset_5, column_3, column_3, children_5, None)
                                                 while True: # start capture
                                                     count_1 = 0
                                                     while offset_5 < buf_eof:
@@ -10002,11 +10097,11 @@ class Parser:
                                                     break
                                                 if offset_5 == -1:
                                                     break
-                                                value_4.name = 'whitespace'
-                                                value_4.end = offset_5
-                                                value_4.end_column = column_3
-                                                value_4.value = None
-                                                children_4.append(value_4)
+                                                value_7.name = 'whitespace'
+                                                value_7.end = offset_5
+                                                value_7.end_column = column_3
+                                                value_7.value = None
+                                                children_4.append(value_7)
 
 
                                                 break
@@ -10029,7 +10124,9 @@ class Parser:
                                         if offset_4 == -1: break
 
 
+                                        #print('safe exit rep rule', offset_3, offset_4)
                                         break
+                                    #print('exit rep rule', offset_3, offset_4)
                                     if offset_4 == -1:
                                         break
                                     if offset_3 == offset_4: break
@@ -10043,6 +10140,7 @@ class Parser:
                                     count_0 += 1
                                 if offset_3 == -1:
                                     break
+                                value_6 = count_0
 
                                 count_0 = 0
                                 while offset_3 < buf_eof:
@@ -10072,6 +10170,7 @@ class Parser:
                                     partial_tab_width_2 = partial_tab_width_1
                                     children_3 = [] if children_2 is not None else None
                                     while True:
+                                        #print('entry rep rule', offset_3, offset_4)
                                         if buf[offset_4:offset_4+1] == '\\':
                                             offset_4 += 1
                                             column_2 += 1
@@ -10081,7 +10180,9 @@ class Parser:
 
                                         children_3.append(Node('value', offset_4, offset_4, column_2, column_2, (), '\\'))
 
+                                        #print('safe exit rep rule', offset_3, offset_4)
                                         break
+                                    #print('exit rep rule', offset_3, offset_4)
                                     if offset_4 == -1:
                                         break
                                     if offset_3 == offset_4: break
@@ -10096,6 +10197,7 @@ class Parser:
                                     break
                                 if offset_3 == -1:
                                     break
+                                value_8 = count_0
 
                                 if offset_3 < buf_eof:
                                     codepoint = buf[offset_3]
@@ -10966,6 +11068,7 @@ class Parser:
                             partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True:
+                                #print('entry rep rule', offset_1, offset_2)
                                 while True: # start choice
                                     offset_3 = offset_2
                                     column_3 = column_2
@@ -11084,7 +11187,9 @@ class Parser:
                                 if offset_2 == -1:
                                     break
 
+                                #print('safe exit rep rule', offset_1, offset_2)
                                 break
+                            #print('exit rep rule', offset_1, offset_2)
                             if offset_2 == -1:
                                 break
                             if offset_1 == offset_2: break
@@ -11098,6 +11203,7 @@ class Parser:
                             count_0 += 1
                         if offset_1 == -1:
                             break
+                        value_10 = count_0
 
                         break
                     if offset_1 == -1:
@@ -11242,6 +11348,7 @@ class Parser:
                                                 partial_tab_width_2 = partial_tab_width_1
                                                 children_6 = [] if children_5 is not None else None
                                                 while True:
+                                                    #print('entry rep rule', offset_3, offset_4)
                                                     while True: # start reject
                                                         children_7 = []
                                                         offset_5 = offset_4 + 0
@@ -11274,6 +11381,7 @@ class Parser:
                                                         partial_tab_width_3 = partial_tab_width_2
                                                         children_7 = [] if children_6 is not None else None
                                                         while True:
+                                                            #print('entry rep rule', offset_4, offset_5)
                                                             while True: # start choice
                                                                 offset_6 = offset_5
                                                                 column_4 = column_3
@@ -11306,7 +11414,7 @@ class Parser:
                                                                 children_8 = [] if children_7 is not None else None
                                                                 while True: # case
                                                                     children_9 = []
-                                                                    value_5 = Node(None, offset_6, offset_6, column_4, column_4, children_9, None)
+                                                                    value_8 = Node(None, offset_6, offset_6, column_4, column_4, children_9, None)
                                                                     while True: # start capture
                                                                         count_4 = 0
                                                                         while offset_6 < buf_eof:
@@ -11330,11 +11438,11 @@ class Parser:
                                                                         break
                                                                     if offset_6 == -1:
                                                                         break
-                                                                    value_5.name = 'whitespace'
-                                                                    value_5.end = offset_6
-                                                                    value_5.end_column = column_4
-                                                                    value_5.value = None
-                                                                    children_8.append(value_5)
+                                                                    value_8.name = 'whitespace'
+                                                                    value_8.end = offset_6
+                                                                    value_8.end_column = column_4
+                                                                    value_8.value = None
+                                                                    children_8.append(value_8)
 
 
                                                                     break
@@ -11376,7 +11484,9 @@ class Parser:
                                                             if offset_5 == -1: break
 
 
+                                                            #print('safe exit rep rule', offset_4, offset_5)
                                                             break
+                                                        #print('exit rep rule', offset_4, offset_5)
                                                         if offset_5 == -1:
                                                             break
                                                         if offset_4 == offset_5: break
@@ -11390,8 +11500,11 @@ class Parser:
                                                         count_3 += 1
                                                     if offset_4 == -1:
                                                         break
+                                                    value_7 = count_3
 
+                                                    #print('safe exit rep rule', offset_3, offset_4)
                                                     break
+                                                #print('exit rep rule', offset_3, offset_4)
                                                 if offset_4 == -1:
                                                     break
                                                 if offset_3 == offset_4: break
@@ -11406,9 +11519,10 @@ class Parser:
                                                 break
                                             if offset_3 == -1:
                                                 break
+                                            value_6 = count_2
 
                                             children_6 = []
-                                            value_6 = Node(None, offset_3, offset_3, column_1, column_1, children_6, None)
+                                            value_9 = Node(None, offset_3, offset_3, column_1, column_1, children_6, None)
                                             while True: # start capture
                                                 count_2 = 0
                                                 while offset_3 < buf_eof:
@@ -11432,17 +11546,17 @@ class Parser:
                                                 break
                                             if offset_3 == -1:
                                                 break
-                                            value_6.name = 'whitespace'
-                                            value_6.end = offset_3
-                                            value_6.end_column = column_1
-                                            value_6.value = None
-                                            children_5.append(value_6)
+                                            value_9.name = 'whitespace'
+                                            value_9.end = offset_3
+                                            value_9.end_column = column_1
+                                            value_9.value = None
+                                            children_5.append(value_9)
 
                                             break
                                         if offset_3 == -1:
                                             offset_2 = -1
                                             break
-                                        value_7 = buf[offset_2:offset_3]
+                                        value_5 = buf[offset_2:offset_3]
                                         offset_2 = offset_3
 
                                         break
@@ -11496,7 +11610,7 @@ class Parser:
                                                     break
 
                                             children_6 = []
-                                            value_8 = Node(None, offset_3, offset_3, column_2, column_2, children_6, None)
+                                            value_10 = Node(None, offset_3, offset_3, column_2, column_2, children_6, None)
                                             while True: # start capture
                                                 _match = regex_regex_39.match(buf, offset_3)
                                                 if _match:
@@ -11510,11 +11624,11 @@ class Parser:
                                                 break
                                             if offset_3 == -1:
                                                 break
-                                            value_8.name = 'link_label'
-                                            value_8.end = offset_3
-                                            value_8.end_column = column_2
-                                            value_8.value = None
-                                            children_5.append(value_8)
+                                            value_10.name = 'link_label'
+                                            value_10.end = offset_3
+                                            value_10.end_column = column_2
+                                            value_10.value = None
+                                            children_5.append(value_10)
 
                                             if buf[offset_3:offset_3+1] == ']':
                                                 offset_3 += 1
@@ -11722,6 +11836,7 @@ class Parser:
                                                 partial_tab_width_3 = partial_tab_width_2
                                                 children_6 = [] if children_5 is not None else None
                                                 while True:
+                                                    #print('entry rep rule', offset_3, offset_4)
                                                     while True: # start choice
                                                         offset_5 = offset_4
                                                         column_4 = column_3
@@ -11865,7 +11980,9 @@ class Parser:
                                                     if offset_4 == -1: break
 
 
+                                                    #print('safe exit rep rule', offset_3, offset_4)
                                                     break
+                                                #print('exit rep rule', offset_3, offset_4)
                                                 if offset_4 == -1:
                                                     break
                                                 if offset_3 == offset_4: break
@@ -11880,6 +11997,7 @@ class Parser:
                                                 break
                                             if offset_3 == -1:
                                                 break
+                                            value_11 = count_2
 
                                             count_2 = 0
                                             while offset_3 < buf_eof:
@@ -11929,7 +12047,7 @@ class Parser:
                                         children_5 = [] if children_4 is not None else None
                                         while True: # case
                                             children_6 = []
-                                            value_9 = Node(None, offset_3, offset_3, column_2, column_2, children_6, None)
+                                            value_12 = Node(None, offset_3, offset_3, column_2, column_2, children_6, None)
                                             while True: # start capture
                                                 _match = regex_regex_40.match(buf, offset_3)
                                                 if _match:
@@ -11943,11 +12061,11 @@ class Parser:
                                                 break
                                             if offset_3 == -1:
                                                 break
-                                            value_9.name = 'text'
-                                            value_9.end = offset_3
-                                            value_9.end_column = column_2
-                                            value_9.value = None
-                                            children_5.append(value_9)
+                                            value_12.name = 'text'
+                                            value_12.end = offset_3
+                                            value_12.end_column = column_2
+                                            value_12.value = None
+                                            children_5.append(value_12)
 
                                             value_2 = 'shortcut'
 
@@ -12028,7 +12146,7 @@ class Parser:
                     buf_eof = count_1
                     while True: # case
                         children_3 = []
-                        value_10 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
+                        value_13 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
                             offset_1, column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_inline_image_as_para(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_3, partial_tab_offset_1, partial_tab_width_1)
                             if offset_1 == -1: break
@@ -12037,11 +12155,11 @@ class Parser:
                             break
                         if offset_1 == -1:
                             break
-                        value_10.name = 'maybe_para'
-                        value_10.end = offset_1
-                        value_10.end_column = column_1
-                        value_10.value = None
-                        children_2.append(value_10)
+                        value_13.name = 'maybe_para'
+                        value_13.end = offset_1
+                        value_13.end_column = column_1
+                        value_13.value = None
+                        children_2.append(value_13)
 
 
                         break
@@ -12171,7 +12289,7 @@ class Parser:
                                     offset_3 = offset_2
                                     while True: # start backref
                                         children_5 = []
-                                        value_5 = Node(None, offset_3, offset_3, column_1, column_1, children_5, None)
+                                        value_6 = Node(None, offset_3, offset_3, column_1, column_1, children_5, None)
                                         while True: # start capture
                                             count_0 = 0
                                             while offset_3 < buf_eof:
@@ -12195,11 +12313,11 @@ class Parser:
                                             break
                                         if offset_3 == -1:
                                             break
-                                        value_5.name = 'whitespace'
-                                        value_5.end = offset_3
-                                        value_5.end_column = column_1
-                                        value_5.value = None
-                                        children_4.append(value_5)
+                                        value_6.name = 'whitespace'
+                                        value_6.end = offset_3
+                                        value_6.end_column = column_1
+                                        value_6.value = None
+                                        children_4.append(value_6)
 
                                         count_0 = 0
                                         while count_0 < 1:
@@ -12210,6 +12328,7 @@ class Parser:
                                             partial_tab_width_2 = partial_tab_width_1
                                             children_5 = [] if children_4 is not None else None
                                             while True:
+                                                #print('entry rep rule', offset_3, offset_4)
                                                 while True: # start reject
                                                     children_6 = []
                                                     offset_5 = offset_4 + 0
@@ -12242,6 +12361,7 @@ class Parser:
                                                     partial_tab_width_3 = partial_tab_width_2
                                                     children_6 = [] if children_5 is not None else None
                                                     while True:
+                                                        #print('entry rep rule', offset_4, offset_5)
                                                         while True: # start choice
                                                             offset_6 = offset_5
                                                             column_4 = column_3
@@ -12274,7 +12394,7 @@ class Parser:
                                                             children_7 = [] if children_6 is not None else None
                                                             while True: # case
                                                                 children_8 = []
-                                                                value_6 = Node(None, offset_6, offset_6, column_4, column_4, children_8, None)
+                                                                value_9 = Node(None, offset_6, offset_6, column_4, column_4, children_8, None)
                                                                 while True: # start capture
                                                                     count_2 = 0
                                                                     while offset_6 < buf_eof:
@@ -12298,11 +12418,11 @@ class Parser:
                                                                     break
                                                                 if offset_6 == -1:
                                                                     break
-                                                                value_6.name = 'whitespace'
-                                                                value_6.end = offset_6
-                                                                value_6.end_column = column_4
-                                                                value_6.value = None
-                                                                children_7.append(value_6)
+                                                                value_9.name = 'whitespace'
+                                                                value_9.end = offset_6
+                                                                value_9.end_column = column_4
+                                                                value_9.value = None
+                                                                children_7.append(value_9)
 
 
                                                                 break
@@ -12344,7 +12464,9 @@ class Parser:
                                                         if offset_5 == -1: break
 
 
+                                                        #print('safe exit rep rule', offset_4, offset_5)
                                                         break
+                                                    #print('exit rep rule', offset_4, offset_5)
                                                     if offset_5 == -1:
                                                         break
                                                     if offset_4 == offset_5: break
@@ -12358,8 +12480,11 @@ class Parser:
                                                     count_1 += 1
                                                 if offset_4 == -1:
                                                     break
+                                                value_8 = count_1
 
+                                                #print('safe exit rep rule', offset_3, offset_4)
                                                 break
+                                            #print('exit rep rule', offset_3, offset_4)
                                             if offset_4 == -1:
                                                 break
                                             if offset_3 == offset_4: break
@@ -12374,9 +12499,10 @@ class Parser:
                                             break
                                         if offset_3 == -1:
                                             break
+                                        value_7 = count_0
 
                                         children_5 = []
-                                        value_7 = Node(None, offset_3, offset_3, column_1, column_1, children_5, None)
+                                        value_10 = Node(None, offset_3, offset_3, column_1, column_1, children_5, None)
                                         while True: # start capture
                                             count_0 = 0
                                             while offset_3 < buf_eof:
@@ -12400,17 +12526,17 @@ class Parser:
                                             break
                                         if offset_3 == -1:
                                             break
-                                        value_7.name = 'whitespace'
-                                        value_7.end = offset_3
-                                        value_7.end_column = column_1
-                                        value_7.value = None
-                                        children_4.append(value_7)
+                                        value_10.name = 'whitespace'
+                                        value_10.end = offset_3
+                                        value_10.end_column = column_1
+                                        value_10.value = None
+                                        children_4.append(value_10)
 
                                         break
                                     if offset_3 == -1:
                                         offset_2 = -1
                                         break
-                                    value_8 = buf[offset_2:offset_3]
+                                    value_5 = buf[offset_2:offset_3]
                                     offset_2 = offset_3
 
                                     break
@@ -12464,7 +12590,7 @@ class Parser:
                                                 break
 
                                         children_5 = []
-                                        value_9 = Node(None, offset_3, offset_3, column_2, column_2, children_5, None)
+                                        value_11 = Node(None, offset_3, offset_3, column_2, column_2, children_5, None)
                                         while True: # start capture
                                             _match = regex_regex_39.match(buf, offset_3)
                                             if _match:
@@ -12478,11 +12604,11 @@ class Parser:
                                             break
                                         if offset_3 == -1:
                                             break
-                                        value_9.name = 'link_label'
-                                        value_9.end = offset_3
-                                        value_9.end_column = column_2
-                                        value_9.value = None
-                                        children_4.append(value_9)
+                                        value_11.name = 'link_label'
+                                        value_11.end = offset_3
+                                        value_11.end_column = column_2
+                                        value_11.value = None
+                                        children_4.append(value_11)
 
                                         if buf[offset_3:offset_3+1] == ']':
                                             offset_3 += 1
@@ -12500,7 +12626,7 @@ class Parser:
                                             children_5 = [] if children_4 is not None else None
                                             while True: # case
                                                 children_6 = []
-                                                value_10 = Node(None, offset_4, offset_4, column_3, column_3, children_6, None)
+                                                value_12 = Node(None, offset_4, offset_4, column_3, column_3, children_6, None)
                                                 while True: # start capture
                                                     offset_4, column_3, partial_tab_offset_3, partial_tab_width_3 = self.parse_inline_link(buf, buf_start, buf_eof, offset_4, column_3, indent_column_3, prefix_0, children_6, partial_tab_offset_3, partial_tab_width_3)
                                                     if offset_4 == -1: break
@@ -12509,11 +12635,11 @@ class Parser:
                                                     break
                                                 if offset_4 == -1:
                                                     break
-                                                value_10.name = 'link_tail'
-                                                value_10.end = offset_4
-                                                value_10.end_column = column_3
-                                                value_10.value = None
-                                                children_5.append(value_10)
+                                                value_12.name = 'link_tail'
+                                                value_12.end = offset_4
+                                                value_12.end_column = column_3
+                                                value_12.value = None
+                                                children_5.append(value_12)
 
                                                 value_2 = 'multiple'
 
@@ -12733,6 +12859,7 @@ class Parser:
                                             partial_tab_width_3 = partial_tab_width_2
                                             children_5 = [] if children_4 is not None else None
                                             while True:
+                                                #print('entry rep rule', offset_3, offset_4)
                                                 while True: # start choice
                                                     offset_5 = offset_4
                                                     column_4 = column_3
@@ -12876,7 +13003,9 @@ class Parser:
                                                 if offset_4 == -1: break
 
 
+                                                #print('safe exit rep rule', offset_3, offset_4)
                                                 break
+                                            #print('exit rep rule', offset_3, offset_4)
                                             if offset_4 == -1:
                                                 break
                                             if offset_3 == offset_4: break
@@ -12891,6 +13020,7 @@ class Parser:
                                             break
                                         if offset_3 == -1:
                                             break
+                                        value_13 = count_0
 
                                         count_0 = 0
                                         while offset_3 < buf_eof:
@@ -12940,7 +13070,7 @@ class Parser:
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
                                         children_5 = []
-                                        value_11 = Node(None, offset_3, offset_3, column_2, column_2, children_5, None)
+                                        value_14 = Node(None, offset_3, offset_3, column_2, column_2, children_5, None)
                                         while True: # start capture
                                             _match = regex_regex_40.match(buf, offset_3)
                                             if _match:
@@ -12954,11 +13084,11 @@ class Parser:
                                             break
                                         if offset_3 == -1:
                                             break
-                                        value_11.name = 'text'
-                                        value_11.end = offset_3
-                                        value_11.end_column = column_2
-                                        value_11.value = None
-                                        children_4.append(value_11)
+                                        value_14.name = 'text'
+                                        value_14.end = offset_3
+                                        value_14.end_column = column_2
+                                        value_14.value = None
+                                        children_4.append(value_14)
 
                                         value_2 = 'shortcut'
 
@@ -13028,14 +13158,14 @@ class Parser:
                 if offset_1 == -1:
                     offset_0 = -1
                     break
-                value_12 = offset_1
+                value_15 = offset_1
 
                 offset_1 = offset_0
                 count_1 = buf_eof
-                buf_eof = value_12
+                buf_eof = value_15
                 while True: # start until
                     children_2 = []
-                    value_13 = Node(None, offset_1, offset_1, column_0, column_0, children_2, None)
+                    value_16 = Node(None, offset_1, offset_1, column_0, column_0, children_2, None)
                     while True: # start capture
                         offset_1, column_0, partial_tab_offset_0, partial_tab_width_0 = self.parse_inline_link_as_para(buf, buf_start, buf_eof, offset_1, column_0, indent_column_0, prefix_0, children_2, partial_tab_offset_0, partial_tab_width_0)
                         if offset_1 == -1: break
@@ -13044,15 +13174,15 @@ class Parser:
                         break
                     if offset_1 == -1:
                         break
-                    value_13.name = 'maybe_para'
-                    value_13.end = offset_1
-                    value_13.end_column = column_0
-                    value_13.value = None
-                    children_1.append(value_13)
+                    value_16.name = 'maybe_para'
+                    value_16.end = offset_1
+                    value_16.end_column = column_0
+                    value_16.value = None
+                    children_1.append(value_16)
 
                     break
                 buf_eof = count_1
-                if offset_1 == -1 or offset_1 != value_12:
+                if offset_1 == -1 or offset_1 != value_15:
                     offset_0 = -1
                     break
                 offset_0 = offset_1
@@ -13130,6 +13260,7 @@ class Parser:
                 partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True:
+                    #print('entry rep rule', offset_0, offset_1)
                     while True: # start reject
                         children_2 = []
                         offset_2 = offset_1 + 0
@@ -13162,6 +13293,7 @@ class Parser:
                         partial_tab_width_2 = partial_tab_width_1
                         children_2 = [] if children_1 is not None else None
                         while True:
+                            #print('entry rep rule', offset_1, offset_2)
                             while True: # start choice
                                 offset_3 = offset_2
                                 column_3 = column_2
@@ -13194,7 +13326,7 @@ class Parser:
                                 children_3 = [] if children_2 is not None else None
                                 while True: # case
                                     children_4 = []
-                                    value_2 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
+                                    value_4 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
                                     while True: # start capture
                                         count_2 = 0
                                         while offset_3 < buf_eof:
@@ -13218,11 +13350,11 @@ class Parser:
                                         break
                                     if offset_3 == -1:
                                         break
-                                    value_2.name = 'whitespace'
-                                    value_2.end = offset_3
-                                    value_2.end_column = column_3
-                                    value_2.value = None
-                                    children_3.append(value_2)
+                                    value_4.name = 'whitespace'
+                                    value_4.end = offset_3
+                                    value_4.end_column = column_3
+                                    value_4.value = None
+                                    children_3.append(value_4)
 
 
                                     break
@@ -13264,7 +13396,9 @@ class Parser:
                             if offset_2 == -1: break
 
 
+                            #print('safe exit rep rule', offset_1, offset_2)
                             break
+                        #print('exit rep rule', offset_1, offset_2)
                         if offset_2 == -1:
                             break
                         if offset_1 == offset_2: break
@@ -13278,8 +13412,11 @@ class Parser:
                         count_1 += 1
                     if offset_1 == -1:
                         break
+                    value_3 = count_1
 
+                    #print('safe exit rep rule', offset_0, offset_1)
                     break
+                #print('exit rep rule', offset_0, offset_1)
                 if offset_1 == -1:
                     break
                 if offset_0 == offset_1: break
@@ -13294,9 +13431,10 @@ class Parser:
                 break
             if offset_0 == -1:
                 break
+            value_2 = count_0
 
             children_1 = []
-            value_3 = Node(None, offset_0, offset_0, column_0, column_0, children_1, None)
+            value_5 = Node(None, offset_0, offset_0, column_0, column_0, children_1, None)
             while True: # start capture
                 if buf[offset_0:offset_0+1] == ']':
                     offset_0 += 1
@@ -13308,11 +13446,11 @@ class Parser:
                 break
             if offset_0 == -1:
                 break
-            value_3.name = 'operator'
-            value_3.end = offset_0
-            value_3.end_column = column_0
-            value_3.value = None
-            children_0.append(value_3)
+            value_5.name = 'operator'
+            value_5.end = offset_0
+            value_5.end_column = column_0
+            value_5.value = None
+            children_0.append(value_5)
 
             while True: # start choice
                 offset_1 = offset_0
@@ -13346,7 +13484,7 @@ class Parser:
                 children_1 = [] if children_0 is not None else None
                 while True: # case
                     children_2 = []
-                    value_4 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
+                    value_6 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
                         if buf[offset_1:offset_1+1] == '[':
                             offset_1 += 1
@@ -13358,14 +13496,14 @@ class Parser:
                         break
                     if offset_1 == -1:
                         break
-                    value_4.name = 'operator'
-                    value_4.end = offset_1
-                    value_4.end_column = column_1
-                    value_4.value = None
-                    children_1.append(value_4)
+                    value_6.name = 'operator'
+                    value_6.end = offset_1
+                    value_6.end_column = column_1
+                    value_6.value = None
+                    children_1.append(value_6)
 
                     children_2 = []
-                    value_5 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
+                    value_7 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
                         count_0 = 0
                         while offset_1 < buf_eof:
@@ -13389,11 +13527,11 @@ class Parser:
                         break
                     if offset_1 == -1:
                         break
-                    value_5.name = 'whitespace'
-                    value_5.end = offset_1
-                    value_5.end_column = column_1
-                    value_5.value = None
-                    children_1.append(value_5)
+                    value_7.name = 'whitespace'
+                    value_7.end = offset_1
+                    value_7.end_column = column_1
+                    value_7.value = None
+                    children_1.append(value_7)
 
                     count_0 = 0
                     while count_0 < 1:
@@ -13404,6 +13542,7 @@ class Parser:
                         partial_tab_width_2 = partial_tab_width_1
                         children_2 = [] if children_1 is not None else None
                         while True:
+                            #print('entry rep rule', offset_1, offset_2)
                             while True: # start reject
                                 children_3 = []
                                 offset_3 = offset_2 + 0
@@ -13436,6 +13575,7 @@ class Parser:
                                 partial_tab_width_3 = partial_tab_width_2
                                 children_3 = [] if children_2 is not None else None
                                 while True:
+                                    #print('entry rep rule', offset_2, offset_3)
                                     while True: # start choice
                                         offset_4 = offset_3
                                         column_4 = column_3
@@ -13468,7 +13608,7 @@ class Parser:
                                         children_4 = [] if children_3 is not None else None
                                         while True: # case
                                             children_5 = []
-                                            value_6 = Node(None, offset_4, offset_4, column_4, column_4, children_5, None)
+                                            value_10 = Node(None, offset_4, offset_4, column_4, column_4, children_5, None)
                                             while True: # start capture
                                                 count_2 = 0
                                                 while offset_4 < buf_eof:
@@ -13492,11 +13632,11 @@ class Parser:
                                                 break
                                             if offset_4 == -1:
                                                 break
-                                            value_6.name = 'whitespace'
-                                            value_6.end = offset_4
-                                            value_6.end_column = column_4
-                                            value_6.value = None
-                                            children_4.append(value_6)
+                                            value_10.name = 'whitespace'
+                                            value_10.end = offset_4
+                                            value_10.end_column = column_4
+                                            value_10.value = None
+                                            children_4.append(value_10)
 
 
                                             break
@@ -13538,7 +13678,9 @@ class Parser:
                                     if offset_3 == -1: break
 
 
+                                    #print('safe exit rep rule', offset_2, offset_3)
                                     break
+                                #print('exit rep rule', offset_2, offset_3)
                                 if offset_3 == -1:
                                     break
                                 if offset_2 == offset_3: break
@@ -13552,9 +13694,10 @@ class Parser:
                                 count_1 += 1
                             if offset_2 == -1:
                                 break
+                            value_9 = count_1
 
                             children_3 = []
-                            value_7 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
+                            value_11 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
                             while True: # start capture
                                 count_1 = 0
                                 while offset_2 < buf_eof:
@@ -13578,13 +13721,15 @@ class Parser:
                                 break
                             if offset_2 == -1:
                                 break
-                            value_7.name = 'whitespace'
-                            value_7.end = offset_2
-                            value_7.end_column = column_2
-                            value_7.value = None
-                            children_2.append(value_7)
+                            value_11.name = 'whitespace'
+                            value_11.end = offset_2
+                            value_11.end_column = column_2
+                            value_11.value = None
+                            children_2.append(value_11)
 
+                            #print('safe exit rep rule', offset_1, offset_2)
                             break
+                        #print('exit rep rule', offset_1, offset_2)
                         if offset_2 == -1:
                             break
                         if offset_1 == offset_2: break
@@ -13599,9 +13744,10 @@ class Parser:
                         break
                     if offset_1 == -1:
                         break
+                    value_8 = count_0
 
                     children_2 = []
-                    value_8 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
+                    value_12 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
                         if buf[offset_1:offset_1+1] == ']':
                             offset_1 += 1
@@ -13613,11 +13759,11 @@ class Parser:
                         break
                     if offset_1 == -1:
                         break
-                    value_8.name = 'operator'
-                    value_8.end = offset_1
-                    value_8.end_column = column_1
-                    value_8.value = None
-                    children_1.append(value_8)
+                    value_12.name = 'operator'
+                    value_12.end = offset_1
+                    value_12.end_column = column_1
+                    value_12.value = None
+                    children_1.append(value_12)
 
 
                     break
@@ -13639,7 +13785,7 @@ class Parser:
                 children_1 = [] if children_0 is not None else None
                 while True: # case
                     children_2 = []
-                    value_9 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
+                    value_13 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
                         if buf[offset_1:offset_1+1] == '(':
                             offset_1 += 1
@@ -13651,14 +13797,14 @@ class Parser:
                         break
                     if offset_1 == -1:
                         break
-                    value_9.name = 'operator'
-                    value_9.end = offset_1
-                    value_9.end_column = column_1
-                    value_9.value = None
-                    children_1.append(value_9)
+                    value_13.name = 'operator'
+                    value_13.end = offset_1
+                    value_13.end_column = column_1
+                    value_13.value = None
+                    children_1.append(value_13)
 
                     children_2 = []
-                    value_10 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
+                    value_14 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
                         count_0 = 0
                         while offset_1 < buf_eof:
@@ -13682,11 +13828,11 @@ class Parser:
                         break
                     if offset_1 == -1:
                         break
-                    value_10.name = 'whitespace'
-                    value_10.end = offset_1
-                    value_10.end_column = column_1
-                    value_10.value = None
-                    children_1.append(value_10)
+                    value_14.name = 'whitespace'
+                    value_14.end = offset_1
+                    value_14.end_column = column_1
+                    value_14.value = None
+                    children_1.append(value_14)
 
                     count_0 = 0
                     while count_0 < 1:
@@ -13697,6 +13843,7 @@ class Parser:
                         partial_tab_width_2 = partial_tab_width_1
                         children_2 = [] if children_1 is not None else None
                         while True:
+                            #print('entry rep rule', offset_1, offset_2)
                             while True: # start reject
                                 children_3 = []
                                 offset_3 = offset_2 + 0
@@ -13733,6 +13880,642 @@ class Parser:
                                 partial_tab_width_3 = partial_tab_width_2
                                 children_3 = [] if children_2 is not None else None
                                 while True:
+                                    #print('entry rep rule', offset_2, offset_3)
+                                    while True: # start choice
+                                        offset_4 = offset_3
+                                        column_4 = column_3
+                                        indent_column_4 = list(indent_column_3)
+                                        partial_tab_offset_4 = partial_tab_offset_3
+                                        partial_tab_width_4 = partial_tab_width_3
+                                        children_4 = [] if children_3 is not None else None
+                                        while True: # case
+                                            offset_4, column_4, partial_tab_offset_4, partial_tab_width_4 = self.parse_linebreak(buf, buf_start, buf_eof, offset_4, column_4, indent_column_4, prefix_0, children_4, partial_tab_offset_4, partial_tab_width_4)
+                                            if offset_4 == -1: break
+
+
+
+                                            break
+                                        if offset_4 != -1:
+                                            offset_3 = offset_4
+                                            column_3 = column_4
+                                            indent_column_3 = indent_column_4
+                                            partial_tab_offset_3 = partial_tab_offset_4
+                                            partial_tab_width_3 = partial_tab_width_4
+                                            if children_4 is not None and children_4 is not None:
+                                                children_3.extend(children_4)
+                                            break
+                                        # end case
+                                        offset_4 = offset_3
+                                        column_4 = column_3
+                                        indent_column_4 = list(indent_column_3)
+                                        partial_tab_offset_4 = partial_tab_offset_3
+                                        partial_tab_width_4 = partial_tab_width_3
+                                        children_4 = [] if children_3 is not None else None
+                                        while True: # case
+                                            children_5 = []
+                                            value_17 = Node(None, offset_4, offset_4, column_4, column_4, children_5, None)
+                                            while True: # start capture
+                                                count_2 = 0
+                                                while offset_4 < buf_eof:
+                                                    codepoint = buf[offset_4]
+                                                    if codepoint in ' \t':
+                                                        if codepoint == '\t':
+                                                            if offset_4 == partial_tab_offset_4 and partial_tab_width_4 > 0:
+                                                                width = partial_tab_width_4
+                                                            else:
+                                                                width  = (self.tabstop-(column_4%self.tabstop))
+                                                            count_2 += width
+                                                            column_4 += width
+                                                            offset_4 += 1
+                                                        else:
+                                                            count_2 += 1
+                                                            column_4 += 1
+                                                            offset_4 += 1
+                                                    else:
+                                                        break
+
+                                                break
+                                            if offset_4 == -1:
+                                                break
+                                            value_17.name = 'whitespace'
+                                            value_17.end = offset_4
+                                            value_17.end_column = column_4
+                                            value_17.value = None
+                                            children_4.append(value_17)
+
+
+                                            break
+                                        if offset_4 != -1:
+                                            offset_3 = offset_4
+                                            column_3 = column_4
+                                            indent_column_3 = indent_column_4
+                                            partial_tab_offset_3 = partial_tab_offset_4
+                                            partial_tab_width_3 = partial_tab_width_4
+                                            if children_4 is not None and children_4 is not None:
+                                                children_3.extend(children_4)
+                                            break
+                                        # end case
+                                        offset_3 = -1 # no more choices
+                                        break # end choice
+                                    if offset_3 == -1:
+                                        break
+
+                                    while True: # start reject
+                                        children_4 = []
+                                        offset_4 = offset_3 + 0
+                                        column_4 = column_3
+                                        indent_column_4 = list(indent_column_3)
+                                        partial_tab_offset_4 = partial_tab_offset_3
+                                        partial_tab_width_4 = partial_tab_width_3
+                                        if buf[offset_4:offset_4+1] == ')':
+                                            offset_4 += 1
+                                            column_4 += 1
+                                        else:
+                                            offset_4 = -1
+                                            break
+
+                                        if offset_4 != buf_eof:
+                                            offset_4 = -1
+                                            break
+
+                                        break
+                                    if offset_4 != -1:
+                                        offset_3 = -1
+                                        break
+
+                                    offset_3, column_3, partial_tab_offset_3, partial_tab_width_3 = self.parse_inline_element(buf, buf_start, buf_eof, offset_3, column_3, indent_column_3, prefix_0, children_3, partial_tab_offset_3, partial_tab_width_3)
+                                    if offset_3 == -1: break
+
+
+                                    #print('safe exit rep rule', offset_2, offset_3)
+                                    break
+                                #print('exit rep rule', offset_2, offset_3)
+                                if offset_3 == -1:
+                                    break
+                                if offset_2 == offset_3: break
+                                if children_3 is not None and children_3 is not None:
+                                    children_2.extend(children_3)
+                                offset_2 = offset_3
+                                column_2 = column_3
+                                indent_column_2 = indent_column_3
+                                partial_tab_offset_2 = partial_tab_offset_3
+                                partial_tab_width_2 = partial_tab_width_3
+                                count_1 += 1
+                            if offset_2 == -1:
+                                break
+                            value_16 = count_1
+
+                            children_3 = []
+                            value_18 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
+                            while True: # start capture
+                                count_1 = 0
+                                while offset_2 < buf_eof:
+                                    codepoint = buf[offset_2]
+                                    if codepoint in ' \t':
+                                        if codepoint == '\t':
+                                            if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
+                                                width = partial_tab_width_2
+                                            else:
+                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                            count_1 += width
+                                            column_2 += width
+                                            offset_2 += 1
+                                        else:
+                                            count_1 += 1
+                                            column_2 += 1
+                                            offset_2 += 1
+                                    else:
+                                        break
+
+                                break
+                            if offset_2 == -1:
+                                break
+                            value_18.name = 'whitespace'
+                            value_18.end = offset_2
+                            value_18.end_column = column_2
+                            value_18.value = None
+                            children_2.append(value_18)
+
+                            #print('safe exit rep rule', offset_1, offset_2)
+                            break
+                        #print('exit rep rule', offset_1, offset_2)
+                        if offset_2 == -1:
+                            break
+                        if offset_1 == offset_2: break
+                        if children_2 is not None and children_2 is not None:
+                            children_1.extend(children_2)
+                        offset_1 = offset_2
+                        column_1 = column_2
+                        indent_column_1 = indent_column_2
+                        partial_tab_offset_1 = partial_tab_offset_2
+                        partial_tab_width_1 = partial_tab_width_2
+                        count_0 += 1
+                        break
+                    if offset_1 == -1:
+                        break
+                    value_15 = count_0
+
+                    children_2 = []
+                    value_19 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
+                    while True: # start capture
+                        if buf[offset_1:offset_1+1] == ')':
+                            offset_1 += 1
+                            column_1 += 1
+                        else:
+                            offset_1 = -1
+                            break
+
+                        break
+                    if offset_1 == -1:
+                        break
+                    value_19.name = 'operator'
+                    value_19.end = offset_1
+                    value_19.end_column = column_1
+                    value_19.value = None
+                    children_1.append(value_19)
+
+
+                    break
+                if offset_1 != -1:
+                    offset_0 = offset_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
+                    if children_1 is not None and children_1 is not None:
+                        children_0.extend(children_1)
+                    break
+                # end case
+                offset_0 = -1 # no more choices
+                break # end choice
+            if offset_0 == -1:
+                break
+
+
+            break
+        return offset_0, column_0, partial_tab_offset_0, partial_tab_width_0
+
+    def parse_inline_link_as_para(self, buf, buf_start, buf_eof, offset_0, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
+        while True: # note: return at end of loop
+            children_1 = []
+            value_0 = Node(None, offset_0, offset_0, column_0, column_0, children_1, None)
+            while True: # start capture
+                if buf[offset_0:offset_0+1] == '[':
+                    offset_0 += 1
+                    column_0 += 1
+                else:
+                    offset_0 = -1
+                    break
+
+                break
+            if offset_0 == -1:
+                break
+            value_0.name = 'operator'
+            value_0.end = offset_0
+            value_0.end_column = column_0
+            value_0.value = None
+            children_0.append(value_0)
+
+            children_1 = []
+            value_1 = Node(None, offset_0, offset_0, column_0, column_0, children_1, None)
+            while True: # start capture
+                count_0 = 0
+                while offset_0 < buf_eof:
+                    codepoint = buf[offset_0]
+                    if codepoint in ' \t':
+                        if codepoint == '\t':
+                            if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
+                                width = partial_tab_width_0
+                            else:
+                                width  = (self.tabstop-(column_0%self.tabstop))
+                            count_0 += width
+                            column_0 += width
+                            offset_0 += 1
+                        else:
+                            count_0 += 1
+                            column_0 += 1
+                            offset_0 += 1
+                    else:
+                        break
+
+                break
+            if offset_0 == -1:
+                break
+            value_1.name = 'whitespace'
+            value_1.end = offset_0
+            value_1.end_column = column_0
+            value_1.value = None
+            children_0.append(value_1)
+
+            count_0 = 0
+            while count_0 < 1:
+                offset_1 = offset_0
+                column_1 = column_0
+                indent_column_1 = list(indent_column_0)
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
+                children_1 = [] if children_0 is not None else None
+                while True:
+                    #print('entry rep rule', offset_0, offset_1)
+                    while True: # start reject
+                        children_2 = []
+                        offset_2 = offset_1 + 0
+                        column_2 = column_1
+                        indent_column_2 = list(indent_column_1)
+                        partial_tab_offset_2 = partial_tab_offset_1
+                        partial_tab_width_2 = partial_tab_width_1
+                        if buf[offset_2:offset_2+1] == ']':
+                            offset_2 += 1
+                            column_2 += 1
+                        else:
+                            offset_2 = -1
+                            break
+
+                        break
+                    if offset_2 != -1:
+                        offset_1 = -1
+                        break
+
+                    offset_1, column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_inline_element(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
+                    if offset_1 == -1: break
+
+
+                    count_1 = 0
+                    while True:
+                        offset_2 = offset_1
+                        column_2 = column_1
+                        indent_column_2 = list(indent_column_1)
+                        partial_tab_offset_2 = partial_tab_offset_1
+                        partial_tab_width_2 = partial_tab_width_1
+                        children_2 = [] if children_1 is not None else None
+                        while True:
+                            #print('entry rep rule', offset_1, offset_2)
+                            while True: # start choice
+                                offset_3 = offset_2
+                                column_3 = column_2
+                                indent_column_3 = list(indent_column_2)
+                                partial_tab_offset_3 = partial_tab_offset_2
+                                partial_tab_width_3 = partial_tab_width_2
+                                children_3 = [] if children_2 is not None else None
+                                while True: # case
+                                    offset_3, column_3, partial_tab_offset_3, partial_tab_width_3 = self.parse_linebreak(buf, buf_start, buf_eof, offset_3, column_3, indent_column_3, prefix_0, children_3, partial_tab_offset_3, partial_tab_width_3)
+                                    if offset_3 == -1: break
+
+
+
+                                    break
+                                if offset_3 != -1:
+                                    offset_2 = offset_3
+                                    column_2 = column_3
+                                    indent_column_2 = indent_column_3
+                                    partial_tab_offset_2 = partial_tab_offset_3
+                                    partial_tab_width_2 = partial_tab_width_3
+                                    if children_3 is not None and children_3 is not None:
+                                        children_2.extend(children_3)
+                                    break
+                                # end case
+                                offset_3 = offset_2
+                                column_3 = column_2
+                                indent_column_3 = list(indent_column_2)
+                                partial_tab_offset_3 = partial_tab_offset_2
+                                partial_tab_width_3 = partial_tab_width_2
+                                children_3 = [] if children_2 is not None else None
+                                while True: # case
+                                    children_4 = []
+                                    value_4 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
+                                    while True: # start capture
+                                        count_2 = 0
+                                        while offset_3 < buf_eof:
+                                            codepoint = buf[offset_3]
+                                            if codepoint in ' \t':
+                                                if codepoint == '\t':
+                                                    if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
+                                                        width = partial_tab_width_3
+                                                    else:
+                                                        width  = (self.tabstop-(column_3%self.tabstop))
+                                                    count_2 += width
+                                                    column_3 += width
+                                                    offset_3 += 1
+                                                else:
+                                                    count_2 += 1
+                                                    column_3 += 1
+                                                    offset_3 += 1
+                                            else:
+                                                break
+
+                                        break
+                                    if offset_3 == -1:
+                                        break
+                                    value_4.name = 'whitespace'
+                                    value_4.end = offset_3
+                                    value_4.end_column = column_3
+                                    value_4.value = None
+                                    children_3.append(value_4)
+
+
+                                    break
+                                if offset_3 != -1:
+                                    offset_2 = offset_3
+                                    column_2 = column_3
+                                    indent_column_2 = indent_column_3
+                                    partial_tab_offset_2 = partial_tab_offset_3
+                                    partial_tab_width_2 = partial_tab_width_3
+                                    if children_3 is not None and children_3 is not None:
+                                        children_2.extend(children_3)
+                                    break
+                                # end case
+                                offset_2 = -1 # no more choices
+                                break # end choice
+                            if offset_2 == -1:
+                                break
+
+                            while True: # start reject
+                                children_3 = []
+                                offset_3 = offset_2 + 0
+                                column_3 = column_2
+                                indent_column_3 = list(indent_column_2)
+                                partial_tab_offset_3 = partial_tab_offset_2
+                                partial_tab_width_3 = partial_tab_width_2
+                                if buf[offset_3:offset_3+1] == ']':
+                                    offset_3 += 1
+                                    column_3 += 1
+                                else:
+                                    offset_3 = -1
+                                    break
+
+                                break
+                            if offset_3 != -1:
+                                offset_2 = -1
+                                break
+
+                            offset_2, column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_inline_element(buf, buf_start, buf_eof, offset_2, column_2, indent_column_2, prefix_0, children_2, partial_tab_offset_2, partial_tab_width_2)
+                            if offset_2 == -1: break
+
+
+                            #print('safe exit rep rule', offset_1, offset_2)
+                            break
+                        #print('exit rep rule', offset_1, offset_2)
+                        if offset_2 == -1:
+                            break
+                        if offset_1 == offset_2: break
+                        if children_2 is not None and children_2 is not None:
+                            children_1.extend(children_2)
+                        offset_1 = offset_2
+                        column_1 = column_2
+                        indent_column_1 = indent_column_2
+                        partial_tab_offset_1 = partial_tab_offset_2
+                        partial_tab_width_1 = partial_tab_width_2
+                        count_1 += 1
+                    if offset_1 == -1:
+                        break
+                    value_3 = count_1
+
+                    #print('safe exit rep rule', offset_0, offset_1)
+                    break
+                #print('exit rep rule', offset_0, offset_1)
+                if offset_1 == -1:
+                    break
+                if offset_0 == offset_1: break
+                if children_1 is not None and children_1 is not None:
+                    children_0.extend(children_1)
+                offset_0 = offset_1
+                column_0 = column_1
+                indent_column_0 = indent_column_1
+                partial_tab_offset_0 = partial_tab_offset_1
+                partial_tab_width_0 = partial_tab_width_1
+                count_0 += 1
+                break
+            if offset_0 == -1:
+                break
+            value_2 = count_0
+
+            children_1 = []
+            value_5 = Node(None, offset_0, offset_0, column_0, column_0, children_1, None)
+            while True: # start capture
+                if buf[offset_0:offset_0+1] == ']':
+                    offset_0 += 1
+                    column_0 += 1
+                else:
+                    offset_0 = -1
+                    break
+
+                break
+            if offset_0 == -1:
+                break
+            value_5.name = 'operator'
+            value_5.end = offset_0
+            value_5.end_column = column_0
+            value_5.value = None
+            children_0.append(value_5)
+
+            while True: # start choice
+                offset_1 = offset_0
+                column_1 = column_0
+                indent_column_1 = list(indent_column_0)
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
+                children_1 = [] if children_0 is not None else None
+                while True: # case
+                    if offset_1 != buf_eof:
+                        offset_1 = -1
+                        break
+
+
+                    break
+                if offset_1 != -1:
+                    offset_0 = offset_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
+                    if children_1 is not None and children_1 is not None:
+                        children_0.extend(children_1)
+                    break
+                # end case
+                offset_1 = offset_0
+                column_1 = column_0
+                indent_column_1 = list(indent_column_0)
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
+                children_1 = [] if children_0 is not None else None
+                while True: # case
+                    children_2 = []
+                    value_6 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
+                    while True: # start capture
+                        _match = regex_regex_40.match(buf, offset_1)
+                        if _match:
+                            _end = _match.end()
+                            column_1 += (_end - offset_1)
+                            offset_1 = _end
+                        else:
+                            offset_1 = -1
+                            break
+
+                        break
+                    if offset_1 == -1:
+                        break
+                    value_6.name = 'operator'
+                    value_6.end = offset_1
+                    value_6.end_column = column_1
+                    value_6.value = None
+                    children_1.append(value_6)
+
+
+                    break
+                if offset_1 != -1:
+                    offset_0 = offset_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
+                    if children_1 is not None and children_1 is not None:
+                        children_0.extend(children_1)
+                    break
+                # end case
+                offset_1 = offset_0
+                column_1 = column_0
+                indent_column_1 = list(indent_column_0)
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
+                children_1 = [] if children_0 is not None else None
+                while True: # case
+                    children_2 = []
+                    value_7 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
+                    while True: # start capture
+                        if buf[offset_1:offset_1+1] == '(':
+                            offset_1 += 1
+                            column_1 += 1
+                        else:
+                            offset_1 = -1
+                            break
+
+                        break
+                    if offset_1 == -1:
+                        break
+                    value_7.name = 'operator'
+                    value_7.end = offset_1
+                    value_7.end_column = column_1
+                    value_7.value = None
+                    children_1.append(value_7)
+
+                    children_2 = []
+                    value_8 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
+                    while True: # start capture
+                        count_0 = 0
+                        while offset_1 < buf_eof:
+                            codepoint = buf[offset_1]
+                            if codepoint in ' \t':
+                                if codepoint == '\t':
+                                    if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
+                                        width = partial_tab_width_1
+                                    else:
+                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                    count_0 += width
+                                    column_1 += width
+                                    offset_1 += 1
+                                else:
+                                    count_0 += 1
+                                    column_1 += 1
+                                    offset_1 += 1
+                            else:
+                                break
+
+                        break
+                    if offset_1 == -1:
+                        break
+                    value_8.name = 'whitespace'
+                    value_8.end = offset_1
+                    value_8.end_column = column_1
+                    value_8.value = None
+                    children_1.append(value_8)
+
+                    count_0 = 0
+                    while count_0 < 1:
+                        offset_2 = offset_1
+                        column_2 = column_1
+                        indent_column_2 = list(indent_column_1)
+                        partial_tab_offset_2 = partial_tab_offset_1
+                        partial_tab_width_2 = partial_tab_width_1
+                        children_2 = [] if children_1 is not None else None
+                        while True:
+                            #print('entry rep rule', offset_1, offset_2)
+                            while True: # start reject
+                                children_3 = []
+                                offset_3 = offset_2 + 0
+                                column_3 = column_2
+                                indent_column_3 = list(indent_column_2)
+                                partial_tab_offset_3 = partial_tab_offset_2
+                                partial_tab_width_3 = partial_tab_width_2
+                                if buf[offset_3:offset_3+1] == ')':
+                                    offset_3 += 1
+                                    column_3 += 1
+                                else:
+                                    offset_3 = -1
+                                    break
+
+                                if offset_3 != buf_eof:
+                                    offset_3 = -1
+                                    break
+
+                                break
+                            if offset_3 != -1:
+                                offset_2 = -1
+                                break
+
+                            offset_2, column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_inline_element(buf, buf_start, buf_eof, offset_2, column_2, indent_column_2, prefix_0, children_2, partial_tab_offset_2, partial_tab_width_2)
+                            if offset_2 == -1: break
+
+
+                            count_1 = 0
+                            while True:
+                                offset_3 = offset_2
+                                column_3 = column_2
+                                indent_column_3 = list(indent_column_2)
+                                partial_tab_offset_3 = partial_tab_offset_2
+                                partial_tab_width_3 = partial_tab_width_2
+                                children_3 = [] if children_2 is not None else None
+                                while True:
+                                    #print('entry rep rule', offset_2, offset_3)
                                     while True: # start choice
                                         offset_4 = offset_3
                                         column_4 = column_3
@@ -13839,7 +14622,9 @@ class Parser:
                                     if offset_3 == -1: break
 
 
+                                    #print('safe exit rep rule', offset_2, offset_3)
                                     break
+                                #print('exit rep rule', offset_2, offset_3)
                                 if offset_3 == -1:
                                     break
                                 if offset_2 == offset_3: break
@@ -13853,6 +14638,7 @@ class Parser:
                                 count_1 += 1
                             if offset_2 == -1:
                                 break
+                            value_10 = count_1
 
                             children_3 = []
                             value_12 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
@@ -13885,7 +14671,9 @@ class Parser:
                             value_12.value = None
                             children_2.append(value_12)
 
+                            #print('safe exit rep rule', offset_1, offset_2)
                             break
+                        #print('exit rep rule', offset_1, offset_2)
                         if offset_2 == -1:
                             break
                         if offset_1 == offset_2: break
@@ -13900,6 +14688,7 @@ class Parser:
                         break
                     if offset_1 == -1:
                         break
+                    value_9 = count_0
 
                     children_2 = []
                     value_13 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
@@ -13932,625 +14721,6 @@ class Parser:
                         children_0.extend(children_1)
                     break
                 # end case
-                offset_0 = -1 # no more choices
-                break # end choice
-            if offset_0 == -1:
-                break
-
-
-            break
-        return offset_0, column_0, partial_tab_offset_0, partial_tab_width_0
-
-    def parse_inline_link_as_para(self, buf, buf_start, buf_eof, offset_0, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
-        while True: # note: return at end of loop
-            children_1 = []
-            value_0 = Node(None, offset_0, offset_0, column_0, column_0, children_1, None)
-            while True: # start capture
-                if buf[offset_0:offset_0+1] == '[':
-                    offset_0 += 1
-                    column_0 += 1
-                else:
-                    offset_0 = -1
-                    break
-
-                break
-            if offset_0 == -1:
-                break
-            value_0.name = 'operator'
-            value_0.end = offset_0
-            value_0.end_column = column_0
-            value_0.value = None
-            children_0.append(value_0)
-
-            children_1 = []
-            value_1 = Node(None, offset_0, offset_0, column_0, column_0, children_1, None)
-            while True: # start capture
-                count_0 = 0
-                while offset_0 < buf_eof:
-                    codepoint = buf[offset_0]
-                    if codepoint in ' \t':
-                        if codepoint == '\t':
-                            if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
-                                width = partial_tab_width_0
-                            else:
-                                width  = (self.tabstop-(column_0%self.tabstop))
-                            count_0 += width
-                            column_0 += width
-                            offset_0 += 1
-                        else:
-                            count_0 += 1
-                            column_0 += 1
-                            offset_0 += 1
-                    else:
-                        break
-
-                break
-            if offset_0 == -1:
-                break
-            value_1.name = 'whitespace'
-            value_1.end = offset_0
-            value_1.end_column = column_0
-            value_1.value = None
-            children_0.append(value_1)
-
-            count_0 = 0
-            while count_0 < 1:
-                offset_1 = offset_0
-                column_1 = column_0
-                indent_column_1 = list(indent_column_0)
-                partial_tab_offset_1 = partial_tab_offset_0
-                partial_tab_width_1 = partial_tab_width_0
-                children_1 = [] if children_0 is not None else None
-                while True:
-                    while True: # start reject
-                        children_2 = []
-                        offset_2 = offset_1 + 0
-                        column_2 = column_1
-                        indent_column_2 = list(indent_column_1)
-                        partial_tab_offset_2 = partial_tab_offset_1
-                        partial_tab_width_2 = partial_tab_width_1
-                        if buf[offset_2:offset_2+1] == ']':
-                            offset_2 += 1
-                            column_2 += 1
-                        else:
-                            offset_2 = -1
-                            break
-
-                        break
-                    if offset_2 != -1:
-                        offset_1 = -1
-                        break
-
-                    offset_1, column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_inline_element(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
-                    if offset_1 == -1: break
-
-
-                    count_1 = 0
-                    while True:
-                        offset_2 = offset_1
-                        column_2 = column_1
-                        indent_column_2 = list(indent_column_1)
-                        partial_tab_offset_2 = partial_tab_offset_1
-                        partial_tab_width_2 = partial_tab_width_1
-                        children_2 = [] if children_1 is not None else None
-                        while True:
-                            while True: # start choice
-                                offset_3 = offset_2
-                                column_3 = column_2
-                                indent_column_3 = list(indent_column_2)
-                                partial_tab_offset_3 = partial_tab_offset_2
-                                partial_tab_width_3 = partial_tab_width_2
-                                children_3 = [] if children_2 is not None else None
-                                while True: # case
-                                    offset_3, column_3, partial_tab_offset_3, partial_tab_width_3 = self.parse_linebreak(buf, buf_start, buf_eof, offset_3, column_3, indent_column_3, prefix_0, children_3, partial_tab_offset_3, partial_tab_width_3)
-                                    if offset_3 == -1: break
-
-
-
-                                    break
-                                if offset_3 != -1:
-                                    offset_2 = offset_3
-                                    column_2 = column_3
-                                    indent_column_2 = indent_column_3
-                                    partial_tab_offset_2 = partial_tab_offset_3
-                                    partial_tab_width_2 = partial_tab_width_3
-                                    if children_3 is not None and children_3 is not None:
-                                        children_2.extend(children_3)
-                                    break
-                                # end case
-                                offset_3 = offset_2
-                                column_3 = column_2
-                                indent_column_3 = list(indent_column_2)
-                                partial_tab_offset_3 = partial_tab_offset_2
-                                partial_tab_width_3 = partial_tab_width_2
-                                children_3 = [] if children_2 is not None else None
-                                while True: # case
-                                    children_4 = []
-                                    value_2 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
-                                    while True: # start capture
-                                        count_2 = 0
-                                        while offset_3 < buf_eof:
-                                            codepoint = buf[offset_3]
-                                            if codepoint in ' \t':
-                                                if codepoint == '\t':
-                                                    if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
-                                                        width = partial_tab_width_3
-                                                    else:
-                                                        width  = (self.tabstop-(column_3%self.tabstop))
-                                                    count_2 += width
-                                                    column_3 += width
-                                                    offset_3 += 1
-                                                else:
-                                                    count_2 += 1
-                                                    column_3 += 1
-                                                    offset_3 += 1
-                                            else:
-                                                break
-
-                                        break
-                                    if offset_3 == -1:
-                                        break
-                                    value_2.name = 'whitespace'
-                                    value_2.end = offset_3
-                                    value_2.end_column = column_3
-                                    value_2.value = None
-                                    children_3.append(value_2)
-
-
-                                    break
-                                if offset_3 != -1:
-                                    offset_2 = offset_3
-                                    column_2 = column_3
-                                    indent_column_2 = indent_column_3
-                                    partial_tab_offset_2 = partial_tab_offset_3
-                                    partial_tab_width_2 = partial_tab_width_3
-                                    if children_3 is not None and children_3 is not None:
-                                        children_2.extend(children_3)
-                                    break
-                                # end case
-                                offset_2 = -1 # no more choices
-                                break # end choice
-                            if offset_2 == -1:
-                                break
-
-                            while True: # start reject
-                                children_3 = []
-                                offset_3 = offset_2 + 0
-                                column_3 = column_2
-                                indent_column_3 = list(indent_column_2)
-                                partial_tab_offset_3 = partial_tab_offset_2
-                                partial_tab_width_3 = partial_tab_width_2
-                                if buf[offset_3:offset_3+1] == ']':
-                                    offset_3 += 1
-                                    column_3 += 1
-                                else:
-                                    offset_3 = -1
-                                    break
-
-                                break
-                            if offset_3 != -1:
-                                offset_2 = -1
-                                break
-
-                            offset_2, column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_inline_element(buf, buf_start, buf_eof, offset_2, column_2, indent_column_2, prefix_0, children_2, partial_tab_offset_2, partial_tab_width_2)
-                            if offset_2 == -1: break
-
-
-                            break
-                        if offset_2 == -1:
-                            break
-                        if offset_1 == offset_2: break
-                        if children_2 is not None and children_2 is not None:
-                            children_1.extend(children_2)
-                        offset_1 = offset_2
-                        column_1 = column_2
-                        indent_column_1 = indent_column_2
-                        partial_tab_offset_1 = partial_tab_offset_2
-                        partial_tab_width_1 = partial_tab_width_2
-                        count_1 += 1
-                    if offset_1 == -1:
-                        break
-
-                    break
-                if offset_1 == -1:
-                    break
-                if offset_0 == offset_1: break
-                if children_1 is not None and children_1 is not None:
-                    children_0.extend(children_1)
-                offset_0 = offset_1
-                column_0 = column_1
-                indent_column_0 = indent_column_1
-                partial_tab_offset_0 = partial_tab_offset_1
-                partial_tab_width_0 = partial_tab_width_1
-                count_0 += 1
-                break
-            if offset_0 == -1:
-                break
-
-            children_1 = []
-            value_3 = Node(None, offset_0, offset_0, column_0, column_0, children_1, None)
-            while True: # start capture
-                if buf[offset_0:offset_0+1] == ']':
-                    offset_0 += 1
-                    column_0 += 1
-                else:
-                    offset_0 = -1
-                    break
-
-                break
-            if offset_0 == -1:
-                break
-            value_3.name = 'operator'
-            value_3.end = offset_0
-            value_3.end_column = column_0
-            value_3.value = None
-            children_0.append(value_3)
-
-            while True: # start choice
-                offset_1 = offset_0
-                column_1 = column_0
-                indent_column_1 = list(indent_column_0)
-                partial_tab_offset_1 = partial_tab_offset_0
-                partial_tab_width_1 = partial_tab_width_0
-                children_1 = [] if children_0 is not None else None
-                while True: # case
-                    if offset_1 != buf_eof:
-                        offset_1 = -1
-                        break
-
-
-                    break
-                if offset_1 != -1:
-                    offset_0 = offset_1
-                    column_0 = column_1
-                    indent_column_0 = indent_column_1
-                    partial_tab_offset_0 = partial_tab_offset_1
-                    partial_tab_width_0 = partial_tab_width_1
-                    if children_1 is not None and children_1 is not None:
-                        children_0.extend(children_1)
-                    break
-                # end case
-                offset_1 = offset_0
-                column_1 = column_0
-                indent_column_1 = list(indent_column_0)
-                partial_tab_offset_1 = partial_tab_offset_0
-                partial_tab_width_1 = partial_tab_width_0
-                children_1 = [] if children_0 is not None else None
-                while True: # case
-                    children_2 = []
-                    value_4 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
-                    while True: # start capture
-                        _match = regex_regex_40.match(buf, offset_1)
-                        if _match:
-                            _end = _match.end()
-                            column_1 += (_end - offset_1)
-                            offset_1 = _end
-                        else:
-                            offset_1 = -1
-                            break
-
-                        break
-                    if offset_1 == -1:
-                        break
-                    value_4.name = 'operator'
-                    value_4.end = offset_1
-                    value_4.end_column = column_1
-                    value_4.value = None
-                    children_1.append(value_4)
-
-
-                    break
-                if offset_1 != -1:
-                    offset_0 = offset_1
-                    column_0 = column_1
-                    indent_column_0 = indent_column_1
-                    partial_tab_offset_0 = partial_tab_offset_1
-                    partial_tab_width_0 = partial_tab_width_1
-                    if children_1 is not None and children_1 is not None:
-                        children_0.extend(children_1)
-                    break
-                # end case
-                offset_1 = offset_0
-                column_1 = column_0
-                indent_column_1 = list(indent_column_0)
-                partial_tab_offset_1 = partial_tab_offset_0
-                partial_tab_width_1 = partial_tab_width_0
-                children_1 = [] if children_0 is not None else None
-                while True: # case
-                    children_2 = []
-                    value_5 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
-                    while True: # start capture
-                        if buf[offset_1:offset_1+1] == '(':
-                            offset_1 += 1
-                            column_1 += 1
-                        else:
-                            offset_1 = -1
-                            break
-
-                        break
-                    if offset_1 == -1:
-                        break
-                    value_5.name = 'operator'
-                    value_5.end = offset_1
-                    value_5.end_column = column_1
-                    value_5.value = None
-                    children_1.append(value_5)
-
-                    children_2 = []
-                    value_6 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
-                    while True: # start capture
-                        count_0 = 0
-                        while offset_1 < buf_eof:
-                            codepoint = buf[offset_1]
-                            if codepoint in ' \t':
-                                if codepoint == '\t':
-                                    if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
-                                        width = partial_tab_width_1
-                                    else:
-                                        width  = (self.tabstop-(column_1%self.tabstop))
-                                    count_0 += width
-                                    column_1 += width
-                                    offset_1 += 1
-                                else:
-                                    count_0 += 1
-                                    column_1 += 1
-                                    offset_1 += 1
-                            else:
-                                break
-
-                        break
-                    if offset_1 == -1:
-                        break
-                    value_6.name = 'whitespace'
-                    value_6.end = offset_1
-                    value_6.end_column = column_1
-                    value_6.value = None
-                    children_1.append(value_6)
-
-                    count_0 = 0
-                    while count_0 < 1:
-                        offset_2 = offset_1
-                        column_2 = column_1
-                        indent_column_2 = list(indent_column_1)
-                        partial_tab_offset_2 = partial_tab_offset_1
-                        partial_tab_width_2 = partial_tab_width_1
-                        children_2 = [] if children_1 is not None else None
-                        while True:
-                            while True: # start reject
-                                children_3 = []
-                                offset_3 = offset_2 + 0
-                                column_3 = column_2
-                                indent_column_3 = list(indent_column_2)
-                                partial_tab_offset_3 = partial_tab_offset_2
-                                partial_tab_width_3 = partial_tab_width_2
-                                if buf[offset_3:offset_3+1] == ')':
-                                    offset_3 += 1
-                                    column_3 += 1
-                                else:
-                                    offset_3 = -1
-                                    break
-
-                                if offset_3 != buf_eof:
-                                    offset_3 = -1
-                                    break
-
-                                break
-                            if offset_3 != -1:
-                                offset_2 = -1
-                                break
-
-                            offset_2, column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_inline_element(buf, buf_start, buf_eof, offset_2, column_2, indent_column_2, prefix_0, children_2, partial_tab_offset_2, partial_tab_width_2)
-                            if offset_2 == -1: break
-
-
-                            count_1 = 0
-                            while True:
-                                offset_3 = offset_2
-                                column_3 = column_2
-                                indent_column_3 = list(indent_column_2)
-                                partial_tab_offset_3 = partial_tab_offset_2
-                                partial_tab_width_3 = partial_tab_width_2
-                                children_3 = [] if children_2 is not None else None
-                                while True:
-                                    while True: # start choice
-                                        offset_4 = offset_3
-                                        column_4 = column_3
-                                        indent_column_4 = list(indent_column_3)
-                                        partial_tab_offset_4 = partial_tab_offset_3
-                                        partial_tab_width_4 = partial_tab_width_3
-                                        children_4 = [] if children_3 is not None else None
-                                        while True: # case
-                                            offset_4, column_4, partial_tab_offset_4, partial_tab_width_4 = self.parse_linebreak(buf, buf_start, buf_eof, offset_4, column_4, indent_column_4, prefix_0, children_4, partial_tab_offset_4, partial_tab_width_4)
-                                            if offset_4 == -1: break
-
-
-
-                                            break
-                                        if offset_4 != -1:
-                                            offset_3 = offset_4
-                                            column_3 = column_4
-                                            indent_column_3 = indent_column_4
-                                            partial_tab_offset_3 = partial_tab_offset_4
-                                            partial_tab_width_3 = partial_tab_width_4
-                                            if children_4 is not None and children_4 is not None:
-                                                children_3.extend(children_4)
-                                            break
-                                        # end case
-                                        offset_4 = offset_3
-                                        column_4 = column_3
-                                        indent_column_4 = list(indent_column_3)
-                                        partial_tab_offset_4 = partial_tab_offset_3
-                                        partial_tab_width_4 = partial_tab_width_3
-                                        children_4 = [] if children_3 is not None else None
-                                        while True: # case
-                                            children_5 = []
-                                            value_7 = Node(None, offset_4, offset_4, column_4, column_4, children_5, None)
-                                            while True: # start capture
-                                                count_2 = 0
-                                                while offset_4 < buf_eof:
-                                                    codepoint = buf[offset_4]
-                                                    if codepoint in ' \t':
-                                                        if codepoint == '\t':
-                                                            if offset_4 == partial_tab_offset_4 and partial_tab_width_4 > 0:
-                                                                width = partial_tab_width_4
-                                                            else:
-                                                                width  = (self.tabstop-(column_4%self.tabstop))
-                                                            count_2 += width
-                                                            column_4 += width
-                                                            offset_4 += 1
-                                                        else:
-                                                            count_2 += 1
-                                                            column_4 += 1
-                                                            offset_4 += 1
-                                                    else:
-                                                        break
-
-                                                break
-                                            if offset_4 == -1:
-                                                break
-                                            value_7.name = 'whitespace'
-                                            value_7.end = offset_4
-                                            value_7.end_column = column_4
-                                            value_7.value = None
-                                            children_4.append(value_7)
-
-
-                                            break
-                                        if offset_4 != -1:
-                                            offset_3 = offset_4
-                                            column_3 = column_4
-                                            indent_column_3 = indent_column_4
-                                            partial_tab_offset_3 = partial_tab_offset_4
-                                            partial_tab_width_3 = partial_tab_width_4
-                                            if children_4 is not None and children_4 is not None:
-                                                children_3.extend(children_4)
-                                            break
-                                        # end case
-                                        offset_3 = -1 # no more choices
-                                        break # end choice
-                                    if offset_3 == -1:
-                                        break
-
-                                    while True: # start reject
-                                        children_4 = []
-                                        offset_4 = offset_3 + 0
-                                        column_4 = column_3
-                                        indent_column_4 = list(indent_column_3)
-                                        partial_tab_offset_4 = partial_tab_offset_3
-                                        partial_tab_width_4 = partial_tab_width_3
-                                        if buf[offset_4:offset_4+1] == ')':
-                                            offset_4 += 1
-                                            column_4 += 1
-                                        else:
-                                            offset_4 = -1
-                                            break
-
-                                        if offset_4 != buf_eof:
-                                            offset_4 = -1
-                                            break
-
-                                        break
-                                    if offset_4 != -1:
-                                        offset_3 = -1
-                                        break
-
-                                    offset_3, column_3, partial_tab_offset_3, partial_tab_width_3 = self.parse_inline_element(buf, buf_start, buf_eof, offset_3, column_3, indent_column_3, prefix_0, children_3, partial_tab_offset_3, partial_tab_width_3)
-                                    if offset_3 == -1: break
-
-
-                                    break
-                                if offset_3 == -1:
-                                    break
-                                if offset_2 == offset_3: break
-                                if children_3 is not None and children_3 is not None:
-                                    children_2.extend(children_3)
-                                offset_2 = offset_3
-                                column_2 = column_3
-                                indent_column_2 = indent_column_3
-                                partial_tab_offset_2 = partial_tab_offset_3
-                                partial_tab_width_2 = partial_tab_width_3
-                                count_1 += 1
-                            if offset_2 == -1:
-                                break
-
-                            children_3 = []
-                            value_8 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
-                            while True: # start capture
-                                count_1 = 0
-                                while offset_2 < buf_eof:
-                                    codepoint = buf[offset_2]
-                                    if codepoint in ' \t':
-                                        if codepoint == '\t':
-                                            if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
-                                                width = partial_tab_width_2
-                                            else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
-                                            count_1 += width
-                                            column_2 += width
-                                            offset_2 += 1
-                                        else:
-                                            count_1 += 1
-                                            column_2 += 1
-                                            offset_2 += 1
-                                    else:
-                                        break
-
-                                break
-                            if offset_2 == -1:
-                                break
-                            value_8.name = 'whitespace'
-                            value_8.end = offset_2
-                            value_8.end_column = column_2
-                            value_8.value = None
-                            children_2.append(value_8)
-
-                            break
-                        if offset_2 == -1:
-                            break
-                        if offset_1 == offset_2: break
-                        if children_2 is not None and children_2 is not None:
-                            children_1.extend(children_2)
-                        offset_1 = offset_2
-                        column_1 = column_2
-                        indent_column_1 = indent_column_2
-                        partial_tab_offset_1 = partial_tab_offset_2
-                        partial_tab_width_1 = partial_tab_width_2
-                        count_0 += 1
-                        break
-                    if offset_1 == -1:
-                        break
-
-                    children_2 = []
-                    value_9 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
-                    while True: # start capture
-                        if buf[offset_1:offset_1+1] == ')':
-                            offset_1 += 1
-                            column_1 += 1
-                        else:
-                            offset_1 = -1
-                            break
-
-                        break
-                    if offset_1 == -1:
-                        break
-                    value_9.name = 'operator'
-                    value_9.end = offset_1
-                    value_9.end_column = column_1
-                    value_9.value = None
-                    children_1.append(value_9)
-
-
-                    break
-                if offset_1 != -1:
-                    offset_0 = offset_1
-                    column_0 = column_1
-                    indent_column_0 = indent_column_1
-                    partial_tab_offset_0 = partial_tab_offset_1
-                    partial_tab_width_0 = partial_tab_width_1
-                    if children_1 is not None and children_1 is not None:
-                        children_0.extend(children_1)
-                    break
-                # end case
                 offset_1 = offset_0
                 column_1 = column_0
                 indent_column_1 = list(indent_column_0)
@@ -14567,11 +14737,14 @@ class Parser:
                         partial_tab_width_2 = partial_tab_width_1
                         children_2 = [] if children_1 is not None else None
                         while True:
+                            #print('entry rep rule', offset_1, offset_2)
                             offset_2, column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_inline_link(buf, buf_start, buf_eof, offset_2, column_2, indent_column_2, prefix_0, children_2, partial_tab_offset_2, partial_tab_width_2)
                             if offset_2 == -1: break
 
 
+                            #print('safe exit rep rule', offset_1, offset_2)
                             break
+                        #print('exit rep rule', offset_1, offset_2)
                         if offset_2 == -1:
                             break
                         if offset_1 == offset_2: break
@@ -14584,10 +14757,12 @@ class Parser:
                         partial_tab_width_1 = partial_tab_width_2
                         count_0 += 1
                     if count_0 < 1:
+                    #    print('min exit', offset_1)
                         offset_1 = -1
                         break
                     if offset_1 == -1:
                         break
+                    value_14 = count_0
 
 
                     break
@@ -14639,6 +14814,7 @@ class Parser:
                             partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True:
+                                #print('entry rep rule', offset_1, offset_2)
                                 while True: # start choice
                                     offset_3 = offset_2
                                     column_3 = column_2
@@ -14699,49 +14875,9 @@ class Parser:
                                             break
 
                                         children_5 = []
-                                        value_1 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
-                                        while True: # start capture
-                                            _match = regex_regex_6.match(buf, offset_3)
-                                            if _match:
-                                                _end = _match.end()
-                                                column_3 += (_end - offset_3)
-                                                offset_3 = _end
-                                            else:
-                                                offset_3 = -1
-                                                break
-
-                                            break
-                                        if offset_3 == -1:
-                                            break
-                                        value_1.name = 'raw'
-                                        value_1.end = offset_3
-                                        value_1.end_column = column_3
-                                        value_1.value = None
-                                        children_4.append(value_1)
-
-
-                                        break
-                                    if offset_3 != -1:
-                                        offset_2 = offset_3
-                                        column_2 = column_3
-                                        indent_column_2 = indent_column_3
-                                        partial_tab_offset_2 = partial_tab_offset_3
-                                        partial_tab_width_2 = partial_tab_width_3
-                                        if children_4 is not None and children_4 is not None:
-                                            children_3.extend(children_4)
-                                        break
-                                    # end case
-                                    offset_3 = offset_2
-                                    column_3 = column_2
-                                    indent_column_3 = list(indent_column_2)
-                                    partial_tab_offset_3 = partial_tab_offset_2
-                                    partial_tab_width_3 = partial_tab_width_2
-                                    children_4 = [] if children_3 is not None else None
-                                    while True: # case
-                                        children_5 = []
                                         value_2 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
                                         while True: # start capture
-                                            _match = regex_regex_21.match(buf, offset_3)
+                                            _match = regex_regex_6.match(buf, offset_3)
                                             if _match:
                                                 _end = _match.end()
                                                 column_3 += (_end - offset_3)
@@ -14771,12 +14907,54 @@ class Parser:
                                             children_3.extend(children_4)
                                         break
                                     # end case
+                                    offset_3 = offset_2
+                                    column_3 = column_2
+                                    indent_column_3 = list(indent_column_2)
+                                    partial_tab_offset_3 = partial_tab_offset_2
+                                    partial_tab_width_3 = partial_tab_width_2
+                                    children_4 = [] if children_3 is not None else None
+                                    while True: # case
+                                        children_5 = []
+                                        value_3 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
+                                        while True: # start capture
+                                            _match = regex_regex_21.match(buf, offset_3)
+                                            if _match:
+                                                _end = _match.end()
+                                                column_3 += (_end - offset_3)
+                                                offset_3 = _end
+                                            else:
+                                                offset_3 = -1
+                                                break
+
+                                            break
+                                        if offset_3 == -1:
+                                            break
+                                        value_3.name = 'raw'
+                                        value_3.end = offset_3
+                                        value_3.end_column = column_3
+                                        value_3.value = None
+                                        children_4.append(value_3)
+
+
+                                        break
+                                    if offset_3 != -1:
+                                        offset_2 = offset_3
+                                        column_2 = column_3
+                                        indent_column_2 = indent_column_3
+                                        partial_tab_offset_2 = partial_tab_offset_3
+                                        partial_tab_width_2 = partial_tab_width_3
+                                        if children_4 is not None and children_4 is not None:
+                                            children_3.extend(children_4)
+                                        break
+                                    # end case
                                     offset_2 = -1 # no more choices
                                     break # end choice
                                 if offset_2 == -1:
                                     break
 
+                                #print('safe exit rep rule', offset_1, offset_2)
                                 break
+                            #print('exit rep rule', offset_1, offset_2)
                             if offset_2 == -1:
                                 break
                             if offset_1 == offset_2: break
@@ -14790,6 +14968,7 @@ class Parser:
                             count_0 += 1
                         if offset_1 == -1:
                             break
+                        value_1 = count_0
 
                         break
                     if offset_1 == -1:
@@ -14846,7 +15025,7 @@ class Parser:
                 children_1 = [] if children_0 is not None else None
                 while True: # case
                     children_2 = []
-                    value_3 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
+                    value_4 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
                         while True: # start reject
                             children_3 = []
@@ -14876,11 +15055,11 @@ class Parser:
                         break
                     if offset_1 == -1:
                         break
-                    value_3.name = 'link_url'
-                    value_3.end = offset_1
-                    value_3.end_column = column_1
-                    value_3.value = None
-                    children_1.append(value_3)
+                    value_4.name = 'link_url'
+                    value_4.end = offset_1
+                    value_4.end_column = column_1
+                    value_4.value = None
+                    children_1.append(value_4)
 
 
                     break
@@ -14913,6 +15092,7 @@ class Parser:
                 partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True:
+                    #print('entry rep rule', offset_0, offset_1)
                     count_1 = 0
                     while True:
                         offset_2 = offset_1
@@ -14922,6 +15102,7 @@ class Parser:
                         partial_tab_width_2 = partial_tab_width_1
                         children_2 = [] if children_1 is not None else None
                         while True:
+                            #print('entry rep rule', offset_1, offset_2)
                             while True: # start choice
                                 offset_3 = offset_2
                                 column_3 = column_2
@@ -14982,7 +15163,7 @@ class Parser:
                                         break
 
                                     children_4 = []
-                                    value_0 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
+                                    value_2 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
                                     while True: # start capture
                                         _match = regex_regex_6.match(buf, offset_3)
                                         if _match:
@@ -14996,11 +15177,11 @@ class Parser:
                                         break
                                     if offset_3 == -1:
                                         break
-                                    value_0.name = 'raw'
-                                    value_0.end = offset_3
-                                    value_0.end_column = column_3
-                                    value_0.value = None
-                                    children_3.append(value_0)
+                                    value_2.name = 'raw'
+                                    value_2.end = offset_3
+                                    value_2.end_column = column_3
+                                    value_2.value = None
+                                    children_3.append(value_2)
 
 
                                     break
@@ -15022,7 +15203,7 @@ class Parser:
                                 children_3 = [] if children_2 is not None else None
                                 while True: # case
                                     children_4 = []
-                                    value_1 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
+                                    value_3 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
                                     while True: # start capture
                                         _match = regex_regex_22.match(buf, offset_3)
                                         if _match:
@@ -15036,11 +15217,11 @@ class Parser:
                                         break
                                     if offset_3 == -1:
                                         break
-                                    value_1.name = 'raw'
-                                    value_1.end = offset_3
-                                    value_1.end_column = column_3
-                                    value_1.value = None
-                                    children_3.append(value_1)
+                                    value_3.name = 'raw'
+                                    value_3.end = offset_3
+                                    value_3.end_column = column_3
+                                    value_3.value = None
+                                    children_3.append(value_3)
 
 
                                     break
@@ -15059,7 +15240,9 @@ class Parser:
                             if offset_2 == -1:
                                 break
 
+                            #print('safe exit rep rule', offset_1, offset_2)
                             break
+                        #print('exit rep rule', offset_1, offset_2)
                         if offset_2 == -1:
                             break
                         if offset_1 == offset_2: break
@@ -15073,6 +15256,7 @@ class Parser:
                         count_1 += 1
                     if offset_1 == -1:
                         break
+                    value_1 = count_1
 
                     count_1 = 0
                     while True:
@@ -15083,8 +15267,9 @@ class Parser:
                         partial_tab_width_2 = partial_tab_width_1
                         children_2 = [] if children_1 is not None else None
                         while True:
+                            #print('entry rep rule', offset_1, offset_2)
                             children_3 = []
-                            value_2 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
+                            value_5 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
                             while True: # start capture
                                 if buf[offset_2:offset_2+1] == '(':
                                     offset_2 += 1
@@ -15096,18 +15281,18 @@ class Parser:
                                 break
                             if offset_2 == -1:
                                 break
-                            value_2.name = 'raw'
-                            value_2.end = offset_2
-                            value_2.end_column = column_2
-                            value_2.value = None
-                            children_2.append(value_2)
+                            value_5.name = 'raw'
+                            value_5.end = offset_2
+                            value_5.end_column = column_2
+                            value_5.value = None
+                            children_2.append(value_5)
 
                             offset_2, column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_balanced_list_url(buf, buf_start, buf_eof, offset_2, column_2, indent_column_2, prefix_0, children_2, partial_tab_offset_2, partial_tab_width_2)
                             if offset_2 == -1: break
 
 
                             children_3 = []
-                            value_3 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
+                            value_6 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
                             while True: # start capture
                                 if buf[offset_2:offset_2+1] == ')':
                                     offset_2 += 1
@@ -15119,13 +15304,15 @@ class Parser:
                                 break
                             if offset_2 == -1:
                                 break
-                            value_3.name = 'raw'
-                            value_3.end = offset_2
-                            value_3.end_column = column_2
-                            value_3.value = None
-                            children_2.append(value_3)
+                            value_6.name = 'raw'
+                            value_6.end = offset_2
+                            value_6.end_column = column_2
+                            value_6.value = None
+                            children_2.append(value_6)
 
+                            #print('safe exit rep rule', offset_1, offset_2)
                             break
+                        #print('exit rep rule', offset_1, offset_2)
                         if offset_2 == -1:
                             break
                         if offset_1 == offset_2: break
@@ -15139,8 +15326,11 @@ class Parser:
                         count_1 += 1
                     if offset_1 == -1:
                         break
+                    value_4 = count_1
 
+                    #print('safe exit rep rule', offset_0, offset_1)
                     break
+                #print('exit rep rule', offset_0, offset_1)
                 if offset_1 == -1:
                     break
                 if offset_0 == offset_1: break
@@ -15154,6 +15344,7 @@ class Parser:
                 count_0 += 1
             if offset_0 == -1:
                 break
+            value_0 = count_0
 
             break
         return offset_0, column_0, partial_tab_offset_0, partial_tab_width_0
@@ -15187,6 +15378,7 @@ class Parser:
                             partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True:
+                                #print('entry rep rule', offset_1, offset_2)
                                 while True: # start choice
                                     offset_3 = offset_2
                                     column_3 = column_2
@@ -15247,49 +15439,9 @@ class Parser:
                                             break
 
                                         children_5 = []
-                                        value_1 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
-                                        while True: # start capture
-                                            _match = regex_regex_6.match(buf, offset_3)
-                                            if _match:
-                                                _end = _match.end()
-                                                column_3 += (_end - offset_3)
-                                                offset_3 = _end
-                                            else:
-                                                offset_3 = -1
-                                                break
-
-                                            break
-                                        if offset_3 == -1:
-                                            break
-                                        value_1.name = 'raw'
-                                        value_1.end = offset_3
-                                        value_1.end_column = column_3
-                                        value_1.value = None
-                                        children_4.append(value_1)
-
-
-                                        break
-                                    if offset_3 != -1:
-                                        offset_2 = offset_3
-                                        column_2 = column_3
-                                        indent_column_2 = indent_column_3
-                                        partial_tab_offset_2 = partial_tab_offset_3
-                                        partial_tab_width_2 = partial_tab_width_3
-                                        if children_4 is not None and children_4 is not None:
-                                            children_3.extend(children_4)
-                                        break
-                                    # end case
-                                    offset_3 = offset_2
-                                    column_3 = column_2
-                                    indent_column_3 = list(indent_column_2)
-                                    partial_tab_offset_3 = partial_tab_offset_2
-                                    partial_tab_width_3 = partial_tab_width_2
-                                    children_4 = [] if children_3 is not None else None
-                                    while True: # case
-                                        children_5 = []
                                         value_2 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
                                         while True: # start capture
-                                            _match = regex_regex_42.match(buf, offset_3)
+                                            _match = regex_regex_6.match(buf, offset_3)
                                             if _match:
                                                 _end = _match.end()
                                                 column_3 += (_end - offset_3)
@@ -15329,6 +15481,46 @@ class Parser:
                                         children_5 = []
                                         value_3 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
                                         while True: # start capture
+                                            _match = regex_regex_42.match(buf, offset_3)
+                                            if _match:
+                                                _end = _match.end()
+                                                column_3 += (_end - offset_3)
+                                                offset_3 = _end
+                                            else:
+                                                offset_3 = -1
+                                                break
+
+                                            break
+                                        if offset_3 == -1:
+                                            break
+                                        value_3.name = 'raw'
+                                        value_3.end = offset_3
+                                        value_3.end_column = column_3
+                                        value_3.value = None
+                                        children_4.append(value_3)
+
+
+                                        break
+                                    if offset_3 != -1:
+                                        offset_2 = offset_3
+                                        column_2 = column_3
+                                        indent_column_2 = indent_column_3
+                                        partial_tab_offset_2 = partial_tab_offset_3
+                                        partial_tab_width_2 = partial_tab_width_3
+                                        if children_4 is not None and children_4 is not None:
+                                            children_3.extend(children_4)
+                                        break
+                                    # end case
+                                    offset_3 = offset_2
+                                    column_3 = column_2
+                                    indent_column_3 = list(indent_column_2)
+                                    partial_tab_offset_3 = partial_tab_offset_2
+                                    partial_tab_width_3 = partial_tab_width_2
+                                    children_4 = [] if children_3 is not None else None
+                                    while True: # case
+                                        children_5 = []
+                                        value_4 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
+                                        while True: # start capture
                                             if offset_3 < buf_eof:
                                                 codepoint = buf[offset_3]
                                                 if codepoint in '\n':
@@ -15345,11 +15537,11 @@ class Parser:
                                             break
                                         if offset_3 == -1:
                                             break
-                                        value_3.name = 'raw'
-                                        value_3.end = offset_3
-                                        value_3.end_column = column_3
-                                        value_3.value = None
-                                        children_4.append(value_3)
+                                        value_4.name = 'raw'
+                                        value_4.end = offset_3
+                                        value_4.end_column = column_3
+                                        value_4.value = None
+                                        children_4.append(value_4)
 
                                         if column_3 != 0:
                                             offset_3 = -1
@@ -15440,7 +15632,9 @@ class Parser:
                                 if offset_2 == -1:
                                     break
 
+                                #print('safe exit rep rule', offset_1, offset_2)
                                 break
+                            #print('exit rep rule', offset_1, offset_2)
                             if offset_2 == -1:
                                 break
                             if offset_1 == offset_2: break
@@ -15454,6 +15648,7 @@ class Parser:
                             count_0 += 1
                         if offset_1 == -1:
                             break
+                        value_1 = count_0
 
                         break
                     if offset_1 == -1:
@@ -15498,7 +15693,7 @@ class Parser:
                         break
 
                     children_2 = []
-                    value_4 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
+                    value_5 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
                         count_0 = 0
                         while True:
@@ -15509,6 +15704,7 @@ class Parser:
                             partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True:
+                                #print('entry rep rule', offset_1, offset_2)
                                 while True: # start choice
                                     offset_3 = offset_2
                                     column_3 = column_2
@@ -15569,7 +15765,7 @@ class Parser:
                                             break
 
                                         children_5 = []
-                                        value_5 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
+                                        value_7 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
                                         while True: # start capture
                                             _match = regex_regex_6.match(buf, offset_3)
                                             if _match:
@@ -15583,11 +15779,11 @@ class Parser:
                                             break
                                         if offset_3 == -1:
                                             break
-                                        value_5.name = 'raw'
-                                        value_5.end = offset_3
-                                        value_5.end_column = column_3
-                                        value_5.value = None
-                                        children_4.append(value_5)
+                                        value_7.name = 'raw'
+                                        value_7.end = offset_3
+                                        value_7.end_column = column_3
+                                        value_7.value = None
+                                        children_4.append(value_7)
 
 
                                         break
@@ -15609,7 +15805,7 @@ class Parser:
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
                                         children_5 = []
-                                        value_6 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
+                                        value_8 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
                                         while True: # start capture
                                             _match = regex_regex_43.match(buf, offset_3)
                                             if _match:
@@ -15623,11 +15819,11 @@ class Parser:
                                             break
                                         if offset_3 == -1:
                                             break
-                                        value_6.name = 'raw'
-                                        value_6.end = offset_3
-                                        value_6.end_column = column_3
-                                        value_6.value = None
-                                        children_4.append(value_6)
+                                        value_8.name = 'raw'
+                                        value_8.end = offset_3
+                                        value_8.end_column = column_3
+                                        value_8.value = None
+                                        children_4.append(value_8)
 
 
                                         break
@@ -15649,7 +15845,7 @@ class Parser:
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
                                         children_5 = []
-                                        value_7 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
+                                        value_9 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
                                         while True: # start capture
                                             if offset_3 < buf_eof:
                                                 codepoint = buf[offset_3]
@@ -15667,11 +15863,11 @@ class Parser:
                                             break
                                         if offset_3 == -1:
                                             break
-                                        value_7.name = 'raw'
-                                        value_7.end = offset_3
-                                        value_7.end_column = column_3
-                                        value_7.value = None
-                                        children_4.append(value_7)
+                                        value_9.name = 'raw'
+                                        value_9.end = offset_3
+                                        value_9.end_column = column_3
+                                        value_9.value = None
+                                        children_4.append(value_9)
 
                                         if column_3 != 0:
                                             offset_3 = -1
@@ -15762,7 +15958,9 @@ class Parser:
                                 if offset_2 == -1:
                                     break
 
+                                #print('safe exit rep rule', offset_1, offset_2)
                                 break
+                            #print('exit rep rule', offset_1, offset_2)
                             if offset_2 == -1:
                                 break
                             if offset_1 == offset_2: break
@@ -15776,15 +15974,16 @@ class Parser:
                             count_0 += 1
                         if offset_1 == -1:
                             break
+                        value_6 = count_0
 
                         break
                     if offset_1 == -1:
                         break
-                    value_4.name = 'link_title'
-                    value_4.end = offset_1
-                    value_4.end_column = column_1
-                    value_4.value = None
-                    children_1.append(value_4)
+                    value_5.name = 'link_title'
+                    value_5.end = offset_1
+                    value_5.end_column = column_1
+                    value_5.value = None
+                    children_1.append(value_5)
 
                     if buf[offset_1:offset_1+1] == "'":
                         offset_1 += 1
@@ -15820,7 +16019,7 @@ class Parser:
                         break
 
                     children_2 = []
-                    value_8 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
+                    value_10 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
                         offset_1, column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_balanced_list_title(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                         if offset_1 == -1: break
@@ -15829,11 +16028,11 @@ class Parser:
                         break
                     if offset_1 == -1:
                         break
-                    value_8.name = 'link_title'
-                    value_8.end = offset_1
-                    value_8.end_column = column_1
-                    value_8.value = None
-                    children_1.append(value_8)
+                    value_10.name = 'link_title'
+                    value_10.end = offset_1
+                    value_10.end_column = column_1
+                    value_10.value = None
+                    children_1.append(value_10)
 
                     if buf[offset_1:offset_1+1] == ')':
                         offset_1 += 1
@@ -15873,6 +16072,7 @@ class Parser:
                 partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True:
+                    #print('entry rep rule', offset_0, offset_1)
                     count_1 = 0
                     while True:
                         offset_2 = offset_1
@@ -15882,6 +16082,7 @@ class Parser:
                         partial_tab_width_2 = partial_tab_width_1
                         children_2 = [] if children_1 is not None else None
                         while True:
+                            #print('entry rep rule', offset_1, offset_2)
                             while True: # start choice
                                 offset_3 = offset_2
                                 column_3 = column_2
@@ -15942,7 +16143,7 @@ class Parser:
                                         break
 
                                     children_4 = []
-                                    value_0 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
+                                    value_2 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
                                     while True: # start capture
                                         _match = regex_regex_6.match(buf, offset_3)
                                         if _match:
@@ -15956,11 +16157,11 @@ class Parser:
                                         break
                                     if offset_3 == -1:
                                         break
-                                    value_0.name = 'raw'
-                                    value_0.end = offset_3
-                                    value_0.end_column = column_3
-                                    value_0.value = None
-                                    children_3.append(value_0)
+                                    value_2.name = 'raw'
+                                    value_2.end = offset_3
+                                    value_2.end_column = column_3
+                                    value_2.value = None
+                                    children_3.append(value_2)
 
 
                                     break
@@ -15982,7 +16183,7 @@ class Parser:
                                 children_3 = [] if children_2 is not None else None
                                 while True: # case
                                     children_4 = []
-                                    value_1 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
+                                    value_3 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
                                     while True: # start capture
                                         _match = regex_regex_44.match(buf, offset_3)
                                         if _match:
@@ -15996,11 +16197,11 @@ class Parser:
                                         break
                                     if offset_3 == -1:
                                         break
-                                    value_1.name = 'raw'
-                                    value_1.end = offset_3
-                                    value_1.end_column = column_3
-                                    value_1.value = None
-                                    children_3.append(value_1)
+                                    value_3.name = 'raw'
+                                    value_3.end = offset_3
+                                    value_3.end_column = column_3
+                                    value_3.value = None
+                                    children_3.append(value_3)
 
 
                                     break
@@ -16019,7 +16220,9 @@ class Parser:
                             if offset_2 == -1:
                                 break
 
+                            #print('safe exit rep rule', offset_1, offset_2)
                             break
+                        #print('exit rep rule', offset_1, offset_2)
                         if offset_2 == -1:
                             break
                         if offset_1 == offset_2: break
@@ -16033,6 +16236,7 @@ class Parser:
                         count_1 += 1
                     if offset_1 == -1:
                         break
+                    value_1 = count_1
 
                     count_1 = 0
                     while True:
@@ -16043,8 +16247,9 @@ class Parser:
                         partial_tab_width_2 = partial_tab_width_1
                         children_2 = [] if children_1 is not None else None
                         while True:
+                            #print('entry rep rule', offset_1, offset_2)
                             children_3 = []
-                            value_2 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
+                            value_5 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
                             while True: # start capture
                                 if buf[offset_2:offset_2+1] == '(':
                                     offset_2 += 1
@@ -16056,18 +16261,18 @@ class Parser:
                                 break
                             if offset_2 == -1:
                                 break
-                            value_2.name = 'raw'
-                            value_2.end = offset_2
-                            value_2.end_column = column_2
-                            value_2.value = None
-                            children_2.append(value_2)
+                            value_5.name = 'raw'
+                            value_5.end = offset_2
+                            value_5.end_column = column_2
+                            value_5.value = None
+                            children_2.append(value_5)
 
                             offset_2, column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_balanced_list_title(buf, buf_start, buf_eof, offset_2, column_2, indent_column_2, prefix_0, children_2, partial_tab_offset_2, partial_tab_width_2)
                             if offset_2 == -1: break
 
 
                             children_3 = []
-                            value_3 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
+                            value_6 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
                             while True: # start capture
                                 if buf[offset_2:offset_2+1] == ')':
                                     offset_2 += 1
@@ -16079,13 +16284,15 @@ class Parser:
                                 break
                             if offset_2 == -1:
                                 break
-                            value_3.name = 'raw'
-                            value_3.end = offset_2
-                            value_3.end_column = column_2
-                            value_3.value = None
-                            children_2.append(value_3)
+                            value_6.name = 'raw'
+                            value_6.end = offset_2
+                            value_6.end_column = column_2
+                            value_6.value = None
+                            children_2.append(value_6)
 
+                            #print('safe exit rep rule', offset_1, offset_2)
                             break
+                        #print('exit rep rule', offset_1, offset_2)
                         if offset_2 == -1:
                             break
                         if offset_1 == offset_2: break
@@ -16099,8 +16306,11 @@ class Parser:
                         count_1 += 1
                     if offset_1 == -1:
                         break
+                    value_4 = count_1
 
+                    #print('safe exit rep rule', offset_0, offset_1)
                     break
+                #print('exit rep rule', offset_0, offset_1)
                 if offset_1 == -1:
                     break
                 if offset_0 == offset_1: break
@@ -16114,6 +16324,7 @@ class Parser:
                 count_0 += 1
             if offset_0 == -1:
                 break
+            value_0 = count_0
 
             break
         return offset_0, column_0, partial_tab_offset_0, partial_tab_width_0
@@ -16381,7 +16592,7 @@ class Parser:
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_1 = buf[offset_2:offset_3]
+                            value_2 = buf[offset_2:offset_3]
                             offset_2 = offset_3
 
                             count_0 = 0
@@ -16393,14 +16604,17 @@ class Parser:
                                 partial_tab_width_2 = partial_tab_width_1
                                 children_3 = [] if children_2 is not None else None
                                 while True:
-                                    if buf[offset_3:offset_3+len(value_1)] == value_1:
-                                        offset_3 += len(value_1)
-                                        column_3 += len(value_1)
+                                    #print('entry rep rule', offset_2, offset_3)
+                                    if buf[offset_3:offset_3+len(value_2)] == value_2:
+                                        offset_3 += len(value_2)
+                                        column_3 += len(value_2)
                                     else:
                                         offset_3 = -1
                                         break
 
+                                    #print('safe exit rep rule', offset_2, offset_3)
                                     break
+                                #print('exit rep rule', offset_2, offset_3)
                                 if offset_3 == -1:
                                     break
                                 if offset_2 == offset_3: break
@@ -16414,11 +16628,12 @@ class Parser:
                                 count_0 += 1
                             if offset_2 == -1:
                                 break
+                            value_3 = count_0
 
                             break
                         if offset_2 == -1:
                             offset_1 = -1; break
-                        value_2 = column_2 - column_1
+                        value_1 = column_2 - column_1
                         offset_1 = offset_2
                         column_1 = column_2
 
@@ -16452,9 +16667,9 @@ class Parser:
 
                         children_2.append(Node('value', offset_1, offset_1, column_1, column_1, (), 'left'))
 
-                        children_2.append(Node('value', offset_1, offset_1, column_1, column_1, (), value_1))
-
                         children_2.append(Node('value', offset_1, offset_1, column_1, column_1, (), value_2))
+
+                        children_2.append(Node('value', offset_1, offset_1, column_1, column_1, (), value_1))
 
 
                         break
@@ -16518,7 +16733,7 @@ class Parser:
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_3 = buf[offset_2:offset_3]
+                            value_5 = buf[offset_2:offset_3]
                             offset_2 = offset_3
 
                             count_0 = 0
@@ -16530,14 +16745,17 @@ class Parser:
                                 partial_tab_width_2 = partial_tab_width_1
                                 children_3 = [] if children_2 is not None else None
                                 while True:
-                                    if buf[offset_3:offset_3+len(value_3)] == value_3:
-                                        offset_3 += len(value_3)
-                                        column_3 += len(value_3)
+                                    #print('entry rep rule', offset_2, offset_3)
+                                    if buf[offset_3:offset_3+len(value_5)] == value_5:
+                                        offset_3 += len(value_5)
+                                        column_3 += len(value_5)
                                     else:
                                         offset_3 = -1
                                         break
 
+                                    #print('safe exit rep rule', offset_2, offset_3)
                                     break
+                                #print('exit rep rule', offset_2, offset_3)
                                 if offset_3 == -1:
                                     break
                                 if offset_2 == offset_3: break
@@ -16551,6 +16769,7 @@ class Parser:
                                 count_0 += 1
                             if offset_2 == -1:
                                 break
+                            value_6 = count_0
 
                             break
                         if offset_2 == -1:
@@ -16592,7 +16811,7 @@ class Parser:
 
                         children_2.append(Node('value', offset_1, offset_1, column_1, column_1, (), 'left'))
 
-                        children_2.append(Node('value', offset_1, offset_1, column_1, column_1, (), value_3))
+                        children_2.append(Node('value', offset_1, offset_1, column_1, column_1, (), value_5))
 
                         children_2.append(Node('value', offset_1, offset_1, column_1, column_1, (), value_4))
 
@@ -16687,7 +16906,7 @@ class Parser:
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_1 = buf[offset_2:offset_3]
+                            value_2 = buf[offset_2:offset_3]
                             offset_2 = offset_3
 
                             count_0 = 0
@@ -16699,14 +16918,17 @@ class Parser:
                                 partial_tab_width_2 = partial_tab_width_1
                                 children_3 = [] if children_2 is not None else None
                                 while True:
-                                    if buf[offset_3:offset_3+len(value_1)] == value_1:
-                                        offset_3 += len(value_1)
-                                        column_3 += len(value_1)
+                                    #print('entry rep rule', offset_2, offset_3)
+                                    if buf[offset_3:offset_3+len(value_2)] == value_2:
+                                        offset_3 += len(value_2)
+                                        column_3 += len(value_2)
                                     else:
                                         offset_3 = -1
                                         break
 
+                                    #print('safe exit rep rule', offset_2, offset_3)
                                     break
+                                #print('exit rep rule', offset_2, offset_3)
                                 if offset_3 == -1:
                                     break
                                 if offset_2 == offset_3: break
@@ -16720,19 +16942,20 @@ class Parser:
                                 count_0 += 1
                             if offset_2 == -1:
                                 break
+                            value_3 = count_0
 
                             break
                         if offset_2 == -1:
                             offset_1 = -1; break
-                        value_2 = column_2 - column_1
+                        value_1 = column_2 - column_1
                         offset_1 = offset_2
                         column_1 = column_2
 
                         children_2.append(Node('value', offset_1, offset_1, column_1, column_1, (), 'right'))
 
-                        children_2.append(Node('value', offset_1, offset_1, column_1, column_1, (), value_1))
-
                         children_2.append(Node('value', offset_1, offset_1, column_1, column_1, (), value_2))
+
+                        children_2.append(Node('value', offset_1, offset_1, column_1, column_1, (), value_1))
 
 
                         break
@@ -16799,7 +17022,7 @@ class Parser:
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_3 = buf[offset_2:offset_3]
+                            value_5 = buf[offset_2:offset_3]
                             offset_2 = offset_3
 
                             count_0 = 0
@@ -16811,14 +17034,17 @@ class Parser:
                                 partial_tab_width_2 = partial_tab_width_1
                                 children_3 = [] if children_2 is not None else None
                                 while True:
-                                    if buf[offset_3:offset_3+len(value_3)] == value_3:
-                                        offset_3 += len(value_3)
-                                        column_3 += len(value_3)
+                                    #print('entry rep rule', offset_2, offset_3)
+                                    if buf[offset_3:offset_3+len(value_5)] == value_5:
+                                        offset_3 += len(value_5)
+                                        column_3 += len(value_5)
                                     else:
                                         offset_3 = -1
                                         break
 
+                                    #print('safe exit rep rule', offset_2, offset_3)
                                     break
+                                #print('exit rep rule', offset_2, offset_3)
                                 if offset_3 == -1:
                                     break
                                 if offset_2 == offset_3: break
@@ -16832,6 +17058,7 @@ class Parser:
                                 count_0 += 1
                             if offset_2 == -1:
                                 break
+                            value_6 = count_0
 
                             break
                         if offset_2 == -1:
@@ -16873,7 +17100,7 @@ class Parser:
 
                         children_2.append(Node('value', offset_1, offset_1, column_1, column_1, (), 'right'))
 
-                        children_2.append(Node('value', offset_1, offset_1, column_1, column_1, (), value_3))
+                        children_2.append(Node('value', offset_1, offset_1, column_1, column_1, (), value_5))
 
                         children_2.append(Node('value', offset_1, offset_1, column_1, column_1, (), value_4))
 
@@ -16962,7 +17189,7 @@ class Parser:
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_1 = buf[offset_2:offset_3]
+                            value_2 = buf[offset_2:offset_3]
                             offset_2 = offset_3
 
                             count_0 = 0
@@ -16974,14 +17201,17 @@ class Parser:
                                 partial_tab_width_2 = partial_tab_width_1
                                 children_3 = [] if children_2 is not None else None
                                 while True:
-                                    if buf[offset_3:offset_3+len(value_1)] == value_1:
-                                        offset_3 += len(value_1)
-                                        column_3 += len(value_1)
+                                    #print('entry rep rule', offset_2, offset_3)
+                                    if buf[offset_3:offset_3+len(value_2)] == value_2:
+                                        offset_3 += len(value_2)
+                                        column_3 += len(value_2)
                                     else:
                                         offset_3 = -1
                                         break
 
+                                    #print('safe exit rep rule', offset_2, offset_3)
                                     break
+                                #print('exit rep rule', offset_2, offset_3)
                                 if offset_3 == -1:
                                     break
                                 if offset_2 == offset_3: break
@@ -16995,11 +17225,12 @@ class Parser:
                                 count_0 += 1
                             if offset_2 == -1:
                                 break
+                            value_3 = count_0
 
                             break
                         if offset_2 == -1:
                             offset_1 = -1; break
-                        value_2 = column_2 - column_1
+                        value_1 = column_2 - column_1
                         offset_1 = offset_2
                         column_1 = column_2
 
@@ -17030,9 +17261,9 @@ class Parser:
 
                         children_2.append(Node('value', offset_1, offset_1, column_1, column_1, (), 'dual'))
 
-                        children_2.append(Node('value', offset_1, offset_1, column_1, column_1, (), value_1))
-
                         children_2.append(Node('value', offset_1, offset_1, column_1, column_1, (), value_2))
+
+                        children_2.append(Node('value', offset_1, offset_1, column_1, column_1, (), value_1))
 
 
                         break
@@ -17102,7 +17333,7 @@ class Parser:
                             if offset_3 == -1:
                                 offset_2 = -1
                                 break
-                            value_3 = buf[offset_2:offset_3]
+                            value_5 = buf[offset_2:offset_3]
                             offset_2 = offset_3
 
                             count_0 = 0
@@ -17114,14 +17345,17 @@ class Parser:
                                 partial_tab_width_2 = partial_tab_width_1
                                 children_3 = [] if children_2 is not None else None
                                 while True:
-                                    if buf[offset_3:offset_3+len(value_3)] == value_3:
-                                        offset_3 += len(value_3)
-                                        column_3 += len(value_3)
+                                    #print('entry rep rule', offset_2, offset_3)
+                                    if buf[offset_3:offset_3+len(value_5)] == value_5:
+                                        offset_3 += len(value_5)
+                                        column_3 += len(value_5)
                                     else:
                                         offset_3 = -1
                                         break
 
+                                    #print('safe exit rep rule', offset_2, offset_3)
                                     break
+                                #print('exit rep rule', offset_2, offset_3)
                                 if offset_3 == -1:
                                     break
                                 if offset_2 == offset_3: break
@@ -17135,6 +17369,7 @@ class Parser:
                                 count_0 += 1
                             if offset_2 == -1:
                                 break
+                            value_6 = count_0
 
                             break
                         if offset_2 == -1:
@@ -17176,7 +17411,7 @@ class Parser:
 
                         children_2.append(Node('value', offset_1, offset_1, column_1, column_1, (), 'dual'))
 
-                        children_2.append(Node('value', offset_1, offset_1, column_1, column_1, (), value_3))
+                        children_2.append(Node('value', offset_1, offset_1, column_1, column_1, (), value_5))
 
                         children_2.append(Node('value', offset_1, offset_1, column_1, column_1, (), value_4))
 
@@ -17250,6 +17485,7 @@ class Parser:
                             partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True:
+                                #print('entry rep rule', offset_1, offset_2)
                                 while True: # start choice
                                     offset_3 = offset_2
                                     column_3 = column_2
@@ -17259,7 +17495,7 @@ class Parser:
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
                                         children_5 = []
-                                        value_2 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
+                                        value_3 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
                                         while True: # start capture
                                             _match = regex_regex_48.match(buf, offset_3)
                                             if _match:
@@ -17282,11 +17518,11 @@ class Parser:
                                             break
                                         if offset_3 == -1:
                                             break
-                                        value_2.name = 'text'
-                                        value_2.end = offset_3
-                                        value_2.end_column = column_3
-                                        value_2.value = None
-                                        children_4.append(value_2)
+                                        value_3.name = 'text'
+                                        value_3.end = offset_3
+                                        value_3.end_column = column_3
+                                        value_3.value = None
+                                        children_4.append(value_3)
 
 
                                         break
@@ -17308,7 +17544,7 @@ class Parser:
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
                                         children_5 = []
-                                        value_3 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
+                                        value_4 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
                                         while True: # start capture
                                             if offset_3 < buf_eof:
                                                 codepoint = buf[offset_3]
@@ -17326,11 +17562,11 @@ class Parser:
                                             break
                                         if offset_3 == -1:
                                             break
-                                        value_3.name = 'text'
-                                        value_3.end = offset_3
-                                        value_3.end_column = column_3
-                                        value_3.value = None
-                                        children_4.append(value_3)
+                                        value_4.name = 'text'
+                                        value_4.end = offset_3
+                                        value_4.end_column = column_3
+                                        value_4.value = None
+                                        children_4.append(value_4)
 
                                         if column_3 != 0:
                                             offset_3 = -1
@@ -17395,6 +17631,7 @@ class Parser:
                                                 partial_tab_width_5 = partial_tab_width_4
                                                 children_6 = [] if children_5 is not None else None
                                                 while True:
+                                                    #print('entry rep rule', offset_4, offset_5)
                                                     if buf[offset_5:offset_5+1] == '`':
                                                         offset_5 += 1
                                                         column_5 += 1
@@ -17402,7 +17639,9 @@ class Parser:
                                                         offset_5 = -1
                                                         break
 
+                                                    #print('safe exit rep rule', offset_4, offset_5)
                                                     break
+                                                #print('exit rep rule', offset_4, offset_5)
                                                 if offset_5 == -1:
                                                     break
                                                 if offset_4 == offset_5: break
@@ -17415,10 +17654,12 @@ class Parser:
                                                 partial_tab_width_4 = partial_tab_width_5
                                                 count_1 += 1
                                             if count_1 < value_0:
+                                            #    print('min exit', offset_4)
                                                 offset_4 = -1
                                                 break
                                             if offset_4 == -1:
                                                 break
+                                            value_5 = count_1
 
                                             while True: # start choice
                                                 offset_5 = offset_4
@@ -17482,7 +17723,7 @@ class Parser:
                                             break
 
                                         children_5 = []
-                                        value_4 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
+                                        value_6 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
                                         while True: # start capture
                                             _match = regex_regex_51.match(buf, offset_3)
                                             if _match:
@@ -17496,11 +17737,11 @@ class Parser:
                                             break
                                         if offset_3 == -1:
                                             break
-                                        value_4.name = 'text'
-                                        value_4.end = offset_3
-                                        value_4.end_column = column_3
-                                        value_4.value = None
-                                        children_4.append(value_4)
+                                        value_6.name = 'text'
+                                        value_6.end = offset_3
+                                        value_6.end_column = column_3
+                                        value_6.value = None
+                                        children_4.append(value_6)
 
 
                                         break
@@ -17519,7 +17760,9 @@ class Parser:
                                 if offset_2 == -1:
                                     break
 
+                                #print('safe exit rep rule', offset_1, offset_2)
                                 break
+                            #print('exit rep rule', offset_1, offset_2)
                             if offset_2 == -1:
                                 break
                             if offset_1 == offset_2: break
@@ -17532,10 +17775,12 @@ class Parser:
                             partial_tab_width_1 = partial_tab_width_2
                             count_0 += 1
                         if count_0 < 1:
+                        #    print('min exit', offset_1)
                             offset_1 = -1
                             break
                         if offset_1 == -1:
                             break
+                        value_2 = count_0
 
                         break
                     if offset_1 == -1:
@@ -17555,6 +17800,7 @@ class Parser:
                         partial_tab_width_2 = partial_tab_width_1
                         children_2 = [] if children_1 is not None else None
                         while True:
+                            #print('entry rep rule', offset_1, offset_2)
                             if buf[offset_2:offset_2+1] == '`':
                                 offset_2 += 1
                                 column_2 += 1
@@ -17562,7 +17808,9 @@ class Parser:
                                 offset_2 = -1
                                 break
 
+                            #print('safe exit rep rule', offset_1, offset_2)
                             break
+                        #print('exit rep rule', offset_1, offset_2)
                         if offset_2 == -1:
                             break
                         if offset_1 == offset_2: break
@@ -17575,10 +17823,12 @@ class Parser:
                         partial_tab_width_1 = partial_tab_width_2
                         count_0 += 1
                     if count_0 < value_0:
+                    #    print('min exit', offset_1)
                         offset_1 = -1
                         break
                     if offset_1 == -1:
                         break
+                    value_7 = count_0
 
                     while True: # start reject
                         children_2 = []
@@ -17619,7 +17869,7 @@ class Parser:
                 children_1 = [] if children_0 is not None else None
                 while True: # case
                     children_2 = []
-                    value_5 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
+                    value_8 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
                         _match = regex_regex_47.match(buf, offset_1)
                         if _match:
@@ -17633,11 +17883,11 @@ class Parser:
                         break
                     if offset_1 == -1:
                         break
-                    value_5.name = 'text'
-                    value_5.end = offset_1
-                    value_5.end_column = column_1
-                    value_5.value = None
-                    children_1.append(value_5)
+                    value_8.name = 'text'
+                    value_8.end = offset_1
+                    value_8.end_column = column_1
+                    value_8.value = None
+                    children_1.append(value_8)
 
 
                     break
@@ -18124,6 +18374,7 @@ class Parser:
                             partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True:
+                                #print('entry rep rule', offset_1, offset_2)
                                 while True: # start reject
                                     children_4 = []
                                     offset_3 = offset_2 + 0
@@ -18152,7 +18403,9 @@ class Parser:
                                     offset_2 = -1
                                     break
 
+                                #print('safe exit rep rule', offset_1, offset_2)
                                 break
+                            #print('exit rep rule', offset_1, offset_2)
                             if offset_2 == -1:
                                 break
                             if offset_1 == offset_2: break
@@ -18166,6 +18419,7 @@ class Parser:
                             count_0 += 1
                         if offset_1 == -1:
                             break
+                        value_1 = count_0
 
                         break
                     if offset_1 == -1:
@@ -18185,8 +18439,9 @@ class Parser:
                         partial_tab_width_2 = partial_tab_width_1
                         children_2 = [] if children_1 is not None else None
                         while True:
+                            #print('entry rep rule', offset_1, offset_2)
                             children_3 = []
-                            value_1 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
+                            value_3 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
                             while True: # start capture
                                 if offset_2 < buf_eof:
                                     codepoint = buf[offset_2]
@@ -18204,11 +18459,11 @@ class Parser:
                                 break
                             if offset_2 == -1:
                                 break
-                            value_1.name = 'raw'
-                            value_1.end = offset_2
-                            value_1.end_column = column_2
-                            value_1.value = None
-                            children_2.append(value_1)
+                            value_3.name = 'raw'
+                            value_3.end = offset_2
+                            value_3.end_column = column_2
+                            value_3.value = None
+                            children_2.append(value_3)
 
                             if column_2 != 0:
                                 offset_2 = -1
@@ -18239,7 +18494,7 @@ class Parser:
                                 break
 
                             children_3 = []
-                            value_2 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
+                            value_4 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
                             while True: # start capture
                                 count_1 = 0
                                 while True:
@@ -18250,6 +18505,7 @@ class Parser:
                                     partial_tab_width_3 = partial_tab_width_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
+                                        #print('entry rep rule', offset_2, offset_3)
                                         while True: # start reject
                                             children_5 = []
                                             offset_4 = offset_3 + 0
@@ -18278,7 +18534,9 @@ class Parser:
                                             offset_3 = -1
                                             break
 
+                                        #print('safe exit rep rule', offset_2, offset_3)
                                         break
+                                    #print('exit rep rule', offset_2, offset_3)
                                     if offset_3 == -1:
                                         break
                                     if offset_2 == offset_3: break
@@ -18292,17 +18550,20 @@ class Parser:
                                     count_1 += 1
                                 if offset_2 == -1:
                                     break
+                                value_5 = count_1
 
                                 break
                             if offset_2 == -1:
                                 break
-                            value_2.name = 'raw'
-                            value_2.end = offset_2
-                            value_2.end_column = column_2
-                            value_2.value = None
-                            children_2.append(value_2)
+                            value_4.name = 'raw'
+                            value_4.end = offset_2
+                            value_4.end_column = column_2
+                            value_4.value = None
+                            children_2.append(value_4)
 
+                            #print('safe exit rep rule', offset_1, offset_2)
                             break
+                        #print('exit rep rule', offset_1, offset_2)
                         if offset_2 == -1:
                             break
                         if offset_1 == offset_2: break
@@ -18316,9 +18577,10 @@ class Parser:
                         count_0 += 1
                     if offset_1 == -1:
                         break
+                    value_2 = count_0
 
                     children_2 = []
-                    value_3 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
+                    value_6 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
                         if buf[offset_1:offset_1+2] == '?>':
                             offset_1 += 2
@@ -18330,11 +18592,11 @@ class Parser:
                         break
                     if offset_1 == -1:
                         break
-                    value_3.name = 'raw'
-                    value_3.end = offset_1
-                    value_3.end_column = column_1
-                    value_3.value = None
-                    children_1.append(value_3)
+                    value_6.name = 'raw'
+                    value_6.end = offset_1
+                    value_6.end_column = column_1
+                    value_6.value = None
+                    children_1.append(value_6)
 
 
                     break
@@ -18356,7 +18618,7 @@ class Parser:
                 children_1 = [] if children_0 is not None else None
                 while True: # case
                     children_2 = []
-                    value_4 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
+                    value_7 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
                         if buf[offset_1:offset_1+4] == '<!--':
                             offset_1 += 4
@@ -18374,6 +18636,7 @@ class Parser:
                             partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True:
+                                #print('entry rep rule', offset_1, offset_2)
                                 while True: # start reject
                                     children_4 = []
                                     offset_3 = offset_2 + 0
@@ -18404,7 +18667,9 @@ class Parser:
                                     offset_2 = -1
                                     break
 
+                                #print('safe exit rep rule', offset_1, offset_2)
                                 break
+                            #print('exit rep rule', offset_1, offset_2)
                             if offset_2 == -1:
                                 break
                             if offset_1 == offset_2: break
@@ -18418,15 +18683,16 @@ class Parser:
                             count_0 += 1
                         if offset_1 == -1:
                             break
+                        value_8 = count_0
 
                         break
                     if offset_1 == -1:
                         break
-                    value_4.name = 'raw'
-                    value_4.end = offset_1
-                    value_4.end_column = column_1
-                    value_4.value = None
-                    children_1.append(value_4)
+                    value_7.name = 'raw'
+                    value_7.end = offset_1
+                    value_7.end_column = column_1
+                    value_7.value = None
+                    children_1.append(value_7)
 
                     count_0 = 0
                     while True:
@@ -18437,8 +18703,9 @@ class Parser:
                         partial_tab_width_2 = partial_tab_width_1
                         children_2 = [] if children_1 is not None else None
                         while True:
+                            #print('entry rep rule', offset_1, offset_2)
                             children_3 = []
-                            value_5 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
+                            value_10 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
                             while True: # start capture
                                 if offset_2 < buf_eof:
                                     codepoint = buf[offset_2]
@@ -18456,11 +18723,11 @@ class Parser:
                                 break
                             if offset_2 == -1:
                                 break
-                            value_5.name = 'raw'
-                            value_5.end = offset_2
-                            value_5.end_column = column_2
-                            value_5.value = None
-                            children_2.append(value_5)
+                            value_10.name = 'raw'
+                            value_10.end = offset_2
+                            value_10.end_column = column_2
+                            value_10.value = None
+                            children_2.append(value_10)
 
                             if column_2 != 0:
                                 offset_2 = -1
@@ -18491,7 +18758,7 @@ class Parser:
                                 break
 
                             children_3 = []
-                            value_6 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
+                            value_11 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
                             while True: # start capture
                                 count_1 = 0
                                 while True:
@@ -18502,6 +18769,7 @@ class Parser:
                                     partial_tab_width_3 = partial_tab_width_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
+                                        #print('entry rep rule', offset_2, offset_3)
                                         while True: # start reject
                                             children_5 = []
                                             offset_4 = offset_3 + 0
@@ -18532,7 +18800,9 @@ class Parser:
                                             offset_3 = -1
                                             break
 
+                                        #print('safe exit rep rule', offset_2, offset_3)
                                         break
+                                    #print('exit rep rule', offset_2, offset_3)
                                     if offset_3 == -1:
                                         break
                                     if offset_2 == offset_3: break
@@ -18546,17 +18816,20 @@ class Parser:
                                     count_1 += 1
                                 if offset_2 == -1:
                                     break
+                                value_12 = count_1
 
                                 break
                             if offset_2 == -1:
                                 break
-                            value_6.name = 'raw'
-                            value_6.end = offset_2
-                            value_6.end_column = column_2
-                            value_6.value = None
-                            children_2.append(value_6)
+                            value_11.name = 'raw'
+                            value_11.end = offset_2
+                            value_11.end_column = column_2
+                            value_11.value = None
+                            children_2.append(value_11)
 
+                            #print('safe exit rep rule', offset_1, offset_2)
                             break
+                        #print('exit rep rule', offset_1, offset_2)
                         if offset_2 == -1:
                             break
                         if offset_1 == offset_2: break
@@ -18570,9 +18843,10 @@ class Parser:
                         count_0 += 1
                     if offset_1 == -1:
                         break
+                    value_9 = count_0
 
                     children_2 = []
-                    value_7 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
+                    value_13 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
                         if buf[offset_1:offset_1+3] == '-->':
                             offset_1 += 3
@@ -18584,11 +18858,11 @@ class Parser:
                         break
                     if offset_1 == -1:
                         break
-                    value_7.name = 'raw'
-                    value_7.end = offset_1
-                    value_7.end_column = column_1
-                    value_7.value = None
-                    children_1.append(value_7)
+                    value_13.name = 'raw'
+                    value_13.end = offset_1
+                    value_13.end_column = column_1
+                    value_13.value = None
+                    children_1.append(value_13)
 
 
                     break
@@ -18610,7 +18884,7 @@ class Parser:
                 children_1 = [] if children_0 is not None else None
                 while True: # case
                     children_2 = []
-                    value_8 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
+                    value_14 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
                         if buf[offset_1:offset_1+2] == '<!':
                             offset_1 += 2
@@ -18640,11 +18914,11 @@ class Parser:
                         break
                     if offset_1 == -1:
                         break
-                    value_8.name = 'raw'
-                    value_8.end = offset_1
-                    value_8.end_column = column_1
-                    value_8.value = None
-                    children_1.append(value_8)
+                    value_14.name = 'raw'
+                    value_14.end = offset_1
+                    value_14.end_column = column_1
+                    value_14.value = None
+                    children_1.append(value_14)
 
                     count_0 = 0
                     while True:
@@ -18655,8 +18929,9 @@ class Parser:
                         partial_tab_width_2 = partial_tab_width_1
                         children_2 = [] if children_1 is not None else None
                         while True:
+                            #print('entry rep rule', offset_1, offset_2)
                             children_3 = []
-                            value_9 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
+                            value_16 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
                             while True: # start capture
                                 if offset_2 < buf_eof:
                                     codepoint = buf[offset_2]
@@ -18674,11 +18949,11 @@ class Parser:
                                 break
                             if offset_2 == -1:
                                 break
-                            value_9.name = 'raw'
-                            value_9.end = offset_2
-                            value_9.end_column = column_2
-                            value_9.value = None
-                            children_2.append(value_9)
+                            value_16.name = 'raw'
+                            value_16.end = offset_2
+                            value_16.end_column = column_2
+                            value_16.value = None
+                            children_2.append(value_16)
 
                             if column_2 != 0:
                                 offset_2 = -1
@@ -18709,7 +18984,7 @@ class Parser:
                                 break
 
                             children_3 = []
-                            value_10 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
+                            value_17 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
                             while True: # start capture
                                 _match = regex_regex_60.match(buf, offset_2)
                                 if _match:
@@ -18723,13 +18998,15 @@ class Parser:
                                 break
                             if offset_2 == -1:
                                 break
-                            value_10.name = 'raw'
-                            value_10.end = offset_2
-                            value_10.end_column = column_2
-                            value_10.value = None
-                            children_2.append(value_10)
+                            value_17.name = 'raw'
+                            value_17.end = offset_2
+                            value_17.end_column = column_2
+                            value_17.value = None
+                            children_2.append(value_17)
 
+                            #print('safe exit rep rule', offset_1, offset_2)
                             break
+                        #print('exit rep rule', offset_1, offset_2)
                         if offset_2 == -1:
                             break
                         if offset_1 == offset_2: break
@@ -18743,9 +19020,10 @@ class Parser:
                         count_0 += 1
                     if offset_1 == -1:
                         break
+                    value_15 = count_0
 
                     children_2 = []
-                    value_11 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
+                    value_18 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
                         if buf[offset_1:offset_1+1] == '>':
                             offset_1 += 1
@@ -18757,11 +19035,11 @@ class Parser:
                         break
                     if offset_1 == -1:
                         break
-                    value_11.name = 'raw'
-                    value_11.end = offset_1
-                    value_11.end_column = column_1
-                    value_11.value = None
-                    children_1.append(value_11)
+                    value_18.name = 'raw'
+                    value_18.end = offset_1
+                    value_18.end_column = column_1
+                    value_18.value = None
+                    children_1.append(value_18)
 
 
                     break
@@ -18783,7 +19061,7 @@ class Parser:
                 children_1 = [] if children_0 is not None else None
                 while True: # case
                     children_2 = []
-                    value_12 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
+                    value_19 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
                         if buf[offset_1:offset_1+9] == '<![CDATA[':
                             offset_1 += 9
@@ -18801,6 +19079,7 @@ class Parser:
                             partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True:
+                                #print('entry rep rule', offset_1, offset_2)
                                 while True: # start reject
                                     children_4 = []
                                     offset_3 = offset_2 + 0
@@ -18829,7 +19108,9 @@ class Parser:
                                     offset_2 = -1
                                     break
 
+                                #print('safe exit rep rule', offset_1, offset_2)
                                 break
+                            #print('exit rep rule', offset_1, offset_2)
                             if offset_2 == -1:
                                 break
                             if offset_1 == offset_2: break
@@ -18843,15 +19124,16 @@ class Parser:
                             count_0 += 1
                         if offset_1 == -1:
                             break
+                        value_20 = count_0
 
                         break
                     if offset_1 == -1:
                         break
-                    value_12.name = 'raw'
-                    value_12.end = offset_1
-                    value_12.end_column = column_1
-                    value_12.value = None
-                    children_1.append(value_12)
+                    value_19.name = 'raw'
+                    value_19.end = offset_1
+                    value_19.end_column = column_1
+                    value_19.value = None
+                    children_1.append(value_19)
 
                     count_0 = 0
                     while True:
@@ -18862,8 +19144,9 @@ class Parser:
                         partial_tab_width_2 = partial_tab_width_1
                         children_2 = [] if children_1 is not None else None
                         while True:
+                            #print('entry rep rule', offset_1, offset_2)
                             children_3 = []
-                            value_13 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
+                            value_22 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
                             while True: # start capture
                                 if offset_2 < buf_eof:
                                     codepoint = buf[offset_2]
@@ -18881,11 +19164,11 @@ class Parser:
                                 break
                             if offset_2 == -1:
                                 break
-                            value_13.name = 'raw'
-                            value_13.end = offset_2
-                            value_13.end_column = column_2
-                            value_13.value = None
-                            children_2.append(value_13)
+                            value_22.name = 'raw'
+                            value_22.end = offset_2
+                            value_22.end_column = column_2
+                            value_22.value = None
+                            children_2.append(value_22)
 
                             if column_2 != 0:
                                 offset_2 = -1
@@ -18916,7 +19199,7 @@ class Parser:
                                 break
 
                             children_3 = []
-                            value_14 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
+                            value_23 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
                             while True: # start capture
                                 count_1 = 0
                                 while True:
@@ -18927,6 +19210,7 @@ class Parser:
                                     partial_tab_width_3 = partial_tab_width_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
+                                        #print('entry rep rule', offset_2, offset_3)
                                         while True: # start reject
                                             children_5 = []
                                             offset_4 = offset_3 + 0
@@ -18955,7 +19239,9 @@ class Parser:
                                             offset_3 = -1
                                             break
 
+                                        #print('safe exit rep rule', offset_2, offset_3)
                                         break
+                                    #print('exit rep rule', offset_2, offset_3)
                                     if offset_3 == -1:
                                         break
                                     if offset_2 == offset_3: break
@@ -18969,17 +19255,20 @@ class Parser:
                                     count_1 += 1
                                 if offset_2 == -1:
                                     break
+                                value_24 = count_1
 
                                 break
                             if offset_2 == -1:
                                 break
-                            value_14.name = 'raw'
-                            value_14.end = offset_2
-                            value_14.end_column = column_2
-                            value_14.value = None
-                            children_2.append(value_14)
+                            value_23.name = 'raw'
+                            value_23.end = offset_2
+                            value_23.end_column = column_2
+                            value_23.value = None
+                            children_2.append(value_23)
 
+                            #print('safe exit rep rule', offset_1, offset_2)
                             break
+                        #print('exit rep rule', offset_1, offset_2)
                         if offset_2 == -1:
                             break
                         if offset_1 == offset_2: break
@@ -18993,9 +19282,10 @@ class Parser:
                         count_0 += 1
                     if offset_1 == -1:
                         break
+                    value_21 = count_0
 
                     children_2 = []
-                    value_15 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
+                    value_25 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
                         if buf[offset_1:offset_1+3] == ']]>':
                             offset_1 += 3
@@ -19007,11 +19297,11 @@ class Parser:
                         break
                     if offset_1 == -1:
                         break
-                    value_15.name = 'raw'
-                    value_15.end = offset_1
-                    value_15.end_column = column_1
-                    value_15.value = None
-                    children_1.append(value_15)
+                    value_25.name = 'raw'
+                    value_25.end = offset_1
+                    value_25.end_column = column_1
+                    value_25.value = None
+                    children_1.append(value_25)
 
 
                     break
@@ -19033,7 +19323,7 @@ class Parser:
                 children_1 = [] if children_0 is not None else None
                 while True: # case
                     children_2 = []
-                    value_16 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
+                    value_26 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
                         if buf[offset_1:offset_1+1] == '<':
                             offset_1 += 1
@@ -19063,11 +19353,11 @@ class Parser:
                         break
                     if offset_1 == -1:
                         break
-                    value_16.name = 'raw'
-                    value_16.end = offset_1
-                    value_16.end_column = column_1
-                    value_16.value = None
-                    children_1.append(value_16)
+                    value_26.name = 'raw'
+                    value_26.end = offset_1
+                    value_26.end_column = column_1
+                    value_26.value = None
+                    children_1.append(value_26)
 
                     count_0 = 0
                     while True:
@@ -19078,6 +19368,7 @@ class Parser:
                         partial_tab_width_2 = partial_tab_width_1
                         children_2 = [] if children_1 is not None else None
                         while True:
+                            #print('entry rep rule', offset_1, offset_2)
                             while True: # start choice
                                 offset_3 = offset_2
                                 column_3 = column_2
@@ -19087,7 +19378,7 @@ class Parser:
                                 children_3 = [] if children_2 is not None else None
                                 while True: # case
                                     children_4 = []
-                                    value_17 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
+                                    value_28 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
                                     while True: # start capture
                                         count_1 = 0
                                         while offset_3 < buf_eof:
@@ -19114,11 +19405,11 @@ class Parser:
                                         break
                                     if offset_3 == -1:
                                         break
-                                    value_17.name = 'raw'
-                                    value_17.end = offset_3
-                                    value_17.end_column = column_3
-                                    value_17.value = None
-                                    children_3.append(value_17)
+                                    value_28.name = 'raw'
+                                    value_28.end = offset_3
+                                    value_28.end_column = column_3
+                                    value_28.value = None
+                                    children_3.append(value_28)
 
 
                                     break
@@ -19148,8 +19439,9 @@ class Parser:
                                         partial_tab_width_4 = partial_tab_width_3
                                         children_4 = [] if children_3 is not None else None
                                         while True:
+                                            #print('entry rep rule', offset_3, offset_4)
                                             children_5 = []
-                                            value_18 = Node(None, offset_4, offset_4, column_4, column_4, children_5, None)
+                                            value_30 = Node(None, offset_4, offset_4, column_4, column_4, children_5, None)
                                             while True: # start capture
                                                 count_2 = 0
                                                 while offset_4 < buf_eof:
@@ -19186,11 +19478,11 @@ class Parser:
                                                 break
                                             if offset_4 == -1:
                                                 break
-                                            value_18.name = 'raw'
-                                            value_18.end = offset_4
-                                            value_18.end_column = column_4
-                                            value_18.value = None
-                                            children_4.append(value_18)
+                                            value_30.name = 'raw'
+                                            value_30.end = offset_4
+                                            value_30.end_column = column_4
+                                            value_30.value = None
+                                            children_4.append(value_30)
 
                                             if column_4 != 0:
                                                 offset_4 = -1
@@ -19221,7 +19513,7 @@ class Parser:
                                                 break
 
                                             children_5 = []
-                                            value_19 = Node(None, offset_4, offset_4, column_4, column_4, children_5, None)
+                                            value_31 = Node(None, offset_4, offset_4, column_4, column_4, children_5, None)
                                             while True: # start capture
                                                 count_2 = 0
                                                 while offset_4 < buf_eof:
@@ -19245,13 +19537,15 @@ class Parser:
                                                 break
                                             if offset_4 == -1:
                                                 break
-                                            value_19.name = 'raw'
-                                            value_19.end = offset_4
-                                            value_19.end_column = column_4
-                                            value_19.value = None
-                                            children_4.append(value_19)
+                                            value_31.name = 'raw'
+                                            value_31.end = offset_4
+                                            value_31.end_column = column_4
+                                            value_31.value = None
+                                            children_4.append(value_31)
 
+                                            #print('safe exit rep rule', offset_3, offset_4)
                                             break
+                                        #print('exit rep rule', offset_3, offset_4)
                                         if offset_4 == -1:
                                             break
                                         if offset_3 == offset_4: break
@@ -19264,10 +19558,12 @@ class Parser:
                                         partial_tab_width_3 = partial_tab_width_4
                                         count_1 += 1
                                     if count_1 < 1:
+                                    #    print('min exit', offset_3)
                                         offset_3 = -1
                                         break
                                     if offset_3 == -1:
                                         break
+                                    value_29 = count_1
 
 
                                     break
@@ -19287,7 +19583,7 @@ class Parser:
                                 break
 
                             children_3 = []
-                            value_20 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
+                            value_32 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
                             while True: # start capture
                                 _match = regex_regex_62.match(buf, offset_2)
                                 if _match:
@@ -19310,11 +19606,11 @@ class Parser:
                                 break
                             if offset_2 == -1:
                                 break
-                            value_20.name = 'raw'
-                            value_20.end = offset_2
-                            value_20.end_column = column_2
-                            value_20.value = None
-                            children_2.append(value_20)
+                            value_32.name = 'raw'
+                            value_32.end = offset_2
+                            value_32.end_column = column_2
+                            value_32.value = None
+                            children_2.append(value_32)
 
                             count_1 = 0
                             while count_1 < 1:
@@ -19325,8 +19621,9 @@ class Parser:
                                 partial_tab_width_3 = partial_tab_width_2
                                 children_3 = [] if children_2 is not None else None
                                 while True:
+                                    #print('entry rep rule', offset_2, offset_3)
                                     children_4 = []
-                                    value_21 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
+                                    value_34 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
                                     while True: # start capture
                                         count_2 = 0
                                         while offset_3 < buf_eof:
@@ -19357,11 +19654,11 @@ class Parser:
                                         break
                                     if offset_3 == -1:
                                         break
-                                    value_21.name = 'raw'
-                                    value_21.end = offset_3
-                                    value_21.end_column = column_3
-                                    value_21.value = None
-                                    children_3.append(value_21)
+                                    value_34.name = 'raw'
+                                    value_34.end = offset_3
+                                    value_34.end_column = column_3
+                                    value_34.value = None
+                                    children_3.append(value_34)
 
                                     while True: # start choice
                                         offset_4 = offset_3
@@ -19372,7 +19669,7 @@ class Parser:
                                         children_4 = [] if children_3 is not None else None
                                         while True: # case
                                             children_5 = []
-                                            value_22 = Node(None, offset_4, offset_4, column_4, column_4, children_5, None)
+                                            value_35 = Node(None, offset_4, offset_4, column_4, column_4, children_5, None)
                                             while True: # start capture
                                                 count_2 = 0
                                                 while offset_4 < buf_eof:
@@ -19396,11 +19693,11 @@ class Parser:
                                                 break
                                             if offset_4 == -1:
                                                 break
-                                            value_22.name = 'raw'
-                                            value_22.end = offset_4
-                                            value_22.end_column = column_4
-                                            value_22.value = None
-                                            children_4.append(value_22)
+                                            value_35.name = 'raw'
+                                            value_35.end = offset_4
+                                            value_35.end_column = column_4
+                                            value_35.value = None
+                                            children_4.append(value_35)
 
 
                                             break
@@ -19430,8 +19727,9 @@ class Parser:
                                                 partial_tab_width_5 = partial_tab_width_4
                                                 children_5 = [] if children_4 is not None else None
                                                 while True:
+                                                    #print('entry rep rule', offset_4, offset_5)
                                                     children_6 = []
-                                                    value_23 = Node(None, offset_5, offset_5, column_5, column_5, children_6, None)
+                                                    value_37 = Node(None, offset_5, offset_5, column_5, column_5, children_6, None)
                                                     while True: # start capture
                                                         count_3 = 0
                                                         while offset_5 < buf_eof:
@@ -19468,11 +19766,11 @@ class Parser:
                                                         break
                                                     if offset_5 == -1:
                                                         break
-                                                    value_23.name = 'raw'
-                                                    value_23.end = offset_5
-                                                    value_23.end_column = column_5
-                                                    value_23.value = None
-                                                    children_5.append(value_23)
+                                                    value_37.name = 'raw'
+                                                    value_37.end = offset_5
+                                                    value_37.end_column = column_5
+                                                    value_37.value = None
+                                                    children_5.append(value_37)
 
                                                     if column_5 != 0:
                                                         offset_5 = -1
@@ -19503,7 +19801,7 @@ class Parser:
                                                         break
 
                                                     children_6 = []
-                                                    value_24 = Node(None, offset_5, offset_5, column_5, column_5, children_6, None)
+                                                    value_38 = Node(None, offset_5, offset_5, column_5, column_5, children_6, None)
                                                     while True: # start capture
                                                         count_3 = 0
                                                         while offset_5 < buf_eof:
@@ -19527,13 +19825,15 @@ class Parser:
                                                         break
                                                     if offset_5 == -1:
                                                         break
-                                                    value_24.name = 'raw'
-                                                    value_24.end = offset_5
-                                                    value_24.end_column = column_5
-                                                    value_24.value = None
-                                                    children_5.append(value_24)
+                                                    value_38.name = 'raw'
+                                                    value_38.end = offset_5
+                                                    value_38.end_column = column_5
+                                                    value_38.value = None
+                                                    children_5.append(value_38)
 
+                                                    #print('safe exit rep rule', offset_4, offset_5)
                                                     break
+                                                #print('exit rep rule', offset_4, offset_5)
                                                 if offset_5 == -1:
                                                     break
                                                 if offset_4 == offset_5: break
@@ -19547,6 +19847,7 @@ class Parser:
                                                 count_2 += 1
                                             if offset_4 == -1:
                                                 break
+                                            value_36 = count_2
 
 
                                             break
@@ -19574,7 +19875,7 @@ class Parser:
                                         children_4 = [] if children_3 is not None else None
                                         while True: # case
                                             children_5 = []
-                                            value_25 = Node(None, offset_4, offset_4, column_4, column_4, children_5, None)
+                                            value_39 = Node(None, offset_4, offset_4, column_4, column_4, children_5, None)
                                             while True: # start capture
                                                 _match = regex_regex_64.match(buf, offset_4)
                                                 if _match:
@@ -19588,11 +19889,11 @@ class Parser:
                                                 break
                                             if offset_4 == -1:
                                                 break
-                                            value_25.name = 'raw'
-                                            value_25.end = offset_4
-                                            value_25.end_column = column_4
-                                            value_25.value = None
-                                            children_4.append(value_25)
+                                            value_39.name = 'raw'
+                                            value_39.end = offset_4
+                                            value_39.end_column = column_4
+                                            value_39.value = None
+                                            children_4.append(value_39)
 
 
                                             break
@@ -19614,7 +19915,7 @@ class Parser:
                                         children_4 = [] if children_3 is not None else None
                                         while True: # case
                                             children_5 = []
-                                            value_26 = Node(None, offset_4, offset_4, column_4, column_4, children_5, None)
+                                            value_40 = Node(None, offset_4, offset_4, column_4, column_4, children_5, None)
                                             while True: # start capture
                                                 if buf[offset_4:offset_4+1] == '"':
                                                     offset_4 += 1
@@ -19635,11 +19936,11 @@ class Parser:
                                                 break
                                             if offset_4 == -1:
                                                 break
-                                            value_26.name = 'raw'
-                                            value_26.end = offset_4
-                                            value_26.end_column = column_4
-                                            value_26.value = None
-                                            children_4.append(value_26)
+                                            value_40.name = 'raw'
+                                            value_40.end = offset_4
+                                            value_40.end_column = column_4
+                                            value_40.value = None
+                                            children_4.append(value_40)
 
                                             count_2 = 0
                                             while True:
@@ -19650,8 +19951,9 @@ class Parser:
                                                 partial_tab_width_5 = partial_tab_width_4
                                                 children_5 = [] if children_4 is not None else None
                                                 while True:
+                                                    #print('entry rep rule', offset_4, offset_5)
                                                     children_6 = []
-                                                    value_27 = Node(None, offset_5, offset_5, column_5, column_5, children_6, None)
+                                                    value_42 = Node(None, offset_5, offset_5, column_5, column_5, children_6, None)
                                                     while True: # start capture
                                                         if offset_5 < buf_eof:
                                                             codepoint = buf[offset_5]
@@ -19669,11 +19971,11 @@ class Parser:
                                                         break
                                                     if offset_5 == -1:
                                                         break
-                                                    value_27.name = 'raw'
-                                                    value_27.end = offset_5
-                                                    value_27.end_column = column_5
-                                                    value_27.value = None
-                                                    children_5.append(value_27)
+                                                    value_42.name = 'raw'
+                                                    value_42.end = offset_5
+                                                    value_42.end_column = column_5
+                                                    value_42.value = None
+                                                    children_5.append(value_42)
 
                                                     if column_5 != 0:
                                                         offset_5 = -1
@@ -19704,7 +20006,7 @@ class Parser:
                                                         break
 
                                                     children_6 = []
-                                                    value_28 = Node(None, offset_5, offset_5, column_5, column_5, children_6, None)
+                                                    value_43 = Node(None, offset_5, offset_5, column_5, column_5, children_6, None)
                                                     while True: # start capture
                                                         _match = regex_regex_65.match(buf, offset_5)
                                                         if _match:
@@ -19718,13 +20020,15 @@ class Parser:
                                                         break
                                                     if offset_5 == -1:
                                                         break
-                                                    value_28.name = 'raw'
-                                                    value_28.end = offset_5
-                                                    value_28.end_column = column_5
-                                                    value_28.value = None
-                                                    children_5.append(value_28)
+                                                    value_43.name = 'raw'
+                                                    value_43.end = offset_5
+                                                    value_43.end_column = column_5
+                                                    value_43.value = None
+                                                    children_5.append(value_43)
 
+                                                    #print('safe exit rep rule', offset_4, offset_5)
                                                     break
+                                                #print('exit rep rule', offset_4, offset_5)
                                                 if offset_5 == -1:
                                                     break
                                                 if offset_4 == offset_5: break
@@ -19738,9 +20042,10 @@ class Parser:
                                                 count_2 += 1
                                             if offset_4 == -1:
                                                 break
+                                            value_41 = count_2
 
                                             children_5 = []
-                                            value_29 = Node(None, offset_4, offset_4, column_4, column_4, children_5, None)
+                                            value_44 = Node(None, offset_4, offset_4, column_4, column_4, children_5, None)
                                             while True: # start capture
                                                 if buf[offset_4:offset_4+1] == '"':
                                                     offset_4 += 1
@@ -19752,11 +20057,11 @@ class Parser:
                                                 break
                                             if offset_4 == -1:
                                                 break
-                                            value_29.name = 'raw'
-                                            value_29.end = offset_4
-                                            value_29.end_column = column_4
-                                            value_29.value = None
-                                            children_4.append(value_29)
+                                            value_44.name = 'raw'
+                                            value_44.end = offset_4
+                                            value_44.end_column = column_4
+                                            value_44.value = None
+                                            children_4.append(value_44)
 
 
                                             break
@@ -19778,7 +20083,7 @@ class Parser:
                                         children_4 = [] if children_3 is not None else None
                                         while True: # case
                                             children_5 = []
-                                            value_30 = Node(None, offset_4, offset_4, column_4, column_4, children_5, None)
+                                            value_45 = Node(None, offset_4, offset_4, column_4, column_4, children_5, None)
                                             while True: # start capture
                                                 if buf[offset_4:offset_4+1] == "'":
                                                     offset_4 += 1
@@ -19799,11 +20104,11 @@ class Parser:
                                                 break
                                             if offset_4 == -1:
                                                 break
-                                            value_30.name = 'raw'
-                                            value_30.end = offset_4
-                                            value_30.end_column = column_4
-                                            value_30.value = None
-                                            children_4.append(value_30)
+                                            value_45.name = 'raw'
+                                            value_45.end = offset_4
+                                            value_45.end_column = column_4
+                                            value_45.value = None
+                                            children_4.append(value_45)
 
                                             count_2 = 0
                                             while True:
@@ -19814,8 +20119,9 @@ class Parser:
                                                 partial_tab_width_5 = partial_tab_width_4
                                                 children_5 = [] if children_4 is not None else None
                                                 while True:
+                                                    #print('entry rep rule', offset_4, offset_5)
                                                     children_6 = []
-                                                    value_31 = Node(None, offset_5, offset_5, column_5, column_5, children_6, None)
+                                                    value_47 = Node(None, offset_5, offset_5, column_5, column_5, children_6, None)
                                                     while True: # start capture
                                                         if offset_5 < buf_eof:
                                                             codepoint = buf[offset_5]
@@ -19833,11 +20139,11 @@ class Parser:
                                                         break
                                                     if offset_5 == -1:
                                                         break
-                                                    value_31.name = 'raw'
-                                                    value_31.end = offset_5
-                                                    value_31.end_column = column_5
-                                                    value_31.value = None
-                                                    children_5.append(value_31)
+                                                    value_47.name = 'raw'
+                                                    value_47.end = offset_5
+                                                    value_47.end_column = column_5
+                                                    value_47.value = None
+                                                    children_5.append(value_47)
 
                                                     if column_5 != 0:
                                                         offset_5 = -1
@@ -19868,7 +20174,7 @@ class Parser:
                                                         break
 
                                                     children_6 = []
-                                                    value_32 = Node(None, offset_5, offset_5, column_5, column_5, children_6, None)
+                                                    value_48 = Node(None, offset_5, offset_5, column_5, column_5, children_6, None)
                                                     while True: # start capture
                                                         _match = regex_regex_66.match(buf, offset_5)
                                                         if _match:
@@ -19882,13 +20188,15 @@ class Parser:
                                                         break
                                                     if offset_5 == -1:
                                                         break
-                                                    value_32.name = 'raw'
-                                                    value_32.end = offset_5
-                                                    value_32.end_column = column_5
-                                                    value_32.value = None
-                                                    children_5.append(value_32)
+                                                    value_48.name = 'raw'
+                                                    value_48.end = offset_5
+                                                    value_48.end_column = column_5
+                                                    value_48.value = None
+                                                    children_5.append(value_48)
 
+                                                    #print('safe exit rep rule', offset_4, offset_5)
                                                     break
+                                                #print('exit rep rule', offset_4, offset_5)
                                                 if offset_5 == -1:
                                                     break
                                                 if offset_4 == offset_5: break
@@ -19902,9 +20210,10 @@ class Parser:
                                                 count_2 += 1
                                             if offset_4 == -1:
                                                 break
+                                            value_46 = count_2
 
                                             children_5 = []
-                                            value_33 = Node(None, offset_4, offset_4, column_4, column_4, children_5, None)
+                                            value_49 = Node(None, offset_4, offset_4, column_4, column_4, children_5, None)
                                             while True: # start capture
                                                 if buf[offset_4:offset_4+1] == "'":
                                                     offset_4 += 1
@@ -19916,11 +20225,11 @@ class Parser:
                                                 break
                                             if offset_4 == -1:
                                                 break
-                                            value_33.name = 'raw'
-                                            value_33.end = offset_4
-                                            value_33.end_column = column_4
-                                            value_33.value = None
-                                            children_4.append(value_33)
+                                            value_49.name = 'raw'
+                                            value_49.end = offset_4
+                                            value_49.end_column = column_4
+                                            value_49.value = None
+                                            children_4.append(value_49)
 
 
                                             break
@@ -19939,7 +20248,9 @@ class Parser:
                                     if offset_3 == -1:
                                         break
 
+                                    #print('safe exit rep rule', offset_2, offset_3)
                                     break
+                                #print('exit rep rule', offset_2, offset_3)
                                 if offset_3 == -1:
                                     break
                                 if offset_2 == offset_3: break
@@ -19954,8 +20265,11 @@ class Parser:
                                 break
                             if offset_2 == -1:
                                 break
+                            value_33 = count_1
 
+                            #print('safe exit rep rule', offset_1, offset_2)
                             break
+                        #print('exit rep rule', offset_1, offset_2)
                         if offset_2 == -1:
                             break
                         if offset_1 == offset_2: break
@@ -19969,6 +20283,7 @@ class Parser:
                         count_0 += 1
                     if offset_1 == -1:
                         break
+                    value_27 = count_0
 
                     while True: # start choice
                         offset_2 = offset_1
@@ -19979,7 +20294,7 @@ class Parser:
                         children_2 = [] if children_1 is not None else None
                         while True: # case
                             children_3 = []
-                            value_34 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
+                            value_50 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
                             while True: # start capture
                                 count_0 = 0
                                 while offset_2 < buf_eof:
@@ -20012,11 +20327,11 @@ class Parser:
                                 break
                             if offset_2 == -1:
                                 break
-                            value_34.name = 'raw'
-                            value_34.end = offset_2
-                            value_34.end_column = column_2
-                            value_34.value = None
-                            children_2.append(value_34)
+                            value_50.name = 'raw'
+                            value_50.end = offset_2
+                            value_50.end_column = column_2
+                            value_50.value = None
+                            children_2.append(value_50)
 
 
                             break
@@ -20046,7 +20361,7 @@ class Parser:
                                 children_3 = [] if children_2 is not None else None
                                 while True: # case
                                     children_4 = []
-                                    value_35 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
+                                    value_51 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
                                     while True: # start capture
                                         count_0 = 0
                                         while offset_3 < buf_eof:
@@ -20070,11 +20385,11 @@ class Parser:
                                         break
                                     if offset_3 == -1:
                                         break
-                                    value_35.name = 'raw'
-                                    value_35.end = offset_3
-                                    value_35.end_column = column_3
-                                    value_35.value = None
-                                    children_3.append(value_35)
+                                    value_51.name = 'raw'
+                                    value_51.end = offset_3
+                                    value_51.end_column = column_3
+                                    value_51.value = None
+                                    children_3.append(value_51)
 
 
                                     break
@@ -20104,8 +20419,9 @@ class Parser:
                                         partial_tab_width_4 = partial_tab_width_3
                                         children_4 = [] if children_3 is not None else None
                                         while True:
+                                            #print('entry rep rule', offset_3, offset_4)
                                             children_5 = []
-                                            value_36 = Node(None, offset_4, offset_4, column_4, column_4, children_5, None)
+                                            value_53 = Node(None, offset_4, offset_4, column_4, column_4, children_5, None)
                                             while True: # start capture
                                                 count_1 = 0
                                                 while offset_4 < buf_eof:
@@ -20142,11 +20458,11 @@ class Parser:
                                                 break
                                             if offset_4 == -1:
                                                 break
-                                            value_36.name = 'raw'
-                                            value_36.end = offset_4
-                                            value_36.end_column = column_4
-                                            value_36.value = None
-                                            children_4.append(value_36)
+                                            value_53.name = 'raw'
+                                            value_53.end = offset_4
+                                            value_53.end_column = column_4
+                                            value_53.value = None
+                                            children_4.append(value_53)
 
                                             if column_4 != 0:
                                                 offset_4 = -1
@@ -20177,7 +20493,7 @@ class Parser:
                                                 break
 
                                             children_5 = []
-                                            value_37 = Node(None, offset_4, offset_4, column_4, column_4, children_5, None)
+                                            value_54 = Node(None, offset_4, offset_4, column_4, column_4, children_5, None)
                                             while True: # start capture
                                                 count_1 = 0
                                                 while offset_4 < buf_eof:
@@ -20201,13 +20517,15 @@ class Parser:
                                                 break
                                             if offset_4 == -1:
                                                 break
-                                            value_37.name = 'raw'
-                                            value_37.end = offset_4
-                                            value_37.end_column = column_4
-                                            value_37.value = None
-                                            children_4.append(value_37)
+                                            value_54.name = 'raw'
+                                            value_54.end = offset_4
+                                            value_54.end_column = column_4
+                                            value_54.value = None
+                                            children_4.append(value_54)
 
+                                            #print('safe exit rep rule', offset_3, offset_4)
                                             break
+                                        #print('exit rep rule', offset_3, offset_4)
                                         if offset_4 == -1:
                                             break
                                         if offset_3 == offset_4: break
@@ -20221,6 +20539,7 @@ class Parser:
                                         count_0 += 1
                                     if offset_3 == -1:
                                         break
+                                    value_52 = count_0
 
 
                                     break
@@ -20240,7 +20559,7 @@ class Parser:
                                 break
 
                             children_3 = []
-                            value_38 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
+                            value_55 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
                             while True: # start capture
                                 if buf[offset_2:offset_2+2] == '/>':
                                     offset_2 += 2
@@ -20252,11 +20571,11 @@ class Parser:
                                 break
                             if offset_2 == -1:
                                 break
-                            value_38.name = 'raw'
-                            value_38.end = offset_2
-                            value_38.end_column = column_2
-                            value_38.value = None
-                            children_2.append(value_38)
+                            value_55.name = 'raw'
+                            value_55.end = offset_2
+                            value_55.end_column = column_2
+                            value_55.value = None
+                            children_2.append(value_55)
 
 
                             break
@@ -20295,7 +20614,7 @@ class Parser:
                 children_1 = [] if children_0 is not None else None
                 while True: # case
                     children_2 = []
-                    value_39 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
+                    value_56 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
                         if buf[offset_1:offset_1+2] == '</':
                             offset_1 += 2
@@ -20351,11 +20670,11 @@ class Parser:
                         break
                     if offset_1 == -1:
                         break
-                    value_39.name = 'raw'
-                    value_39.end = offset_1
-                    value_39.end_column = column_1
-                    value_39.value = None
-                    children_1.append(value_39)
+                    value_56.name = 'raw'
+                    value_56.end = offset_1
+                    value_56.end_column = column_1
+                    value_56.value = None
+                    children_1.append(value_56)
 
 
                     break
@@ -20544,6 +20863,7 @@ class Parser:
                         partial_tab_width_1 = partial_tab_width_0
                         children_3 = [] if children_2 is not None else None
                         while True:
+                            #print('entry rep rule', offset_0, offset_1)
                             while True: # start reject
                                 children_4 = []
                                 offset_2 = offset_1 + 0
@@ -20574,7 +20894,9 @@ class Parser:
                                 offset_1 = -1
                                 break
 
+                            #print('safe exit rep rule', offset_0, offset_1)
                             break
+                        #print('exit rep rule', offset_0, offset_1)
                         if offset_1 == -1:
                             break
                         if offset_0 == offset_1: break
@@ -20588,6 +20910,7 @@ class Parser:
                         count_0 += 1
                     if offset_0 == -1:
                         break
+                    value_2 = count_0
 
                     break
                 if offset_0 == -1:
@@ -20607,8 +20930,9 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
+                        #print('entry rep rule', offset_0, offset_1)
                         children_3 = []
-                        value_2 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
+                        value_4 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
                             if offset_1 < buf_eof:
                                 codepoint = buf[offset_1]
@@ -20626,11 +20950,11 @@ class Parser:
                             break
                         if offset_1 == -1:
                             break
-                        value_2.name = 'raw'
-                        value_2.end = offset_1
-                        value_2.end_column = column_1
-                        value_2.value = None
-                        children_2.append(value_2)
+                        value_4.name = 'raw'
+                        value_4.end = offset_1
+                        value_4.end_column = column_1
+                        value_4.value = None
+                        children_2.append(value_4)
 
                         if column_1 != 0:
                             offset_1 = -1
@@ -20687,7 +21011,7 @@ class Parser:
                             break
 
                         children_3 = []
-                        value_3 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
+                        value_5 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
                             count_1 = 0
                             while True:
@@ -20698,6 +21022,7 @@ class Parser:
                                 partial_tab_width_2 = partial_tab_width_1
                                 children_4 = [] if children_3 is not None else None
                                 while True:
+                                    #print('entry rep rule', offset_1, offset_2)
                                     while True: # start reject
                                         children_5 = []
                                         offset_3 = offset_2 + 0
@@ -20728,7 +21053,9 @@ class Parser:
                                         offset_2 = -1
                                         break
 
+                                    #print('safe exit rep rule', offset_1, offset_2)
                                     break
+                                #print('exit rep rule', offset_1, offset_2)
                                 if offset_2 == -1:
                                     break
                                 if offset_1 == offset_2: break
@@ -20742,17 +21069,20 @@ class Parser:
                                 count_1 += 1
                             if offset_1 == -1:
                                 break
+                            value_6 = count_1
 
                             break
                         if offset_1 == -1:
                             break
-                        value_3.name = 'raw'
-                        value_3.end = offset_1
-                        value_3.end_column = column_1
-                        value_3.value = None
-                        children_2.append(value_3)
+                        value_5.name = 'raw'
+                        value_5.end = offset_1
+                        value_5.end_column = column_1
+                        value_5.value = None
+                        children_2.append(value_5)
 
+                        #print('safe exit rep rule', offset_0, offset_1)
                         break
+                    #print('exit rep rule', offset_0, offset_1)
                     if offset_1 == -1:
                         break
                     if offset_0 == offset_1: break
@@ -20766,6 +21096,7 @@ class Parser:
                     count_0 += 1
                 if offset_0 == -1:
                     break
+                value_3 = count_0
 
                 while True: # start choice
                     offset_1 = offset_0
@@ -20776,7 +21107,7 @@ class Parser:
                     children_2 = [] if children_1 is not None else None
                     while True: # case
                         children_3 = []
-                        value_4 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
+                        value_7 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
                             _match = regex_regex_68.match(buf, offset_1)
                             if _match:
@@ -20799,11 +21130,11 @@ class Parser:
                             break
                         if offset_1 == -1:
                             break
-                        value_4.name = 'raw'
-                        value_4.end = offset_1
-                        value_4.end_column = column_1
-                        value_4.value = None
-                        children_2.append(value_4)
+                        value_7.name = 'raw'
+                        value_7.end = offset_1
+                        value_7.end_column = column_1
+                        value_7.value = None
+                        children_2.append(value_7)
 
                         if offset_1 < buf_eof:
                             codepoint = buf[offset_1]
@@ -20838,7 +21169,7 @@ class Parser:
                     children_2 = [] if children_1 is not None else None
                     while True: # case
                         children_3 = []
-                        value_5 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
+                        value_8 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
                             count_0 = 0
                             while True:
@@ -20849,6 +21180,7 @@ class Parser:
                                 partial_tab_width_2 = partial_tab_width_1
                                 children_4 = [] if children_3 is not None else None
                                 while True:
+                                    #print('entry rep rule', offset_1, offset_2)
                                     while True: # start reject
                                         children_5 = []
                                         offset_3 = offset_2 + 0
@@ -20879,7 +21211,9 @@ class Parser:
                                         offset_2 = -1
                                         break
 
+                                    #print('safe exit rep rule', offset_1, offset_2)
                                     break
+                                #print('exit rep rule', offset_1, offset_2)
                                 if offset_2 == -1:
                                     break
                                 if offset_1 == offset_2: break
@@ -20893,15 +21227,16 @@ class Parser:
                                 count_0 += 1
                             if offset_1 == -1:
                                 break
+                            value_9 = count_0
 
                             break
                         if offset_1 == -1:
                             break
-                        value_5.name = 'raw'
-                        value_5.end = offset_1
-                        value_5.end_column = column_1
-                        value_5.value = None
-                        children_2.append(value_5)
+                        value_8.name = 'raw'
+                        value_8.end = offset_1
+                        value_8.end_column = column_1
+                        value_8.value = None
+                        children_2.append(value_8)
 
                         if offset_1 < buf_eof:
                             codepoint = buf[offset_1]
@@ -20992,6 +21327,7 @@ class Parser:
                         partial_tab_width_1 = partial_tab_width_0
                         children_3 = [] if children_2 is not None else None
                         while True:
+                            #print('entry rep rule', offset_0, offset_1)
                             while True: # start reject
                                 children_4 = []
                                 offset_2 = offset_1 + 0
@@ -21020,7 +21356,9 @@ class Parser:
                                 offset_1 = -1
                                 break
 
+                            #print('safe exit rep rule', offset_0, offset_1)
                             break
+                        #print('exit rep rule', offset_0, offset_1)
                         if offset_1 == -1:
                             break
                         if offset_0 == offset_1: break
@@ -21034,6 +21372,7 @@ class Parser:
                         count_0 += 1
                     if offset_0 == -1:
                         break
+                    value_2 = count_0
 
                     break
                 if offset_0 == -1:
@@ -21053,8 +21392,9 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
+                        #print('entry rep rule', offset_0, offset_1)
                         children_3 = []
-                        value_2 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
+                        value_4 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
                             if offset_1 < buf_eof:
                                 codepoint = buf[offset_1]
@@ -21072,11 +21412,11 @@ class Parser:
                             break
                         if offset_1 == -1:
                             break
-                        value_2.name = 'raw'
-                        value_2.end = offset_1
-                        value_2.end_column = column_1
-                        value_2.value = None
-                        children_2.append(value_2)
+                        value_4.name = 'raw'
+                        value_4.end = offset_1
+                        value_4.end_column = column_1
+                        value_4.value = None
+                        children_2.append(value_4)
 
                         if column_1 != 0:
                             offset_1 = -1
@@ -21133,7 +21473,7 @@ class Parser:
                             break
 
                         children_3 = []
-                        value_3 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
+                        value_5 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
                             count_1 = 0
                             while True:
@@ -21144,6 +21484,7 @@ class Parser:
                                 partial_tab_width_2 = partial_tab_width_1
                                 children_4 = [] if children_3 is not None else None
                                 while True:
+                                    #print('entry rep rule', offset_1, offset_2)
                                     while True: # start reject
                                         children_5 = []
                                         offset_3 = offset_2 + 0
@@ -21172,7 +21513,9 @@ class Parser:
                                         offset_2 = -1
                                         break
 
+                                    #print('safe exit rep rule', offset_1, offset_2)
                                     break
+                                #print('exit rep rule', offset_1, offset_2)
                                 if offset_2 == -1:
                                     break
                                 if offset_1 == offset_2: break
@@ -21186,17 +21529,20 @@ class Parser:
                                 count_1 += 1
                             if offset_1 == -1:
                                 break
+                            value_6 = count_1
 
                             break
                         if offset_1 == -1:
                             break
-                        value_3.name = 'raw'
-                        value_3.end = offset_1
-                        value_3.end_column = column_1
-                        value_3.value = None
-                        children_2.append(value_3)
+                        value_5.name = 'raw'
+                        value_5.end = offset_1
+                        value_5.end_column = column_1
+                        value_5.value = None
+                        children_2.append(value_5)
 
+                        #print('safe exit rep rule', offset_0, offset_1)
                         break
+                    #print('exit rep rule', offset_0, offset_1)
                     if offset_1 == -1:
                         break
                     if offset_0 == offset_1: break
@@ -21210,6 +21556,7 @@ class Parser:
                     count_0 += 1
                 if offset_0 == -1:
                     break
+                value_3 = count_0
 
                 while True: # start choice
                     offset_1 = offset_0
@@ -21220,7 +21567,7 @@ class Parser:
                     children_2 = [] if children_1 is not None else None
                     while True: # case
                         children_3 = []
-                        value_4 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
+                        value_7 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
                             if buf[offset_1:offset_1+3] == '-->':
                                 offset_1 += 3
@@ -21241,11 +21588,11 @@ class Parser:
                             break
                         if offset_1 == -1:
                             break
-                        value_4.name = 'raw'
-                        value_4.end = offset_1
-                        value_4.end_column = column_1
-                        value_4.value = None
-                        children_2.append(value_4)
+                        value_7.name = 'raw'
+                        value_7.end = offset_1
+                        value_7.end_column = column_1
+                        value_7.value = None
+                        children_2.append(value_7)
 
                         if offset_1 < buf_eof:
                             codepoint = buf[offset_1]
@@ -21280,7 +21627,7 @@ class Parser:
                     children_2 = [] if children_1 is not None else None
                     while True: # case
                         children_3 = []
-                        value_5 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
+                        value_8 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
                             count_0 = 0
                             while True:
@@ -21291,6 +21638,7 @@ class Parser:
                                 partial_tab_width_2 = partial_tab_width_1
                                 children_4 = [] if children_3 is not None else None
                                 while True:
+                                    #print('entry rep rule', offset_1, offset_2)
                                     while True: # start reject
                                         children_5 = []
                                         offset_3 = offset_2 + 0
@@ -21319,7 +21667,9 @@ class Parser:
                                         offset_2 = -1
                                         break
 
+                                    #print('safe exit rep rule', offset_1, offset_2)
                                     break
+                                #print('exit rep rule', offset_1, offset_2)
                                 if offset_2 == -1:
                                     break
                                 if offset_1 == offset_2: break
@@ -21333,15 +21683,16 @@ class Parser:
                                 count_0 += 1
                             if offset_1 == -1:
                                 break
+                            value_9 = count_0
 
                             break
                         if offset_1 == -1:
                             break
-                        value_5.name = 'raw'
-                        value_5.end = offset_1
-                        value_5.end_column = column_1
-                        value_5.value = None
-                        children_2.append(value_5)
+                        value_8.name = 'raw'
+                        value_8.end = offset_1
+                        value_8.end_column = column_1
+                        value_8.value = None
+                        children_2.append(value_8)
 
                         if offset_1 < buf_eof:
                             codepoint = buf[offset_1]
@@ -21432,6 +21783,7 @@ class Parser:
                         partial_tab_width_1 = partial_tab_width_0
                         children_3 = [] if children_2 is not None else None
                         while True:
+                            #print('entry rep rule', offset_0, offset_1)
                             while True: # start reject
                                 children_4 = []
                                 offset_2 = offset_1 + 0
@@ -21460,7 +21812,9 @@ class Parser:
                                 offset_1 = -1
                                 break
 
+                            #print('safe exit rep rule', offset_0, offset_1)
                             break
+                        #print('exit rep rule', offset_0, offset_1)
                         if offset_1 == -1:
                             break
                         if offset_0 == offset_1: break
@@ -21474,6 +21828,7 @@ class Parser:
                         count_0 += 1
                     if offset_0 == -1:
                         break
+                    value_2 = count_0
 
                     break
                 if offset_0 == -1:
@@ -21493,8 +21848,9 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
+                        #print('entry rep rule', offset_0, offset_1)
                         children_3 = []
-                        value_2 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
+                        value_4 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
                             if offset_1 < buf_eof:
                                 codepoint = buf[offset_1]
@@ -21512,11 +21868,11 @@ class Parser:
                             break
                         if offset_1 == -1:
                             break
-                        value_2.name = 'raw'
-                        value_2.end = offset_1
-                        value_2.end_column = column_1
-                        value_2.value = None
-                        children_2.append(value_2)
+                        value_4.name = 'raw'
+                        value_4.end = offset_1
+                        value_4.end_column = column_1
+                        value_4.value = None
+                        children_2.append(value_4)
 
                         if column_1 != 0:
                             offset_1 = -1
@@ -21573,7 +21929,7 @@ class Parser:
                             break
 
                         children_3 = []
-                        value_3 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
+                        value_5 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
                             count_1 = 0
                             while True:
@@ -21584,6 +21940,7 @@ class Parser:
                                 partial_tab_width_2 = partial_tab_width_1
                                 children_4 = [] if children_3 is not None else None
                                 while True:
+                                    #print('entry rep rule', offset_1, offset_2)
                                     while True: # start reject
                                         children_5 = []
                                         offset_3 = offset_2 + 0
@@ -21612,7 +21969,9 @@ class Parser:
                                         offset_2 = -1
                                         break
 
+                                    #print('safe exit rep rule', offset_1, offset_2)
                                     break
+                                #print('exit rep rule', offset_1, offset_2)
                                 if offset_2 == -1:
                                     break
                                 if offset_1 == offset_2: break
@@ -21626,17 +21985,20 @@ class Parser:
                                 count_1 += 1
                             if offset_1 == -1:
                                 break
+                            value_6 = count_1
 
                             break
                         if offset_1 == -1:
                             break
-                        value_3.name = 'raw'
-                        value_3.end = offset_1
-                        value_3.end_column = column_1
-                        value_3.value = None
-                        children_2.append(value_3)
+                        value_5.name = 'raw'
+                        value_5.end = offset_1
+                        value_5.end_column = column_1
+                        value_5.value = None
+                        children_2.append(value_5)
 
+                        #print('safe exit rep rule', offset_0, offset_1)
                         break
+                    #print('exit rep rule', offset_0, offset_1)
                     if offset_1 == -1:
                         break
                     if offset_0 == offset_1: break
@@ -21650,6 +22012,7 @@ class Parser:
                     count_0 += 1
                 if offset_0 == -1:
                     break
+                value_3 = count_0
 
                 while True: # start choice
                     offset_1 = offset_0
@@ -21660,7 +22023,7 @@ class Parser:
                     children_2 = [] if children_1 is not None else None
                     while True: # case
                         children_3 = []
-                        value_4 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
+                        value_7 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
                             if buf[offset_1:offset_1+2] == '?>':
                                 offset_1 += 2
@@ -21681,11 +22044,11 @@ class Parser:
                             break
                         if offset_1 == -1:
                             break
-                        value_4.name = 'raw'
-                        value_4.end = offset_1
-                        value_4.end_column = column_1
-                        value_4.value = None
-                        children_2.append(value_4)
+                        value_7.name = 'raw'
+                        value_7.end = offset_1
+                        value_7.end_column = column_1
+                        value_7.value = None
+                        children_2.append(value_7)
 
                         if offset_1 < buf_eof:
                             codepoint = buf[offset_1]
@@ -21720,7 +22083,7 @@ class Parser:
                     children_2 = [] if children_1 is not None else None
                     while True: # case
                         children_3 = []
-                        value_5 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
+                        value_8 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
                             count_0 = 0
                             while True:
@@ -21731,6 +22094,7 @@ class Parser:
                                 partial_tab_width_2 = partial_tab_width_1
                                 children_4 = [] if children_3 is not None else None
                                 while True:
+                                    #print('entry rep rule', offset_1, offset_2)
                                     while True: # start reject
                                         children_5 = []
                                         offset_3 = offset_2 + 0
@@ -21759,7 +22123,9 @@ class Parser:
                                         offset_2 = -1
                                         break
 
+                                    #print('safe exit rep rule', offset_1, offset_2)
                                     break
+                                #print('exit rep rule', offset_1, offset_2)
                                 if offset_2 == -1:
                                     break
                                 if offset_1 == offset_2: break
@@ -21773,15 +22139,16 @@ class Parser:
                                 count_0 += 1
                             if offset_1 == -1:
                                 break
+                            value_9 = count_0
 
                             break
                         if offset_1 == -1:
                             break
-                        value_5.name = 'raw'
-                        value_5.end = offset_1
-                        value_5.end_column = column_1
-                        value_5.value = None
-                        children_2.append(value_5)
+                        value_8.name = 'raw'
+                        value_8.end = offset_1
+                        value_8.end_column = column_1
+                        value_8.value = None
+                        children_2.append(value_8)
 
                         if offset_1 < buf_eof:
                             codepoint = buf[offset_1]
@@ -21881,6 +22248,7 @@ class Parser:
                         partial_tab_width_1 = partial_tab_width_0
                         children_3 = [] if children_2 is not None else None
                         while True:
+                            #print('entry rep rule', offset_0, offset_1)
                             while True: # start reject
                                 children_4 = []
                                 offset_2 = offset_1 + 0
@@ -21909,7 +22277,9 @@ class Parser:
                                 offset_1 = -1
                                 break
 
+                            #print('safe exit rep rule', offset_0, offset_1)
                             break
+                        #print('exit rep rule', offset_0, offset_1)
                         if offset_1 == -1:
                             break
                         if offset_0 == offset_1: break
@@ -21923,6 +22293,7 @@ class Parser:
                         count_0 += 1
                     if offset_0 == -1:
                         break
+                    value_2 = count_0
 
                     break
                 if offset_0 == -1:
@@ -21942,8 +22313,9 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
+                        #print('entry rep rule', offset_0, offset_1)
                         children_3 = []
-                        value_2 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
+                        value_4 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
                             if offset_1 < buf_eof:
                                 codepoint = buf[offset_1]
@@ -21961,11 +22333,11 @@ class Parser:
                             break
                         if offset_1 == -1:
                             break
-                        value_2.name = 'raw'
-                        value_2.end = offset_1
-                        value_2.end_column = column_1
-                        value_2.value = None
-                        children_2.append(value_2)
+                        value_4.name = 'raw'
+                        value_4.end = offset_1
+                        value_4.end_column = column_1
+                        value_4.value = None
+                        children_2.append(value_4)
 
                         if column_1 != 0:
                             offset_1 = -1
@@ -22022,7 +22394,7 @@ class Parser:
                             break
 
                         children_3 = []
-                        value_3 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
+                        value_5 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
                             count_1 = 0
                             while True:
@@ -22033,6 +22405,7 @@ class Parser:
                                 partial_tab_width_2 = partial_tab_width_1
                                 children_4 = [] if children_3 is not None else None
                                 while True:
+                                    #print('entry rep rule', offset_1, offset_2)
                                     while True: # start reject
                                         children_5 = []
                                         offset_3 = offset_2 + 0
@@ -22061,7 +22434,9 @@ class Parser:
                                         offset_2 = -1
                                         break
 
+                                    #print('safe exit rep rule', offset_1, offset_2)
                                     break
+                                #print('exit rep rule', offset_1, offset_2)
                                 if offset_2 == -1:
                                     break
                                 if offset_1 == offset_2: break
@@ -22075,17 +22450,20 @@ class Parser:
                                 count_1 += 1
                             if offset_1 == -1:
                                 break
+                            value_6 = count_1
 
                             break
                         if offset_1 == -1:
                             break
-                        value_3.name = 'raw'
-                        value_3.end = offset_1
-                        value_3.end_column = column_1
-                        value_3.value = None
-                        children_2.append(value_3)
+                        value_5.name = 'raw'
+                        value_5.end = offset_1
+                        value_5.end_column = column_1
+                        value_5.value = None
+                        children_2.append(value_5)
 
+                        #print('safe exit rep rule', offset_0, offset_1)
                         break
+                    #print('exit rep rule', offset_0, offset_1)
                     if offset_1 == -1:
                         break
                     if offset_0 == offset_1: break
@@ -22099,6 +22477,7 @@ class Parser:
                     count_0 += 1
                 if offset_0 == -1:
                     break
+                value_3 = count_0
 
                 while True: # start choice
                     offset_1 = offset_0
@@ -22109,7 +22488,7 @@ class Parser:
                     children_2 = [] if children_1 is not None else None
                     while True: # case
                         children_3 = []
-                        value_4 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
+                        value_7 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
                             if buf[offset_1:offset_1+1] == '>':
                                 offset_1 += 1
@@ -22130,11 +22509,11 @@ class Parser:
                             break
                         if offset_1 == -1:
                             break
-                        value_4.name = 'raw'
-                        value_4.end = offset_1
-                        value_4.end_column = column_1
-                        value_4.value = None
-                        children_2.append(value_4)
+                        value_7.name = 'raw'
+                        value_7.end = offset_1
+                        value_7.end_column = column_1
+                        value_7.value = None
+                        children_2.append(value_7)
 
                         if offset_1 < buf_eof:
                             codepoint = buf[offset_1]
@@ -22169,7 +22548,7 @@ class Parser:
                     children_2 = [] if children_1 is not None else None
                     while True: # case
                         children_3 = []
-                        value_5 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
+                        value_8 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
                             count_0 = 0
                             while True:
@@ -22180,6 +22559,7 @@ class Parser:
                                 partial_tab_width_2 = partial_tab_width_1
                                 children_4 = [] if children_3 is not None else None
                                 while True:
+                                    #print('entry rep rule', offset_1, offset_2)
                                     while True: # start reject
                                         children_5 = []
                                         offset_3 = offset_2 + 0
@@ -22208,7 +22588,9 @@ class Parser:
                                         offset_2 = -1
                                         break
 
+                                    #print('safe exit rep rule', offset_1, offset_2)
                                     break
+                                #print('exit rep rule', offset_1, offset_2)
                                 if offset_2 == -1:
                                     break
                                 if offset_1 == offset_2: break
@@ -22222,15 +22604,16 @@ class Parser:
                                 count_0 += 1
                             if offset_1 == -1:
                                 break
+                            value_9 = count_0
 
                             break
                         if offset_1 == -1:
                             break
-                        value_5.name = 'raw'
-                        value_5.end = offset_1
-                        value_5.end_column = column_1
-                        value_5.value = None
-                        children_2.append(value_5)
+                        value_8.name = 'raw'
+                        value_8.end = offset_1
+                        value_8.end_column = column_1
+                        value_8.value = None
+                        children_2.append(value_8)
 
                         if offset_1 < buf_eof:
                             codepoint = buf[offset_1]
@@ -22321,6 +22704,7 @@ class Parser:
                         partial_tab_width_1 = partial_tab_width_0
                         children_3 = [] if children_2 is not None else None
                         while True:
+                            #print('entry rep rule', offset_0, offset_1)
                             while True: # start reject
                                 children_4 = []
                                 offset_2 = offset_1 + 0
@@ -22349,7 +22733,9 @@ class Parser:
                                 offset_1 = -1
                                 break
 
+                            #print('safe exit rep rule', offset_0, offset_1)
                             break
+                        #print('exit rep rule', offset_0, offset_1)
                         if offset_1 == -1:
                             break
                         if offset_0 == offset_1: break
@@ -22363,6 +22749,7 @@ class Parser:
                         count_0 += 1
                     if offset_0 == -1:
                         break
+                    value_2 = count_0
 
                     break
                 if offset_0 == -1:
@@ -22382,8 +22769,9 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
+                        #print('entry rep rule', offset_0, offset_1)
                         children_3 = []
-                        value_2 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
+                        value_4 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
                             if offset_1 < buf_eof:
                                 codepoint = buf[offset_1]
@@ -22401,11 +22789,11 @@ class Parser:
                             break
                         if offset_1 == -1:
                             break
-                        value_2.name = 'raw'
-                        value_2.end = offset_1
-                        value_2.end_column = column_1
-                        value_2.value = None
-                        children_2.append(value_2)
+                        value_4.name = 'raw'
+                        value_4.end = offset_1
+                        value_4.end_column = column_1
+                        value_4.value = None
+                        children_2.append(value_4)
 
                         if column_1 != 0:
                             offset_1 = -1
@@ -22462,7 +22850,7 @@ class Parser:
                             break
 
                         children_3 = []
-                        value_3 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
+                        value_5 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
                             count_1 = 0
                             while True:
@@ -22473,6 +22861,7 @@ class Parser:
                                 partial_tab_width_2 = partial_tab_width_1
                                 children_4 = [] if children_3 is not None else None
                                 while True:
+                                    #print('entry rep rule', offset_1, offset_2)
                                     while True: # start reject
                                         children_5 = []
                                         offset_3 = offset_2 + 0
@@ -22501,7 +22890,9 @@ class Parser:
                                         offset_2 = -1
                                         break
 
+                                    #print('safe exit rep rule', offset_1, offset_2)
                                     break
+                                #print('exit rep rule', offset_1, offset_2)
                                 if offset_2 == -1:
                                     break
                                 if offset_1 == offset_2: break
@@ -22515,17 +22906,20 @@ class Parser:
                                 count_1 += 1
                             if offset_1 == -1:
                                 break
+                            value_6 = count_1
 
                             break
                         if offset_1 == -1:
                             break
-                        value_3.name = 'raw'
-                        value_3.end = offset_1
-                        value_3.end_column = column_1
-                        value_3.value = None
-                        children_2.append(value_3)
+                        value_5.name = 'raw'
+                        value_5.end = offset_1
+                        value_5.end_column = column_1
+                        value_5.value = None
+                        children_2.append(value_5)
 
+                        #print('safe exit rep rule', offset_0, offset_1)
                         break
+                    #print('exit rep rule', offset_0, offset_1)
                     if offset_1 == -1:
                         break
                     if offset_0 == offset_1: break
@@ -22539,6 +22933,7 @@ class Parser:
                     count_0 += 1
                 if offset_0 == -1:
                     break
+                value_3 = count_0
 
                 while True: # start choice
                     offset_1 = offset_0
@@ -22549,7 +22944,7 @@ class Parser:
                     children_2 = [] if children_1 is not None else None
                     while True: # case
                         children_3 = []
-                        value_4 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
+                        value_7 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
                             if buf[offset_1:offset_1+3] == ']]>':
                                 offset_1 += 3
@@ -22570,11 +22965,11 @@ class Parser:
                             break
                         if offset_1 == -1:
                             break
-                        value_4.name = 'raw'
-                        value_4.end = offset_1
-                        value_4.end_column = column_1
-                        value_4.value = None
-                        children_2.append(value_4)
+                        value_7.name = 'raw'
+                        value_7.end = offset_1
+                        value_7.end_column = column_1
+                        value_7.value = None
+                        children_2.append(value_7)
 
                         if offset_1 < buf_eof:
                             codepoint = buf[offset_1]
@@ -22609,7 +23004,7 @@ class Parser:
                     children_2 = [] if children_1 is not None else None
                     while True: # case
                         children_3 = []
-                        value_5 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
+                        value_8 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
                             count_0 = 0
                             while True:
@@ -22620,6 +23015,7 @@ class Parser:
                                 partial_tab_width_2 = partial_tab_width_1
                                 children_4 = [] if children_3 is not None else None
                                 while True:
+                                    #print('entry rep rule', offset_1, offset_2)
                                     while True: # start reject
                                         children_5 = []
                                         offset_3 = offset_2 + 0
@@ -22648,7 +23044,9 @@ class Parser:
                                         offset_2 = -1
                                         break
 
+                                    #print('safe exit rep rule', offset_1, offset_2)
                                     break
+                                #print('exit rep rule', offset_1, offset_2)
                                 if offset_2 == -1:
                                     break
                                 if offset_1 == offset_2: break
@@ -22662,15 +23060,16 @@ class Parser:
                                 count_0 += 1
                             if offset_1 == -1:
                                 break
+                            value_9 = count_0
 
                             break
                         if offset_1 == -1:
                             break
-                        value_5.name = 'raw'
-                        value_5.end = offset_1
-                        value_5.end_column = column_1
-                        value_5.value = None
-                        children_2.append(value_5)
+                        value_8.name = 'raw'
+                        value_8.end = offset_1
+                        value_8.end_column = column_1
+                        value_8.value = None
+                        children_2.append(value_8)
 
                         if offset_1 < buf_eof:
                             codepoint = buf[offset_1]
@@ -22905,8 +23304,9 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
+                        #print('entry rep rule', offset_0, offset_1)
                         children_3 = []
-                        value_2 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
+                        value_3 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
                             if offset_1 < buf_eof:
                                 codepoint = buf[offset_1]
@@ -22924,11 +23324,11 @@ class Parser:
                             break
                         if offset_1 == -1:
                             break
-                        value_2.name = 'raw'
-                        value_2.end = offset_1
-                        value_2.end_column = column_1
-                        value_2.value = None
-                        children_2.append(value_2)
+                        value_3.name = 'raw'
+                        value_3.end = offset_1
+                        value_3.end_column = column_1
+                        value_3.value = None
+                        children_2.append(value_3)
 
                         if column_1 != 0:
                             offset_1 = -1
@@ -22991,7 +23391,7 @@ class Parser:
                             break
 
                         children_3 = []
-                        value_3 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
+                        value_4 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
                             _match = regex_regex_14.match(buf, offset_1)
                             if _match:
@@ -23005,13 +23405,15 @@ class Parser:
                             break
                         if offset_1 == -1:
                             break
-                        value_3.name = 'raw'
-                        value_3.end = offset_1
-                        value_3.end_column = column_1
-                        value_3.value = None
-                        children_2.append(value_3)
+                        value_4.name = 'raw'
+                        value_4.end = offset_1
+                        value_4.end_column = column_1
+                        value_4.value = None
+                        children_2.append(value_4)
 
+                        #print('safe exit rep rule', offset_0, offset_1)
                         break
+                    #print('exit rep rule', offset_0, offset_1)
                     if offset_1 == -1:
                         break
                     if offset_0 == offset_1: break
@@ -23025,6 +23427,7 @@ class Parser:
                     count_0 += 1
                 if offset_0 == -1:
                     break
+                value_2 = count_0
 
                 while True: # start choice
                     offset_1 = offset_0
@@ -23403,6 +23806,7 @@ class Parser:
                                 partial_tab_width_2 = partial_tab_width_1
                                 children_4 = [] if children_3 is not None else None
                                 while True:
+                                    #print('entry rep rule', offset_1, offset_2)
                                     count_1 = 0
                                     while offset_2 < buf_eof:
                                         codepoint = buf[offset_2]
@@ -23452,6 +23856,7 @@ class Parser:
                                         partial_tab_width_3 = partial_tab_width_2
                                         children_5 = [] if children_4 is not None else None
                                         while True:
+                                            #print('entry rep rule', offset_2, offset_3)
                                             count_2 = 0
                                             while offset_3 < buf_eof:
                                                 codepoint = buf[offset_3]
@@ -23506,7 +23911,9 @@ class Parser:
                                                 offset_3 = -1
                                                 break
 
+                                            #print('safe exit rep rule', offset_2, offset_3)
                                             break
+                                        #print('exit rep rule', offset_2, offset_3)
                                         if offset_3 == -1:
                                             break
                                         if offset_2 == offset_3: break
@@ -23521,8 +23928,11 @@ class Parser:
                                         break
                                     if offset_2 == -1:
                                         break
+                                    value_3 = count_1
 
+                                    #print('safe exit rep rule', offset_1, offset_2)
                                     break
+                                #print('exit rep rule', offset_1, offset_2)
                                 if offset_2 == -1:
                                     break
                                 if offset_1 == offset_2: break
@@ -23536,6 +23946,7 @@ class Parser:
                                 count_0 += 1
                             if offset_1 == -1:
                                 break
+                            value_2 = count_0
 
                             count_0 = 0
                             while offset_1 < buf_eof:
@@ -23619,8 +24030,9 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
+                        #print('entry rep rule', offset_0, offset_1)
                         children_3 = []
-                        value_2 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
+                        value_5 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
                             if offset_1 < buf_eof:
                                 codepoint = buf[offset_1]
@@ -23638,11 +24050,11 @@ class Parser:
                             break
                         if offset_1 == -1:
                             break
-                        value_2.name = 'raw'
-                        value_2.end = offset_1
-                        value_2.end_column = column_1
-                        value_2.value = None
-                        children_2.append(value_2)
+                        value_5.name = 'raw'
+                        value_5.end = offset_1
+                        value_5.end_column = column_1
+                        value_5.value = None
+                        children_2.append(value_5)
 
                         if column_1 != 0:
                             offset_1 = -1
@@ -23705,7 +24117,7 @@ class Parser:
                             break
 
                         children_3 = []
-                        value_3 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
+                        value_6 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
                             _match = regex_regex_14.match(buf, offset_1)
                             if _match:
@@ -23719,13 +24131,15 @@ class Parser:
                             break
                         if offset_1 == -1:
                             break
-                        value_3.name = 'raw'
-                        value_3.end = offset_1
-                        value_3.end_column = column_1
-                        value_3.value = None
-                        children_2.append(value_3)
+                        value_6.name = 'raw'
+                        value_6.end = offset_1
+                        value_6.end_column = column_1
+                        value_6.value = None
+                        children_2.append(value_6)
 
+                        #print('safe exit rep rule', offset_0, offset_1)
                         break
+                    #print('exit rep rule', offset_0, offset_1)
                     if offset_1 == -1:
                         break
                     if offset_0 == offset_1: break
@@ -23739,6 +24153,7 @@ class Parser:
                     count_0 += 1
                 if offset_0 == -1:
                     break
+                value_4 = count_0
 
                 while True: # start choice
                     offset_1 = offset_0
