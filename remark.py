@@ -11,6 +11,7 @@ from clgi.app import App, Router, command, Plaintext, Document
 
 from remarkable import dom
 from remarkable.parser import parse
+from remarkable.spec import run_tests
 from remarkable.render_ansi import to_ansi, RenderBox
 from remarkable.render_html import to_html
 
@@ -25,18 +26,22 @@ for module in new:
     if file and os.path.commonprefix([file, path]) == path:
         files.append(file)
 
-modified = []
-
-for file in files:
+def is_modified(file):
     dir, p = os.path.split(file)
     swapfile = os.path.join(dir, f".{p}.swp")
     if os.path.exists(swapfile):
         with open(swapfile,'rb') as fh:
             contents = fh.read()
-            if contents[:5] != b"b0VIM": continue
+            if contents[:5] != b"b0VIM": return
             fn = contents[108:1008].rsplit(b"\x00",1)[-1]
             if fn.endswith(b"U"):
-                modified.append(file)
+                return True
+
+modified = []
+
+for file in files:
+    if is_modified(file):
+        modified.append(file)
 
 for m in modified:
     print("modified!", os.path.relpath(m), file=sys.stderr)
@@ -107,11 +112,19 @@ def View(ctx, file, width, height, heading):
         doc = parse(text)
 
     fragments = []
-    dom.run_tests(doc, parse)
+    run_tests(doc)
 
-    tests = list(doc.select('TestCase'))
 
-    for t in tests:
+    if is_modified(filename):
+        fragments.append(dom.HorizontalRule((), ()))
+        fragments.append(dom.Paragraph((), ["unsaved", " ", "changes", " ", "in", " ", filename]))
+        fragments.append(dom.HorizontalRule((), ()))
+
+    for r in doc.select('TestReport'):
+        fragments.append(r)
+        fragments.append(dom.HorizontalRule((), ()))
+
+    for t in doc.select('TestCase'):
         fragments.append(t)
         if t.get_arg('state') == 'working':
             fragments.append(dom.Paragraph((), ["worked"]))
@@ -133,12 +146,14 @@ def View(ctx, file, width, height, heading):
     app = ctx['app']
     name = ctx['name']
     filename = os.path.relpath(file)
+    if is_modified(file):
+        print("modified!", file, file=sys.stderr)
     with open(filename) as fh:
         doc = parse(fh.read())
     settings = {}
     settings['double']=(heading!="single")
     if width: settings['width']=width
-    dom.run_tests(doc, parse)
+    run_tests(doc)
 
     return Document(doc, settings)
 app = App(
