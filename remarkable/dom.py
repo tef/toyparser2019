@@ -270,14 +270,14 @@ class Row(Inline):
     name = "TableRow"
 
     def walk(self, builder):
-        with builder.add_row() as b:
+        with builder.build_row() as b:
             b.walk_text(self.text)
 
 @elements.add()
 class TableHeader(Inline):
     name = "TableHeader"
     def walk(self, builder):
-        with builder.add_table_header() as b:
+        with builder.build_table_header() as b:
             b.walk_text(self.text)
 
 class TableRule(Inline):
@@ -288,7 +288,7 @@ class CellBlock(Block):
     name = "TableCellBlock"
 
     def walk(self, builder):
-        with builder.add_block_column() as c:
+        with builder.build_block_column() as c:
             c.walk_text(self.text)
 
 
@@ -297,7 +297,7 @@ class CellSpan(Inline):
     name = "TableCellSpan"
 
     def walk(self, builder):
-        with builder.add_column() as c:
+        with builder.build_column() as c:
             c.walk_text(self.text)
 
 

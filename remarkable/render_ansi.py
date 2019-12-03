@@ -478,7 +478,7 @@ class TableBuilder:
         if total_width  > self.settings['width']:
             headers_width = [max(max(line_len(l) for l in c) for c in r) for r in self.headings]
             max_width_rows = max(max(max(line_len(l) for l in c) for c in r) for r in self.rows)
-            max_width_header = max(headers_width)
+            max_width_header = max(headers_width) if headers_width else 0
             if max_width_header + max_width_rows + 7 < total_width:
                 new_rows = []
                 for r in self.rows:
@@ -491,10 +491,14 @@ class TableBuilder:
                 self.headings = []
                 max_widths = headers_width + [max_width_rows]
                 sideways = True
-                self.align = dict(enumerate((["left"] * headings) + ["right"], 0))
+                if headings:
+                    self.align = dict(enumerate((["left"] * headings) + ["right"], 0))
+                else:
+                    self.align = dict(enumerate(["left"], 0))
+
 
         lines = []
-        if sideways:
+        if sideways and headings:
             top_line = Box.sideways_top_line(max_widths, 2)
             mid_line = Box.sideways_mid_line(max_widths, 2)
             bot_line = Box.sideways_bot_line(max_widths, 2)
@@ -543,7 +547,7 @@ class TableBuilder:
             for l in range(max(len(c) for c in row)):
                 line = []
                 for x, col in enumerate(row):
-                    if sideways or r < len(self.headings):
+                    if (sideways or r < len(self.headings)) and headings >0:
                         line.append(Box.vertical_bold+" ")
                     else:
                         line.append(Box.vertical+" ")
@@ -576,10 +580,11 @@ class TableBuilder:
 
         return self.mapper, lines
 
-    def add_table_header(self,heading = True):
-        return self.add_row(heading=heading)
+    def build_table_header(self,heading = True):
+        return self.build_row(heading=heading)
+
     @contextmanager
-    def add_row(self,heading = False):
+    def build_row(self,heading = False):
         builder = RowBuilder(self.settings, self.box, self.cols)
         yield builder
         cols = builder.build()
@@ -609,7 +614,7 @@ class RowBuilder:
             self.walk(x)
 
     @contextmanager
-    def add_column(self):
+    def build_column(self):
         box = RenderBox(0, self.width-4, self.box.height)
         builder = ParaBuilder(self.settings, box)
         yield builder
@@ -617,7 +622,7 @@ class RowBuilder:
         self.columns.append(lines)
 
     @contextmanager
-    def add_block_column(self):
+    def build_block_column(self):
         box = RenderBox(0, self.width-2, self.box.height)
         builder = BlockBuilder(self.settings, box)
         yield builder
