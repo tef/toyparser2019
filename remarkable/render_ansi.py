@@ -812,6 +812,9 @@ class ParaBuilder:
             else:
                 self.current_word.append(line)
 
+    def add_named_entity(self, name):
+        pass
+
     def add_node(self, obj):
         self.add_wordbreak()
         self.add_text(dom.dump(obj))

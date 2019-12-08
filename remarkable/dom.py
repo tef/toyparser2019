@@ -399,6 +399,19 @@ class Nbsp(Inline):
     def walk(self, builder):
         builder.add_text(" ")
 
+@elements.add()
+class NamedEntity(Inline):
+    name = "NamedEntity"
+
+    def walk(self, builder):
+        builder.add_named_entity(self.text[0])
+
+@elements.add()
+class Codepoint(Inline):
+    name = "Codepoint"
+
+    def walk(self, builder):
+        builder.add_text(chr(self.get_arg('n')))
 
 @elements.add()
 class Emoji(Inline):
