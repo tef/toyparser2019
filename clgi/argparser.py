@@ -252,23 +252,32 @@ class ArgumentParser:
     def complete_kind(self, kind, value):
         out = []
         if kind in ('path', 'dir', 'file'):
-            def format(p):
+            if value == '.':
+                out.extend(["./", "../"])
+            if value == '..':
+                out.extend(["../"])
+            def format(p, dir=None):
+                if dir:
+                    p = os.path.join(dir, p) 
                 if os.path.isdir(p):
-                    return f"{os.path.relpath(p)}/"
+                    return f"{p}/"
                 else:
-                    return f"{os.path.relpath(p)} "
+                    return f"{p} "
             def filter(p, path):
                 if path: return p.startswith(path)
-                return not (p.startswith('.') or p.endswith(("~", ".swp")))
+                return not (p.endswith(("~", ".swp")))
             if value:
-                value = os.path.normpath(os.path.join(os.getcwd(), value))
-                if os.path.isdir(value):
-                    dir, path = value, ''
+                if value.endswith('/'):
+                    out.extend(format(p, value) for p in os.listdir(value) if filter(p, None))
                 else:
                     dir, path = os.path.split(value)
-                out.extend(format(os.path.join(dir,p)) for p in os.listdir(dir) if filter(p, path))
+                    if dir == '':
+                        out.extend(format(p) for p in os.listdir() if filter(p, None))
+                    else:
+                        out.extend(format(p, dir) for p in os.listdir(dir) if filter(p, path))
             else:
-                out.extend(format(os.path.join(os.getcwd(), p)) for p in os.listdir() if filter(p, None))
+                dir = os.getcwd()
+                out.extend(format(p) for p in os.listdir() if filter(p, None))
         elif kind in ('bool', 'boolean'):
             vals = ('true ','false ')
             if value:
