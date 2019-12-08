@@ -10,7 +10,7 @@ from clgi.errors import Bug, Error
 from clgi.app import App, Router, command, Plaintext, Document
 
 from remarkable import dom
-from remarkable.parser import parse
+from remarkable.parser import parse, parse_commonmark
 from remarkable.spec import run_tests
 from remarkable.render_ansi import to_ansi, RenderBox
 from remarkable.render_html import to_html
@@ -150,6 +150,22 @@ def View(ctx, file, width, height, heading):
         print("modified!", file, file=sys.stderr)
     with open(filename) as fh:
         doc = parse(fh.read())
+    settings = {}
+    settings['double']=(heading!="single")
+    if width: settings['width']=width
+    run_tests(doc)
+
+    return Document(doc, settings)
+@router.on("view:commonmark") 
+@command(args=dict(heading="--str?", width="--int?", height="--int?", file="path"))
+def View(ctx, file, width, height, heading):
+    app = ctx['app']
+    name = ctx['name']
+    filename = os.path.relpath(file)
+    if is_modified(file):
+        print("modified!", file, file=sys.stderr)
+    with open(filename) as fh:
+        doc = parse_commonmark(fh.read())
     settings = {}
     settings['double']=(heading!="single")
     if width: settings['width']=width

@@ -465,7 +465,7 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
     @rule()
     def code_block(self):
         self.whitespace(max=8)
-        with self.capture_node('code_block'):
+        with self.capture_node('remark_code_block'):
             fence = "`"
             with self.count(char=fence) as c, self.repeat(min=3):
                 self.literal(fence)
