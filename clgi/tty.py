@@ -128,7 +128,17 @@ class Console:
                 return Event("escape", None)
             if line == "\x1b":
                 return Event("escape", None)
+            if line == "[F":
+                return Event("end", None)
+            if line == "[H":
+                return Event("home", None)
 
+            if line == "[5":
+                line = self.get_buf(1)
+                return Event("pageup", None)
+            if line == "[6":
+                line = self.get_buf(1)
+                return Event("pagedown", None)
             if line == "[A" or line == "OA":
                 return Event("up", None)
             elif line == "[B" or line == "OB":
@@ -441,13 +451,23 @@ def pager(obj, *, use_tty=True):
                                     console.render(viewport)
                                 else:
                                     console.bell()
-                            elif e.name == "text" and e.value in ("\x00", "-", "\x7f","\b"):
+                            elif e.name=="pageup" or (e.name == "text" and e.value in ("\x00", "-", "\x7f","\b")):
                                 if viewport.up(console.height):
                                     console.render(viewport)
                                 else:
                                     console.bell()
-                            elif e.name == "text" and e.value == " ":
+                            elif e.name == "pagedown" or (e.name == "text" and e.value == " "):
                                 if viewport.down(console.height):
+                                    console.render(viewport)
+                                else:
+                                    console.bell()
+                            elif e.name == "home":
+                                if viewport.scroll_to(0):
+                                    console.render(viewport)
+                                else:
+                                    console.bell()
+                            elif e.name == "end":
+                                if viewport.scroll_to(len(viewport.buf)):
                                     console.render(viewport)
                                 else:
                                     console.bell()

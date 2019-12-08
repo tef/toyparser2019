@@ -272,7 +272,7 @@ class ArgumentParser:
                 else:
                     dir, path = os.path.split(value)
                     if dir == '':
-                        out.extend(format(p) for p in os.listdir() if filter(p, None))
+                        out.extend(format(p) for p in os.listdir() if filter(p, value))
                     else:
                         out.extend(format(p, dir) for p in os.listdir(dir) if filter(p, path))
             else:
