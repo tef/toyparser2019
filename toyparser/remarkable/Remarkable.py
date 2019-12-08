@@ -1,14 +1,14 @@
 from ..grammar import Grammar, compile_python, sibling
 
-class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r", "\n", "\r\n"], tabstop=8):
+class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newline=["\r", "\n", "\r\n"], tabstop=8):
     @rule(inline=True) # 2.1 line ends by newline or end_of_file
     def line_end(self):
         self.whitespace()
         self.end_of_line()
 
     # block
-    @rule(start="document")
-    def document(self):
+    @rule(start="remark_document")
+    def remark_document(self):
         with self.choice():
             with self.case():
                 self.end_of_file()
@@ -36,7 +36,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             self.indent()
             self.whitespace()
             self.newline()
-        with self.capture_node("empty_line"):
+        with self.capture_node("remark_empty_line"):
             pass
 
     # blocks
@@ -81,11 +81,11 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             with self.case():
                 self.whitespace()
                 self.literal("\\")
-                with self.capture_node("hardbreak"):
+                with self.capture_node("remark_hardbreak"):
                     self.newline()
             with self.case():
                 self.whitespace()
-                with self.capture_node("softbreak"):
+                with self.capture_node("remark_softbreak"):
                     self.newline()
 
         self.indent(partial=True)
@@ -98,7 +98,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
 
     @rule()
     def inner_para(self):
-        with self.capture_node("whitespace"):
+        with self.capture_node("remark_whitespace"):
             self.whitespace()
         self.inline_element()
 
@@ -107,12 +107,12 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 with self.case():
                     self.linebreak()
                 with self.case():
-                    with self.capture_node("whitespace"):
+                    with self.capture_node("remark_whitespace"):
                         self.whitespace()
 
             self.inline_element()
 
-        with self.capture_node("whitespace"):
+        with self.capture_node("remark_whitespace"):
             self.whitespace()
         with self.optional():
             self.literal("\\")
@@ -122,13 +122,13 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
 
     @rule()
     def para(self):
-        with self.capture_node("paragraph"):
+        with self.capture_node("remark_paragraph"):
             self.inner_para()
         self.end_of_line()
 
     @rule()
-    def identifier(self):
-        with self.capture_node('identifier', nested=False):
+    def rson_identifier(self):
+        with self.capture_node('rson_identifier', nested=False):
             self.range("a-z", "A-Z")
             with self.repeat():
                 self.range("0-9", "a-z","A-Z","_")
@@ -152,7 +152,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
     def directive_arg(self):
         with self.capture_node("arg"), self.choice():
             with self.case():
-                self.identifier()
+                self.rson_identifier()
                 with self.optional():
                     self.whitespace()
                     self.literal(":")
@@ -172,12 +172,12 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
         self.literal("\\begin::")
         with self.capture_node("block_directive"):
             with self.capture_node("directive_name"), self.backref() as name:
-                self.identifier()
+                self.rson_identifier()
             with self.variable("") as fence:
                 with self.optional():
                     self.whitespace()
                     with self.backref() as b:
-                        self.identifier()
+                        self.rson_identifier()
                     self.set_variable(fence, b)
                 self.whitespace()
                 with self.capture_node("directive_args"), self.optional():
@@ -220,7 +220,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             self.literal("begin", "end")
         with self.capture_node("block_directive"):
             with self.capture_node("directive_name"), self.backref() as name:
-                self.identifier()
+                self.rson_identifier()
             with self.capture_node("directive_args"), self.optional():
                 self.literal("[")
                 self.directive_args()
@@ -317,7 +317,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             self.literal("begin", "end")
         with self.capture_node("inline_directive"):
             with self.capture_node("directive_name"):
-                self.identifier()
+                self.rson_identifier()
             with self.capture_node("directive_args"), self.optional():
                 self.literal("[")
                 self.directive_args()
@@ -355,7 +355,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                                     with self.case():
                                         self.linebreak()
                                     with self.case():
-                                        with self.capture_node("whitespace"):
+                                        with self.capture_node("remark_whitespace"):
                                             self.whitespace()
 
                                 with self.reject():
@@ -366,7 +366,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                             with self.case():
                                 self.linebreak()
                             with self.case():
-                                with self.capture_node("whitespace"):
+                                with self.capture_node("remark_whitespace"):
                                     self.whitespace()
 
                     with self.repeat(min=n, max=n):
@@ -377,7 +377,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
     @rule() 
     def horizontal_rule(self):
         self.whitespace(max=8)
-        with self.capture_node('horizontal_rule'):
+        with self.capture_node('remark_horizontal_rule'):
             with self.repeat(min=3):
                 self.literal("-")
             with self.capture_node("directive_args"), self.optional():
@@ -401,7 +401,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
     @rule()
     def atx_heading(self):
         self.whitespace(max=8)
-        with self.variable(0) as num, self.capture_node("atx_heading", value=num):
+        with self.variable(0) as num, self.capture_node("remark_heading", value=num):
             with self.count(char='#') as level:
                 with self.repeat(min=1, max=9):
                     self.literal("#")
@@ -431,7 +431,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
 
     @rule()
     def prose_para(self):
-        with self.capture_node("prose"):
+        with self.capture_node("remark_prose_paragraph"):
             self.inner_prose_para()
 
     @rule()
@@ -449,7 +449,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
         with self.indented(count=-1):
             self.inner_para()
         with self.repeat():
-            with self.capture_node("hardbreak"):
+            with self.capture_node("remark_prose_hardbreak"):
                 self.newline()
             self.indent()
             self.start_prose_para()
@@ -477,7 +477,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                     self.literal("]")
                 with self.case(), self.capture_node("code_string"):
                     self.whitespace()
-                    self.identifier()
+                    self.rson_identifier()
                 with self.case():
                     self.capture_value(None)
 
@@ -488,7 +488,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                     with self.repeat(min=c):
                         self.literal(fence)
                     self.line_end()
-                with self.capture_node('text'):
+                with self.capture_node('remark_text'):
                     with self.repeat(min=0):
                         self.range("\n", invert=True)
                     self.line_end()
@@ -510,7 +510,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 with self.repeat(min=c):
                     self.literal(fence)
                 self.line_end()
-            with self.capture_node('text'):
+            with self.capture_node('remark_text'):
                 with self.repeat(min=0):
                     self.range("\n", invert=True)
                 self.line_end()
@@ -530,7 +530,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 self.newline()
     @rule()
     def blockquote(self):
-        with self.capture_node("blockquote"):
+        with self.capture_node("remark_blockquote"):
             self.inner_blockquote()
 
     @rule()
@@ -610,8 +610,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 with self.optional():
                     with self.repeat(min=1):
                         self.whitespace()
-                        with self.capture_node("empty"):
-                            self.newline()
+                        self.newline()
                         self.indent()
                     with self.lookahead():
                         self.whitespace()
@@ -627,9 +626,9 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             with self.count(columns=True) as w:
                 with self.count(columns=True) as i:
                     self.whitespace(max=8)
-                with self.capture_node('group_marker'), self.backref() as marker:
+                with self.capture_node('item_marker'), self.backref() as marker:
                     self.literal("--", "-")
-            with self.capture_node('group_spacing', value=spacing):
+            with self.capture_node('list_spacing', value=spacing):
                 pass
 
 
@@ -640,7 +639,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 with self.case():
                     self.whitespace(min=1, max=1, newline=True)
 
-            with self.capture_node("item"):
+            with self.capture_node("remark_item"):
                 with self.capture_node("directive_args"):
                     with self.optional():
                         self.literal("[")
@@ -659,9 +658,8 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             with self.repeat():
                 self.indent()
                 with self.optional():
-                    with self.capture_node('empty'):
-                        self.whitespace()
-                        self.newline()
+                    self.whitespace()
+                    self.newline()
                     self.indent()
                     with self.lookahead():
                         self.whitespace(min=i, max=i)
@@ -677,7 +675,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                     with self.case():
                         self.whitespace(min=1, max=1, newline=True)
 
-                with self.capture_node("item"):
+                with self.capture_node("remark_item"):
                     with self.capture_node("directive_args"):
                         with self.optional():
                             self.literal("[")
@@ -696,7 +694,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
 
     @rule()
     def list_block(self):
-        with self.capture_node('list'):
+        with self.capture_node('remark_list'):
             self.inner_list()
 
 
@@ -718,7 +716,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                     with self.indented(count=-1):
                         self.inline_element()
                         with self.repeat():
-                            with self.capture_node("whitespace"):
+                            with self.capture_node("remark_whitespace"):
                                 self.whitespace()
                             with self.reject():
                                 self.literal("|")
@@ -780,16 +778,16 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
         with self.choice():
             with self.case():
                 self.literal("\\")
-                with self.capture_node("text"):
+                with self.capture_node("remark_text"):
                     self.range("*", "_","!-/",":-@","[-`","{-~")
             with self.case():
                 self.literal("\\")
-                with self.capture_node("nbsp"):
+                with self.capture_node("remark_nbsp"):
                     self.whitespace(min=1)
             with self.case():
                 self.literal(":")
-                with self.capture_node("emoji"):
-                    self.identifier()
+                with self.capture_node("remark_emoji"):
+                    self.rson_identifier()
                 self.literal(":")
             with self.case():
                 self.inline_directive()
@@ -802,7 +800,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
 
     @rule()
     def word(self):
-        with self.capture_node('text'):
+        with self.capture_node('remark_text'):
             self.range(" ", "\n", "\\", invert=True)
             with self.repeat(min=0):
                 with self.choice():
@@ -816,7 +814,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
 
     @rule()
     def inline_span(self):
-        with self.variable('') as fence, self.capture_node('span', value=fence):
+        with self.variable('') as fence, self.capture_node('remark_paragraph_span', value=fence):
             with self.count(columns=True) as n:
                 with self.backref() as chr:
                     self.range("_", "*", "~")
@@ -833,7 +831,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                     with self.case():
                         self.linebreak()
                     with self.case():
-                        with self.capture_node("whitespace"):
+                        with self.capture_node("remark_whitespace"):
                             self.whitespace()
 
                 with self.reject():
@@ -845,7 +843,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                 with self.case():
                     self.linebreak()
                 with self.case():
-                    with self.capture_node("whitespace"):
+                    with self.capture_node("remark_whitespace"):
                         self.whitespace()
             with self.repeat(min=n, max=n):
                 self.literal(fence)
@@ -862,7 +860,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             self.newline()
         with self.repeat(min=1), self.choice():
             with self.case():
-                with self.capture_node('text'):
+                with self.capture_node('remark_text'):
                     self.range("\n", "`", invert=True)
                     with self.repeat(min=0):
                         self.range("\n", "`", invert=True)
@@ -876,7 +874,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
                     with self.choice():
                         with self.case(): self.range('`', invert=True)
                         with self.case(): self.end_of_file()
-                with self.capture_node("text"), self.repeat():
+                with self.capture_node("remark_text"), self.repeat():
                     self.literal("`")
         with self.repeat(min=c, max=c):
             self.literal("`")
@@ -884,7 +882,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             self.literal("`")
     @rule()
     def code_span(self):
-        with self.capture_node('code_span') as span: 
+        with self.capture_node('remark_code_span') as span: 
             self.inner_code_span()
             with self.capture_node("directive_args"), self.optional():
                 self.literal("[")
@@ -895,7 +893,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
     def block_rson(self):
         with self.capture_node('block_rson'):
             self.literal('@')
-            self.identifier()
+            self.rson_identifier()
             self.literal(' ')
             self.rson_literal()
             self.line_end()
@@ -908,7 +906,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
             with self.case():
                 with self.capture_node('rson_tagged'):
                     self.literal('@')
-                    self.identifier()
+                    self.rson_identifier()
                     self.literal(' ')
                     self.rson_literal()
             with self.case():
@@ -957,7 +955,7 @@ class Remarkable(Grammar, start="document", whitespace=[" ", "\t"], newline=["\r
     def rson_key(self):
         with self.choice():
             with self.case(): self.rson_string()
-            with self.case(): self.identifier()
+            with self.case(): self.rson_identifier()
     @rule()
     def rson_pair(self):
         with self.capture_node("rson_pair"):
