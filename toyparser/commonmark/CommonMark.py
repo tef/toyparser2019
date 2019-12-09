@@ -10,11 +10,16 @@ def walk(node, indent="- "):
     for child in node.children:
         walk(child, indent+ "  ")
 
+# todo
+#   real yaml parsing
+#   
 
 class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["\n"], tabstop=4):
     version = 0.29
     @rule(start="document")
     def document(self):
+        with self.optional():
+            self.yaml_metadata()
         with self.repeat(min=0):
             self.indent()
             with self.choice():
@@ -22,6 +27,20 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                 with self.case(): self.empty_lines()
         self.whitespace()
         self.end_of_file()
+
+    @rule()
+    def yaml_metadata(self):
+        self.literal("---")
+        self.newline()
+        with self.capture_node('yaml_metadata_block'):
+            with self.repeat():
+                with self.reject():
+                    self.literal("...", "---")
+                with self.repeat():
+                    self.range("\n", invert=True)
+                self.newline()
+        self.literal("...", "---")
+        self.newline()
 
     @rule(inline=True)
     def empty_lines(self):

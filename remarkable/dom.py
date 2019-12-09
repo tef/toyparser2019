@@ -98,6 +98,12 @@ class DirectiveNode(Element):
     def walk(self, builder):
         raise Exception('bad')
 
+@elements.add()
+class Metadata(Block):
+    name = "Metadata"
+
+    def walk(self, builder):
+        pass
 
 @elements.add()
 class RawBlock(Block):
