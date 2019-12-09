@@ -133,6 +133,11 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
             with self.repeat():
                 self.range("0-9", "a-z","A-Z","_")
 
+    @rule(inline=True)
+    def raw_identifier(self):
+        self.range("a-z", "A-Z")
+        with self.repeat():
+            self.range("0-9", "a-z","A-Z","_")
     @rule()
     def directive_args(self):
         self.whitespace(newline=True)
@@ -175,11 +180,11 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
         with self.capture_node("block_directive"):
             with self.capture_node("directive_name"), self.backref() as name:
                 self.rson_identifier()
-            with self.variable("") as fence:
+            with self.variable("fake name") as fence:
                 with self.optional():
                     self.whitespace()
                     with self.backref() as b:
-                        self.rson_identifier()
+                        self.raw_identifier()
                     self.set_variable(fence, b)
                 self.whitespace()
                 with self.capture_node("directive_args"), self.optional():
@@ -197,24 +202,58 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                             with self.optional():
                                 self.literal("::")
                                 self.literal(name)
-                                self.whitespace()
-                                self.literal(fence)
+                                with self.optional():
+                                    self.whitespace()
+                                    self.literal(fence)
                             self.line_end()
                         with self.choice():
 
                             with self.case(): self.block_element()
                             with self.case(): self.para()
                             with self.case(): self.empty_lines()
-                self.indent()
-                self.whitespace(max=8)
-                self.literal(*marker)
-                self.literal("end")
-                with self.optional():
-                    self.literal("::")
-                    self.literal(name)
-                    self.whitespace()
-                    self.literal(fence)
-                self.line_end()
+                with self.choice():
+                    # someone else's marker
+                    # my marker, diff name
+                    with self.case(), self.lookahead():
+                        self.whitespace(newline=True)
+                        self.end_of_file()
+                    with self.case(), self.lookahead():
+                        self.indent()
+                        self.whitespace(max=8)
+                        self.literal(*marker)
+                        self.literal("end")
+                        self.literal("::")
+                        with self.reject():
+                            self.literal(name)
+                        self.raw_identifier()
+                        with self.optional():
+                            self.whitespace()
+                            self.literal(fence)
+                        self.line_end()
+                    with self.case(), self.lookahead():
+                        self.indent()
+                        self.whitespace(max=8)
+                        self.literal(*marker)
+                        self.literal("end")
+                        self.literal("::")
+                        self.literal(name)
+                        self.whitespace()
+                        with self.reject():
+                            self.literal(fence)
+                        self.raw_identifier()
+                        self.line_end()
+                    with self.case():
+                        self.indent()
+                        self.whitespace(max=8)
+                        self.literal(*marker)
+                        self.literal("end")
+                        with self.optional():
+                            self.literal("::")
+                            self.literal(name)
+                            with self.optional():
+                                self.whitespace()
+                                self.literal(fence)
+                        self.line_end()
 
     @rule()
     def block_directive(self):
@@ -224,7 +263,7 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
             self.literal("begin", "end")
         with self.capture_node("block_directive"):
             with self.capture_node("directive_name"), self.backref() as name:
-                self.rson_identifier()
+                self.raw_identifier()
             with self.capture_node("directive_args"), self.optional():
                 self.literal("[")
                 self.directive_args()

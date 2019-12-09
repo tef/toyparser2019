@@ -131,3 +131,43 @@ Fragments can be specified with directives, or data structures too:
 }
 
 \end
+
+\begin::section
+
+# Blocks
+
+## Begin-End Blocks
+
+- `\begin::name` and optionally, `\end`
+- end of file collapses all open blocks
+- `\end` collapses current open block
+- `\end::name` collapses all blocks until name matches
+
+
+- Optionally specify an identifier, `\begin::name identifier`
+- `\end::name identifier` closes all blocks until name and identifier matches
+
+&TestCase:
+	```remark
+	\begin::fragment
+	\begin::blockquote
+	\end::fragment
+	```
+	@Fragment {text: [@Blockquote {}]}
+
+&TestCase:
+	```remark
+	\begin::blockquote outer
+	\begin::blockquote
+	\end::blockquote outer
+	```
+	@Fragment {text: [ @Blockquote {text: [ @Blockquote {text: []} ]} ]}
+
+&TestCase:
+	```remark
+	\begin::fragment
+	\begin::blockquote
+	```
+	@Fragment {text: [@Blockquote {}]}
+
+\end

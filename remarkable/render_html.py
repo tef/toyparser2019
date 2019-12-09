@@ -214,6 +214,7 @@ def to_html(obj):
 
 
     if name in html_tags:
+        print(name, args)
         return html_tags[name].format(name=name, text=text, **args)
     args = " ".join(f"{key}={repr(value)}" for key, value in args.items())
     end = "" if isinstance(obj, dom.Inline) else "\n"
