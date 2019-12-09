@@ -6,7 +6,7 @@
 
 > I also dream about a modern replacement for LaTeX designed from the ground up
 > to target multiple output formats (at least PDF, HTML, EPUB).
-> \em{John MacFarlane, author of Pandoc, editor of CommonMark.}
+> &em{John MacFarlane, author of Pandoc, editor of CommonMark.}
 
 ## Why Remark?
 
@@ -33,7 +33,7 @@ Remark has markdown-like rules for annotating text:
 | `*text*`, `**text**`, or `***text***` | *text* | `<strong>text</strong>` |
 | `_text_`, `__text__`, or `___text___` | _text_ | `<em>text</em>` |
 | `~text~`, `~~text~~`, or `~~~text~~~` | ~text~ | `<del>text</del>` | 
-| \code{\`raw\`}, \code{\`\`raw\`\`}, or \code{\`\`\`raw\`\`\`} | `raw` |  `<code>raw</code>` |
+| &code{\`raw\`}, &code{\`\`raw\`\`}, or &code{\`\`\`raw\`\`\`} | `raw` |  `<code>raw</code>` |
 | `:emoji_name:` | :emoji_name: | `<span class="emoji">emoji_name</span>` |
 
 A remark document is a collection of blocks, which contain paragraphs. Inside a paragraph, multiple
@@ -48,7 +48,7 @@ spaces are treated as one, and a paragraph ends when a new block starts, or afte
 Blocks are also quite similar to markdown. Headings, Lists, Code Blocks, Blockquotes, and Horizonal Rules
 work almost exactly the same. Unlike markdown, a list cannot have more than one blank line between items. A blockquote must have an `>` on every line, even empty lines.
 
-\table[column_align: ["left", "left", "left"]]:
+&table[column_align: ["left", "left", "left"]]:
   - - # Remark
     - # Result
     - # HTML

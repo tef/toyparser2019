@@ -132,7 +132,7 @@ def View(ctx, file, width, height, heading):
             fragments.append(dom.Paragraph((), ["failed"]))
             result_dom = t.get_arg('result_dom')
             if result_dom:
-                fragments.append(dom.Paragraph((), ["raw ast: ",dom.dump(results[i])]))
+                fragments.append(dom.Paragraph((), ["raw ast: ",dom.dump(result_dom)]))
             else:
                 fragments.append(dom.Paragraph((), ["raw ast: null"]))
         fragments.append(dom.HorizontalRule((), ()))

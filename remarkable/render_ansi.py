@@ -330,7 +330,7 @@ class BlockBuilder:
     @contextmanager
     def build_directive(self, name, args):
         self.add_index()
-        builder = BlockBuilder(self.settings, self.box.indent())
+        builder = BlockBuilder(self.settings, self.box)
         self.lines.append("\\{name}:")
         yield builder
         mapper, lines = builder.build(indent=False)

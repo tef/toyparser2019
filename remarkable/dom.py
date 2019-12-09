@@ -28,12 +28,17 @@ elements = Registry()
 
 class Element:
     def __eq__(self, other):
-        return (
-            other is not None and 
-            self.name == other.name and
-            all(x == y for x,y in zip(self.args, other.args)) and
-            all(x == y for x,y in zip(self.text, other.text))
-        )
+        if other is None: return
+        if self.name != other.name: return
+        text = self.text
+        for x, y in self.args:
+            if x == "text": text = y
+            elif y != other.get_arg(x): return
+
+        other_text = other.get_arg('text') or other.text
+        
+        return all(x == y for x,y in zip(text, other_text))
+
     def get_arg(self, key):
         if key is None:
             return [v for k,v in self.args if k is None]
@@ -584,6 +589,10 @@ block_directives = { # \foo::begin
         "comment": CommentBlock,
         "math": MathBlock,
         "figure": Figure,
+        "TestCase": TestCase,
+        "metadata": Metadata,
+        "document": Document,
+        "fragment": Fragment,
 }
 para_directives = { # \foo: ...
         "paragraph": Paragraph,

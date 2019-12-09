@@ -1,0 +1,133 @@
+# Remark Document Language Specification
+
+@Metadata {
+   	version: "2019-11-0",
+	title: "Remark Document Language Specification", 
+}
+
+@TestReport {
+
+}
+
+\begin::section
+
+# Table of Contents
+
+- Overview
+- Documents
+	- Fragments, Document, Document Set
+	- Metadata
+	- Examples
+- Inlines
+	- Words, Whitespace, Breaks
+	- Escaping, Entities
+	- Inline styling
+	- Inline Code, Emojis, Raw Spans
+	- Directives, Code Directives 
+- Blocks
+	- Paragraphs
+	- Headers
+	- Prose Blocks
+	- Code Blocks
+	- Blockquotes
+	- Horizontal Rules
+	- Lists
+	- Tables
+	- Paragraph Directives
+	- Block Directives
+		- Indented Block Directives
+		- Delimited Directives
+		- List, Blockquote, Prose, Table Directives
+- Document Object Model
+	- Grammar
+	- RSON
+- Index
+
+\end
+
+\begin::section
+
+# Overview 
+
+\end
+
+\begin::section
+
+# Documents and Fragments
+
+A `Fragment` is a document that carries no metadata. An empty file is always 
+a `Fragment`.
+
+@TestCase {
+	input_text: "",
+	output_dom: @Fragment {},
+}
+
+If metadata is provided, a `Document` is returned instead.
+
+&TestCase:
+	```remark
+	\metadata[title: "Example"]
+
+	```
+	@Document {title: "Example", text: []}
+
+Alternatively, a `Document` can be created explicitly, using a directive:
+
+&TestCase:
+	```remark
+	\begin::document
+ 	\end
+	```
+	@Document {}
+
+A document can also be specified using data structures, rather than directives:
+
+@TestCase {
+	input_text: "@Document {}",
+	output_dom: @Document {},
+}
+
+If the only content in the document is a data structure, that is returned instead
+of a `Fragment` or a `Document`.
+
+@TestCase {
+	input_text: "@UnknownExample {}",
+	output_dom: @UnknownExample {},
+}
+
+@TestCase {
+	input_text: "@DocumentSet {}",
+	output_dom: @DocumentSet {},
+}
+
+Fragments can be specified with directives, or data structures too:
+
+@TestCase {
+	input_text: "@Fragment {}",
+	output_dom: @Fragment {},
+}
+
+&TestCase:
+	```remark
+	\begin::fragment
+	\end
+	```
+	@Fragment {}
+\end::section
+
+\begin::section
+
+
+@TestCase {
+	input_text: "Example text.",
+	output_dom: @Fragment {text: [@Paragraph {text: ["Example", " ", "text."]}] },
+}
+
+
+@TestCase {
+	input_text: "\\paragraph: Hi",
+	output_dom: @Fragment {text: [@Paragraph {text: ["Hi"]}] },
+}
+
+\end

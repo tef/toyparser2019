@@ -168,9 +168,9 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                 self.rson_value()
     @rule()
     def begin_end_directive(self):
-        marker = "\\"
+        marker = ["\\", "&"]
         self.whitespace(max=8)
-        self.literal(marker)
+        self.literal(*marker)
         self.literal("begin::")
         with self.capture_node("block_directive"):
             with self.capture_node("directive_name"), self.backref() as name:
@@ -192,7 +192,7 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                         self.indent()
                         with self.reject():
                             self.whitespace(max=8)
-                            self.literal(marker)
+                            self.literal(*marker)
                             self.literal("end")
                             with self.optional():
                                 self.literal("::")
@@ -207,7 +207,7 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                             with self.case(): self.empty_lines()
                 self.indent()
                 self.whitespace(max=8)
-                self.literal(marker)
+                self.literal(*marker)
                 self.literal("end")
                 with self.optional():
                     self.literal("::")
@@ -219,7 +219,7 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
     @rule()
     def block_directive(self):
         self.whitespace(max=8)
-        self.literal("\\")
+        self.literal("\\", "&")
         with self.reject():
             self.literal("begin", "end")
         with self.capture_node("block_directive"):
@@ -316,7 +316,7 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
             
     @rule(inline=True)
     def inline_directive(self):
-        self.literal("\\")
+        self.literal("\\", "&")
         with self.reject():
             self.literal("begin", "end")
         with self.capture_node("inline_directive"):
@@ -571,7 +571,7 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
     @rule()
     def start_list_block(self):
         self.whitespace(max=8)
-        self.literal("--", "-")
+        self.literal("*", "-")
         with self.choice():
             with self.case(), self.lookahead():
                 self.whitespace()
@@ -782,12 +782,13 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
         with self.choice():
             with self.case():
                 self.literal("\\")
-                with self.capture_node("remark_text"):
-                    self.range("*", "_","!-/",":-@","[-`","{-~")
-            with self.case():
-                self.literal("\\")
                 with self.capture_node("remark_nbsp"):
                     self.whitespace(min=1)
+            with self.case():
+                self.literal("\\")
+                with self.capture_node("remark_text"):
+                    self.range("*", "_","!-/",":-@","[-`","{-~")
+                    # self.range(" ", "\t", "\n", invert=True)
             with self.case():
                 self.literal(":")
                 with self.capture_node("remark_emoji"):
@@ -805,7 +806,7 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
     @rule()
     def word(self):
         with self.capture_node('remark_text'):
-            self.range(" ", "\n", "\\", invert=True)
+            self.range(" ", "\n", "\\", "&", invert=True)
             with self.repeat(min=0):
                 with self.choice():
                     with self.case():
