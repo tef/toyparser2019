@@ -168,8 +168,10 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                 self.rson_value()
     @rule()
     def begin_end_directive(self):
+        marker = "\\"
         self.whitespace(max=8)
-        self.literal("\\begin::")
+        self.literal(marker)
+        self.literal("begin::")
         with self.capture_node("block_directive"):
             with self.capture_node("directive_name"), self.backref() as name:
                 self.rson_identifier()
@@ -190,7 +192,8 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                         self.indent()
                         with self.reject():
                             self.whitespace(max=8)
-                            self.literal("\\end")
+                            self.literal(marker)
+                            self.literal("end")
                             with self.optional():
                                 self.literal("::")
                                 self.literal(name)
@@ -204,7 +207,8 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                             with self.case(): self.empty_lines()
                 self.indent()
                 self.whitespace(max=8)
-                self.literal("\\end")
+                self.literal(marker)
+                self.literal("end")
                 with self.optional():
                     self.literal("::")
                     self.literal(name)
