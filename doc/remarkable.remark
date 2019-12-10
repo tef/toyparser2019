@@ -5,13 +5,49 @@
 	title: "Remark Document Language Specification", 
 }
 
+&begin::section intro
+
+> I also dream about a modern replacement for LaTeX
+> designed from the ground up to target multiple output formats
+> (at least PDF, HTML, EPUB).
+> &em{John MacFarlane, author of Pandoc, editor of CommonMark.}
+
 &TestReport
 
-&begin::section
+`````remark
+# A Remarkable Example Document
+
+Remarkable is a CommonMark-alike markup language designed
+for writing larger technical documents.
+
+- It has lists
+- It has *bold*, _italic_, and ~strikethrough~ text
+- It even has `inline code` fragments
+
+Unlike CommonMark, there's a standard long form for annotating text: `&directive_name[args]{text}` 
+
+```
+&list:
+	&item: It has Lists
+
+	&item: It has &strong{bold}, &emph{italic},
+	   and &strike{strikethrough} text
+
+	&item: It even has &code`inline code` fragments
+```
+
+`````
+
+&end::section 
+
+&begin::section toc
 
 # Table of Contents
 
 - Overview
+	- Why Remark?
+	- A Tour of the Syntax
+	
 - Documents
 	- Fragments, Document, Document Set
 	- Metadata
@@ -46,9 +82,265 @@
 
 &end
 
-&begin::section
+&begin::section overview
 
-# Overview 
+# Remark(able), a restructured markup format.
+
+## Why Remark?
+
+Markdown is great for small comments or blog posts. LaTeX is good for writing
+a book on Mathematics. RST is good for technical documentation, and HTML is good
+for webpages. So why Remark?
+
+- A consistent way to escape text 
+- CommonMark like shortcuts (`---` for a horizontal rule)
+- LaTeX/HTML like named Directives (`&hr`)
+- An internal document object model
+- Standard ways to embed structured data
+- Not just HTML output, too
+
+The biggest difference might be that Remark has a Grammar.
+
+Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented in terms of a parsing evaluation grammar. 
+
+
+## Remark In A Nutshell
+
+Remark is very similar to Markdown:
+
+&TestCase:
+	```remark
+	\* \` \> \# \\
+	```
+	@Fragment {text: [ @Paragraph { text : [
+	"*", " ", "`", " ", ">", " ", "#", " ", "\\",
+	]} ]}
+	
+	You can use &code{\\} to escape any punctuation
+
+&TestCase:
+	```remark
+	*text* **text** ***text***
+
+	```
+	@Fragment {text: [ @Paragraph { text : [
+		@Strong {text: ["text"]}, " ",
+		@Strong {text: ["text"]}, " ",
+		@Strong {text: ["text"]}, 
+	]} ]}
+	
+	You can use `*` to embolden text. Unlike Markdown, doubling or 
+	tripling the markers does not change their semantic meaning.
+
+&TestCase:
+	```remark
+	_italic_ ~~~strike~~~ ``code``
+
+	```
+	@Fragment {text: [ @Paragraph { text : [
+		@Emphasis {text: ["italic"]}, " ",
+		@Strikethrough {text: ["strike"]}, " ",
+		@CodeSpan {text: ["code"]}, 
+	]} ]}
+	
+	Like CommonMark, you can use `_` for emphasised text. Unlike
+	GitHub\ Flavoured\ Markdown (GFM), `~`, `~~`, and `~~~` work
+	for strikethrough text. 
+
+	Like for `*`, doubling or tripling \code{\`}, `_`, and `~` 
+	also work, and do not change meaning
+
+&TestCase:
+	```remark
+	Example :emoji:
+	```
+	@Fragment {text: [ @Paragraph { text : [
+	"Example", " ", 
+	@Emoji {name: "emoji"},
+	]} ]}
+	
+	Example text.
+
+&TestCase:
+	```remark
+	An  Example  Non\ Breaking  space,  and\
+	a  hard  break.
+	```
+	@Fragment {text: [ @Paragraph { text : [
+	"An", " ", "Example", " ",  "Non", @Nbsp {text:[" "]}, "Breaking", " ",
+	"space,", " ", "and", @Hardbreak {text: ["\n"]}, "a", " ", "hard"," ",
+	"break.",
+	]} ]}
+	
+	Like how `\` can be used to escape punctuation, it can also
+	be used to preserve newlines and spaces.
+
+	
+&table[column_align: ["left", "left", "left"]]:
+  - - # Remark
+    - # Result
+    - # HTML
+
+  - 
+    - ```
+      # A multi-line
+      # Heading
+      ```
+    - 
+      # A multi-line
+      # Heading
+      
+    - `<h1>A multi-line Heading</h1>` 
+  - 
+    - `---`
+    -  &hr 
+    - `<hr/>`  
+  -
+    - ```
+      - 1
+      - 2
+      ```
+    -
+      - 1
+      - 2 
+    -
+      ```
+      <ul>
+      <li>1</li>
+      <li>2</li>
+      </ul>
+      ```
+  -
+    - ```
+      -- 1
+      -- 2
+      ```
+    -
+      -- 1
+      -- 2 
+    -
+      ```
+      <ul>
+      <li>1</li>
+      <li>2</li>
+      </ul>
+      ```
+  - - ````
+      ```
+      1 + 2
+      ```
+      ````
+    - ```
+      1 + 2
+      ```
+    - ```
+      <pre><code>1 + 2</code></pre>
+      ```
+  - - ```
+      > A *bolded line
+      > that continues* 
+
+      > A second quote
+      ```
+    -
+      > A *bolded line
+      > that continues* 
+
+      > A second quote
+    -
+      ```
+      <blockquote>
+      <p>A <strong>bolded line that continues</strong></p>
+      </blockquote>
+      <blockquote>
+      <p>A Second Quote</p>
+      </blockquote>
+      ```
+  - - ```
+      | header 1 | header 2 |
+      | :------: | :------: |
+      | cell 1   | cell 2   |
+      ```
+    - 
+      &table:
+        - - # Header 1
+          - # Header 2
+        - - cell 1
+          - cell 2
+      
+    - ```
+      <table><thead><tr><td>header 1 ....
+      .... <td>cell 2</td></tr></table> 
+      ```
+  - - ```
+      | Prose blocks are special
+      |   line breaks and whitespace preserved
+      |      like foot prints in snow
+      ```
+    -
+      | Prose blocks are special
+      |   line breaks and whitespace preserved
+      |      like foot prints in snow
+    - ```
+      <p style="white-space: pre-wrap">...
+      ...</p>
+      ```
+
+Unlike markdown, and a little more like LaTeX, Remark has a standard form for directives, `&name[args]{text}`.
+
+&table:
+   - - # Shorthand
+     - # Longhand
+      
+   - - `*text*`, `_text_`, `~text~`
+     - `&strong{text}`, `&em{text}`, `&strike{text}`
+
+   - - `# Heading`
+     - `&heading[level: 1]: Heading`
+   - - ````
+        - 1
+        - 2
+       ````
+     - ````
+       &list: &item{1}&item{2}
+       ````
+   - - ````
+       ```python
+       1 + 2
+       ```
+       ````
+     - ````
+       &code[language: "python"]```
+       1 + 2
+       ```
+       ````
+
+Block directives and inline directives accept arguments, too.
+
+````
+# &[arg: 1] A Header with args, including **strong**&[args:2] inline args.
+
+--- [another: 4]
+
+&list[start: 1]:
+  - [args: 4.5] A Numbered List
+    > [args: 5] A block quote
+
+    > A New Paragraph in the same blockquote
+
+&table[args:3]:
+| Heading |
+| :-----: |
+|  Cell   |
+
+````
+
+There's even a way to embed raw data inside a document, too:
+
+```
+@Metadata {name: "tef", title: "Remark README"}
+```
+
 
 &end
 

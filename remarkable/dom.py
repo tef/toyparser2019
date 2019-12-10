@@ -547,14 +547,14 @@ class Nbsp(Inline):
 
 @elements.add()
 class Hardbreak(Inline):
-    name ="HardBreak"
+    name ="Hardbreak"
 
     def walk(self, builder):
         builder.add_break()
 
 @elements.add()
 class Wordbreak(Inline):
-    name ="WordBreak"
+    name ="Wordbreak"
 
     def walk(self, builder):
         builder.add_wordbreak()
