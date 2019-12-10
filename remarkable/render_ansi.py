@@ -723,6 +723,8 @@ class ParaBuilder:
         if isinstance(text, str):
             if text == " ":
                 self.add_space()
+            elif text == "\n":
+                self.add_break()
             else:
                 self.add_text(text)
         else:

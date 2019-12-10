@@ -84,6 +84,8 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
             with self.case():
                 self.link_definition()
             with self.case():
+                self.table()
+            with self.case():
                 self.para()
 
     @rule() # 4.1
@@ -296,6 +298,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
             with self.case(): self.start_fenced_block()
             with self.case(): self.start_list()
             with self.case(): self.start_html_block()
+            with self.case(): self.start_table()
 
     @rule()
     def blockquote(self):
@@ -345,6 +348,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
             with self.case(): self.start_fenced_block()
             with self.case(): self.start_blockquote()
             with self.case(): self.start_html_block()
+            with self.case(): self.start_table()
             with self.case():
                 self.start_list()
 
@@ -642,6 +646,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
             with self.case(): self.start_fenced_block()
             with self.case(): self.start_blockquote()
             with self.case(): self.start_html_block()
+            with self.case(): self.start_table()
             with self.case():
                 self.whitespace(max=3)
                 with self.choice():
@@ -749,6 +754,80 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                         self.literal("\\")
                         self.capture_value("\\")
                     self.end_of_line()
+    @rule()
+    def start_table(self):
+        self.whitespace(max=8)
+        self.literal("|")
+
+
+    @rule()
+    def table_cell(self):
+        with self.capture_node("table_cell"):
+            with self.choice():
+                with self.case(), self.lookahead():
+                    self.literal("|")
+                with self.case():
+                    with self.reject():
+                        self.literal("|")
+                    with self.indented(count=-1):
+                        self.inline_element()
+                        with self.repeat():
+                            with self.capture_node("whitespace"):
+                                self.whitespace()
+                            with self.reject():
+                                self.literal("|")
+                            self.inline_element()
+
+    @rule()
+    def table(self):
+        with self.capture_node('table'):
+            self.inner_table()
+
+
+    @rule()
+    def inner_table(self):
+        with self.count(columns=True) as c:
+            self.whitespace(max=8)
+        with self.indented(count=c):
+            with self.variable(0) as rows:
+                with self.capture_node('table_header'):
+                    with self.repeat(min=1) as c:
+                        self.literal("|")
+                        self.whitespace()
+                        self.table_cell()
+                        self.whitespace()
+                    with self.optional():
+                        self.literal("|")
+                        self.whitespace()
+                    self.newline()
+                
+                self.indent()
+
+                with self.capture_node('table_header_rule'):
+                    with self.repeat(min=c, max=c):
+                        self.literal("|")
+                        self.whitespace()
+                        with self.capture_node("column_align"):
+                            with self.optional(): self.literal(":")
+                            with self.repeat(min=1): self.literal("-")
+                            with self.optional(): self.literal(":")
+                        self.whitespace()
+                    with self.optional():
+                        self.literal("|")
+                        self.whitespace()
+                    self.newline()
+            with self.repeat():
+                self.indent()
+                with self.capture_node("table_row"):
+                    with self.repeat(min=1,max=c):
+                        self.literal("|")
+                        self.whitespace()
+                        self.table_cell()
+                        self.whitespace()
+                    with self.optional():
+                        self.literal("|")
+                        self.whitespace()
+                    self.newline()
 
     @rule()
     def inline_element(self):
@@ -815,6 +894,13 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                 self.html_entity()
             with self.case():
                 self.escaped_text()
+            with self.case():
+                self.literal(":")
+                with self.capture_node("emoji"):
+                    self.range("a-z", "A-Z")
+                    with self.repeat():
+                        self.range("0-9", "a-z","A-Z","_")
+                self.literal(":")
             with self.case():
                 with self.capture_node('text'):
                     with self.repeat(min=1): 

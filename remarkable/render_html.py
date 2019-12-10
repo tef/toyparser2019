@@ -166,6 +166,7 @@ html_tags = {
        dom.Prose.name: '<p style="white-space: pre-wrap">{text}</p>\n',
        dom.Division.name: "<div>{text}</div>\n",
        dom.Section.name: "<section>{text}</section>\n",
+       dom.TestCase.name: '<section class="testcase">{text}</section>\n',
        dom.Hardbreak.name: "<br/>",
        dom.Softbreak.name: "\n",
        dom.Emoji.name: "<span class='emoji'>{text}</span>",
@@ -214,7 +215,6 @@ def to_html(obj):
 
 
     if name in html_tags:
-        print(name, args)
         return html_tags[name].format(name=name, text=text, **args)
     args = " ".join(f"{key}={repr(value)}" for key, value in args.items())
     end = "" if isinstance(obj, dom.Inline) else "\n"

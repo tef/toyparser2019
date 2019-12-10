@@ -68,12 +68,13 @@ def ConvertHtml(ctx, file):
     filename = os.path.relpath(file)
     with open(filename) as fh:
         doc = parse(fh.read())
+        run_tests(doc)
         text = to_html(doc) 
     return Plaintext(text)
 
 @router.on("convert:rson") 
 @command(args=dict(file="path"))
-def ConvertHtml(ctx, file):
+def ConvertRson(ctx, file):
     app = ctx['app']
     name = ctx['name']
     filename = os.path.relpath(file)
@@ -99,7 +100,7 @@ def ConvertAnsi(ctx, file, width, height, heading):
 
 @router.on("test") 
 @command(args=dict(heading="--str?", width="--int?", height="--int?", file="path"))
-def View(ctx, file, width, height, heading):
+def Test(ctx, file, width, height, heading):
     app = ctx['app']
     name = ctx['name']
     filename = os.path.relpath(file)

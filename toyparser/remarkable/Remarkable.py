@@ -507,8 +507,9 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
 
     @rule()
     def code_block(self):
-        self.whitespace(max=8)
-        with self.capture_node('remark_code_block'):
+        with self.count(columns=True) as w:
+            self.whitespace(max=8)
+        with self.indented(count=w), self.capture_node('remark_code_block'):
             fence = "`"
             with self.count(char=fence) as c, self.repeat(min=3):
                 self.literal(fence)
@@ -531,9 +532,10 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                     with self.repeat(min=c):
                         self.literal(fence)
                     self.line_end()
-                with self.capture_node('remark_text'):
+                with self.capture_node('code_text'):
                     with self.repeat(min=0):
                         self.range("\n", invert=True)
+                with self.capture_node('code_text'):
                     self.line_end()
             self.indent()
             with self.repeat(min=c):
@@ -543,25 +545,27 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
 
     @rule()
     def inner_code_block(self):
-        fence = "`"
-        with self.count(char=fence) as c, self.repeat(min=3):
-            self.literal(fence)
-        self.line_end()
-        with self.repeat():
+        with self.indented():
+            fence = "`"
+            with self.count(char=fence) as c, self.repeat(min=3):
+                self.literal(fence)
+            self.line_end()
+            with self.repeat():
+                self.indent()
+                with self.reject():
+                    with self.repeat(min=c):
+                        self.literal(fence)
+                    self.line_end()
+                with self.capture_node('code_text'):
+                    with self.repeat(min=0):
+                        self.range("\n", invert=True)
+                with self.capture_node('code_text'):
+                    self.line_end()
             self.indent()
-            with self.reject():
-                with self.repeat(min=c):
-                    self.literal(fence)
-                self.line_end()
-            with self.capture_node('remark_text'):
-                with self.repeat(min=0):
-                    self.range("\n", invert=True)
-                self.line_end()
-        self.indent()
-        with self.repeat(min=c):
-            self.literal(fence)
-        self.whitespace()
-        self.line_end()
+            with self.repeat(min=c):
+                self.literal(fence)
+            self.whitespace()
+            self.line_end()
 
     @rule()
     def start_blockquote(self):
