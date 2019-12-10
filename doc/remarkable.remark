@@ -30,10 +30,8 @@
 	```
 	&list:
 		&item: It has Lists
-
 		&item: It has &strong{bold}, &emph{italic},
 		   and &strike{strikethrough} text
-
 		&item: It even has &code`inline code` fragments
 	```
 
@@ -45,9 +43,7 @@
 
 # Table of Contents
 
-
-
-- Overview
+- Remark(able), a restructured markup format.
 	- Why Remark?
 	- A Tour of the Syntax
 	
@@ -70,6 +66,7 @@
 	- Lists
 	- Tables
 - Directives
+	- Entities
 	- Inline Directives, Inline Code Directives 
 	- Paragraph Directives
 	- Block Directives
@@ -288,20 +285,52 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 		]}
 	]}
 	@Fragment {}
-	Prose Blocks
+
+	Prose Blocks preserve whitespace within a single paragraph.
+	The `|` must be on every line.
 
 &TestCase:
-	Code Blocks
+	````remark
+	```
+	1 + 2
+	```
+	````
+	@Fragment {"text": [@CodeBlock {"text": ["1 + 2", "\n"]}]}
+
+	Code Blocks work similarly to Markdown.
+
 &TestCase:
-	Tables
 	```remark
 	| header 1 | header 2 |
 	| :------: | :------: |
- 	| cell 1   | cell 2   |
-        ```
+	| cell 1   | cell 2   |
+	```
+	@Fragment { "text": [
+		@TableBlock { "column_align": ["center", "center"], "text": [
+			@TableHeader {"text": [
+				@TableCellSpan {"text": ["header", " ", "1"]}, 
+				@TableCellSpan {"text": ["header", " ", "2"]}
+			]},
+			@TableRow {"text": [
+				@TableCellSpan {"text": ["cell", " ", "1"]},
+				@TableCellSpan {"text": ["cell", " ", "2"]}
+			]}
+		]}
+	]}
+	Tables work like GFM.
+
+&TestCase:
+	```remark
+	@Paragraph { text: ["Raw", " ", "Text!"] }
+	```
+	@Fragment { text: [ @Paragraph { text: ["Raw", " ", "Text!"] } ]}
+	
+	You can embed raw dom nodes inside a remakable document, too!
+
+
 &end
 
-&begin::section
+&begin::section document
 
 # Documents and Fragments
 
@@ -407,10 +436,9 @@ Fragments can be specified with directives, or data structures too:
 
 Byte order mark is ignored at start of file.
 
-&end::section
+&end::section document
 
-&begin::section
-
+&begin::section inlines
 
 @TestCase {
 	input_text: "Example text.",
@@ -423,53 +451,15 @@ Byte order mark is ignored at start of file.
 	output_dom: @Fragment {text: [@Paragraph {text: ["Hi"]}] },
 }
 
-&end
+&end::section inlines
 
-&begin::section
+&begin::section blocks
 
 # Blocks
 
-## Begin-End Blocks
+&end::section blocks
 
-- `&begin::name` and optionally, `&end`
-- end of file collapses all open blocks
-- `&end` collapses current open block
-- `&end::name` collapses all blocks until name matches
-
-
-- Optionally specify an identifier, `&begin::name identifier`
-- `&end::name identifier` closes all blocks until name and identifier matches
-
-&TestCase:
-	```remark
-	&begin::fragment
-	  &begin::blockquote
-	&end::fragment
-	```
-	@Fragment {text: [@Blockquote {}]}
-
-&TestCase:
-	```remark
-	&begin::blockquote outer
-	    &begin::blockquote
-	&end::blockquote outer
-	```
-	@Fragment {text: [ @Blockquote {text: [ @Blockquote {text: []} ]} ]}
-
-&TestCase:
-	```remark
-	&begin::fragment
-	&begin::blockquote
-	```
-	@Fragment {text: [@Blockquote {}]}
-
-&end
-
-# ...
-
-# Lists
-
-&begin::section
+&begin::section directives
 
 # Directives
 
@@ -505,4 +495,43 @@ Byte order mark is ignored at start of file.
 		@Codepoint {n: 0x43}, 
 	]}, ] }
 
+
+
+## Begin-End Directive
+
+- `&begin::name` and optionally, `&end`
+- end of file collapses all open blocks
+- `&end` collapses current open block
+- `&end::name` collapses all blocks until name matches
+- Optionally specify an identifier, `&begin::name identifier`
+- `&end::name identifier` closes all blocks until name and identifier matches
+
+&TestCase:
+	```remark
+	&begin::fragment
+	  &begin::blockquote
+	&end::fragment
+	```
+	@Fragment {text: [@Blockquote {}]}
+
+&TestCase:
+	```remark
+	&begin::blockquote outer
+	    &begin::blockquote
+	&end::blockquote outer
+	```
+	@Fragment {text: [ @Blockquote {text: [ @Blockquote {text: []} ]} ]}
+
+&TestCase:
+	```remark
+	&begin::fragment
+	&begin::blockquote
+	```
+	@Fragment {text: [@Blockquote {}]}
+
+&end::section directives
+
+&begin::section dom
+
+&end::section dom
 

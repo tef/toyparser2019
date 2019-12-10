@@ -751,7 +751,11 @@ class ParaBuilder:
             return self.mapper, [line + (" "*(max_width-len(line))) for line in lines]
         else:
             return self.mapper, [(" "* self.box.indent)+line for line in self.lines]
-
+    @contextmanager
+    def build_quote(self):
+        self.add_text("'")
+        yield self
+        self.add_text("'")
     def add_current_word(self):
         if not self.current_word:
             return
@@ -787,7 +791,6 @@ class ParaBuilder:
             self.whitespace = True
 
     def add_code_text(self, text):
-        self.add_wordbreak()
         self.add_text("`")
         for line in text.splitlines(keepends=True):
             if '\n' == line[-1]:
@@ -806,9 +809,9 @@ class ParaBuilder:
 
     def add_wordbreak(self):
         if self.whitespace:
-            self.add_text(' ')
-        self.add_current_word()
+            self.add_text(" ")
         self.whitespace = False
+        self.add_current_word()
 
     def add_break(self):
         self.add_current_word()

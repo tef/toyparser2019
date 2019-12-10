@@ -135,16 +135,22 @@ class Document(Block):
     name = "Document"
 
     def walk(self, builder):
-        with builder.build_document() as b:
-            b.walk_text(self.text)
+        if hasattr(builder, 'build_fragment'):
+            with builder.build_document() as b:
+                b.walk_text(self.text)
+        else:
+            builder.lines.append('waaa')
 
 @elements.add()
 class Fragment(Block):
     name = "Fragment"
 
     def walk(self, builder):
-        with builder.build_fragment() as b:
-            b.walk_text(self.text)
+        if hasattr(builder, 'build_fragment'):
+            with builder.build_fragment() as b:
+                b.walk_text(self.text)
+        else:
+            builder.lines.append('waaa')
 
 @elements.add()
 class InlineFragment(Inline):
@@ -502,7 +508,7 @@ class Quote(Inline):
 
     def walk(self, builder):
         with builder.build_quote() as b:
-            b.walk_text(self)
+            b.walk_text(self.text)
 
 
 @elements.add()
