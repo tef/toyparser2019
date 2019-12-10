@@ -16,7 +16,7 @@ def run_tests(doc):
         else:
             raw_text, output_dom = test_case.text
             test_case.text = test_case.text[2:]
-            raw_text = "\n".join(raw_text.text).strip()
+            raw_text = "".join(raw_text.text)
         result_dom = parser.parse(raw_text)
         test_case.args.append(('result_dom', result_dom))
 
