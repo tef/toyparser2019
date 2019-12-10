@@ -5,11 +5,9 @@
 	title: "Remark Document Language Specification", 
 }
 
-@TestReport {
+&TestReport
 
-}
-
-\begin::section
+&begin::section
 
 # Table of Contents
 
@@ -23,7 +21,6 @@
 	- Escaping, Entities
 	- Inline styling
 	- Inline Code, Emojis, Raw Spans
-	- Directives, Code Directives 
 - Blocks
 	- Paragraphs
 	- Headers
@@ -33,6 +30,8 @@
 	- Horizontal Rules
 	- Lists
 	- Tables
+- Directives
+	- Inline Directives, Inline Code Directives 
 	- Paragraph Directives
 	- Block Directives
 		- Indented Block Directives
@@ -42,17 +41,18 @@
 	- Types
 	- Grammar
 	- RSON
-- Index
+- HTML5 Output 
+- Index, Reference
 
-\end
+&end
 
-\begin::section
+&begin::section
 
 # Overview 
 
-\end
+&end
 
-\begin::section
+&begin::section
 
 # Documents and Fragments
 
@@ -154,9 +154,9 @@ Fragments can be specified with directives, or data structures too:
 	If mispelled, and the solitary item, no `Document` or `Fragment`
 	is returned
 
-\end::section
+&end::section
 
-\begin::section
+&begin::section
 
 
 @TestCase {
@@ -170,9 +170,9 @@ Fragments can be specified with directives, or data structures too:
 	output_dom: @Fragment {text: [@Paragraph {text: ["Hi"]}] },
 }
 
-\end
+&end
 
-\begin::section
+&begin::section
 
 # Blocks
 
@@ -210,4 +210,4 @@ Fragments can be specified with directives, or data structures too:
 	```
 	@Fragment {text: [@Blockquote {}]}
 
-\end
+&end

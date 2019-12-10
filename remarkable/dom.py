@@ -629,6 +629,7 @@ block_directives = { # \foo::begin
         "math": MathBlock,
         "figure": Figure,
         "TestCase": TestCase,
+        "TestReport": TestReport,
         "metadata": Metadata,
         "document": Document,
         "fragment": Fragment,
