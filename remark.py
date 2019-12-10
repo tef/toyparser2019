@@ -125,9 +125,14 @@ def Test(ctx, file, width, height, heading):
         fragments.append(r)
         fragments.append(dom.HorizontalRule((), ()))
 
+    skipped = []
     for t in doc.select('TestCase'):
         if t.get_arg('state') == 'working':
             pass # fragments.append(dom.Paragraph((), ["worked"]))
+        elif t.get_arg('state') == 'skipped':
+            skipped.append(t)
+            skipped.append(dom.Paragraph((), ["skipped"]))
+            skipped.append(dom.HorizontalRule((), ()))
         else:
             fragments.append(t)
             fragments.append(dom.Paragraph((), ["failed"]))
@@ -137,7 +142,7 @@ def Test(ctx, file, width, height, heading):
             else:
                 fragments.append(dom.Paragraph((), ["raw ast: null"]))
             fragments.append(dom.HorizontalRule((), ()))
-
+    fragments.extend(skipped)
 
     return Document(dom.Document((), fragments), settings)
 

@@ -157,11 +157,15 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 &TestCase:
 	```remark
 	Example :emoji:
+	---
 	```
-	@Fragment {text: [ @Paragraph { text : [
-	"Example", " ", 
-	@Emoji {name: "emoji"},
-	]} ]}
+	@Fragment {text: [ 
+		@Paragraph { text : [
+			"Example", " ", 
+			@Emoji {name: "emoji"},
+		]},
+		@HorizontalRule {},
+	 ]}
 	
 	There's also shorthand for `:emoji:`.
 
@@ -266,173 +270,35 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 	Numbered lists are also specified with `-`, but inside
 	a block directive `&list[start: 1]:`
 
-	
-&table[column_align: ["left", "left", "left"]]:
-  - - # Remark
-    - # Result
-    - # HTML
+&TestCase:
+	```remark
+	| Prose blocks are special
+	|   line breaks and whitespace preserved
+ 	|      like foot prints in snow
+	```
+	@Fragment {"text": [
+		@Prose {"text": [
+			"Prose", " ", "blocks", " ", "are",
+			 " ", "special", @Hardbreak {"text": ["\n"]}, 
+			@Whitespace {"text": ["  "]}, "line", " ", "breaks",
+			 " ", "and", " ", "whitespace", " ", "preserved",
+			 @Hardbreak {"text": ["\n"]}, 
+			@Whitespace {"text": ["     "]}, "like", " ", "foot",
+			 " ", "prints", " ", "in", " ", "snow"
+		]}
+	]}
+	@Fragment {}
+	Prose Blocks
 
-  - 
-    - ```
-      # A multi-line
-      # Heading
-      ```
-    - 
-      # A multi-line
-      # Heading
-      
-    - `<h1>A multi-line Heading</h1>` 
-  - 
-    - `---`
-    -  &hr 
-    - `<hr/>`  
-  -
-    - ```
-      - 1
-      - 2
-      ```
-    -
-      - 1
-      - 2 
-    -
-      ```
-      <ul>
-      <li>1</li>
-      <li>2</li>
-      </ul>
-      ```
-  -
-    - ```
-      -- 1
-      -- 2
-      ```
-    -
-      -- 1
-      -- 2 
-    -
-      ```
-      <ul>
-      <li>1</li>
-      <li>2</li>
-      </ul>
-      ```
-  - - ````
-      ```
-      1 + 2
-      ```
-      ````
-    - ```
-      1 + 2
-      ```
-    - ```
-      <pre><code>1 + 2</code></pre>
-      ```
-  - - ```
-      > A *bolded line
-      > that continues* 
-
-      > A second quote
-      ```
-    -
-      > A *bolded line
-      > that continues* 
-
-      > A second quote
-    -
-      ```
-      <blockquote>
-      <p>A <strong>bolded line that continues</strong></p>
-      </blockquote>
-      <blockquote>
-      <p>A Second Quote</p>
-      </blockquote>
-      ```
-  - - ```
-      | header 1 | header 2 |
-      | :------: | :------: |
-      | cell 1   | cell 2   |
-      ```
-    - 
-      &table:
-        - - # Header 1
-          - # Header 2
-        - - cell 1
-          - cell 2
-      
-    - ```
-      <table><thead><tr><td>header 1 ....
-      .... <td>cell 2</td></tr></table> 
-      ```
-  - - ```
-      | Prose blocks are special
-      |   line breaks and whitespace preserved
-      |      like foot prints in snow
-      ```
-    -
-      | Prose blocks are special
-      |   line breaks and whitespace preserved
-      |      like foot prints in snow
-    - ```
-      <p style="white-space: pre-wrap">...
-      ...</p>
-      ```
-
-Unlike markdown, and a little more like LaTeX, Remark has a standard form for directives, `&name[args]{text}`.
-
-&table:
-   - - # Shorthand
-     - # Longhand
-      
-   - - `*text*`, `_text_`, `~text~`
-     - `&strong{text}`, `&em{text}`, `&strike{text}`
-
-   - - `# Heading`
-     - `&heading[level: 1]: Heading`
-   - - ````
-        - 1
-        - 2
-       ````
-     - ````
-       &list: &item{1}&item{2}
-       ````
-   - - ````
-       ```python
-       1 + 2
-       ```
-       ````
-     - ````
-       &code[language: "python"]```
-       1 + 2
-       ```
-       ````
-
-Block directives and inline directives accept arguments, too.
-
-````
-# &[arg: 1] A Header with args, including **strong**&[args:2] inline args.
-
---- [another: 4]
-
-&list[start: 1]:
-  - [args: 4.5] A Numbered List
-    > [args: 5] A block quote
-
-    > A New Paragraph in the same blockquote
-
-&table[args:3]:
-| Heading |
-| :-----: |
-|  Cell   |
-
-````
-
-There's even a way to embed raw data inside a document, too:
-
-```
-@Metadata {name: "tef", title: "Remark README"}
-```
-
-
+&TestCase:
+	Code Blocks
+&TestCase:
+	Tables
+	```remark
+	| header 1 | header 2 |
+	| :------: | :------: |
+ 	| cell 1   | cell 2   |
+        ```
 &end
 
 &begin::section

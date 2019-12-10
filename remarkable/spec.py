@@ -6,17 +6,31 @@ def run_tests(doc):
     success = []
     total = 0
     working = 0
+    skipped = 0
     for n, test_case in enumerate(tests):
         total += 1
         if not test_case.text:
             raw_text = test_case.get_arg('input_text')
+            if raw_text is None: 
+                test_case.args.append(('state', 'skipped'))
+                skipped+=1
+                continue
             if hasattr(raw_text, 'text'):
                 raw_text = "\n".join(raw_text.text)
             output_dom = test_case.get_arg('output_dom')
-        else:
+        elif len(test_case.text) >= 2:
+            # todo: select codeblock, etc
             raw_text, output_dom = test_case.text[:2]
+            if getattr(raw_text, "name", "") != dom.CodeBlock.name or raw_text.get_arg('language') != 'remark':
+                test_case.args.append(('state', 'skipped'))
+                skipped+=1
+                continue
             test_case.text = test_case.text[2:]
             raw_text = "".join(raw_text.text)
+        else:
+            test_case.args.append(('state', 'skipped'))
+            skipped+=1
+            continue
         result_dom = parser.parse(raw_text)
         test_case.args.append(('result_dom', result_dom))
         test_case.args.append(('number', n))
@@ -42,11 +56,13 @@ def run_tests(doc):
     for r in doc.select(dom.TestReport.name):
         r.args.append(('total', total))
         r.args.append(('working', working))
+        r.args.append(('skipped', skipped))
         r.text += [ 
             dom.Table( [ ('align', ()), ], [
                 dom.Row((), [
                     dom.CellSpan((), [ dom.Strong((), ["Test", " ", "Report:"]), ]),
                     dom.CellSpan((), ["Working:", " ", str(working)]),
+                    dom.CellSpan((), ["Skipped:", " ", str(skipped)]),
                     dom.CellSpan((), ["Total:", " ", str(total)]),
                 ]),
             ])
