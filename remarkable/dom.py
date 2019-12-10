@@ -36,7 +36,8 @@ class Element:
             elif y != other.get_arg(x): return
 
         other_text = other.get_arg('text') or other.text
-        
+
+        if len(self.text != other_text): return
         return all(x == y for x,y in zip(text, other_text))
 
     def get_arg(self, key):
@@ -142,6 +143,14 @@ class Fragment(Block):
 
     def walk(self, builder):
         with builder.build_fragment() as b:
+            b.walk_text(self.text)
+
+@elements.add()
+class InlineFragment(Inline):
+    name = "InlineFragment"
+
+    def walk(self, builder):
+        with builder.build_inline_fragment() as b:
             b.walk_text(self.text)
 
 @elements.add()
@@ -686,6 +695,10 @@ inline_directives = {
         "comment": CommentSpan,
         "math": MathSpan,
 }
+entities = {}
+
+def named_entity(name):
+    return NamedEntity([('name', name)], [entities[name]])
 
 def object_to_tagged(obj):
     args = {}

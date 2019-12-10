@@ -211,3 +211,58 @@ Fragments can be specified with directives, or data structures too:
 	@Fragment {text: [@Blockquote {}]}
 
 &end
+
+# ...
+
+# Lists
+
+&begin::section
+
+# Directives
+
+## Entities
+
+&TestCase:
+	```remark
+	&65;
+	```
+	@Fragment {
+		text: [
+			@Paragraph { text: [@Codepoint {n: 65}]},
+		]
+	}
+&TestCase:
+	```remark
+	&0x41;
+	```
+	@Fragment {
+		text: [
+			@Paragraph { text: [@Codepoint {n: 0x41}]},
+		]
+	}
+&TestCase:
+	```remark
+	&#64;&#0x41 &#x42&x43
+	```
+	@Fragment { text: [ @Paragraph { text: [
+		@Codepoint {n: 0x40}, 
+		@Codepoint {n: 0x41}, 
+		" ", 
+		@Codepoint {n: 0x42},  
+		@Codepoint {n: 0x43}, 
+	]}, ] }
+
+
+&TestCase:
+	```remark
+	- 1
+	- 2
+
+	```
+	@Fragment { text: [
+		@BulletList { text: [
+			@ItemSpan { text: ["1"] },
+			@ItemSpan { text: ["2"] },
+		] },
+	] }
+
