@@ -19,6 +19,7 @@ def run_tests(doc):
             raw_text = "".join(raw_text.text)
         result_dom = parser.parse(raw_text)
         test_case.args.append(('result_dom', result_dom))
+        test_case.args.append(('number', n))
 
         if result_dom == output_dom:
             state = "working"
@@ -28,7 +29,6 @@ def run_tests(doc):
             state = "failed"
             test_case.args.append( ('state', state))
             state = dom.Strong((), state)
-        test_case.args.append(('number', n))
         test_case.text = [ 
             dom.Table( [ ('align', ()), ], [
                 dom.Row((), [
@@ -42,7 +42,7 @@ def run_tests(doc):
     for r in doc.select(dom.TestReport.name):
         r.args.append(('total', total))
         r.args.append(('working', working))
-        r.text = [ 
+        r.text += [ 
             dom.Table( [ ('align', ()), ], [
                 dom.Row((), [
                     dom.CellSpan((), [ dom.Strong((), ["Test", " ", "Report:"]), ]),

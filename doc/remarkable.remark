@@ -5,6 +5,8 @@
 	title: "Remark Document Language Specification", 
 }
 
+&TestReport
+
 &begin::section intro
 
 > I also dream about a modern replacement for LaTeX
@@ -12,37 +14,38 @@
 > (at least PDF, HTML, EPUB).
 > &em{John MacFarlane, author of Pandoc, editor of CommonMark.}
 
-&TestReport
+	`````remark
+	# A Remarkable Example Document
 
-`````remark
-# A Remarkable Example Document
+	Remarkable is a CommonMark-alike markup language designed
+	for writing larger technical documents.
 
-Remarkable is a CommonMark-alike markup language designed
-for writing larger technical documents.
+	- It has lists
+	- It has *bold*, _italic_, and ~strikethrough~ text
+	- It even has `inline code` fragments
 
-- It has lists
-- It has *bold*, _italic_, and ~strikethrough~ text
-- It even has `inline code` fragments
+	Unlike CommonMark, there's a standard long form for
+	annotating text: `&directive_name[args]{text}` 
 
-Unlike CommonMark, there's a standard long form for annotating text: `&directive_name[args]{text}` 
+	```
+	&list:
+		&item: It has Lists
 
-```
-&list:
-	&item: It has Lists
+		&item: It has &strong{bold}, &emph{italic},
+		   and &strike{strikethrough} text
 
-	&item: It has &strong{bold}, &emph{italic},
-	   and &strike{strikethrough} text
+		&item: It even has &code`inline code` fragments
+	```
 
-	&item: It even has &code`inline code` fragments
-```
-
-`````
+	`````
 
 &end::section 
 
 &begin::section toc
 
 # Table of Contents
+
+
 
 - Overview
 	- Why Remark?
@@ -104,16 +107,17 @@ The biggest difference might be that Remark has a Grammar.
 Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented in terms of a parsing evaluation grammar. 
 
 
-## Remark In A Nutshell
-
-Remark is very similar to Markdown:
+## A Tour of The Syntax
 
 &TestCase:
 	```remark
-	\* \` \> \# \\
+	\* \` \> \# \\ \& \- \_ \: \@ \[ \]
 	```
 	@Fragment {text: [ @Paragraph { text : [
 	"*", " ", "`", " ", ">", " ", "#", " ", "\\",
+	" " , "&", " ", "-", " " , "_", " ", ":", " ",
+	"@", " ", "[", " ", "]",
+	
 	]} ]}
 	
 	You can use &code{\\} to escape any punctuation
@@ -159,7 +163,7 @@ Remark is very similar to Markdown:
 	@Emoji {name: "emoji"},
 	]} ]}
 	
-	Example text.
+	There's also shorthand for `:emoji:`.
 
 &TestCase:
 	```remark
@@ -174,6 +178,93 @@ Remark is very similar to Markdown:
 	
 	Like how `\` can be used to escape punctuation, it can also
 	be used to preserve newlines and spaces.
+
+&TestCase:
+	```remark
+	# Example
+	# Heading
+	```
+	@Fragment {text: [
+		@Heading { level: 1,  text : [
+			"Example", 
+			@Softbreak {"text": ["\n"]},
+			"Heading",
+		]}
+	]}
+	
+	There is \q{atx-style} headings, which can span multiple
+	lines.
+
+&TestCase:
+	```remark
+	> Example
+	> Blockquote
+
+	> > Another Example
+	```
+	@Fragment {text: [
+		@Blockquote { text: [ @Paragraph { text: [
+			"Example", 
+			@Softbreak {"text": ["\n"]},
+			"Blockquote",
+		]} ]},
+		@Blockquote { text : [
+			@Blockquote { text: [ @Paragraph { text: [
+				"Another", " " , "Example", 
+			]} ]},
+		]},
+	]}
+	
+	Like Markdown, `>` can be used to mark out blockquotes. Unlike
+	Markdown, or CommonMark, the `>` cannot be omitted.
+
+	Additionally, An empty line ends a blockquote.
+	Blockquotes
+
+&TestCase:
+	```remark
+	- 1
+	- 2
+
+
+	- 3
+	- 4
+	```
+	@Fragment { text: [
+		@BulletList { text: [
+			@ItemSpan { text: ["1"] },
+			@ItemSpan { text: ["2"] },
+		] },
+		@BulletList { text: [
+			@ItemSpan { text: ["3"] },
+			@ItemSpan { text: ["4"] },
+		] },
+	] }
+	
+	Bulleted lists can be specified with `-`. There has to be
+	whitespace after the `-` (or a newline)
+
+	There can be at most one blank line between lists
+
+&TestCase:
+	```remark
+	&list[start:1]:
+	- 1
+	- 2
+	- 3
+	- 4
+	```
+	@Fragment { text: [
+		@NumberedList { start: 1, text: [
+			@ItemSpan { text: ["1"] },
+			@ItemSpan { text: ["2"] },
+			@ItemSpan { text: ["3"] },
+			@ItemSpan { text: ["4"] },
+		] },
+	] }
+	
+	Numbered lists are also specified with `-`, but inside
+	a block directive `&list[start: 1]:`
 
 	
 &table[column_align: ["left", "left", "left"]]:
@@ -548,17 +639,4 @@ Byte order mark is ignored at start of file.
 		@Codepoint {n: 0x43}, 
 	]}, ] }
 
-
-&TestCase:
-	```remark
-	- 1
-	- 2
-
-	```
-	@Fragment { text: [
-		@BulletList { text: [
-			@ItemSpan { text: ["1"] },
-			@ItemSpan { text: ["2"] },
-		] },
-	] }
 

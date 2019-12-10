@@ -126,17 +126,17 @@ def Test(ctx, file, width, height, heading):
         fragments.append(dom.HorizontalRule((), ()))
 
     for t in doc.select('TestCase'):
-        fragments.append(t)
         if t.get_arg('state') == 'working':
-            fragments.append(dom.Paragraph((), ["worked"]))
+            pass # fragments.append(dom.Paragraph((), ["worked"]))
         else:
+            fragments.append(t)
             fragments.append(dom.Paragraph((), ["failed"]))
             result_dom = t.get_arg('result_dom')
             if result_dom:
                 fragments.append(dom.Paragraph((), ["raw ast: ",dom.dump(result_dom)]))
             else:
                 fragments.append(dom.Paragraph((), ["raw ast: null"]))
-        fragments.append(dom.HorizontalRule((), ()))
+            fragments.append(dom.HorizontalRule((), ()))
 
 
     return Document(dom.Document((), fragments), settings)

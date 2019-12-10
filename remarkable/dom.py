@@ -29,6 +29,7 @@ elements = Registry()
 class Element:
     def __eq__(self, other):
         if other is None: return
+        if isinstance(other, str): return
         if self.name != other.name: return
         text = self.text
         for x, y in self.args:
