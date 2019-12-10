@@ -179,6 +179,8 @@ html_tags = {
        dom.Strikethrough.name: "<del>{text}</del>",
        dom.Strong.name: "<strong>{text}</strong>",
        dom.Emphasis.name: "<em>{text}</em>",
+       dom.BulletList.name: "<ul>{text}</ul>",
+       dom.NumberedList.name: "<ol>{text}</ol>",
        dom.ItemBlock.name: "<li>{text}</li>",
        dom.ItemSpan.name: "<li>{text}</li>",
        dom.RawBlock.name: "{text}",
@@ -205,14 +207,6 @@ def to_html(obj):
     if name == dom.Heading.name:
         name = f"h{args.get('level',1)}"
         if 'level' in args: args.pop('level')
-
-    if name == dom.ListBlock.name:
-        if 'start' in args:
-            name = "ol"
-        else:
-            name = "ul"
-        if 'marker' in args: args.pop('marker')
-
 
     if name in html_tags:
         return html_tags[name].format(name=name, text=text, **args)

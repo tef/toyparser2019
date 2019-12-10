@@ -195,13 +195,12 @@ class CodeBlock(Block):
             for word in self.text:
                 p.walk(word)
 
-
 @elements.add()
-class Aside(Block):
+class AsideBlock(Block):
     name = "AsideBlock"
 
 @elements.add()
-class Warning(Block):
+class WarningBlock(Block):
     name = "WarningBlock"
 
 
@@ -224,11 +223,24 @@ class Figure(Block):
 
 
 @elements.add()
-class ListBlock(Block):
-    name = "ListBlock"
+class BulletList(Block):
+    name = "BulletList"
 
     def walk(self, builder):
-        with builder.build_list(self.get_arg('start'), self.get_arg('bullet'), len(self.text)) as l:
+        with builder.build_bullet_list(self.get_arg('bullet'), len(self.text)) as l:
+            for item in self.text:
+                if item.name == ItemSpan.name:
+                    with l.build_item_span() as p:
+                        p.walk_text(item.text)
+                if item.name == ItemBlock.name:
+                    with l.build_block_item() as p:
+                        p.walk_text(item.text)
+@elements.add()
+class NumberedList(Block):
+    name = "NumberedList"
+
+    def walk(self, builder):
+        with builder.build_numbered_list(self.get_arg('start'), len(self.text)) as l:
             for item in self.text:
                 if item.name == ItemSpan.name:
                     with l.build_item_span() as p:
@@ -344,85 +356,36 @@ class CodeSpan(Inline):
         with builder.build_codespan() as b:
             b.walk_text(self.text)
 
+class Effect(Inline):
+    def walk(self, builder):
+        with builder.effect(self.name) as b:
+            b.walk_text(self.text)
 
 @elements.add()
-class Strong(Inline):
+class SmallCaps(Effect):
+    name = "SmallCaps"
+
+@elements.add()
+class Superscript(Effect):
+    name = "Superscript"
+
+@elements.add()
+class Subscript(Effect):
+    name = "Subscript"
+
+@elements.add()
+class Strong(Effect):
     name = "Strong"
 
-    def walk(self, builder):
-        with builder.effect('strong') as b:
-            b.walk_text(self.text)
-
-
 @elements.add()
-class Emphasis(Inline):
+class Emphasis(Effect):
     name = "Emphasis"
 
-    def walk(self, builder):
-        with builder.effect('emphasis') as b:
-            b.walk_text(self.text)
-
-
 @elements.add()
-class Strikethrough(Inline):
+class Strikethrough(Effect):
     name = "Strikethrough"
 
-    def walk(self, builder):
-        with builder.effect('strikethrough') as b:
-            b.walk_text(self.text)
 
-@elements.add()
-class Hardbreak(Inline):
-    name ="HardBreak"
-
-    def walk(self, builder):
-        builder.add_break()
-
-
-@elements.add()
-class Wordbreak(Inline):
-    name ="WordBreak"
-
-    def walk(self, builder):
-        builder.add_wordbreak()
-
-
-@elements.add()
-class Newline(Inline):
-    name = "Newline"
-
-    def walk(self, builder):
-        builder.add_break()
-
-
-@elements.add()
-class Softbreak(Inline):
-    name = "Softbreak"
-
-    def walk(self, builder):
-        builder.add_softbreak()
-
-
-@elements.add()
-class Nbsp(Inline):
-    name = "Nbsp"
-
-    def walk(self, builder):
-        builder.add_text(" ")
-
-@elements.add()
-class NamedEntity(Inline):
-    name = "NamedEntity"
-
-    def walk(self, builder):
-        builder.add_named_entity(self.text[0])
-
-@elements.add()
-class Codepoint(Inline):
-    name = "Codepoint"
-
-    def walk(self, builder):
-        builder.add_text(chr(self.get_arg('n')))
 
 @elements.add()
 class Emoji(Inline):
@@ -431,6 +394,14 @@ class Emoji(Inline):
     def walk(self, builder):
         builder.add_emoji(self.get_arg('name'))
 
+
+@elements.add()
+class Cite(Inline):
+    name = "Cite"
+
+    def walk(self, builder):
+        with builder.build_cite(self.get_arg('name')) as b:
+            b.walk_text(self.text)
 
 @elements.add()
 class NoteSpan(Inline):
@@ -524,6 +495,20 @@ class MathSpan(Inline):
         for o in self.text:
             o.walk(builder)
 
+@elements.add()
+class NamedEntity(Inline):
+    name = "NamedEntity"
+
+    def walk(self, builder):
+        builder.add_named_entity(self.text[0])
+
+@elements.add()
+class Codepoint(Inline):
+    name = "Codepoint"
+
+    def walk(self, builder):
+        builder.add_text(chr(self.get_arg('n')))
+
 
 @elements.add()
 class Whitespace(Inline):
@@ -531,6 +516,42 @@ class Whitespace(Inline):
 
     def walk(self, builder):
         builder.add_space(self.text[0]) 
+
+@elements.add()
+class Nbsp(Inline):
+    name = "Nbsp"
+
+    def walk(self, builder):
+        builder.add_text(" ")
+
+
+@elements.add()
+class Hardbreak(Inline):
+    name ="HardBreak"
+
+    def walk(self, builder):
+        builder.add_break()
+
+@elements.add()
+class Wordbreak(Inline):
+    name ="WordBreak"
+
+    def walk(self, builder):
+        builder.add_wordbreak()
+
+@elements.add()
+class Newline(Inline):
+    name = "Newline"
+
+    def walk(self, builder):
+        builder.add_break()
+
+@elements.add()
+class Softbreak(Inline):
+    name = "Softbreak"
+
+    def walk(self, builder):
+        builder.add_softbreak()
 
 
 @elements.add()
@@ -572,9 +593,16 @@ class TestCase(Element):
     def walk(self, builder):
         builder.walk_text(self.text)
 
+def list_directive(args, text):
+    if any('start' == x[0] for x in args):
+        return NumberedList(args, text)
+    return BulletList(args, text)
+
 block_directives = { # \foo::begin
         "hr": HorizontalRule,
-        "list": ListBlock,
+        "list": list_directive,
+        "ol": NumberedList,
+        "ul": BulletList,
         "blockquote": Blockquote,
         "item": ItemBlock,
         "table": Table,
@@ -583,8 +611,8 @@ block_directives = { # \foo::begin
         "code": CodeBlock,
         "section": Section,
         "division": Division,
-        "aside": Aside,
-        "warning": Warning,
+        "aside": AsideBlock,
+        "warning": WarningBlock,
         "note": NoteBlock,
         "comment": CommentBlock,
         "math": MathBlock,
@@ -601,15 +629,17 @@ para_directives = { # \foo: ...
         "prose": Prose,
         "h": Heading,
         "heading": Heading,
-        "list": ListBlock,
+        "list": list_directive,
+        "ul": BulletList,
+        "ol": NumberedList,
         "code": CodeBlock,
         "raw": RawBlock,
         "table": Table,
         "row": Row,
         "cell": CellSpan,
         "span": Span,
-        "comment": CommentSpan,
-        "math": MathSpan,
+        "comment": CommentBlock,
+        "math": MathBlock,
 }
 
 inline_directives = {

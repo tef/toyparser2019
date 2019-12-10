@@ -434,16 +434,26 @@ class BlockBuilder:
         self.lines.append("")
 
     @contextmanager
-    def build_list(self, start, bullet, num):
+    def build_bullet_list(self, bullet, num):
         self.add_index()
         box = RenderBox(0, self.box.width, self.box.height)
-        builder = ListBuilder(self.settings, box, start, bullet, num)
+        builder = ListBuilder(self.settings, box, None, bullet, num)
         yield builder
         mapper, lines = builder.build()
         self.lines.extend(lines)
         self.add_mapper(mapper)
         self.lines.append("")
     
+    @contextmanager
+    def build_numbered_list(self, start, num):
+        self.add_index()
+        box = RenderBox(0, self.box.width, self.box.height)
+        builder = ListBuilder(self.settings, box, start, None, num)
+        yield builder
+        mapper, lines = builder.build()
+        self.lines.extend(lines)
+        self.add_mapper(mapper)
+        self.lines.append("")
 
 class TableBuilder:
     def __init__(self, settings, box, cols, align):
@@ -837,6 +847,7 @@ class ParaBuilder:
 
     @contextmanager
     def effect(self, name):
+        name = name.casefold()
         self.add_wordbreak()
         self.current_word.append(self.start_code[name])
         self.effects.append(name)
