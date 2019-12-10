@@ -68,7 +68,7 @@ If metadata is provided, a `Document` is returned instead.
 
 &TestCase:
 	```remark
-	\metadata[title: "Example"]
+	&metadata[title: "Example"]
 
 	```
 	@Document {title: "Example", text: []}
@@ -77,8 +77,8 @@ Alternatively, a `Document` can be created explicitly, using a directive:
 
 &TestCase:
 	```remark
-	\begin::document
-	\end
+	&begin::document
+	&end
 	```
 	@Document {}
 
@@ -111,8 +111,8 @@ Fragments can be specified with directives, or data structures too:
 
 &TestCase:
 	```remark
-	\begin::fragment
-        \end
+	&begin::fragment
+        &end
 	```
 	@Fragment {}
 
@@ -121,7 +121,7 @@ Fragments can be specified with directives, or data structures too:
 
 &TestCase:
 	```remark
-	\metadata
+	&metadata
 	```
 	@Document {}
 
@@ -133,7 +133,7 @@ Fragments can be specified with directives, or data structures too:
 
 &TestCase:
 	```remark
-	\metadata[]
+	&metadata[]
 	```
 	@Document {}
 
@@ -154,6 +154,10 @@ Fragments can be specified with directives, or data structures too:
 	If mispelled, and the solitary item, no `Document` or `Fragment`
 	is returned
 
+# BOM
+
+Byte order mark is ignored at start of file.
+
 &end::section
 
 &begin::section
@@ -166,7 +170,7 @@ Fragments can be specified with directives, or data structures too:
 
 
 @TestCase {
-	input_text: "\\paragraph: Hi",
+	input_text: "&paragraph: Hi",
 	output_dom: @Fragment {text: [@Paragraph {text: ["Hi"]}] },
 }
 
@@ -178,35 +182,35 @@ Fragments can be specified with directives, or data structures too:
 
 ## Begin-End Blocks
 
-- `\begin::name` and optionally, `\end`
+- `&begin::name` and optionally, `&end`
 - end of file collapses all open blocks
-- `\end` collapses current open block
-- `\end::name` collapses all blocks until name matches
+- `&end` collapses current open block
+- `&end::name` collapses all blocks until name matches
 
 
-- Optionally specify an identifier, `\begin::name identifier`
-- `\end::name identifier` closes all blocks until name and identifier matches
+- Optionally specify an identifier, `&begin::name identifier`
+- `&end::name identifier` closes all blocks until name and identifier matches
 
 &TestCase:
 	```remark
-	\begin::fragment
-	\begin::blockquote
-	\end::fragment
+	&begin::fragment
+	  &begin::blockquote
+	&end::fragment
 	```
 	@Fragment {text: [@Blockquote {}]}
 
 &TestCase:
 	```remark
-	\begin::blockquote outer
-	\begin::blockquote
-	\end::blockquote outer
+	&begin::blockquote outer
+	    &begin::blockquote
+	&end::blockquote outer
 	```
 	@Fragment {text: [ @Blockquote {text: [ @Blockquote {text: []} ]} ]}
 
 &TestCase:
 	```remark
-	\begin::fragment
-	\begin::blockquote
+	&begin::fragment
+	&begin::blockquote
 	```
 	@Fragment {text: [@Blockquote {}]}
 

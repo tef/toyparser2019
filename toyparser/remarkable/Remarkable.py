@@ -9,6 +9,8 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
     # block
     @rule(start="remark_document")
     def remark_document(self):
+        with self.optional():
+            self.literal("\uFEFF")
         with self.choice():
             with self.case():
                 self.end_of_file()

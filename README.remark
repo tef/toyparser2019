@@ -190,7 +190,7 @@ Unlike markdown, and a little more like LaTeX, Remark has a standard form for di
 Block directives and inline directives accept arguments, too.
 
 ````
-# [arg: 1] A Header with args, including **strong**[args:2] inline args.
+# &[arg: 1] A Header with args, including **strong**&[args:2] inline args.
 
 --- [another: 4]
 
@@ -247,9 +247,9 @@ Blocks can contain other blocks and paragraphs. Paragraphs can contain inline di
 
 - `#` marked headings: `# heading`, `## Subheading` and continue on till the end of the paragraph.
 
-- `# [args] text` to pass arguments
+- `# &[args] text` to pass arguments
 
-- `---` for a horizonal rule, `--- [arguments]` with args, `----`,`-----`, at least 3 `-`s
+- `---` for a horizonal rule, `--- &[arguments]` with args, `----`,`-----`, at least 3 `-`s
 
 ## Code Blocks
 
@@ -350,7 +350,7 @@ A directive has a name, optional parameters, and an argument, usually text:
 
 - `&heading[1]{text}`, or `&h[2]{text}`
 - `&emphasis{text}`, `&strong{text}`
-- `&hr`, `\br` 
+- `&hr`, `&br` 
 - `&list[spacing: "loose"]{&item{text}}`, 
 
 For example, `# My heading` can be expressed in several different ways:
@@ -492,7 +492,7 @@ The `&` is not mandatory for inline forms, code blocks, horizonal rules, or begi
 
 - A `\` before newline creates a hardbreak
 
-- Use `\*`, `\_`, `\#`, `\>`, \code{\`} to get those characters.
+- Use `\*`, `\_`, `\#`, `\>`, &code{\`} to get those characters.
 
 ## Inlines
 
