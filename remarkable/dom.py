@@ -37,7 +37,7 @@ class Element:
 
         other_text = other.get_arg('text') or other.text
 
-        if len(self.text != other_text): return
+        if len(text) != len(other_text): return
         return all(x == y for x,y in zip(text, other_text))
 
     def get_arg(self, key):
@@ -613,6 +613,8 @@ class TestCase(Element):
     def walk(self, builder):
         builder.walk_text(self.text)
 
+# ---
+
 def list_directive(args, text):
     if any('start' == x[0] for x in args):
         return NumberedList(args, text)
@@ -699,6 +701,31 @@ entities = {}
 
 def named_entity(name):
     return NamedEntity([('name', name)], [entities[name]])
+
+def named_block_directive(name, args, text):
+    if name in para_directives:
+        return para_directives[name](args, text)
+    elif name in block_directives:
+        return block_directives[name](args, text)
+    elif name in entities:
+        return named_entities(name)
+    else:
+        return NamedBlockDirective([('name', name)] + args, text)
+
+def named_inline_directive(name, args, text):
+    if name in inline_directives:
+        return inline_directives[name](args, text)
+    return NamedInlineDirective([('name', name)]+ args, text)
+
+def named_rson_block(name, args):
+    if name in elements:
+        text = args.pop('text') if 'text' in args else []
+        args = list(args.items())
+        return elements.make(name, args, text)
+    else:
+        args = list(args.items())
+        return Node(name, args)
+
 
 def object_to_tagged(obj):
     args = {}
