@@ -55,6 +55,7 @@ class Element:
             if isinstance(o, str): continue
             yield from o.select(name)
 
+
 class Node(Element):
     def __init__(self, name, args):
         self.name = name
@@ -67,6 +68,16 @@ class Node(Element):
 
     def walk(self, builder):
         builder.add_node(self)
+
+class DocumentSet(Node):
+    name = "DocumentSet"
+    def __init__(self, args):
+        self.args = args
+
+    @property
+    def text(self):
+        x = self.get_arg('text')
+        return x or ()
 
 class Block(Element):
     def __init__(self, args, text):

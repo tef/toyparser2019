@@ -39,6 +39,7 @@
 		- Delimited Directives
 		- List, Blockquote, Prose, Table Directives
 - Document Object Model
+	- Types
 	- Grammar
 	- RSON
 - Index
@@ -114,6 +115,45 @@ Fragments can be specified with directives, or data structures too:
         \end
 	```
 	@Fragment {}
+
+# Metadata
+
+
+&TestCase:
+	```remark
+	\metadata
+	```
+	@Document {}
+
+&TestCase:
+	```remark
+	&metadata
+	```
+	@Document {}
+
+&TestCase:
+	```remark
+	\metadata[]
+	```
+	@Document {}
+
+&TestCase:
+	```remark
+	@Metadata {}
+	```
+	@Document {}
+
+	
+&TestCase:
+	```remark
+	@metadata {}
+	```
+
+	@metadata {}
+		
+	If mispelled, and the solitary item, no `Document` or `Fragment`
+	is returned
+
 \end::section
 
 \begin::section
