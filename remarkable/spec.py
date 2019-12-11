@@ -43,14 +43,30 @@ def run_tests(doc):
             state = "failed"
             test_case.args.append( ('state', state))
             state = dom.Strong((), state)
+        def brk(s):
+            o = []
+            while True:
+                x = s.split(' ', 1)
+                if len(x) <2:
+                    o.append(x[0])
+                    break
+                else:
+                    if x[0]:
+                        o.append(x[0])
+                    o.append(' ')
+                    s= x[1]
+            return o
         test_case.text = [ 
-            dom.Table( [ ('align', ()), ], [
+            dom.Table( [ ('column_align', ['left']), ], [
                 dom.Row((), [
-                    dom.CellSpan((), [dom.Strong((), ["Test", " ", "Case", " ",  "#", str(n)]) ]),
-                    dom.CellSpan((), [dom.CodeSpan((), raw_text)]),
-                    dom.CellSpan((), [dom.CodeSpan((), dom.dump(output_dom))]),
-                    dom.CellSpan((), [state,]),
-                ]),
+                    dom.CellBlock((), [
+                        dom.BulletList( [('bullet', '')], [
+                            dom.ItemBlock((), [dom.Paragraph((), [dom.Strong((), ["Test", " ", "Case", " ",  "#", str(n), " ", "is", " ", state]) ]) ]),
+                            dom.ItemBlock((), [dom.CodeBlock((), [raw_text]) ]),
+                            dom.ItemBlock((), [dom.CodeBlock((), brk(dom.dump(output_dom)))]),
+                        ])
+                    ])
+                ])
             ])
         ] + test_case.text
     for r in doc.select(dom.TestReport.name):

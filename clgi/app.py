@@ -29,6 +29,7 @@ def to_response(response):
 class Response:
     pass
 
+in_complete = 'COMP_LINE' in os.environ and 'COMP_POINT' in os.environ
 class Multiple(Response):
     def __init__(self, original, extra):
         self.original = original

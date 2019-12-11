@@ -1453,13 +1453,13 @@ def compile_python(grammar, cython=False, wrap=False):
                         f"    start_column, start_offset = column, offset",
                         f"    if count < 0: offset = -1",
                         f"    while count > 0 and offset < buf_eof:",
-                        f"        codepoint = buf[offset]",
+                        f"        codepoint = buf[offset]; ",
                         f"        if {cond}:",
                         f"            if not allow_mixed_indent:",
                         f"                if codepoint == '\\t': saw_tab = True",
                         f"                else: saw_not_tab = True",
                         f"                if saw_tab and saw_not_tab:",
-                        f"                     offset -1; break",
+                        f"                     offset = -1; break",
                         f"            if codepoint != '\\t':",
                         f"                column += 1",
                         f"                offset += 1",
@@ -1468,15 +1468,17 @@ def compile_python(grammar, cython=False, wrap=False):
                         f"                if offset == partial_tab_offset and partial_tab_width > 0:",
                         f"                    width = partial_tab_width",
                         f"                else:",
-                        f"                    width  = (self.tabstop-(column%self.tabstop))",
+                        f"                    width  = (self.tabstop-((column)%self.tabstop));",
                         f"                if width <= count:",
                         f"                    column += width",
                         f"                    offset += 1",
                         f"                    count -= width",
                         f"                else:",
-                        f"                    column += count",
                         f"                    partial_tab_offset = offset",
                         f"                    partial_tab_width = width-count",
+                        f"                    column += count",
+                        f"                    offset += count",
+                        f"                    count -= width",
                         f"                    break",
                 ))
                 if newline_rn:
@@ -1866,7 +1868,7 @@ def compile_python(grammar, cython=False, wrap=False):
                         f"            if {offset} == {partial_tab_offset} and {partial_tab_width} > 0:",
                         f"                width = {partial_tab_width}",
                         f"            else:",
-                        f"                width  = (self.tabstop-({column}%self.tabstop))",
+                        f"                width  = (self.tabstop-(({column})%self.tabstop)); ",
             ))
             if _max: steps.extend((
                         f"            if {count} + width > {_maxv}:",
@@ -2093,7 +2095,7 @@ def compile_python(grammar, cython=False, wrap=False):
     else:
         output.extend((
             f"class Parser:",
-            f"    def __init__(self, tabstop=None, allow_mixed_indent=False):",
+            f"    def __init__(self, tabstop=None, allow_mixed_indent=True):",
             f"         self.tabstop = tabstop or {grammar.tabstop}",
             f"         self.cache = None",
             f"         self.allow_mixed_indent = allow_mixed_indent",

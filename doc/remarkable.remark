@@ -122,7 +122,6 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 &TestCase:
 	```remark
 	*text* **text** ***text***
-
 	```
 	@Fragment {text: [ @Paragraph { text : [
 		@Strong {text: ["text"]}, " ",
@@ -271,7 +270,7 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 	```remark
 	| Prose blocks are special
 	|   line breaks and whitespace preserved
- 	|      like foot prints in snow
+	|      like foot prints in snow
 	```
 	@Fragment {"text": [
 		@Prose {"text": [
@@ -284,7 +283,6 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 			 " ", "prints", " ", "in", " ", "snow"
 		]}
 	]}
-	@Fragment {}
 
 	Prose Blocks preserve whitespace within a single paragraph.
 	The `|` must be on every line.
@@ -456,6 +454,24 @@ Byte order mark is ignored at start of file.
 &begin::section blocks
 
 # Blocks
+
+## Paragraph
+
+## Header
+
+## Code Blocks
+
+
+&TestCase:
+	````remark
+		```
+ 	    	1 + 2
+		```
+	````
+	@Fragment {"text": [@CodeBlock {"text": ["1 + 2", "\n"]}]}
+
+	Code Blocks work similarly to Markdown.
+	
 
 &end::section blocks
 

@@ -3,28 +3,7 @@
 import os
 import sys
 import os.path
-
-old = set(sys.modules.keys())
-
-from clgi.errors import Bug, Error
-from clgi.app import App, Router, command, Plaintext, Document
-
-from remarkable import dom
-from remarkable.parser import parse, parse_commonmark
-from remarkable.spec import run_tests
-from remarkable.render_ansi import to_ansi, RenderBox
-from remarkable.render_html import to_html
-
-new = sys.modules.keys() - old
-
-path = os.path.dirname(os.path.abspath(__file__))
-files = [os.path.abspath(__file__)]
-
-for module in new:
-    m = sys.modules[module]
-    file = getattr(m, "__file__", "")
-    if file and os.path.commonprefix([file, path]) == path:
-        files.append(file)
+from contextlib import contextmanager
 
 def is_modified(file):
     dir, p = os.path.split(file)
@@ -37,11 +16,45 @@ def is_modified(file):
             if fn.endswith(b"U"):
                 return True
 
-modified = []
+if 'COMP_LINE' in os.environ and 'COMP_POINT' in os.environ:
+    @contextmanager
+    def check_modified_imports():
+        yield ()
+else:
+    @contextmanager
+    def check_modified_imports():
+        old = set(sys.modules.keys())
+        modified = []
 
-for file in files:
-    if is_modified(file):
-        modified.append(file)
+        yield modified
+
+        new = sys.modules.keys() - old
+
+        path = os.path.dirname(os.path.abspath(__file__))
+        files = [os.path.abspath(__file__)]
+
+        for module in new:
+            m = sys.modules[module]
+            file = getattr(m, "__file__", "")
+            if file and os.path.commonprefix([file, path]) == path:
+                files.append(file)
+
+
+        for file in files:
+            if is_modified(file):
+                modified.append(file)
+
+
+
+with check_modified_imports() as modified:
+    from clgi.errors import Bug, Error
+    from clgi.app import App, Router, command, Plaintext, Document
+
+    from remarkable import dom
+    from remarkable.parser import parse, parse_commonmark
+    from remarkable.spec import run_tests
+    from remarkable.render_ansi import to_ansi, RenderBox
+    from remarkable.render_html import to_html
 
 for m in modified:
     print("modified!", os.path.relpath(m), file=sys.stderr)

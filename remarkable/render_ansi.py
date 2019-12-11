@@ -374,8 +374,7 @@ class BlockBuilder:
     @contextmanager
     def build_codeblock(self):
         self.add_index()
-        box = RenderBox(2, self.box.width-2, self.box.height)
-        builder = ParaBuilder(self.settings, box, prose=True)
+        builder = ParaBuilder(self.settings, self.box, prose=True)
         yield builder
         mapper, lines= builder.build()
         self.add_mapper(mapper)
@@ -395,6 +394,8 @@ class BlockBuilder:
         yield builder
         mapper, lines= builder.build()
         self.add_mapper(mapper)
+        if prose:
+            lines = [line + (" "*(max_width-len(line))) for line in lines]
         self.lines.extend(lines)
         self.lines.append("")
 
@@ -650,7 +651,7 @@ class ListBuilder:
         self.mapper = Mapper()
         self.numbered = start is not None and bullet is None
         self.count = start if start is not None else 1
-        self.bullet = bullet or BULLETS[self.settings.get('list_depth',0)%len(BULLETS)]
+        self.bullet = bullet if bullet is not None else BULLETS[self.settings.get('list_depth',0)%len(BULLETS)]
         self.width = len(str(num))+2 if self.numbered else 7-len(self.bullet)
 
     def add_index(self):
