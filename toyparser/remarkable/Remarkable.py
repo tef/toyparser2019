@@ -343,9 +343,9 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                                     with self.capture_node("directive_table"):
                                         self.inner_table()
                                 with self.case():
-                                    with self.count(columns=True) as c:
-                                        self.whitespace(min=1)
-                                    with self.indented(count=c), self.capture_node("directive_block"):
+                                    # with self.count(columns=True) as c:
+                                    self.whitespace(min=1)
+                                    with self.indented(), self.capture_node("directive_block"):
                                         with self.choice():
                                             with self.case(): self.block_element()
                                             with self.case(): self.para()
@@ -791,9 +791,9 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
 
     @rule()
     def inner_table(self):
-        with self.count(columns=True) as c:
-            self.whitespace(max=8)
-        with self.indented(count=c):
+        # with self.count(columns=True) as c:
+        self.whitespace(max=8)
+        with self.indented():
             with self.variable(0) as rows:
                 with self.capture_node('table_header'):
                     with self.repeat(min=1) as c:
