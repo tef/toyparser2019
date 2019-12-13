@@ -191,13 +191,13 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                         self.set_variable(fence, b)
                         self.whitespace()
                         with self.capture_node("directive_args"), self.optional():
-                            self.literal("[", "&[",)
+                            self.literal("[",)
                             self.directive_args()
                             self.literal("]")
                     with self.case():
                         self.whitespace()
                         with self.capture_node("directive_args"), self.optional():
-                            self.literal("[", "&[",)
+                            self.literal("[",)
                             self.directive_args()
                             self.literal("]")
                         with self.optional():
@@ -439,7 +439,7 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                 self.literal("-")
             with self.capture_node("directive_args"), self.optional():
                 self.whitespace(min=1)
-                self.literal("&[", "[")
+                self.literal("[")
                 self.directive_args()
                 self.literal("]")
         self.line_end()
@@ -466,7 +466,7 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
             with self.capture_node("directive_args"):
                 with self.optional():
                     self.whitespace(min=1)
-                    self.literal("&[")
+                    self.literal("[")
                     self.directive_args()
                     self.literal("]")
             with self.choice():
@@ -497,7 +497,7 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
         with self.capture_node("directive_args"):
             with self.optional():
                 self.whitespace()
-                self.literal("&[")
+                self.literal("[")
                 self.directive_args()
                 self.literal("]")
                 self.line_end()
@@ -530,7 +530,7 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
             with self.choice():
                 with self.case(), self.capture_node("directive_args"):
                     self.whitespace(min=1)
-                    self.literal("&[", "[")
+                    self.literal("[", "[")
                     self.directive_args()
                     self.literal("]")
                 with self.case(), self.capture_node("code_string"):
@@ -599,7 +599,7 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
         self.start_blockquote()
         with self.capture_node("directive_args"):
             with self.optional():
-                self.literal("&[")
+                self.literal("[")
                 self.directive_args()
                 self.literal("] ")
         with self.choice():
@@ -703,7 +703,7 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
             with self.capture_node("remark_item"):
                 with self.capture_node("directive_args"):
                     with self.optional():
-                        self.literal("&[")
+                        self.literal("[")
                         self.directive_args()
                         self.literal("] ")
                 with self.choice():
@@ -739,7 +739,7 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                 with self.capture_node("remark_item"):
                     with self.capture_node("directive_args"):
                         with self.optional():
-                            self.literal("&[")
+                            self.literal("[")
                             self.directive_args()
                             self.literal("] ")
                     with self.choice():
@@ -936,7 +936,7 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
             with self.repeat(min=n, max=n):
                 self.literal(fence)
             with self.capture_node("directive_args"), self.optional():
-                self.literal("&[", "[")
+                self.literal("[")
                 self.directive_args()
                 self.literal("]")
     @rule()
@@ -973,7 +973,7 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
         with self.capture_node('remark_code_span') as span: 
             self.inner_code_span()
             with self.capture_node("directive_args"), self.optional():
-                self.literal("&[", "[")
+                self.literal("[")
                 self.directive_args()
                 self.literal("]")
 

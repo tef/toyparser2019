@@ -190,7 +190,7 @@ Unlike markdown, and a little more like LaTeX, Remark has a standard form for di
 Block directives and inline directives accept arguments, too.
 
 ````
-# &[arg: 1] A Header with args, including **strong**&[args:2] inline args.
+# [arg: 1] A Header with args, including **strong**[args:2] inline args.
 
 --- [another: 4]
 
@@ -247,9 +247,9 @@ Blocks can contain other blocks and paragraphs. Paragraphs can contain inline di
 
 - `#` marked headings: `# heading`, `## Subheading` and continue on till the end of the paragraph.
 
-- `# &[args] text` to pass arguments
+- `# [args] text` to pass arguments
 
-- `---` for a horizonal rule, `--- &[arguments]` with args, `----`,`-----`, at least 3 `-`s
+- `---` for a horizonal rule, `--- [arguments]` with args, `----`,`-----`, at least 3 `-`s
 
 ## Code Blocks
 
@@ -452,20 +452,20 @@ Inner
 Arguments can be passed to horizontal rules, lists, quotes, code blocks, code spans, and others too:
 
 ````
---- &[a:1]
+--- [a:1]
 
-- &[b:2] foo
-> &[c:3] foo
+- [b:2] foo
+> [c:3] foo
 
-``` &[d:4]
+``` [d:4]
 foo
 ```
 
-*one*&[e:5] _two_&[f:6] ~three~&[g:7] `four`&[g:8]
+*one*[e:5] _two_[f:6] ~three~[g:7] `four`[g:8]
 
-### &[h:9] Foo
+### [h:9] Foo
 
-&begin::section name &[i:10]
+&begin::section name [i:10]
 &end::section name
 ````
 

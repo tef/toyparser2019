@@ -438,16 +438,23 @@ Byte order mark is ignored at start of file.
 
 &begin::section inlines
 
+# Inlines
+
 @TestCase {
 	input_text: "Example text.",
 	output_dom: @Fragment {text: [@Paragraph {text: ["Example", " ", "text."]}] },
 }
 
 
-@TestCase {
-	input_text: "&paragraph: Hi",
-	output_dom: @Fragment {text: [@Paragraph {text: ["Hi"]}] },
-}
+
+## Words, Whitespace, Breaks
+
+## Escaping, Entities
+
+## Inline styling
+
+## Inline Code, Emojis, Raw Spans
+
 
 &end::section inlines
 
@@ -455,11 +462,26 @@ Byte order mark is ignored at start of file.
 
 # Blocks
 
-## Paragraph
+## Paragraphs
 
-## Header
+@TestCase {
+	input_text: "&paragraph: Hi",
+	output_dom: @Fragment {text: [@Paragraph {text: ["Hi"]}] },
+}
+
+## Headers
+
+## Prose Blocks
 
 ## Code Blocks
+
+## Blockquotes
+
+## Horizontal Rules
+
+## Lists
+
+## Tables
 
 
 &TestCase:
