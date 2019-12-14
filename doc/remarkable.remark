@@ -46,7 +46,6 @@
 - Remark(able), a restructured markup format.
 	- Why Remark?
 	- A Tour of the Syntax
-	
 - Documents
 	- Fragments, Document, Document Set
 	- Metadata
@@ -69,10 +68,9 @@
 	- Entities
 	- Inline Directives, Inline Code Directives 
 	- Paragraph Directives
-	- Block Directives
-		- Indented Block Directives
-		- Delimited Directives
-		- List, Blockquote, Prose, Table Directives
+	- Indented Block Directives
+	- Delimited Block Directives
+	- List, Blockquote, Prose, Table Directives
 - Document Object Model
 	- Types
 	- Grammar
@@ -445,9 +443,12 @@ Byte order mark is ignored at start of file.
 	output_dom: @Fragment {text: [@Paragraph {text: ["Example", " ", "text."]}] },
 }
 
-
-
 ## Words, Whitespace, Breaks
+
+@TestCase {
+	input_text: "Example text.",
+	output_dom: @Fragment {text: [@Paragraph {text: ["Example", " ", "text."]}] },
+}
 
 ## Escaping, Entities
 
@@ -475,15 +476,6 @@ Byte order mark is ignored at start of file.
 
 ## Code Blocks
 
-## Blockquotes
-
-## Horizontal Rules
-
-## Lists
-
-## Tables
-
-
 &TestCase:
 	````remark
 		```
@@ -494,6 +486,14 @@ Byte order mark is ignored at start of file.
 
 	Code Blocks work similarly to Markdown.
 	
+## Blockquotes
+
+## Horizontal Rules
+
+## Lists
+
+## Tables
+
 
 &end::section blocks
 

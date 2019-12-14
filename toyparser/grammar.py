@@ -1477,7 +1477,6 @@ def compile_python(grammar, cython=False, wrap=False):
                         f"                    partial_tab_offset = offset",
                         f"                    partial_tab_width = width-count",
                         f"                    column += count",
-                        f"                    offset += count",
                         f"                    count -= width",
                         f"                    break",
                 ))
