@@ -715,7 +715,7 @@ def named_block_directive(name, args, text):
     elif name in block_directives:
         return block_directives[name](args, text)
     elif name in entities:
-        return named_entities(name)
+        return named_entity(name)
     else:
         return NamedBlockDirective([('name', name)] + args, text)
 
@@ -723,16 +723,23 @@ def named_inline_directive(name, args, text):
     if name in inline_directives:
         return inline_directives[name](args, text)
     return NamedInlineDirective([('name', name)]+ args, text)
+def _parse_args(args):
+    if isinstance(args, dict):
+        text = args.pop('text') if 'text' in args else []
+        return list(args.items()), text
+    elif isinstance(args, str):
+        return [], [args]
+    else:
+        raise Exception("What")
+
 
 def named_rson_block(name, args):
     if name in elements:
-        text = args.pop('text') if 'text' in args else []
-        args = list(args.items())
+        args, text = _parse_args(args)
         return elements.make(name, args, text)
     else:
-        args = list(args.items())
+        args, text = _parse_args(args)
         return Node(name, args)
-
 
 def object_to_tagged(obj):
     args = {}
@@ -743,11 +750,7 @@ def object_to_tagged(obj):
 
 def tagged_to_object(name, value):
     if name in elements:
-        if 'text' in value:
-            text = value['text']
-        else:
-            text = []
-        value = list(value.items())
+        value, text = _parse_args(value)
         return elements.make(name, value, text)
     else:
         value = list(value.items())

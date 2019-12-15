@@ -428,9 +428,13 @@ Fragments can be specified with directives, or data structures too:
 	If mispelled, and the solitary item, no `Document` or `Fragment`
 	is returned
 
-# BOM
+## BOM
 
-Byte order mark is ignored at start of file.
+&TestCase[
+	input_text: "\uFEFF",
+	output_dom: @Fragment {}
+]:
+	Byte order mark is ignored at start of file.
 
 &end::section document
 
@@ -438,12 +442,48 @@ Byte order mark is ignored at start of file.
 
 # Inlines
 
-@TestCase {
+## Words, Whitespace, Breaks
+
+
+&TestCase[
 	input_text: "Example text.",
 	output_dom: @Fragment {text: [@Paragraph {text: ["Example", " ", "text."]}] },
-}
+]:
+	Whitespaces separate words. Multiple spaces are treated as a single space.
 
-## Words, Whitespace, Breaks
+&TestCase[
+	input_text: "  Example  text.  ",
+	output_dom: @Fragment {text: [@Paragraph {text: ["Example", " ", "text."]}] },
+]:
+	Leading, trailing whitespace is ignored within a paragraph.
+
+&TestCase[
+	input_text: "| Example  text.",
+	output_dom: @Fragment {text: [@Prose {text: ["Example", @Whitespace {text:["  "]}, "text."]}] },
+]: 
+	Normally, whitespace is treated as a single ` `, but this can vary. 
+
+&TestCase[
+	input_text: " \tExample\ttext.\t",
+	output_dom: @Fragment {text: [@Paragraph {text: ["Example", " ", "text.",]}] },
+]:
+	Tabs are treated as whitespace
+&TestCase[
+	input_text: "|\tExample\ttext.\t",
+	output_dom: @Fragment {text: [@Prose {text:
+	[@Whitespace {"text": ["      "]}, "Example", @Whitespace {"text": [" "]}, "text.", @Whitespace {"text": ["   "]}]
+	}]}
+]:
+	Tabs are treated as whitespace, and are converted to spaces. The `| ` prefix is not included, and six
+	spaces are left over.
+
+&TestCase[
+	input_text: "      |\tExample\ttext.\t",
+	output_dom: @Fragment {text: [@Prose {text:
+	[@Whitespace {"Example", @Whitespace {"text": [" "]}, "text.", @Whitespace {"text": ["   "]}]
+	}]}
+]:
+	Tabstop is 8, so a tab at column 8 has width 1, so there is nothing after the `| ` prefix.
 
 @TestCase {
 	input_text: "Example text.",

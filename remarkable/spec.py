@@ -9,15 +9,11 @@ def run_tests(doc):
     skipped = 0
     for n, test_case in enumerate(tests):
         total += 1
-        if not test_case.text:
-            raw_text = test_case.get_arg('input_text')
-            if raw_text is None: 
-                test_case.args.append(('state', 'skipped'))
-                skipped+=1
-                continue
+        raw_text = test_case.get_arg('input_text')
+        output_dom = test_case.get_arg('output_dom')
+        if raw_text is not None:
             if hasattr(raw_text, 'text'):
                 raw_text = "\n".join(raw_text.text)
-            output_dom = test_case.get_arg('output_dom')
         elif len(test_case.text) >= 2:
             # todo: select codeblock, etc
             raw_text, output_dom = test_case.text[:2]
@@ -27,10 +23,11 @@ def run_tests(doc):
                 continue
             test_case.text = test_case.text[2:]
             raw_text = "".join(raw_text.text)
-        else:
+        if raw_text is None: 
             test_case.args.append(('state', 'skipped'))
             skipped+=1
             continue
+
         result_dom = parser.parse(raw_text)
         test_case.args.append(('result_dom', result_dom))
         test_case.args.append(('number', n))
@@ -62,7 +59,7 @@ def run_tests(doc):
                     dom.CellBlock((), [
                         dom.BulletList( [('bullet', '')], [
                             dom.ItemBlock((), [dom.Paragraph((), [dom.Strong((), ["Test", " ", "Case", " ",  "#", str(n), " ", "is", " ", state]) ]) ]),
-                            dom.ItemBlock((), [dom.CodeBlock((), [raw_text]) ]),
+                            dom.ItemBlock((), [dom.CodeBlock((), [repr(raw_text)]) ]),
                             dom.ItemBlock((), [dom.CodeBlock((), brk(dom.dump(output_dom)))]),
                         ])
                     ])

@@ -11,6 +11,11 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
     def remark_document(self):
         with self.optional():
             self.literal("\uFEFF")
+            with self.choice():
+                with self.case(): self.block_element()
+                with self.case(): self.para()
+                with self.case(): self.empty_lines()
+                with self.case(): self.end_of_file()
         with self.choice():
             with self.case():
                 self.end_of_file()
@@ -893,7 +898,7 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
             with self.repeat(min=0):
                 with self.choice():
                     with self.case():
-                        self.range(" ", "\n", "`", "_", "*", "~", "\\", "}",invert=True)
+                        self.range("\t"," ", "\n", "`", "_", "*", "~", "\\", "}",invert=True)
                     with self.case():
                         with self.repeat(min=1): 
                             self.literal("_") 
