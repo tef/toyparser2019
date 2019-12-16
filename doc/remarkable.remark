@@ -109,7 +109,6 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 	"*", " ", "`", " ", ">", " ", "#", " ", "\\",
 	" " , "&", " ", "-", " " , "_", " ", ":", " ",
 	"@", " ", "[", " ", "]",
-
 	]} ]}
 
 	You can use &code{\\} to escape any punctuation
@@ -245,10 +244,10 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 &TestCase:
 	```remark
 	&list[start:1]:
-	- 1
-	- 2
-	- 3
-	- 4
+	 - 1
+	 - 2
+	 - 3
+	 - 4
 	```
 	@Fragment { text: [
 		@NumberedList { start: 1, text: [

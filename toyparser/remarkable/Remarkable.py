@@ -276,7 +276,8 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
 
     @rule()
     def block_directive(self):
-        self.whitespace(max=8)
+        with self.count(columns=True) as min_indent:
+            self.whitespace(max=8)
         self.literal("\\", "&")
         with self.reject():
             self.literal("begin", "end")
@@ -336,31 +337,38 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                             self.indent()
                             with self.choice():
                                 with self.case():
-                                    with self.capture_node("directive_list"):
-                                        self.inner_list()
-                                with self.case():
-                                    with self.capture_node("directive_quote"):
-                                        self.inner_blockquote()
-                                with self.case():
-                                    with self.capture_node("directive_prose"):
-                                        self.inner_prose_para()
-                                with self.case():
-                                    with self.capture_node("directive_table"):
-                                        self.inner_table()
-                                with self.case():
                                     # with self.count(columns=True) as c:
-                                    self.whitespace(min=1)
-                                    with self.indented(), self.capture_node("directive_block"):
+                                    self.whitespace(min=min_indent, max=min_indent)
+                                    self.whitespace(min=1, max=1)
+                                    with self.indented(), self.capture_node("directive_fragment"):
                                         with self.choice():
-                                            with self.case(): self.block_element()
-                                            with self.case(): self.para()
-                                            with self.case(): self.empty_lines()
-                                        with self.repeat(min=0) as n:
-                                            self.indent()
-                                            with self.choice():
-                                                with self.case(): self.block_element()
-                                                with self.case(): self.para()
-                                                with self.case(): self.empty_lines()
+                                            with self.case():
+                                                with self.capture_node("directive_list"):
+                                                    self.inner_list()
+                                            with self.case():
+                                                with self.capture_node("directive_quote"):
+                                                    self.inner_blockquote()
+                                            with self.case():
+                                                with self.capture_node("directive_prose"):
+                                                    self.inner_prose_para()
+                                            with self.case():
+                                                with self.capture_node("directive_table"):
+                                                    self.inner_table()
+                                            with self.case(): 
+                                                with self.capture_node("directive_block"):
+                                                    self.block_element()
+                                            with self.case(): 
+                                                with self.capture_node("directive_block"):
+                                                    self.para()
+                                            with self.case(): 
+                                                self.empty_lines()
+                                        with self.capture_node("directive_block"):
+                                            with self.repeat(min=0) as n:
+                                                self.indent()
+                                                with self.choice():
+                                                    with self.case(): self.block_element()
+                                                    with self.case(): self.para()
+                                                    with self.case(): self.empty_lines()
                         with self.case():
                             self.whitespace()
                             self.newline()
@@ -984,6 +992,7 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
 
     @rule()
     def block_rson(self):
+        self.whitespace(max=8)
         with self.capture_node('block_rson'):
             self.literal('@')
             self.rson_identifier()

@@ -743,9 +743,9 @@ def named_rson_block(name, args):
 
 def object_to_tagged(obj):
     args = {}
-    args.update(obj.args)
     if obj.text:
         args['text'] = obj.text
+    args.update(obj.args)
     return obj.name, args
 
 def tagged_to_object(name, value):
