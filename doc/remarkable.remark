@@ -9,11 +9,6 @@
 
 &begin::section intro
 
-> I also dream about a modern replacement for LaTeX
-> designed from the ground up to target multiple output formats
-> (at least PDF, HTML, EPUB).
-> &em{John MacFarlane, author of Pandoc, editor of CommonMark.}
-
 	`````remark
 	# A Remarkable Example Document
 
@@ -84,20 +79,22 @@
 
 # Remark(able), a restructured markup format.
 
+> I dream about a modern replacement for LaTeX, designed from the ground up to target multiple output formats.
+> &em{John MacFarlane, author of Pandoc, editor of CommonMark.}
+
+
 ## Why Remark?
 
 Markdown is great for small comments or blog posts. LaTeX is good for writing
 a book on Mathematics. RST is good for technical documentation, and HTML is good
 for webpages. So why Remark?
 
-- A consistent way to escape text 
 - CommonMark like shortcuts (`---` for a horizontal rule)
+- A consistent way to escape text 
 - LaTeX/HTML like named Directives (`&hr`)
 - An internal document object model
 - Standard ways to embed structured data
 - Not just HTML output, too
-
-The biggest difference might be that Remark has a Grammar.
 
 Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented in terms of a parsing evaluation grammar. 
 
@@ -112,9 +109,9 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 	"*", " ", "`", " ", ">", " ", "#", " ", "\\",
 	" " , "&", " ", "-", " " , "_", " ", ":", " ",
 	"@", " ", "[", " ", "]",
-	
+
 	]} ]}
-	
+
 	You can use &code{\\} to escape any punctuation
 
 &TestCase:
@@ -127,7 +124,7 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 		@Strong {text: ["text"]}, 
 	]} ]}
 	
-	You can use `*` to embolden text. Unlike Markdown, doubling or 
+	You can use `*` for bold text. Unlike Markdown, doubling or 
 	tripling the markers does not change their semantic meaning.
 
 &TestCase:
@@ -190,8 +187,12 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 		]}
 	]}
 	
-	There is \q{atx-style} headings, which can span multiple
-	lines.
+	There are \q{atx-style} headings, a `# ` at the start
+	of a line indicates a level-1 heading. A `## ` indicates
+	a level-2 heading.
+
+	Continuation lines have to have a `# ` prefix, but the
+	number of `#`'s does not have to match.
 
 &TestCase:
 	```remark
@@ -215,9 +216,6 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 	
 	Like Markdown, `>` can be used to mark out blockquotes. Unlike
 	Markdown, or CommonMark, the `>` cannot be omitted.
-
-	Additionally, An empty line ends a blockquote.
-	Blockquotes
 
 &TestCase:
 	```remark
@@ -261,8 +259,7 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 		] },
 	] }
 	
-	Numbered lists are also specified with `-`, but inside
-	a block directive `&list[start: 1]:`
+	Numbered lists use a block directive `&list[start: 1]:`
 
 &TestCase:
 	```remark

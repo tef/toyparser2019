@@ -53,8 +53,7 @@ def run_tests(doc):
                     o.append(' ')
                     s= x[1]
             return o
-        test_case.text = [ 
-            dom.Table( [ ('column_align', ['left']), ], [
+        rows = [
                 dom.Row((), [
                     dom.CellBlock((), [
                         dom.BulletList( [('bullet', '')], [
@@ -63,9 +62,16 @@ def run_tests(doc):
                             dom.ItemBlock((), [dom.CodeBlock((), brk(dom.dump(output_dom)))]),
                         ])
                     ])
+                ]),
+        ]
+        if test_case.text:
+            rows.append(
+                dom.Row((), [
+                    dom.CellBlock((), test_case.text)
                 ])
-            ])
-        ] + test_case.text
+            )
+        table = dom.Table( [ ('column_align', ['left']), ], rows)
+        test_case.text = [table]
     for r in doc.select(dom.TestReport.name):
         r.args.append(('total', total))
         r.args.append(('working', working))
