@@ -173,7 +173,7 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 	Like how `\` can be used to escape punctuation, it can also
 	be used to preserve newlines and spaces.
 
-&TestCase:
+&TestCase {
 	```remark
 	# Example
 	# Heading
@@ -185,13 +185,15 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 			"Heading",
 		]}
 	]}
-	
+
 	There are \q{atx-style} headings, a `# ` at the start
 	of a line indicates a level-1 heading. A `## ` indicates
 	a level-2 heading.
 
 	Continuation lines have to have a `# ` prefix, but the
 	number of `#`'s does not have to match.
+
+}
 
 &TestCase:
 	```remark
@@ -244,10 +246,10 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 &TestCase:
 	```remark
 	&list[start:1]:
-	 - 1
-	 - 2
-	 - 3
-	 - 4
+	- 1
+	- 2
+	- 3
+	- 4
 	```
 	@Fragment { text: [
 		@NumberedList { start: 1, text: [
@@ -438,8 +440,7 @@ Fragments can be specified with directives, or data structures too:
 
 # Inlines
 
-## Words, Whitespace, Breaks
-
+## Words, Tabs, Whitespace, Breaks
 
 &TestCase[
 	input_text: "Example text.",
@@ -476,8 +477,9 @@ Fragments can be specified with directives, or data structures too:
 &TestCase[
 	input_text: "      |\tExample\ttext.\t",
 	output_dom: @Fragment {text: [@Prose {text:
-	[@Whitespace {"Example", @Whitespace {"text": [" "]}, "text.", @Whitespace {"text": ["   "]}]
+	["Example", @Whitespace {"text": [" "]}, "text.", @Whitespace {"text": ["   "]}]
 	}]}
+ 	
 ]:
 	Tabstop is 8, so a tab at column 8 has width 1, so there is nothing after the `| ` prefix.
 
