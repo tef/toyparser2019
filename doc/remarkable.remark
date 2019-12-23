@@ -20,13 +20,13 @@
 	- It even has `inline code` fragments
 
 	Unlike CommonMark, there's a standard long form for
-	annotating text: `&directive_name[args]{text}` 
+	annotating text: `&directive_name{args}[text]` 
 
 	```
 	&list:
 		&item: It has Lists
-		&item: It has &strong{bold}, &emph{italic},
-		   and &strike{strikethrough} text
+		&item: It has &strong[bold], &emph[italic],
+		   and &strike[strikethrough] text
 		&item: It even has &code`inline code` fragments
 	```
 
@@ -80,7 +80,7 @@
 # Remark(able), a restructured markup format.
 
 > I dream about a modern replacement for LaTeX, designed from the ground up to target multiple output formats.
-> &em{John MacFarlane, author of Pandoc, editor of CommonMark.}
+> &em[John MacFarlane, author of Pandoc, editor of CommonMark.]
 
 
 ## Why Remark?
@@ -111,7 +111,7 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 	"@", " ", "[", " ", "]",
 	]} ]}
 
-	You can use &code{\\} to escape any punctuation
+	You can use &code[\\] to escape any punctuation
 
 &TestCase:
 	```remark
@@ -141,7 +141,7 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 	GitHub\ Flavoured\ Markdown (GFM), `~`, `~~`, and `~~~` work
 	for strikethrough text. 
 
-	Like for `*`, doubling or tripling \code{\`}, `_`, and `~` 
+	Like for `*`, doubling or tripling \code[\`], `_`, and `~` 
 	also work, and do not change meaning
 
 &TestCase:
@@ -173,7 +173,7 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 	Like how `\` can be used to escape punctuation, it can also
 	be used to preserve newlines and spaces.
 
-&TestCase {
+&TestCase [
 	```remark
 	# Example
 	# Heading
@@ -186,14 +186,14 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 		]}
 	]}
 
-	There are \q{atx-style} headings, a `# ` at the start
+	There are \q[atx-style] headings, a `# ` at the start
 	of a line indicates a level-1 heading. A `## ` indicates
 	a level-2 heading.
 
 	Continuation lines have to have a `# ` prefix, but the
 	number of `#`'s does not have to match.
 
-}
+]
 
 &TestCase:
 	```remark
@@ -245,7 +245,7 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 
 &TestCase:
 	```remark
-	&list[start:1]:
+	&list{start:1}:
 	- 1
 	- 2
 	- 3
@@ -260,7 +260,7 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 		] },
 	] }
 	
-	Numbered lists use a block directive `&list[start: 1]:`
+	Numbered lists use a block directive `&list{start: 1}:`
 
 &TestCase:
 	```remark
@@ -340,7 +340,7 @@ If metadata is provided, a `Document` is returned instead.
 
 &TestCase:
 	```remark
-	&metadata[title: "Example"]
+	&metadata{title: "Example"}
 
 	```
 	@Document {title: "Example", text: []}
@@ -405,7 +405,7 @@ Fragments can be specified with directives, or data structures too:
 
 &TestCase:
 	```remark
-	&metadata[]
+	&metadata{}
 	```
 	@Document {}
 
@@ -428,10 +428,10 @@ Fragments can be specified with directives, or data structures too:
 
 ## BOM
 
-&TestCase[
+&TestCase{
 	input_text: "\uFEFF",
 	output_dom: @Fragment {}
-]:
+}:
 	Byte order mark is ignored at start of file.
 
 &end::section document
@@ -442,45 +442,45 @@ Fragments can be specified with directives, or data structures too:
 
 ## Words, Tabs, Whitespace, Breaks
 
-&TestCase[
+&TestCase{
 	input_text: "Example text.",
 	output_dom: @Fragment {text: [@Paragraph {text: ["Example", " ", "text."]}] },
-]:
+}:
 	Whitespaces separate words. Multiple spaces are treated as a single space.
 
-&TestCase[
+&TestCase{
 	input_text: "  Example  text.  ",
 	output_dom: @Fragment {text: [@Paragraph {text: ["Example", " ", "text."]}] },
-]:
+}:
 	Leading, trailing whitespace is ignored within a paragraph.
 
-&TestCase[
+&TestCase{
 	input_text: "| Example  text.",
 	output_dom: @Fragment {text: [@Prose {text: ["Example", @Whitespace {text:["  "]}, "text."]}] },
-]: 
+}: 
 	Normally, whitespace is treated as a single ` `, but this can vary. 
 
-&TestCase[
+&TestCase{
 	input_text: " \tExample\ttext.\t",
 	output_dom: @Fragment {text: [@Paragraph {text: ["Example", " ", "text.",]}] },
-]:
+}:
 	Tabs are treated as whitespace
-&TestCase[
+&TestCase{
 	input_text: "|\tExample\ttext.\t",
 	output_dom: @Fragment {text: [@Prose {text:
 	[@Whitespace {"text": ["      "]}, "Example", @Whitespace {"text": [" "]}, "text.", @Whitespace {"text": ["   "]}]
 	}]}
-]:
+}:
 	Tabs are treated as whitespace, and are converted to spaces. The `| ` prefix is not included, and six
 	spaces are left over.
 
-&TestCase[
+&TestCase{
 	input_text: "      |\tExample\ttext.\t",
 	output_dom: @Fragment {text: [@Prose {text:
 	["Example", @Whitespace {"text": [" "]}, "text.", @Whitespace {"text": ["   "]}]
 	}]}
  	
-]:
+}:
 	Tabstop is 8, so a tab at column 8 has width 1, so there is nothing after the `| ` prefix.
 
 @TestCase {

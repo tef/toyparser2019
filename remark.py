@@ -170,7 +170,7 @@ def View(ctx, file, width, height, heading):
     with open(filename) as fh:
         doc = parse(fh.read())
     settings = {}
-    settings['double']=(heading!="single")
+    settings['double']=(heading=="double")
     if width: settings['width']=width
     run_tests(doc)
 

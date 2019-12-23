@@ -395,6 +395,7 @@ class BlockBuilder:
         mapper, lines= builder.build()
         self.add_mapper(mapper)
         if prose:
+            max_width = len(max(lines, key=len))
             lines = [line + (" "*(max_width-len(line))) for line in lines]
         self.lines.extend(lines)
         self.lines.append("")

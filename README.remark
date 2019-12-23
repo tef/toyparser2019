@@ -6,7 +6,7 @@
 
 > I also dream about a modern replacement for LaTeX designed from the ground up
 > to target multiple output formats (at least PDF, HTML, EPUB).
-> &em{John MacFarlane, author of Pandoc, editor of CommonMark.}
+> &em[John MacFarlane, author of Pandoc, editor of CommonMark.]
 
 ## Why Remark?
 
@@ -33,7 +33,7 @@ Remark has markdown-like rules for annotating text:
 | `*text*`, `**text**`, or `***text***` | *text* | `<strong>text</strong>` |
 | `_text_`, `__text__`, or `___text___` | _text_ | `<em>text</em>` |
 | `~text~`, `~~text~~`, or `~~~text~~~` | ~text~ | `<del>text</del>` | 
-| &code{\`raw\`}, &code{\`\`raw\`\`}, or &code{\`\`\`raw\`\`\`} | `raw` |  `<code>raw</code>` |
+| &code[\`raw\`], &code[\`\`raw\`\`], or &code[\`\`\`raw\`\`\`] | `raw` |  `<code>raw</code>` |
 | `:emoji_name:` | :emoji_name: | `<span class="emoji">emoji_name</span>` |
 
 A remark document is a collection of blocks, which contain paragraphs. Inside a paragraph, multiple
@@ -43,12 +43,12 @@ spaces are treated as one, and a paragraph ends when a new block starts, or afte
 | :----- | :----: | -------: |
 | `text     text` | text text | `text text` |
 | `text\     text` | text&nbsp;text | `text&nbsp;text` |
-| \code{text\\&n;text} | text&br;text | `text<br/>text` |
+| \code[text\\&n;text] | text&br;text | `text<br/>text` |
 
 Blocks are also quite similar to markdown. Headings, Lists, Code Blocks, Blockquotes, and Horizonal Rules
 work almost exactly the same. Unlike markdown, a list cannot have more than one blank line between items. A blockquote must have an `>` on every line, even empty lines.
 
-&table[column_align: ["left", "left", "left"]]:
+&table{column_align: ["left", "left", "left"]}:
   - - # Remark
     - # Result
     - # HTML
@@ -158,23 +158,23 @@ work almost exactly the same. Unlike markdown, a list cannot have more than one 
       ...</p>
       ```
 
-Unlike markdown, and a little more like LaTeX, Remark has a standard form for directives, `&name[args]{text}`.
+Unlike markdown, and a little more like LaTeX, Remark has a standard form for directives, `&name{args}[text]`.
 
 &table:
    - - # Shorthand
      - # Longhand
       
    - - `*text*`, `_text_`, `~text~`
-     - `&strong{text}`, `&em{text}`, `&strike{text}`
+     - `&strong[text]`, `&em[text]`, `&strike[text]`
 
    - - `# Heading`
-     - `&heading[level: 1]: Heading`
+     - `&heading{level: 1}: Heading`
    - - ````
         - 1
         - 2
        ````
      - ````
-       &list: &item{1}&item{2}
+       &list: &item[1]&item[2]
        ````
    - - ````
        ```python
@@ -182,7 +182,7 @@ Unlike markdown, and a little more like LaTeX, Remark has a standard form for di
        ```
        ````
      - ````
-       &code[language: "python"]```
+       &code{language: "python"}```
        1 + 2
        ```
        ````
@@ -190,17 +190,17 @@ Unlike markdown, and a little more like LaTeX, Remark has a standard form for di
 Block directives and inline directives accept arguments, too.
 
 ````
-# [arg: 1] A Header with args, including **strong**[args:2] inline args.
+# {arg: 1} A Header with args, including **strong**{args:2} inline args.
 
---- [another: 4]
+--- {another: 4}
 
-&list[start: 1]:
-  - [args: 4.5] A Numbered List
-    > [args: 5] A block quote
+&list{start: 1}:
+  - {args: 4.5} A Numbered List
+    > {args: 5} A block quote
 
     > A New Paragraph in the same blockquote
 
-&table[args:3]:
+&table{args:3}:
 | Heading |
 | :-----: |
 |  Cell   |
@@ -210,7 +210,7 @@ Block directives and inline directives accept arguments, too.
 There's even a way to embed raw data inside a document, too:
 
 ```
-@Metadata {name: "tef", title: "Remark README"}
+@Metadata [name: "tef", title: "Remark README"]
 ```
 
 ## An Overview of Remark:
@@ -227,7 +227,7 @@ Blocks can contain other blocks and paragraphs. Paragraphs can contain inline di
 	- Code Blocks
 	- Prose Blocks
 	- Tables
-	- Named Directives (`&name[...]: ...`)
+	- Named Directives (`&name{...}: ...`)
 
 - Inlines
 	- Emphasis
@@ -235,21 +235,21 @@ Blocks can contain other blocks and paragraphs. Paragraphs can contain inline di
 	- Strikethrough
 	- Code Span
 	- Plain text
-	- Named Inline Directive (`&name[...]{...}`)
+	- Named Inline Directive (`&name{...}[...]`)
 
 ## Documents
 
  - Can have a metadata block
- - Can be `&document{...}`
+ - Can be `&document[...]`
 
 
 ## Headings, Rules
 
 - `#` marked headings: `# heading`, `## Subheading` and continue on till the end of the paragraph.
 
-- `# [args] text` to pass arguments
+- `# {args} text` to pass arguments
 
-- `---` for a horizonal rule, `--- [arguments]` with args, `----`,`-----`, at least 3 `-`s
+- `---` for a horizonal rule, `--- {arguments}` with args, `----`,`-----`, at least 3 `-`s
 
 ## Code Blocks
 
@@ -339,7 +339,7 @@ You can also specify tables another way:
 Or the long way:
 ````
 &begin::table
-&row: &cell{1};&cell{2};
+&row: &cell[1];&cell[2];
 &end
 ````
 
@@ -348,22 +348,22 @@ Or the long way:
 Unlike markdown, every piece of ascii-art has a more canonical longer form, called a directive.
 A directive has a name, optional parameters, and an argument, usually text:
 
-- `&heading[1]{text}`, or `&h[2]{text}`
-- `&emphasis{text}`, `&strong{text}`
+- `&heading{1}[text]`, or `&h{2}[text]`
+- `&emphasis[text]`, `&strong[text]`
 - `&hr`, `&br` 
-- `&list[spacing: "loose"]{&item{text}}`, 
+- `&list{spacing: "loose"}[&item[text]]`, 
 
 For example, `# My heading` can be expressed in several different ways:
 
-- `&heading[level: 1]: My Heading`
-- `&heading[level: 1]{My Heading}`,
-- `&heading[level: 1]{{{My Heading}}}`
+- `&heading{level: 1}: My Heading`
+- `&heading{level: 1}[My Heading]`,
+- `&heading{level: 1}[[[My Heading]]]`
 
 Like the block forms above, directives can take parameters, alongside text:
 
-- `&foo[key: "value", "key": "value"]{text}`
-- `&foo[bare_key, "value with no key"]{text}`
-- `&foo[a,b,c]` is `&foo["a": null, "b":null, "c":null]`. 
+- `&foo{key: "value", "key": "value"}[text]`
+- `&foo{bare_key, "value with no key"}[text]`
+- `&foo{a,b,c}` is `&foo{"a": null, "b":null, "c":null}`. 
 
 Parameters are lists of (key,value) pairs, where one or both are given. non null keys must be unique. 
 Keys can be quoted strings, or identifier like bare words. Values can take numerous JSON like forms:
@@ -373,7 +373,7 @@ Keys can be quoted strings, or identifier like bare words. Values can take numer
 - `"strings"`, `'or single quoted'`
 - `[lists]`, `{key:value}`
 
-Inline directives can take `&code{text}` or &code{\&code\`text\`} as arguments.
+Inline directives can take `&code[text]` or &code[\&code\`text\`] as arguments.
 
 Block directives can take several forms:
 
@@ -384,7 +384,7 @@ A single paragraph:
 and this line too. The space after `:` is not optional.
 ````
 
-A code block (args must be `&code[args]`, not after opening delimiter):
+A code block (args must be `&code{args}`, not after opening delimiter):
 
 ````
 &code```
@@ -434,7 +434,7 @@ Or even tables:
 | 1 | 2 |
 ````
 
-Like `# headings`, and  &code{\`\`\`}, `&directive:` or \code{\&directive\`\`\`} must be 
+Like `# headings`, and  &code[\`\`\`], `&directive:` or \code[\&directive\`\`\`] must be 
 at most 8 spaces indented from the beginning of the line.
 
 Directives can also take a delimited block, with an optional name (an identifier):
@@ -452,20 +452,20 @@ Inner
 Arguments can be passed to horizontal rules, lists, quotes, code blocks, code spans, and others too:
 
 ````
---- [a:1]
+--- {a:1}
 
-- [b:2] foo
-> [c:3] foo
+- {b:2} foo
+> {c:3} foo
 
-``` [d:4]
+``` {d:4}
 foo
 ```
 
-*one*[e:5] _two_[f:6] ~three~[g:7] `four`[g:8]
+*one*{e:5} _two_{f:6} ~three~{g:7} `four`{g:8}
 
-### [h:9] Foo
+### {h:9} Foo
 
-&begin::section name [i:10]
+&begin::section name {i:10}
 &end::section name
 ````
 
@@ -492,19 +492,19 @@ The `&` is not mandatory for inline forms, code blocks, horizonal rules, or begi
 
 - A `\` before newline creates a hardbreak
 
-- Use `\*`, `\_`, `\#`, `\>`, &code{\`} to get those characters.
+- Use `\*`, `\_`, `\#`, `\>`, &code[\`] to get those characters.
 
 ## Inlines
 
-- *\*strong\**, _\_emphasis\__ ~\~strike through\~~, &code{\`code\`}, and `:emoji:`
+- *\*strong\**, _\_emphasis\__ ~\~strike through\~~, &code[\`code\`], and `:emoji:`
 
 - Doubling or tripling markers doesn't change their meaning:
 
   ```
-  _emphasis_ __emphasis__ ___emphasis___ &emph{emphasis}
-  *strong* **strong** ***strong*** &strong{strong}
-  ~strike~ ~~strike~~ ~~~strike~~~ &strike{strike}
-  `code` ``code`` ```code``` &code{code} &code`code`
+  _emphasis_ __emphasis__ ___emphasis___ &emph[emphasis]
+  *strong* **strong** ***strong*** &strong[strong]
+  ~strike~ ~~strike~~ ~~~strike~~~ &strike[strike]
+  `code` ``code`` ```code``` &code[code] &code`code`
   ```
 
 
@@ -515,26 +515,26 @@ If you want to skip the text processing and just dump data inside, you can. A he
 can be specified as a raw node, instead of using a directive, or `#` shorthand.
 
 ```
-  @heading {
+  @heading [
       level: 1,
-      text: ["My Heading", ],
-  }
+      text: {"My Heading", },
+  ]
 ```
 
-Raw nodes can also be used to specify metadata, although `&metadata[author:"tef", date:"..."]` works just as well.
+Raw nodes can also be used to specify metadata, although `&metadata{author:"tef", date:"..."}` works just as well.
 
 ```
-@Metadata {
+@Metadata [
     author: "tef",
     date: "2019-09-30T12:00Z",
-    example: &para{...},
-}
+    example: &para[...],
+]
 ```
 
 Really they're so things can emit dom nodes in a simpler, canonical form, and you can still paste it midway into another
 document. Yes, that's a terrible idea, but stopping it happening doesn't prevent the need.
 
-The subset of Remark that's only `@foo{}` with no directives or markup or bare identifiers, is called RSON.
+The subset of Remark that's only `@foo[]` with no directives or markup or bare identifiers, is called RSON.
 
 ## An Example Document
 
@@ -558,7 +558,7 @@ Contains a line break
 
 - here is the next list item
  
-  ```` [language: "python"]
+  ```` {language: "python"}
   and a code block inside
   ````
 
@@ -574,7 +574,7 @@ Contains a line break
 This paragraph contains _emphasis_ and *strong text*. As well as ___emphasis over
 multiple lines___ and `inline code`, too.
 
-&list[start: 1]:
+&list{start: 1}:
 - a final list
 - that starts at 1
   - with an unnumbered
