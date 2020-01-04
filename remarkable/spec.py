@@ -21,8 +21,15 @@ def run_tests(doc):
                 test_case.args.append(('state', 'skipped'))
                 skipped+=1
                 continue
-            test_case.text = test_case.text[2:]
             raw_text = "".join(raw_text.text)
+            test_case.text = test_case.text[2:]
+            if getattr(output_dom, "name", "") == dom.CodeBlock.name:
+                if output_dom.get_arg('language') == 'rson':
+                    output_dom = "".join(output_dom.text)
+                    output_dom = dom.parse(output_dom)
+                if output_dom.get_arg('language') == 'remark':
+                    output_dom = "".join(output_dom.text)
+                    output_dom = parser.parse(output_dom)
         if raw_text is None: 
             test_case.args.append(('state', 'skipped'))
             skipped+=1

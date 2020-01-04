@@ -117,6 +117,22 @@ class DirectiveNode(Element):
         raise Exception('bad')
 
 @elements.add()
+class DefinitionList(Block):
+    name = "DefinitionList"
+
+@elements.add()
+class DefinitionBlock(Block):
+    name = "DefinitionBlock"
+
+@elements.add()
+class DefinitionSpan(Inline):
+    name = "DefinitionSpan"
+
+@elements.add()
+class ItemLabel(Inline):
+    name = "ItemLabel"
+
+@elements.add()
 class Metadata(Block):
     name = "Metadata"
 

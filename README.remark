@@ -515,7 +515,7 @@ If you want to skip the text processing and just dump data inside, you can. A he
 can be specified as a raw node, instead of using a directive, or `#` shorthand.
 
 ```
-  @heading [
+  @Heading [
       level: 1,
       text: {"My Heading", },
   ]
