@@ -17,81 +17,84 @@ class Node:
         if self.name == "value": return self.value
         return builder[self.name](buf, self, children)
 
-regex_regex_0 = re.compile(r'''(?:(?:\#)){1,6}''')
-regex_regex_1 = re.compile(r'''(?:(?:\#))*''')
-regex_regex_2 = re.compile(r'''(?:[^\n])+''')
-regex_regex_3 = re.compile(r'''[^\n]''')
-regex_regex_4 = re.compile(r'''(?:(?:(?:```))|(?:(?:\~\~\~)))''')
-regex_regex_5 = re.compile(r'''(?:(?:`)){3,}''')
-regex_regex_6 = re.compile(r'''[!-/:-@\[-`\{-\~]''')
-regex_regex_7 = re.compile(r'''(?:[0-9]){1,7}''')
-regex_regex_8 = re.compile(r'''[xX]''')
-regex_regex_9 = re.compile(r'''[0-9a-fA-F]''')
-regex_regex_10 = re.compile(r'''(?:[0-9a-fA-F]){,6}''')
-regex_regex_11 = re.compile(r'''[a-zA-Z]''')
-regex_regex_12 = re.compile(r'''(?:[0-9a-zA-Z])+''')
-regex_regex_13 = re.compile(r'''(?:[^\n\\\&`])*''')
-regex_regex_14 = re.compile(r'''(?:[^\n])*''')
-regex_regex_15 = re.compile(r'''(?:(?:\~)){3,}''')
-regex_regex_16 = re.compile(r'''(?:[^\n\\\&])*''')
-regex_regex_17 = re.compile(r'''(?:(?:[\-\*\+])|(?:(?:[0-9]){1,9}[\.\)]))''')
-regex_regex_18 = re.compile(r'''[\-\*\+]''')
-regex_regex_19 = re.compile(r'''(?:[0-9]){1,9}''')
-regex_regex_20 = re.compile(r'''[\.\)]''')
-regex_regex_21 = re.compile(r'''[^><\n]''')
-regex_regex_22 = re.compile(r'''[^\)\(\n ]''')
-regex_regex_23 = re.compile(r'''[^\[\]]''')
-regex_regex_24 = re.compile(r'''(?:(?:[\-\*\+])|(?:(?:1)[\.\)]))''')
-regex_regex_25 = re.compile(r'''(?:\\)''')
-regex_regex_26 = re.compile(r'''(?:(?:(?:(?:=))+)|(?:(?:(?:\-))+))''')
-regex_regex_27 = re.compile(r'''(?:(?:=))+''')
-regex_regex_28 = re.compile(r'''(?:(?:\-))+''')
-regex_regex_29 = re.compile(r'''(?:[a-zA-Z0-9\+\.\-])+''')
-regex_regex_30 = re.compile(r'''(?:[^\x00- ><])*''')
-regex_regex_31 = re.compile(r'''(?:[a-zA-Z0-9\.!\#\$%\&'\*\+/=\?\^_`\{\|\}\~\-])+''')
-regex_regex_32 = re.compile(r'''[a-zA-Z0-9]''')
-regex_regex_33 = re.compile(r'''(?:(?:(?:(?:[a-zA-Z0-9])|(?:(?:(?:\-))+[a-zA-Z0-9]))){,62})?''')
-regex_regex_34 = re.compile(r'''(?:(?:\.)[a-zA-Z0-9](?:(?:(?:(?:[a-zA-Z0-9])|(?:(?:(?:\-))+[a-zA-Z0-9]))){,61})?)*''')
-regex_regex_35 = re.compile(r'''(?:(?:_))+''')
-regex_regex_36 = re.compile(r'''(?:(?:\*))+''')
-regex_regex_37 = re.compile(r'''[^ \n\\]''')
-regex_regex_38 = re.compile(r'''[^ \n\\<`\&\*_\[\]\(\)!]''')
-regex_regex_39 = re.compile(r'''(?:(?:(?:(?:\\\[|\\\]))|(?:[^\[\]\n])))+''')
-regex_regex_40 = re.compile(r'''(?:\[\]|\(\))''')
-regex_regex_41 = re.compile(r'''(?:<|\ )''')
-regex_regex_42 = re.compile(r'''[^"\n]''')
-regex_regex_43 = re.compile(r'''[^'\n]''')
-regex_regex_44 = re.compile(r'''[^\)\(\n]''')
-regex_regex_45 = re.compile(r'''[_\*]''')
-regex_regex_46 = re.compile(r'''[\*]''')
-regex_regex_47 = re.compile(r'''(?:(?:`))+''')
-regex_regex_48 = re.compile(r'''[^\n`]''')
-regex_regex_49 = re.compile(r'''(?:[^\n`])*''')
-regex_regex_50 = re.compile(r'''[^`]''')
-regex_regex_51 = re.compile(r'''(?:(?:`))*''')
-regex_regex_52 = re.compile(r'''(?:<script|<pre|<style)''')
-regex_regex_53 = re.compile(r'''(?:<\?|<!\[CDATA\[)''')
-regex_regex_54 = re.compile(r'''(?:<!)[A-Z]''')
-regex_regex_55 = re.compile(r'''(?:</|<)''')
-regex_regex_56 = re.compile(r'''(?:address|article|aside|base|basefont|blockquote|body|caption|center|col|colgroup|dd|details|dialog|dir|div|dl|dt|fieldset|figcaption|figure|footer|form|frame|frameset|h1|h2|h3|h4|h5|h6|head|header|hr|html|iframe|legend|li|link|main|menu|menuitem|nav|noframes|ol|optgroup|option|p|param|section|source|summary|table|tbody|td|tfoot|th|thead|title|tr|track|ul)''')
-regex_regex_57 = re.compile(r'''(?:>)''')
-regex_regex_58 = re.compile(r'''(?:\-\-|\->|>|\-\-\-)''')
-regex_regex_59 = re.compile(r'''[A-Z]''')
-regex_regex_60 = re.compile(r'''(?:[^>\n])*''')
-regex_regex_61 = re.compile(r'''(?:[a-zA-Z\-0-9])*''')
-regex_regex_62 = re.compile(r'''[a-zA-Z:_]''')
-regex_regex_63 = re.compile(r'''(?:[a-zA-Z:_0-9\-])+''')
-regex_regex_64 = re.compile(r'''(?:[^"'=<>`\t \n\r])+''')
-regex_regex_65 = re.compile(r'''(?:[^"\n])*''')
-regex_regex_66 = re.compile(r'''(?:[^'\n])*''')
-regex_regex_67 = re.compile(r'''(?:/>|>)''')
-regex_regex_68 = re.compile(r'''(?:</script>|</pre>|</style>)''')
-regex_regex_69 = re.compile(r'''(?:pre|script|style)''')
-regex_regex_70 = re.compile(r'''(?:(?:(?:[^"'=<>`\t \n\r])+)|(?:(?:")(?:[^"\n])*(?:"))|(?:(?:')(?:[^'\n])*(?:')))''')
-regex_regex_71 = re.compile(r'''(?:>|/>)''')
+regex_regex_0 = re.compile(r'''(?:\.\.\.|\-\-\-)''')
+regex_regex_1 = re.compile(r'''(?:[^\n])*''')
+regex_regex_2 = re.compile(r'''(?:(?:\#)){1,6}''')
+regex_regex_3 = re.compile(r'''(?:(?:\#))*''')
+regex_regex_4 = re.compile(r'''(?:[^\n])+''')
+regex_regex_5 = re.compile(r'''[^\n]''')
+regex_regex_6 = re.compile(r'''(?:(?:(?:```))|(?:(?:\~\~\~)))''')
+regex_regex_7 = re.compile(r'''(?:(?:`)){3,}''')
+regex_regex_8 = re.compile(r'''[!-/:-@\[-`\{-\~]''')
+regex_regex_9 = re.compile(r'''(?:[0-9]){1,7}''')
+regex_regex_10 = re.compile(r'''[xX]''')
+regex_regex_11 = re.compile(r'''[0-9a-fA-F]''')
+regex_regex_12 = re.compile(r'''(?:[0-9a-fA-F]){,6}''')
+regex_regex_13 = re.compile(r'''[a-zA-Z]''')
+regex_regex_14 = re.compile(r'''(?:[0-9a-zA-Z])+''')
+regex_regex_15 = re.compile(r'''(?:[^\n\\\&`])*''')
+regex_regex_16 = re.compile(r'''(?:(?:\~)){3,}''')
+regex_regex_17 = re.compile(r'''(?:[^\n\\\&])*''')
+regex_regex_18 = re.compile(r'''(?:(?:[\-\*\+])|(?:(?:[0-9]){1,9}[\.\)]))''')
+regex_regex_19 = re.compile(r'''[\-\*\+]''')
+regex_regex_20 = re.compile(r'''(?:[0-9]){1,9}''')
+regex_regex_21 = re.compile(r'''[\.\)]''')
+regex_regex_22 = re.compile(r'''[^><\n]''')
+regex_regex_23 = re.compile(r'''[^\)\(\n ]''')
+regex_regex_24 = re.compile(r'''[^\[\]]''')
+regex_regex_25 = re.compile(r'''(?:(?:[\-\*\+])|(?:(?:1)[\.\)]))''')
+regex_regex_26 = re.compile(r'''(?:\\)''')
+regex_regex_27 = re.compile(r'''(?:(?:(?:(?:=))+)|(?:(?:(?:\-))+))''')
+regex_regex_28 = re.compile(r'''(?:(?:=))+''')
+regex_regex_29 = re.compile(r'''(?:(?:\-))+''')
+regex_regex_30 = re.compile(r'''(?:(?::))?''')
+regex_regex_31 = re.compile(r'''(?:[a-zA-Z0-9\+\.\-])+''')
+regex_regex_32 = re.compile(r'''(?:[^\x00- ><])*''')
+regex_regex_33 = re.compile(r'''(?:[a-zA-Z0-9\.!\#\$%\&'\*\+/=\?\^_`\{\|\}\~\-])+''')
+regex_regex_34 = re.compile(r'''[a-zA-Z0-9]''')
+regex_regex_35 = re.compile(r'''(?:(?:(?:(?:[a-zA-Z0-9])|(?:(?:(?:\-))+[a-zA-Z0-9]))){,62})?''')
+regex_regex_36 = re.compile(r'''(?:(?:\.)[a-zA-Z0-9](?:(?:(?:(?:[a-zA-Z0-9])|(?:(?:(?:\-))+[a-zA-Z0-9]))){,61})?)*''')
+regex_regex_37 = re.compile(r'''(?:[0-9a-zA-Z_])*''')
+regex_regex_38 = re.compile(r'''(?:(?:_))+''')
+regex_regex_39 = re.compile(r'''(?:(?:\*))+''')
+regex_regex_40 = re.compile(r'''[^ \n\\]''')
+regex_regex_41 = re.compile(r'''[^ \n\\<`\&\*_\[\]\(\)!]''')
+regex_regex_42 = re.compile(r'''(?:(?:(?:(?:\\\[|\\\]))|(?:[^\[\]\n])))+''')
+regex_regex_43 = re.compile(r'''(?:\[\]|\(\))''')
+regex_regex_44 = re.compile(r'''(?:<|\ )''')
+regex_regex_45 = re.compile(r'''[^"\n]''')
+regex_regex_46 = re.compile(r'''[^'\n]''')
+regex_regex_47 = re.compile(r'''[^\)\(\n]''')
+regex_regex_48 = re.compile(r'''[_\*]''')
+regex_regex_49 = re.compile(r'''[\*]''')
+regex_regex_50 = re.compile(r'''(?:(?:`))+''')
+regex_regex_51 = re.compile(r'''[^\n`]''')
+regex_regex_52 = re.compile(r'''(?:[^\n`])*''')
+regex_regex_53 = re.compile(r'''[^`]''')
+regex_regex_54 = re.compile(r'''(?:(?:`))*''')
+regex_regex_55 = re.compile(r'''(?:<script|<pre|<style)''')
+regex_regex_56 = re.compile(r'''(?:<\?|<!\[CDATA\[)''')
+regex_regex_57 = re.compile(r'''(?:<!)[A-Z]''')
+regex_regex_58 = re.compile(r'''(?:</|<)''')
+regex_regex_59 = re.compile(r'''(?:address|article|aside|base|basefont|blockquote|body|caption|center|col|colgroup|dd|details|dialog|dir|div|dl|dt|fieldset|figcaption|figure|footer|form|frame|frameset|h1|h2|h3|h4|h5|h6|head|header|hr|html|iframe|legend|li|link|main|menu|menuitem|nav|noframes|ol|optgroup|option|p|param|section|source|summary|table|tbody|td|tfoot|th|thead|title|tr|track|ul)''')
+regex_regex_60 = re.compile(r'''(?:>)''')
+regex_regex_61 = re.compile(r'''(?:\-\-|\->|>|\-\-\-)''')
+regex_regex_62 = re.compile(r'''[A-Z]''')
+regex_regex_63 = re.compile(r'''(?:[^>\n])*''')
+regex_regex_64 = re.compile(r'''(?:[a-zA-Z\-0-9])*''')
+regex_regex_65 = re.compile(r'''[a-zA-Z:_]''')
+regex_regex_66 = re.compile(r'''(?:[a-zA-Z:_0-9\-])+''')
+regex_regex_67 = re.compile(r'''(?:[^"'=<>`\t \n\r])+''')
+regex_regex_68 = re.compile(r'''(?:[^"\n])*''')
+regex_regex_69 = re.compile(r'''(?:[^'\n])*''')
+regex_regex_70 = re.compile(r'''(?:/>|>)''')
+regex_regex_71 = re.compile(r'''(?:</script>|</pre>|</style>)''')
+regex_regex_72 = re.compile(r'''(?:pre|script|style)''')
+regex_regex_73 = re.compile(r'''(?:(?:(?:[^"'=<>`\t \n\r])+)|(?:(?:")(?:[^"\n])*(?:"))|(?:(?:')(?:[^'\n])*(?:')))''')
+regex_regex_74 = re.compile(r'''(?:>|/>)''')
 
 class Parser:
-    def __init__(self, tabstop=None, allow_mixed_indent=False):
+    def __init__(self, tabstop=None, allow_mixed_indent=True):
          self.tabstop = tabstop or 4
          self.cache = None
          self.allow_mixed_indent = allow_mixed_indent
@@ -111,6 +114,39 @@ class Parser:
 
     def parse_document(self, buf, buf_start, buf_eof, offset_0, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
         while True: # note: return at end of loop
+            count_0 = 0
+            while count_0 < 1:
+                offset_1 = offset_0
+                column_1 = column_0
+                indent_column_1 = list(indent_column_0)
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
+                children_1 = [] if children_0 is not None else None
+                while True:
+                    #print('entry rep rule', offset_0, offset_1)
+                    offset_1, column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_yaml_metadata(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
+                    if offset_1 == -1: break
+
+
+                    #print('safe exit rep rule', offset_0, offset_1)
+                    break
+                #print('exit rep rule', offset_0, offset_1)
+                if offset_1 == -1:
+                    break
+                if offset_0 == offset_1: break
+                if children_1 is not None and children_1 is not None:
+                    children_0.extend(children_1)
+                offset_0 = offset_1
+                column_0 = column_1
+                indent_column_0 = indent_column_1
+                partial_tab_offset_0 = partial_tab_offset_1
+                partial_tab_width_0 = partial_tab_width_1
+                count_0 += 1
+                break
+            if offset_0 == -1:
+                break
+            value_0 = count_0
+
             count_0 = 0
             while True:
                 offset_1 = offset_0
@@ -179,7 +215,7 @@ class Parser:
                                         if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                             width = partial_tab_width_2
                                         else:
-                                            width  = (self.tabstop-(column_2%self.tabstop))
+                                            width  = (self.tabstop-((column_2)%self.tabstop));
                                         count_1 += width
                                         column_2 += width
                                         offset_2 += 1
@@ -240,7 +276,7 @@ class Parser:
                                                 if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                     width = partial_tab_width_3
                                                 else:
-                                                    width  = (self.tabstop-(column_3%self.tabstop))
+                                                    width  = (self.tabstop-((column_3)%self.tabstop));
                                                 count_2 += width
                                                 column_3 += width
                                                 offset_3 += 1
@@ -280,15 +316,15 @@ class Parser:
                                 count_1 += 1
                             if offset_2 == -1:
                                 break
-                            value_1 = count_1
+                            value_2 = count_1
 
                             children_3 = []
-                            value_2 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
-                            value_2.name = 'empty_line'
-                            value_2.end = offset_2
-                            value_2.end_column = column_2
-                            value_2.value = None
-                            children_2.append(value_2)
+                            value_3 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
+                            value_3.name = 'empty_line'
+                            value_3.end = offset_2
+                            value_3.end_column = column_2
+                            value_3.value = None
+                            children_2.append(value_3)
 
 
 
@@ -324,7 +360,7 @@ class Parser:
                 count_0 += 1
             if offset_0 == -1:
                 break
-            value_0 = count_0
+            value_1 = count_0
 
             count_0 = 0
             while offset_0 < buf_eof:
@@ -334,7 +370,7 @@ class Parser:
                         if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                             width = partial_tab_width_0
                         else:
-                            width  = (self.tabstop-(column_0%self.tabstop))
+                            width  = (self.tabstop-((column_0)%self.tabstop));
                         count_0 += width
                         column_0 += width
                         offset_0 += 1
@@ -346,6 +382,137 @@ class Parser:
                     break
 
             if offset_0 != buf_eof:
+                offset_0 = -1
+                break
+
+
+            break
+        return offset_0, column_0, partial_tab_offset_0, partial_tab_width_0
+
+    def parse_yaml_metadata(self, buf, buf_start, buf_eof, offset_0, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
+        while True: # note: return at end of loop
+            if buf[offset_0:offset_0+3] == '---':
+                offset_0 += 3
+                column_0 += 3
+            else:
+                offset_0 = -1
+                break
+
+            if offset_0 < buf_eof:
+                codepoint = buf[offset_0]
+                if codepoint in '\n':
+                    offset_0 +=1
+                    column_0 = 0
+                    indent_column_0[:] = (0, )
+                else:
+                    offset_0 = -1
+                    break
+            else:
+                offset_0 = -1
+                break
+
+            children_1 = []
+            value_0 = Node(None, offset_0, offset_0, column_0, column_0, children_1, None)
+            while True: # start capture
+                count_0 = 0
+                while True:
+                    offset_1 = offset_0
+                    column_1 = column_0
+                    indent_column_1 = list(indent_column_0)
+                    partial_tab_offset_1 = partial_tab_offset_0
+                    partial_tab_width_1 = partial_tab_width_0
+                    children_2 = [] if children_1 is not None else None
+                    while True:
+                        #print('entry rep rule', offset_0, offset_1)
+                        while True: # start reject
+                            children_3 = []
+                            offset_2 = offset_1 + 0
+                            column_2 = column_1
+                            indent_column_2 = list(indent_column_1)
+                            partial_tab_offset_2 = partial_tab_offset_1
+                            partial_tab_width_2 = partial_tab_width_1
+                            _match = regex_regex_0.match(buf, offset_2)
+                            if _match:
+                                _end = _match.end()
+                                column_2 += (_end - offset_2)
+                                offset_2 = _end
+                            else:
+                                offset_2 = -1
+                                break
+
+                            break
+                        if offset_2 != -1:
+                            offset_1 = -1
+                            break
+
+                        _match = regex_regex_1.match(buf, offset_1)
+                        if _match:
+                            _end = _match.end()
+                            column_1 += (_end - offset_1)
+                            offset_1 = _end
+                        else:
+                            offset_1 = -1
+                            break
+
+                        if offset_1 < buf_eof:
+                            codepoint = buf[offset_1]
+                            if codepoint in '\n':
+                                offset_1 +=1
+                                column_1 = 0
+                                indent_column_1[:] = (0, )
+                            else:
+                                offset_1 = -1
+                                break
+                        else:
+                            offset_1 = -1
+                            break
+
+                        #print('safe exit rep rule', offset_0, offset_1)
+                        break
+                    #print('exit rep rule', offset_0, offset_1)
+                    if offset_1 == -1:
+                        break
+                    if offset_0 == offset_1: break
+                    if children_2 is not None and children_2 is not None:
+                        children_1.extend(children_2)
+                    offset_0 = offset_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
+                    count_0 += 1
+                if offset_0 == -1:
+                    break
+                value_1 = count_0
+
+                break
+            if offset_0 == -1:
+                break
+            value_0.name = 'yaml_metadata_block'
+            value_0.end = offset_0
+            value_0.end_column = column_0
+            value_0.value = None
+            children_0.append(value_0)
+
+            _match = regex_regex_0.match(buf, offset_0)
+            if _match:
+                _end = _match.end()
+                column_0 += (_end - offset_0)
+                offset_0 = _end
+            else:
+                offset_0 = -1
+                break
+
+            if offset_0 < buf_eof:
+                codepoint = buf[offset_0]
+                if codepoint in '\n':
+                    offset_0 +=1
+                    column_0 = 0
+                    indent_column_0[:] = (0, )
+                else:
+                    offset_0 = -1
+                    break
+            else:
                 offset_0 = -1
                 break
 
@@ -593,6 +760,29 @@ class Parser:
                 partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
+                    offset_1, column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_table(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
+                    if offset_1 == -1: break
+
+
+
+                    break
+                if offset_1 != -1:
+                    offset_0 = offset_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
+                    if children_1 is not None and children_1 is not None:
+                        children_0.extend(children_1)
+                    break
+                # end case
+                offset_1 = offset_0
+                column_1 = column_0
+                indent_column_1 = list(indent_column_0)
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
+                children_1 = [] if children_0 is not None else None
+                while True: # case
                     offset_1, column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_para(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                     if offset_1 == -1: break
 
@@ -627,7 +817,7 @@ class Parser:
                         if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                             width = partial_tab_width_0
                         else:
-                            width  = (self.tabstop-(column_0%self.tabstop))
+                            width  = (self.tabstop-((column_0)%self.tabstop));
                         if count_0 + width > 3:
                             new_width = 3 - count_0
                             count_0 += new_width
@@ -681,7 +871,7 @@ class Parser:
                                             if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                             count_1 += width
                                             column_2 += width
                                             offset_2 += 1
@@ -758,7 +948,7 @@ class Parser:
                                             if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                             count_1 += width
                                             column_2 += width
                                             offset_2 += 1
@@ -835,7 +1025,7 @@ class Parser:
                                             if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                             count_1 += width
                                             column_2 += width
                                             offset_2 += 1
@@ -902,7 +1092,7 @@ class Parser:
                         if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                             width = partial_tab_width_0
                         else:
-                            width  = (self.tabstop-(column_0%self.tabstop))
+                            width  = (self.tabstop-((column_0)%self.tabstop));
                         count_0 += width
                         column_0 += width
                         offset_0 += 1
@@ -938,7 +1128,7 @@ class Parser:
                         if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                             width = partial_tab_width_0
                         else:
-                            width  = (self.tabstop-(column_0%self.tabstop))
+                            width  = (self.tabstop-((column_0)%self.tabstop));
                         if count_0 + width > 3:
                             new_width = 3 - count_0
                             count_0 += new_width
@@ -965,7 +1155,7 @@ class Parser:
                     offset_2 = offset_1
                     column_1 = column_0
                     while True: # start count
-                        _match = regex_regex_0.match(buf, offset_2)
+                        _match = regex_regex_2.match(buf, offset_2)
                         if _match:
                             _end = _match.end()
                             column_1 += (_end - offset_2)
@@ -1016,7 +1206,7 @@ class Parser:
                                                         if offset_4 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                             width = partial_tab_width_2
                                                         else:
-                                                            width  = (self.tabstop-(column_2%self.tabstop))
+                                                            width  = (self.tabstop-((column_2)%self.tabstop));
                                                         count_2 += width
                                                         column_2 += width
                                                         offset_4 += 1
@@ -1030,7 +1220,7 @@ class Parser:
                                                 offset_4 = -1
                                                 break
 
-                                            _match = regex_regex_1.match(buf, offset_4)
+                                            _match = regex_regex_3.match(buf, offset_4)
                                             if _match:
                                                 _end = _match.end()
                                                 column_2 += (_end - offset_4)
@@ -1066,7 +1256,7 @@ class Parser:
                                                 if offset_3 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                                     width = partial_tab_width_1
                                                 else:
-                                                    width  = (self.tabstop-(column_1%self.tabstop))
+                                                    width  = (self.tabstop-((column_1)%self.tabstop));
                                                 count_1 += width
                                                 column_1 += width
                                                 offset_3 += 1
@@ -1122,7 +1312,7 @@ class Parser:
                                         if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
-                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                            width  = (self.tabstop-((column_1)%self.tabstop));
                                         count_0 += width
                                         column_1 += width
                                         offset_2 += 1
@@ -1182,7 +1372,7 @@ class Parser:
                                                                     if offset_6 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                                         width = partial_tab_width_4
                                                                     else:
-                                                                        width  = (self.tabstop-(column_4%self.tabstop))
+                                                                        width  = (self.tabstop-((column_4)%self.tabstop));
                                                                     count_3 += width
                                                                     column_4 += width
                                                                     offset_6 += 1
@@ -1196,7 +1386,7 @@ class Parser:
                                                             offset_6 = -1
                                                             break
 
-                                                        _match = regex_regex_1.match(buf, offset_6)
+                                                        _match = regex_regex_3.match(buf, offset_6)
                                                         if _match:
                                                             _end = _match.end()
                                                             column_4 += (_end - offset_6)
@@ -1232,7 +1422,7 @@ class Parser:
                                                             if offset_5 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                                 width = partial_tab_width_3
                                                             else:
-                                                                width  = (self.tabstop-(column_3%self.tabstop))
+                                                                width  = (self.tabstop-((column_3)%self.tabstop));
                                                             count_2 += width
                                                             column_3 += width
                                                             offset_5 += 1
@@ -1277,7 +1467,7 @@ class Parser:
                                                     if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                         width = partial_tab_width_2
                                                     else:
-                                                        width  = (self.tabstop-(column_2%self.tabstop))
+                                                        width  = (self.tabstop-((column_2)%self.tabstop));
                                                     count_1 += width
                                                     column_2 += width
                                                     offset_3 += 1
@@ -1382,7 +1572,7 @@ class Parser:
                                                         if offset_4 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                             width = partial_tab_width_2
                                                         else:
-                                                            width  = (self.tabstop-(column_2%self.tabstop))
+                                                            width  = (self.tabstop-((column_2)%self.tabstop));
                                                         count_2 += width
                                                         column_2 += width
                                                         offset_4 += 1
@@ -1396,7 +1586,7 @@ class Parser:
                                                 offset_4 = -1
                                                 break
 
-                                            _match = regex_regex_1.match(buf, offset_4)
+                                            _match = regex_regex_3.match(buf, offset_4)
                                             if _match:
                                                 _end = _match.end()
                                                 column_2 += (_end - offset_4)
@@ -1432,7 +1622,7 @@ class Parser:
                                                 if offset_3 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                                     width = partial_tab_width_1
                                                 else:
-                                                    width  = (self.tabstop-(column_1%self.tabstop))
+                                                    width  = (self.tabstop-((column_1)%self.tabstop));
                                                 count_1 += width
                                                 column_1 += width
                                                 offset_3 += 1
@@ -1507,7 +1697,7 @@ class Parser:
                         if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                             width = partial_tab_width_0
                         else:
-                            width  = (self.tabstop-(column_0%self.tabstop))
+                            width  = (self.tabstop-((column_0)%self.tabstop));
                         if count_0 + width > 4:
                             new_width = 4 - count_0
                             count_0 += new_width
@@ -1538,13 +1728,13 @@ class Parser:
                     start_column, start_offset = column, offset
                     if count < 0: offset = -1
                     while count > 0 and offset < buf_eof:
-                        codepoint = buf[offset]
+                        codepoint = buf[offset];
                         if codepoint in ' \t':
                             if not allow_mixed_indent:
                                 if codepoint == '\t': saw_tab = True
                                 else: saw_not_tab = True
                                 if saw_tab and saw_not_tab:
-                                     offset -1; break
+                                     offset = -1; break
                             if codepoint != '\t':
                                 column += 1
                                 offset += 1
@@ -1553,15 +1743,16 @@ class Parser:
                                 if offset == partial_tab_offset and partial_tab_width > 0:
                                     width = partial_tab_width
                                 else:
-                                    width  = (self.tabstop-(column%self.tabstop))
+                                    width  = (self.tabstop-((column)%self.tabstop));
                                 if width <= count:
                                     column += width
                                     offset += 1
                                     count -= width
                                 else:
-                                    column += count
                                     partial_tab_offset = offset
                                     partial_tab_width = width-count
+                                    column += count
+                                    count -= width
                                     break
                         elif codepoint in '\n':
                             break
@@ -1599,7 +1790,7 @@ class Parser:
                                     if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                         width = partial_tab_width_0
                                     else:
-                                        width  = (self.tabstop-(column_0%self.tabstop))
+                                        width  = (self.tabstop-((column_0)%self.tabstop));
                                     count_0 += width
                                     column_0 += width
                                     offset_0 += 1
@@ -1610,7 +1801,7 @@ class Parser:
                             else:
                                 break
 
-                        _match = regex_regex_2.match(buf, offset_0)
+                        _match = regex_regex_4.match(buf, offset_0)
                         if _match:
                             _end = _match.end()
                             column_0 += (_end - offset_0)
@@ -1696,7 +1887,7 @@ class Parser:
                                                             if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                                 width = partial_tab_width_3
                                                             else:
-                                                                width  = (self.tabstop-(column_3%self.tabstop))
+                                                                width  = (self.tabstop-((column_3)%self.tabstop));
                                                             count_2 += width
                                                             column_3 += width
                                                             offset_3 += 1
@@ -1785,7 +1976,7 @@ class Parser:
                                                     if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                         width = partial_tab_width_3
                                                     else:
-                                                        width  = (self.tabstop-(column_3%self.tabstop))
+                                                        width  = (self.tabstop-((column_3)%self.tabstop));
                                                     count_1 += width
                                                     column_3 += width
                                                     offset_3 += 1
@@ -1796,7 +1987,7 @@ class Parser:
                                             else:
                                                 break
 
-                                        _match = regex_regex_3.match(buf, offset_3)
+                                        _match = regex_regex_5.match(buf, offset_3)
                                         if _match:
                                             _end = _match.end()
                                             column_3 += (_end - offset_3)
@@ -1875,7 +2066,7 @@ class Parser:
                                                     if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                         width = partial_tab_width_2
                                                     else:
-                                                        width  = (self.tabstop-(column_2%self.tabstop))
+                                                        width  = (self.tabstop-((column_2)%self.tabstop));
                                                     count_1 += width
                                                     column_2 += width
                                                     offset_2 += 1
@@ -1886,7 +2077,7 @@ class Parser:
                                             else:
                                                 break
 
-                                        _match = regex_regex_2.match(buf, offset_2)
+                                        _match = regex_regex_4.match(buf, offset_2)
                                         if _match:
                                             _end = _match.end()
                                             column_2 += (_end - offset_2)
@@ -1977,7 +2168,7 @@ class Parser:
                         if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                             width = partial_tab_width_0
                         else:
-                            width  = (self.tabstop-(column_0%self.tabstop))
+                            width  = (self.tabstop-((column_0)%self.tabstop));
                         if count_0 + width > 3:
                             new_width = 3 - count_0
                             count_0 += new_width
@@ -1995,7 +2186,7 @@ class Parser:
                 else:
                     break
 
-            _match = regex_regex_4.match(buf, offset_0)
+            _match = regex_regex_6.match(buf, offset_0)
             if _match:
                 _end = _match.end()
                 column_0 += (_end - offset_0)
@@ -2021,7 +2212,7 @@ class Parser:
                             if offset_1 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                 width = partial_tab_width_0
                             else:
-                                width  = (self.tabstop-(column_1%self.tabstop))
+                                width  = (self.tabstop-((column_1)%self.tabstop));
                             if count_0 + width > 3:
                                 new_width = 3 - count_0
                                 count_0 += new_width
@@ -2052,7 +2243,7 @@ class Parser:
                 offset_1 = offset_0
                 column_1 = column_0
                 while True: # start count
-                    _match = regex_regex_5.match(buf, offset_1)
+                    _match = regex_regex_7.match(buf, offset_1)
                     if _match:
                         _end = _match.end()
                         column_1 += (_end - offset_1)
@@ -2126,7 +2317,7 @@ class Parser:
                                             children_6 = []
                                             value_5 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
                                             while True: # start capture
-                                                _match = regex_regex_6.match(buf, offset_3)
+                                                _match = regex_regex_8.match(buf, offset_3)
                                                 if _match:
                                                     _end = _match.end()
                                                     column_3 += (_end - offset_3)
@@ -2201,7 +2392,7 @@ class Parser:
                                                                 if offset_4 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                                     width = partial_tab_width_4
                                                                 else:
-                                                                    width  = (self.tabstop-(column_4%self.tabstop))
+                                                                    width  = (self.tabstop-((column_4)%self.tabstop));
                                                                 count_1 += width
                                                                 column_4 += width
                                                                 offset_4 += 1
@@ -2212,7 +2403,7 @@ class Parser:
                                                         else:
                                                             break
 
-                                                    _match = regex_regex_3.match(buf, offset_4)
+                                                    _match = regex_regex_5.match(buf, offset_4)
                                                     if _match:
                                                         _end = _match.end()
                                                         column_4 += (_end - offset_4)
@@ -2296,7 +2487,7 @@ class Parser:
                                             children_6 = []
                                             value_7 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
                                             while True: # start capture
-                                                _match = regex_regex_7.match(buf, offset_3)
+                                                _match = regex_regex_9.match(buf, offset_3)
                                                 if _match:
                                                     _end = _match.end()
                                                     column_3 += (_end - offset_3)
@@ -2347,7 +2538,7 @@ class Parser:
                                                 offset_3 = -1
                                                 break
 
-                                            _match = regex_regex_8.match(buf, offset_3)
+                                            _match = regex_regex_10.match(buf, offset_3)
                                             if _match:
                                                 _end = _match.end()
                                                 column_3 += (_end - offset_3)
@@ -2359,7 +2550,7 @@ class Parser:
                                             children_6 = []
                                             value_8 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
                                             while True: # start capture
-                                                _match = regex_regex_9.match(buf, offset_3)
+                                                _match = regex_regex_11.match(buf, offset_3)
                                                 if _match:
                                                     _end = _match.end()
                                                     column_3 += (_end - offset_3)
@@ -2368,7 +2559,7 @@ class Parser:
                                                     offset_3 = -1
                                                     break
 
-                                                _match = regex_regex_10.match(buf, offset_3)
+                                                _match = regex_regex_12.match(buf, offset_3)
                                                 if _match:
                                                     _end = _match.end()
                                                     column_3 += (_end - offset_3)
@@ -2415,7 +2606,7 @@ class Parser:
                                             children_6 = []
                                             value_9 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
                                             while True: # start capture
-                                                _match = regex_regex_11.match(buf, offset_3)
+                                                _match = regex_regex_13.match(buf, offset_3)
                                                 if _match:
                                                     _end = _match.end()
                                                     column_3 += (_end - offset_3)
@@ -2424,7 +2615,7 @@ class Parser:
                                                     offset_3 = -1
                                                     break
 
-                                                _match = regex_regex_12.match(buf, offset_3)
+                                                _match = regex_regex_14.match(buf, offset_3)
                                                 if _match:
                                                     _end = _match.end()
                                                     column_3 += (_end - offset_3)
@@ -2489,7 +2680,7 @@ class Parser:
                                     children_5 = []
                                     value_10 = Node(None, offset_2, offset_2, column_2, column_2, children_5, None)
                                     while True: # start capture
-                                        _match = regex_regex_3.match(buf, offset_2)
+                                        _match = regex_regex_5.match(buf, offset_2)
                                         if _match:
                                             _end = _match.end()
                                             column_2 += (_end - offset_2)
@@ -2498,7 +2689,7 @@ class Parser:
                                             offset_2 = -1
                                             break
 
-                                        _match = regex_regex_13.match(buf, offset_2)
+                                        _match = regex_regex_15.match(buf, offset_2)
                                         if _match:
                                             _end = _match.end()
                                             column_2 += (_end - offset_2)
@@ -2568,7 +2759,7 @@ class Parser:
                             if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                 width = partial_tab_width_0
                             else:
-                                width  = (self.tabstop-(column_0%self.tabstop))
+                                width  = (self.tabstop-((column_0)%self.tabstop));
                             count_0 += width
                             column_0 += width
                             offset_0 += 1
@@ -2634,7 +2825,7 @@ class Parser:
                                         if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                             width = partial_tab_width_2
                                         else:
-                                            width  = (self.tabstop-(column_2%self.tabstop))
+                                            width  = (self.tabstop-((column_2)%self.tabstop));
                                         if count_1 + width > 3:
                                             new_width = 3 - count_1
                                             count_1 += new_width
@@ -2677,7 +2868,7 @@ class Parser:
                                                 if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                     width = partial_tab_width_3
                                                 else:
-                                                    width  = (self.tabstop-(column_3%self.tabstop))
+                                                    width  = (self.tabstop-((column_3)%self.tabstop));
                                                 count_2 += width
                                                 column_3 += width
                                                 offset_3 += 1
@@ -2733,7 +2924,7 @@ class Parser:
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
-                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                        width  = (self.tabstop-((column_1)%self.tabstop));
                                     if count_1 + width > value_0:
                                         new_width = value_0 - count_1
                                         count_1 += new_width
@@ -2754,7 +2945,7 @@ class Parser:
                         children_3 = []
                         value_13 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
-                            _match = regex_regex_14.match(buf, offset_1)
+                            _match = regex_regex_1.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -2780,7 +2971,7 @@ class Parser:
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
-                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                        width  = (self.tabstop-((column_1)%self.tabstop));
                                     count_1 += width
                                     column_1 += width
                                     offset_1 += 1
@@ -2886,7 +3077,7 @@ class Parser:
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
-                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                        width  = (self.tabstop-((column_1)%self.tabstop));
                                     count_0 += width
                                     column_1 += width
                                     offset_1 += 1
@@ -2947,7 +3138,7 @@ class Parser:
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
-                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                        width  = (self.tabstop-((column_1)%self.tabstop));
                                     if count_0 + width > 3:
                                         new_width = 3 - count_0
                                         count_0 += new_width
@@ -2983,7 +3174,7 @@ class Parser:
                                             if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                             count_1 += width
                                             column_2 += width
                                             offset_2 += 1
@@ -3031,7 +3222,7 @@ class Parser:
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
-                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                        width  = (self.tabstop-((column_1)%self.tabstop));
                                     count_0 += width
                                     column_1 += width
                                     offset_1 += 1
@@ -3050,7 +3241,7 @@ class Parser:
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
-                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                        width  = (self.tabstop-((column_1)%self.tabstop));
                                     count_0 += width
                                     column_1 += width
                                     offset_1 += 1
@@ -3115,7 +3306,7 @@ class Parser:
                             if offset_1 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                 width = partial_tab_width_0
                             else:
-                                width  = (self.tabstop-(column_1%self.tabstop))
+                                width  = (self.tabstop-((column_1)%self.tabstop));
                             if count_0 + width > 3:
                                 new_width = 3 - count_0
                                 count_0 += new_width
@@ -3146,7 +3337,7 @@ class Parser:
                 offset_1 = offset_0
                 column_1 = column_0
                 while True: # start count
-                    _match = regex_regex_15.match(buf, offset_1)
+                    _match = regex_regex_16.match(buf, offset_1)
                     if _match:
                         _end = _match.end()
                         column_1 += (_end - offset_1)
@@ -3201,7 +3392,7 @@ class Parser:
                                             children_6 = []
                                             value_5 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
                                             while True: # start capture
-                                                _match = regex_regex_6.match(buf, offset_3)
+                                                _match = regex_regex_8.match(buf, offset_3)
                                                 if _match:
                                                     _end = _match.end()
                                                     column_3 += (_end - offset_3)
@@ -3276,7 +3467,7 @@ class Parser:
                                                                 if offset_4 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                                     width = partial_tab_width_4
                                                                 else:
-                                                                    width  = (self.tabstop-(column_4%self.tabstop))
+                                                                    width  = (self.tabstop-((column_4)%self.tabstop));
                                                                 count_1 += width
                                                                 column_4 += width
                                                                 offset_4 += 1
@@ -3287,7 +3478,7 @@ class Parser:
                                                         else:
                                                             break
 
-                                                    _match = regex_regex_3.match(buf, offset_4)
+                                                    _match = regex_regex_5.match(buf, offset_4)
                                                     if _match:
                                                         _end = _match.end()
                                                         column_4 += (_end - offset_4)
@@ -3371,7 +3562,7 @@ class Parser:
                                             children_6 = []
                                             value_7 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
                                             while True: # start capture
-                                                _match = regex_regex_7.match(buf, offset_3)
+                                                _match = regex_regex_9.match(buf, offset_3)
                                                 if _match:
                                                     _end = _match.end()
                                                     column_3 += (_end - offset_3)
@@ -3422,7 +3613,7 @@ class Parser:
                                                 offset_3 = -1
                                                 break
 
-                                            _match = regex_regex_8.match(buf, offset_3)
+                                            _match = regex_regex_10.match(buf, offset_3)
                                             if _match:
                                                 _end = _match.end()
                                                 column_3 += (_end - offset_3)
@@ -3434,7 +3625,7 @@ class Parser:
                                             children_6 = []
                                             value_8 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
                                             while True: # start capture
-                                                _match = regex_regex_9.match(buf, offset_3)
+                                                _match = regex_regex_11.match(buf, offset_3)
                                                 if _match:
                                                     _end = _match.end()
                                                     column_3 += (_end - offset_3)
@@ -3443,7 +3634,7 @@ class Parser:
                                                     offset_3 = -1
                                                     break
 
-                                                _match = regex_regex_10.match(buf, offset_3)
+                                                _match = regex_regex_12.match(buf, offset_3)
                                                 if _match:
                                                     _end = _match.end()
                                                     column_3 += (_end - offset_3)
@@ -3490,7 +3681,7 @@ class Parser:
                                             children_6 = []
                                             value_9 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
                                             while True: # start capture
-                                                _match = regex_regex_11.match(buf, offset_3)
+                                                _match = regex_regex_13.match(buf, offset_3)
                                                 if _match:
                                                     _end = _match.end()
                                                     column_3 += (_end - offset_3)
@@ -3499,7 +3690,7 @@ class Parser:
                                                     offset_3 = -1
                                                     break
 
-                                                _match = regex_regex_12.match(buf, offset_3)
+                                                _match = regex_regex_14.match(buf, offset_3)
                                                 if _match:
                                                     _end = _match.end()
                                                     column_3 += (_end - offset_3)
@@ -3564,7 +3755,7 @@ class Parser:
                                     children_5 = []
                                     value_10 = Node(None, offset_2, offset_2, column_2, column_2, children_5, None)
                                     while True: # start capture
-                                        _match = regex_regex_3.match(buf, offset_2)
+                                        _match = regex_regex_5.match(buf, offset_2)
                                         if _match:
                                             _end = _match.end()
                                             column_2 += (_end - offset_2)
@@ -3573,7 +3764,7 @@ class Parser:
                                             offset_2 = -1
                                             break
 
-                                        _match = regex_regex_16.match(buf, offset_2)
+                                        _match = regex_regex_17.match(buf, offset_2)
                                         if _match:
                                             _end = _match.end()
                                             column_2 += (_end - offset_2)
@@ -3643,7 +3834,7 @@ class Parser:
                             if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                 width = partial_tab_width_0
                             else:
-                                width  = (self.tabstop-(column_0%self.tabstop))
+                                width  = (self.tabstop-((column_0)%self.tabstop));
                             count_0 += width
                             column_0 += width
                             offset_0 += 1
@@ -3709,7 +3900,7 @@ class Parser:
                                         if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                             width = partial_tab_width_2
                                         else:
-                                            width  = (self.tabstop-(column_2%self.tabstop))
+                                            width  = (self.tabstop-((column_2)%self.tabstop));
                                         if count_1 + width > 3:
                                             new_width = 3 - count_1
                                             count_1 += new_width
@@ -3752,7 +3943,7 @@ class Parser:
                                                 if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                     width = partial_tab_width_3
                                                 else:
-                                                    width  = (self.tabstop-(column_3%self.tabstop))
+                                                    width  = (self.tabstop-((column_3)%self.tabstop));
                                                 count_2 += width
                                                 column_3 += width
                                                 offset_3 += 1
@@ -3798,7 +3989,7 @@ class Parser:
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
-                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                        width  = (self.tabstop-((column_1)%self.tabstop));
                                     if count_1 + width > value_0:
                                         new_width = value_0 - count_1
                                         count_1 += new_width
@@ -3819,7 +4010,7 @@ class Parser:
                         children_3 = []
                         value_13 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
-                            _match = regex_regex_14.match(buf, offset_1)
+                            _match = regex_regex_1.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -3845,7 +4036,7 @@ class Parser:
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
-                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                        width  = (self.tabstop-((column_1)%self.tabstop));
                                     count_1 += width
                                     column_1 += width
                                     offset_1 += 1
@@ -3951,7 +4142,7 @@ class Parser:
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
-                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                        width  = (self.tabstop-((column_1)%self.tabstop));
                                     count_0 += width
                                     column_1 += width
                                     offset_1 += 1
@@ -4012,7 +4203,7 @@ class Parser:
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
-                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                        width  = (self.tabstop-((column_1)%self.tabstop));
                                     if count_0 + width > 3:
                                         new_width = 3 - count_0
                                         count_0 += new_width
@@ -4048,7 +4239,7 @@ class Parser:
                                             if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                             count_1 += width
                                             column_2 += width
                                             offset_2 += 1
@@ -4096,7 +4287,7 @@ class Parser:
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
-                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                        width  = (self.tabstop-((column_1)%self.tabstop));
                                     count_0 += width
                                     column_1 += width
                                     offset_1 += 1
@@ -4115,7 +4306,7 @@ class Parser:
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
-                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                        width  = (self.tabstop-((column_1)%self.tabstop));
                                     count_0 += width
                                     column_1 += width
                                     offset_1 += 1
@@ -4177,7 +4368,7 @@ class Parser:
                         if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                             width = partial_tab_width_0
                         else:
-                            width  = (self.tabstop-(column_0%self.tabstop))
+                            width  = (self.tabstop-((column_0)%self.tabstop));
                         if count_0 + width > 3:
                             new_width = 3 - count_0
                             count_0 += new_width
@@ -4225,7 +4416,7 @@ class Parser:
                                     if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                         width = partial_tab_width_2
                                     else:
-                                        width  = (self.tabstop-(column_2%self.tabstop))
+                                        width  = (self.tabstop-((column_2)%self.tabstop));
                                     count_0 += width
                                     column_2 += width
                                     offset_2 += 1
@@ -4278,7 +4469,7 @@ class Parser:
                                 if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                     width = partial_tab_width_1
                                 else:
-                                    width  = (self.tabstop-(column_1%self.tabstop))
+                                    width  = (self.tabstop-((column_1)%self.tabstop));
                                 if count_0 + width > 1:
                                     new_width = 1 - count_0
                                     count_0 += new_width
@@ -4303,7 +4494,7 @@ class Parser:
                         indent_column_2 = list(indent_column_1)
                         partial_tab_offset_2 = partial_tab_offset_1
                         partial_tab_width_2 = partial_tab_width_1
-                        _match = regex_regex_3.match(buf, offset_2)
+                        _match = regex_regex_5.match(buf, offset_2)
                         if _match:
                             _end = _match.end()
                             column_2 += (_end - offset_2)
@@ -4356,7 +4547,7 @@ class Parser:
                                 if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                     width = partial_tab_width_1
                                 else:
-                                    width  = (self.tabstop-(column_1%self.tabstop))
+                                    width  = (self.tabstop-((column_1)%self.tabstop));
                                 count_0 += width
                                 column_1 += width
                                 offset_1 += 1
@@ -4507,6 +4698,29 @@ class Parser:
                         children_0.extend(children_1)
                     break
                 # end case
+                offset_1 = offset_0
+                column_1 = column_0
+                indent_column_1 = list(indent_column_0)
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
+                children_1 = [] if children_0 is not None else None
+                while True: # case
+                    offset_1, column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_start_table(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
+                    if offset_1 == -1: break
+
+
+
+                    break
+                if offset_1 != -1:
+                    offset_0 = offset_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
+                    if children_1 is not None and children_1 is not None:
+                        children_0.extend(children_1)
+                    break
+                # end case
                 offset_0 = -1 # no more choices
                 break # end choice
             if offset_0 == -1:
@@ -4540,7 +4754,7 @@ class Parser:
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
-                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                        width  = (self.tabstop-((column_1)%self.tabstop));
                                     count_0 += width
                                     column_1 += width
                                     offset_1 += 1
@@ -4658,7 +4872,7 @@ class Parser:
                                             if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                             count_1 += width
                                             column_2 += width
                                             offset_2 += 1
@@ -4767,7 +4981,7 @@ class Parser:
                         if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                             width = partial_tab_width_0
                         else:
-                            width  = (self.tabstop-(column_0%self.tabstop))
+                            width  = (self.tabstop-((column_0)%self.tabstop));
                         if count_0 + width > 3:
                             new_width = 3 - count_0
                             count_0 += new_width
@@ -4785,7 +4999,7 @@ class Parser:
                 else:
                     break
 
-            _match = regex_regex_17.match(buf, offset_0)
+            _match = regex_regex_18.match(buf, offset_0)
             if _match:
                 _end = _match.end()
                 column_0 += (_end - offset_0)
@@ -4817,7 +5031,7 @@ class Parser:
                                     if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                         width = partial_tab_width_2
                                     else:
-                                        width  = (self.tabstop-(column_2%self.tabstop))
+                                        width  = (self.tabstop-((column_2)%self.tabstop));
                                     count_0 += width
                                     column_2 += width
                                     offset_2 += 1
@@ -4875,7 +5089,7 @@ class Parser:
                                 if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                     width = partial_tab_width_1
                                 else:
-                                    width  = (self.tabstop-(column_1%self.tabstop))
+                                    width  = (self.tabstop-((column_1)%self.tabstop));
                                 if count_0 + width > 1:
                                     new_width = 1 - count_0
                                     count_0 += new_width
@@ -5042,6 +5256,29 @@ class Parser:
                 partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
+                    offset_1, column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_start_table(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
+                    if offset_1 == -1: break
+
+
+
+                    break
+                if offset_1 != -1:
+                    offset_0 = offset_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
+                    if children_1 is not None and children_1 is not None:
+                        children_0.extend(children_1)
+                    break
+                # end case
+                offset_1 = offset_0
+                column_1 = column_0
+                indent_column_1 = list(indent_column_0)
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
+                children_1 = [] if children_0 is not None else None
+                while True: # case
                     offset_1, column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_start_list(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                     if offset_1 == -1: break
 
@@ -5091,7 +5328,7 @@ class Parser:
                                     if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                         width = partial_tab_width_2
                                     else:
-                                        width  = (self.tabstop-(column_2%self.tabstop))
+                                        width  = (self.tabstop-((column_2)%self.tabstop));
                                     if count_0 + width > 4:
                                         new_width = 4 - count_0
                                         count_0 += new_width
@@ -5127,7 +5364,7 @@ class Parser:
                                         if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                             width = partial_tab_width_3
                                         else:
-                                            width  = (self.tabstop-(column_3%self.tabstop))
+                                            width  = (self.tabstop-((column_3)%self.tabstop));
                                         count_0 += width
                                         column_3 += width
                                         offset_3 += 1
@@ -5221,7 +5458,7 @@ class Parser:
                                 if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                     width = partial_tab_width_1
                                 else:
-                                    width  = (self.tabstop-(column_1%self.tabstop))
+                                    width  = (self.tabstop-((column_1)%self.tabstop));
                                 count_0 += width
                                 column_1 += width
                                 offset_1 += 1
@@ -5291,7 +5528,7 @@ class Parser:
                                     if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                         width = partial_tab_width_2
                                     else:
-                                        width  = (self.tabstop-(column_2%self.tabstop))
+                                        width  = (self.tabstop-((column_2)%self.tabstop));
                                     count_0 += width
                                     column_2 += width
                                     offset_2 += 1
@@ -5327,13 +5564,13 @@ class Parser:
                         start_column, start_offset = column, offset
                         if count < 0: offset = -1
                         while count > 0 and offset < buf_eof:
-                            codepoint = buf[offset]
+                            codepoint = buf[offset];
                             if codepoint in ' \t':
                                 if not allow_mixed_indent:
                                     if codepoint == '\t': saw_tab = True
                                     else: saw_not_tab = True
                                     if saw_tab and saw_not_tab:
-                                         offset -1; break
+                                         offset = -1; break
                                 if codepoint != '\t':
                                     column += 1
                                     offset += 1
@@ -5342,15 +5579,16 @@ class Parser:
                                     if offset == partial_tab_offset and partial_tab_width > 0:
                                         width = partial_tab_width
                                     else:
-                                        width  = (self.tabstop-(column%self.tabstop))
+                                        width  = (self.tabstop-((column)%self.tabstop));
                                     if width <= count:
                                         column += width
                                         offset += 1
                                         count -= width
                                     else:
-                                        column += count
                                         partial_tab_offset = offset
                                         partial_tab_width = width-count
+                                        column += count
+                                        count -= width
                                         break
                             elif codepoint in '\n':
                                 break
@@ -5369,7 +5607,7 @@ class Parser:
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
-                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                        width  = (self.tabstop-((column_1)%self.tabstop));
                                     count_0 += width
                                     column_1 += width
                                     offset_1 += 1
@@ -5425,7 +5663,7 @@ class Parser:
                                 if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                     width = partial_tab_width_1
                                 else:
-                                    width  = (self.tabstop-(column_1%self.tabstop))
+                                    width  = (self.tabstop-((column_1)%self.tabstop));
                                 if count_0 + width > 1:
                                     new_width = 1 - count_0
                                     count_0 += new_width
@@ -5470,13 +5708,13 @@ class Parser:
                 start_column, start_offset = column, offset
                 if count < 0: offset = -1
                 while count > 0 and offset < buf_eof:
-                    codepoint = buf[offset]
+                    codepoint = buf[offset];
                     if codepoint in ' \t':
                         if not allow_mixed_indent:
                             if codepoint == '\t': saw_tab = True
                             else: saw_not_tab = True
                             if saw_tab and saw_not_tab:
-                                 offset -1; break
+                                 offset = -1; break
                         if codepoint != '\t':
                             column += 1
                             offset += 1
@@ -5485,15 +5723,16 @@ class Parser:
                             if offset == partial_tab_offset and partial_tab_width > 0:
                                 width = partial_tab_width
                             else:
-                                width  = (self.tabstop-(column%self.tabstop))
+                                width  = (self.tabstop-((column)%self.tabstop));
                             if width <= count:
                                 column += width
                                 offset += 1
                                 count -= width
                             else:
-                                column += count
                                 partial_tab_offset = offset
                                 partial_tab_width = width-count
+                                column += count
+                                count -= width
                                 break
                     elif codepoint in '\n':
                         break
@@ -5574,7 +5813,7 @@ class Parser:
                                                     if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                         width = partial_tab_width_3
                                                     else:
-                                                        width  = (self.tabstop-(column_3%self.tabstop))
+                                                        width  = (self.tabstop-((column_3)%self.tabstop));
                                                     count_3 += width
                                                     column_3 += width
                                                     offset_3 += 1
@@ -5662,7 +5901,7 @@ class Parser:
                                                 if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                     width = partial_tab_width_3
                                                 else:
-                                                    width  = (self.tabstop-(column_3%self.tabstop))
+                                                    width  = (self.tabstop-((column_3)%self.tabstop));
                                                 count_2 += width
                                                 column_3 += width
                                                 offset_3 += 1
@@ -5673,7 +5912,7 @@ class Parser:
                                         else:
                                             break
 
-                                    _match = regex_regex_3.match(buf, offset_3)
+                                    _match = regex_regex_5.match(buf, offset_3)
                                     if _match:
                                         _end = _match.end()
                                         column_3 += (_end - offset_3)
@@ -5766,7 +6005,7 @@ class Parser:
                             if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                 width = partial_tab_width_0
                             else:
-                                width  = (self.tabstop-(column_0%self.tabstop))
+                                width  = (self.tabstop-((column_0)%self.tabstop));
                             if count_0 + width > 3:
                                 new_width = 3 - count_0
                                 count_0 += new_width
@@ -5786,7 +6025,7 @@ class Parser:
 
                 offset_1 = offset_0
                 while True: # start backref
-                    _match = regex_regex_18.match(buf, offset_1)
+                    _match = regex_regex_19.match(buf, offset_1)
                     if _match:
                         _end = _match.end()
                         column_0 += (_end - offset_1)
@@ -5825,7 +6064,7 @@ class Parser:
                                         if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                             width = partial_tab_width_2
                                         else:
-                                            width  = (self.tabstop-(column_2%self.tabstop))
+                                            width  = (self.tabstop-((column_2)%self.tabstop));
                                         count_0 += width
                                         column_2 += width
                                         offset_2 += 1
@@ -5883,7 +6122,7 @@ class Parser:
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
-                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                        width  = (self.tabstop-((column_1)%self.tabstop));
                                     if count_0 + width > 1:
                                         new_width = 1 - count_0
                                         count_0 += new_width
@@ -5975,7 +6214,7 @@ class Parser:
                                         if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
-                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                            width  = (self.tabstop-((column_1)%self.tabstop));
                                         count_0 += width
                                         column_1 += width
                                         offset_1 += 1
@@ -6067,7 +6306,7 @@ class Parser:
                                             if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                             count_1 += width
                                             column_2 += width
                                             offset_2 += 1
@@ -6131,7 +6370,7 @@ class Parser:
                                                         if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                             width = partial_tab_width_3
                                                         else:
-                                                            width  = (self.tabstop-(column_3%self.tabstop))
+                                                            width  = (self.tabstop-((column_3)%self.tabstop));
                                                         count_2 += width
                                                         column_3 += width
                                                         offset_3 += 1
@@ -6216,7 +6455,7 @@ class Parser:
                                                 if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                     width = partial_tab_width_3
                                                 else:
-                                                    width  = (self.tabstop-(column_3%self.tabstop))
+                                                    width  = (self.tabstop-((column_3)%self.tabstop));
                                                 if count_1 + width > 3:
                                                     new_width = 3 - count_1
                                                     count_1 += new_width
@@ -6289,7 +6528,7 @@ class Parser:
                                             if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                             if count_1 + width > 3:
                                                 new_width = 3 - count_1
                                                 count_1 += new_width
@@ -6337,7 +6576,7 @@ class Parser:
                                                         if offset_4 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                             width = partial_tab_width_4
                                                         else:
-                                                            width  = (self.tabstop-(column_4%self.tabstop))
+                                                            width  = (self.tabstop-((column_4)%self.tabstop));
                                                         count_1 += width
                                                         column_4 += width
                                                         offset_4 += 1
@@ -6395,7 +6634,7 @@ class Parser:
                                                     if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                         width = partial_tab_width_3
                                                     else:
-                                                        width  = (self.tabstop-(column_3%self.tabstop))
+                                                        width  = (self.tabstop-((column_3)%self.tabstop));
                                                     if count_1 + width > 1:
                                                         new_width = 1 - count_1
                                                         count_1 += new_width
@@ -6487,7 +6726,7 @@ class Parser:
                                                         if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                             width = partial_tab_width_3
                                                         else:
-                                                            width  = (self.tabstop-(column_3%self.tabstop))
+                                                            width  = (self.tabstop-((column_3)%self.tabstop));
                                                         count_1 += width
                                                         column_3 += width
                                                         offset_3 += 1
@@ -6595,7 +6834,7 @@ class Parser:
                             if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                 width = partial_tab_width_0
                             else:
-                                width  = (self.tabstop-(column_0%self.tabstop))
+                                width  = (self.tabstop-((column_0)%self.tabstop));
                             if count_0 + width > 3:
                                 new_width = 3 - count_0
                                 count_0 += new_width
@@ -6616,7 +6855,7 @@ class Parser:
                 children_2 = []
                 value_1 = Node(None, offset_0, offset_0, column_0, column_0, children_2, None)
                 while True: # start capture
-                    _match = regex_regex_19.match(buf, offset_0)
+                    _match = regex_regex_20.match(buf, offset_0)
                     if _match:
                         _end = _match.end()
                         column_0 += (_end - offset_0)
@@ -6636,7 +6875,7 @@ class Parser:
 
                 offset_1 = offset_0
                 while True: # start backref
-                    _match = regex_regex_20.match(buf, offset_1)
+                    _match = regex_regex_21.match(buf, offset_1)
                     if _match:
                         _end = _match.end()
                         column_0 += (_end - offset_1)
@@ -6675,7 +6914,7 @@ class Parser:
                                         if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                             width = partial_tab_width_2
                                         else:
-                                            width  = (self.tabstop-(column_2%self.tabstop))
+                                            width  = (self.tabstop-((column_2)%self.tabstop));
                                         count_0 += width
                                         column_2 += width
                                         offset_2 += 1
@@ -6733,7 +6972,7 @@ class Parser:
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
-                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                        width  = (self.tabstop-((column_1)%self.tabstop));
                                     if count_0 + width > 1:
                                         new_width = 1 - count_0
                                         count_0 += new_width
@@ -6825,7 +7064,7 @@ class Parser:
                                         if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
-                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                            width  = (self.tabstop-((column_1)%self.tabstop));
                                         count_0 += width
                                         column_1 += width
                                         offset_1 += 1
@@ -6917,7 +7156,7 @@ class Parser:
                                             if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                             count_1 += width
                                             column_2 += width
                                             offset_2 += 1
@@ -6981,7 +7220,7 @@ class Parser:
                                                         if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                             width = partial_tab_width_3
                                                         else:
-                                                            width  = (self.tabstop-(column_3%self.tabstop))
+                                                            width  = (self.tabstop-((column_3)%self.tabstop));
                                                         count_2 += width
                                                         column_3 += width
                                                         offset_3 += 1
@@ -7066,7 +7305,7 @@ class Parser:
                                                 if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                     width = partial_tab_width_3
                                                 else:
-                                                    width  = (self.tabstop-(column_3%self.tabstop))
+                                                    width  = (self.tabstop-((column_3)%self.tabstop));
                                                 if count_1 + width > 3:
                                                     new_width = 3 - count_1
                                                     count_1 += new_width
@@ -7084,7 +7323,7 @@ class Parser:
                                         else:
                                             break
 
-                                    _match = regex_regex_19.match(buf, offset_3)
+                                    _match = regex_regex_20.match(buf, offset_3)
                                     if _match:
                                         _end = _match.end()
                                         column_3 += (_end - offset_3)
@@ -7132,7 +7371,7 @@ class Parser:
                                             if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                             if count_1 + width > 3:
                                                 new_width = 3 - count_1
                                                 count_1 += new_width
@@ -7150,7 +7389,7 @@ class Parser:
                                     else:
                                         break
 
-                                _match = regex_regex_19.match(buf, offset_2)
+                                _match = regex_regex_20.match(buf, offset_2)
                                 if _match:
                                     _end = _match.end()
                                     column_2 += (_end - offset_2)
@@ -7189,7 +7428,7 @@ class Parser:
                                                         if offset_4 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                             width = partial_tab_width_4
                                                         else:
-                                                            width  = (self.tabstop-(column_4%self.tabstop))
+                                                            width  = (self.tabstop-((column_4)%self.tabstop));
                                                         count_1 += width
                                                         column_4 += width
                                                         offset_4 += 1
@@ -7247,7 +7486,7 @@ class Parser:
                                                     if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                         width = partial_tab_width_3
                                                     else:
-                                                        width  = (self.tabstop-(column_3%self.tabstop))
+                                                        width  = (self.tabstop-((column_3)%self.tabstop));
                                                     if count_1 + width > 1:
                                                         new_width = 1 - count_1
                                                         count_1 += new_width
@@ -7339,7 +7578,7 @@ class Parser:
                                                         if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                             width = partial_tab_width_3
                                                         else:
-                                                            width  = (self.tabstop-(column_3%self.tabstop))
+                                                            width  = (self.tabstop-((column_3)%self.tabstop));
                                                         count_1 += width
                                                         column_3 += width
                                                         offset_3 += 1
@@ -7508,7 +7747,7 @@ class Parser:
                                             indent_column_4 = list(indent_column_3)
                                             partial_tab_offset_4 = partial_tab_offset_3
                                             partial_tab_width_4 = partial_tab_width_3
-                                            _match = regex_regex_6.match(buf, offset_4)
+                                            _match = regex_regex_8.match(buf, offset_4)
                                             if _match:
                                                 _end = _match.end()
                                                 column_4 += (_end - offset_4)
@@ -7525,7 +7764,7 @@ class Parser:
                                         children_5 = []
                                         value_2 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
                                         while True: # start capture
-                                            _match = regex_regex_6.match(buf, offset_3)
+                                            _match = regex_regex_8.match(buf, offset_3)
                                             if _match:
                                                 _end = _match.end()
                                                 column_3 += (_end - offset_3)
@@ -7565,7 +7804,7 @@ class Parser:
                                         children_5 = []
                                         value_3 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
                                         while True: # start capture
-                                            _match = regex_regex_21.match(buf, offset_3)
+                                            _match = regex_regex_22.match(buf, offset_3)
                                             if _match:
                                                 _end = _match.end()
                                                 column_3 += (_end - offset_3)
@@ -7642,7 +7881,7 @@ class Parser:
                                 if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                     width = partial_tab_width_1
                                 else:
-                                    width  = (self.tabstop-(column_1%self.tabstop))
+                                    width  = (self.tabstop-((column_1)%self.tabstop));
                                 count_0 += width
                                 column_1 += width
                                 offset_1 += 1
@@ -7794,7 +8033,7 @@ class Parser:
                                         indent_column_4 = list(indent_column_3)
                                         partial_tab_offset_4 = partial_tab_offset_3
                                         partial_tab_width_4 = partial_tab_width_3
-                                        _match = regex_regex_6.match(buf, offset_4)
+                                        _match = regex_regex_8.match(buf, offset_4)
                                         if _match:
                                             _end = _match.end()
                                             column_4 += (_end - offset_4)
@@ -7811,7 +8050,7 @@ class Parser:
                                     children_4 = []
                                     value_2 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
                                     while True: # start capture
-                                        _match = regex_regex_6.match(buf, offset_3)
+                                        _match = regex_regex_8.match(buf, offset_3)
                                         if _match:
                                             _end = _match.end()
                                             column_3 += (_end - offset_3)
@@ -7851,7 +8090,7 @@ class Parser:
                                     children_4 = []
                                     value_3 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
                                     while True: # start capture
-                                        _match = regex_regex_22.match(buf, offset_3)
+                                        _match = regex_regex_23.match(buf, offset_3)
                                         if _match:
                                             _end = _match.end()
                                             column_3 += (_end - offset_3)
@@ -7899,7 +8138,7 @@ class Parser:
                                                     if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                         width = partial_tab_width_3
                                                     else:
-                                                        width  = (self.tabstop-(column_3%self.tabstop))
+                                                        width  = (self.tabstop-((column_3)%self.tabstop));
                                                     count_2 += width
                                                     column_3 += width
                                                     offset_3 += 1
@@ -8080,7 +8319,7 @@ class Parser:
                             if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                 width = partial_tab_width_0
                             else:
-                                width  = (self.tabstop-(column_0%self.tabstop))
+                                width  = (self.tabstop-((column_0)%self.tabstop));
                             if count_0 + width > 3:
                                 new_width = 3 - count_0
                                 count_0 += new_width
@@ -8125,7 +8364,7 @@ class Parser:
                                 if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                     width = partial_tab_width_1
                                 else:
-                                    width  = (self.tabstop-(column_1%self.tabstop))
+                                    width  = (self.tabstop-((column_1)%self.tabstop));
                                 count_0 += width
                                 column_1 += width
                                 offset_1 += 1
@@ -8206,7 +8445,7 @@ class Parser:
                                         indent_column_3 = list(indent_column_2)
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
-                                        _match = regex_regex_6.match(buf, offset_3)
+                                        _match = regex_regex_8.match(buf, offset_3)
                                         if _match:
                                             _end = _match.end()
                                             column_3 += (_end - offset_3)
@@ -8223,7 +8462,7 @@ class Parser:
                                     children_5 = []
                                     value_3 = Node(None, offset_2, offset_2, column_2, column_2, children_5, None)
                                     while True: # start capture
-                                        _match = regex_regex_6.match(buf, offset_2)
+                                        _match = regex_regex_8.match(buf, offset_2)
                                         if _match:
                                             _end = _match.end()
                                             column_2 += (_end - offset_2)
@@ -8263,7 +8502,7 @@ class Parser:
                                     children_5 = []
                                     value_4 = Node(None, offset_2, offset_2, column_2, column_2, children_5, None)
                                     while True: # start capture
-                                        _match = regex_regex_23.match(buf, offset_2)
+                                        _match = regex_regex_24.match(buf, offset_2)
                                         if _match:
                                             _end = _match.end()
                                             column_2 += (_end - offset_2)
@@ -8359,7 +8598,7 @@ class Parser:
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
-                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                        width  = (self.tabstop-((column_1)%self.tabstop));
                                     count_0 += width
                                     column_1 += width
                                     offset_1 += 1
@@ -8419,7 +8658,7 @@ class Parser:
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
-                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                        width  = (self.tabstop-((column_1)%self.tabstop));
                                     count_0 += width
                                     column_1 += width
                                     offset_1 += 1
@@ -8486,7 +8725,7 @@ class Parser:
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
-                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                        width  = (self.tabstop-((column_1)%self.tabstop));
                                     count_0 += width
                                     column_1 += width
                                     offset_1 += 1
@@ -8569,7 +8808,7 @@ class Parser:
                                             if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                             count_1 += width
                                             column_2 += width
                                             offset_2 += 1
@@ -8629,7 +8868,7 @@ class Parser:
                                             if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                             count_1 += width
                                             column_2 += width
                                             offset_2 += 1
@@ -8692,7 +8931,7 @@ class Parser:
                                             if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                             count_1 += width
                                             column_2 += width
                                             offset_2 += 1
@@ -8742,7 +8981,7 @@ class Parser:
                                         if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                             width = partial_tab_width_2
                                         else:
-                                            width  = (self.tabstop-(column_2%self.tabstop))
+                                            width  = (self.tabstop-((column_2)%self.tabstop));
                                         count_1 += width
                                         column_2 += width
                                         offset_2 += 1
@@ -8789,7 +9028,7 @@ class Parser:
                                             if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                             count_2 += width
                                             column_2 += width
                                             offset_2 += 1
@@ -8849,7 +9088,7 @@ class Parser:
                                             if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                             count_2 += width
                                             column_2 += width
                                             offset_2 += 1
@@ -8904,7 +9143,7 @@ class Parser:
                                                 if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                     width = partial_tab_width_3
                                                 else:
-                                                    width  = (self.tabstop-(column_3%self.tabstop))
+                                                    width  = (self.tabstop-((column_3)%self.tabstop));
                                                 count_2 += width
                                                 column_3 += width
                                                 offset_3 += 1
@@ -8987,7 +9226,7 @@ class Parser:
                         if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                             width = partial_tab_width_0
                         else:
-                            width  = (self.tabstop-(column_0%self.tabstop))
+                            width  = (self.tabstop-((column_0)%self.tabstop));
                         count_0 += width
                         column_0 += width
                         offset_0 += 1
@@ -9140,6 +9379,29 @@ class Parser:
                 partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
+                    offset_1, column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_start_table(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
+                    if offset_1 == -1: break
+
+
+
+                    break
+                if offset_1 != -1:
+                    offset_0 = offset_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
+                    if children_1 is not None and children_1 is not None:
+                        children_0.extend(children_1)
+                    break
+                # end case
+                offset_1 = offset_0
+                column_1 = column_0
+                indent_column_1 = list(indent_column_0)
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
+                children_1 = [] if children_0 is not None else None
+                while True: # case
                     count_0 = 0
                     while offset_1 < buf_eof and count_0 < 3:
                         codepoint = buf[offset_1]
@@ -9148,7 +9410,7 @@ class Parser:
                                 if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                     width = partial_tab_width_1
                                 else:
-                                    width  = (self.tabstop-(column_1%self.tabstop))
+                                    width  = (self.tabstop-((column_1)%self.tabstop));
                                 if count_0 + width > 3:
                                     new_width = 3 - count_0
                                     count_0 += new_width
@@ -9166,7 +9428,7 @@ class Parser:
                         else:
                             break
 
-                    _match = regex_regex_24.match(buf, offset_1)
+                    _match = regex_regex_25.match(buf, offset_1)
                     if _match:
                         _end = _match.end()
                         column_1 += (_end - offset_1)
@@ -9183,7 +9445,7 @@ class Parser:
                                 if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                     width = partial_tab_width_1
                                 else:
-                                    width  = (self.tabstop-(column_1%self.tabstop))
+                                    width  = (self.tabstop-((column_1)%self.tabstop));
                                 count_0 += width
                                 column_1 += width
                                 offset_1 += 1
@@ -9212,7 +9474,7 @@ class Parser:
                                     if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                         width = partial_tab_width_2
                                     else:
-                                        width  = (self.tabstop-(column_2%self.tabstop))
+                                        width  = (self.tabstop-((column_2)%self.tabstop));
                                     count_0 += width
                                     column_2 += width
                                     offset_2 += 1
@@ -9284,7 +9546,7 @@ class Parser:
                                         if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                             width = partial_tab_width_2
                                         else:
-                                            width  = (self.tabstop-(column_2%self.tabstop))
+                                            width  = (self.tabstop-((column_2)%self.tabstop));
                                         count_0 += width
                                         column_2 += width
                                         offset_2 += 1
@@ -9317,7 +9579,7 @@ class Parser:
                         partial_tab_width_2 = partial_tab_width_1
                         children_2 = [] if children_1 is not None else None
                         while True: # case
-                            _match = regex_regex_25.match(buf, offset_2)
+                            _match = regex_regex_26.match(buf, offset_2)
                             if _match:
                                 _end = _match.end()
                                 column_2 += (_end - offset_2)
@@ -9394,7 +9656,7 @@ class Parser:
                                 if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                     width = partial_tab_width_1
                                 else:
-                                    width  = (self.tabstop-(column_1%self.tabstop))
+                                    width  = (self.tabstop-((column_1)%self.tabstop));
                                 count_0 += width
                                 column_1 += width
                                 offset_1 += 1
@@ -9499,7 +9761,7 @@ class Parser:
                         if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                             width = partial_tab_width_0
                         else:
-                            width  = (self.tabstop-(column_0%self.tabstop))
+                            width  = (self.tabstop-((column_0)%self.tabstop));
                         count_0 += width
                         column_0 += width
                         offset_0 += 1
@@ -9549,7 +9811,7 @@ class Parser:
                         if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                             width = partial_tab_width_0
                         else:
-                            width  = (self.tabstop-(column_0%self.tabstop))
+                            width  = (self.tabstop-((column_0)%self.tabstop));
                         if count_0 + width > 3:
                             new_width = 3 - count_0
                             count_0 += new_width
@@ -9567,7 +9829,7 @@ class Parser:
                 else:
                     break
 
-            _match = regex_regex_26.match(buf, offset_0)
+            _match = regex_regex_27.match(buf, offset_0)
             if _match:
                 _end = _match.end()
                 column_0 += (_end - offset_0)
@@ -9584,7 +9846,7 @@ class Parser:
                         if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                             width = partial_tab_width_0
                         else:
-                            width  = (self.tabstop-(column_0%self.tabstop))
+                            width  = (self.tabstop-((column_0)%self.tabstop));
                         count_0 += width
                         column_0 += width
                         offset_0 += 1
@@ -9641,7 +9903,7 @@ class Parser:
                         if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                             width = partial_tab_width_0
                         else:
-                            width  = (self.tabstop-(column_0%self.tabstop))
+                            width  = (self.tabstop-((column_0)%self.tabstop));
                         if count_0 + width > 3:
                             new_width = 3 - count_0
                             count_0 += new_width
@@ -9727,7 +9989,7 @@ class Parser:
                                                             if offset_4 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                                 width = partial_tab_width_2
                                                             else:
-                                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                                             count_1 += width
                                                             column_2 += width
                                                             offset_4 += 1
@@ -9845,7 +10107,7 @@ class Parser:
                                             if offset_3 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                                 width = partial_tab_width_1
                                             else:
-                                                width  = (self.tabstop-(column_1%self.tabstop))
+                                                width  = (self.tabstop-((column_1)%self.tabstop));
                                             count_0 += width
                                             column_1 += width
                                             offset_3 += 1
@@ -9896,7 +10158,7 @@ class Parser:
                                             if offset_3 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                                 width = partial_tab_width_1
                                             else:
-                                                width  = (self.tabstop-(column_1%self.tabstop))
+                                                width  = (self.tabstop-((column_1)%self.tabstop));
                                             if count_0 + width > 3:
                                                 new_width = 3 - count_0
                                                 count_0 += new_width
@@ -9922,7 +10184,7 @@ class Parser:
                                     partial_tab_width_2 = partial_tab_width_1
                                     children_3 = [] if children_2 is not None else None
                                     while True: # case
-                                        _match = regex_regex_27.match(buf, offset_4)
+                                        _match = regex_regex_28.match(buf, offset_4)
                                         if _match:
                                             _end = _match.end()
                                             column_2 += (_end - offset_4)
@@ -9952,7 +10214,7 @@ class Parser:
                                     partial_tab_width_2 = partial_tab_width_1
                                     children_3 = [] if children_2 is not None else None
                                     while True: # case
-                                        _match = regex_regex_28.match(buf, offset_4)
+                                        _match = regex_regex_29.match(buf, offset_4)
                                         if _match:
                                             _end = _match.end()
                                             column_2 += (_end - offset_4)
@@ -9988,7 +10250,7 @@ class Parser:
                                             if offset_3 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                                 width = partial_tab_width_1
                                             else:
-                                                width  = (self.tabstop-(column_1%self.tabstop))
+                                                width  = (self.tabstop-((column_1)%self.tabstop));
                                             count_0 += width
                                             column_1 += width
                                             offset_3 += 1
@@ -10083,7 +10345,7 @@ class Parser:
                                                                 if offset_5 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                                     width = partial_tab_width_3
                                                                 else:
-                                                                    width  = (self.tabstop-(column_3%self.tabstop))
+                                                                    width  = (self.tabstop-((column_3)%self.tabstop));
                                                                 count_1 += width
                                                                 column_3 += width
                                                                 offset_5 += 1
@@ -10150,7 +10412,7 @@ class Parser:
                                             if offset_3 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                                 width = partial_tab_width_1
                                             else:
-                                                width  = (self.tabstop-(column_1%self.tabstop))
+                                                width  = (self.tabstop-((column_1)%self.tabstop));
                                             count_0 += width
                                             column_1 += width
                                             offset_3 += 1
@@ -10251,6 +10513,980 @@ class Parser:
             break
         return offset_0, column_0, partial_tab_offset_0, partial_tab_width_0
 
+    def parse_start_table(self, buf, buf_start, buf_eof, offset_0, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
+        while True: # note: return at end of loop
+            count_0 = 0
+            while offset_0 < buf_eof and count_0 < 8:
+                codepoint = buf[offset_0]
+                if codepoint in ' \t':
+                    if codepoint == '\t':
+                        if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
+                            width = partial_tab_width_0
+                        else:
+                            width  = (self.tabstop-((column_0)%self.tabstop));
+                        if count_0 + width > 8:
+                            new_width = 8 - count_0
+                            count_0 += new_width
+                            column_0 += new_width
+                            partial_tab_offset_0 = offset_0
+                            partial_tab_width_0 = width - new_width
+                            break
+                        count_0 += width
+                        column_0 += width
+                        offset_0 += 1
+                    else:
+                        count_0 += 1
+                        column_0 += 1
+                        offset_0 += 1
+                else:
+                    break
+
+            if buf[offset_0:offset_0+1] == '|':
+                offset_0 += 1
+                column_0 += 1
+            else:
+                offset_0 = -1
+                break
+
+
+            break
+        return offset_0, column_0, partial_tab_offset_0, partial_tab_width_0
+
+    def parse_table_cell(self, buf, buf_start, buf_eof, offset_0, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
+        while True: # note: return at end of loop
+            children_1 = []
+            value_0 = Node(None, offset_0, offset_0, column_0, column_0, children_1, None)
+            while True: # start capture
+                while True: # start choice
+                    offset_1 = offset_0
+                    column_1 = column_0
+                    indent_column_1 = list(indent_column_0)
+                    partial_tab_offset_1 = partial_tab_offset_0
+                    partial_tab_width_1 = partial_tab_width_0
+                    children_2 = [] if children_1 is not None else None
+                    while True: # case
+                        while True: # start lookahed
+                            children_3 = []
+                            offset_2 = offset_1 + 0
+                            column_2 = column_1
+                            indent_column_2 = list(indent_column_1)
+                            partial_tab_offset_2 = partial_tab_offset_1
+                            partial_tab_width_2 = partial_tab_width_1
+                            if buf[offset_2:offset_2+1] == '|':
+                                offset_2 += 1
+                                column_2 += 1
+                            else:
+                                offset_2 = -1
+                                break
+
+                            break
+                        if offset_2 == -1:
+                            offset_1 = -1
+                            break
+
+
+                        break
+                    if offset_1 != -1:
+                        offset_0 = offset_1
+                        column_0 = column_1
+                        indent_column_0 = indent_column_1
+                        partial_tab_offset_0 = partial_tab_offset_1
+                        partial_tab_width_0 = partial_tab_width_1
+                        if children_2 is not None and children_2 is not None:
+                            children_1.extend(children_2)
+                        break
+                    # end case
+                    offset_1 = offset_0
+                    column_1 = column_0
+                    indent_column_1 = list(indent_column_0)
+                    partial_tab_offset_1 = partial_tab_offset_0
+                    partial_tab_width_1 = partial_tab_width_0
+                    children_2 = [] if children_1 is not None else None
+                    while True: # case
+                        while True: # start reject
+                            children_3 = []
+                            offset_2 = offset_1 + 0
+                            column_2 = column_1
+                            indent_column_2 = list(indent_column_1)
+                            partial_tab_offset_2 = partial_tab_offset_1
+                            partial_tab_width_2 = partial_tab_width_1
+                            if buf[offset_2:offset_2+1] == '|':
+                                offset_2 += 1
+                                column_2 += 1
+                            else:
+                                offset_2 = -1
+                                break
+
+                            break
+                        if offset_2 != -1:
+                            offset_1 = -1
+                            break
+
+                        count_0 = -1
+                        # print(count_0, 'indent')
+                        def _indent(buf, buf_start, buf_eof, offset, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
+                            saw_tab, saw_not_tab = False, False
+                            start_column, start_offset = column, offset
+                            if count < 0: offset = -1
+                            while count > 0 and offset < buf_eof:
+                                codepoint = buf[offset];
+                                if codepoint in ' \t':
+                                    if not allow_mixed_indent:
+                                        if codepoint == '\t': saw_tab = True
+                                        else: saw_not_tab = True
+                                        if saw_tab and saw_not_tab:
+                                             offset = -1; break
+                                    if codepoint != '\t':
+                                        column += 1
+                                        offset += 1
+                                        count -=1
+                                    else:
+                                        if offset == partial_tab_offset and partial_tab_width > 0:
+                                            width = partial_tab_width
+                                        else:
+                                            width  = (self.tabstop-((column)%self.tabstop));
+                                        if width <= count:
+                                            column += width
+                                            offset += 1
+                                            count -= width
+                                        else:
+                                            partial_tab_offset = offset
+                                            partial_tab_width = width-count
+                                            column += count
+                                            count -= width
+                                            break
+                                elif codepoint in '\n':
+                                    break
+                                else:
+                                    offset = -1
+                                    break
+                            return offset, column, partial_tab_offset, partial_tab_width
+                        prefix_0.append((_indent, None))
+                        indent_column_1.append(column_1)
+                        while True:
+                            offset_1, column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_inline_element(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
+                            if offset_1 == -1: break
+
+
+                            count_0 = 0
+                            while True:
+                                offset_2 = offset_1
+                                column_2 = column_1
+                                indent_column_2 = list(indent_column_1)
+                                partial_tab_offset_2 = partial_tab_offset_1
+                                partial_tab_width_2 = partial_tab_width_1
+                                children_3 = [] if children_2 is not None else None
+                                while True:
+                                    #print('entry rep rule', offset_1, offset_2)
+                                    children_4 = []
+                                    value_2 = Node(None, offset_2, offset_2, column_2, column_2, children_4, None)
+                                    while True: # start capture
+                                        count_1 = 0
+                                        while offset_2 < buf_eof:
+                                            codepoint = buf[offset_2]
+                                            if codepoint in ' \t':
+                                                if codepoint == '\t':
+                                                    if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
+                                                        width = partial_tab_width_2
+                                                    else:
+                                                        width  = (self.tabstop-((column_2)%self.tabstop));
+                                                    count_1 += width
+                                                    column_2 += width
+                                                    offset_2 += 1
+                                                else:
+                                                    count_1 += 1
+                                                    column_2 += 1
+                                                    offset_2 += 1
+                                            else:
+                                                break
+
+                                        break
+                                    if offset_2 == -1:
+                                        break
+                                    value_2.name = 'whitespace'
+                                    value_2.end = offset_2
+                                    value_2.end_column = column_2
+                                    value_2.value = None
+                                    children_3.append(value_2)
+
+                                    while True: # start reject
+                                        children_4 = []
+                                        offset_3 = offset_2 + 0
+                                        column_3 = column_2
+                                        indent_column_3 = list(indent_column_2)
+                                        partial_tab_offset_3 = partial_tab_offset_2
+                                        partial_tab_width_3 = partial_tab_width_2
+                                        if buf[offset_3:offset_3+1] == '|':
+                                            offset_3 += 1
+                                            column_3 += 1
+                                        else:
+                                            offset_3 = -1
+                                            break
+
+                                        break
+                                    if offset_3 != -1:
+                                        offset_2 = -1
+                                        break
+
+                                    offset_2, column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_inline_element(buf, buf_start, buf_eof, offset_2, column_2, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
+                                    if offset_2 == -1: break
+
+
+                                    #print('safe exit rep rule', offset_1, offset_2)
+                                    break
+                                #print('exit rep rule', offset_1, offset_2)
+                                if offset_2 == -1:
+                                    break
+                                if offset_1 == offset_2: break
+                                if children_3 is not None and children_3 is not None:
+                                    children_2.extend(children_3)
+                                offset_1 = offset_2
+                                column_1 = column_2
+                                indent_column_1 = indent_column_2
+                                partial_tab_offset_1 = partial_tab_offset_2
+                                partial_tab_width_1 = partial_tab_width_2
+                                count_0 += 1
+                            if offset_1 == -1:
+                                break
+                            value_1 = count_0
+
+                            break
+                        prefix_0.pop()
+                        if len(indent_column_1) > 1: indent_column_1.pop()
+                        if offset_1 == -1: break
+
+
+                        break
+                    if offset_1 != -1:
+                        offset_0 = offset_1
+                        column_0 = column_1
+                        indent_column_0 = indent_column_1
+                        partial_tab_offset_0 = partial_tab_offset_1
+                        partial_tab_width_0 = partial_tab_width_1
+                        if children_2 is not None and children_2 is not None:
+                            children_1.extend(children_2)
+                        break
+                    # end case
+                    offset_0 = -1 # no more choices
+                    break # end choice
+                if offset_0 == -1:
+                    break
+
+                break
+            if offset_0 == -1:
+                break
+            value_0.name = 'table_cell'
+            value_0.end = offset_0
+            value_0.end_column = column_0
+            value_0.value = None
+            children_0.append(value_0)
+
+            break
+        return offset_0, column_0, partial_tab_offset_0, partial_tab_width_0
+
+    def parse_table(self, buf, buf_start, buf_eof, offset_0, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
+        while True: # note: return at end of loop
+            children_1 = []
+            value_0 = Node(None, offset_0, offset_0, column_0, column_0, children_1, None)
+            while True: # start capture
+                offset_0, column_0, partial_tab_offset_0, partial_tab_width_0 = self.parse_inner_table(buf, buf_start, buf_eof, offset_0, column_0, indent_column_0, prefix_0, children_1, partial_tab_offset_0, partial_tab_width_0)
+                if offset_0 == -1: break
+
+
+                break
+            if offset_0 == -1:
+                break
+            value_0.name = 'table'
+            value_0.end = offset_0
+            value_0.end_column = column_0
+            value_0.value = None
+            children_0.append(value_0)
+
+            break
+        return offset_0, column_0, partial_tab_offset_0, partial_tab_width_0
+
+    def parse_inner_table(self, buf, buf_start, buf_eof, offset_0, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
+        while True: # note: return at end of loop
+            offset_1 = offset_0
+            column_1 = column_0
+            while True: # start count
+                count_0 = 0
+                while offset_1 < buf_eof and count_0 < 8:
+                    codepoint = buf[offset_1]
+                    if codepoint in ' \t':
+                        if codepoint == '\t':
+                            if offset_1 == partial_tab_offset_0 and partial_tab_width_0 > 0:
+                                width = partial_tab_width_0
+                            else:
+                                width  = (self.tabstop-((column_1)%self.tabstop));
+                            if count_0 + width > 8:
+                                new_width = 8 - count_0
+                                count_0 += new_width
+                                column_1 += new_width
+                                partial_tab_offset_0 = offset_1
+                                partial_tab_width_0 = width - new_width
+                                break
+                            count_0 += width
+                            column_1 += width
+                            offset_1 += 1
+                        else:
+                            count_0 += 1
+                            column_1 += 1
+                            offset_1 += 1
+                    else:
+                        break
+
+                break
+            if offset_1 == -1:
+                offset_0 = -1; break
+            value_0 = column_1 - column_0
+            offset_0 = offset_1
+            column_0 = column_1
+
+            count_0 = value_0
+            # print(count_0, 'indent')
+            def _indent(buf, buf_start, buf_eof, offset, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
+                saw_tab, saw_not_tab = False, False
+                start_column, start_offset = column, offset
+                if count < 0: offset = -1
+                while count > 0 and offset < buf_eof:
+                    codepoint = buf[offset];
+                    if codepoint in ' \t':
+                        if not allow_mixed_indent:
+                            if codepoint == '\t': saw_tab = True
+                            else: saw_not_tab = True
+                            if saw_tab and saw_not_tab:
+                                 offset = -1; break
+                        if codepoint != '\t':
+                            column += 1
+                            offset += 1
+                            count -=1
+                        else:
+                            if offset == partial_tab_offset and partial_tab_width > 0:
+                                width = partial_tab_width
+                            else:
+                                width  = (self.tabstop-((column)%self.tabstop));
+                            if width <= count:
+                                column += width
+                                offset += 1
+                                count -= width
+                            else:
+                                partial_tab_offset = offset
+                                partial_tab_width = width-count
+                                column += count
+                                count -= width
+                                break
+                    elif codepoint in '\n':
+                        break
+                    else:
+                        offset = -1
+                        break
+                return offset, column, partial_tab_offset, partial_tab_width
+            prefix_0.append((_indent, None))
+            indent_column_0.append(column_0)
+            while True:
+                value_1 = 0
+                offset_1 = offset_0
+                while True: # start backref
+                    children_1 = []
+                    value_2 = Node(None, offset_1, offset_1, column_0, column_0, children_1, None)
+                    while True: # start capture
+                        count_0 = 0
+                        while True:
+                            offset_2 = offset_1
+                            column_1 = column_0
+                            indent_column_1 = list(indent_column_0)
+                            partial_tab_offset_1 = partial_tab_offset_0
+                            partial_tab_width_1 = partial_tab_width_0
+                            children_2 = [] if children_1 is not None else None
+                            while True:
+                                #print('entry rep rule', offset_1, offset_2)
+                                if buf[offset_2:offset_2+1] == '|':
+                                    offset_2 += 1
+                                    column_1 += 1
+                                else:
+                                    offset_2 = -1
+                                    break
+
+                                count_1 = 0
+                                while offset_2 < buf_eof:
+                                    codepoint = buf[offset_2]
+                                    if codepoint in ' \t':
+                                        if codepoint == '\t':
+                                            if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
+                                                width = partial_tab_width_1
+                                            else:
+                                                width  = (self.tabstop-((column_1)%self.tabstop));
+                                            count_1 += width
+                                            column_1 += width
+                                            offset_2 += 1
+                                        else:
+                                            count_1 += 1
+                                            column_1 += 1
+                                            offset_2 += 1
+                                    else:
+                                        break
+
+                                offset_2, column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_table_cell(buf, buf_start, buf_eof, offset_2, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
+                                if offset_2 == -1: break
+
+
+                                count_1 = 0
+                                while offset_2 < buf_eof:
+                                    codepoint = buf[offset_2]
+                                    if codepoint in ' \t':
+                                        if codepoint == '\t':
+                                            if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
+                                                width = partial_tab_width_1
+                                            else:
+                                                width  = (self.tabstop-((column_1)%self.tabstop));
+                                            count_1 += width
+                                            column_1 += width
+                                            offset_2 += 1
+                                        else:
+                                            count_1 += 1
+                                            column_1 += 1
+                                            offset_2 += 1
+                                    else:
+                                        break
+
+                                #print('safe exit rep rule', offset_1, offset_2)
+                                break
+                            #print('exit rep rule', offset_1, offset_2)
+                            if offset_2 == -1:
+                                break
+                            if offset_1 == offset_2: break
+                            if children_2 is not None and children_2 is not None:
+                                children_1.extend(children_2)
+                            offset_1 = offset_2
+                            column_0 = column_1
+                            indent_column_0 = indent_column_1
+                            partial_tab_offset_0 = partial_tab_offset_1
+                            partial_tab_width_0 = partial_tab_width_1
+                            count_0 += 1
+                        if count_0 < 1:
+                        #    print('min exit', offset_1)
+                            offset_1 = -1
+                            break
+                        if offset_1 == -1:
+                            break
+                        value_3 = count_0
+
+                        count_0 = 0
+                        while count_0 < 1:
+                            offset_2 = offset_1
+                            column_1 = column_0
+                            indent_column_1 = list(indent_column_0)
+                            partial_tab_offset_1 = partial_tab_offset_0
+                            partial_tab_width_1 = partial_tab_width_0
+                            children_2 = [] if children_1 is not None else None
+                            while True:
+                                #print('entry rep rule', offset_1, offset_2)
+                                if buf[offset_2:offset_2+1] == '|':
+                                    offset_2 += 1
+                                    column_1 += 1
+                                else:
+                                    offset_2 = -1
+                                    break
+
+                                count_1 = 0
+                                while offset_2 < buf_eof:
+                                    codepoint = buf[offset_2]
+                                    if codepoint in ' \t':
+                                        if codepoint == '\t':
+                                            if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
+                                                width = partial_tab_width_1
+                                            else:
+                                                width  = (self.tabstop-((column_1)%self.tabstop));
+                                            count_1 += width
+                                            column_1 += width
+                                            offset_2 += 1
+                                        else:
+                                            count_1 += 1
+                                            column_1 += 1
+                                            offset_2 += 1
+                                    else:
+                                        break
+
+                                #print('safe exit rep rule', offset_1, offset_2)
+                                break
+                            #print('exit rep rule', offset_1, offset_2)
+                            if offset_2 == -1:
+                                break
+                            if offset_1 == offset_2: break
+                            if children_2 is not None and children_2 is not None:
+                                children_1.extend(children_2)
+                            offset_1 = offset_2
+                            column_0 = column_1
+                            indent_column_0 = indent_column_1
+                            partial_tab_offset_0 = partial_tab_offset_1
+                            partial_tab_width_0 = partial_tab_width_1
+                            count_0 += 1
+                            break
+                        if offset_1 == -1:
+                            break
+                        value_4 = count_0
+
+                        if offset_1 < buf_eof:
+                            codepoint = buf[offset_1]
+                            if codepoint in '\n':
+                                offset_1 +=1
+                                column_0 = 0
+                                indent_column_0[:] = (0, )
+                            else:
+                                offset_1 = -1
+                                break
+                        else:
+                            offset_1 = -1
+                            break
+
+                        break
+                    if offset_1 == -1:
+                        break
+                    value_2.name = 'table_header'
+                    value_2.end = offset_1
+                    value_2.end_column = column_0
+                    value_2.value = None
+                    children_0.append(value_2)
+
+                    if column_0 != 0:
+                        offset_1 = -1
+                        break
+                    # print('start')
+                    for indent, dedent in prefix_0:
+                        # print(indent, dedent)
+                        _children, _prefix = [], []
+                        offset_2 = offset_1
+                        offset_2, column_0, partial_tab_offset_0, partial_tab_width_0 = indent(buf, buf_start, buf_eof, offset_2, column_0, indent_column_0, _prefix, _children, partial_tab_offset_0, partial_tab_width_0)
+                        if _prefix or _children:
+                           raise Exception('bar')
+                        if offset_2 == -1:
+                            offset_1 = -1
+                            break
+                        offset_1 = offset_2
+                        indent_column_0.append(column_0)
+                    if offset_1 == -1:
+                        break
+
+                    children_1 = []
+                    value_5 = Node(None, offset_1, offset_1, column_0, column_0, children_1, None)
+                    while True: # start capture
+                        count_0 = 0
+                        while count_0 < value_3:
+                            offset_2 = offset_1
+                            column_1 = column_0
+                            indent_column_1 = list(indent_column_0)
+                            partial_tab_offset_1 = partial_tab_offset_0
+                            partial_tab_width_1 = partial_tab_width_0
+                            children_2 = [] if children_1 is not None else None
+                            while True:
+                                #print('entry rep rule', offset_1, offset_2)
+                                if buf[offset_2:offset_2+1] == '|':
+                                    offset_2 += 1
+                                    column_1 += 1
+                                else:
+                                    offset_2 = -1
+                                    break
+
+                                count_1 = 0
+                                while offset_2 < buf_eof:
+                                    codepoint = buf[offset_2]
+                                    if codepoint in ' \t':
+                                        if codepoint == '\t':
+                                            if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
+                                                width = partial_tab_width_1
+                                            else:
+                                                width  = (self.tabstop-((column_1)%self.tabstop));
+                                            count_1 += width
+                                            column_1 += width
+                                            offset_2 += 1
+                                        else:
+                                            count_1 += 1
+                                            column_1 += 1
+                                            offset_2 += 1
+                                    else:
+                                        break
+
+                                children_3 = []
+                                value_7 = Node(None, offset_2, offset_2, column_1, column_1, children_3, None)
+                                while True: # start capture
+                                    _match = regex_regex_30.match(buf, offset_2)
+                                    if _match:
+                                        _end = _match.end()
+                                        column_1 += (_end - offset_2)
+                                        offset_2 = _end
+                                    else:
+                                        offset_2 = -1
+                                        break
+
+                                    _match = regex_regex_29.match(buf, offset_2)
+                                    if _match:
+                                        _end = _match.end()
+                                        column_1 += (_end - offset_2)
+                                        offset_2 = _end
+                                    else:
+                                        offset_2 = -1
+                                        break
+
+                                    _match = regex_regex_30.match(buf, offset_2)
+                                    if _match:
+                                        _end = _match.end()
+                                        column_1 += (_end - offset_2)
+                                        offset_2 = _end
+                                    else:
+                                        offset_2 = -1
+                                        break
+
+                                    break
+                                if offset_2 == -1:
+                                    break
+                                value_7.name = 'column_align'
+                                value_7.end = offset_2
+                                value_7.end_column = column_1
+                                value_7.value = None
+                                children_2.append(value_7)
+
+                                count_1 = 0
+                                while offset_2 < buf_eof:
+                                    codepoint = buf[offset_2]
+                                    if codepoint in ' \t':
+                                        if codepoint == '\t':
+                                            if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
+                                                width = partial_tab_width_1
+                                            else:
+                                                width  = (self.tabstop-((column_1)%self.tabstop));
+                                            count_1 += width
+                                            column_1 += width
+                                            offset_2 += 1
+                                        else:
+                                            count_1 += 1
+                                            column_1 += 1
+                                            offset_2 += 1
+                                    else:
+                                        break
+
+                                #print('safe exit rep rule', offset_1, offset_2)
+                                break
+                            #print('exit rep rule', offset_1, offset_2)
+                            if offset_2 == -1:
+                                break
+                            if offset_1 == offset_2: break
+                            if children_2 is not None and children_2 is not None:
+                                children_1.extend(children_2)
+                            offset_1 = offset_2
+                            column_0 = column_1
+                            indent_column_0 = indent_column_1
+                            partial_tab_offset_0 = partial_tab_offset_1
+                            partial_tab_width_0 = partial_tab_width_1
+                            count_0 += 1
+                        if count_0 < value_3:
+                        #    print('min exit', offset_1)
+                            offset_1 = -1
+                            break
+                        if offset_1 == -1:
+                            break
+                        value_6 = count_0
+
+                        count_0 = 0
+                        while count_0 < 1:
+                            offset_2 = offset_1
+                            column_1 = column_0
+                            indent_column_1 = list(indent_column_0)
+                            partial_tab_offset_1 = partial_tab_offset_0
+                            partial_tab_width_1 = partial_tab_width_0
+                            children_2 = [] if children_1 is not None else None
+                            while True:
+                                #print('entry rep rule', offset_1, offset_2)
+                                if buf[offset_2:offset_2+1] == '|':
+                                    offset_2 += 1
+                                    column_1 += 1
+                                else:
+                                    offset_2 = -1
+                                    break
+
+                                count_1 = 0
+                                while offset_2 < buf_eof:
+                                    codepoint = buf[offset_2]
+                                    if codepoint in ' \t':
+                                        if codepoint == '\t':
+                                            if offset_2 == partial_tab_offset_1 and partial_tab_width_1 > 0:
+                                                width = partial_tab_width_1
+                                            else:
+                                                width  = (self.tabstop-((column_1)%self.tabstop));
+                                            count_1 += width
+                                            column_1 += width
+                                            offset_2 += 1
+                                        else:
+                                            count_1 += 1
+                                            column_1 += 1
+                                            offset_2 += 1
+                                    else:
+                                        break
+
+                                #print('safe exit rep rule', offset_1, offset_2)
+                                break
+                            #print('exit rep rule', offset_1, offset_2)
+                            if offset_2 == -1:
+                                break
+                            if offset_1 == offset_2: break
+                            if children_2 is not None and children_2 is not None:
+                                children_1.extend(children_2)
+                            offset_1 = offset_2
+                            column_0 = column_1
+                            indent_column_0 = indent_column_1
+                            partial_tab_offset_0 = partial_tab_offset_1
+                            partial_tab_width_0 = partial_tab_width_1
+                            count_0 += 1
+                            break
+                        if offset_1 == -1:
+                            break
+                        value_8 = count_0
+
+                        if offset_1 < buf_eof:
+                            codepoint = buf[offset_1]
+                            if codepoint in '\n':
+                                offset_1 +=1
+                                column_0 = 0
+                                indent_column_0[:] = (0, )
+                            else:
+                                offset_1 = -1
+                                break
+                        else:
+                            offset_1 = -1
+                            break
+
+                        break
+                    if offset_1 == -1:
+                        break
+                    value_5.name = 'table_header_rule'
+                    value_5.end = offset_1
+                    value_5.end_column = column_0
+                    value_5.value = None
+                    children_0.append(value_5)
+
+                    break
+                if offset_1 == -1:
+                    offset_0 = -1
+                    break
+                offset_0 = offset_1
+
+                count_0 = 0
+                while True:
+                    offset_1 = offset_0
+                    column_1 = column_0
+                    indent_column_1 = list(indent_column_0)
+                    partial_tab_offset_1 = partial_tab_offset_0
+                    partial_tab_width_1 = partial_tab_width_0
+                    children_1 = [] if children_0 is not None else None
+                    while True:
+                        #print('entry rep rule', offset_0, offset_1)
+                        if column_1 != 0:
+                            offset_1 = -1
+                            break
+                        # print('start')
+                        for indent, dedent in prefix_0:
+                            # print(indent, dedent)
+                            _children, _prefix = [], []
+                            offset_2 = offset_1
+                            offset_2, column_1, partial_tab_offset_1, partial_tab_width_1 = indent(buf, buf_start, buf_eof, offset_2, column_1, indent_column_1, _prefix, _children, partial_tab_offset_1, partial_tab_width_1)
+                            if _prefix or _children:
+                               raise Exception('bar')
+                            if offset_2 == -1:
+                                offset_1 = -1
+                                break
+                            offset_1 = offset_2
+                            indent_column_1.append(column_1)
+                        if offset_1 == -1:
+                            break
+
+                        children_2 = []
+                        value_10 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
+                        while True: # start capture
+                            count_1 = 0
+                            while count_1 < value_3:
+                                offset_2 = offset_1
+                                column_2 = column_1
+                                indent_column_2 = list(indent_column_1)
+                                partial_tab_offset_2 = partial_tab_offset_1
+                                partial_tab_width_2 = partial_tab_width_1
+                                children_3 = [] if children_2 is not None else None
+                                while True:
+                                    #print('entry rep rule', offset_1, offset_2)
+                                    if buf[offset_2:offset_2+1] == '|':
+                                        offset_2 += 1
+                                        column_2 += 1
+                                    else:
+                                        offset_2 = -1
+                                        break
+
+                                    count_2 = 0
+                                    while offset_2 < buf_eof:
+                                        codepoint = buf[offset_2]
+                                        if codepoint in ' \t':
+                                            if codepoint == '\t':
+                                                if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
+                                                    width = partial_tab_width_2
+                                                else:
+                                                    width  = (self.tabstop-((column_2)%self.tabstop));
+                                                count_2 += width
+                                                column_2 += width
+                                                offset_2 += 1
+                                            else:
+                                                count_2 += 1
+                                                column_2 += 1
+                                                offset_2 += 1
+                                        else:
+                                            break
+
+                                    offset_2, column_2, partial_tab_offset_2, partial_tab_width_2 = self.parse_table_cell(buf, buf_start, buf_eof, offset_2, column_2, indent_column_2, prefix_0, children_3, partial_tab_offset_2, partial_tab_width_2)
+                                    if offset_2 == -1: break
+
+
+                                    count_2 = 0
+                                    while offset_2 < buf_eof:
+                                        codepoint = buf[offset_2]
+                                        if codepoint in ' \t':
+                                            if codepoint == '\t':
+                                                if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
+                                                    width = partial_tab_width_2
+                                                else:
+                                                    width  = (self.tabstop-((column_2)%self.tabstop));
+                                                count_2 += width
+                                                column_2 += width
+                                                offset_2 += 1
+                                            else:
+                                                count_2 += 1
+                                                column_2 += 1
+                                                offset_2 += 1
+                                        else:
+                                            break
+
+                                    #print('safe exit rep rule', offset_1, offset_2)
+                                    break
+                                #print('exit rep rule', offset_1, offset_2)
+                                if offset_2 == -1:
+                                    break
+                                if offset_1 == offset_2: break
+                                if children_3 is not None and children_3 is not None:
+                                    children_2.extend(children_3)
+                                offset_1 = offset_2
+                                column_1 = column_2
+                                indent_column_1 = indent_column_2
+                                partial_tab_offset_1 = partial_tab_offset_2
+                                partial_tab_width_1 = partial_tab_width_2
+                                count_1 += 1
+                            if count_1 < 1:
+                            #    print('min exit', offset_1)
+                                offset_1 = -1
+                                break
+                            if offset_1 == -1:
+                                break
+                            value_11 = count_1
+
+                            count_1 = 0
+                            while count_1 < 1:
+                                offset_2 = offset_1
+                                column_2 = column_1
+                                indent_column_2 = list(indent_column_1)
+                                partial_tab_offset_2 = partial_tab_offset_1
+                                partial_tab_width_2 = partial_tab_width_1
+                                children_3 = [] if children_2 is not None else None
+                                while True:
+                                    #print('entry rep rule', offset_1, offset_2)
+                                    if buf[offset_2:offset_2+1] == '|':
+                                        offset_2 += 1
+                                        column_2 += 1
+                                    else:
+                                        offset_2 = -1
+                                        break
+
+                                    count_2 = 0
+                                    while offset_2 < buf_eof:
+                                        codepoint = buf[offset_2]
+                                        if codepoint in ' \t':
+                                            if codepoint == '\t':
+                                                if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
+                                                    width = partial_tab_width_2
+                                                else:
+                                                    width  = (self.tabstop-((column_2)%self.tabstop));
+                                                count_2 += width
+                                                column_2 += width
+                                                offset_2 += 1
+                                            else:
+                                                count_2 += 1
+                                                column_2 += 1
+                                                offset_2 += 1
+                                        else:
+                                            break
+
+                                    #print('safe exit rep rule', offset_1, offset_2)
+                                    break
+                                #print('exit rep rule', offset_1, offset_2)
+                                if offset_2 == -1:
+                                    break
+                                if offset_1 == offset_2: break
+                                if children_3 is not None and children_3 is not None:
+                                    children_2.extend(children_3)
+                                offset_1 = offset_2
+                                column_1 = column_2
+                                indent_column_1 = indent_column_2
+                                partial_tab_offset_1 = partial_tab_offset_2
+                                partial_tab_width_1 = partial_tab_width_2
+                                count_1 += 1
+                                break
+                            if offset_1 == -1:
+                                break
+                            value_12 = count_1
+
+                            if offset_1 < buf_eof:
+                                codepoint = buf[offset_1]
+                                if codepoint in '\n':
+                                    offset_1 +=1
+                                    column_1 = 0
+                                    indent_column_1[:] = (0, )
+                                else:
+                                    offset_1 = -1
+                                    break
+                            else:
+                                offset_1 = -1
+                                break
+
+                            break
+                        if offset_1 == -1:
+                            break
+                        value_10.name = 'table_row'
+                        value_10.end = offset_1
+                        value_10.end_column = column_1
+                        value_10.value = None
+                        children_1.append(value_10)
+
+                        #print('safe exit rep rule', offset_0, offset_1)
+                        break
+                    #print('exit rep rule', offset_0, offset_1)
+                    if offset_1 == -1:
+                        break
+                    if offset_0 == offset_1: break
+                    if children_1 is not None and children_1 is not None:
+                        children_0.extend(children_1)
+                    offset_0 = offset_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
+                    count_0 += 1
+                if offset_0 == -1:
+                    break
+                value_9 = count_0
+
+                break
+            prefix_0.pop()
+            if len(indent_column_0) > 1: indent_column_0.pop()
+            if offset_0 == -1: break
+
+
+            break
+        return offset_0, column_0, partial_tab_offset_0, partial_tab_width_0
+
     def parse_inline_element(self, buf, buf_start, buf_eof, offset_0, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
         while True: # note: return at end of loop
             while True: # start choice
@@ -10340,7 +11576,7 @@ class Parser:
                     children_2 = []
                     value_0 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
-                        _match = regex_regex_11.match(buf, offset_1)
+                        _match = regex_regex_13.match(buf, offset_1)
                         if _match:
                             _end = _match.end()
                             column_1 += (_end - offset_1)
@@ -10349,7 +11585,7 @@ class Parser:
                             offset_1 = -1
                             break
 
-                        _match = regex_regex_29.match(buf, offset_1)
+                        _match = regex_regex_31.match(buf, offset_1)
                         if _match:
                             _end = _match.end()
                             column_1 += (_end - offset_1)
@@ -10365,7 +11601,7 @@ class Parser:
                             offset_1 = -1
                             break
 
-                        _match = regex_regex_30.match(buf, offset_1)
+                        _match = regex_regex_32.match(buf, offset_1)
                         if _match:
                             _end = _match.end()
                             column_1 += (_end - offset_1)
@@ -10419,7 +11655,7 @@ class Parser:
                     children_2 = []
                     value_1 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
-                        _match = regex_regex_31.match(buf, offset_1)
+                        _match = regex_regex_33.match(buf, offset_1)
                         if _match:
                             _end = _match.end()
                             column_1 += (_end - offset_1)
@@ -10435,25 +11671,25 @@ class Parser:
                             offset_1 = -1
                             break
 
-                        _match = regex_regex_32.match(buf, offset_1)
-                        if _match:
-                            _end = _match.end()
-                            column_1 += (_end - offset_1)
-                            offset_1 = _end
-                        else:
-                            offset_1 = -1
-                            break
-
-                        _match = regex_regex_33.match(buf, offset_1)
-                        if _match:
-                            _end = _match.end()
-                            column_1 += (_end - offset_1)
-                            offset_1 = _end
-                        else:
-                            offset_1 = -1
-                            break
-
                         _match = regex_regex_34.match(buf, offset_1)
+                        if _match:
+                            _end = _match.end()
+                            column_1 += (_end - offset_1)
+                            offset_1 = _end
+                        else:
+                            offset_1 = -1
+                            break
+
+                        _match = regex_regex_35.match(buf, offset_1)
+                        if _match:
+                            _end = _match.end()
+                            column_1 += (_end - offset_1)
+                            offset_1 = _end
+                        else:
+                            offset_1 = -1
+                            break
+
+                        _match = regex_regex_36.match(buf, offset_1)
                         if _match:
                             _end = _match.end()
                             column_1 += (_end - offset_1)
@@ -10614,7 +11850,7 @@ class Parser:
                             children_3 = []
                             value_2 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
                             while True: # start capture
-                                _match = regex_regex_7.match(buf, offset_2)
+                                _match = regex_regex_9.match(buf, offset_2)
                                 if _match:
                                     _end = _match.end()
                                     column_2 += (_end - offset_2)
@@ -10665,7 +11901,7 @@ class Parser:
                                 offset_2 = -1
                                 break
 
-                            _match = regex_regex_8.match(buf, offset_2)
+                            _match = regex_regex_10.match(buf, offset_2)
                             if _match:
                                 _end = _match.end()
                                 column_2 += (_end - offset_2)
@@ -10677,7 +11913,7 @@ class Parser:
                             children_3 = []
                             value_3 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
                             while True: # start capture
-                                _match = regex_regex_9.match(buf, offset_2)
+                                _match = regex_regex_11.match(buf, offset_2)
                                 if _match:
                                     _end = _match.end()
                                     column_2 += (_end - offset_2)
@@ -10686,7 +11922,7 @@ class Parser:
                                     offset_2 = -1
                                     break
 
-                                _match = regex_regex_10.match(buf, offset_2)
+                                _match = regex_regex_12.match(buf, offset_2)
                                 if _match:
                                     _end = _match.end()
                                     column_2 += (_end - offset_2)
@@ -10733,7 +11969,7 @@ class Parser:
                             children_3 = []
                             value_4 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
                             while True: # start capture
-                                _match = regex_regex_11.match(buf, offset_2)
+                                _match = regex_regex_13.match(buf, offset_2)
                                 if _match:
                                     _end = _match.end()
                                     column_2 += (_end - offset_2)
@@ -10742,7 +11978,7 @@ class Parser:
                                     offset_2 = -1
                                     break
 
-                                _match = regex_regex_12.match(buf, offset_2)
+                                _match = regex_regex_14.match(buf, offset_2)
                                 if _match:
                                     _end = _match.end()
                                     column_2 += (_end - offset_2)
@@ -10822,7 +12058,7 @@ class Parser:
                             children_3 = []
                             value_5 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
                             while True: # start capture
-                                _match = regex_regex_6.match(buf, offset_2)
+                                _match = regex_regex_8.match(buf, offset_2)
                                 if _match:
                                     _end = _match.end()
                                     column_2 += (_end - offset_2)
@@ -10897,7 +12133,7 @@ class Parser:
                                                 if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                     width = partial_tab_width_3
                                                 else:
-                                                    width  = (self.tabstop-(column_3%self.tabstop))
+                                                    width  = (self.tabstop-((column_3)%self.tabstop));
                                                 count_0 += width
                                                 column_3 += width
                                                 offset_3 += 1
@@ -10908,7 +12144,7 @@ class Parser:
                                         else:
                                             break
 
-                                    _match = regex_regex_3.match(buf, offset_3)
+                                    _match = regex_regex_5.match(buf, offset_3)
                                     if _match:
                                         _end = _match.end()
                                         column_3 += (_end - offset_3)
@@ -10967,10 +12203,26 @@ class Parser:
                 partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
+                    if buf[offset_1:offset_1+1] == ':':
+                        offset_1 += 1
+                        column_1 += 1
+                    else:
+                        offset_1 = -1
+                        break
+
                     children_2 = []
                     value_7 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
-                        _match = regex_regex_35.match(buf, offset_1)
+                        _match = regex_regex_13.match(buf, offset_1)
+                        if _match:
+                            _end = _match.end()
+                            column_1 += (_end - offset_1)
+                            offset_1 = _end
+                        else:
+                            offset_1 = -1
+                            break
+
+                        _match = regex_regex_37.match(buf, offset_1)
                         if _match:
                             _end = _match.end()
                             column_1 += (_end - offset_1)
@@ -10982,11 +12234,18 @@ class Parser:
                         break
                     if offset_1 == -1:
                         break
-                    value_7.name = 'text'
+                    value_7.name = 'emoji'
                     value_7.end = offset_1
                     value_7.end_column = column_1
                     value_7.value = None
                     children_1.append(value_7)
+
+                    if buf[offset_1:offset_1+1] == ':':
+                        offset_1 += 1
+                        column_1 += 1
+                    else:
+                        offset_1 = -1
+                        break
 
 
                     break
@@ -11010,7 +12269,7 @@ class Parser:
                     children_2 = []
                     value_8 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
-                        _match = regex_regex_36.match(buf, offset_1)
+                        _match = regex_regex_38.match(buf, offset_1)
                         if _match:
                             _end = _match.end()
                             column_1 += (_end - offset_1)
@@ -11050,7 +12309,47 @@ class Parser:
                     children_2 = []
                     value_9 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
-                        _match = regex_regex_37.match(buf, offset_1)
+                        _match = regex_regex_39.match(buf, offset_1)
+                        if _match:
+                            _end = _match.end()
+                            column_1 += (_end - offset_1)
+                            offset_1 = _end
+                        else:
+                            offset_1 = -1
+                            break
+
+                        break
+                    if offset_1 == -1:
+                        break
+                    value_9.name = 'text'
+                    value_9.end = offset_1
+                    value_9.end_column = column_1
+                    value_9.value = None
+                    children_1.append(value_9)
+
+
+                    break
+                if offset_1 != -1:
+                    offset_0 = offset_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
+                    if children_1 is not None and children_1 is not None:
+                        children_0.extend(children_1)
+                    break
+                # end case
+                offset_1 = offset_0
+                column_1 = column_0
+                indent_column_1 = list(indent_column_0)
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
+                children_1 = [] if children_0 is not None else None
+                while True: # case
+                    children_2 = []
+                    value_10 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
+                    while True: # start capture
+                        _match = regex_regex_40.match(buf, offset_1)
                         if _match:
                             _end = _match.end()
                             column_1 += (_end - offset_1)
@@ -11077,7 +12376,7 @@ class Parser:
                                     partial_tab_width_3 = partial_tab_width_2
                                     children_4 = [] if children_3 is not None else None
                                     while True: # case
-                                        _match = regex_regex_38.match(buf, offset_3)
+                                        _match = regex_regex_41.match(buf, offset_3)
                                         if _match:
                                             _end = _match.end()
                                             column_3 += (_end - offset_3)
@@ -11161,7 +12460,7 @@ class Parser:
                                             offset_3 = -1
                                             break
 
-                                        _match = regex_regex_35.match(buf, offset_3)
+                                        _match = regex_regex_38.match(buf, offset_3)
                                         if _match:
                                             _end = _match.end()
                                             column_3 += (_end - offset_3)
@@ -11203,16 +12502,16 @@ class Parser:
                             count_0 += 1
                         if offset_1 == -1:
                             break
-                        value_10 = count_0
+                        value_11 = count_0
 
                         break
                     if offset_1 == -1:
                         break
-                    value_9.name = 'text'
-                    value_9.end = offset_1
-                    value_9.end_column = column_1
-                    value_9.value = None
-                    children_1.append(value_9)
+                    value_10.name = 'text'
+                    value_10.end = offset_1
+                    value_10.end_column = column_1
+                    value_10.value = None
+                    children_1.append(value_10)
 
 
                     break
@@ -11292,7 +12591,7 @@ class Parser:
                                                     if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                         width = partial_tab_width_2
                                                     else:
-                                                        width  = (self.tabstop-(column_2%self.tabstop))
+                                                        width  = (self.tabstop-((column_2)%self.tabstop));
                                                     count_2 += width
                                                     column_2 += width
                                                     offset_3 += 1
@@ -11424,7 +12723,7 @@ class Parser:
                                                                                     if offset_6 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                                                         width = partial_tab_width_4
                                                                                     else:
-                                                                                        width  = (self.tabstop-(column_4%self.tabstop))
+                                                                                        width  = (self.tabstop-((column_4)%self.tabstop));
                                                                                     count_4 += width
                                                                                     column_4 += width
                                                                                     offset_6 += 1
@@ -11532,7 +12831,7 @@ class Parser:
                                                             if offset_3 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                                                 width = partial_tab_width_1
                                                             else:
-                                                                width  = (self.tabstop-(column_1%self.tabstop))
+                                                                width  = (self.tabstop-((column_1)%self.tabstop));
                                                             count_2 += width
                                                             column_1 += width
                                                             offset_3 += 1
@@ -11598,7 +12897,7 @@ class Parser:
                                                         if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                             width = partial_tab_width_2
                                                         else:
-                                                            width  = (self.tabstop-(column_2%self.tabstop))
+                                                            width  = (self.tabstop-((column_2)%self.tabstop));
                                                         count_2 += width
                                                         column_2 += width
                                                         offset_3 += 1
@@ -11612,7 +12911,7 @@ class Parser:
                                             children_6 = []
                                             value_10 = Node(None, offset_3, offset_3, column_2, column_2, children_6, None)
                                             while True: # start capture
-                                                _match = regex_regex_39.match(buf, offset_3)
+                                                _match = regex_regex_42.match(buf, offset_3)
                                                 if _match:
                                                     _end = _match.end()
                                                     column_2 += (_end - offset_3)
@@ -11700,7 +12999,7 @@ class Parser:
                                                                 if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                                     width = partial_tab_width_3
                                                                 else:
-                                                                    width  = (self.tabstop-(column_3%self.tabstop))
+                                                                    width  = (self.tabstop-((column_3)%self.tabstop));
                                                                 count_2 += width
                                                                 column_3 += width
                                                                 offset_4 += 1
@@ -11732,7 +13031,7 @@ class Parser:
                                                                 if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                                     width = partial_tab_width_3
                                                                 else:
-                                                                    width  = (self.tabstop-(column_3%self.tabstop))
+                                                                    width  = (self.tabstop-((column_3)%self.tabstop));
                                                                 count_2 += width
                                                                 column_3 += width
                                                                 offset_4 += 1
@@ -11795,7 +13094,7 @@ class Parser:
                                                                 if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                                     width = partial_tab_width_3
                                                                 else:
-                                                                    width  = (self.tabstop-(column_3%self.tabstop))
+                                                                    width  = (self.tabstop-((column_3)%self.tabstop));
                                                                 count_2 += width
                                                                 column_3 += width
                                                                 offset_4 += 1
@@ -11853,7 +13152,7 @@ class Parser:
                                                                         if offset_5 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                                             width = partial_tab_width_4
                                                                         else:
-                                                                            width  = (self.tabstop-(column_4%self.tabstop))
+                                                                            width  = (self.tabstop-((column_4)%self.tabstop));
                                                                         count_3 += width
                                                                         column_4 += width
                                                                         offset_5 += 1
@@ -11885,7 +13184,7 @@ class Parser:
                                                                         if offset_5 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                                             width = partial_tab_width_4
                                                                         else:
-                                                                            width  = (self.tabstop-(column_4%self.tabstop))
+                                                                            width  = (self.tabstop-((column_4)%self.tabstop));
                                                                         count_3 += width
                                                                         column_4 += width
                                                                         offset_5 += 1
@@ -11948,7 +13247,7 @@ class Parser:
                                                                         if offset_5 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                                             width = partial_tab_width_4
                                                                         else:
-                                                                            width  = (self.tabstop-(column_4%self.tabstop))
+                                                                            width  = (self.tabstop-((column_4)%self.tabstop));
                                                                         count_3 += width
                                                                         column_4 += width
                                                                         offset_5 += 1
@@ -12007,7 +13306,7 @@ class Parser:
                                                         if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                             width = partial_tab_width_2
                                                         else:
-                                                            width  = (self.tabstop-(column_2%self.tabstop))
+                                                            width  = (self.tabstop-((column_2)%self.tabstop));
                                                         count_2 += width
                                                         column_2 += width
                                                         offset_3 += 1
@@ -12049,7 +13348,7 @@ class Parser:
                                             children_6 = []
                                             value_12 = Node(None, offset_3, offset_3, column_2, column_2, children_6, None)
                                             while True: # start capture
-                                                _match = regex_regex_40.match(buf, offset_3)
+                                                _match = regex_regex_43.match(buf, offset_3)
                                                 if _match:
                                                     _end = _match.end()
                                                     column_2 += (_end - offset_3)
@@ -12241,7 +13540,7 @@ class Parser:
                                                 if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
-                                                    width  = (self.tabstop-(column_2%self.tabstop))
+                                                    width  = (self.tabstop-((column_2)%self.tabstop));
                                                 count_0 += width
                                                 column_2 += width
                                                 offset_3 += 1
@@ -12299,7 +13598,7 @@ class Parser:
                                                         if offset_3 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                                             width = partial_tab_width_1
                                                         else:
-                                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                                            width  = (self.tabstop-((column_1)%self.tabstop));
                                                         count_0 += width
                                                         column_1 += width
                                                         offset_3 += 1
@@ -12404,7 +13703,7 @@ class Parser:
                                                                                 if offset_6 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                                                     width = partial_tab_width_4
                                                                                 else:
-                                                                                    width  = (self.tabstop-(column_4%self.tabstop))
+                                                                                    width  = (self.tabstop-((column_4)%self.tabstop));
                                                                                 count_2 += width
                                                                                 column_4 += width
                                                                                 offset_6 += 1
@@ -12512,7 +13811,7 @@ class Parser:
                                                         if offset_3 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                                             width = partial_tab_width_1
                                                         else:
-                                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                                            width  = (self.tabstop-((column_1)%self.tabstop));
                                                         count_0 += width
                                                         column_1 += width
                                                         offset_3 += 1
@@ -12578,7 +13877,7 @@ class Parser:
                                                     if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                         width = partial_tab_width_2
                                                     else:
-                                                        width  = (self.tabstop-(column_2%self.tabstop))
+                                                        width  = (self.tabstop-((column_2)%self.tabstop));
                                                     count_0 += width
                                                     column_2 += width
                                                     offset_3 += 1
@@ -12592,7 +13891,7 @@ class Parser:
                                         children_5 = []
                                         value_11 = Node(None, offset_3, offset_3, column_2, column_2, children_5, None)
                                         while True: # start capture
-                                            _match = regex_regex_39.match(buf, offset_3)
+                                            _match = regex_regex_42.match(buf, offset_3)
                                             if _match:
                                                 _end = _match.end()
                                                 column_2 += (_end - offset_3)
@@ -12723,7 +14022,7 @@ class Parser:
                                                             if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                                 width = partial_tab_width_3
                                                             else:
-                                                                width  = (self.tabstop-(column_3%self.tabstop))
+                                                                width  = (self.tabstop-((column_3)%self.tabstop));
                                                             count_0 += width
                                                             column_3 += width
                                                             offset_4 += 1
@@ -12755,7 +14054,7 @@ class Parser:
                                                             if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                                 width = partial_tab_width_3
                                                             else:
-                                                                width  = (self.tabstop-(column_3%self.tabstop))
+                                                                width  = (self.tabstop-((column_3)%self.tabstop));
                                                             count_0 += width
                                                             column_3 += width
                                                             offset_4 += 1
@@ -12818,7 +14117,7 @@ class Parser:
                                                             if offset_4 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                                 width = partial_tab_width_3
                                                             else:
-                                                                width  = (self.tabstop-(column_3%self.tabstop))
+                                                                width  = (self.tabstop-((column_3)%self.tabstop));
                                                             count_0 += width
                                                             column_3 += width
                                                             offset_4 += 1
@@ -12876,7 +14175,7 @@ class Parser:
                                                                     if offset_5 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                                         width = partial_tab_width_4
                                                                     else:
-                                                                        width  = (self.tabstop-(column_4%self.tabstop))
+                                                                        width  = (self.tabstop-((column_4)%self.tabstop));
                                                                     count_1 += width
                                                                     column_4 += width
                                                                     offset_5 += 1
@@ -12908,7 +14207,7 @@ class Parser:
                                                                     if offset_5 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                                         width = partial_tab_width_4
                                                                     else:
-                                                                        width  = (self.tabstop-(column_4%self.tabstop))
+                                                                        width  = (self.tabstop-((column_4)%self.tabstop));
                                                                     count_1 += width
                                                                     column_4 += width
                                                                     offset_5 += 1
@@ -12971,7 +14270,7 @@ class Parser:
                                                                     if offset_5 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                                         width = partial_tab_width_4
                                                                     else:
-                                                                        width  = (self.tabstop-(column_4%self.tabstop))
+                                                                        width  = (self.tabstop-((column_4)%self.tabstop));
                                                                     count_1 += width
                                                                     column_4 += width
                                                                     offset_5 += 1
@@ -13030,7 +14329,7 @@ class Parser:
                                                     if offset_3 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                         width = partial_tab_width_2
                                                     else:
-                                                        width  = (self.tabstop-(column_2%self.tabstop))
+                                                        width  = (self.tabstop-((column_2)%self.tabstop));
                                                     count_0 += width
                                                     column_2 += width
                                                     offset_3 += 1
@@ -13072,7 +14371,7 @@ class Parser:
                                         children_5 = []
                                         value_14 = Node(None, offset_3, offset_3, column_2, column_2, children_5, None)
                                         while True: # start capture
-                                            _match = regex_regex_40.match(buf, offset_3)
+                                            _match = regex_regex_43.match(buf, offset_3)
                                             if _match:
                                                 _end = _match.end()
                                                 column_2 += (_end - offset_3)
@@ -13231,7 +14530,7 @@ class Parser:
                             if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                 width = partial_tab_width_0
                             else:
-                                width  = (self.tabstop-(column_0%self.tabstop))
+                                width  = (self.tabstop-((column_0)%self.tabstop));
                             count_0 += width
                             column_0 += width
                             offset_0 += 1
@@ -13336,7 +14635,7 @@ class Parser:
                                                     if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                         width = partial_tab_width_3
                                                     else:
-                                                        width  = (self.tabstop-(column_3%self.tabstop))
+                                                        width  = (self.tabstop-((column_3)%self.tabstop));
                                                     count_2 += width
                                                     column_3 += width
                                                     offset_3 += 1
@@ -13513,7 +14812,7 @@ class Parser:
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
-                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                        width  = (self.tabstop-((column_1)%self.tabstop));
                                     count_0 += width
                                     column_1 += width
                                     offset_1 += 1
@@ -13618,7 +14917,7 @@ class Parser:
                                                             if offset_4 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                                 width = partial_tab_width_4
                                                             else:
-                                                                width  = (self.tabstop-(column_4%self.tabstop))
+                                                                width  = (self.tabstop-((column_4)%self.tabstop));
                                                             count_2 += width
                                                             column_4 += width
                                                             offset_4 += 1
@@ -13707,7 +15006,7 @@ class Parser:
                                             if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                             count_1 += width
                                             column_2 += width
                                             offset_2 += 1
@@ -13814,7 +15113,7 @@ class Parser:
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
-                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                        width  = (self.tabstop-((column_1)%self.tabstop));
                                     count_0 += width
                                     column_1 += width
                                     offset_1 += 1
@@ -13923,7 +15222,7 @@ class Parser:
                                                             if offset_4 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                                 width = partial_tab_width_4
                                                             else:
-                                                                width  = (self.tabstop-(column_4%self.tabstop))
+                                                                width  = (self.tabstop-((column_4)%self.tabstop));
                                                             count_2 += width
                                                             column_4 += width
                                                             offset_4 += 1
@@ -14016,7 +15315,7 @@ class Parser:
                                             if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                             count_1 += width
                                             column_2 += width
                                             offset_2 += 1
@@ -14127,7 +15426,7 @@ class Parser:
                             if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                 width = partial_tab_width_0
                             else:
-                                width  = (self.tabstop-(column_0%self.tabstop))
+                                width  = (self.tabstop-((column_0)%self.tabstop));
                             count_0 += width
                             column_0 += width
                             offset_0 += 1
@@ -14232,7 +15531,7 @@ class Parser:
                                                     if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                         width = partial_tab_width_3
                                                     else:
-                                                        width  = (self.tabstop-(column_3%self.tabstop))
+                                                        width  = (self.tabstop-((column_3)%self.tabstop));
                                                     count_2 += width
                                                     column_3 += width
                                                     offset_3 += 1
@@ -14382,7 +15681,7 @@ class Parser:
                     children_2 = []
                     value_6 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
-                        _match = regex_regex_40.match(buf, offset_1)
+                        _match = regex_regex_43.match(buf, offset_1)
                         if _match:
                             _end = _match.end()
                             column_1 += (_end - offset_1)
@@ -14449,7 +15748,7 @@ class Parser:
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
-                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                        width  = (self.tabstop-((column_1)%self.tabstop));
                                     count_0 += width
                                     column_1 += width
                                     offset_1 += 1
@@ -14558,7 +15857,7 @@ class Parser:
                                                             if offset_4 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                                 width = partial_tab_width_4
                                                             else:
-                                                                width  = (self.tabstop-(column_4%self.tabstop))
+                                                                width  = (self.tabstop-((column_4)%self.tabstop));
                                                             count_2 += width
                                                             column_4 += width
                                                             offset_4 += 1
@@ -14651,7 +15950,7 @@ class Parser:
                                             if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                             count_1 += width
                                             column_2 += width
                                             offset_2 += 1
@@ -14860,7 +16159,7 @@ class Parser:
                                             indent_column_4 = list(indent_column_3)
                                             partial_tab_offset_4 = partial_tab_offset_3
                                             partial_tab_width_4 = partial_tab_width_3
-                                            _match = regex_regex_6.match(buf, offset_4)
+                                            _match = regex_regex_8.match(buf, offset_4)
                                             if _match:
                                                 _end = _match.end()
                                                 column_4 += (_end - offset_4)
@@ -14877,7 +16176,7 @@ class Parser:
                                         children_5 = []
                                         value_2 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
                                         while True: # start capture
-                                            _match = regex_regex_6.match(buf, offset_3)
+                                            _match = regex_regex_8.match(buf, offset_3)
                                             if _match:
                                                 _end = _match.end()
                                                 column_3 += (_end - offset_3)
@@ -14917,7 +16216,7 @@ class Parser:
                                         children_5 = []
                                         value_3 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
                                         while True: # start capture
-                                            _match = regex_regex_21.match(buf, offset_3)
+                                            _match = regex_regex_22.match(buf, offset_3)
                                             if _match:
                                                 _end = _match.end()
                                                 column_3 += (_end - offset_3)
@@ -14994,7 +16293,7 @@ class Parser:
                                 if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                     width = partial_tab_width_1
                                 else:
-                                    width  = (self.tabstop-(column_1%self.tabstop))
+                                    width  = (self.tabstop-((column_1)%self.tabstop));
                                 count_0 += width
                                 column_1 += width
                                 offset_1 += 1
@@ -15034,7 +16333,7 @@ class Parser:
                             indent_column_2 = list(indent_column_1)
                             partial_tab_offset_2 = partial_tab_offset_1
                             partial_tab_width_2 = partial_tab_width_1
-                            _match = regex_regex_41.match(buf, offset_2)
+                            _match = regex_regex_44.match(buf, offset_2)
                             if _match:
                                 _end = _match.end()
                                 column_2 += (_end - offset_2)
@@ -15148,7 +16447,7 @@ class Parser:
                                         indent_column_4 = list(indent_column_3)
                                         partial_tab_offset_4 = partial_tab_offset_3
                                         partial_tab_width_4 = partial_tab_width_3
-                                        _match = regex_regex_6.match(buf, offset_4)
+                                        _match = regex_regex_8.match(buf, offset_4)
                                         if _match:
                                             _end = _match.end()
                                             column_4 += (_end - offset_4)
@@ -15165,7 +16464,7 @@ class Parser:
                                     children_4 = []
                                     value_2 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
                                     while True: # start capture
-                                        _match = regex_regex_6.match(buf, offset_3)
+                                        _match = regex_regex_8.match(buf, offset_3)
                                         if _match:
                                             _end = _match.end()
                                             column_3 += (_end - offset_3)
@@ -15205,7 +16504,7 @@ class Parser:
                                     children_4 = []
                                     value_3 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
                                     while True: # start capture
-                                        _match = regex_regex_22.match(buf, offset_3)
+                                        _match = regex_regex_23.match(buf, offset_3)
                                         if _match:
                                             _end = _match.end()
                                             column_3 += (_end - offset_3)
@@ -15424,7 +16723,7 @@ class Parser:
                                             indent_column_4 = list(indent_column_3)
                                             partial_tab_offset_4 = partial_tab_offset_3
                                             partial_tab_width_4 = partial_tab_width_3
-                                            _match = regex_regex_6.match(buf, offset_4)
+                                            _match = regex_regex_8.match(buf, offset_4)
                                             if _match:
                                                 _end = _match.end()
                                                 column_4 += (_end - offset_4)
@@ -15441,7 +16740,7 @@ class Parser:
                                         children_5 = []
                                         value_2 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
                                         while True: # start capture
-                                            _match = regex_regex_6.match(buf, offset_3)
+                                            _match = regex_regex_8.match(buf, offset_3)
                                             if _match:
                                                 _end = _match.end()
                                                 column_3 += (_end - offset_3)
@@ -15481,7 +16780,7 @@ class Parser:
                                         children_5 = []
                                         value_3 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
                                         while True: # start capture
-                                            _match = regex_regex_42.match(buf, offset_3)
+                                            _match = regex_regex_45.match(buf, offset_3)
                                             if _match:
                                                 _end = _match.end()
                                                 column_3 += (_end - offset_3)
@@ -15579,7 +16878,7 @@ class Parser:
                                                     if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                         width = partial_tab_width_3
                                                     else:
-                                                        width  = (self.tabstop-(column_3%self.tabstop))
+                                                        width  = (self.tabstop-((column_3)%self.tabstop));
                                                     count_1 += width
                                                     column_3 += width
                                                     offset_3 += 1
@@ -15750,7 +17049,7 @@ class Parser:
                                             indent_column_4 = list(indent_column_3)
                                             partial_tab_offset_4 = partial_tab_offset_3
                                             partial_tab_width_4 = partial_tab_width_3
-                                            _match = regex_regex_6.match(buf, offset_4)
+                                            _match = regex_regex_8.match(buf, offset_4)
                                             if _match:
                                                 _end = _match.end()
                                                 column_4 += (_end - offset_4)
@@ -15767,7 +17066,7 @@ class Parser:
                                         children_5 = []
                                         value_7 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
                                         while True: # start capture
-                                            _match = regex_regex_6.match(buf, offset_3)
+                                            _match = regex_regex_8.match(buf, offset_3)
                                             if _match:
                                                 _end = _match.end()
                                                 column_3 += (_end - offset_3)
@@ -15807,7 +17106,7 @@ class Parser:
                                         children_5 = []
                                         value_8 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
                                         while True: # start capture
-                                            _match = regex_regex_43.match(buf, offset_3)
+                                            _match = regex_regex_46.match(buf, offset_3)
                                             if _match:
                                                 _end = _match.end()
                                                 column_3 += (_end - offset_3)
@@ -15905,7 +17204,7 @@ class Parser:
                                                     if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                         width = partial_tab_width_3
                                                     else:
-                                                        width  = (self.tabstop-(column_3%self.tabstop))
+                                                        width  = (self.tabstop-((column_3)%self.tabstop));
                                                     count_1 += width
                                                     column_3 += width
                                                     offset_3 += 1
@@ -16128,7 +17427,7 @@ class Parser:
                                         indent_column_4 = list(indent_column_3)
                                         partial_tab_offset_4 = partial_tab_offset_3
                                         partial_tab_width_4 = partial_tab_width_3
-                                        _match = regex_regex_6.match(buf, offset_4)
+                                        _match = regex_regex_8.match(buf, offset_4)
                                         if _match:
                                             _end = _match.end()
                                             column_4 += (_end - offset_4)
@@ -16145,7 +17444,7 @@ class Parser:
                                     children_4 = []
                                     value_2 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
                                     while True: # start capture
-                                        _match = regex_regex_6.match(buf, offset_3)
+                                        _match = regex_regex_8.match(buf, offset_3)
                                         if _match:
                                             _end = _match.end()
                                             column_3 += (_end - offset_3)
@@ -16185,7 +17484,7 @@ class Parser:
                                     children_4 = []
                                     value_3 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
                                     while True: # start capture
-                                        _match = regex_regex_44.match(buf, offset_3)
+                                        _match = regex_regex_47.match(buf, offset_3)
                                         if _match:
                                             _end = _match.end()
                                             column_3 += (_end - offset_3)
@@ -16356,7 +17655,7 @@ class Parser:
                     children_2 = []
                     value_0 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
-                        _match = regex_regex_7.match(buf, offset_1)
+                        _match = regex_regex_9.match(buf, offset_1)
                         if _match:
                             _end = _match.end()
                             column_1 += (_end - offset_1)
@@ -16407,7 +17706,7 @@ class Parser:
                         offset_1 = -1
                         break
 
-                    _match = regex_regex_8.match(buf, offset_1)
+                    _match = regex_regex_10.match(buf, offset_1)
                     if _match:
                         _end = _match.end()
                         column_1 += (_end - offset_1)
@@ -16419,7 +17718,7 @@ class Parser:
                     children_2 = []
                     value_1 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
-                        _match = regex_regex_9.match(buf, offset_1)
+                        _match = regex_regex_11.match(buf, offset_1)
                         if _match:
                             _end = _match.end()
                             column_1 += (_end - offset_1)
@@ -16428,7 +17727,7 @@ class Parser:
                             offset_1 = -1
                             break
 
-                        _match = regex_regex_10.match(buf, offset_1)
+                        _match = regex_regex_12.match(buf, offset_1)
                         if _match:
                             _end = _match.end()
                             column_1 += (_end - offset_1)
@@ -16475,7 +17774,7 @@ class Parser:
                     children_2 = []
                     value_2 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
-                        _match = regex_regex_11.match(buf, offset_1)
+                        _match = regex_regex_13.match(buf, offset_1)
                         if _match:
                             _end = _match.end()
                             column_1 += (_end - offset_1)
@@ -16484,7 +17783,7 @@ class Parser:
                             offset_1 = -1
                             break
 
-                        _match = regex_regex_12.match(buf, offset_1)
+                        _match = regex_regex_14.match(buf, offset_1)
                         if _match:
                             _end = _match.end()
                             column_1 += (_end - offset_1)
@@ -16579,7 +17878,7 @@ class Parser:
                         while True: # start count
                             offset_3 = offset_2
                             while True: # start backref
-                                _match = regex_regex_45.match(buf, offset_3)
+                                _match = regex_regex_48.match(buf, offset_3)
                                 if _match:
                                     _end = _match.end()
                                     column_2 += (_end - offset_3)
@@ -16720,7 +18019,7 @@ class Parser:
                         while True: # start count
                             offset_3 = offset_2
                             while True: # start backref
-                                _match = regex_regex_45.match(buf, offset_3)
+                                _match = regex_regex_48.match(buf, offset_3)
                                 if _match:
                                     _end = _match.end()
                                     column_2 += (_end - offset_3)
@@ -16893,7 +18192,7 @@ class Parser:
                         while True: # start count
                             offset_3 = offset_2
                             while True: # start backref
-                                _match = regex_regex_45.match(buf, offset_3)
+                                _match = regex_regex_48.match(buf, offset_3)
                                 if _match:
                                     _end = _match.end()
                                     column_2 += (_end - offset_3)
@@ -17009,7 +18308,7 @@ class Parser:
                         while True: # start count
                             offset_3 = offset_2
                             while True: # start backref
-                                _match = regex_regex_45.match(buf, offset_3)
+                                _match = regex_regex_48.match(buf, offset_3)
                                 if _match:
                                     _end = _match.end()
                                     column_2 += (_end - offset_3)
@@ -17176,7 +18475,7 @@ class Parser:
                         while True: # start count
                             offset_3 = offset_2
                             while True: # start backref
-                                _match = regex_regex_45.match(buf, offset_3)
+                                _match = regex_regex_48.match(buf, offset_3)
                                 if _match:
                                     _end = _match.end()
                                     column_2 += (_end - offset_3)
@@ -17320,7 +18619,7 @@ class Parser:
                         while True: # start count
                             offset_3 = offset_2
                             while True: # start backref
-                                _match = regex_regex_46.match(buf, offset_3)
+                                _match = regex_regex_49.match(buf, offset_3)
                                 if _match:
                                     _end = _match.end()
                                     column_2 += (_end - offset_3)
@@ -17457,7 +18756,7 @@ class Parser:
                     offset_2 = offset_1
                     column_2 = column_1
                     while True: # start count
-                        _match = regex_regex_47.match(buf, offset_2)
+                        _match = regex_regex_50.match(buf, offset_2)
                         if _match:
                             _end = _match.end()
                             column_2 += (_end - offset_2)
@@ -17497,7 +18796,7 @@ class Parser:
                                         children_5 = []
                                         value_3 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
                                         while True: # start capture
-                                            _match = regex_regex_48.match(buf, offset_3)
+                                            _match = regex_regex_51.match(buf, offset_3)
                                             if _match:
                                                 _end = _match.end()
                                                 column_3 += (_end - offset_3)
@@ -17506,7 +18805,7 @@ class Parser:
                                                 offset_3 = -1
                                                 break
 
-                                            _match = regex_regex_49.match(buf, offset_3)
+                                            _match = regex_regex_52.match(buf, offset_3)
                                             if _match:
                                                 _end = _match.end()
                                                 column_3 += (_end - offset_3)
@@ -17669,7 +18968,7 @@ class Parser:
                                                 partial_tab_width_5 = partial_tab_width_4
                                                 children_6 = [] if children_5 is not None else None
                                                 while True: # case
-                                                    _match = regex_regex_50.match(buf, offset_5)
+                                                    _match = regex_regex_53.match(buf, offset_5)
                                                     if _match:
                                                         _end = _match.end()
                                                         column_5 += (_end - offset_5)
@@ -17725,7 +19024,7 @@ class Parser:
                                         children_5 = []
                                         value_6 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
                                         while True: # start capture
-                                            _match = regex_regex_51.match(buf, offset_3)
+                                            _match = regex_regex_54.match(buf, offset_3)
                                             if _match:
                                                 _end = _match.end()
                                                 column_3 += (_end - offset_3)
@@ -17871,7 +19170,7 @@ class Parser:
                     children_2 = []
                     value_8 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
-                        _match = regex_regex_47.match(buf, offset_1)
+                        _match = regex_regex_50.match(buf, offset_1)
                         if _match:
                             _end = _match.end()
                             column_1 += (_end - offset_1)
@@ -18084,7 +19383,7 @@ class Parser:
                         if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                             width = partial_tab_width_0
                         else:
-                            width  = (self.tabstop-(column_0%self.tabstop))
+                            width  = (self.tabstop-((column_0)%self.tabstop));
                         if count_0 + width > 3:
                             new_width = 3 - count_0
                             count_0 += new_width
@@ -18110,87 +19409,6 @@ class Parser:
                 partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True: # case
-                    _match = regex_regex_52.match(buf, offset_1)
-                    if _match:
-                        _end = _match.end()
-                        column_1 += (_end - offset_1)
-                        offset_1 = _end
-                    else:
-                        offset_1 = -1
-                        break
-
-                    break
-                if offset_1 != -1:
-                    offset_0 = offset_1
-                    column_0 = column_1
-                    indent_column_0 = indent_column_1
-                    partial_tab_offset_0 = partial_tab_offset_1
-                    partial_tab_width_0 = partial_tab_width_1
-                    if children_1 is not None and children_1 is not None:
-                        children_0.extend(children_1)
-                    break
-                # end case
-                offset_1 = offset_0
-                column_1 = column_0
-                indent_column_1 = list(indent_column_0)
-                partial_tab_offset_1 = partial_tab_offset_0
-                partial_tab_width_1 = partial_tab_width_0
-                children_1 = [] if children_0 is not None else None
-                while True: # case
-                    _match = regex_regex_53.match(buf, offset_1)
-                    if _match:
-                        _end = _match.end()
-                        column_1 += (_end - offset_1)
-                        offset_1 = _end
-                    else:
-                        offset_1 = -1
-                        break
-
-                    break
-                if offset_1 != -1:
-                    offset_0 = offset_1
-                    column_0 = column_1
-                    indent_column_0 = indent_column_1
-                    partial_tab_offset_0 = partial_tab_offset_1
-                    partial_tab_width_0 = partial_tab_width_1
-                    if children_1 is not None and children_1 is not None:
-                        children_0.extend(children_1)
-                    break
-                # end case
-                offset_1 = offset_0
-                column_1 = column_0
-                indent_column_1 = list(indent_column_0)
-                partial_tab_offset_1 = partial_tab_offset_0
-                partial_tab_width_1 = partial_tab_width_0
-                children_1 = [] if children_0 is not None else None
-                while True: # case
-                    _match = regex_regex_54.match(buf, offset_1)
-                    if _match:
-                        _end = _match.end()
-                        column_1 += (_end - offset_1)
-                        offset_1 = _end
-                    else:
-                        offset_1 = -1
-                        break
-
-                    break
-                if offset_1 != -1:
-                    offset_0 = offset_1
-                    column_0 = column_1
-                    indent_column_0 = indent_column_1
-                    partial_tab_offset_0 = partial_tab_offset_1
-                    partial_tab_width_0 = partial_tab_width_1
-                    if children_1 is not None and children_1 is not None:
-                        children_0.extend(children_1)
-                    break
-                # end case
-                offset_1 = offset_0
-                column_1 = column_0
-                indent_column_1 = list(indent_column_0)
-                partial_tab_offset_1 = partial_tab_offset_0
-                partial_tab_width_1 = partial_tab_width_0
-                children_1 = [] if children_0 is not None else None
-                while True: # case
                     _match = regex_regex_55.match(buf, offset_1)
                     if _match:
                         _end = _match.end()
@@ -18200,7 +19418,88 @@ class Parser:
                         offset_1 = -1
                         break
 
+                    break
+                if offset_1 != -1:
+                    offset_0 = offset_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
+                    if children_1 is not None and children_1 is not None:
+                        children_0.extend(children_1)
+                    break
+                # end case
+                offset_1 = offset_0
+                column_1 = column_0
+                indent_column_1 = list(indent_column_0)
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
+                children_1 = [] if children_0 is not None else None
+                while True: # case
                     _match = regex_regex_56.match(buf, offset_1)
+                    if _match:
+                        _end = _match.end()
+                        column_1 += (_end - offset_1)
+                        offset_1 = _end
+                    else:
+                        offset_1 = -1
+                        break
+
+                    break
+                if offset_1 != -1:
+                    offset_0 = offset_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
+                    if children_1 is not None and children_1 is not None:
+                        children_0.extend(children_1)
+                    break
+                # end case
+                offset_1 = offset_0
+                column_1 = column_0
+                indent_column_1 = list(indent_column_0)
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
+                children_1 = [] if children_0 is not None else None
+                while True: # case
+                    _match = regex_regex_57.match(buf, offset_1)
+                    if _match:
+                        _end = _match.end()
+                        column_1 += (_end - offset_1)
+                        offset_1 = _end
+                    else:
+                        offset_1 = -1
+                        break
+
+                    break
+                if offset_1 != -1:
+                    offset_0 = offset_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
+                    if children_1 is not None and children_1 is not None:
+                        children_0.extend(children_1)
+                    break
+                # end case
+                offset_1 = offset_0
+                column_1 = column_0
+                indent_column_1 = list(indent_column_0)
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
+                children_1 = [] if children_0 is not None else None
+                while True: # case
+                    _match = regex_regex_58.match(buf, offset_1)
+                    if _match:
+                        _end = _match.end()
+                        column_1 += (_end - offset_1)
+                        offset_1 = _end
+                    else:
+                        offset_1 = -1
+                        break
+
+                    _match = regex_regex_59.match(buf, offset_1)
                     if _match:
                         _end = _match.end()
                         column_1 += (_end - offset_1)
@@ -18232,7 +19531,7 @@ class Parser:
                                             if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                 width = partial_tab_width_3
                                             else:
-                                                width  = (self.tabstop-(column_3%self.tabstop))
+                                                width  = (self.tabstop-((column_3)%self.tabstop));
                                             count_0 += width
                                             column_3 += width
                                             offset_3 += 1
@@ -18265,7 +19564,7 @@ class Parser:
                             partial_tab_width_3 = partial_tab_width_2
                             children_3 = [] if children_2 is not None else None
                             while True: # case
-                                _match = regex_regex_57.match(buf, offset_3)
+                                _match = regex_regex_60.match(buf, offset_3)
                                 if _match:
                                     _end = _match.end()
                                     column_3 += (_end - offset_3)
@@ -18394,7 +19693,7 @@ class Parser:
                                     offset_2 = -1
                                     break
 
-                                _match = regex_regex_3.match(buf, offset_2)
+                                _match = regex_regex_5.match(buf, offset_2)
                                 if _match:
                                     _end = _match.end()
                                     column_2 += (_end - offset_2)
@@ -18525,7 +19824,7 @@ class Parser:
                                             offset_3 = -1
                                             break
 
-                                        _match = regex_regex_3.match(buf, offset_3)
+                                        _match = regex_regex_5.match(buf, offset_3)
                                         if _match:
                                             _end = _match.end()
                                             column_3 += (_end - offset_3)
@@ -18644,7 +19943,7 @@ class Parser:
                                     indent_column_3 = list(indent_column_2)
                                     partial_tab_offset_3 = partial_tab_offset_2
                                     partial_tab_width_3 = partial_tab_width_2
-                                    _match = regex_regex_58.match(buf, offset_3)
+                                    _match = regex_regex_61.match(buf, offset_3)
                                     if _match:
                                         _end = _match.end()
                                         column_3 += (_end - offset_3)
@@ -18658,7 +19957,7 @@ class Parser:
                                     offset_2 = -1
                                     break
 
-                                _match = regex_regex_3.match(buf, offset_2)
+                                _match = regex_regex_5.match(buf, offset_2)
                                 if _match:
                                     _end = _match.end()
                                     column_2 += (_end - offset_2)
@@ -18777,7 +20076,7 @@ class Parser:
                                             indent_column_4 = list(indent_column_3)
                                             partial_tab_offset_4 = partial_tab_offset_3
                                             partial_tab_width_4 = partial_tab_width_3
-                                            _match = regex_regex_58.match(buf, offset_4)
+                                            _match = regex_regex_61.match(buf, offset_4)
                                             if _match:
                                                 _end = _match.end()
                                                 column_4 += (_end - offset_4)
@@ -18791,7 +20090,7 @@ class Parser:
                                             offset_3 = -1
                                             break
 
-                                        _match = regex_regex_3.match(buf, offset_3)
+                                        _match = regex_regex_5.match(buf, offset_3)
                                         if _match:
                                             _end = _match.end()
                                             column_3 += (_end - offset_3)
@@ -18893,7 +20192,7 @@ class Parser:
                             offset_1 = -1
                             break
 
-                        _match = regex_regex_59.match(buf, offset_1)
+                        _match = regex_regex_62.match(buf, offset_1)
                         if _match:
                             _end = _match.end()
                             column_1 += (_end - offset_1)
@@ -18902,7 +20201,7 @@ class Parser:
                             offset_1 = -1
                             break
 
-                        _match = regex_regex_60.match(buf, offset_1)
+                        _match = regex_regex_63.match(buf, offset_1)
                         if _match:
                             _end = _match.end()
                             column_1 += (_end - offset_1)
@@ -18986,7 +20285,7 @@ class Parser:
                             children_3 = []
                             value_17 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
                             while True: # start capture
-                                _match = regex_regex_60.match(buf, offset_2)
+                                _match = regex_regex_63.match(buf, offset_2)
                                 if _match:
                                     _end = _match.end()
                                     column_2 += (_end - offset_2)
@@ -19099,7 +20398,7 @@ class Parser:
                                     offset_2 = -1
                                     break
 
-                                _match = regex_regex_3.match(buf, offset_2)
+                                _match = regex_regex_5.match(buf, offset_2)
                                 if _match:
                                     _end = _match.end()
                                     column_2 += (_end - offset_2)
@@ -19230,7 +20529,7 @@ class Parser:
                                             offset_3 = -1
                                             break
 
-                                        _match = regex_regex_3.match(buf, offset_3)
+                                        _match = regex_regex_5.match(buf, offset_3)
                                         if _match:
                                             _end = _match.end()
                                             column_3 += (_end - offset_3)
@@ -19332,7 +20631,7 @@ class Parser:
                             offset_1 = -1
                             break
 
-                        _match = regex_regex_11.match(buf, offset_1)
+                        _match = regex_regex_13.match(buf, offset_1)
                         if _match:
                             _end = _match.end()
                             column_1 += (_end - offset_1)
@@ -19341,7 +20640,7 @@ class Parser:
                             offset_1 = -1
                             break
 
-                        _match = regex_regex_61.match(buf, offset_1)
+                        _match = regex_regex_64.match(buf, offset_1)
                         if _match:
                             _end = _match.end()
                             column_1 += (_end - offset_1)
@@ -19388,7 +20687,7 @@ class Parser:
                                                     if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                         width = partial_tab_width_3
                                                     else:
-                                                        width  = (self.tabstop-(column_3%self.tabstop))
+                                                        width  = (self.tabstop-((column_3)%self.tabstop));
                                                     count_1 += width
                                                     column_3 += width
                                                     offset_3 += 1
@@ -19451,7 +20750,7 @@ class Parser:
                                                             if offset_4 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                                 width = partial_tab_width_4
                                                             else:
-                                                                width  = (self.tabstop-(column_4%self.tabstop))
+                                                                width  = (self.tabstop-((column_4)%self.tabstop));
                                                             count_2 += width
                                                             column_4 += width
                                                             offset_4 += 1
@@ -19523,7 +20822,7 @@ class Parser:
                                                             if offset_4 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                                 width = partial_tab_width_4
                                                             else:
-                                                                width  = (self.tabstop-(column_4%self.tabstop))
+                                                                width  = (self.tabstop-((column_4)%self.tabstop));
                                                             count_2 += width
                                                             column_4 += width
                                                             offset_4 += 1
@@ -19585,7 +20884,7 @@ class Parser:
                             children_3 = []
                             value_32 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
                             while True: # start capture
-                                _match = regex_regex_62.match(buf, offset_2)
+                                _match = regex_regex_65.match(buf, offset_2)
                                 if _match:
                                     _end = _match.end()
                                     column_2 += (_end - offset_2)
@@ -19594,7 +20893,7 @@ class Parser:
                                     offset_2 = -1
                                     break
 
-                                _match = regex_regex_63.match(buf, offset_2)
+                                _match = regex_regex_66.match(buf, offset_2)
                                 if _match:
                                     _end = _match.end()
                                     column_2 += (_end - offset_2)
@@ -19633,7 +20932,7 @@ class Parser:
                                                     if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                         width = partial_tab_width_3
                                                     else:
-                                                        width  = (self.tabstop-(column_3%self.tabstop))
+                                                        width  = (self.tabstop-((column_3)%self.tabstop));
                                                     count_2 += width
                                                     column_3 += width
                                                     offset_3 += 1
@@ -19679,7 +20978,7 @@ class Parser:
                                                             if offset_4 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                                 width = partial_tab_width_4
                                                             else:
-                                                                width  = (self.tabstop-(column_4%self.tabstop))
+                                                                width  = (self.tabstop-((column_4)%self.tabstop));
                                                             count_2 += width
                                                             column_4 += width
                                                             offset_4 += 1
@@ -19739,7 +21038,7 @@ class Parser:
                                                                     if offset_5 == partial_tab_offset_5 and partial_tab_width_5 > 0:
                                                                         width = partial_tab_width_5
                                                                     else:
-                                                                        width  = (self.tabstop-(column_5%self.tabstop))
+                                                                        width  = (self.tabstop-((column_5)%self.tabstop));
                                                                     count_3 += width
                                                                     column_5 += width
                                                                     offset_5 += 1
@@ -19811,7 +21110,7 @@ class Parser:
                                                                     if offset_5 == partial_tab_offset_5 and partial_tab_width_5 > 0:
                                                                         width = partial_tab_width_5
                                                                     else:
-                                                                        width  = (self.tabstop-(column_5%self.tabstop))
+                                                                        width  = (self.tabstop-((column_5)%self.tabstop));
                                                                     count_3 += width
                                                                     column_5 += width
                                                                     offset_5 += 1
@@ -19877,7 +21176,7 @@ class Parser:
                                             children_5 = []
                                             value_39 = Node(None, offset_4, offset_4, column_4, column_4, children_5, None)
                                             while True: # start capture
-                                                _match = regex_regex_64.match(buf, offset_4)
+                                                _match = regex_regex_67.match(buf, offset_4)
                                                 if _match:
                                                     _end = _match.end()
                                                     column_4 += (_end - offset_4)
@@ -19924,7 +21223,7 @@ class Parser:
                                                     offset_4 = -1
                                                     break
 
-                                                _match = regex_regex_65.match(buf, offset_4)
+                                                _match = regex_regex_68.match(buf, offset_4)
                                                 if _match:
                                                     _end = _match.end()
                                                     column_4 += (_end - offset_4)
@@ -20008,7 +21307,7 @@ class Parser:
                                                     children_6 = []
                                                     value_43 = Node(None, offset_5, offset_5, column_5, column_5, children_6, None)
                                                     while True: # start capture
-                                                        _match = regex_regex_65.match(buf, offset_5)
+                                                        _match = regex_regex_68.match(buf, offset_5)
                                                         if _match:
                                                             _end = _match.end()
                                                             column_5 += (_end - offset_5)
@@ -20092,7 +21391,7 @@ class Parser:
                                                     offset_4 = -1
                                                     break
 
-                                                _match = regex_regex_66.match(buf, offset_4)
+                                                _match = regex_regex_69.match(buf, offset_4)
                                                 if _match:
                                                     _end = _match.end()
                                                     column_4 += (_end - offset_4)
@@ -20176,7 +21475,7 @@ class Parser:
                                                     children_6 = []
                                                     value_48 = Node(None, offset_5, offset_5, column_5, column_5, children_6, None)
                                                     while True: # start capture
-                                                        _match = regex_regex_66.match(buf, offset_5)
+                                                        _match = regex_regex_69.match(buf, offset_5)
                                                         if _match:
                                                             _end = _match.end()
                                                             column_5 += (_end - offset_5)
@@ -20304,7 +21603,7 @@ class Parser:
                                             if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                             count_0 += width
                                             column_2 += width
                                             offset_2 += 1
@@ -20315,7 +21614,7 @@ class Parser:
                                     else:
                                         break
 
-                                _match = regex_regex_67.match(buf, offset_2)
+                                _match = regex_regex_70.match(buf, offset_2)
                                 if _match:
                                     _end = _match.end()
                                     column_2 += (_end - offset_2)
@@ -20371,7 +21670,7 @@ class Parser:
                                                     if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                         width = partial_tab_width_3
                                                     else:
-                                                        width  = (self.tabstop-(column_3%self.tabstop))
+                                                        width  = (self.tabstop-((column_3)%self.tabstop));
                                                     count_0 += width
                                                     column_3 += width
                                                     offset_3 += 1
@@ -20431,7 +21730,7 @@ class Parser:
                                                             if offset_4 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                                 width = partial_tab_width_4
                                                             else:
-                                                                width  = (self.tabstop-(column_4%self.tabstop))
+                                                                width  = (self.tabstop-((column_4)%self.tabstop));
                                                             count_1 += width
                                                             column_4 += width
                                                             offset_4 += 1
@@ -20503,7 +21802,7 @@ class Parser:
                                                             if offset_4 == partial_tab_offset_4 and partial_tab_width_4 > 0:
                                                                 width = partial_tab_width_4
                                                             else:
-                                                                width  = (self.tabstop-(column_4%self.tabstop))
+                                                                width  = (self.tabstop-((column_4)%self.tabstop));
                                                             count_1 += width
                                                             column_4 += width
                                                             offset_4 += 1
@@ -20623,7 +21922,7 @@ class Parser:
                             offset_1 = -1
                             break
 
-                        _match = regex_regex_11.match(buf, offset_1)
+                        _match = regex_regex_13.match(buf, offset_1)
                         if _match:
                             _end = _match.end()
                             column_1 += (_end - offset_1)
@@ -20632,7 +21931,7 @@ class Parser:
                             offset_1 = -1
                             break
 
-                        _match = regex_regex_61.match(buf, offset_1)
+                        _match = regex_regex_64.match(buf, offset_1)
                         if _match:
                             _end = _match.end()
                             column_1 += (_end - offset_1)
@@ -20649,7 +21948,7 @@ class Parser:
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
-                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                        width  = (self.tabstop-((column_1)%self.tabstop));
                                     count_0 += width
                                     column_1 += width
                                     offset_1 += 1
@@ -20712,7 +22011,7 @@ class Parser:
                                 if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                     width = partial_tab_width_0
                                 else:
-                                    width  = (self.tabstop-(column_0%self.tabstop))
+                                    width  = (self.tabstop-((column_0)%self.tabstop));
                                 if count_0 + width > 3:
                                     new_width = 3 - count_0
                                     count_0 += new_width
@@ -20730,7 +22029,7 @@ class Parser:
                         else:
                             break
 
-                    _match = regex_regex_52.match(buf, offset_0)
+                    _match = regex_regex_55.match(buf, offset_0)
                     if _match:
                         _end = _match.end()
                         column_0 += (_end - offset_0)
@@ -20762,7 +22061,7 @@ class Parser:
                                             if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                             count_0 += width
                                             column_2 += width
                                             offset_2 += 1
@@ -20795,7 +22094,7 @@ class Parser:
                             partial_tab_width_2 = partial_tab_width_1
                             children_4 = [] if children_3 is not None else None
                             while True: # case
-                                _match = regex_regex_57.match(buf, offset_2)
+                                _match = regex_regex_60.match(buf, offset_2)
                                 if _match:
                                     _end = _match.end()
                                     column_2 += (_end - offset_2)
@@ -20871,7 +22170,7 @@ class Parser:
                                 indent_column_2 = list(indent_column_1)
                                 partial_tab_offset_2 = partial_tab_offset_1
                                 partial_tab_width_2 = partial_tab_width_1
-                                _match = regex_regex_68.match(buf, offset_2)
+                                _match = regex_regex_71.match(buf, offset_2)
                                 if _match:
                                     _end = _match.end()
                                     column_2 += (_end - offset_2)
@@ -20885,7 +22184,7 @@ class Parser:
                                 offset_1 = -1
                                 break
 
-                            _match = regex_regex_3.match(buf, offset_1)
+                            _match = regex_regex_5.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -20990,7 +22289,7 @@ class Parser:
                                         if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                             width = partial_tab_width_2
                                         else:
-                                            width  = (self.tabstop-(column_2%self.tabstop))
+                                            width  = (self.tabstop-((column_2)%self.tabstop));
                                         count_1 += width
                                         column_2 += width
                                         offset_2 += 1
@@ -21030,7 +22329,7 @@ class Parser:
                                         indent_column_3 = list(indent_column_2)
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
-                                        _match = regex_regex_68.match(buf, offset_3)
+                                        _match = regex_regex_71.match(buf, offset_3)
                                         if _match:
                                             _end = _match.end()
                                             column_3 += (_end - offset_3)
@@ -21044,7 +22343,7 @@ class Parser:
                                         offset_2 = -1
                                         break
 
-                                    _match = regex_regex_3.match(buf, offset_2)
+                                    _match = regex_regex_5.match(buf, offset_2)
                                     if _match:
                                         _end = _match.end()
                                         column_2 += (_end - offset_2)
@@ -21109,7 +22408,7 @@ class Parser:
                         children_3 = []
                         value_7 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
-                            _match = regex_regex_68.match(buf, offset_1)
+                            _match = regex_regex_71.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -21118,7 +22417,7 @@ class Parser:
                                 offset_1 = -1
                                 break
 
-                            _match = regex_regex_14.match(buf, offset_1)
+                            _match = regex_regex_1.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -21188,7 +22487,7 @@ class Parser:
                                         indent_column_3 = list(indent_column_2)
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
-                                        _match = regex_regex_68.match(buf, offset_3)
+                                        _match = regex_regex_71.match(buf, offset_3)
                                         if _match:
                                             _end = _match.end()
                                             column_3 += (_end - offset_3)
@@ -21202,7 +22501,7 @@ class Parser:
                                         offset_2 = -1
                                         break
 
-                                    _match = regex_regex_3.match(buf, offset_2)
+                                    _match = regex_regex_5.match(buf, offset_2)
                                     if _match:
                                         _end = _match.end()
                                         column_2 += (_end - offset_2)
@@ -21293,7 +22592,7 @@ class Parser:
                                 if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                     width = partial_tab_width_0
                                 else:
-                                    width  = (self.tabstop-(column_0%self.tabstop))
+                                    width  = (self.tabstop-((column_0)%self.tabstop));
                                 if count_0 + width > 3:
                                     new_width = 3 - count_0
                                     count_0 += new_width
@@ -21347,7 +22646,7 @@ class Parser:
                                 offset_1 = -1
                                 break
 
-                            _match = regex_regex_3.match(buf, offset_1)
+                            _match = regex_regex_5.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -21452,7 +22751,7 @@ class Parser:
                                         if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                             width = partial_tab_width_2
                                         else:
-                                            width  = (self.tabstop-(column_2%self.tabstop))
+                                            width  = (self.tabstop-((column_2)%self.tabstop));
                                         count_1 += width
                                         column_2 += width
                                         offset_2 += 1
@@ -21504,7 +22803,7 @@ class Parser:
                                         offset_2 = -1
                                         break
 
-                                    _match = regex_regex_3.match(buf, offset_2)
+                                    _match = regex_regex_5.match(buf, offset_2)
                                     if _match:
                                         _end = _match.end()
                                         column_2 += (_end - offset_2)
@@ -21576,7 +22875,7 @@ class Parser:
                                 offset_1 = -1
                                 break
 
-                            _match = regex_regex_14.match(buf, offset_1)
+                            _match = regex_regex_1.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -21658,7 +22957,7 @@ class Parser:
                                         offset_2 = -1
                                         break
 
-                                    _match = regex_regex_3.match(buf, offset_2)
+                                    _match = regex_regex_5.match(buf, offset_2)
                                     if _match:
                                         _end = _match.end()
                                         column_2 += (_end - offset_2)
@@ -21749,7 +23048,7 @@ class Parser:
                                 if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                     width = partial_tab_width_0
                                 else:
-                                    width  = (self.tabstop-(column_0%self.tabstop))
+                                    width  = (self.tabstop-((column_0)%self.tabstop));
                                 if count_0 + width > 3:
                                     new_width = 3 - count_0
                                     count_0 += new_width
@@ -21803,7 +23102,7 @@ class Parser:
                                 offset_1 = -1
                                 break
 
-                            _match = regex_regex_3.match(buf, offset_1)
+                            _match = regex_regex_5.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -21908,7 +23207,7 @@ class Parser:
                                         if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                             width = partial_tab_width_2
                                         else:
-                                            width  = (self.tabstop-(column_2%self.tabstop))
+                                            width  = (self.tabstop-((column_2)%self.tabstop));
                                         count_1 += width
                                         column_2 += width
                                         offset_2 += 1
@@ -21960,7 +23259,7 @@ class Parser:
                                         offset_2 = -1
                                         break
 
-                                    _match = regex_regex_3.match(buf, offset_2)
+                                    _match = regex_regex_5.match(buf, offset_2)
                                     if _match:
                                         _end = _match.end()
                                         column_2 += (_end - offset_2)
@@ -22032,7 +23331,7 @@ class Parser:
                                 offset_1 = -1
                                 break
 
-                            _match = regex_regex_14.match(buf, offset_1)
+                            _match = regex_regex_1.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -22114,7 +23413,7 @@ class Parser:
                                         offset_2 = -1
                                         break
 
-                                    _match = regex_regex_3.match(buf, offset_2)
+                                    _match = regex_regex_5.match(buf, offset_2)
                                     if _match:
                                         _end = _match.end()
                                         column_2 += (_end - offset_2)
@@ -22205,7 +23504,7 @@ class Parser:
                                 if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                     width = partial_tab_width_0
                                 else:
-                                    width  = (self.tabstop-(column_0%self.tabstop))
+                                    width  = (self.tabstop-((column_0)%self.tabstop));
                                 if count_0 + width > 3:
                                     new_width = 3 - count_0
                                     count_0 += new_width
@@ -22230,7 +23529,7 @@ class Parser:
                         offset_0 = -1
                         break
 
-                    _match = regex_regex_59.match(buf, offset_0)
+                    _match = regex_regex_62.match(buf, offset_0)
                     if _match:
                         _end = _match.end()
                         column_0 += (_end - offset_0)
@@ -22268,7 +23567,7 @@ class Parser:
                                 offset_1 = -1
                                 break
 
-                            _match = regex_regex_3.match(buf, offset_1)
+                            _match = regex_regex_5.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -22373,7 +23672,7 @@ class Parser:
                                         if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                             width = partial_tab_width_2
                                         else:
-                                            width  = (self.tabstop-(column_2%self.tabstop))
+                                            width  = (self.tabstop-((column_2)%self.tabstop));
                                         count_1 += width
                                         column_2 += width
                                         offset_2 += 1
@@ -22425,7 +23724,7 @@ class Parser:
                                         offset_2 = -1
                                         break
 
-                                    _match = regex_regex_3.match(buf, offset_2)
+                                    _match = regex_regex_5.match(buf, offset_2)
                                     if _match:
                                         _end = _match.end()
                                         column_2 += (_end - offset_2)
@@ -22497,7 +23796,7 @@ class Parser:
                                 offset_1 = -1
                                 break
 
-                            _match = regex_regex_14.match(buf, offset_1)
+                            _match = regex_regex_1.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -22579,7 +23878,7 @@ class Parser:
                                         offset_2 = -1
                                         break
 
-                                    _match = regex_regex_3.match(buf, offset_2)
+                                    _match = regex_regex_5.match(buf, offset_2)
                                     if _match:
                                         _end = _match.end()
                                         column_2 += (_end - offset_2)
@@ -22670,7 +23969,7 @@ class Parser:
                                 if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                     width = partial_tab_width_0
                                 else:
-                                    width  = (self.tabstop-(column_0%self.tabstop))
+                                    width  = (self.tabstop-((column_0)%self.tabstop));
                                 if count_0 + width > 3:
                                     new_width = 3 - count_0
                                     count_0 += new_width
@@ -22724,7 +24023,7 @@ class Parser:
                                 offset_1 = -1
                                 break
 
-                            _match = regex_regex_3.match(buf, offset_1)
+                            _match = regex_regex_5.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -22829,7 +24128,7 @@ class Parser:
                                         if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                             width = partial_tab_width_2
                                         else:
-                                            width  = (self.tabstop-(column_2%self.tabstop))
+                                            width  = (self.tabstop-((column_2)%self.tabstop));
                                         count_1 += width
                                         column_2 += width
                                         offset_2 += 1
@@ -22881,7 +24180,7 @@ class Parser:
                                         offset_2 = -1
                                         break
 
-                                    _match = regex_regex_3.match(buf, offset_2)
+                                    _match = regex_regex_5.match(buf, offset_2)
                                     if _match:
                                         _end = _match.end()
                                         column_2 += (_end - offset_2)
@@ -22953,7 +24252,7 @@ class Parser:
                                 offset_1 = -1
                                 break
 
-                            _match = regex_regex_14.match(buf, offset_1)
+                            _match = regex_regex_1.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -23035,7 +24334,7 @@ class Parser:
                                         offset_2 = -1
                                         break
 
-                                    _match = regex_regex_3.match(buf, offset_2)
+                                    _match = regex_regex_5.match(buf, offset_2)
                                     if _match:
                                         _end = _match.end()
                                         column_2 += (_end - offset_2)
@@ -23126,7 +24425,7 @@ class Parser:
                                 if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                     width = partial_tab_width_0
                                 else:
-                                    width  = (self.tabstop-(column_0%self.tabstop))
+                                    width  = (self.tabstop-((column_0)%self.tabstop));
                                 if count_0 + width > 3:
                                     new_width = 3 - count_0
                                     count_0 += new_width
@@ -23144,7 +24443,7 @@ class Parser:
                         else:
                             break
 
-                    _match = regex_regex_55.match(buf, offset_0)
+                    _match = regex_regex_58.match(buf, offset_0)
                     if _match:
                         _end = _match.end()
                         column_0 += (_end - offset_0)
@@ -23153,7 +24452,7 @@ class Parser:
                         offset_0 = -1
                         break
 
-                    _match = regex_regex_56.match(buf, offset_0)
+                    _match = regex_regex_59.match(buf, offset_0)
                     if _match:
                         _end = _match.end()
                         column_0 += (_end - offset_0)
@@ -23185,7 +24484,7 @@ class Parser:
                                             if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                             count_0 += width
                                             column_2 += width
                                             offset_2 += 1
@@ -23218,7 +24517,7 @@ class Parser:
                             partial_tab_width_2 = partial_tab_width_1
                             children_4 = [] if children_3 is not None else None
                             while True: # case
-                                _match = regex_regex_57.match(buf, offset_2)
+                                _match = regex_regex_60.match(buf, offset_2)
                                 if _match:
                                     _end = _match.end()
                                     column_2 += (_end - offset_2)
@@ -23277,7 +24576,7 @@ class Parser:
                         offset_0 = -1
                         break
 
-                    _match = regex_regex_14.match(buf, offset_0)
+                    _match = regex_regex_1.match(buf, offset_0)
                     if _match:
                         _end = _match.end()
                         column_0 += (_end - offset_0)
@@ -23364,7 +24663,7 @@ class Parser:
                                         if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                             width = partial_tab_width_2
                                         else:
-                                            width  = (self.tabstop-(column_2%self.tabstop))
+                                            width  = (self.tabstop-((column_2)%self.tabstop));
                                         count_1 += width
                                         column_2 += width
                                         offset_2 += 1
@@ -23393,7 +24692,7 @@ class Parser:
                         children_3 = []
                         value_4 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
-                            _match = regex_regex_14.match(buf, offset_1)
+                            _match = regex_regex_1.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -23477,7 +24776,7 @@ class Parser:
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
-                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                        width  = (self.tabstop-((column_1)%self.tabstop));
                                     count_0 += width
                                     column_1 += width
                                     offset_1 += 1
@@ -23636,7 +24935,7 @@ class Parser:
                                 if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                     width = partial_tab_width_0
                                 else:
-                                    width  = (self.tabstop-(column_0%self.tabstop))
+                                    width  = (self.tabstop-((column_0)%self.tabstop));
                                 if count_0 + width > 3:
                                     new_width = 3 - count_0
                                     count_0 += new_width
@@ -23668,7 +24967,7 @@ class Parser:
                         indent_column_1 = list(indent_column_0)
                         partial_tab_offset_1 = partial_tab_offset_0
                         partial_tab_width_1 = partial_tab_width_0
-                        _match = regex_regex_69.match(buf, offset_1)
+                        _match = regex_regex_72.match(buf, offset_1)
                         if _match:
                             _end = _match.end()
                             column_1 += (_end - offset_1)
@@ -23697,7 +24996,7 @@ class Parser:
                                 offset_1 = -1
                                 break
 
-                            _match = regex_regex_11.match(buf, offset_1)
+                            _match = regex_regex_13.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -23706,7 +25005,7 @@ class Parser:
                                 offset_1 = -1
                                 break
 
-                            _match = regex_regex_61.match(buf, offset_1)
+                            _match = regex_regex_64.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -23723,7 +25022,7 @@ class Parser:
                                         if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
-                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                            width  = (self.tabstop-((column_1)%self.tabstop));
                                         count_0 += width
                                         column_1 += width
                                         offset_1 += 1
@@ -23749,7 +25048,7 @@ class Parser:
                                         if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
-                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                            width  = (self.tabstop-((column_1)%self.tabstop));
                                         count_0 += width
                                         column_1 += width
                                         offset_1 += 1
@@ -23779,7 +25078,7 @@ class Parser:
                         partial_tab_width_1 = partial_tab_width_0
                         children_3 = [] if children_2 is not None else None
                         while True: # case
-                            _match = regex_regex_11.match(buf, offset_1)
+                            _match = regex_regex_13.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -23788,7 +25087,7 @@ class Parser:
                                 offset_1 = -1
                                 break
 
-                            _match = regex_regex_61.match(buf, offset_1)
+                            _match = regex_regex_64.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -23815,7 +25114,7 @@ class Parser:
                                                 if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
-                                                    width  = (self.tabstop-(column_2%self.tabstop))
+                                                    width  = (self.tabstop-((column_2)%self.tabstop));
                                                 count_1 += width
                                                 column_2 += width
                                                 offset_2 += 1
@@ -23829,7 +25128,7 @@ class Parser:
                                         offset_2 = -1
                                         break
 
-                                    _match = regex_regex_62.match(buf, offset_2)
+                                    _match = regex_regex_65.match(buf, offset_2)
                                     if _match:
                                         _end = _match.end()
                                         column_2 += (_end - offset_2)
@@ -23838,7 +25137,7 @@ class Parser:
                                         offset_2 = -1
                                         break
 
-                                    _match = regex_regex_63.match(buf, offset_2)
+                                    _match = regex_regex_66.match(buf, offset_2)
                                     if _match:
                                         _end = _match.end()
                                         column_2 += (_end - offset_2)
@@ -23865,7 +25164,7 @@ class Parser:
                                                         if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                             width = partial_tab_width_3
                                                         else:
-                                                            width  = (self.tabstop-(column_3%self.tabstop))
+                                                            width  = (self.tabstop-((column_3)%self.tabstop));
                                                         count_2 += width
                                                         column_3 += width
                                                         offset_3 += 1
@@ -23891,7 +25190,7 @@ class Parser:
                                                         if offset_3 == partial_tab_offset_3 and partial_tab_width_3 > 0:
                                                             width = partial_tab_width_3
                                                         else:
-                                                            width  = (self.tabstop-(column_3%self.tabstop))
+                                                            width  = (self.tabstop-((column_3)%self.tabstop));
                                                         count_2 += width
                                                         column_3 += width
                                                         offset_3 += 1
@@ -23902,7 +25201,7 @@ class Parser:
                                                 else:
                                                     break
 
-                                            _match = regex_regex_70.match(buf, offset_3)
+                                            _match = regex_regex_73.match(buf, offset_3)
                                             if _match:
                                                 _end = _match.end()
                                                 column_3 += (_end - offset_3)
@@ -23956,7 +25255,7 @@ class Parser:
                                         if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
-                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                            width  = (self.tabstop-((column_1)%self.tabstop));
                                         count_0 += width
                                         column_1 += width
                                         offset_1 += 1
@@ -23967,7 +25266,7 @@ class Parser:
                                 else:
                                     break
 
-                            _match = regex_regex_71.match(buf, offset_1)
+                            _match = regex_regex_74.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -23984,7 +25283,7 @@ class Parser:
                                         if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
-                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                            width  = (self.tabstop-((column_1)%self.tabstop));
                                         count_0 += width
                                         column_1 += width
                                         offset_1 += 1
@@ -24090,7 +25389,7 @@ class Parser:
                                         if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                             width = partial_tab_width_2
                                         else:
-                                            width  = (self.tabstop-(column_2%self.tabstop))
+                                            width  = (self.tabstop-((column_2)%self.tabstop));
                                         count_1 += width
                                         column_2 += width
                                         offset_2 += 1
@@ -24119,7 +25418,7 @@ class Parser:
                         children_3 = []
                         value_6 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
-                            _match = regex_regex_14.match(buf, offset_1)
+                            _match = regex_regex_1.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -24203,7 +25502,7 @@ class Parser:
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
-                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                        width  = (self.tabstop-((column_1)%self.tabstop));
                                     count_0 += width
                                     column_1 += width
                                     offset_1 += 1
