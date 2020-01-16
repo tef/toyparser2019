@@ -38,6 +38,9 @@ class Binary(Base):
 class Project(Base):
     "A Collection of Units, that include Headers, that provides Libraries, Binaries"
 
+    @classmethod
+    def make(cls):
+        pass
     
 class Stdio(Library):
     pass
@@ -52,10 +55,17 @@ class Build:
     @router.on("make")
     @command(args={"target":"str*"})
     def Make(ctx, target):
-        return Plaintext(f"targets: {','.join(target)}")
+        projects = {c.__name__:c for c in ctx['targets']}
+        targets = target or list(projects.keys())
+        output = []
+        for t in targets:
+            cls = projects[t]
+            output.append(f"building {t}")
+            cls.make()
+        return Plaintext("\n".join(output))
 
     app = App(name="makec", version="0", command=router, args={})
 
     @classmethod
-    def run(self, name):
-        self.app.main(name)
+    def run(self, name, targets):
+        self.app.main(name, {'targets': targets})

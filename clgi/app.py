@@ -98,7 +98,7 @@ class App:
         if self.parser.positional:
             raise Bug('No Positional arguments for app option parser')
 
-    def main(self, name):
+    def main(self, name, base_ctx=None):
         if name != '__main__':
             return
 
@@ -120,11 +120,12 @@ class App:
 
         try:
             request = None
-            request = self.parse(argv, environ)
+            request = self.parse(argv, environ, base_ctx)
         except Error as e:
             if any(a.startswith('--debug=') or a == '--debug' for a in argv):
                 raise
             ctx = dict()
+            ctx.update(base_ctx)
             ctx['app'] = self
             ctx['argv'] = argv
             ctx['name'] = self.name
@@ -154,7 +155,7 @@ class App:
             pager(response, use_tty=(code == 0 and 'debug' not in request.ctx and request.mode not in ('debug', 'error')))
         sys.exit(code) 
 
-    def parse(self, argv, environ):
+    def parse(self, argv, environ, base_ctx=None):
         """ turn 
             a b c --d=e -- --raw
             into list of name, value pairs
@@ -192,10 +193,11 @@ class App:
                 app_args.append((name, value))
             else:
                 args.append((name, value))
-        base_ctx = dict()
-        base_ctx['app'] = self
-        base_ctx['argv'] = argv
-        base_ctx['name'] = self.name
+        _ctx = dict()
+        _ctx.update(base_ctx)
+        _ctx['app'] = self
+        _ctx['argv'] = argv
+        _ctx['name'] = self.name
         ctx = self.parser.parse(app_args, named_args=True, defaults=False) 
         if 'help' in ctx:
             mode = 'usage'
@@ -203,7 +205,7 @@ class App:
             mode = ctx['debug']
         if 'version' in ctx:
             mode = 'version'
-        ctx.update(base_ctx)
+        ctx.update(_ctx)
         return Request(ctx, mode, "", args)
 
     def complete(self, prefix):

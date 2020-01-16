@@ -17,6 +17,14 @@ class HelloWorld(Binary):
 class Example(Project):
     export = [HelloWorld]
 
-Build.run(__name__)
+Build.run(__name__, [Example])
 
+# todo
 
+"""
+# list targets in project
+
+   $ exc.py targets
+   $ exc.py make hello
+
+"""
