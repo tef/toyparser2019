@@ -102,6 +102,8 @@ class App:
         if name != '__main__':
             return
 
+        self.name = sys.argv[0]
+
         argv, environ = sys.argv[1:], os.environ
         if 'COMP_LINE' in environ and 'COMP_POINT' in environ:
             # Bash Line Completion.

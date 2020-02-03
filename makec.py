@@ -12,6 +12,16 @@ class Metaclass(type):
 class Base(metaclass=Metaclass):
     pass
 
+class Metaclass(type):
+    @classmethod
+    def __prepare__(metacls, name, bases, **args):
+        return {}
+
+    def __new__(metacls, name, bases, attrs, **args):
+        attrs["__args__"] = args
+        return super().__new__(metacls, name, bases, attrs)
+
+
 
 class Unit(Base):
     "A Translation unit"
