@@ -127,7 +127,8 @@ class App:
             if any(a.startswith('--debug=') or a == '--debug' for a in argv):
                 raise
             ctx = dict()
-            ctx.update(base_ctx)
+            if base_ctx:
+                ctx.update(base_ctx)
             ctx['app'] = self
             ctx['argv'] = argv
             ctx['name'] = self.name
@@ -196,7 +197,8 @@ class App:
             else:
                 args.append((name, value))
         _ctx = dict()
-        _ctx.update(base_ctx)
+        if base_ctx:
+            _ctx.update(base_ctx)
         _ctx['app'] = self
         _ctx['argv'] = argv
         _ctx['name'] = self.name
