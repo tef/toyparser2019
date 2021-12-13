@@ -36,12 +36,13 @@ class Redraw(Exception):
     pass
 
 class Console:
-    def __init__(self, stdin, stdout, stderr):
+    def __init__(self, stdin, stdout, stderr, hacker=None):
         self.stdin = stdin
         self.stdout = stdout
         self.stderr = stderr
         self.encoding = None if stdout.encoding == 'UTF-8' else stdout.encoding
         self.buf = ""
+        self.hacker = hacker
 
     def print(self,  *args, end="\r\n",**kwargs):
         print(*args, end=end, file=self.stdout, **kwargs)
@@ -57,16 +58,16 @@ class Console:
     def render(self, obj, reason=None):
         lines = obj.render(width=self.width, height=self.height, encoding=self.encoding)
         out = "\r\n".join(lines)
-        if reason == "scroll":
+        if reason == "scroll" and self.hacker:
             self.stdout.write("\x1b[H\x1b[J")
-            self.flash(lines, reason=reason)
+            self.flash(lines, self.hacker, reason=reason)
         self.stdout.write("\x1b[H\x1b[J")
         self.stdout.write(out)
         self.stdout.write(f"\x1b[{self.height};{0}H")
         self.stdout.flush()
         return
 
-    def flash(self, lines, reason):
+    def flash(self, lines, hacker, reason):
         if isinstance(lines, str):
             lines = lines.splitlines()
 
@@ -248,7 +249,7 @@ class Event:
         self.value = value
 
 @contextmanager
-def tty(stdin, stdout, stderr, bracketed_paste=True):
+def tty(stdin, stdout, stderr, bracketed_paste=True, hacker=None):
     fd = stdin.fileno()
 
     # [iflag, oflag, cflag, lflag, ispeed, ospeed, cc]
@@ -318,7 +319,7 @@ def tty(stdin, stdout, stderr, bracketed_paste=True):
         signal.signal(signal.SIGTSTP, stopHandler)
         set_term()
 
-        yield Console(stdin, stdout, stderr)
+        yield Console(stdin, stdout, stderr, hacker=hacker)
     finally:
         clear_term()
 
@@ -426,9 +427,9 @@ class NoViewport:
         return buf
 
 
-def pager(obj, *, use_tty=True):
+def pager(obj, *, use_tty=True, hacker=None):
     if use_tty and sys.stdin.isatty() and sys.stdout.isatty():
-        with tty(sys.stdin, sys.stdout, sys.stderr) as console:
+        with tty(sys.stdin, sys.stdout, sys.stderr, hacker=hacker) as console:
             running = True
             viewport = Viewport(obj, 0)
             reason = "scroll"

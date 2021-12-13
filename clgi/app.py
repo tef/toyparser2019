@@ -97,6 +97,7 @@ class App:
         args['help'] = '--bool*'
         args['version'] = '--bool?'
         args['debug'] = '--str?'
+        args['hacker'] = '--int?' 
 
         self.parser = ArgumentParser(args)
         if self.parser.positional:
@@ -159,7 +160,7 @@ class App:
 
         response = to_response(response)
         if response:
-            pager(response, use_tty=(code == 0 and 'debug' not in request.ctx and request.mode not in ('debug', 'error')))
+            pager(response, use_tty=(code == 0 and 'debug' not in request.ctx and request.mode not in ('debug', 'error')), hacker=request.ctx.get('hacker'))
         sys.exit(code) 
 
     def parse(self, argv, environ, base_ctx=None):
