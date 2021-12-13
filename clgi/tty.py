@@ -53,32 +53,42 @@ class Console:
         t = fcntl.ioctl(self.stdout.fileno(), termios.TIOCGWINSZ, s)
         self.height, self.width, height_px, width_px = struct.unpack('HHHH', t)
 
-    def render(self, obj):
-        self.stdout.write("\x1b[H\x1b[J")
+    def render(self, obj, reason=None):
         lines = obj.render(width=self.width, height=self.height)
-
         out = "\r\n".join(lines)
+        if reason == "scroll":
+            self.stdout.write("\x1b[H\x1b[J")
+            self.flash(lines, reason=reason)
+        self.stdout.write("\x1b[H\x1b[J")
         self.stdout.write(out)
         self.stdout.write(f"\x1b[{self.height};{0}H")
         self.stdout.flush()
         return
 
-    def flash(self, lines):
+    def flash(self, lines, reason):
         if isinstance(lines, str):
             lines = lines.splitlines()
+
+        lines = [l.replace("\x1b[1m","").replace("\x1b[0m","") for l in lines]
 
         lines = [line[:self.width] + " "*max(0, self.width-len(line)) for line in lines]
         flash = []
         new_lines = []
         for row, line in enumerate(lines, 1):
             for col, char in enumerate(line, 1):
+                if char == ' ': continue
                 new_lines.append(f"\x1b[{row};{col}H{char}")
                 flash.append(f"\x1b[{row};{col}H.")
-                flash.append(f"\x1b[{row};{col}H ")
-                flash.append(f"\x1b[{row};{col}H ")
-                flash.append(f"\x1b[{row};{col}H ")
-                flash.append(f"\x1b[{row};{col}H ")
-                flash.append(f"\x1b[{row};{col}H*")
+                if reason == "scroll":
+                    flash.append(f"\x1b[{row};{col}Ht")
+                    flash.append(f"\x1b[{row};{col}HA")
+                    flash.append(f"\x1b[{row};{col}Hg")
+                    flash.append(f"\x1b[{row};{col}HC")
+                    flash.append(f"\x1b[{row};{col}H%")
+                    flash.append(f"\x1b[{row};{col}H@")
+                else:
+                    flash.append(f"\x1b[{row};{col}H ")
+
 
         random.shuffle(flash)
         for chr in flash:
@@ -86,9 +96,15 @@ class Console:
 
         self.stdout.flush()
         random.shuffle(new_lines)
+        c = 0
+        t = 30 if reason == "resize" else 5
         for chr in new_lines:
             sys.stdout.write(chr)
             self.stdout.flush()
+            c+=1
+            if c>t:
+                time.sleep(0.001)
+                c=0
 
         #if isinstance(lines, (tuple, list)):
         #    self.stdout.write("\r\n".join(line[:self.width] for line in lines))
@@ -414,10 +430,12 @@ def pager(obj, *, use_tty=True):
         with tty(sys.stdin, sys.stdout, sys.stderr) as console:
             running = True
             viewport = Viewport(obj, 0)
+            reason = "scroll"
             while running:
                 try:
                     console.resize()
-                    console.render(viewport)
+                    console.render(viewport, reason)
+                    reason = "scroll"
                     while running:
                         e = console.get_event()
                         if e:
@@ -453,27 +471,27 @@ def pager(obj, *, use_tty=True):
                                     console.bell()
                             elif e.name=="pageup" or (e.name == "text" and e.value in ("\x00", "-", "\x7f","\b")):
                                 if viewport.up(console.height):
-                                    console.render(viewport)
+                                    console.render(viewport, "scroll")
                                 else:
                                     console.bell()
                             elif e.name == "pagedown" or (e.name == "text" and e.value == " "):
                                 if viewport.down(console.height):
-                                    console.render(viewport)
+                                    console.render(viewport, "scroll")
                                 else:
                                     console.bell()
                             elif e.name == "home":
                                 if viewport.scroll_to(0):
-                                    console.render(viewport)
+                                    console.render(viewport, "scroll")
                                 else:
                                     console.bell()
                             elif e.name == "end":
                                 if viewport.scroll_to(len(viewport.buf)):
-                                    console.render(viewport)
+                                    console.render(viewport,"scroll")
                                 else:
                                     console.bell()
                             elif e.name == "text" and e.value in "0123456789":
                                 if viewport.scroll_to(int(e.value)/10*len(viewport.buf)):
-                                    console.render(viewport)
+                                    console.render(viewport, "scroll")
                                 else:
                                     console.bell()
                             else:
@@ -482,6 +500,7 @@ def pager(obj, *, use_tty=True):
                                 
                                 
                 except Redraw:
+                    reason = "resize"
                     pass
     else:
         console = LineConsole(sys.stdin, sys.stdout, sys.stderr)
