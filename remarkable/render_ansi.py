@@ -6,29 +6,30 @@ class RenderBox:
     min_width = 40
 
     @classmethod
-    def max_width(self, indent, width, height, max_w):
+    def max_width(self, indent, width, height, max_w, encoding=None):
         if width > max_w:
             indent = (width-max_w)//2
             width = max_w
-        return self(indent, width, height)
+        return self(indent, width, height, encoding)
 
-    def __init__(self, indent, width, height):
+    def __init__(self, indent, width, height, encoding):
         self.indent = indent
         self.width = width
         self.height = height
+        self.encoding = encoding
 
-    def zero(self):
-        return RenderBox(0, self.width, self.height)
+    def zero(self, encoding=None):
+        return RenderBox(0, self.width, self.height, encoding)
 
-    def margin(self, amount):
+    def margin(self, amount, encoding=None):
         new_width = max(self.width - amount*2) if self.width >= self.min_width else self.width
         new_amount = (self.width - new_width)/2
-        return RenderBox(new_amount, self.width-new_amount, self.height)
+        return RenderBox(new_amount, self.width-new_amount, self.height, encoding)
 
-    def shrink(self, scale=0.5, indent=False):
+    def shrink(self, scale=0.5, indent=False, encoding=None):
         new_width = int(max(self.width * scale, self.min_width)) if self.width >= self.min_width else self.width
         indent = (self.width - new_width)//2 if indent else 0
-        return RenderBox(indent, new_width, self.height)
+        return RenderBox(indent, new_width, self.height, encoding)
 
 class Mapper:
     def __init__(self, *, mapping=(), count=-1, offset=0):
@@ -85,33 +86,33 @@ to_sans_italic.update(zip(range(ord('a'), ord('z')+1),range(0x1d622, 0x1d63b+1))
 to_sans_italic.update(zip(range(ord('A'), ord('Z')+1),range(0x1d608, 0x1d621+1)))
 
 class Box:
-    top_left  = "\u250c"
-    top_right = "\u2510"
-    bot_left  = "\u2514"
-    bot_right = "\u2518"
-    horizontal= "\u2500"
-    vertical  = "\u2502"
-    cross     = "\u253c"
-    top_mid   = "\u252c"
-    bot_mid   = "\u2534"
-    left_mid  = "\u251c"
-    right_mid = "\u2524"
+    top_left  = "+" #"\u250c"
+    top_right = "+" #"\u2510"
+    bot_left  = "+" #"\u2514"
+    bot_right = "+" #"\u2518"
+    horizontal= "-" #"\u2500"
+    vertical  = "|" #"\u2502"
+    cross     = "+" #"\u253c"
+    top_mid   = "+" #"\u252c"
+    bot_mid   = "+" #"\u2534"
+    left_mid  = "+" #"\u251c"
+    right_mid = "+" #"\u2524"
 
-    top_left_bold = "\u250F"
-    top_mid_bold = "\u2533"
-    top_mid_left_bold = "\u2531"
-    top_right_bold = "\u2513"
-    left_mid_top_bold = "\u2521"
-    cross_top_bold = "\u2547"
-    right_mid_top_bold = "\u2529"
-    horizontal_bold = "\u2501"
-    vertical_bold = "\u2503"
-    left_mid_bold = "\u2523"
-    cross_bold = "\u254b"
-    cross_bold_left = "\u2549"
-    bot_left_bold = "\u2517"
-    bot_mid_left_bold = "\u2539"
-    bot_mid_left_bold = "\u2539"
+    top_left_bold = "+" #"\u250F"
+    top_mid_bold = "+" #"\u2533"
+    top_mid_left_bold = "+" #"\u2531"
+    top_right_bold = "+" #"\u2513"
+    left_mid_top_bold = "+" #"\u2521"
+    cross_top_bold = "+" #"\u2547"
+    right_mid_top_bold = "+" #"\u2529"
+    horizontal_bold = "=" #"\u2501"
+    vertical_bold = "|" #"\u2503"
+    left_mid_bold = "+" #"\u2523"
+    cross_bold = "+" #"\u254b"
+    cross_bold_left = "+" #"\u2549"
+    bot_left_bold = "+" #"\u2517"
+    bot_mid_left_bold = "+" #"\u2539"
+    bot_mid_left_bold = "+" #"\u2539"
 
     @classmethod
     def top_line(cls, col_widths, pad):
@@ -197,7 +198,7 @@ class Box:
             out.append(cls.horizontal_bold* (col+pad))
         out.append(cls.right_mid_top_bold)
         return "".join(out)
-BULLETS = ["\u2022", "\u25e6"]
+BULLETS = ["-", "+", ] # ["\u2022", "\u25e6"]
 
 def line_len(text):
     return len(text)-4*(text.count("\x1b[0m")+text.count("\x1b[1m"))
@@ -389,7 +390,7 @@ class BlockBuilder:
     @contextmanager
     def build_para(self, prose=False):
         self.add_index()
-        box = RenderBox(0, self.box.width, self.box.height)
+        box = RenderBox(0, self.box.width, self.box.height, self.box.encoding)
         builder = ParaBuilder(self.settings, box, prose=prose)
         yield builder
         mapper, lines= builder.build()
@@ -438,7 +439,7 @@ class BlockBuilder:
     @contextmanager
     def build_bullet_list(self, bullet, num):
         self.add_index()
-        box = RenderBox(0, self.box.width, self.box.height)
+        box = RenderBox(0, self.box.width, self.box.height, self.box.encoding)
         builder = ListBuilder(self.settings, box, None, bullet, num)
         yield builder
         mapper, lines = builder.build()
@@ -449,7 +450,7 @@ class BlockBuilder:
     @contextmanager
     def build_numbered_list(self, start, num):
         self.add_index()
-        box = RenderBox(0, self.box.width, self.box.height)
+        box = RenderBox(0, self.box.width, self.box.height, self.box.encoding)
         builder = ListBuilder(self.settings, box, start, None, num)
         yield builder
         mapper, lines = builder.build()
@@ -627,7 +628,7 @@ class RowBuilder:
 
     @contextmanager
     def build_column(self):
-        box = RenderBox(0, self.width-4, self.box.height)
+        box = RenderBox(0, self.width-4, self.box.height, self.box.encoding)
         builder = ParaBuilder(self.settings, box)
         yield builder
         mapper, lines = builder.build()
@@ -635,7 +636,7 @@ class RowBuilder:
 
     @contextmanager
     def build_block_column(self):
-        box = RenderBox(0, self.width-2, self.box.height)
+        box = RenderBox(0, self.width-2, self.box.height, self.box.encoding)
         builder = BlockBuilder(self.settings, box)
         yield builder
         mapper, lines = builder.build()
@@ -676,7 +677,7 @@ class ListBuilder:
     @contextmanager
     def build_block_item(self):
         self.add_index()
-        box = RenderBox(0, self.box.width-self.width, self.box.height)
+        box = RenderBox(0, self.box.width-self.width, self.box.height, self.box.encoding)
         builder = BlockBuilder(self.settings, box)
         self.settings['list_depth'] = self.settings.get('list_depth',0) +1
         yield builder
@@ -692,7 +693,7 @@ class ListBuilder:
     @contextmanager
     def build_item_span(self):
         self.add_index()
-        box = RenderBox(0, self.box.width-self.width, self.box.height)
+        box = RenderBox(0, self.box.width-self.width, self.box.height, self.box.encoding)
         builder = ParaBuilder(self.settings, box)
         yield builder
         mapper, lines = builder.build()

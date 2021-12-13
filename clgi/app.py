@@ -35,31 +35,35 @@ class Multiple(Response):
         self.original = original
         self.extra = extra
 
-    def render(self, width, height):
-        mapping1, lines1 = self.original.render(width, height)
-        mapping2, lines2 = self.extra.render(width, height)
+    def render(self, width, height, encoding):
+        mapping1, lines1 = self.original.render(width, height, encoding)
+        mapping2, lines2 = self.extra.render(width, height, encoding)
         return {}, lines1 + [""] + lines2
 
 class Plaintext(Response):
     def __init__(self, lines):
         self.lines = lines
-    def render(self, width, height):
+    def render(self, width, height, encoding):
         if isinstance(self.lines, str):
+            if encoding is not None: 
+                return [], [line.encode(encoding) for line in self.lines.encode(encoding, 'replace').decode()]
             return [], self.lines.splitlines()
+        if encoding is not None:
+            return [], [line.encode(encoding, 'replace').decode() for line in self.lines]
         return [], self.lines
 
 class Document(Response):
     def __init__(self, obj, args):
         self.obj = obj
         self.args = args
-    def render(self, width, height):
+    def render(self, width, height, encoding):
         settings = {'width': width, 'height': height}
         settings.update(self.args)
         if 'width' in self.args:
             indent = max(width-settings['width'],0)//2
-            box = RenderBox(indent, settings['width'], settings['height'])
+            box = RenderBox(indent, settings['width'], settings['height'], encoding)
         else:
-            box = RenderBox.max_width(0, width, height, 90)
+            box = RenderBox.max_width(0, width, height, 90, encoding)
         return to_ansi(self.obj, box, settings)
 
 # Errors

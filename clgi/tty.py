@@ -18,7 +18,7 @@ def main(name, argv=None, env=None):
 
 
     class Box:
-        def render(self, width, height):
+        def render(self, width, height, encoding):
             width = width-5 or 80
             height = height*2 or 24
             output = ["     +"+("-"*(width-10))+"+"]
@@ -40,6 +40,7 @@ class Console:
         self.stdin = stdin
         self.stdout = stdout
         self.stderr = stderr
+        self.encoding = None if stdout.encoding == 'UTF-8' else stdout.encoding
         self.buf = ""
 
     def print(self,  *args, end="\r\n",**kwargs):
@@ -54,7 +55,7 @@ class Console:
         self.height, self.width, height_px, width_px = struct.unpack('HHHH', t)
 
     def render(self, obj, reason=None):
-        lines = obj.render(width=self.width, height=self.height)
+        lines = obj.render(width=self.width, height=self.height, encoding=self.encoding)
         out = "\r\n".join(lines)
         if reason == "scroll":
             self.stdout.write("\x1b[H\x1b[J")
@@ -231,7 +232,7 @@ class LineConsole(Console):
         self.width, self.height = shutil.get_terminal_size((self.width, self.height))
 
     def render(self, obj):
-        lines = obj.render(self.width, self.height)
+        lines = obj.render(self.width, self.height, encoding=self.encoding)
         out = "\n".join(lines)
         self.stdout.write(out)
         if not out.endswith("\n"):
@@ -332,14 +333,14 @@ class Viewport:
         self.line = line
         self.col = 0
 
-    def render(self, width, height):
+    def render(self, width, height, encoding=None):
         if self.width != width or self.height != height:
             self.width, self.height = width, height
             if self.mapping:
                 position = self.mapping.index_of(self.line)
             else:
                 position = None
-            self.mapping, self.buf = self.obj.render(width=self.width, height=self.height)
+            self.mapping, self.buf = self.obj.render(width=self.width, height=self.height, encoding=None)
             if position is not None and self.mapping:
                 self.line = self.mapping.line_of(position)
             self.line = min(self.line, len(self.buf))
@@ -420,8 +421,8 @@ class NoViewport:
     def __init__(self, obj, line=0):
         self.obj = obj
 
-    def render(self, width, height):
-        mapping, buf = self.obj.render(width=width, height=height)
+    def render(self, width, height, encoding):
+        mapping, buf = self.obj.render(width=width, height=height, encoding=encoding)
         return buf
 
 
