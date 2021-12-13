@@ -80,16 +80,23 @@ class Console:
             for col, char in enumerate(line, 1):
                 if char == ' ': continue
                 new_lines.append(f"\x1b[{row};{col}H{char}")
-                flash.append(f"\x1b[{row};{col}H.")
-                if reason == "scroll":
-                    flash.append(f"\x1b[{row};{col}Ht")
-                    flash.append(f"\x1b[{row};{col}HA")
-                    flash.append(f"\x1b[{row};{col}Hg")
-                    flash.append(f"\x1b[{row};{col}HC")
-                    flash.append(f"\x1b[{row};{col}H%")
-                    flash.append(f"\x1b[{row};{col}H@")
+                if hacker == 1:
+                    flash.append(f"\x1b[{row};{col}H.")
+                    if reason == "scroll":
+                        flash.append(f"\x1b[{row};{col}Ht")
+                        flash.append(f"\x1b[{row};{col}HA")
+                        flash.append(f"\x1b[{row};{col}Hg")
+                        flash.append(f"\x1b[{row};{col}HC")
+                        flash.append(f"\x1b[{row};{col}H%")
+                        flash.append(f"\x1b[{row};{col}H@")
+                    else:
+                        flash.append(f"\x1b[{row};{col}H ")
                 else:
-                    flash.append(f"\x1b[{row};{col}H ")
+                    for _ in range(hacker):
+                        flash.append(f"\x1b[{row};{col}H+")
+                        flash.append(f"\x1b[{row};{col}HX")
+                        flash.append(f"\x1b[{row};{col}H ")
+                    
 
 
         random.shuffle(flash)
@@ -497,7 +504,7 @@ def pager(obj, *, use_tty=True, hacker=None):
                                 else:
                                     console.bell()
                             else:
-                                console.print("\r", e.name, repr(e.value), end="")
+                                # console.print("\r", e.name, repr(e.value), end="")
                                 console.flush()
                                 
                                 
