@@ -15,7 +15,7 @@ def walk(node, indent="- "):
 #   
 
 class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["\n"], tabstop=4):
-    version = 0.29
+    version = 0.30
     @rule(start="document")
     def document(self):
         with self.optional():
@@ -41,6 +41,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                     with self.repeat(min=1):
                         self.range("a-z", "A-Z")
                     self.literal(":")
+                with self.repeat():
                     self.range("\n", invert=True)
                 self.newline()
         self.literal("...", "---")
@@ -1600,7 +1601,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
         self.whitespace(max=3)
         with self.choice():
             with self.case():
-                self.literal("<script", "<pre", "<style", transform="lower")
+                self.literal("<script", "<pre", "<style", "<textarea", transform="lower")
             with self.case():
                 self.literal("<?", "<![CDATA[")
             with self.case():
@@ -1633,7 +1634,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                         self.range("\n", invert=True)
                 with self.capture_node('raw'): self.literal("?>")
             with self.case():
-                with self.capture_node('raw'):
+                with self.capture_node('html_comment'):
                     self.literal("<!--")
                     with self.repeat():
                         with self.reject():
@@ -1781,7 +1782,7 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
         with self.capture_node('html_block'):
             with self.capture_node('raw'):
                 self.whitespace(max=3)
-                self.literal("<script", "<pre", "<style", transform="lower")
+                self.literal("<script", "<pre", "<style", "<textarea", transform="lower")
                 with self.lookahead(), self.choice():
                     with self.case(): self.whitespace(min=1)
                     with self.case(): self.literal(">")

@@ -465,6 +465,8 @@ def commonmark_builder(buf, node, children):
         return buf[node.start:node.end]
     if kind == "raw":
         return buf[node.start:node.end]
+    if kind == "html_comment":
+        return ""
     if kind == "whitespace":
         if node.end == node.start:
             return None
@@ -474,6 +476,9 @@ def commonmark_builder(buf, node, children):
 
     if kind == "softbreak":
         return dom.Softbreak([], [buf[node.start:node.end]])
+    if kind == "hardbreak":
+        return dom.Hardbreak([], [buf[node.start:node.end]])
+
 
     if kind in ('empty', 'empty_line',):
         return None
@@ -539,7 +544,7 @@ def commonmark_builder(buf, node, children):
 
     if kind == 'html_block':
         args = [('language', 'html')]
-        return dom.RawBlock(args, children)
+        return dom.RawBlock(args, buf[node.start:node.end])
 
     if kind == 'link_def' or kind == 'link_name':
         return None # todo

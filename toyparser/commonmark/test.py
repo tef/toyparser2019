@@ -16,7 +16,7 @@ def test_spec():
     import json
     import os.path
 
-    with open(sibling(__file__, "commonmark_0_29.json")) as fh:
+    with open(sibling(__file__, "commonmark_0_30.json")) as fh:
         tests = json.load(fh)
 
     failed = 0
@@ -49,7 +49,7 @@ if __name__ == "__main__":
     import time 
     test_spec()
 
-    with open(sibling(__file__, "syntax.md")) as readme:
+    with open(sibling(__file__, "spec.txt")) as readme:
         test_case = readme.read()
 
     t = time.time()
@@ -60,12 +60,14 @@ if __name__ == "__main__":
 
     print(t, t/times)
 
+    """
     from .CommonMarkParser import Parser
     t = time.time()
     for i in range(times):
         out = parse(test_case, parser=Parser()).build(test_case,builder)
     t = time.time() -t 
     print(t, t/times)
+    """
 
     import commonmark
 
