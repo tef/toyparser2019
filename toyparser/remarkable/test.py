@@ -1,14 +1,15 @@
 import base64, codecs
 from datetime import datetime, timedelta, timezone
 
-from ..grammar import Grammar, compile_python
+from ..grammar import Grammar, compile_python, sibling
 from .RemarkableParser import Parser as RemarkableParser
-from .Remarkable import Remarkable, builder, __doc__ as Readme
-from remarkable.render import to_ansi, RenderBox
+from .Remarkable import Remarkable
+from remarkable.parser import builder
+from remarkable.render_ansi import to_ansi, RenderBox
 
 def to_text(t):
     settings = {'width':80, 'height':24}
-    box = RenderBox(0, 80, 24)
+    box = RenderBox(0, 80, 24, encoding=None)
 
     return to_ansi(t, box, settings)
 
@@ -225,6 +226,9 @@ foo
         print()
 
     print()
+
+    with open(sibling(__file__, "../../README.remark")) as readme:
+        Readme = readme.read()
 
     out = python_parser.parse(Readme).build(Readme, builder)
     import pprint

@@ -33,10 +33,14 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
         self.literal("---")
         self.newline()
         with self.capture_node('yaml_metadata_block'):
-            with self.repeat():
+            with self.repeat(min=1):
                 with self.reject():
                     self.literal("...", "---")
                 with self.repeat():
+                    self.whitespace()
+                    with self.repeat(min=1):
+                        self.range("a-z", "A-Z")
+                    self.literal(":")
                     self.range("\n", invert=True)
                 self.newline()
         self.literal("...", "---")
@@ -2344,6 +2348,10 @@ def wrap_tight(list_items, out):
 
 builder = {}
 _builder = lambda fn:builder.__setitem__(fn.__name__,fn)
+
+@_builder
+def yaml_metadata_block(buf, node, children):
+    return ""
 
 @_builder
 def document(buf, node, children):

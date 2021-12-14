@@ -850,6 +850,10 @@ class ParaBuilder:
         self.current_word.extend([':', name, ':'])
         self.add_wordbreak()
 
+    @contextmanager
+    def build_span(self):
+        self.add_wordbreak()
+        yield self
 
     @contextmanager
     def effect(self, name):
