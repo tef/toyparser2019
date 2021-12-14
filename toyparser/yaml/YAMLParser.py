@@ -17,16 +17,16 @@ class Node:
         if self.name == "value": return self.value
         return builder[self.name](buf, self, children)
 
-regex_0 = re.compile(r'(?:[a-zA-Z_])+')
-regex_1 = re.compile(r'(?:[\-\+])?')
-regex_2 = re.compile(r'(?:[0-9])+')
-regex_3 = re.compile(r'(?:(?:\.)(?:[0-9])*)?')
-regex_4 = re.compile(r'(?:(?:e|E)(?:(?:\+|\-)(?:[0-9])*)?)?')
-regex_5 = re.compile(r'(?:(?:(?:(?:\\u)[0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F])|(?:(?:\\)[\"\\\/bfnrt])|(?:[^\\\"])))*')
-regex_6 = re.compile(r'(?:[^\n])*')
+regex_0 = re.compile(r'''(?:[a-zA-Z_])+''')
+regex_1 = re.compile(r'''(?:[\-\+])?''')
+regex_2 = re.compile(r'''(?:[0-9])+''')
+regex_3 = re.compile(r'''(?:(?:\.)(?:[0-9])*)?''')
+regex_4 = re.compile(r'''(?:(?:e|E)(?:(?:\+|\-)(?:[0-9])*)?)?''')
+regex_5 = re.compile(r'''(?:(?:(?:(?:\\u)[0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F])|(?:(?:\\)["\\/bfnrt])|(?:[^\\"])))*''')
+regex_6 = re.compile(r'''(?:[^\n])*''')
 
 class Parser:
-    def __init__(self, tabstop=None, allow_mixed_indent=False):
+    def __init__(self, tabstop=None, allow_mixed_indent=True):
          self.tabstop = tabstop or 8
          self.cache = None
          self.allow_mixed_indent = allow_mixed_indent
@@ -38,10 +38,10 @@ class Parser:
         column, indent_column = 0, [0]
         prefix, children = [], []
         new_offset, column, partial_tab_offset, partial_tab_width = self.parse_document(buf, start, end, offset, column, indent_column, prefix, children, 0, 0)
-        if children and new_offset == end:
+        if new_offset == end:
              if builder is None: return Node('document', offset, new_offset, 0, column, children, None)
              return children[-1].build(buf, builder)
-        print('no', offset, new_offset, end, buf[new_offset:])
+        # print('no', children, offset, new_offset, end)
         if err is not None: raise err(buf, new_offset, 'no')
 
     def parse_yaml_literal(self, buf, buf_start, buf_eof, offset_0, column_0, indent_column_0, prefix_0, children_0, partial_tab_offset_0, partial_tab_width_0):
@@ -475,7 +475,7 @@ class Parser:
                         if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                             width = partial_tab_width_0
                         else:
-                            width  = (self.tabstop-(column_0%self.tabstop))
+                            width  = (self.tabstop-((column_0)%self.tabstop));
                         count_0 += width
                         column_0 += width
                         offset_0 += 1
@@ -498,6 +498,7 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
+                        #print('entry rep rule', offset_0, offset_1)
                         offset_1, column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_yaml_literal(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                         if offset_1 == -1: break
 
@@ -511,6 +512,7 @@ class Parser:
                             partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True:
+                                #print('entry rep rule', offset_1, offset_2)
                                 count_2 = 0
                                 while offset_2 < buf_eof:
                                     codepoint = buf[offset_2]
@@ -528,7 +530,7 @@ class Parser:
                                             if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                             count_2 += width
                                             column_2 += width
                                             offset_2 += 1
@@ -563,7 +565,7 @@ class Parser:
                                             if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                             count_2 += width
                                             column_2 += width
                                             offset_2 += 1
@@ -578,7 +580,9 @@ class Parser:
                                 if offset_2 == -1: break
 
 
+                                #print('safe exit rep rule', offset_1, offset_2)
                                 break
+                            #print('exit rep rule', offset_1, offset_2)
                             if offset_2 == -1:
                                 break
                             if offset_1 == offset_2: break
@@ -592,6 +596,7 @@ class Parser:
                             count_1 += 1
                         if offset_1 == -1:
                             break
+                        value_2 = count_1
 
                         count_1 = 0
                         while offset_1 < buf_eof:
@@ -610,7 +615,7 @@ class Parser:
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
-                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                        width  = (self.tabstop-((column_1)%self.tabstop));
                                     count_1 += width
                                     column_1 += width
                                     offset_1 += 1
@@ -630,6 +635,7 @@ class Parser:
                             partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True:
+                                #print('entry rep rule', offset_1, offset_2)
                                 if buf[offset_2:offset_2+1] == ',':
                                     offset_2 += 1
                                     column_2 += 1
@@ -654,7 +660,7 @@ class Parser:
                                             if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                             count_2 += width
                                             column_2 += width
                                             offset_2 += 1
@@ -665,7 +671,9 @@ class Parser:
                                     else:
                                         break
 
+                                #print('safe exit rep rule', offset_1, offset_2)
                                 break
+                            #print('exit rep rule', offset_1, offset_2)
                             if offset_2 == -1:
                                 break
                             if offset_1 == offset_2: break
@@ -680,8 +688,11 @@ class Parser:
                             break
                         if offset_1 == -1:
                             break
+                        value_3 = count_1
 
+                        #print('safe exit rep rule', offset_0, offset_1)
                         break
+                    #print('exit rep rule', offset_0, offset_1)
                     if offset_1 == -1:
                         break
                     if offset_0 == offset_1: break
@@ -696,6 +707,7 @@ class Parser:
                     break
                 if offset_0 == -1:
                     break
+                value_1 = count_0
 
                 break
             if offset_0 == -1:
@@ -743,7 +755,7 @@ class Parser:
                         if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                             width = partial_tab_width_0
                         else:
-                            width  = (self.tabstop-(column_0%self.tabstop))
+                            width  = (self.tabstop-((column_0)%self.tabstop));
                         count_0 += width
                         column_0 += width
                         offset_0 += 1
@@ -766,6 +778,7 @@ class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
+                        #print('entry rep rule', offset_0, offset_1)
                         offset_1, column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_string_literal(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                         if offset_1 == -1: break
 
@@ -778,7 +791,7 @@ class Parser:
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
-                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                        width  = (self.tabstop-((column_1)%self.tabstop));
                                     count_1 += width
                                     column_1 += width
                                     offset_1 += 1
@@ -813,7 +826,7 @@ class Parser:
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
-                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                        width  = (self.tabstop-((column_1)%self.tabstop));
                                     count_1 += width
                                     column_1 += width
                                     offset_1 += 1
@@ -837,6 +850,7 @@ class Parser:
                             partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True:
+                                #print('entry rep rule', offset_1, offset_2)
                                 count_2 = 0
                                 while offset_2 < buf_eof:
                                     codepoint = buf[offset_2]
@@ -854,7 +868,7 @@ class Parser:
                                             if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                             count_2 += width
                                             column_2 += width
                                             offset_2 += 1
@@ -889,7 +903,7 @@ class Parser:
                                             if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                             count_2 += width
                                             column_2 += width
                                             offset_2 += 1
@@ -912,7 +926,7 @@ class Parser:
                                             if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                             count_2 += width
                                             column_2 += width
                                             offset_2 += 1
@@ -947,7 +961,7 @@ class Parser:
                                             if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                             count_2 += width
                                             column_2 += width
                                             offset_2 += 1
@@ -962,7 +976,9 @@ class Parser:
                                 if offset_2 == -1: break
 
 
+                                #print('safe exit rep rule', offset_1, offset_2)
                                 break
+                            #print('exit rep rule', offset_1, offset_2)
                             if offset_2 == -1:
                                 break
                             if offset_1 == offset_2: break
@@ -976,6 +992,7 @@ class Parser:
                             count_1 += 1
                         if offset_1 == -1:
                             break
+                        value_2 = count_1
 
                         count_1 = 0
                         while offset_1 < buf_eof:
@@ -994,7 +1011,7 @@ class Parser:
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
-                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                        width  = (self.tabstop-((column_1)%self.tabstop));
                                     count_1 += width
                                     column_1 += width
                                     offset_1 += 1
@@ -1014,6 +1031,7 @@ class Parser:
                             partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True:
+                                #print('entry rep rule', offset_1, offset_2)
                                 if buf[offset_2:offset_2+1] == ',':
                                     offset_2 += 1
                                     column_2 += 1
@@ -1038,7 +1056,7 @@ class Parser:
                                             if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                             count_2 += width
                                             column_2 += width
                                             offset_2 += 1
@@ -1049,7 +1067,9 @@ class Parser:
                                     else:
                                         break
 
+                                #print('safe exit rep rule', offset_1, offset_2)
                                 break
+                            #print('exit rep rule', offset_1, offset_2)
                             if offset_2 == -1:
                                 break
                             if offset_1 == offset_2: break
@@ -1064,8 +1084,11 @@ class Parser:
                             break
                         if offset_1 == -1:
                             break
+                        value_3 = count_1
 
+                        #print('safe exit rep rule', offset_0, offset_1)
                         break
+                    #print('exit rep rule', offset_0, offset_1)
                     if offset_1 == -1:
                         break
                     if offset_0 == offset_1: break
@@ -1080,6 +1103,7 @@ class Parser:
                     break
                 if offset_0 == -1:
                     break
+                value_1 = count_0
 
                 break
             if offset_0 == -1:
@@ -1112,6 +1136,7 @@ class Parser:
                 partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True:
+                    #print('entry rep rule', offset_0, offset_1)
                     while True: # start choice
                         offset_2 = offset_1
                         column_2 = column_1
@@ -1128,7 +1153,7 @@ class Parser:
                                         if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                             width = partial_tab_width_2
                                         else:
-                                            width  = (self.tabstop-(column_2%self.tabstop))
+                                            width  = (self.tabstop-((column_2)%self.tabstop));
                                         count_1 += width
                                         column_2 += width
                                         offset_2 += 1
@@ -1183,7 +1208,7 @@ class Parser:
                                         if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                             width = partial_tab_width_2
                                         else:
-                                            width  = (self.tabstop-(column_2%self.tabstop))
+                                            width  = (self.tabstop-((column_2)%self.tabstop));
                                         count_1 += width
                                         column_2 += width
                                         offset_2 += 1
@@ -1244,7 +1269,9 @@ class Parser:
                     if offset_1 == -1:
                         break
 
+                    #print('safe exit rep rule', offset_0, offset_1)
                     break
+                #print('exit rep rule', offset_0, offset_1)
                 if offset_1 == -1:
                     break
                 if offset_0 == offset_1: break
@@ -1258,6 +1285,7 @@ class Parser:
                 count_0 += 1
             if offset_0 == -1:
                 break
+            value_0 = count_0
 
             break
         return offset_0, column_0, partial_tab_offset_0, partial_tab_width_0
@@ -1269,14 +1297,15 @@ class Parser:
             def _indent(buf, buf_start, buf_eof, offset, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
                 saw_tab, saw_not_tab = False, False
                 start_column, start_offset = column, offset
+                if count < 0: offset = -1
                 while count > 0 and offset < buf_eof:
-                    codepoint = buf[offset]
+                    codepoint = buf[offset];
                     if codepoint in ' \t':
                         if not allow_mixed_indent:
                             if codepoint == '\t': saw_tab = True
                             else: saw_not_tab = True
                             if saw_tab and saw_not_tab:
-                                 offset -1; break
+                                 offset = -1; break
                         if codepoint != '\t':
                             column += 1
                             offset += 1
@@ -1285,15 +1314,16 @@ class Parser:
                             if offset == partial_tab_offset and partial_tab_width > 0:
                                 width = partial_tab_width
                             else:
-                                width  = (self.tabstop-(column%self.tabstop))
+                                width  = (self.tabstop-((column)%self.tabstop));
                             if width <= count:
                                 column += width
                                 offset += 1
                                 count -= width
                             else:
-                                column += count
                                 partial_tab_offset = offset
                                 partial_tab_width = width-count
+                                column += count
+                                count -= width
                                 break
                     elif codepoint == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
                         break
@@ -1303,42 +1333,7 @@ class Parser:
                         offset = -1
                         break
                 return offset, column, partial_tab_offset, partial_tab_width
-            def _dedent(buf, buf_start, buf_eof, offset, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
-                saw_tab, saw_not_tab = False, False
-                start_column, start_offset = column, offset
-                while count > 0 and offset < buf_eof:
-                    codepoint = buf[offset]
-                    if codepoint in ' \t':
-                        if not allow_mixed_indent:
-                            if codepoint == '\t': saw_tab = True
-                            else: saw_not_tab = True
-                            if saw_tab and saw_not_tab:
-                                offset = start_offset; break
-                        if codepoint != '\t':
-                            column += 1
-                            offset += 1
-                            count -=1
-                        else:
-                            if offset == partial_tab_offset and partial_tab_width > 0:
-                                width = partial_tab_width
-                            else:
-                                width  = (self.tabstop-(column%self.tabstop))
-                            if width <= count:
-                                column += width
-                                offset += 1
-                                count -= width
-                            else: # we have indent, so break
-                                offset = -1; break
-                    elif codepoint == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
-                        offset = -1; break
-                    elif codepoint in '\n\r':
-                        offset = -1; break
-                    else:
-                        offset = start_offset
-                if count == 0:
-                        offset = -1
-                return offset, column, partial_tab_offset, partial_tab_width
-            prefix_0.append((_indent, _dedent))
+            prefix_0.append((_indent, None))
             indent_column_0.append(column_0)
             while True:
                 children_1 = []
@@ -1367,7 +1362,7 @@ class Parser:
                                         if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
-                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                            width  = (self.tabstop-((column_1)%self.tabstop));
                                         count_0 += width
                                         column_1 += width
                                         offset_1 += 1
@@ -1432,7 +1427,7 @@ class Parser:
                                         if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
-                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                            width  = (self.tabstop-((column_1)%self.tabstop));
                                         count_0 += width
                                         column_1 += width
                                         offset_1 += 1
@@ -1476,6 +1471,7 @@ class Parser:
                         partial_tab_width_1 = partial_tab_width_0
                         children_2 = [] if children_1 is not None else None
                         while True:
+                            #print('entry rep rule', offset_0, offset_1)
                             offset_1, column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_yaml_eol(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                             if offset_1 == -1: break
 
@@ -1514,7 +1510,7 @@ class Parser:
                                         if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
-                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                            width  = (self.tabstop-((column_1)%self.tabstop));
                                         count_1 += width
                                         column_1 += width
                                         offset_1 += 1
@@ -1544,7 +1540,7 @@ class Parser:
                                                 if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
-                                                    width  = (self.tabstop-(column_2%self.tabstop))
+                                                    width  = (self.tabstop-((column_2)%self.tabstop));
                                                 count_1 += width
                                                 column_2 += width
                                                 offset_2 += 1
@@ -1609,7 +1605,7 @@ class Parser:
                                                 if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
-                                                    width  = (self.tabstop-(column_2%self.tabstop))
+                                                    width  = (self.tabstop-((column_2)%self.tabstop));
                                                 count_1 += width
                                                 column_2 += width
                                                 offset_2 += 1
@@ -1641,7 +1637,9 @@ class Parser:
                             if offset_1 == -1:
                                 break
 
+                            #print('safe exit rep rule', offset_0, offset_1)
                             break
+                        #print('exit rep rule', offset_0, offset_1)
                         if offset_1 == -1:
                             break
                         if offset_0 == offset_1: break
@@ -1655,6 +1653,7 @@ class Parser:
                         count_0 += 1
                     if offset_0 == -1:
                         break
+                    value_1 = count_0
 
                     break
                 if offset_0 == -1:
@@ -1680,14 +1679,15 @@ class Parser:
             def _indent(buf, buf_start, buf_eof, offset, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
                 saw_tab, saw_not_tab = False, False
                 start_column, start_offset = column, offset
+                if count < 0: offset = -1
                 while count > 0 and offset < buf_eof:
-                    codepoint = buf[offset]
+                    codepoint = buf[offset];
                     if codepoint in ' \t':
                         if not allow_mixed_indent:
                             if codepoint == '\t': saw_tab = True
                             else: saw_not_tab = True
                             if saw_tab and saw_not_tab:
-                                 offset -1; break
+                                 offset = -1; break
                         if codepoint != '\t':
                             column += 1
                             offset += 1
@@ -1696,15 +1696,16 @@ class Parser:
                             if offset == partial_tab_offset and partial_tab_width > 0:
                                 width = partial_tab_width
                             else:
-                                width  = (self.tabstop-(column%self.tabstop))
+                                width  = (self.tabstop-((column)%self.tabstop));
                             if width <= count:
                                 column += width
                                 offset += 1
                                 count -= width
                             else:
-                                column += count
                                 partial_tab_offset = offset
                                 partial_tab_width = width-count
+                                column += count
+                                count -= width
                                 break
                     elif codepoint == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
                         break
@@ -1714,42 +1715,7 @@ class Parser:
                         offset = -1
                         break
                 return offset, column, partial_tab_offset, partial_tab_width
-            def _dedent(buf, buf_start, buf_eof, offset, column, indent_column,  prefix,  children, partial_tab_offset, partial_tab_width, count=count_0, allow_mixed_indent=self.allow_mixed_indent):
-                saw_tab, saw_not_tab = False, False
-                start_column, start_offset = column, offset
-                while count > 0 and offset < buf_eof:
-                    codepoint = buf[offset]
-                    if codepoint in ' \t':
-                        if not allow_mixed_indent:
-                            if codepoint == '\t': saw_tab = True
-                            else: saw_not_tab = True
-                            if saw_tab and saw_not_tab:
-                                offset = start_offset; break
-                        if codepoint != '\t':
-                            column += 1
-                            offset += 1
-                            count -=1
-                        else:
-                            if offset == partial_tab_offset and partial_tab_width > 0:
-                                width = partial_tab_width
-                            else:
-                                width  = (self.tabstop-(column%self.tabstop))
-                            if width <= count:
-                                column += width
-                                offset += 1
-                                count -= width
-                            else: # we have indent, so break
-                                offset = -1; break
-                    elif codepoint == '\r' and offset_0 + 1 < buf_eof and buf[offset_0+1] == '\n':
-                        offset = -1; break
-                    elif codepoint in '\n\r':
-                        offset = -1; break
-                    else:
-                        offset = start_offset
-                if count == 0:
-                        offset = -1
-                return offset, column, partial_tab_offset, partial_tab_width
-            prefix_0.append((_indent, _dedent))
+            prefix_0.append((_indent, None))
             indent_column_0.append(column_0)
             while True:
                 children_1 = []
@@ -1770,7 +1736,7 @@ class Parser:
                                     if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                                         width = partial_tab_width_0
                                     else:
-                                        width  = (self.tabstop-(column_0%self.tabstop))
+                                        width  = (self.tabstop-((column_0)%self.tabstop));
                                     count_0 += width
                                     column_0 += width
                                     offset_0 += 1
@@ -1827,7 +1793,7 @@ class Parser:
                                             if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                                 width = partial_tab_width_1
                                             else:
-                                                width  = (self.tabstop-(column_1%self.tabstop))
+                                                width  = (self.tabstop-((column_1)%self.tabstop));
                                             count_0 += width
                                             column_1 += width
                                             offset_1 += 1
@@ -1872,7 +1838,7 @@ class Parser:
                                             if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                                 width = partial_tab_width_1
                                             else:
-                                                width  = (self.tabstop-(column_1%self.tabstop))
+                                                width  = (self.tabstop-((column_1)%self.tabstop));
                                             count_0 += width
                                             column_1 += width
                                             offset_1 += 1
@@ -1922,8 +1888,9 @@ class Parser:
                         partial_tab_width_1 = partial_tab_width_0
                         children_2 = [] if children_1 is not None else None
                         while True:
+                            #print('entry rep rule', offset_0, offset_1)
                             children_3 = []
-                            value_2 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
+                            value_3 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                             while True: # start capture
                                 offset_1, column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_yaml_eol(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_3, partial_tab_offset_1, partial_tab_width_1)
                                 if offset_1 == -1: break
@@ -1960,7 +1927,7 @@ class Parser:
                                             if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                                 width = partial_tab_width_1
                                             else:
-                                                width  = (self.tabstop-(column_1%self.tabstop))
+                                                width  = (self.tabstop-((column_1)%self.tabstop));
                                             count_1 += width
                                             column_1 += width
                                             offset_1 += 1
@@ -1996,7 +1963,7 @@ class Parser:
                                                     if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                         width = partial_tab_width_2
                                                     else:
-                                                        width  = (self.tabstop-(column_2%self.tabstop))
+                                                        width  = (self.tabstop-((column_2)%self.tabstop));
                                                     count_1 += width
                                                     column_2 += width
                                                     offset_2 += 1
@@ -2061,7 +2028,7 @@ class Parser:
                                                     if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                         width = partial_tab_width_2
                                                     else:
-                                                        width  = (self.tabstop-(column_2%self.tabstop))
+                                                        width  = (self.tabstop-((column_2)%self.tabstop));
                                                     count_1 += width
                                                     column_2 += width
                                                     offset_2 += 1
@@ -2099,13 +2066,15 @@ class Parser:
                                 break
                             if offset_1 == -1:
                                 break
-                            value_2.name = 'pair'
-                            value_2.end = offset_1
-                            value_2.end_column = column_1
-                            value_2.value = None
-                            children_2.append(value_2)
+                            value_3.name = 'pair'
+                            value_3.end = offset_1
+                            value_3.end_column = column_1
+                            value_3.value = None
+                            children_2.append(value_3)
 
+                            #print('safe exit rep rule', offset_0, offset_1)
                             break
+                        #print('exit rep rule', offset_0, offset_1)
                         if offset_1 == -1:
                             break
                         if offset_0 == offset_1: break
@@ -2119,6 +2088,7 @@ class Parser:
                         count_0 += 1
                     if offset_0 == -1:
                         break
+                    value_2 = count_0
 
                     break
                 if offset_0 == -1:
@@ -2228,6 +2198,7 @@ class Parser:
                 partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True:
+                    #print('entry rep rule', offset_0, offset_1)
                     count_1 = 0
                     while offset_1 < buf_eof:
                         codepoint = buf[offset_1]
@@ -2236,7 +2207,7 @@ class Parser:
                                 if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                     width = partial_tab_width_1
                                 else:
-                                    width  = (self.tabstop-(column_1%self.tabstop))
+                                    width  = (self.tabstop-((column_1)%self.tabstop));
                                 count_1 += width
                                 column_1 += width
                                 offset_1 += 1
@@ -2251,7 +2222,9 @@ class Parser:
                     if offset_1 == -1: break
 
 
+                    #print('safe exit rep rule', offset_0, offset_1)
                     break
+                #print('exit rep rule', offset_0, offset_1)
                 if offset_1 == -1:
                     break
                 if offset_0 == offset_1: break
@@ -2265,6 +2238,7 @@ class Parser:
                 count_0 += 1
             if offset_0 == -1:
                 break
+            value_0 = count_0
 
             while True: # start choice
                 offset_1 = offset_0
@@ -2372,7 +2346,7 @@ class Parser:
                         if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                             width = partial_tab_width_0
                         else:
-                            width  = (self.tabstop-(column_0%self.tabstop))
+                            width  = (self.tabstop-((column_0)%self.tabstop));
                         count_0 += width
                         column_0 += width
                         offset_0 += 1
@@ -2392,6 +2366,7 @@ class Parser:
                 partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True:
+                    #print('entry rep rule', offset_0, offset_1)
                     offset_1, column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_yaml_eol(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_1, partial_tab_offset_1, partial_tab_width_1)
                     if offset_1 == -1: break
 
@@ -2404,7 +2379,7 @@ class Parser:
                                 if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                     width = partial_tab_width_1
                                 else:
-                                    width  = (self.tabstop-(column_1%self.tabstop))
+                                    width  = (self.tabstop-((column_1)%self.tabstop));
                                 count_1 += width
                                 column_1 += width
                                 offset_1 += 1
@@ -2415,7 +2390,9 @@ class Parser:
                         else:
                             break
 
+                    #print('safe exit rep rule', offset_0, offset_1)
                     break
+                #print('exit rep rule', offset_0, offset_1)
                 if offset_1 == -1:
                     break
                 if offset_0 == offset_1: break
@@ -2429,6 +2406,7 @@ class Parser:
                 count_0 += 1
             if offset_0 == -1:
                 break
+            value_1 = count_0
 
             count_0 = 0
             while True:
@@ -2439,6 +2417,7 @@ class Parser:
                 partial_tab_width_1 = partial_tab_width_0
                 children_1 = [] if children_0 is not None else None
                 while True:
+                    #print('entry rep rule', offset_0, offset_1)
                     if offset_1 < buf_eof:
                         codepoint = buf[offset_1]
                         if codepoint == '\r' and offset_1 + 1 < buf_eof and buf[offset_1+1] == '\n':
@@ -2461,7 +2440,7 @@ class Parser:
                                 if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                     width = partial_tab_width_1
                                 else:
-                                    width  = (self.tabstop-(column_1%self.tabstop))
+                                    width  = (self.tabstop-((column_1)%self.tabstop));
                                 count_1 += width
                                 column_1 += width
                                 offset_1 += 1
@@ -2472,7 +2451,9 @@ class Parser:
                         else:
                             break
 
+                    #print('safe exit rep rule', offset_0, offset_1)
                     break
+                #print('exit rep rule', offset_0, offset_1)
                 if offset_1 == -1:
                     break
                 if offset_0 == offset_1: break
@@ -2486,6 +2467,7 @@ class Parser:
                 count_0 += 1
             if offset_0 == -1:
                 break
+            value_2 = count_0
 
 
             break

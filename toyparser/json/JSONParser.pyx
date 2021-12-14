@@ -35,10 +35,10 @@ cdef class Parser:
         column, indent_column = 0, [0]
         prefix, children = [], []
         new_offset, column, partial_tab_offset, partial_tab_width = self.parse_document(buf, start, end, offset, column, indent_column, prefix, children, 0, 0)
-        if children and new_offset == end:
+        if new_offset == end:
              if builder is None: return Node('document', offset, new_offset, 0, column, children, None)
              return children[-1].build(buf, builder)
-        print('no', offset, new_offset, end, buf[new_offset:])
+        # print('no', children, offset, new_offset, end)
         if err is not None: raise err(buf, new_offset, 'no')
 
     cdef (int, int, int, int) parse_document(self, str buf, int buf_start, int buf_eof, int offset_0,  int column_0, list indent_column_0,  list prefix_0, list children_0, int partial_tab_offset_0, int partial_tab_width_0):
@@ -60,7 +60,7 @@ cdef class Parser:
                         if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                             width = partial_tab_width_0
                         else:
-                            width  = (self.tabstop-(column_0%self.tabstop))
+                            width  = (self.tabstop-((column_0)%self.tabstop));
                         count_0 += width
                         column_0 += width
                         offset_0 += 1
@@ -234,6 +234,7 @@ cdef class Parser:
                             partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True:
+                                #print('entry rep rule', offset_1, offset_2)
                                 while True: # start choice
                                     offset_3 = offset_2
                                     column_3 = column_2
@@ -437,7 +438,9 @@ cdef class Parser:
                                 if offset_2 == -1:
                                     break
 
+                                #print('safe exit rep rule', offset_1, offset_2)
                                 break
+                            #print('exit rep rule', offset_1, offset_2)
                             if offset_2 == -1:
                                 break
                             if offset_1 == offset_2: break
@@ -451,6 +454,7 @@ cdef class Parser:
                             count_0 += 1
                         if offset_1 == -1:
                             break
+                        value_1 = count_0
 
 
 
@@ -491,7 +495,7 @@ cdef class Parser:
                 children_1 = [] if children_0 is not None else None
                 while True: # case
                     children_2 = None
-                    value_1 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
+                    value_2 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
                         count_0 = 0
                         while count_0 < 1:
@@ -502,6 +506,7 @@ cdef class Parser:
                             partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True:
+                                #print('entry rep rule', offset_1, offset_2)
                                 if offset_2 + 1 <= buf_eof and buf[offset_2+0] == '-':
                                     offset_2 += 1
                                     column_2 += 1
@@ -509,7 +514,9 @@ cdef class Parser:
                                     offset_2 = -1
                                     break
 
+                                #print('safe exit rep rule', offset_1, offset_2)
                                 break
+                            #print('exit rep rule', offset_1, offset_2)
                             if offset_2 == -1:
                                 break
                             if offset_1 == offset_2: break
@@ -524,6 +531,7 @@ cdef class Parser:
                             break
                         if offset_1 == -1:
                             break
+                        value_3 = count_0
 
 
                         while True: # start choice
@@ -582,6 +590,7 @@ cdef class Parser:
                                     partial_tab_width_3 = partial_tab_width_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
+                                        #print('entry rep rule', offset_2, offset_3)
                                         if offset_3 == buf_eof:
                                             offset_3 = -1
                                             break
@@ -595,7 +604,9 @@ cdef class Parser:
                                             offset_3 = -1
                                             break
 
+                                        #print('safe exit rep rule', offset_2, offset_3)
                                         break
+                                    #print('exit rep rule', offset_2, offset_3)
                                     if offset_3 == -1:
                                         break
                                     if offset_2 == offset_3: break
@@ -609,6 +620,7 @@ cdef class Parser:
                                     count_0 += 1
                                 if offset_2 == -1:
                                     break
+                                value_4 = count_0
 
 
                                 break
@@ -637,6 +649,7 @@ cdef class Parser:
                             partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True:
+                                #print('entry rep rule', offset_1, offset_2)
                                 if offset_2 + 1 <= buf_eof and buf[offset_2+0] == '.':
                                     offset_2 += 1
                                     column_2 += 1
@@ -653,6 +666,7 @@ cdef class Parser:
                                     partial_tab_width_3 = partial_tab_width_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
+                                        #print('entry rep rule', offset_2, offset_3)
                                         if offset_3 == buf_eof:
                                             offset_3 = -1
                                             break
@@ -666,7 +680,9 @@ cdef class Parser:
                                             offset_3 = -1
                                             break
 
+                                        #print('safe exit rep rule', offset_2, offset_3)
                                         break
+                                    #print('exit rep rule', offset_2, offset_3)
                                     if offset_3 == -1:
                                         break
                                     if offset_2 == offset_3: break
@@ -680,8 +696,11 @@ cdef class Parser:
                                     count_1 += 1
                                 if offset_2 == -1:
                                     break
+                                value_6 = count_1
 
+                                #print('safe exit rep rule', offset_1, offset_2)
                                 break
+                            #print('exit rep rule', offset_1, offset_2)
                             if offset_2 == -1:
                                 break
                             if offset_1 == offset_2: break
@@ -696,6 +715,7 @@ cdef class Parser:
                             break
                         if offset_1 == -1:
                             break
+                        value_5 = count_0
 
 
                         count_0 = 0
@@ -707,6 +727,7 @@ cdef class Parser:
                             partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True:
+                                #print('entry rep rule', offset_1, offset_2)
                                 if offset_2 + 1 <= buf_eof and buf[offset_2+0] == 'e':
                                     offset_2 += 1
                                     column_2 += 1
@@ -726,6 +747,7 @@ cdef class Parser:
                                     partial_tab_width_3 = partial_tab_width_2
                                     children_4 = [] if children_3 is not None else None
                                     while True:
+                                        #print('entry rep rule', offset_2, offset_3)
                                         if offset_3 + 1 <= buf_eof and buf[offset_3+0] == '+':
                                             offset_3 += 1
                                             column_3 += 1
@@ -745,6 +767,7 @@ cdef class Parser:
                                             partial_tab_width_4 = partial_tab_width_3
                                             children_5 = [] if children_4 is not None else None
                                             while True:
+                                                #print('entry rep rule', offset_3, offset_4)
                                                 if offset_4 == buf_eof:
                                                     offset_4 = -1
                                                     break
@@ -758,7 +781,9 @@ cdef class Parser:
                                                     offset_4 = -1
                                                     break
 
+                                                #print('safe exit rep rule', offset_3, offset_4)
                                                 break
+                                            #print('exit rep rule', offset_3, offset_4)
                                             if offset_4 == -1:
                                                 break
                                             if offset_3 == offset_4: break
@@ -772,8 +797,11 @@ cdef class Parser:
                                             count_2 += 1
                                         if offset_3 == -1:
                                             break
+                                        value_9 = count_2
 
+                                        #print('safe exit rep rule', offset_2, offset_3)
                                         break
+                                    #print('exit rep rule', offset_2, offset_3)
                                     if offset_3 == -1:
                                         break
                                     if offset_2 == offset_3: break
@@ -788,8 +816,11 @@ cdef class Parser:
                                     break
                                 if offset_2 == -1:
                                     break
+                                value_8 = count_1
 
+                                #print('safe exit rep rule', offset_1, offset_2)
                                 break
+                            #print('exit rep rule', offset_1, offset_2)
                             if offset_2 == -1:
                                 break
                             if offset_1 == offset_2: break
@@ -804,50 +835,13 @@ cdef class Parser:
                             break
                         if offset_1 == -1:
                             break
+                        value_7 = count_0
 
 
                         break
                     if offset_1 == -1:
                         break
-                    value_1.name = 'number'
-                    value_1.end = offset_1
-                    value_1.end_column = column_1
-                    value_1.value = None
-                    children_1.append(value_1)
-
-
-                    break
-                if offset_1 != -1:
-                    offset_0 = offset_1
-                    column_0 = column_1
-                    indent_column_0 = indent_column_1
-                    partial_tab_offset_0 = partial_tab_offset_1
-                    partial_tab_width_0 = partial_tab_width_1
-                    if children_1 is not None and children_1 is not None:
-                        children_0.extend(children_1)
-                    break
-                # end case
-                offset_1 = offset_0
-                column_1 = column_0
-                indent_column_1 = list(indent_column_0)
-                partial_tab_offset_1 = partial_tab_offset_0
-                partial_tab_width_1 = partial_tab_width_0
-                children_1 = [] if children_0 is not None else None
-                while True: # case
-                    children_2 = None
-                    value_2 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
-                    while True: # start capture
-                        if offset_1 + 4 <= buf_eof and buf[offset_1+0] == 't' and buf[offset_1+1] == 'r' and buf[offset_1+2] == 'u' and buf[offset_1+3] == 'e':
-                            offset_1 += 4
-                            column_1 += 4
-                        else:
-                            offset_1 = -1
-                            break
-
-                        break
-                    if offset_1 == -1:
-                        break
-                    value_2.name = 'bool'
+                    value_2.name = 'number'
                     value_2.end = offset_1
                     value_2.end_column = column_1
                     value_2.value = None
@@ -873,11 +867,11 @@ cdef class Parser:
                 children_1 = [] if children_0 is not None else None
                 while True: # case
                     children_2 = None
-                    value_3 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
+                    value_10 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
-                        if offset_1 + 5 <= buf_eof and buf[offset_1+0] == 'f' and buf[offset_1+1] == 'a' and buf[offset_1+2] == 'l' and buf[offset_1+3] == 's' and buf[offset_1+4] == 'e':
-                            offset_1 += 5
-                            column_1 += 5
+                        if offset_1 + 4 <= buf_eof and buf[offset_1+0] == 't' and buf[offset_1+1] == 'r' and buf[offset_1+2] == 'u' and buf[offset_1+3] == 'e':
+                            offset_1 += 4
+                            column_1 += 4
                         else:
                             offset_1 = -1
                             break
@@ -885,11 +879,11 @@ cdef class Parser:
                         break
                     if offset_1 == -1:
                         break
-                    value_3.name = 'bool'
-                    value_3.end = offset_1
-                    value_3.end_column = column_1
-                    value_3.value = None
-                    children_1.append(value_3)
+                    value_10.name = 'bool'
+                    value_10.end = offset_1
+                    value_10.end_column = column_1
+                    value_10.value = None
+                    children_1.append(value_10)
 
 
                     break
@@ -911,7 +905,45 @@ cdef class Parser:
                 children_1 = [] if children_0 is not None else None
                 while True: # case
                     children_2 = None
-                    value_4 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
+                    value_11 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
+                    while True: # start capture
+                        if offset_1 + 5 <= buf_eof and buf[offset_1+0] == 'f' and buf[offset_1+1] == 'a' and buf[offset_1+2] == 'l' and buf[offset_1+3] == 's' and buf[offset_1+4] == 'e':
+                            offset_1 += 5
+                            column_1 += 5
+                        else:
+                            offset_1 = -1
+                            break
+
+                        break
+                    if offset_1 == -1:
+                        break
+                    value_11.name = 'bool'
+                    value_11.end = offset_1
+                    value_11.end_column = column_1
+                    value_11.value = None
+                    children_1.append(value_11)
+
+
+                    break
+                if offset_1 != -1:
+                    offset_0 = offset_1
+                    column_0 = column_1
+                    indent_column_0 = indent_column_1
+                    partial_tab_offset_0 = partial_tab_offset_1
+                    partial_tab_width_0 = partial_tab_width_1
+                    if children_1 is not None and children_1 is not None:
+                        children_0.extend(children_1)
+                    break
+                # end case
+                offset_1 = offset_0
+                column_1 = column_0
+                indent_column_1 = list(indent_column_0)
+                partial_tab_offset_1 = partial_tab_offset_0
+                partial_tab_width_1 = partial_tab_width_0
+                children_1 = [] if children_0 is not None else None
+                while True: # case
+                    children_2 = None
+                    value_12 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
                         if offset_1 + 4 <= buf_eof and buf[offset_1+0] == 'n' and buf[offset_1+1] == 'u' and buf[offset_1+2] == 'l' and buf[offset_1+3] == 'l':
                             offset_1 += 4
@@ -923,11 +955,11 @@ cdef class Parser:
                         break
                     if offset_1 == -1:
                         break
-                    value_4.name = 'bool'
-                    value_4.end = offset_1
-                    value_4.end_column = column_1
-                    value_4.value = None
-                    children_1.append(value_4)
+                    value_12.name = 'bool'
+                    value_12.end = offset_1
+                    value_12.end_column = column_1
+                    value_12.value = None
+                    children_1.append(value_12)
 
 
                     break
@@ -975,7 +1007,7 @@ cdef class Parser:
                         if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                             width = partial_tab_width_0
                         else:
-                            width  = (self.tabstop-(column_0%self.tabstop))
+                            width  = (self.tabstop-((column_0)%self.tabstop));
                         count_0 += width
                         column_0 += width
                         offset_0 += 1
@@ -998,6 +1030,7 @@ cdef class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
+                        #print('entry rep rule', offset_0, offset_1)
                         offset_1, column_1, partial_tab_offset_1, partial_tab_width_1 = self.parse_json_value(buf, buf_start, buf_eof, offset_1, column_1, indent_column_1, prefix_0, children_2, partial_tab_offset_1, partial_tab_width_1)
                         if offset_1 == -1: break
 
@@ -1011,6 +1044,7 @@ cdef class Parser:
                             partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True:
+                                #print('entry rep rule', offset_1, offset_2)
                                 count_2 = 0
                                 while offset_2 < buf_eof:
                                     codepoint = buf[offset_2]
@@ -1019,7 +1053,7 @@ cdef class Parser:
                                             if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                             count_2 += width
                                             column_2 += width
                                             offset_2 += 1
@@ -1045,7 +1079,7 @@ cdef class Parser:
                                             if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                             count_2 += width
                                             column_2 += width
                                             offset_2 += 1
@@ -1060,7 +1094,9 @@ cdef class Parser:
                                 if offset_2 == -1: break
 
 
+                                #print('safe exit rep rule', offset_1, offset_2)
                                 break
+                            #print('exit rep rule', offset_1, offset_2)
                             if offset_2 == -1:
                                 break
                             if offset_1 == offset_2: break
@@ -1074,8 +1110,11 @@ cdef class Parser:
                             count_1 += 1
                         if offset_1 == -1:
                             break
+                        value_2 = count_1
 
+                        #print('safe exit rep rule', offset_0, offset_1)
                         break
+                    #print('exit rep rule', offset_0, offset_1)
                     if offset_1 == -1:
                         break
                     if offset_0 == offset_1: break
@@ -1090,6 +1129,7 @@ cdef class Parser:
                     break
                 if offset_0 == -1:
                     break
+                value_1 = count_0
 
                 break
             if offset_0 == -1:
@@ -1137,7 +1177,7 @@ cdef class Parser:
                         if offset_0 == partial_tab_offset_0 and partial_tab_width_0 > 0:
                             width = partial_tab_width_0
                         else:
-                            width  = (self.tabstop-(column_0%self.tabstop))
+                            width  = (self.tabstop-((column_0)%self.tabstop));
                         count_0 += width
                         column_0 += width
                         offset_0 += 1
@@ -1160,8 +1200,9 @@ cdef class Parser:
                     partial_tab_width_1 = partial_tab_width_0
                     children_2 = [] if children_1 is not None else None
                     while True:
+                        #print('entry rep rule', offset_0, offset_1)
                         children_3 = []
-                        value_1 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
+                        value_2 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
                             if offset_1 + 1 <= buf_eof and buf[offset_1+0] == '"':
                                 offset_1 += 1
@@ -1171,7 +1212,7 @@ cdef class Parser:
                                 break
 
                             children_4 = None
-                            value_2 = Node(None, offset_1, offset_1, column_1, column_1, children_4, None)
+                            value_3 = Node(None, offset_1, offset_1, column_1, column_1, children_4, None)
                             while True: # start capture
                                 count_1 = 0
                                 while True:
@@ -1182,6 +1223,7 @@ cdef class Parser:
                                     partial_tab_width_2 = partial_tab_width_1
                                     children_5 = [] if children_4 is not None else None
                                     while True:
+                                        #print('entry rep rule', offset_1, offset_2)
                                         while True: # start choice
                                             offset_3 = offset_2
                                             column_3 = column_2
@@ -1385,7 +1427,9 @@ cdef class Parser:
                                         if offset_2 == -1:
                                             break
 
+                                        #print('safe exit rep rule', offset_1, offset_2)
                                         break
+                                    #print('exit rep rule', offset_1, offset_2)
                                     if offset_2 == -1:
                                         break
                                     if offset_1 == offset_2: break
@@ -1399,17 +1443,18 @@ cdef class Parser:
                                     count_1 += 1
                                 if offset_1 == -1:
                                     break
+                                value_4 = count_1
 
 
 
                                 break
                             if offset_1 == -1:
                                 break
-                            value_2.name = 'string'
-                            value_2.end = offset_1
-                            value_2.end_column = column_1
-                            value_2.value = None
-                            children_3.append(value_2)
+                            value_3.name = 'string'
+                            value_3.end = offset_1
+                            value_3.end_column = column_1
+                            value_3.value = None
+                            children_3.append(value_3)
 
                             if offset_1 + 1 <= buf_eof and buf[offset_1+0] == '"':
                                 offset_1 += 1
@@ -1427,7 +1472,7 @@ cdef class Parser:
                                         if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
-                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                            width  = (self.tabstop-((column_1)%self.tabstop));
                                         count_1 += width
                                         column_1 += width
                                         offset_1 += 1
@@ -1453,7 +1498,7 @@ cdef class Parser:
                                         if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                             width = partial_tab_width_1
                                         else:
-                                            width  = (self.tabstop-(column_1%self.tabstop))
+                                            width  = (self.tabstop-((column_1)%self.tabstop));
                                         count_1 += width
                                         column_1 += width
                                         offset_1 += 1
@@ -1471,11 +1516,11 @@ cdef class Parser:
                             break
                         if offset_1 == -1:
                             break
-                        value_1.name = 'pair'
-                        value_1.end = offset_1
-                        value_1.end_column = column_1
-                        value_1.value = None
-                        children_2.append(value_1)
+                        value_2.name = 'pair'
+                        value_2.end = offset_1
+                        value_2.end_column = column_1
+                        value_2.value = None
+                        children_2.append(value_2)
 
                         count_1 = 0
                         while offset_1 < buf_eof:
@@ -1485,7 +1530,7 @@ cdef class Parser:
                                     if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
                                         width = partial_tab_width_1
                                     else:
-                                        width  = (self.tabstop-(column_1%self.tabstop))
+                                        width  = (self.tabstop-((column_1)%self.tabstop));
                                     count_1 += width
                                     column_1 += width
                                     offset_1 += 1
@@ -1505,6 +1550,7 @@ cdef class Parser:
                             partial_tab_width_2 = partial_tab_width_1
                             children_3 = [] if children_2 is not None else None
                             while True:
+                                #print('entry rep rule', offset_1, offset_2)
                                 if offset_2 + 1 <= buf_eof and buf[offset_2+0] == ',':
                                     offset_2 += 1
                                     column_2 += 1
@@ -1520,7 +1566,7 @@ cdef class Parser:
                                             if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                             count_2 += width
                                             column_2 += width
                                             offset_2 += 1
@@ -1532,7 +1578,7 @@ cdef class Parser:
                                         break
 
                                 children_4 = []
-                                value_3 = Node(None, offset_2, offset_2, column_2, column_2, children_4, None)
+                                value_6 = Node(None, offset_2, offset_2, column_2, column_2, children_4, None)
                                 while True: # start capture
                                     if offset_2 + 1 <= buf_eof and buf[offset_2+0] == '"':
                                         offset_2 += 1
@@ -1542,7 +1588,7 @@ cdef class Parser:
                                         break
 
                                     children_5 = None
-                                    value_4 = Node(None, offset_2, offset_2, column_2, column_2, children_5, None)
+                                    value_7 = Node(None, offset_2, offset_2, column_2, column_2, children_5, None)
                                     while True: # start capture
                                         count_2 = 0
                                         while True:
@@ -1553,6 +1599,7 @@ cdef class Parser:
                                             partial_tab_width_3 = partial_tab_width_2
                                             children_6 = [] if children_5 is not None else None
                                             while True:
+                                                #print('entry rep rule', offset_2, offset_3)
                                                 while True: # start choice
                                                     offset_4 = offset_3
                                                     column_4 = column_3
@@ -1756,7 +1803,9 @@ cdef class Parser:
                                                 if offset_3 == -1:
                                                     break
 
+                                                #print('safe exit rep rule', offset_2, offset_3)
                                                 break
+                                            #print('exit rep rule', offset_2, offset_3)
                                             if offset_3 == -1:
                                                 break
                                             if offset_2 == offset_3: break
@@ -1770,17 +1819,18 @@ cdef class Parser:
                                             count_2 += 1
                                         if offset_2 == -1:
                                             break
+                                        value_8 = count_2
 
 
 
                                         break
                                     if offset_2 == -1:
                                         break
-                                    value_4.name = 'string'
-                                    value_4.end = offset_2
-                                    value_4.end_column = column_2
-                                    value_4.value = None
-                                    children_4.append(value_4)
+                                    value_7.name = 'string'
+                                    value_7.end = offset_2
+                                    value_7.end_column = column_2
+                                    value_7.value = None
+                                    children_4.append(value_7)
 
                                     if offset_2 + 1 <= buf_eof and buf[offset_2+0] == '"':
                                         offset_2 += 1
@@ -1798,7 +1848,7 @@ cdef class Parser:
                                                 if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
-                                                    width  = (self.tabstop-(column_2%self.tabstop))
+                                                    width  = (self.tabstop-((column_2)%self.tabstop));
                                                 count_2 += width
                                                 column_2 += width
                                                 offset_2 += 1
@@ -1824,7 +1874,7 @@ cdef class Parser:
                                                 if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                     width = partial_tab_width_2
                                                 else:
-                                                    width  = (self.tabstop-(column_2%self.tabstop))
+                                                    width  = (self.tabstop-((column_2)%self.tabstop));
                                                 count_2 += width
                                                 column_2 += width
                                                 offset_2 += 1
@@ -1842,11 +1892,11 @@ cdef class Parser:
                                     break
                                 if offset_2 == -1:
                                     break
-                                value_3.name = 'pair'
-                                value_3.end = offset_2
-                                value_3.end_column = column_2
-                                value_3.value = None
-                                children_3.append(value_3)
+                                value_6.name = 'pair'
+                                value_6.end = offset_2
+                                value_6.end_column = column_2
+                                value_6.value = None
+                                children_3.append(value_6)
 
                                 count_2 = 0
                                 while offset_2 < buf_eof:
@@ -1856,7 +1906,7 @@ cdef class Parser:
                                             if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
                                                 width = partial_tab_width_2
                                             else:
-                                                width  = (self.tabstop-(column_2%self.tabstop))
+                                                width  = (self.tabstop-((column_2)%self.tabstop));
                                             count_2 += width
                                             column_2 += width
                                             offset_2 += 1
@@ -1867,7 +1917,9 @@ cdef class Parser:
                                     else:
                                         break
 
+                                #print('safe exit rep rule', offset_1, offset_2)
                                 break
+                            #print('exit rep rule', offset_1, offset_2)
                             if offset_2 == -1:
                                 break
                             if offset_1 == offset_2: break
@@ -1881,8 +1933,11 @@ cdef class Parser:
                             count_1 += 1
                         if offset_1 == -1:
                             break
+                        value_5 = count_1
 
+                        #print('safe exit rep rule', offset_0, offset_1)
                         break
+                    #print('exit rep rule', offset_0, offset_1)
                     if offset_1 == -1:
                         break
                     if offset_0 == offset_1: break
@@ -1897,6 +1952,7 @@ cdef class Parser:
                     break
                 if offset_0 == -1:
                     break
+                value_1 = count_0
 
                 break
             if offset_0 == -1:
