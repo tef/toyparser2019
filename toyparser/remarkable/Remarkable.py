@@ -290,7 +290,7 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
             self.whitespace(max=8)
         self.literal("@")
         with self.reject():
-            self.literal("begin", "end")
+            self.literal("begin", "end", "raw")
         with self.capture_node("block_directive"):
             with self.capture_node("directive_name"), self.backref() as name:
                 self.raw_identifier()
@@ -520,7 +520,7 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
     def inline_directive(self):
         self.literal("$")
         with self.reject():
-            self.literal("begin", "end")
+            self.literal("begin", "end", "raw")
         with self.capture_node("inline_directive"):
             with self.capture_node("directive_name"):
                 self.remark_identifier()
@@ -1180,7 +1180,7 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
     def block_rson(self):
         self.whitespace(max=8)
         with self.capture_node('block_rson'):
-            self.literal('@rson')
+            self.literal('@raw::')
             self.rson_identifier()
             self.literal(' ')
             self.rson_literal()
