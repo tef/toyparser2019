@@ -1,4 +1,4 @@
-@Metadata {
+@metadata { 
     title: "Remark, a restructured markup format.",
 }
 
@@ -6,7 +6,7 @@
 
 > I also dream about a modern replacement for LaTeX designed from the ground up
 > to target multiple output formats (at least PDF, HTML, EPUB).
-> &em[John MacFarlane, author of Pandoc, editor of CommonMark.]
+> $em[John MacFarlane, author of Pandoc, editor of CommonMark.]
 
 ## Why Remark?
 
@@ -33,7 +33,7 @@ Remark has markdown-like rules for annotating text:
 | `*text*`, `**text**`, or `***text***` | *text* | `<strong>text</strong>` |
 | `_text_`, `__text__`, or `___text___` | _text_ | `<em>text</em>` |
 | `~text~`, `~~text~~`, or `~~~text~~~` | ~text~ | `<del>text</del>` | 
-| &code[\`raw\`], &code[\`\`raw\`\`], or &code[\`\`\`raw\`\`\`] | `raw` |  `<code>raw</code>` |
+| $code[\`raw\`], $code[\`\`raw\`\`], or $code[\`\`\`raw\`\`\`] | `raw` |  `<code>raw</code>` |
 | `:emoji_name:` | :emoji_name: | `<span class="emoji">emoji_name</span>` |
 
 A remark document is a collection of blocks, which contain paragraphs. Inside a paragraph, multiple
@@ -43,12 +43,12 @@ spaces are treated as one, and a paragraph ends when a new block starts, or afte
 | :----- | :----: | -------: |
 | `text     text` | text text | `text text` |
 | `text\     text` | text&nbsp;text | `text&nbsp;text` |
-| \code[text\\&n;text] | text&br;text | `text<br/>text` |
+| $code[text\\&n;text] | text&br;text | `text<br/>text` |
 
 Blocks are also quite similar to markdown. Headings, Lists, Code Blocks, Blockquotes, and Horizonal Rules
 work almost exactly the same. Unlike markdown, a list cannot have more than one blank line between items. A blockquote must have an `>` on every line, even empty lines.
 
-&table{column_align: ["left", "left", "left"]}:
+@table {column_align: ["left", "left", "left"]}
   - - # Remark
     - # Result
     - # HTML
@@ -65,7 +65,7 @@ work almost exactly the same. Unlike markdown, a list cannot have more than one 
     - `<h1>A multi-line Heading</h1>` 
   - 
     - `---`
-    -  &hr 
+    -  &hr; 
     - `<hr/>`  
   -
     - ```
@@ -134,7 +134,7 @@ work almost exactly the same. Unlike markdown, a list cannot have more than one 
       | cell 1   | cell 2   |
       ```
     - 
-      &table:
+      @table
         - - # Header 1
           - # Header 2
         - - cell 1
@@ -158,31 +158,25 @@ work almost exactly the same. Unlike markdown, a list cannot have more than one 
       ...</p>
       ```
 
-Unlike markdown, and a little more like LaTeX, Remark has a standard form for directives, `&name{args}[text]`.
+Unlike markdown, and a little more like LaTeX, Remark has a standard form for inline directives, `$name[text]{args}`.
 
-&table:
+@table
    - - # Shorthand
      - # Longhand
       
    - - `*text*`, `_text_`, `~text~`
-     - `&strong[text]`, `&em[text]`, `&strike[text]`
+     - `$strong[text]`, `$em[text]`, `$strike[text]`
 
    - - `# Heading`
-     - `&heading{level: 1}: Heading`
-   - - ````
-        - 1
-        - 2
-       ````
-     - ````
-       &list: &item[1]&item[2]
-       ````
+     - `@heading {level: 1} Heading`
    - - ````
        ```python
        1 + 2
        ```
        ````
      - ````
-       &code{language: "python"}```
+       @code {language: "python"}
+       ```
        1 + 2
        ```
        ````
@@ -190,17 +184,17 @@ Unlike markdown, and a little more like LaTeX, Remark has a standard form for di
 Block directives and inline directives accept arguments, too.
 
 ````
-# {arg: 1} A Header with args, including **strong**{args:2} inline args.
+# {level:2} A Header with args, including **strong**{args:2} inline args
 
 --- {another: 4}
 
-&list{start: 1}:
+@list {start: 1}
   - {args: 4.5} A Numbered List
     > {args: 5} A block quote
 
     > A New Paragraph in the same blockquote
 
-&table{args:3}:
+@table {args:3}
 | Heading |
 | :-----: |
 |  Cell   |
@@ -210,7 +204,7 @@ Block directives and inline directives accept arguments, too.
 There's even a way to embed raw data inside a document, too:
 
 ```
-@Metadata [name: "tef", title: "Remark README"]
+@metadata {name: "tef", title: "Remark README"}
 ```
 
 ## An Overview of Remark:
@@ -227,7 +221,7 @@ Blocks can contain other blocks and paragraphs. Paragraphs can contain inline di
 	- Code Blocks
 	- Prose Blocks
 	- Tables
-	- Named Directives (`&name{...}: ...`)
+	- Named Directives (`@name {...}`)
 
 - Inlines
 	- Emphasis
@@ -235,12 +229,12 @@ Blocks can contain other blocks and paragraphs. Paragraphs can contain inline di
 	- Strikethrough
 	- Code Span
 	- Plain text
-	- Named Inline Directive (`&name{...}[...]`)
+	- Named Inline Directive (`$name[...]{...}`)
 
 ## Documents
 
  - Can have a metadata block
- - Can be `&document[...]`
+ - Can be `@document[...]` (maybe)
 
 
 ## Headings, Rules
@@ -338,32 +332,34 @@ You can also specify tables another way:
 
 Or the long way:
 ````
-&begin::table
-&row: &cell[1];&cell[2];
-&end
+@begin::table
+@begin::row
+$cell[1]
+$cell[2]
+@end
+@end
 ````
 
 ## The LaTeX-like Directives
 
+HTML-Like Entities;
+
+- `@hr`, `$br` 
+
 Unlike markdown, every piece of ascii-art has a more canonical longer form, called a directive.
 A directive has a name, optional parameters, and an argument, usually text:
 
-- `&heading{1}[text]`, or `&h{2}[text]`
-- `&emphasis[text]`, `&strong[text]`
-- `&hr`, `&br` 
-- `&list{spacing: "loose"}[&item[text]]`, 
+- `@heading{1} text`, or `&h{2} text`
+- `$emphasis[text]`, `$strong[text]`
 
-For example, `# My heading` can be expressed in several different ways:
+For example, `# My heading` can be expressed in longform:
 
-- `&heading{level: 1}: My Heading`
-- `&heading{level: 1}[My Heading]`,
-- `&heading{level: 1}[[[My Heading]]]`
+- `@heading {level: 1} My Heading`
 
 Like the block forms above, directives can take parameters, alongside text:
 
-- `&foo{key: "value", "key": "value"}[text]`
-- `&foo{bare_key, "value with no key"}[text]`
-- `&foo{a,b,c}` is `&foo{"a": null, "b":null, "c":null}`. 
+- `$foo[text]{key: "value", "key": "value"}`
+- `$foo[text]{bare_key, "value with no key"}`
 
 Parameters are lists of (key,value) pairs, where one or both are given. non null keys must be unique. 
 Keys can be quoted strings, or identifier like bare words. Values can take numerous JSON like forms:
@@ -373,21 +369,22 @@ Keys can be quoted strings, or identifier like bare words. Values can take numer
 - `"strings"`, `'or single quoted'`
 - `[lists]`, `{key:value}`
 
-Inline directives can take `&code[text]` or &code[\&code\`text\`] as arguments.
+Inline directives can take `@code[text]` or @code[\@code\`text\`] as arguments.
 
 Block directives can take several forms:
 
 A single paragraph:
 
 ````
-&para: This will include all text on this line
+@para This will include all text on this line
 and this line too. The space after `:` is not optional.
 ````
 
-A code block (args must be `&code{args}`, not after opening delimiter):
+A code block (args must be `@code{args}`, not after opening delimiter):
 
 ````
-&code```
+@code
+```
 a raw block
 ```
 ````
@@ -395,7 +392,7 @@ a raw block
 An indented set of blocks:
 
 ````
-&section:
+@section
 	It can start on the next line and continues
 	until the first unindented block
 
@@ -404,23 +401,23 @@ An indented set of blocks:
 A delimited set of blocks
 
 ````
-&begin::section
+@begin::section
 Paragraph one
 
 Paragraph two
-&end
+@end
 ````
 
 A list, a blockquote
 
 ````
-&list:
+@list
 - 1 
 - 2
 ````
 
 ````
-&quote:
+@quote
 > para
 > continued
 
@@ -428,7 +425,7 @@ A list, a blockquote
 
 Or even tables:
 ````
-&table:
+@table
 | x | y |
 | - | - |
 | 1 | 2 |
@@ -440,11 +437,11 @@ at most 8 spaces indented from the beginning of the line.
 Directives can also take a delimited block, with an optional name (an identifier):
 
 ```
-&begin::blockquote outer
+@begin::blockquote outer
 A para
-&begin::blockquote inner
+@begin::blockquote inner
 Inner
-&end::blockquoe outer
+@end::blockquoe outer
 ```
 
 ## Arguments

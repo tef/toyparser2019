@@ -306,10 +306,10 @@ def builder(buf, node, children):
         return dom.named_block_directive(name, args, text)
     if kind == "inline_directive":
         name = children[0]
-        args = children[1]
-        text = [children[2]] if children[2:] and children[2] is not None else []
-        if text:
-            text = text[0].text
+        text = children[1] 
+        args = children[2]
+        if text is not None:
+            text = text.text
 
         return dom.named_inline_directive(name, args, text)
     if kind == "arg":
