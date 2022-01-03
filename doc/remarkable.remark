@@ -5,9 +5,9 @@
 	title: "Remark Document Language Specification", 
 }
 
-&TestReport
+@TestReport
 
-&begin::section intro
+@begin::section intro
 
 	`````remark
 	# A Remarkable Example Document
@@ -23,7 +23,7 @@
 	annotating text: `&directive_name{args}[text]` 
 
 	```
-	&list:
+	@list:
 		&item: It has Lists
 		&item: It has &strong[bold], &emph[italic],
 		   and &strike[strikethrough] text
@@ -32,9 +32,9 @@
 
 	`````
 
-&end::section 
+@end::section 
 
-&begin::section toc
+@begin::section toc
 
 # Table of Contents
 
@@ -73,9 +73,9 @@
 - HTML5 Output 
 - Index, Reference
 
-&end
+@end
 
-&begin::section overview
+@begin::section overview
 
 # Remark(able), a restructured markup format.
 
@@ -101,7 +101,7 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 
 ## A Tour of The Syntax
 
-&TestCase:
+@TestCase
 	```remark
 	\* \` \> \# \\ \& \- \_ \: \@ \[ \]
 	```
@@ -115,7 +115,7 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 
 	You can use &code[\\] to escape any punctuation
 
-&TestCase:
+@TestCase
 	```remark
 	*text* **text** ***text***
 	```
@@ -130,7 +130,7 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 	You can use `*` for bold text. Unlike Markdown, doubling or 
 	tripling the markers does not change their semantic meaning.
 
-&TestCase:
+@TestCase
 	```remark
 	_italic_ ~~~strike~~~ ``code``
 
@@ -151,7 +151,7 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 	Like for `*`, doubling or tripling \code[\`], `_`, and `~` 
 	also work, and do not change meaning
 
-&TestCase:
+@TestCase
 	```remark
 	Example :emoji:
 	---
@@ -168,7 +168,7 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 	
 	There's also shorthand for `:emoji:`.
 
-&TestCase:
+@TestCase
 	```remark
 	An  Example  Non\ Breaking  space,  and\
 	a  hard  break.
@@ -208,7 +208,7 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 
 ]
 
-&TestCase:
+@TestCase
 	```remark
 	> Example
 	> Blockquote
@@ -233,7 +233,7 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 	Like Markdown, `>` can be used to mark out blockquotes. Unlike
 	Markdown, or CommonMark, the `>` cannot be omitted.
 
-&TestCase:
+@TestCase
 	```remark
 	- 1
 	- 2
@@ -260,7 +260,7 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 
 	There can be at most one blank line between lists
 
-&TestCase:
+@TestCase
 	```remark
 	&list{start:1}:
 	- 1
@@ -281,7 +281,7 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 	
 	Numbered lists use a block directive `&list{start: 1}:`
 
-&TestCase:
+@TestCase
 	```remark
 	| Prose blocks are special
 	|   line breaks and whitespace preserved
@@ -304,7 +304,7 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 	Prose Blocks preserve whitespace within a single paragraph.
 	The `|` must be on every line.
 
-&TestCase:
+@TestCase
 	````remark
 	```
 	1 + 2
@@ -318,7 +318,7 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 	Code Blocks work similarly to Markdown.
 
 
-&TestCase:
+@TestCase
 	```remark
 	| header 1 | header 2 |
 	| :------: | :------: |
@@ -340,7 +340,7 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 	```
 	Tables work like GFM.
 
-&TestCase:
+@TestCase
 	```remark
 	@Paragraph { text: ["Raw", " ", "Text!"] }
 	```
@@ -351,9 +351,9 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 	You can embed raw dom nodes inside a remakable document, too!
 
 
-&end
+@end
 
-&begin::section document
+@begin::section document
 
 # Documents and Fragments
 
@@ -367,7 +367,7 @@ a `Fragment`.
 
 If metadata is provided, a `Document` is returned instead.
 
-&TestCase:
+@TestCase
 	```remark
 	&metadata{title: "Example"}
 
@@ -379,10 +379,10 @@ If metadata is provided, a `Document` is returned instead.
 
 	Alternatively, a `Document` can be created explicitly, using a directive:
 
-&TestCase:
+@TestCase
 	```remark
-	&begin::document
-	&end
+	@begin::document
+	@end
 	```
 	```remark
 	@Document {}
@@ -415,10 +415,10 @@ Fragments can be specified with directives, or data structures too:
 	output_dom: @Fragment {},
 }
 
-&TestCase:
+@TestCase
 	```remark
-	&begin::fragment
-        &end
+	@begin::fragment
+        @end
 	```
 	```remark
 	@Fragment {}
@@ -427,7 +427,7 @@ Fragments can be specified with directives, or data structures too:
 # Metadata
 
 
-&TestCase:
+@TestCase
 	```remark
 	&metadata
 	```
@@ -435,7 +435,7 @@ Fragments can be specified with directives, or data structures too:
 	@Document {}
 	```
 
-&TestCase:
+@TestCase
 	```remark
 	&metadata
 	```
@@ -444,7 +444,7 @@ Fragments can be specified with directives, or data structures too:
 	@Document {}
 	```
 
-&TestCase:
+@TestCase
 	```remark
 	&metadata{}
 	```
@@ -453,7 +453,7 @@ Fragments can be specified with directives, or data structures too:
 	@Document {}
 	```
 
-&TestCase:
+@TestCase
 	```remark
 	@Metadata {}
 	```
@@ -462,7 +462,7 @@ Fragments can be specified with directives, or data structures too:
 	```
 
 	
-&TestCase:
+@TestCase
 	```remark
 	@metadata {}
 	```
@@ -480,9 +480,9 @@ Fragments can be specified with directives, or data structures too:
 }:
 	Byte order mark is ignored at start of file.
 
-&end::section document
+@end::section document
 
-&begin::section inlines
+@begin::section inlines
 
 # Inlines
 
@@ -545,9 +545,9 @@ Fragments can be specified with directives, or data structures too:
 }
 
 
-&end::section inlines
+@end::section inlines
 
-&begin::section blocks
+@begin::section blocks
 
 # Blocks
 
@@ -564,7 +564,7 @@ Fragments can be specified with directives, or data structures too:
 
 ## Code Blocks
 
-&TestCase:
+@TestCase
 	````remark
 		```
  	    	1 + 2
@@ -584,7 +584,7 @@ Fragments can be specified with directives, or data structures too:
 
 ## Definition Lists
 
-&TestCase:
+@TestCase
 	```remark
 	[inline text]: example
 	```
@@ -599,7 +599,7 @@ Fragments can be specified with directives, or data structures too:
 
 	]}
 	```
-&TestCase:
+@TestCase
 	```remark
 	\list:
 	[inline text]: example
@@ -622,7 +622,7 @@ Fragments can be specified with directives, or data structures too:
 	
 ## Tables
 
-&TestCase:
+@TestCase
 	```remark
 	| header 1 | header 2 |
 	| :------: | :------: |
@@ -644,15 +644,15 @@ Fragments can be specified with directives, or data structures too:
 	```
 	Tables work like GFM.
 
-&end::section blocks
+@end::section blocks
 
-&begin::section directives
+@begin::section directives
 
 # Directives
 
 ## Entities
 
-&TestCase:
+@TestCase
 	```remark
 	&65;
 	```
@@ -663,7 +663,7 @@ Fragments can be specified with directives, or data structures too:
 		]
 	}
 	```
-&TestCase:
+@TestCase
 	```remark
 	&0x41;
 	```
@@ -672,7 +672,7 @@ Fragments can be specified with directives, or data structures too:
 			@Paragraph { text: [@Codepoint {n: 0x41}]},
 		]
 	}
-&TestCase:
+@TestCase
 	```remark
 	&#64;&#0x41 &#x42&x43
 	```
@@ -690,45 +690,45 @@ Fragments can be specified with directives, or data structures too:
 
 ## Begin-End Directive
 
-- `&begin::name` and optionally, `&end`
+- `@begin::name` and optionally, `@end`
 - end of file collapses all open blocks
-- `&end` collapses current open block
-- `&end::name` collapses all blocks until name matches
-- Optionally specify an identifier, `&begin::name identifier`
-- `&end::name identifier` closes all blocks until name and identifier matches
+- `@end` collapses current open block
+- `@end::name` collapses all blocks until name matches
+- Optionally specify an identifier, `@begin::name identifier`
+- `@end::name identifier` closes all blocks until name and identifier matches
 
-&TestCase:
+@TestCase
 	```remark
-	&begin::fragment
-	  &begin::blockquote
-	&end::fragment
+	@begin::fragment
+	  @begin::blockquote
+	@end::fragment
 	```
 	```remark
 	@Fragment {text: [@Blockquote {}]}
 	```
 
-&TestCase:
+@TestCase
 	```remark
-	&begin::blockquote outer
-	    &begin::blockquote
-	&end::blockquote outer
+	@begin::blockquote outer
+	    @begin::blockquote
+	@end::blockquote outer
 	```
 	```remark
 	@Fragment {text: [ @Blockquote {text: [ @Blockquote {text: []} ]} ]}
 	```
 
-&TestCase:
+@TestCase
 	```remark
-	&begin::fragment
-	&begin::blockquote
+	@begin::fragment
+	@begin::blockquote
 	```
 	```remark
 	@Fragment {text: [@Blockquote {}]}
 	```
 
-&end::section directives
+@end::section directives
 
-&begin::section dom
+@begin::section dom
 
-&end::section dom
+@end::section dom
 

@@ -48,7 +48,7 @@ class Element:
             if k == key: return v
 
     def walk(self, builder):
-        raise Exception('no')
+        raise Exception(f'no builder for {self.__class__}')
 
     def select(self, name):
         if name == self.name:

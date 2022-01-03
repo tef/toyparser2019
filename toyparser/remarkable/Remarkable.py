@@ -472,9 +472,6 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
         with self.capture_node('remark_definition_item'):
             self.definition_label()
 
-            self.literal(":")
-            with self.reject():
-                self.literal(":")
             with self.capture_node('remark_definition_block'), self.choice():
                 with self.case():
                     with self.reject():
