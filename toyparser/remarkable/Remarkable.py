@@ -62,8 +62,8 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                 self.begin_end_directive()
             with self.case():
                 self.block_directive()
-            with self.case():
-                self.block_definition()
+            #with self.case():
+            #    self.block_definition()
             with self.case():
                 self.list_block()
             with self.case():

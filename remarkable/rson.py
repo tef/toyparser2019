@@ -201,12 +201,17 @@ class Codec:
                 else:
                     raise ParserErr(
                         buf, pos, "Expected key:value pair but found {}".format(repr(peek)))
-
+                    
                 item, pos = self.parse_rson(buf, pos, transform)
 
                 out[key] = item
 
+                m = whitespace.match(buf, pos)
+                if m:
+                    pos = m.end()
+
                 peek = buf[pos]
+                
                 if peek == ',':
                     pos += 1
                     m = whitespace.match(buf, pos)
@@ -214,7 +219,7 @@ class Codec:
                         pos = m.end()
                 elif peek != '}':
                     raise ParserErr(
-                        buf, pos, "Expecting a ',', or a '{}' but found {}".format('{}',repr(peek)))
+                        buf, pos, "Expecting a ',', or a '}}' but found {}".format('{}',repr(peek)))
             if name not in (None, 'object', 'record', 'dict'):
                 out = self.tagged_to_object(name,  out)
             if transform is not None:

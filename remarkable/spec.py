@@ -1,4 +1,4 @@
-from . import dom, parser
+from . import dom, parser, rson
 
 def run_tests(doc):
     tests = list(doc.select(dom.TestCase.name))
@@ -26,7 +26,11 @@ def run_tests(doc):
             if getattr(output_dom, "name", "") == dom.CodeBlock.name:
                 if output_dom.get_arg('language') == 'rson':
                     output_dom = "".join(output_dom.text)
-                    output_dom = dom.parse(output_dom)
+                    try:
+                        output_dom = dom.parse(output_dom)
+                    except:
+                        print(output_dom)
+                        raise
                 if output_dom.get_arg('language') == 'remark':
                     output_dom = "".join(output_dom.text)
                     output_dom = parser.parse(output_dom)
