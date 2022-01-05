@@ -490,7 +490,12 @@ class TableBuilder:
         headings = len(self.headings)
         if total_width  > self.settings['width']:
             headers_width = [max(max(line_len(l) for l in c) for c in r) for r in self.headings]
-            max_width_rows = max(max(max(line_len(l) for l in c) for c in r) for r in self.rows)
+            
+            max_width_rows = 1
+            for r in self.rows:
+                for c in r:
+                    for l in c:
+                        max_width_rows = max(max_width_rows, line_len(l))
             max_width_header = max(headers_width) if headers_width else 0
             if max_width_header + max_width_rows + 7 < total_width:
                 new_rows = []
