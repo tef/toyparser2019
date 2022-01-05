@@ -20,14 +20,14 @@
 	- It even has `inline code` fragments
 
 	Unlike CommonMark, there's a standard long form for
-	annotating "text": `&directive_name{args}[text]` 
+	annotating "text": `$inline_directive[text]{args}`
 
 	```
-	@list:
-		&item: It has Lists
-		&item: It has &strong[bold], &emph[italic],
-		   and &strike[strikethrough] text
-		&item: It even has &code`inline code` fragments
+	@list
+		@item It has Lists
+		@item It has $strong[bold], $emph[italic],
+		   and $strike[strikethrough] text
+		@item It even has $code`inline code` fragments
 	```
 
 	`````
@@ -89,9 +89,9 @@ Markdown is great for small comments or blog posts. LaTeX is good for writing
 a book on Mathematics. RST is good for technical documentation, and HTML is good
 for webpages. So why Remark?
 
-- CommonMark like shortcuts (`---` for a horizontal rule)
 - A consistent way to escape text 
-- LaTeX/HTML like named Directives (`&hr`)
+- CommonMark alike shortcuts and markup
+- Named Directives for inline and blocks
 - An internal document object model
 - Standard ways to embed structured data
 - Not just HTML output, too
@@ -113,7 +113,7 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 	]} ]}
 	```
 
-	You can use &code[\\] to escape any punctuation
+	You can use $code[\\] to escape any punctuation
 
 @TestCase
 	```remark
@@ -199,7 +199,7 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 	]}
 	```
 
-	There are \q[atx-style] headings, a `# ` at the start
+	There are $q[atx-style] headings, a `# ` at the start
 	of a line indicates a level-1 heading. A `## ` indicates
 	a level-2 heading.
 
@@ -279,7 +279,7 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 	] }
 	```
 	
-	Numbered lists use a block directive `&list{start: 1}:`
+	Numbered lists use a block directive `@list{start: 1}`
 
 @TestCase
 	```remark
@@ -339,16 +339,6 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 	]}
 	```
 	Tables work like GFM.
-
-\@TestCase
-	```remark
-	@Paragraph { "text": ["Raw", " ", "Text!"] }
-	```
-	```rson
-	@Fragment { "text": [ @Paragraph { "text": ["Raw", " ", "Text!"] } ]}
-	```
-	
-	You can embed raw dom nodes inside a remakable document, too!
 
 
 @end
@@ -460,18 +450,7 @@ Fragments can be specified with directives, or data structures too:
 	```rson
 	@Document {}
 	```
-
 	
-\@TestCase
-	```remark
-	@metadata {}
-	```
-
-	@Metadata {}
-		
-	If mispelled, and the solitary item, no `Document` or `Fragment`
-	is returned
-
 ## BOM
 
 @TestCase{

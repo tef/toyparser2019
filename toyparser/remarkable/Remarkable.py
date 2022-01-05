@@ -569,14 +569,19 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                         self.directive_args()
                         self.literal("}")
                 with self.case():
-                    self.capture_value(None)
+                    with self.capture_node('directive_code_span') as span: 
+                        self.inner_code_span()
                     with self.capture_node("directive_args"), self.optional():
                         self.literal("{")
                         self.directive_args()
                         self.literal("}")
                 with self.case():
-                    with self.capture_node('directive_code_span') as span: 
-                        self.inner_code_span()
+                    self.capture_value(None)
+                    with self.capture_node("directive_args"):
+                        self.literal("{")
+                        self.directive_args()
+                        self.literal("}")
+
     @rule() 
     def horizontal_rule(self):
         self.whitespace(max=8)
@@ -1068,6 +1073,15 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
     @rule()
     def inline_span(self):
         with self.capture_node('remark_inline_span'):
+            self.inner_span()
+            with self.capture_node("directive_args"), self.optional():
+                self.literal("{")
+                self.directive_args()
+                self.literal("}")
+    
+
+    @rule()
+    def inner_span(self):
             with self.count(columns=True) as n:
                 with self.repeat(min=1):
                     self.range("[")
@@ -1094,10 +1108,6 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                         self.whitespace()
             with self.repeat(min=n, max=n):
                 self.literal("]")
-            with self.capture_node("directive_args"), self.optional():
-                self.literal("{")
-                self.directive_args()
-                self.literal("}")
     @rule()
     def inline_style(self):
         with self.variable('') as fence, self.capture_node('remark_paragraph_span', value=fence):

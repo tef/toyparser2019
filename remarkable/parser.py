@@ -217,7 +217,6 @@ def builder(buf, node, children):
         elif child.name == 'directive_block':
             text.extend(child.text)
         text.extend(children[1].text)
-        #print(text)
         return dom.DirectiveNode('directive_block',[], text)
 
     if kind == "block_directive":
@@ -306,8 +305,8 @@ def builder(buf, node, children):
         return dom.named_block_directive(name, args, text)
     if kind == "inline_directive":
         name = children[0]
-        text = children[1] 
-        args = children[2]
+        text = children[1] if len(children) > 1 else []
+        args = children[2] if len(children) > 2 else []
         if text is not None:
             text = text.text
 
