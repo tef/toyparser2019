@@ -14,6 +14,8 @@ def run_tests(doc):
         if raw_text is not None:
             if hasattr(raw_text, 'text'):
                 raw_text = "\n".join(raw_text.text)
+            if isinstance(output_dom, str):
+                output_dom = dom.parse(output_dom)
         elif len(test_case.text) >= 2:
             # todo: select codeblock, etc
             raw_text, output_dom = test_case.text[:2]

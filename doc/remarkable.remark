@@ -1,6 +1,6 @@
 # Remark Document Language Specification
 
-@Metadata {
+@metadata {
    	version: "2019-11-0",
 	title: "Remark Document Language Specification", 
 }
@@ -262,7 +262,7 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 
 @TestCase
 	```remark
-	&list{start:1}:
+	@list{start:1}
 	- 1
 	- 2
 	- 3
@@ -340,7 +340,7 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 	```
 	Tables work like GFM.
 
-@TestCase
+\@TestCase
 	```remark
 	@Paragraph { "text": ["Raw", " ", "Text!"] }
 	```
@@ -361,20 +361,20 @@ A `Fragment` is a document that carries no metadata. An empty file is always
 a `Fragment`.
 
 @TestCase {
-	input_"text": "",
-	output_dom: @Fragment {},
+	input_text: "",
+	output_dom: '@Fragment {}',
 }
 
 If metadata is provided, a `Document` is returned instead.
 
 @TestCase
 	```remark
-	&metadata{title: "Example"}
+	@metadata{title: "Example"}
 
 	```
 	
-	```remark
-	@Document {title: "Example", "text": []}
+	```rson
+	@Document {"title": "Example", "text": []}
 	```
 
 	Alternatively, a `Document` can be created explicitly, using a directive:
@@ -384,35 +384,35 @@ If metadata is provided, a `Document` is returned instead.
 	@begin::document
 	@end
 	```
-	```remark
+	```rson
 	@Document {}
 	```
 
 	A document can also be specified using data structures, rather than directives:
 
 @TestCase {
-	input_"text": "@Document {}",
-	output_dom: @Document {},
+	input_text: "@Document {}",
+	output_dom: '@Document {}',
 }
 
 If the only content in the document is a data structure, that is returned instead
 of a `Fragment` or a `Document`.
 
 @TestCase {
-	input_"text": "@UnknownExample {}",
-	output_dom: @UnknownExample {},
+	input_text: "@UnknownExample {}",
+	output_dom: '@UnknownExample {}',
 }
 
 @TestCase {
-	input_"text": "@DocumentSet {}",
-	output_dom: @DocumentSet {},
+	input_text: "@DocumentSet {}",
+	output_dom: '@DocumentSet {}',
 }
 
 Fragments can be specified with directives, or data structures too:
 
 @TestCase {
-	input_"text": "@Fragment {}",
-	output_dom: @Fragment {},
+	input_text: "@Fragment {}",
+	output_dom: '@Fragment {}',
 }
 
 @TestCase
@@ -420,7 +420,7 @@ Fragments can be specified with directives, or data structures too:
 	@begin::fragment
         @end
 	```
-	```remark
+	```rson
 	@Fragment {}
 	```
 
@@ -429,45 +429,45 @@ Fragments can be specified with directives, or data structures too:
 
 @TestCase
 	```remark
-	&metadata
+	@metadata
 	```
-	```remark
+	```rson
 	@Document {}
 	```
 
 @TestCase
 	```remark
-	&metadata
+	@metadata
 	```
 
-	```remark
+	```rson
 	@Document {}
 	```
 
 @TestCase
 	```remark
-	&metadata{}
+	@metadata{}
 	```
 
-	```remark
+	```rson
 	@Document {}
 	```
 
 @TestCase
 	```remark
-	@Metadata {}
+	@metadata {}
 	```
-	```remark
+	```rson
 	@Document {}
 	```
 
 	
-@TestCase
+\@TestCase
 	```remark
 	@metadata {}
 	```
 
-	@metadata {}
+	@Metadata {}
 		
 	If mispelled, and the solitary item, no `Document` or `Fragment`
 	is returned
@@ -475,7 +475,7 @@ Fragments can be specified with directives, or data structures too:
 ## BOM
 
 &TestCase{
-	input_"text": "\uFEFF",
+	input_text: "\uFEFF",
 	output_dom: @Fragment {}
 }:
 	Byte order mark is ignored at start of file.
@@ -489,49 +489,45 @@ Fragments can be specified with directives, or data structures too:
 ## Words, Tabs, Whitespace, Breaks
 
 &TestCase{
-	input_"text": "Example text.",
-	output_dom: @Fragment {"text": [@Paragraph {"text": ["Example", " ", "text."]}] },
+	input_text: "Example text.",
+	output_dom: '@Fragment {"text": [@Paragraph {"text": ["Example", " ", "text."]}] }',
 }:
 	Whitespaces separate words. Multiple spaces are treated as a single space.
 
 &TestCase{
-	input_"text": "  Example  text.  ",
-	output_dom: @Fragment {"text": [@Paragraph {"text": ["Example", " ", "text."]}] },
+	input_text: "  Example  text.  ",
+	output_dom: '@Fragment {"text": [@Paragraph {"text": ["Example", " ", "text."]}] }',
 }:
 	Leading, trailing whitespace is ignored within a paragraph.
 
 &TestCase{
-	input_"text": "| Example  text.",
-	output_dom: @Fragment {"text": [@Prose {"text": ["Example", @Whitespace {"text":["  "]}, "text."]}] },
+	input_text: "| Example  text.",
+	output_dom: '@Fragment {"text": [@Prose {"text": ["Example", @Whitespace {"text":["  "]}, "text."]}] }',
 }: 
 	Normally, whitespace is treated as a single ` `, but this can vary. 
 
 &TestCase{
-	input_"text": " \tExample\ttext.\t",
-	output_dom: @Fragment {"text": [@Paragraph {"text": ["Example", " ", "text.",]}] },
+	input_text: " \tExample\ttext.\t",
+	output_dom: '@Fragment {"text": [@Paragraph {"text": ["Example", " ", "text.",]}] }',
 }:
 	Tabs are treated as whitespace
 &TestCase{
-	input_"text": "|\tExample\ttext.\t",
-	output_dom: @Fragment {"text": [@Prose {"text":
-	[@Whitespace {"text": ["      "]}, "Example", @Whitespace {"text": [" "]}, "text.", @Whitespace {"text": ["   "]}]
-	}]}
+	input_text: "|\tExample\ttext.\t",
+	output_dom: '@Fragment {"text": [@Prose {"text": [@Whitespace {"text": ["      "]}, "Example", @Whitespace {"text": [" "]}, "text.", @Whitespace {"text": ["   "]}] }]}',
 }:
 	Tabs are treated as whitespace, and are converted to spaces. The `| ` prefix is not included, and six
 	spaces are left over.
 
 &TestCase{
-	input_"text": "      |\tExample\ttext.\t",
-	output_dom: @Fragment {"text": [@Prose {"text":
-	["Example", @Whitespace {"text": [" "]}, "text.", @Whitespace {"text": ["   "]}]
-	}]}
+	input_text: "      |\tExample\ttext.\t",
+	output_dom: '@Fragment {"text": [@Prose {"text": ["Example", @Whitespace {"text": [" "]}, "text.", @Whitespace {"text": ["   "]}] }]}',
  	
 }:
 	Tabstop is 8, so a tab at column 8 has width 1, so there is nothing after the `| ` prefix.
 
 @TestCase {
-	input_"text": "Example text.",
-	output_dom: @Fragment {"text": [@Paragraph {"text": ["Example", " ", "text."]}] },
+	input_text: "Example text.",
+	output_dom: '@Fragment {"text": [@Paragraph {"text": ["Example", " ", "text."]}] }',
 }
 
 ## Escaping, Entities
@@ -540,8 +536,8 @@ Fragments can be specified with directives, or data structures too:
 
 ## Inline Code, Emojis, Raw Spans
 @TestCase {
-	input_"text": "Example [text].",
-	output_dom: @Fragment {"text": [@Paragraph {"text": ["Example", " ", @Span {"text":["text"]}, "."]}] },
+	input_text: "Example [text].",
+	output_dom: '@Fragment {"text": [@Paragraph {"text": ["Example", " ", @Span {"text":["text"]}, "."]}] }',
 }
 
 
@@ -554,8 +550,8 @@ Fragments can be specified with directives, or data structures too:
 ## Paragraphs
 
 @TestCase {
-	input_"text": "&paragraph: Hi",
-	output_dom: @Fragment {"text": [@Paragraph {"text": ["Hi"]}] },
+	input_text: "@paragraph: Hi",
+	output_dom: '@Fragment {"text": [@Paragraph {"text": ["Hi"]}] }',
 }
 
 ## Headers
@@ -570,7 +566,7 @@ Fragments can be specified with directives, or data structures too:
  	    	1 + 2
 		```
 	````
-	```remark
+	```rson
 	@Fragment {"text": [@CodeBlock {"text": ["1 + 2", "\n"]}]}
 	```
 
@@ -592,7 +588,7 @@ Fragments can be specified with directives, or data structures too:
 	| :------: | :------: |
 	| cell 1   | cell 2   |
 	```
-	```remark
+	```rson
 	@Fragment { "text": [
 		@TableBlock { "column_align": ["center", "center"], "text": [
 			@TableHeader {"text": [
@@ -620,10 +616,10 @@ Fragments can be specified with directives, or data structures too:
 	```remark
 	&65;
 	```
-	```remark
+	```rson
 	@Fragment {
 		"text": [
-			@Paragraph { "text": [@Codepoint {n: 65}]},
+			@Paragraph { "text": [@Codepoint {"n": 65}]},
 		]
 	}
 	```
@@ -631,22 +627,24 @@ Fragments can be specified with directives, or data structures too:
 	```remark
 	&0x41;
 	```
+	```rson
 	@Fragment {
 		"text": [
-			@Paragraph { "text": [@Codepoint {n: 0x41}]},
+			@Paragraph { "text": [@Codepoint {"n": 0x41}]},
 		]
 	}
+	```
 @TestCase
 	```remark
 	&#64;&#0x41 &#x42&x43
 	```
-	```remark
+	```rson
 	@Fragment { "text": [ @Paragraph { "text": [
-		@Codepoint {n: 0x40}, 
-		@Codepoint {n: 0x41}, 
+		@Codepoint {"n": 0x40}, 
+		@Codepoint {"n": 0x41}, 
 		" ", 
-		@Codepoint {n: 0x42},  
-		@Codepoint {n: 0x43}, 
+		@Codepoint {"n": 0x42},  
+		@Codepoint {"n": 0x43}, 
 	]}, ] }
 	```
 
@@ -667,7 +665,7 @@ Fragments can be specified with directives, or data structures too:
 	  @begin::blockquote
 	@end::fragment
 	```
-	```remark
+	```rson
 	@Fragment {"text": [@Blockquote {}]}
 	```
 
@@ -677,7 +675,7 @@ Fragments can be specified with directives, or data structures too:
 	    @begin::blockquote
 	@end::blockquote outer
 	```
-	```remark
+	```rson
 	@Fragment {"text": [ @Blockquote {"text": [ @Blockquote {"text": []} ]} ]}
 	```
 
@@ -686,7 +684,7 @@ Fragments can be specified with directives, or data structures too:
 	@begin::fragment
 	@begin::blockquote
 	```
-	```remark
+	```rson
 	@Fragment {"text": [@Blockquote {}]}
 	```
 

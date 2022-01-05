@@ -76,6 +76,10 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
     @rule()
     def paragraph_breaks(self):
         with self.choice():
+            with self.case(): 
+                    self.whitespace(min=0)
+                    self.literal('@')
+
             with self.case(): self.horizontal_rule()
             with self.case(): self.atx_heading()
             with self.case(): self.start_code_block()
@@ -228,15 +232,13 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                             self.whitespace(max=8)
                             self.literal(*marker)
                             self.literal("end")
-                            with self.optional():
-                                self.literal("::")
-                                self.literal(name)
-                                with self.optional():
+                            with self.choice():
+                                with self.case():
+                                    self.literal("::")
+                                with self.case():
                                     self.whitespace()
-                                    self.literal(fence)
-                            self.line_end()
+                                    self.line_end()
                         with self.choice():
-
                             with self.case(): self.block_element()
                             with self.case(): self.para()
                             with self.case(): self.empty_lines()
