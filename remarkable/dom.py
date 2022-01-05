@@ -73,7 +73,7 @@ class Node(Element):
 
 class DocumentSet(Node):
     name = "DocumentSet"
-    def __init__(self, args):
+    def __init__(self, args, text=None):
         self.args = args
 
     @property
@@ -666,6 +666,7 @@ block_directives = { # \foo::begin
         "TestReport": TestReport,
         "metadata": Metadata,
         "document": Document,
+        "documentset": DocumentSet,
         "fragment": Fragment,
 }
 para_directives = { # \foo: ...

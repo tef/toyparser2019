@@ -391,7 +391,7 @@ If metadata is provided, a `Document` is returned instead.
 	A document can also be specified using data structures, rather than directives:
 
 @TestCase {
-	input_text: "@Document {}",
+	input_text: "@document {}",
 	output_dom: '@Document {}',
 }
 
@@ -400,18 +400,18 @@ of a `Fragment` or a `Document`.
 
 @TestCase {
 	input_text: "@UnknownExample {}",
-	output_dom: '@UnknownExample {}',
+	output_dom: '@Fragment {"text": [@BlockDirective {"name": "UnknownExample"}]}'
 }
 
 @TestCase {
-	input_text: "@DocumentSet {}",
+	input_text: "@documentset {}",
 	output_dom: '@DocumentSet {}',
 }
 
 Fragments can be specified with directives, or data structures too:
 
 @TestCase {
-	input_text: "@Fragment {}",
+	input_text: "@fragment {}",
 	output_dom: '@Fragment {}',
 }
 
@@ -474,10 +474,10 @@ Fragments can be specified with directives, or data structures too:
 
 ## BOM
 
-&TestCase{
+@TestCase{
 	input_text: "\uFEFF",
 	output_dom: @Fragment {}
-}:
+}
 	Byte order mark is ignored at start of file.
 
 @end::section document
@@ -488,41 +488,41 @@ Fragments can be specified with directives, or data structures too:
 
 ## Words, Tabs, Whitespace, Breaks
 
-&TestCase{
+@TestCase{
 	input_text: "Example text.",
 	output_dom: '@Fragment {"text": [@Paragraph {"text": ["Example", " ", "text."]}] }',
-}:
+}
 	Whitespaces separate words. Multiple spaces are treated as a single space.
 
-&TestCase{
+@TestCase{
 	input_text: "  Example  text.  ",
 	output_dom: '@Fragment {"text": [@Paragraph {"text": ["Example", " ", "text."]}] }',
-}:
+}
 	Leading, trailing whitespace is ignored within a paragraph.
 
-&TestCase{
+@TestCase{
 	input_text: "| Example  text.",
 	output_dom: '@Fragment {"text": [@Prose {"text": ["Example", @Whitespace {"text":["  "]}, "text."]}] }',
-}: 
+} 
 	Normally, whitespace is treated as a single ` `, but this can vary. 
 
-&TestCase{
+@TestCase{
 	input_text: " \tExample\ttext.\t",
 	output_dom: '@Fragment {"text": [@Paragraph {"text": ["Example", " ", "text.",]}] }',
-}:
+}
 	Tabs are treated as whitespace
-&TestCase{
+@TestCase{
 	input_text: "|\tExample\ttext.\t",
 	output_dom: '@Fragment {"text": [@Prose {"text": [@Whitespace {"text": ["      "]}, "Example", @Whitespace {"text": [" "]}, "text.", @Whitespace {"text": ["   "]}] }]}',
-}:
+}
 	Tabs are treated as whitespace, and are converted to spaces. The `| ` prefix is not included, and six
 	spaces are left over.
 
-&TestCase{
+@TestCase{
 	input_text: "      |\tExample\ttext.\t",
 	output_dom: '@Fragment {"text": [@Prose {"text": ["Example", @Whitespace {"text": [" "]}, "text.", @Whitespace {"text": ["   "]}] }]}',
  	
-}:
+}
 	Tabstop is 8, so a tab at column 8 has width 1, so there is nothing after the `| ` prefix.
 
 @TestCase {
@@ -550,7 +550,7 @@ Fragments can be specified with directives, or data structures too:
 ## Paragraphs
 
 @TestCase {
-	input_text: "@paragraph: Hi",
+	input_text: "@paragraph Hi",
 	output_dom: '@Fragment {"text": [@Paragraph {"text": ["Hi"]}] }',
 }
 

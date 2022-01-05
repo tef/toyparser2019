@@ -301,8 +301,8 @@ def tty(stdin, stdout, stderr, bracketed_paste=True, hacker=None):
 
     def set_term():
         stdout.buffer.write(b"\x1B[?2004h") # bracketed paste
-        stdout.buffer.write(b'\x1B[?1005h') # utf-8 mouse mode
-        stdout.buffer.write(b'\x1B[?1003h') # any tracking
+        #stdout.buffer.write(b'\x1B[?1005h') # utf-8 mouse mode
+        #stdout.buffer.write(b'\x1B[?1003h') # any tracking
         stdout.buffer.write(b'\x1B[?1049h') # alt screen
         stdout.buffer.write(b'\x1B[?1h') # DECCKM keyboard mode
         stdout.buffer.flush()
