@@ -293,6 +293,20 @@ class NumberedList(Block):
                         p.walk_text(item.text)
 
 @elements.add()
+class TodoList(Block):
+    name = "TodoList"
+
+    def walk(self, builder):
+        with builder.build_bullet_list(self.get_arg('bullet'), len(self.text)) as l:
+            for item in self.text:
+                print(item, item.text)
+                if item.name == TodoItemSpan.name:
+                    with l.build_item_span() as p:
+                        p.walk_text(item.text)
+                if item.name == TodoItemBlock.name:
+                    with l.build_block_item() as p:
+                        p.walk_text(item.text)
+@elements.add()
 class Blockquote(Block):
     name = "Blockquote"
 
@@ -308,6 +322,12 @@ class ItemBlock(Block):
     def walk(self, builder):
         raise Exception('no')
 
+@elements.add()
+class TodoItemBlock(Block):
+    name = "TodoItemBlock"
+
+    def walk(self, builder):
+        raise Exception('no')
 
 @elements.add()
 class MathBlock(Block):
@@ -390,6 +410,13 @@ class ItemSpan(Inline):
     def walk(self, builder):
         raise Exception('no')
 
+
+@elements.add()
+class TodoItemSpan(Inline):
+    name = "TodoItemSpan"
+
+    def walk(self, builder):
+        raise Exception('no')
 
 @elements.add()
 class CodeSpan(Inline):
@@ -668,6 +695,7 @@ block_directives = { # \foo::begin
         "document": Document,
         "documentset": DocumentSet,
         "fragment": Fragment,
+        "todo": TodoList,
 }
 para_directives = { # \foo: ...
         "paragraph": Paragraph,

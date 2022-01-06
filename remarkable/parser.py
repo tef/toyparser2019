@@ -154,11 +154,12 @@ def builder(buf, node, children):
     if kind == 'remark_list':
         marker = children[0]
         spacing = children[1]
+        items = children[2:]
         args = [("marker", marker)]
 
         if spacing == "tight":
             if all(c and c.name == dom.ItemSpan.name for c in children[2:]):
-                return dom.BulletList([], [c for c in children[2:] if c is not None])
+                return dom.BulletList([], [c for c in items if c is not None])
 
         new_children = []
         for c in children[2:]:
@@ -176,16 +177,19 @@ def builder(buf, node, children):
     if kind == 'item_spacing':
         return node.value
     if kind == 'remark_item':
-        spacing = children[1]
+        label = children[0]
+        args = children[1]
+        spacing = children[2]
+        text = children[3:]
         if spacing == "tight":
-            if not children[2:]:
-                return dom.ItemSpan(children[0], [])
-            elif len(children) == 3 and children[2].name == dom.Paragraph.name and not children[2].args:
-                return dom.ItemSpan(children[0], trim_whitespace(children[2].text))
+            if not text:
+                return dom.ItemSpan(args, [])
+            elif len(text) == 1 and text[0].name == dom.Paragraph.name and not text[0].args:
+                return dom.ItemSpan(args, trim_whitespace(text[0].text))
             else:
-                return dom.ItemBlock(children[0], [c for c in children[2:] if c is not None])
+                return dom.ItemBlock(args, [c for c in text if c is not None])
 
-        return dom.ItemBlock(children[0], [c for c in children[2:] if c is not None])
+        return dom.ItemBlock(args, [c for c in text if c is not None])
 
     if kind == "directive_fragment":
         if not children[1].text:
@@ -224,6 +228,24 @@ def builder(buf, node, children):
         args = children[1]
         text = children[2] 
         if text:
+            if name == 'todo' and text.name == "directive_list":
+                spacing = text.get_arg('spacing')
+                if spacing == "tight":
+                    if all(c and c.name == dom.ItemSpan.name for c in text.text):
+                        children = [dom.TodoItemSpan(c.args, c.text) for c in text.text]
+                        return dom.TodoList(args, children)
+
+                new_children = []
+                for c in text.text:
+                    if c is None: continue
+                    if c.name == dom.ItemSpan.name:
+                        t = [dom.Paragraph([], c.text)] if c.text else []
+                        c = dom.TodoItemBlock(c.args, t)
+                    else:
+                        c = dom.TodoItemBlock(c.args, c.text)
+                    new_children.append(c)
+                return dom.TodoList(args, new_children)
+
             if name == 'list' and text.name == "directive_definition_list":
                 return dom.DefinitionList(args, text.text)
             if name == 'list' and text.name == "directive_list":
