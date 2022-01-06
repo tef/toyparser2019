@@ -156,7 +156,7 @@ def builder(buf, node, children):
     if kind == 'remark_list':
         marker = children[0]
         spacing = children[1]
-        items = children[3::2] # remove labels
+        items = children[2:] # don't remove labels
         args = [("marker", marker)]
 
         if spacing == "tight":
@@ -179,9 +179,9 @@ def builder(buf, node, children):
     if kind == 'item_spacing':
         return node.value
     if kind == 'remark_item':
-        args = []
-        spacing = children[0]
-        text = children[1:]
+        args = children[0].args
+        spacing = children[1]
+        text = children[2:]
         if spacing == "tight":
             if not text:
                 return dom.ItemSpan(args, [])
@@ -361,7 +361,7 @@ def builder(buf, node, children):
     if kind == "directive_list":
         marker = children[0]
         spacing = children[1]
-        items = children[3::2] # remove labels
+        items = children[2:] # don't remove labels
         return dom.DirectiveNode("directive_list", [("marker", marker), ("spacing", spacing)], [c for c in items if c is not None])
 
     if kind == "table":

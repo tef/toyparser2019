@@ -899,8 +899,8 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                 with self.case():
                     self.whitespace(min=1, max=1, newline=True)
 
-            self.item_label()
             with self.capture_node("remark_item"):
+                self.item_label()
                 with self.choice():
                     with self.case():
                         with self.indented(count=1, dedent=self.paragraph_breaks), self.indented(count=w, dedent=self.paragraph_breaks):
@@ -931,8 +931,8 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                     with self.case():
                         self.whitespace(min=1, max=1, newline=True)
 
-                self.item_label()
                 with self.capture_node("remark_item"):
+                    self.item_label()
                     with self.choice():
                         with self.case():
                             with self.indented(count=1, dedent=self.paragraph_breaks):
