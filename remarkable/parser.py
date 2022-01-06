@@ -233,17 +233,46 @@ def builder(buf, node, children):
                 spacing = text.get_arg('spacing')
                 if spacing == "tight":
                     if all(c and c.name == dom.ItemSpan.name for c in text.text):
-                        children = [dom.TodoItemSpan(c.args, c.text) for c in text.text]
-                        return dom.TodoList(args, children)
+                        new_children = []
+                        for c in text.text:
+                            done = False
+                            args = []
+                            for k,v in c.args:
+                                if k == "label":
+                                    if v == ["x"]:
+                                        done = True
+                                else:
+                                    args.append((k,v))
+                            args.append(("done", done))
+                            new_children.append(dom.TodoItemSpan(args, c.text))
+                        return dom.TodoList(args, new_children)
 
                 new_children = []
                 for c in text.text:
                     if c is None: continue
                     if c.name == dom.ItemSpan.name:
                         t = [dom.Paragraph([], c.text)] if c.text else []
-                        c = dom.TodoItemBlock(c.args, t)
+                        args = []
+                        done = False
+                        for k,v in c.args:
+                            if k == "label":
+                                if v == ["x"]:
+                                    done = True
+                            else:
+                                args.append((k,v))
+                        args.append(("done", done))
+                        c = dom.TodoItemBlock(args, t)
                     else:
-                        c = dom.TodoItemBlock(c.args, c.text)
+                        args = []
+                        done = False
+                        for k,v in c.args:
+                            if k == "label":
+                                if v == ["x"]:
+                                    done = True
+                            else:
+                                args.append((k,v))
+                        args.append(("done", done))
+                        c = dom.TodoItemBlock(args, c.text)
                     new_children.append(c)
                 return dom.TodoList(args, new_children)
 

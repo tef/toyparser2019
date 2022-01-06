@@ -299,7 +299,7 @@ class TodoList(Block):
     def walk(self, builder):
         with builder.build_bullet_list(self.get_arg('bullet'), len(self.text)) as l:
             for item in self.text:
-                checked = item.get_arg('label') == ["x"]
+                checked = item.get_arg('done')
                 if item.name == TodoItemSpan.name:
                     with l.build_item_span() as p:
                         if checked:
