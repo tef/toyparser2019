@@ -299,7 +299,6 @@ class TodoList(Block):
     def walk(self, builder):
         with builder.build_bullet_list(self.get_arg('bullet'), len(self.text)) as l:
             for item in self.text:
-                print(item, item.text)
                 if item.name == TodoItemSpan.name:
                     with l.build_item_span() as p:
                         p.walk_text(item.text)
@@ -787,11 +786,15 @@ def named_rson_block(name, args):
         return Node(name, args)
 
 def object_to_tagged(obj):
-    args = {}
-    if obj.text:
-        args['text'] = obj.text
-    args.update(obj.args)
-    return obj.name, args
+    try:
+        args = {}
+        if obj.text:
+            args['text'] = obj.text
+        args.update(obj.args)
+        return obj.name, args
+    except:
+        print(obj, obj.name, obj.args, obj.text)
+        raise
 
 def tagged_to_object(name, value):
     if name in elements:

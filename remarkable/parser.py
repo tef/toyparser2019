@@ -136,8 +136,10 @@ def builder(buf, node, children):
         if children[1].name == dom.ItemSpan.name:
             return dom.DefinitionSpan([], children)
         return dom.DefinitionBlock([], children)
+    if kind == 'remark_label_span':
+        return children
     if kind == 'remark_label':
-        return dom.ItemLabel([], trim_whitespace(children))
+        return dom.ItemLabel(children[1], trim_whitespace(children[0]))
     if kind == 'remark_definition_block':
         if len(children) == 1 and children[0].name == dom.Paragraph.name:
             return dom.ItemSpan([],children[0].text)
@@ -154,11 +156,11 @@ def builder(buf, node, children):
     if kind == 'remark_list':
         marker = children[0]
         spacing = children[1]
-        items = children[2:]
+        items = children[3::2] # remove labels
         args = [("marker", marker)]
 
         if spacing == "tight":
-            if all(c and c.name == dom.ItemSpan.name for c in children[2:]):
+            if all(c and c.name == dom.ItemSpan.name for c in items):
                 return dom.BulletList([], [c for c in items if c is not None])
 
         new_children = []
@@ -177,10 +179,9 @@ def builder(buf, node, children):
     if kind == 'item_spacing':
         return node.value
     if kind == 'remark_item':
-        label = children[0]
-        args = children[1]
-        spacing = children[2]
-        text = children[3:]
+        args = []
+        spacing = children[0]
+        text = children[1:]
         if spacing == "tight":
             if not text:
                 return dom.ItemSpan(args, [])
@@ -360,7 +361,8 @@ def builder(buf, node, children):
     if kind == "directive_list":
         marker = children[0]
         spacing = children[1]
-        return dom.DirectiveNode("directive_list", [("marker", marker), ("spacing", spacing)], [c for c in children[2:] if c is not None])
+        items = children[3::2] # remove labels
+        return dom.DirectiveNode("directive_list", [("marker", marker), ("spacing", spacing)], [c for c in items if c is not None])
 
     if kind == "table":
         text = []
@@ -677,9 +679,11 @@ def commonmark_builder(buf, node, children):
     if kind == 'item_spacing':
         return node.value
     if kind == 'remark_item':
-        spacing = children[1]
+        spacing = children[0]
+        text = children[1:]
+        args = []
         if spacing == "tight":
-            if not children[2:]:
+            if not children[1:]:
                 return dom.ItemSpan(children[0], [])
             elif len(children) == 3 and children[2].name == dom.Paragraph and not children[2].args:
                 return dom.ItemSpan(children[0], [trim_whitepace(t) for t in children[2].text if t is not None])

@@ -835,49 +835,50 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
 
     @rule()
     def item_label(self):
-        with self.choice():
-            with self.case():
-                with self.count(columns=True) as n, self.repeat(min=1):
-                    self.literal("[")
-                with self.reject():
-                    self.line_end()
-                with self.capture_node("remark_label"):
-                    with self.optional():
-                        with self.reject():
-                            with self.repeat(min=n, max=n):
-                                self.literal("]")
-                        self.inline_element()
-
-                        with self.repeat(min=0):
-                            with self.choice():
-                                with self.case():
-                                    self.linebreak()
-                                with self.case():
-                                    with self.capture_node("remark_whitespace"):
-                                        self.whitespace()
-
+        with self.capture_node("remark_label"):
+            with self.choice():
+                with self.case():
+                    with self.count(columns=True) as n, self.repeat(min=1):
+                        self.literal("[")
+                    with self.reject():
+                        self.line_end()
+                    with self.capture_node("remark_label_span"):
+                        with self.optional():
                             with self.reject():
                                 with self.repeat(min=n, max=n):
                                     self.literal("]")
                             self.inline_element()
-                    with self.repeat(), self.choice():
-                        with self.case():
-                            self.linebreak()
-                        with self.case():
-                            with self.capture_node("remark_whitespace"):
-                                self.whitespace()
 
-                with self.repeat(min=n, max=n):
-                    self.literal("]")
-            with self.case():
-                with self.capture_node("remark_label"):
-                    pass
-        with self.capture_node("directive_args"):
-            with self.optional():
-                self.literal("{")
-                self.directive_args()
-                self.literal("}")
-                self.whitespace(min=1)
+                            with self.repeat(min=0):
+                                with self.choice():
+                                    with self.case():
+                                        self.linebreak()
+                                    with self.case():
+                                        with self.capture_node("remark_whitespace"):
+                                            self.whitespace()
+
+                                with self.reject():
+                                    with self.repeat(min=n, max=n):
+                                        self.literal("]")
+                                self.inline_element()
+                        with self.repeat(), self.choice():
+                            with self.case():
+                                self.linebreak()
+                            with self.case():
+                                with self.capture_node("remark_whitespace"):
+                                    self.whitespace()
+
+                    with self.repeat(min=n, max=n):
+                        self.literal("]")
+                with self.case():
+                    with self.capture_node("remark_label_span"):
+                        pass
+            with self.capture_node("directive_args"):
+                with self.optional():
+                    self.literal("{")
+                    self.directive_args()
+                    self.literal("}")
+                    self.whitespace(min=1)
             
     @rule()
     def inner_list(self):
@@ -898,8 +899,8 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                 with self.case():
                     self.whitespace(min=1, max=1, newline=True)
 
+            self.item_label()
             with self.capture_node("remark_item"):
-                self.item_label()
                 with self.choice():
                     with self.case():
                         with self.indented(count=1, dedent=self.paragraph_breaks), self.indented(count=w, dedent=self.paragraph_breaks):
@@ -930,8 +931,8 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                     with self.case():
                         self.whitespace(min=1, max=1, newline=True)
 
+                self.item_label()
                 with self.capture_node("remark_item"):
-                    self.item_label()
                     with self.choice():
                         with self.case():
                             with self.indented(count=1, dedent=self.paragraph_breaks):
