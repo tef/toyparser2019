@@ -179,7 +179,7 @@ def builder(buf, node, children):
     if kind == 'item_spacing':
         return node.value
     if kind == 'remark_item':
-        args = children[0].args
+        args = children[0].args + [("label", children[0].text,)]
         spacing = children[1]
         text = children[2:]
         if spacing == "tight":

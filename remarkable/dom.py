@@ -299,11 +299,20 @@ class TodoList(Block):
     def walk(self, builder):
         with builder.build_bullet_list(self.get_arg('bullet'), len(self.text)) as l:
             for item in self.text:
+                checked = item.get_arg('label') == ["x"]
                 if item.name == TodoItemSpan.name:
                     with l.build_item_span() as p:
+                        if checked:
+                            p.walk_text(["[x]", " "])
+                        else:
+                            p.walk_text(["[ ]", " "])
                         p.walk_text(item.text)
                 if item.name == TodoItemBlock.name:
                     with l.build_block_item() as p:
+                        if checked:
+                            p.walk_text(["[x]", " "])
+                        else:
+                            p.walk_text(["[ ]", " "])
                         p.walk_text(item.text)
 @elements.add()
 class Blockquote(Block):
