@@ -244,7 +244,7 @@ def builder(buf, node, children):
                                 else:
                                     args.append((k,v))
                             args.append(("done", done))
-                            new_children.append(dom.TodoItemSpan(args, c.text))
+                            new_children.append(dom.ItemSpan(args, c.text))
                         return dom.TodoList(args, new_children)
 
                 new_children = []
@@ -261,7 +261,7 @@ def builder(buf, node, children):
                             else:
                                 args.append((k,v))
                         args.append(("done", done))
-                        c = dom.TodoItemBlock(args, t)
+                        c = dom.ItemBlock(args, t)
                     else:
                         args = []
                         done = False
@@ -272,7 +272,7 @@ def builder(buf, node, children):
                             else:
                                 args.append((k,v))
                         args.append(("done", done))
-                        c = dom.TodoItemBlock(args, c.text)
+                        c = dom.ItemBlock(args, c.text)
                     new_children.append(c)
                 return dom.TodoList(args, new_children)
 

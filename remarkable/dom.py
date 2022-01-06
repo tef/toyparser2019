@@ -300,14 +300,14 @@ class TodoList(Block):
         with builder.build_bullet_list(self.get_arg('bullet'), len(self.text)) as l:
             for item in self.text:
                 checked = item.get_arg('done')
-                if item.name == TodoItemSpan.name:
+                if item.name == ItemSpan.name:
                     with l.build_item_span() as p:
                         if checked:
                             p.walk_text(["[x]", " "])
                         else:
                             p.walk_text(["[ ]", " "])
                         p.walk_text(item.text)
-                if item.name == TodoItemBlock.name:
+                if item.name == ItemBlock.name:
                     with l.build_block_item() as p:
                         if checked:
                             p.walk_text(["[x]", " "])
@@ -326,13 +326,6 @@ class Blockquote(Block):
 @elements.add()
 class ItemBlock(Block):
     name = "ItemBlock"
-
-    def walk(self, builder):
-        raise Exception('no')
-
-@elements.add()
-class TodoItemBlock(Block):
-    name = "TodoItemBlock"
 
     def walk(self, builder):
         raise Exception('no')
@@ -418,13 +411,6 @@ class ItemSpan(Inline):
     def walk(self, builder):
         raise Exception('no')
 
-
-@elements.add()
-class TodoItemSpan(Inline):
-    name = "TodoItemSpan"
-
-    def walk(self, builder):
-        raise Exception('no')
 
 @elements.add()
 class CodeSpan(Inline):
