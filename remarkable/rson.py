@@ -678,8 +678,8 @@ b"
     test_parse("[]", [])
     test_parse("[1 , 2 , 3 , 4 , 4 ]", [1, 2, 3, 4, 4])
     test_parse("{'a':1,'b':2}", dict(a=1, b=2))
-    test_parse("@set [1,2,3,4]", set([1, 2, 3, 4]))
-    test_parse("{'a':1,'b':2}", dict(a=1, b=2))
+    test_parse("@set [ 1 , 2 , 3 , 4 ]", set([1, 2, 3, 4]))
+    test_parse("{ 'a':1 , 'b':2 }", dict(a=1, b=2))
     test_parse("@complex [1,2]", 1 + 2j)
     test_parse("@bytestring 'foo'", b"foo")
     test_parse("@base64 '{}'".format(
