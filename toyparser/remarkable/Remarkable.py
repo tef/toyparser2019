@@ -817,10 +817,11 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                             with self.case(): self.para()
                         
 
+    START_LIST = ["--", "-", "*", "+"]
     @rule()
     def start_list_block(self):
         self.whitespace(max=8)
-        self.literal("--","-", "*")
+        self.literal(*self.START_LIST)
         with self.choice():
             with self.case(), self.lookahead():
                 self.whitespace()
@@ -828,9 +829,8 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
             with self.case():
                 self.whitespace(min=1, max=1, newline=True)
 
-
     @rule()
-    def group_item(self):
+    def list_item(self):
         with self.variable('tight') as spacing:
             with self.capture_node('item_spacing', value=spacing):
                 pass
@@ -928,7 +928,7 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                 with self.count(columns=True) as i:
                     self.whitespace(max=8)
                 with self.capture_node('item_marker'), self.backref() as marker:
-                    self.literal("--", "-", "*")
+                    self.literal(*self.START_LIST)
             with self.capture_node('list_spacing', value=spacing):
                 pass
 
@@ -945,7 +945,7 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                 with self.choice():
                     with self.case():
                         with self.indented(count=1, dedent=self.paragraph_breaks), self.indented(count=w, dedent=self.paragraph_breaks):
-                            self.group_item()
+                            self.list_item()
                     with self.case():
                         self.whitespace()
                         self.end_of_line()
@@ -978,7 +978,7 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                         with self.case():
                             with self.indented(count=1, dedent=self.paragraph_breaks):
                                 with self.indented(count=w, dedent=self.paragraph_breaks):
-                                    self.group_item()
+                                    self.list_item()
                         with self.case():
                             self.whitespace()
                             self.end_of_line()
@@ -989,7 +989,6 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
     def list_block(self):
         with self.capture_node('remark_list'):
             self.inner_list()
-
 
     @rule()
     def start_table(self):
