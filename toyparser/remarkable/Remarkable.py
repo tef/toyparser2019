@@ -6,11 +6,13 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
         self.whitespace()
         self.end_of_line()
 
+    BYTE_ORDER_MARK = "\uFEFF"
+
     # block
     @rule(start="remark_document")
     def remark_document(self):
         with self.optional():
-            self.literal("\uFEFF")
+            self.literal(self.BYTE_ORDER_MARK)
             with self.choice():
                 with self.case(): self.block_element()
                 with self.case(): self.para()
@@ -18,12 +20,8 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                 with self.case(): self.end_of_file()
         with self.choice():
             with self.case():
+                self.whitespace()
                 self.end_of_file()
-            # with self.case(): # idea for top level @document{...} directive
-            #    self.whitespace(newline=True)
-            #    self.inline_directive()
-            #    self.whitespace(newline=True)
-            #    self.end_of_file()
             with self.case():
                 with self.repeat(min=0) as n:
                     self.indent()
@@ -540,10 +538,13 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                 self.whitespace()
                 self.newline()
     # inlines/paras
+
+    START_INLINE_DIRECTIVE = ["$",]
+    END_INLINE_DIRECTIVE = ["$", ";",]
             
     @rule(inline=True)
     def inline_directive(self):
-        self.literal("$")
+        self.literal(*self.START_INLINE_DIRECTIVE)
         with self.reject():
             self.literal("begin", "end", "raw")
         with self.capture_node("inline_directive"):
@@ -553,7 +554,7 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                 self.literal(":")
             with self.optional(), self.choice():
                 with self.case():
-                    self.literal(";", "$")
+                    self.literal(*self.END_INLINE_DIRECTIVE)
                     self.capture_value(None)
                     self.capture_value(None)
                 with self.case():

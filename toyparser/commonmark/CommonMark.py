@@ -36,12 +36,12 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
             with self.repeat(min=1):
                 with self.reject():
                     self.literal("...", "---")
-                with self.repeat():
-                    self.whitespace()
-                    with self.repeat(min=1):
-                        self.range("a-z", "A-Z")
-                    self.literal(":")
-                with self.repeat():
+                self.whitespace()
+                with self.repeat(min=1):
+                    self.range("a-z", "A-Z")
+                self.literal(":")
+                self.whitespace()
+                with self.repeat(min=1):
                     self.range("\n", invert=True)
                 self.newline()
         self.literal("...", "---")
@@ -1640,17 +1640,17 @@ class CommonMark(Grammar, capture="document", whitespace=[" ", "\t"], newline=["
                         with self.reject():
                             self.literal("--", "->", ">", "---")
                         self.range("\n", invert=True)
-                with self.repeat():
+                    with self.repeat():
+                        with self.capture_node('raw'):
+                            self.newline()
+                        self.indent(partial=True)
+                        with self.capture_node('raw'):
+                            with self.repeat():
+                                with self.reject():
+                                    self.literal("--", "->", ">", "---")
+                                self.range("\n", invert=True)
                     with self.capture_node('raw'):
-                        self.newline()
-                    self.indent(partial=True)
-                    with self.capture_node('raw'):
-                        with self.repeat():
-                            with self.reject():
-                                self.literal("--", "->", ">", "---")
-                            self.range("\n", invert=True)
-                with self.capture_node('raw'):
-                    self.literal("-->")
+                        self.literal("-->")
             with self.case():
                 with self.capture_node('raw'):
                     self.literal("<!")
@@ -2353,6 +2353,10 @@ _builder = lambda fn:builder.__setitem__(fn.__name__,fn)
 @_builder
 def yaml_metadata_block(buf, node, children):
     return ""
+
+@_builder
+def html_comment(buf, node, children):
+    return buf[node.start:node.end]
 
 @_builder
 def document(buf, node, children):

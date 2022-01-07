@@ -283,7 +283,7 @@ class SequenceNode(GrammarNode):
 NULL = object()
 
 class FunctionBuilder:
-    def __init__(self, names):
+    def __init__(self, names, attrs):
         self.rules = None
         self.block_mode = "build"
         class Rule:
@@ -327,6 +327,9 @@ class FunctionBuilder:
         for name, rule in names.items():
             if hasattr(self, name): raise BadGrammar('Can\'t override ',name,'with rule. Rename it')
             setattr(self, name, Rule(name, rule))
+        for name, value in attrs.items():
+            if not name.startswith('_'):
+                setattr(self, name, value)
 
     def from_function(self, fn):
         if self.block_mode != "build": raise SyntaxError()
@@ -702,7 +705,7 @@ def build_grammar_rules(attrs, args):
 
     names = {name:attrs.named_rules.get(name, NamedNode(name)) for name in rules}
 
-    builder = FunctionBuilder(names)
+    builder = FunctionBuilder(names, new_attrs)
     rule_options = {k:r.options() for k,r in rules.items()}
     if start is None:
         candidates = []
