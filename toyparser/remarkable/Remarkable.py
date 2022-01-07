@@ -50,8 +50,6 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
     @rule()
     def block_element(self):
         with self.choice():
-            # with self.case():
-            #    self.block_rson()
             with self.case():
                 self.code_block()
             with self.case():
@@ -60,6 +58,8 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                 self.horizontal_rule()
             with self.case():
                 self.begin_end_directive()
+            with self.case():
+                self.raw_block_directive()
             with self.case():
                 self.block_directive()
             with self.case():
@@ -290,139 +290,162 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
     def block_directive(self):
         with self.count(columns=True) as min_indent:
             self.whitespace(max=8)
-        self.literal("@")
-        with self.reject():
-            self.literal("begin", "end", "raw")
-        with self.capture_node("block_directive"):
-            with self.capture_node("directive_name"), self.backref() as name:
-                self.raw_identifier()
-            with self.capture_node("directive_args"), self.optional():
-                self.whitespace()
-                self.literal("{")
-                self.directive_args()
-                self.literal("}")
-            with self.choice():
-                with self.case():
-                    self.literal(";")
-                    self.capture_value(None)
-                    self.newline()
-                with self.case():
-                    with self.capture_node('directive_code'): 
-                        self.inner_code_block()
-                with self.case():
-                    self.whitespace(max=1)
-                    with self.count(columns=True) as n, self.repeat(min=1):
-                        self.literal("[")
-                    self.line_end()
-                    with self.capture_node("directive_block"):
-                        with self.repeat(min=0):
-                            self.indent()
-                            with self.reject():
-                                self.whitespace(max=8)
-                                with self.repeat(max=n, min=n):
-                                    self.literal("]")
-                                self.line_end()
-                            with self.choice():
+        with self.indented():
+            self.literal("@")
+            with self.reject():
+                self.literal("begin", "end", "raw")
+            with self.capture_node("block_directive"):
+                with self.capture_node("directive_name"), self.backref() as name:
+                    self.raw_identifier()
+                with self.capture_node("directive_args"), self.optional():
+                    self.whitespace()
+                    self.literal("{")
+                    self.directive_args()
+                    self.literal("}")
+                with self.choice():
+                    with self.case():
+                        self.literal(";")
+                        self.capture_value(None)
+                        self.newline()
+                    with self.case():
+                        with self.capture_node('directive_code'): 
+                            self.inner_code_block()
+                    with self.case():
+                        self.whitespace(max=1)
+                        with self.count(columns=True) as n, self.repeat(min=1):
+                            self.literal("[")
+                        self.line_end()
+                        with self.capture_node("directive_block"):
+                            with self.repeat(min=0):
+                                self.indent()
+                                with self.reject():
+                                    self.whitespace(max=8)
+                                    with self.repeat(max=n, min=n):
+                                        self.literal("]")
+                                    self.line_end()
+                                with self.choice():
 
-                                with self.case(): self.block_element()
-                                with self.case(): self.para()
-                                with self.case(): self.empty_lines()
-                    self.indent()
-                    self.whitespace(max=8)
-                    with self.repeat(max=n, min=n):
-                        self.literal("]")
-                    self.line_end()
-                with self.case():
-                    # self.literal(":")
-                    with self.reject():
-                        self.literal("::")
-                    with self.choice():
-                        with self.case():
-                            with self.reject():
-                                self.whitespace()
-                                self.newline()
-                            self.whitespace(min=1)
-                            with self.capture_node("directive_para"):
-                                self.inner_para()
-                            self.end_of_line()
-                        with self.case():
+                                    with self.case(): self.block_element()
+                                    with self.case(): self.para()
+                                    with self.case(): self.empty_lines()
+                        self.indent()
+                        with self.repeat(max=n, min=n):
+                            self.literal("]")
+                        self.line_end()
+                    with self.case():
+                        with self.reject():
                             self.whitespace()
                             self.newline()
-                            self.indent()
-                            self.whitespace(min=min_indent, max=min_indent)
-                            with self.reject():
-                                self.whitespace(min=1)
-                            with self.indented():
-                                with self.choice():
-                                    with self.case():
-                                        with self.capture_node("directive_list"):
-                                            self.inner_list()
-                                    with self.case():
-                                        with self.capture_node("directive_quote"):
-                                            self.inner_blockquote()
-                                    with self.case():
-                                        with self.capture_node("directive_prose"):
-                                            self.inner_prose_para()
-                                    with self.case():
-                                        with self.capture_node("directive_table"):
-                                            self.inner_table()
-                                    with self.case():
-                                        with self.capture_node("directive_definition_list"):
-                                            self.definition_item()
-                                            with self.repeat():
-                                                self.indent()
-                                                self.definition_item()
-                        with self.case():
-                            self.whitespace()
-                            self.newline()
-                            self.indent()
-                            # with self.count(columns=True) as c:
-                            self.whitespace(min=min_indent, max=min_indent)
+                        self.whitespace(min=1)
+                        with self.capture_node("directive_para"):
+                            self.inner_para()
+                        self.end_of_line()
+                    with self.case(): # Block directly underneath directive
+                        self.whitespace()
+                        self.newline()
+                        self.indent()
+                        with self.reject():
                             self.whitespace(min=1)
-                            with self.indented(), self.capture_node("directive_fragment"):
-                                with self.choice():
-                                    with self.case():
-                                        with self.capture_node("directive_list"):
-                                            self.inner_list()
-                                    with self.case():
-                                        with self.capture_node("directive_quote"):
-                                            self.inner_blockquote()
-                                    with self.case():
-                                        with self.capture_node("directive_prose"):
-                                            self.inner_prose_para()
-                                    with self.case():
-                                        with self.capture_node("directive_table"):
-                                            self.inner_table()
-                                    with self.case():
-                                        with self.capture_node("directive_definition_list"):
-                                            self.definition_item()
-                                            with self.repeat():
-                                                self.indent()
-                                                self.definition_item()
-
-                                    with self.case(): 
-                                        with self.capture_node("directive_block"):
-                                            self.block_element()
-                                    with self.case(): 
-                                        with self.capture_node("directive_block"):
-                                            self.para()
-                                    with self.case(): 
-                                        self.empty_lines()
-                                with self.capture_node("directive_block"):
-                                    with self.repeat(min=0) as n:
+                        with self.choice():
+                            with self.case():
+                                with self.capture_node("directive_list"):
+                                    self.inner_list()
+                            with self.case():
+                                with self.capture_node("directive_quote"):
+                                    self.inner_blockquote()
+                            with self.case():
+                                with self.capture_node("directive_prose"):
+                                    self.inner_prose_para()
+                            with self.case():
+                                with self.capture_node("directive_table"):
+                                    self.inner_table()
+                            with self.case():
+                                with self.capture_node("directive_definition_list"):
+                                    self.definition_item()
+                                    with self.repeat():
                                         self.indent()
-                                        with self.choice():
-                                            with self.case(): self.block_element()
-                                            with self.case(): self.para()
-                                            with self.case(): self.empty_lines()
-                        with self.case():
-                            self.whitespace()
-                            self.newline()
-                            with self.capture_node("directive_para"):
-                                pass
-                with self.case():
-                    self.line_end()
-                    self.capture_value(None)
+                                        self.definition_item()
+                            with self.case():
+                                with self.capture_node('directive_code'): 
+                                    self.inner_code_block()
+
+                    with self.case(): # Indented Block
+                        self.whitespace()
+                        self.newline()
+                        self.indent()
+                        self.whitespace(min=1)
+                        with self.indented(), self.capture_node("directive_fragment"):
+                            with self.choice(): # Allow special form where first/only item is directive
+                                with self.case():
+                                    with self.capture_node("directive_list"):
+                                        self.inner_list()
+                                with self.case():
+                                    with self.capture_node("directive_quote"):
+                                        self.inner_blockquote()
+                                with self.case():
+                                    with self.capture_node("directive_prose"):
+                                        self.inner_prose_para()
+                                with self.case():
+                                    with self.capture_node("directive_table"):
+                                        self.inner_table()
+                                with self.case():
+                                    with self.capture_node('directive_code'): 
+                                        self.inner_code_block()
+                                with self.case():
+                                    with self.capture_node("directive_definition_list"):
+                                        self.definition_item()
+                                        with self.repeat():
+                                            self.indent()
+                                            self.definition_item()
+                                with self.case(): 
+                                    with self.capture_node("directive_block"):
+                                        self.block_element()
+                                with self.case(): 
+                                    with self.capture_node("directive_block"):
+                                        self.para()
+                                with self.case(): 
+                                    self.empty_lines()
+                            with self.capture_node("directive_block"):
+                                with self.repeat(min=0) as n:
+                                    self.indent()
+                                    with self.choice():
+                                        with self.case(): self.block_element()
+                                        with self.case(): self.para()
+                                        with self.case(): self.empty_lines()
+                    with self.case():
+                        self.whitespace()
+                        self.end_of_file()
+                        self.capture_value(None)
+                    with self.case(): # Empty Line
+                        self.whitespace()
+                        self.newline()
+                        self.indent()
+                        self.whitespace()
+                        self.line_end()
+                        self.capture_value(None)
+    @rule()
+    def raw_block_directive(self):
+        with self.count(columns=True) as min_indent:
+            self.whitespace(max=8)
+        with self.indented():
+            self.literal("@raw::")
+            with self.capture_node("raw_block_directive"):
+                with self.capture_node("directive_name"), self.backref() as name:
+                    self.raw_identifier()
+                with self.capture_node("directive_args"), self.optional():
+                    self.whitespace()
+                    self.literal("{")
+                    self.directive_args()
+                    self.literal("}")
+                self.whitespace()
+                with self.optional():
+                    self.newline()
+                    self.indent()
+                    self.whitespace(min=min_indent, max=min_indent)
+                    with self.reject():
+                        self.whitespace(min=1)
+                self.inner_code_block()
+
     @rule()
     def start_definition(self):
         self.whitespace(max=8)
@@ -585,6 +608,21 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                         self.directive_args()
                         self.literal("}")
 
+    @rule(inline=True)
+    def raw_inline_directive(self):
+        self.literal("$raw::")
+        with self.capture_node("raw_inline_directive"):
+            with self.capture_node("directive_name"):
+                self.remark_identifier()
+            with self.reject():
+                self.literal(":")
+            with self.capture_node('directive_code_span') as span: 
+                self.inner_code_span()
+            with self.capture_node("directive_args"), self.optional():
+                self.literal("{")
+                self.directive_args()
+                self.literal("}")
+
     @rule() 
     def horizontal_rule(self):
         self.whitespace(max=8)
@@ -713,27 +751,26 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
 
     @rule()
     def inner_code_block(self):
-        with self.indented():
-            fence = "`"
-            with self.count(char=fence) as c, self.repeat(min=3):
-                self.literal(fence)
-            self.line_end()
-            with self.repeat():
-                self.indent()
-                with self.reject():
-                    with self.repeat(min=c):
-                        self.literal(fence)
-                    self.line_end()
-                with self.capture_node('code_text'):
-                    with self.repeat(min=0):
-                        self.range("\n", invert=True)
-                with self.capture_node('code_text'):
-                    self.line_end()
+        fence = "`"
+        with self.count(char=fence) as c, self.repeat(min=3):
+            self.literal(fence)
+        self.line_end()
+        with self.repeat():
             self.indent()
-            with self.repeat(min=c):
-                self.literal(fence)
-            self.whitespace()
-            self.line_end()
+            with self.reject():
+                with self.repeat(min=c):
+                    self.literal(fence)
+                self.line_end()
+            with self.capture_node('code_text'):
+                with self.repeat(min=0):
+                    self.range("\n", invert=True)
+            with self.capture_node('code_text'):
+                self.line_end()
+        self.indent()
+        with self.repeat(min=c):
+            self.literal(fence)
+        self.whitespace()
+        self.line_end()
 
     @rule()
     def start_blockquote(self):
@@ -1087,6 +1124,8 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                     self.remark_identifier()
                 self.literal(":")
             with self.case():
+                self.raw_inline_directive()
+            with self.case():
                 self.inline_directive()
             with self.case():
                 self.inline_span()
@@ -1225,16 +1264,6 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                 self.literal("{")
                 self.directive_args()
                 self.literal("}")
-
-    @rule()
-    def block_rson(self):
-        self.whitespace(max=8)
-        with self.capture_node('block_rson'):
-            self.literal('@raw::')
-            self.rson_identifier()
-            self.literal(' ')
-            self.rson_literal()
-            self.line_end()
 
     # rson
 

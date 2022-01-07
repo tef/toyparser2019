@@ -245,12 +245,12 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 	```rson
 	@Fragment { "text": [
 		@BulletList { "text": [
-			@ItemSpan { "text": ["1"] },
-			@ItemSpan { "text": ["2"] },
+			@ItemSpan { "text": ["1"], "label": [] },
+			@ItemSpan { "text": ["2"], "label": [] },
 		] },
 		@BulletList { "text": [
-			@ItemSpan { "text": ["3"] },
-			@ItemSpan { "text": ["4"] },
+			@ItemSpan { "text": ["3"], "label": [] },
+			@ItemSpan { "text": ["4"], "label": [] },
 		] },
 	] }
 	```
@@ -271,10 +271,10 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 	```rson
 	@Fragment { "text": [
 		@NumberedList { "start": 1, "text": [
-			@ItemSpan { "text": ["1"] },
-			@ItemSpan { "text": ["2"] },
-			@ItemSpan { "text": ["3"] },
-			@ItemSpan { "text": ["4"] },
+			@ItemSpan { "text": ["1"], "label": [] },
+			@ItemSpan { "text": ["2"], "label": [] },
+			@ItemSpan { "text": ["3"], "label": [] },
+			@ItemSpan { "text": ["4"], "label": [] },
 		] },
 	] }
 	```

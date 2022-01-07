@@ -300,8 +300,9 @@ class BlockBuilder:
         self.lines.append(line)
         self.lines.append("")
 
-    def add_raw(self, text):
-        self.lines.extend(text.splitlines())
+    def add_raw(self, name, text):
+        if name in ('text', 'ansi'):
+            self.lines.extend(text.splitlines())
 
     @contextmanager
     def build_division(self):

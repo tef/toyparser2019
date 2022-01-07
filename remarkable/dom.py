@@ -144,7 +144,7 @@ class RawBlock(Block):
     name = "RawBlock"
 
     def walk(self, builder):
-        builder.add_raw(self.text)
+        builder.add_raw(self.get_arg('name'), self.text)
 
 @elements.add()
 class Document(Block):
@@ -409,7 +409,7 @@ class RawSpan(Inline):
     name = "RawSpan"
 
     def walk(self, builder):
-        builder.add_raw(self.text)
+        builder.add_raw(self.get_arg('name'), self.text)
 
 @elements.add()
 class ItemSpan(Inline):

@@ -351,6 +351,23 @@ def builder(buf, node, children):
             text = []
 
         return dom.named_block_directive(name, args, text)
+    if kind == "raw_block_directive":
+        name = children[0]
+        args = children[1] if len(children) > 2 else []
+        text = children[2] if len(children) > 1 else []
+        args = [('name', name)] + args
+
+        return dom.RawBlock(args, text)
+    if kind == "raw_inline_directive":
+        name = children[0]
+        text = children[1] if len(children) > 1 else []
+        args = children[2] if len(children) > 2 else []
+        if text is not None:
+            text = text.text
+        args = [('name', name)] + args
+
+        return dom.RawSpan(args, text)
+
     if kind == "inline_directive":
         name = children[0]
         text = children[1] if len(children) > 1 else []
