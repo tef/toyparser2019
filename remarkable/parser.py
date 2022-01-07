@@ -130,21 +130,6 @@ def builder(buf, node, children):
         args = children[-1]
         return dom.CodeSpan(args, [c for c in children[:-1] if c is not None])
 
-    if kind == 'remark_definition_list':
-        return dom.DefinitionList([], children)
-    if kind == 'remark_definition_item':
-        if children[1].name == dom.ItemSpan.name:
-            return dom.DefinitionSpan([], children)
-        return dom.DefinitionBlock([], children)
-    if kind == 'remark_label_span':
-        return children
-    if kind == 'remark_label':
-        return dom.ItemLabel(children[1], trim_whitespace(children[0]))
-    if kind == 'remark_definition_block':
-        if len(children) == 1 and children[0].name == dom.Paragraph.name:
-            return dom.ItemSpan([],children[0].text)
-        return dom.ItemBlock([], children)
-
     if kind == 'remark_code_block':
         arg = children[0] if children[0] is not None else []
         return dom.CodeBlock(arg, [c for c in children[1:] if c is not None])
@@ -153,6 +138,17 @@ def builder(buf, node, children):
     if kind == 'remark_blockquote':
         return dom.Blockquote(children[0], children[1:])
         
+    if kind == 'remark_definition_list':
+        return dom.DefinitionList([], children)
+    if kind == 'remark_definition_label':
+        return dom.ItemLabel(children[-1], trim_whitespace(children[:-1]))
+    if kind == 'remark_definition_block':
+        return dom.ItemBlock([], children)
+
+    if kind == 'remark_label_span':
+        return children
+    if kind == 'remark_item_label':
+        return dom.ItemLabel(children[1], trim_whitespace(children[0]))
     if kind == 'remark_list':
         marker = children[0]
         spacing = children[1]

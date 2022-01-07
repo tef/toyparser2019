@@ -62,8 +62,8 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                 self.begin_end_directive()
             with self.case():
                 self.block_directive()
-            #with self.case():
-            #    self.block_definition()
+            with self.case():
+                self.block_definition()
             with self.case():
                 self.list_block()
             with self.case():
@@ -430,7 +430,7 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
 
     @rule()
     def definition_label(self):
-        with self.capture_node('remark_label'):
+        with self.capture_node('remark_definition_label'):
             with self.count(columns=True) as n:
                 with self.repeat(min=1):
                     self.range("[")
@@ -457,6 +457,10 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                         self.whitespace()
             with self.repeat(min=n, max=n):
                 self.literal("]")
+            with self.capture_node("directive_args"), self.optional():
+                self.literal("{")
+                self.directive_args()
+                self.literal("}")
 
 
     @rule()
@@ -471,48 +475,47 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
             
     @rule()
     def definition_item(self):
-        with self.capture_node('remark_definition_item'):
-            self.definition_label()
-
-            with self.capture_node('remark_definition_block'), self.choice():
-                with self.case():
-                    with self.reject():
-                        self.whitespace()
-                        self.newline()
-                    self.whitespace(min=1)
-                    self.para()
-                with self.case():
+        self.definition_label()
+        self.literal(":")
+        with self.capture_node('remark_definition_block'), self.choice():
+            with self.case():
+                with self.reject():
                     self.whitespace()
                     self.newline()
-                    self.indent()
-                    with self.reject():
-                        self.whitespace(min=1)
-                    with self.indented():
-                        with self.choice():
-                            with self.case(): self.list_block()
-                            with self.case(): self.blockquote()
-                            with self.case(): self.prose_para()
-                            with self.case(): self.table()
-                with self.case():
-                    self.whitespace()
-                    self.newline()
-                    self.indent()
-                    # with self.count(columns=True) as c:
+                self.whitespace(min=1)
+                self.para()
+            with self.case():
+                self.whitespace()
+                self.newline()
+                self.indent()
+                with self.reject():
                     self.whitespace(min=1)
-                    with self.indented():
+                with self.indented():
+                    with self.choice():
+                        with self.case(): self.list_block()
+                        with self.case(): self.blockquote()
+                        with self.case(): self.prose_para()
+                        with self.case(): self.table()
+            with self.case():
+                self.whitespace()
+                self.newline()
+                self.indent()
+                # with self.count(columns=True) as c:
+                self.whitespace(min=1)
+                with self.indented():
+                    with self.choice():
+                        with self.case(): self.block_element()
+                        with self.case(): self.para()
+                        with self.case(): self.empty_lines()
+                    with self.repeat(min=0) as n:
+                        self.indent()
                         with self.choice():
                             with self.case(): self.block_element()
                             with self.case(): self.para()
                             with self.case(): self.empty_lines()
-                        with self.repeat(min=0) as n:
-                            self.indent()
-                            with self.choice():
-                                with self.case(): self.block_element()
-                                with self.case(): self.para()
-                                with self.case(): self.empty_lines()
-                with self.case():
-                    self.whitespace()
-                    self.newline()
+            with self.case():
+                self.whitespace()
+                self.newline()
     # inlines/paras
             
     @rule(inline=True)
@@ -835,7 +838,7 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
 
     @rule()
     def item_label(self):
-        with self.capture_node("remark_label"):
+        with self.capture_node("remark_item_label"):
             with self.choice():
                 with self.case():
                     with self.count(columns=True) as n, self.repeat(min=1):

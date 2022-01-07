@@ -125,8 +125,8 @@ class DefinitionBlock(Block):
     name = "DefinitionBlock"
 
 @elements.add()
-class DefinitionSpan(Inline):
-    name = "DefinitionSpan"
+class DefinitionLabel(Inline):
+    name = "DefinitionLabel"
 
 @elements.add()
 class ItemLabel(Inline):
@@ -255,6 +255,13 @@ class NoteBlock(Block):
         with builder.build_noteblock() as b:
             b.walk_text(self.text)
 
+
+@elements.add()
+class LinkDef(Block):
+    name = "LinkDef"
+
+    def walk(self, builder):
+        pass
 
 @elements.add()
 class Figure(Block):
@@ -690,6 +697,7 @@ block_directives = { # \foo::begin
         "documentset": DocumentSet,
         "fragment": Fragment,
         "todo": TodoList,
+        "linkdef": LinkDef,
 }
 para_directives = { # \foo: ...
         "paragraph": Paragraph,
