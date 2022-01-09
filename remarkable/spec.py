@@ -1,58 +1,103 @@
 from . import dom, parser, rson
 
-def run_tests(doc):
+class TestCase:
+    def __init__(self, n, section, name, input_text, output_dom, description):
+        self.n = n
+        self.section = section
+        self.name = name
+        self.input_text = input_text
+        self.output_dom = output_dom
+        self.description = description
+        self.result_dom = None
+        self.expected_dom = None
+
+    def skip(self):
+        return self.input_text is None or self.output_dom is None
+
+    def test(self):
+        try:
+            self.result_dom = parser.parse(self.input_text)
+        except:
+            print('parse error on input {!r}'.format(self.input_text))
+            raise
+        try:
+            self.expected_dom = dom.parse(self.output_dom)
+        except:
+            print('parse error on input {!r}'.format(self.output_dom))
+            raise
+
+        return (self.result_dom == self.expected_dom)
+
+def find_tests(doc):
     tests = list(doc.select(dom.TestCase.name))
+
+    count = 0
+
+    for test_case in tests:
+        n = test_case.get_arg('n')
+        section = test_case.get_arg('section')
+        name = test_case.get_arg('name')
+        input_text = test_case.get_arg('input_text')
+        output_dom = test_case.get_arg('output_dom')
+        description = test_case.get_arg('description')
+        
+        if n is None:
+            n = count
+        if input_text is not None:
+            if hasattr(input_text, 'text'):
+                input_text = "\n".join(input_text.text)
+        elif len(test_case.text) >= 2:
+            # todo: select codeblock, etc
+            input_text, output_dom = test_case.text[:2]
+            description = test_case.text[2:]
+
+            if getattr(input_text, "name", "") == dom.CodeBlock.name and input_text.get_arg('language') == 'remark':
+                input_text = "".join(input_text.text)
+            else:
+                input_text = None
+
+            if getattr(output_dom, "name", "") == dom.CodeBlock.name and output_dom.get_arg('language') == 'rson':
+                output_dom = "".join(output_dom.text)
+            else:
+                output_dom = None
+
+        yield test_case, TestCase(n, section, name, input_text, output_dom, description)
+        count = max(count, n) + 1
+
+def run_tests(doc):
+    tests = list(find_tests(doc))
     results = []
     success = []
     total = 0
     working = 0
     skipped = 0
-    for n, test_case in enumerate(tests):
+    for element, test_case in tests:
         total += 1
-        raw_text = test_case.get_arg('input_text')
-        output_dom = test_case.get_arg('output_dom')
-        if raw_text is not None:
-            if hasattr(raw_text, 'text'):
-                raw_text = "\n".join(raw_text.text)
-            if isinstance(output_dom, str):
-                output_dom = dom.parse(output_dom)
-        elif len(test_case.text) >= 2:
-            # todo: select codeblock, etc
-            raw_text, output_dom = test_case.text[:2]
-            if getattr(raw_text, "name", "") != dom.CodeBlock.name or raw_text.get_arg('language') != 'remark':
-                test_case.args.append(('state', 'skipped'))
-                skipped+=1
-                continue
-            raw_text = "".join(raw_text.text)
-            test_case.text = test_case.text[2:]
-            if getattr(output_dom, "name", "") == dom.CodeBlock.name:
-                if output_dom.get_arg('language') == 'rson':
-                    output_dom = "".join(output_dom.text)
-                    try:
-                        output_dom = dom.parse(output_dom)
-                    except:
-                        print(output_dom)
-                        raise
-                if output_dom.get_arg('language') == 'remark':
-                    output_dom = "".join(output_dom.text)
-                    output_dom = parser.parse(output_dom)
-        if raw_text is None: 
-            test_case.args.append(('state', 'skipped'))
+        if test_case.skip():
             skipped+=1
+            element.args.append(('state', 'skipped'))
             continue
 
-        result_dom = parser.parse(raw_text)
-        test_case.args.append(('result_dom', result_dom))
-        test_case.args.append(('number', n))
+        try:
+            result = test_case.test()
+        except:
+            print(f"skipped {test_case.n}, {test_case.description}, {test_case.output_dom}")
+            skipped+=1
+            element.args.append(('state', 'skipped'))
+            continue
 
-        if result_dom == output_dom:
+        element.args.append(('result_dom', test_case.result_dom))
+        element.args.append(('number', test_case.n))
+
+        if result:
             state = "working"
-            test_case.args.append( ('state', state))
-            working+=1
+            working +=1
         else:
             state = "failed"
-            test_case.args.append( ('state', state))
-            state = dom.Strong((), state)
+
+        element.args.append(('state', state))
+        state = dom.Strong((), state)
+
         def brk(s):
             o = []
             while True:
@@ -66,21 +111,22 @@ def run_tests(doc):
                     o.append(' ')
                     s= x[1]
             return o
+
         rows = [
                 dom.Row((), [
                     dom.CellBlock((), [
                         dom.BulletList( [('bullet', '')], [
-                            dom.ItemBlock((), [dom.Paragraph((), [dom.Strong((), ["Test", " ", "Case", " ",  "#", str(n), " ", "is", " ", state]) ]) ]),
-                            dom.ItemBlock((), [dom.CodeBlock((), [repr(raw_text)]) ]),
-                            dom.ItemBlock((), [dom.CodeBlock((), brk(dom.dump(output_dom)))]),
+                            dom.ItemBlock((), [dom.Paragraph((), [dom.Strong((), ["Test", " ", "Case", " ",  "#", str(test_case.n), " ", "is", " ", state]) ]) ]),
+                            dom.ItemBlock((), [dom.CodeBlock((), [repr(test_case.input_text)]) ]),
+                            dom.ItemBlock((), [dom.CodeBlock((), brk(test_case.output_dom))]),
                         ])
                     ])
                 ]),
         ]
-        if test_case.text:
+        if test_case.description:
             rows.append(
                 dom.Row((), [
-                    dom.CellBlock((), test_case.text)
+                    dom.CellBlock((), test_case.description)
                 ])
             )
         table = dom.Table( [ ('column_align', ['left']), ], rows)

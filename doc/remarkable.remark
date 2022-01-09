@@ -455,7 +455,7 @@ Fragments can be specified with directives, or data structures too:
 
 @TestCase{
 	input_text: "\uFEFF",
-	output_dom: @Fragment {}
+	output_dom: "@Fragment {}",
 }
 	Byte order mark is ignored at start of file.
 
