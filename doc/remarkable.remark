@@ -23,11 +23,12 @@
 	annotating "text": `$inline_directive[text]{args}`
 
 	```
-	@list
+	@begin:list
 		@item It has Lists
 		@item It has $strong[bold], $emph[italic],
 		   and $strike[strikethrough] text
 		@item It even has $code`inline code` fragments
+	@end:list
 	```
 
 	`````
@@ -102,9 +103,11 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 ## A Tour of The Syntax
 
 @TestCase
+      - [input_text]
 	```remark
 	\* \` \> \# \\ \& \- \_ \: \@ \[ \]
 	```
+      - [output_dom]
 	```rson
 	@Fragment {"text": [ @Paragraph { "text": [
 	"*", " ", "`", " ", ">", " ", "#", " ", "\\",
@@ -112,13 +115,15 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 	"@", " ", "[", " ", "]",
 	]} ]}
 	```
-
+      - [description]
 	You can use $code[\\] to escape any punctuation
 
 @TestCase
+      - [input_text]
 	```remark
 	*text* **text** ***text***
 	```
+      - [output_dom]
 	```rson
 	@Fragment {"text": [ @Paragraph { "text": [
 		@Strong {"text": ["text"]}, " ",
@@ -126,7 +131,7 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 		@Strong {"text": ["text"]}, 
 	]} ]}
 	```
-	
+      - [description]
 	You can use `*` for bold text. Unlike Markdown, doubling or 
 	tripling the markers does not change their semantic meaning.
 

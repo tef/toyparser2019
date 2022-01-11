@@ -201,7 +201,7 @@ class Box:
 BULLETS = ["-", "+", ] # ["\u2022", "\u25e6"]
 
 def line_len(text):
-    return len(text)-4*(text.count("\x1b[0m")+text.count("\x1b[1m"))
+    return len(text)-4*(text.count("\x1b[0m")+text.count("\x1b[1m")) # other control codes?
 
 class DocumentBuilder:
     def __init__(self, settings, box):
