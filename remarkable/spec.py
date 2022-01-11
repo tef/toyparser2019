@@ -10,46 +10,50 @@ class TestCase:
         self.description = description
         self.result_dom = None
         self.expected_dom = None
+        self.state = None
 
-    def skip(self):
-        return self.input_text is None or self.output_dom is None
-
-    def test(self):
-        try:
-            self.result_dom = parser.parse(self.input_text)
-        except:
-            print('parse error on input {!r}'.format(self.input_text))
-            raise
-        try:
-            self.expected_dom = dom.parse(self.output_dom)
-        except:
-            print('parse error on input {!r}'.format(self.output_dom))
-            raise
-
-        return (self.result_dom == self.expected_dom)
-
-def find_tests(doc):
-    tests = list(doc.select(dom.TestCase.name))
-
-    count = 0
-
-    for test_case in tests:
-        n = test_case.get_arg('n')
-        section = test_case.get_arg('section')
-        name = test_case.get_arg('name')
-        input_text = test_case.get_arg('input_text')
-        output_dom = test_case.get_arg('output_dom')
-        description = test_case.get_arg('description')
+    @classmethod
+    def from_element(cls, element, count):
+        n = element.get_arg('n')
+        section = element.get_arg('section')
+        name = element.get_arg('name')
+        input_text = element.get_arg('input_text')
+        output_dom = element.get_arg('output_dom')
+        description = element.get_arg('description')
         
         if n is None:
             n = count
         if input_text is not None:
             if hasattr(input_text, 'text'):
                 input_text = "\n".join(input_text.text)
-        elif len(test_case.text) >= 2:
+        elif len(element.text) == 1 and getattr(element.text[0],'name', '') == dom.BulletList.name:
+            for item in element.text[0].text:
+                if getattr(item, 'name', '') in (dom.ItemSpan.name , dom.ItemBlock.name):
+                    label = "".join(item.get_arg('label'))
+                    if label == 'description':
+                        if item.name == dom.ItemBlock.name:
+                            description = item.text
+                        elif item.name == dom.ItemSpan.name:
+                            description = [dom.Paragraph([], item.text)]
+                    elif label == 'input_text':
+                        for codeblock in item.select(dom.CodeBlock.name):
+                            if codeblock.get_arg('language') == 'remark':
+                                input_text = "".join(codeblock.text)
+                                break
+                        else:
+                            input_text = None
+                    elif label == 'output_dom':
+                        for codeblock in item.select(dom.CodeBlock.name):
+                            if codeblock.get_arg('language') == 'rson':
+                                output_dom = "".join(codeblock.text)
+                                break
+                        else:
+                            output_dom = None
+
+        elif len(element.text) >= 2:
             # todo: select codeblock, etc
-            input_text, output_dom = test_case.text[:2]
-            description = test_case.text[2:]
+            input_text, output_dom = element.text[:2]
+            description = element.text[2:]
 
             if getattr(input_text, "name", "") == dom.CodeBlock.name and input_text.get_arg('language') == 'remark':
                 input_text = "".join(input_text.text)
@@ -61,42 +65,14 @@ def find_tests(doc):
             else:
                 output_dom = None
 
-        yield test_case, TestCase(n, section, name, input_text, output_dom, description)
-        count = max(count, n) + 1
+        return cls(n, section, name, input_text, output_dom, description)
 
-def run_tests(doc):
-    tests = list(find_tests(doc))
-    results = []
-    success = []
-    total = 0
-    working = 0
-    skipped = 0
-    for element, test_case in tests:
-        total += 1
-        if test_case.skip():
-            skipped+=1
-            element.args.append(('state', 'skipped'))
-            continue
+    def update_element(self, element):
+        element.args.append(('state', self.state))
+        element.args.append(('result_dom', self.result_dom))
+        element.args.append(('number', self.n))
 
-        try:
-            result = test_case.test()
-        except:
-            print(f"skipped {test_case.n}, {test_case.description}, {test_case.output_dom}")
-            skipped+=1
-            element.args.append(('state', 'skipped'))
-            continue
-
-        element.args.append(('result_dom', test_case.result_dom))
-        element.args.append(('number', test_case.n))
-
-        if result:
-            state = "working"
-            working +=1
-        else:
-            state = "failed"
-
-        element.args.append(('state', state))
-        state = dom.Strong((), state)
+        state = dom.Strong((), self.state)
 
         def brk(s):
             o = []
@@ -116,21 +92,77 @@ def run_tests(doc):
                 dom.Row((), [
                     dom.CellBlock((), [
                         dom.BulletList( [('bullet', '')], [
-                            dom.ItemBlock((), [dom.Paragraph((), [dom.Strong((), ["Test", " ", "Case", " ",  "#", str(test_case.n), " ", "is", " ", state]) ]) ]),
-                            dom.ItemBlock((), [dom.CodeBlock((), [repr(test_case.input_text)]) ]),
-                            dom.ItemBlock((), [dom.CodeBlock((), brk(test_case.output_dom))]),
+                            dom.ItemBlock((), [dom.Paragraph((), [dom.Strong((), ["Test", " ", "Case", " ",  "#", str(self.n), " ", "is", " ", state]) ]) ]),
+                            dom.ItemBlock((), [dom.CodeBlock((), [repr(self.input_text)]) ]),
+                            dom.ItemBlock((), [dom.CodeBlock((), brk(self.output_dom))]),
                         ])
                     ])
                 ]),
         ]
-        if test_case.description:
+        if self.description:
             rows.append(
                 dom.Row((), [
-                    dom.CellBlock((), test_case.description)
+                    dom.CellBlock((), self.description)
                 ])
             )
         table = dom.Table( [ ('column_align', ['left']), ], rows)
-        test_case.text = [table]
+        element.text = [table]
+
+    def run(self):
+        if self.skip():
+            self.state = "skipped"
+            return None
+
+        try:
+            result = self.test()
+        except:
+            self.state = "skipped"
+            return None
+        else:
+            if result:
+                self.state = "working"
+            else:
+                self.state = "failed"
+            return self.state
+
+    def skip(self):
+        return self.input_text is None or self.output_dom is None
+
+    def test(self):
+        try:
+            self.result_dom = parser.parse(self.input_text)
+        except:
+            print('parse error on input {!r}'.format(self.input_text))
+            raise
+        try:
+            self.expected_dom = dom.parse(self.output_dom)
+        except:
+            print('parse error on input {!r}'.format(self.output_dom))
+            raise
+
+        return (self.result_dom == self.expected_dom)
+
+def find_tests(doc):
+    return doc.select(dom.TestCase.name)
+
+def run_tests(doc):
+    count = 0
+    total = 0
+    working = 0
+    skipped = 0
+
+    tests = list(find_tests(doc))
+
+    for element in tests:
+        test_case = TestCase.from_element(element, count)
+        count = max(count, test_case.n) + 1
+        total += 1
+
+        if test_case.run():
+            working +=1
+
+        test_case.update_element(element)
+
     for r in doc.select(dom.TestReport.name):
         r.args.append(('total', total))
         r.args.append(('working', working))
