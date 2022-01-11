@@ -146,7 +146,7 @@ def find_tests(doc):
     return doc.select(dom.TestCase.name)
 
 def run_tests(doc):
-    count = 0
+    count = 1
     total = 0
     working = 0
     skipped = 0
