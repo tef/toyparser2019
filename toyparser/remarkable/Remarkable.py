@@ -1214,10 +1214,13 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
             self.newline()
         with self.repeat(min=1), self.choice():
             with self.case():
-                with self.capture_node('remark_text'):
-                    self.range("\n", "`", invert=True)
+                with self.capture_node('code_whitespace'):
+                    self.whitespace(min=1)
+            with self.case():
+                with self.capture_node('code_text'):
+                    self.range(" ", "\t", "\n", "`", invert=True)
                     with self.repeat(min=0):
-                        self.range("\n", "`", invert=True)
+                        self.range(" ", "\t", "\n", "`", invert=True)
             with self.case():
                 self.newline()
                 self.indent(partial=True)
@@ -1228,7 +1231,7 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                     with self.choice():
                         with self.case(): self.range('`', invert=True)
                         with self.case(): self.end_of_file()
-                with self.capture_node("remark_text"), self.repeat():
+                with self.capture_node("code_text"), self.repeat():
                     self.literal("`")
         with self.repeat(min=c, max=c):
             self.literal("`")

@@ -78,7 +78,6 @@ def builder(buf, node, children):
     if kind == "code_text":
         return buf[node.start:node.end]
     if kind == "code_whitespace":
-        print(node.start_column, node.end_column)
         return " "*(node.end_column-node.start_column)
     if kind == "remark_text":
         return buf[node.start:node.end]
