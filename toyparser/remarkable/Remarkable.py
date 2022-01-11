@@ -728,9 +728,12 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                     with self.repeat(min=c):
                         self.literal(fence)
                     self.line_end()
-                with self.capture_node('code_text'):
-                    with self.repeat(min=0):
-                        self.range("\n", invert=True)
+                with self.repeat(min=0):
+                    with self.choice():
+                        with self.case(), self.capture_node('code_whitespace'):
+                            self.whitespace(min=1) # handle tabs in code ugh
+                        with self.case(), self.capture_node('code_text'), self.repeat(min=1):
+                            self.range(" ", "\n", "\t", invert=True)
                 with self.capture_node('code_text'):
                     self.line_end()
             self.indent()
@@ -751,9 +754,12 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                 with self.repeat(min=c):
                     self.literal(fence)
                 self.line_end()
-            with self.capture_node('code_text'):
-                with self.repeat(min=0):
-                    self.range("\n", invert=True)
+            with self.repeat(min=0):
+                with self.choice():
+                    with self.case(), self.capture_node('code_whitespace'):
+                        self.whitespace(min=1) # handle tabs in code ugh
+                    with self.case(), self.capture_node('code_text'), self.repeat(min=1):
+                        self.range(" ", "\n", "\t", invert=True)
             with self.capture_node('code_text'):
                 self.line_end()
         self.indent()
