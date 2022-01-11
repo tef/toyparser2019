@@ -301,7 +301,7 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                             self.inner_code_block()
                     with self.case():
                         self.whitespace(max=1)
-                        with self.count(columns=True) as n, self.repeat(min=1):
+                        with self.count(columns=True) as n, self.repeat(min=3):
                             self.literal("[")
                         self.line_end()
                         with self.capture_node("directive_block"):
