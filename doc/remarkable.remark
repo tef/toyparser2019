@@ -341,7 +341,7 @@ Unlike LaTeX, unlike Markdown, and unlike RST, Remark is canonically implemented
 
       - [output_dom]
 	```rson
-	@Fragment {"text": [@CodeBlock {"text": ["1 + 2", "\n"]}]}
+	@Fragment {"text": [@CodeBlock {"text": ["1", " ", "+", " ", "2", "\n"]}]}
 	```
 
       - [description]
@@ -613,7 +613,7 @@ Fragments can be specified with directives, or data structures too:
 	````
       - [output_dom]
 	```rson
-	@Fragment {"text": [@CodeBlock {"text": ["1 + 2", "\n"]}]}
+	@Fragment {"text": [@CodeBlock {"text": ["1", " ", "+", " ", "2", "\n"]}]}
 	```
 
       - [description]

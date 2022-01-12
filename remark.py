@@ -112,50 +112,57 @@ def ConvertAnsi(ctx, file, width, height, heading):
     return Plaintext(text)
 
 @router.on("test") 
-@command(args=dict(heading="--str?", width="--int?", height="--int?", file="path"))
+@command(args=dict(heading="--str?", width="--int?", height="--int?", file="path*"))
 def Test(ctx, file, width, height, heading):
     app = ctx['app']
     name = ctx['name']
-    filename = os.path.relpath(file)
     settings = {}
     settings['double']=(heading!="single")
     if width: settings['width']=width
 
-    with open(filename) as fh:
-        text = fh.read()
-        doc = parse(text)
-
     fragments = []
-    run_tests(doc)
+    docs = []
+    
+    for name in file:
+        filename = os.path.relpath(name)
 
-
-    if is_modified(filename):
-        fragments.append(dom.HorizontalRule((), ()))
-        fragments.append(dom.Paragraph((), ["unsaved", " ", "changes", " ", "in", " ", filename]))
-        fragments.append(dom.HorizontalRule((), ()))
-
-    for r in doc.select('TestReport'):
-        fragments.append(r)
-        fragments.append(dom.HorizontalRule((), ()))
-
-    skipped = []
-    for t in doc.select('TestCase'):
-        if t.get_arg('state') == 'working':
-            pass # fragments.append(dom.Paragraph((), ["worked"]))
-        elif t.get_arg('state') == 'skipped':
-            skipped.append(t)
-            skipped.append(dom.Paragraph((), ["skipped"]))
-            skipped.append(dom.HorizontalRule((), ()))
-        else:
-            fragments.append(t)
-            fragments.append(dom.Paragraph((), ["failed"]))
-            result_dom = t.get_arg('result_dom')
-            if result_dom:
-                fragments.append(dom.Paragraph((), ["raw ast: ",dom.dump(result_dom)]))
-            else:
-                fragments.append(dom.Paragraph((), ["raw ast: null"]))
+        if is_modified(filename):
             fragments.append(dom.HorizontalRule((), ()))
-    fragments.extend(skipped)
+            fragments.append(dom.Paragraph((), ["unsaved", " ", "changes", " ", "in", " ", filename]))
+            fragments.append(dom.HorizontalRule((), ()))
+        else:
+            fragments.append(dom.HorizontalRule((), ()))
+            fragments.append(dom.Paragraph((), ["test", " ", "report", " ", "for", " ", filename]))
+            fragments.append(dom.HorizontalRule((), ()))
+
+
+        with open(filename) as fh:
+            text = fh.read()
+            doc = parse(text)
+            run_tests(doc)
+
+        for r in doc.select('TestReport'):
+            fragments.append(r)
+            fragments.append(dom.HorizontalRule((), ()))
+
+        skipped = []
+        for t in doc.select('TestCase'):
+            if t.get_arg('state') == 'working':
+                pass # fragments.append(dom.Paragraph((), ["worked"]))
+            elif t.get_arg('state') == 'skipped':
+                skipped.append(t)
+                skipped.append(dom.Paragraph((), ["skipped"]))
+                skipped.append(dom.HorizontalRule((), ()))
+            else:
+                fragments.append(t)
+                fragments.append(dom.Paragraph((), [t.get_arg('state')]))
+                result_dom = t.get_arg('result_dom')
+                if result_dom:
+                    fragments.append(dom.Paragraph((), ["raw ast: ",dom.dump(result_dom)]))
+                else:
+                    fragments.append(dom.Paragraph((), ["raw ast: null"]))
+                fragments.append(dom.HorizontalRule((), ()))
+        fragments.extend(skipped)
 
     return Document(dom.Document((), fragments), settings)
 
