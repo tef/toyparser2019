@@ -197,7 +197,10 @@ def to_html(obj):
     if 'text' in args:
         text = args.pop('text')
     if name in (dom.RawBlock.name, dom.RawSpan.name):
-        text = "".join(obj.text)
+            if args['name'].lower() == 'html':
+                text = "".join(obj.text)
+            else:
+                return "<!-- raw block omitted -->"
     else:
         text = "".join(to_html(x) for x in obj.text if x is not None) if obj.text else ""
 

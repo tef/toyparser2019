@@ -359,7 +359,7 @@ def builder(buf, node, children):
         text = children[2] if len(children) > 1 else []
         args = [('name', name)] + args
 
-        return dom.RawBlock(args, text)
+        return dom.RawBlock(args, text.text)
     if kind == "raw_inline_directive":
         name = children[0]
         text = children[1] if len(children) > 1 else []

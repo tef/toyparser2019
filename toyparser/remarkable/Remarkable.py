@@ -297,8 +297,7 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                         self.capture_value(None)
                         self.newline()
                     with self.case():
-                        with self.capture_node('directive_code'): 
-                            self.inner_code_block()
+                        self.directive_code_block()
                     with self.case():
                         self.whitespace(max=1)
                         with self.count(columns=True) as n, self.repeat(min=3):
@@ -353,8 +352,7 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                                         self.indent()
                                         self.definition_item()
                             with self.case():
-                                with self.capture_node('directive_code'): 
-                                    self.inner_code_block()
+                                self.directive_code_block()
 
                     with self.case():
                         self.whitespace()
@@ -388,7 +386,7 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                     self.whitespace(min=min_indent, max=min_indent)
                     with self.reject():
                         self.whitespace(min=1)
-                self.inner_code_block()
+                self.directive_code_block()
 
     @rule()
     def start_definition(self):
@@ -698,30 +696,32 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
             self.line_end()
 
     @rule()
-    def inner_code_block(self):
-        fence = "`"
-        with self.count(char=fence) as c, self.repeat(min=3):
-            self.literal(fence)
-        self.line_end()
-        with self.repeat():
+    def directive_code_block(self):
+        # unlike codeblock, no args
+        with self.capture_node('directive_code'): 
+            fence = "`"
+            with self.count(char=fence) as c, self.repeat(min=3):
+                self.literal(fence)
+            self.line_end()
+            with self.repeat():
+                self.indent()
+                with self.reject():
+                    with self.repeat(min=c):
+                        self.literal(fence)
+                    self.line_end()
+                with self.repeat(min=0):
+                    with self.choice():
+                        with self.case(), self.capture_node('code_whitespace'):
+                            self.whitespace(min=1) # handle tabs in code ugh
+                        with self.case(), self.capture_node('code_text'), self.repeat(min=1):
+                            self.range(" ", "\n", "\t", invert=True)
+                with self.capture_node('code_text'):
+                    self.line_end()
             self.indent()
-            with self.reject():
-                with self.repeat(min=c):
-                    self.literal(fence)
-                self.line_end()
-            with self.repeat(min=0):
-                with self.choice():
-                    with self.case(), self.capture_node('code_whitespace'):
-                        self.whitespace(min=1) # handle tabs in code ugh
-                    with self.case(), self.capture_node('code_text'), self.repeat(min=1):
-                        self.range(" ", "\n", "\t", invert=True)
-            with self.capture_node('code_text'):
-                self.line_end()
-        self.indent()
-        with self.repeat(min=c):
-            self.literal(fence)
-        self.whitespace()
-        self.line_end()
+            with self.repeat(min=c):
+                self.literal(fence)
+            self.whitespace()
+            self.line_end()
 
     @rule()
     def start_blockquote(self):
