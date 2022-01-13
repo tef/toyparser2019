@@ -64,7 +64,6 @@
 	- Entities
 	- Inline Directives, Inline Code Directives 
 	- Paragraph Directives
-	- Indented Block Directives
 	- Delimited Block Directives
 	- List, Blockquote, Prose, Table Directives
 - Document Object Model
