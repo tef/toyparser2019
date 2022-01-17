@@ -1,0 +1,188 @@
+@metadata {
+	author: "tef"
+	title:  "Remarkable, a restructured markup format"
+}
+
+@begin::section introduction
+
+# Remark(able): A restructured markup format
+
+> I also dream about a modern replacement for LaTeX designed from the ground up
+> to target multiple output formats (at least PDF, HTML, EPUB).
+> $em[John MacFarlane, author of Pandoc, editor of CommonMark.]
+
+Remark is an attempt to realise this dream: A markup format that isn't tied to one specific output format, without
+many of the shortcomings of other approaches. 
+
+- Unlike Markdown or CommonMark, Remark has a standard way to annotate text or blocks for processing
+- Unlike LaTeX or HTML, Remark has a consistent way to escape text
+- Unlike Markdown or Commonmark, Remark has it's own document object model or AST
+- Unlike LaTeX or HTML, Remark has shorthand methods to mark up text
+- Unlike LaTeX or CommonMark, Remark has a parsing-evaluation-style grammar 
+- Unlike RST, Remark doesn't require perfect alignment of ascii shorthand
+- Unlike Markdown, Remark doesn't care about the exact indentation or trailing whitespace
+
+In a nutshell: Remark is imagining an HTML like DOM, with LaTeX alike directives, with Markdown like shortcuts. As a bonuis, there's a grammar too!
+
+# A short worked example:
+
+`````
+# Remark uses Markdown style headings
+
+Paragraphs work very similar to CommonMark, continuing
+until an empty line.
+
+@aside Unlike CommonMark, Remark has ways to mark
+paragraphs as being special.
+
+Remark has CommonMark like stylings, but the symbol indicates
+which style applies, rather than the number of characters:
+
+- `*strong*` text is wrapped in `*`'s
+- `_emphasis_*` uses underscores
+- `$strong[text]` or `$emph[text]` can be used instead
+
+Remark also features a number of features found in Markdown variants:
+
+- Horizontal Rules
+- Headers
+- Lists
+- Blockquotes
+- Fenced Code Blocks
+- Prose Blocks
+- Tables
+- Emojis
+- To-do Lists (via a directive)
+- Raw Blocks
+
+Many of these can be written using shorthand, but all can be written in
+a longer style:
+
+```remark
+@begin::list {n:1}
+@item A numbered list
+@item With two items
+@end
+```
+`````
+
+@end::section
+
+@begin::section tour
+
+# A tour of Remark
+
+@begin::section dom
+
+# DOMs, Documents and Fragments
+
+The top level object of a Remark file is either a Document, or a Fragment. A Fragment contains a list of blocks, and a Document also carries a metadata entry.
+
+```
+@Document { text: [], title: "", author: "", date: "", version: "" }
+```
+
+```
+@Fragment { text: [] }
+```
+
+Blocks are items like Paragraphs, Lists, or Tables. Some blocks can contain other blocks, for example: a list can contain a sublist, but most blocks contain inlines, which in turn contain text.
+
+```
+@Paragraph {"text": ["A", " ", "paragraph", " ", "contains", "text."]}
+```
+
+Unlike CommonMark, and akin to HTML, Remark comes with a document object model.  These DOM objects all have a name (Paragraph, List, etc), and a list of key-value arguments. One argument in particular, "text", contains child nodes. 
+
+```
+@BulletedList { 
+	"text": [ 
+		@ItemSpan { "text": ["Item", " ", "one."] }
+	]
+}
+```
+
+The above examples are written in `RSON`, Remark's companion serialisation format. It's very much like JSON, but with trailing commas, comments, and tagged literals. 
+
+@end::section
+
+@begin::section paragraphs
+
+# Words, Spaces, and Newlines
+
+The most common type of block within a document is a `Paragraph`. Paragraphs contain text, whitespace, and inline blocks.
+
+```
+A paragraph in remark ends
+after a blank line
+
+Lines do not have to end with trailing whitespace
+to continue on.
+```
+
+To insert a literal line break, use `\` at the end of a line. 
+
+# Escaping text
+
+The `\` (backslash) is used to escape any special character within a remark document, including itself.
+
+For example, ``\* \` \> \# \\`` produces "\* \` \> \# \\".
+
+@end::section
+
+
+
+@begin::section directives
+
+# Inline Directives
+
+# Block Directives
+
+# Arguments
+
+@end::section
+
+
+@begin::section inlines
+
+# Styles
+# Emoji
+# Spans
+# Entities
+# Breaks
+
+@end::section 
+
+
+@begin::section blocks
+
+# Headers
+# Paragraphs
+# Prose Blocks
+# Blockquotes
+# Code Blocks
+# Horizontal Rules
+# Lists
+# Labled Lists
+# Tables
+# Definition Lists
+
+@end::section
+
+@end::section tour
+
+
+
+@begin::section spec
+
+# The Remark Specification
+# The Object Model
+# Documents
+# Whitespace and Newlines
+# Block Directives
+# Inline Directives
+# Blocks
+# Inlines
+#
+@end::section
+
