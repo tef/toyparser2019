@@ -389,16 +389,18 @@ a raw block
 ```
 ````
 
-An indented set of blocks:
+The block can be a list, a blockquote, a prose block, a definition list, a table, or a paragraph underneath
 
 ````
-@section
-	It can start on the next line and continues
-	until the first unindented block
+@table
+- - Header 1
+  - Header 1
+- - Row 1
+  - Row 2
 
 ````
 
-A delimited set of blocks
+A block can be delimited with begin/end
 
 ````
 @begin::section
