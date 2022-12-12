@@ -1,6 +1,7 @@
-@metadata { 
-    title: "Remark, a restructured markup format.",
-}
+@metadata 
+  - [title] Remark, a restructured markup format.
+  - [author] tef
+  - [version] draft
 
 # Remark(able), a restructured markup format.
 
@@ -221,9 +222,11 @@ Blocks can contain other blocks and paragraphs. Paragraphs can contain inline di
 	- Code Blocks
 	- Prose Blocks
 	- Tables
+	- Definition Lists
 	- Named Directives (`@name {...}`)
 
 - Inlines
+	- Spans
 	- Emphasis
 	- Strong
 	- Strikethrough
@@ -233,8 +236,14 @@ Blocks can contain other blocks and paragraphs. Paragraphs can contain inline di
 
 ## Documents
 
- - Can have a metadata block
- - Can be `@document[...]` (maybe)
+ - Must have a metadata block
+
+```
+@metadata
+    - [author] tef
+    - [date] 2019-09-30
+
+```
 
 
 ## Headings, Rules
@@ -292,7 +301,7 @@ that spans two lines
   - A sublist
 ````
 
-Finally, if there are no blank lines between items, or one item, and every item is a solitary paragraph,
+If there are no blank lines between items, or one item, and every item is a solitary paragraph,
 then the list is considered 'tight':
 
 ```buu
@@ -303,6 +312,12 @@ then the list is considered 'tight':
 
 ```
 The above will render without `<p>..</p>` around the item contents.
+
+List items can have optional labels:
+
+```
+- [label] text
+```
 
 ## Tables
 
@@ -340,7 +355,14 @@ $cell[2]
 @end
 ````
 
-## The LaTeX-like Directives
+## Definition Lists
+
+```
+[label]: text
+[label]: text
+```
+
+## Named directives
 
 HTML-Like Entities;
 
@@ -495,6 +517,8 @@ The `&` is not mandatory for inline forms, code blocks, horizonal rules, or begi
 
 ## Inlines
 
+- `[spans]` 
+
 - *\*strong\**, _\_emphasis\__ ~\~strike through\~~, $code[\`code\`], and `:emoji:`
 
 - Doubling or tripling markers doesn't change their meaning:
@@ -520,32 +544,25 @@ can be specified as a raw node, instead of using a directive, or `#` shorthand.
   ]
 ```
 
-Raw nodes can also be used to specify metadata, although `@metadata{author:"tef", date:"..."}` works just as well.
-
-```
-@Metadata {
-    author: "tef",
-    date: "2019-09-30T12:00Z",
-    example: &para[...],
-}
-```
-
 Really they're so things can emit dom nodes in a simpler, canonical form, and you can still paste it midway into another
 document. Yes, that's a terrible idea, but stopping it happening doesn't prevent the need.
 
 The subset of Remark that's only `@foo[]` with no directives or markup or bare identifiers, is called RSON.
+
+## Metadata
+
 
 ## An Example Document
 
 Putting it all together, here's a larger example:
 
 ````````
-@Metadata {
-    author: "tef",
-    version: "123",
+@metadata
+   - [author] tef
+   - [version] 1
 }
 
-# A title
+# A heading
 
 A paragraph is split
 over  multiple lines
