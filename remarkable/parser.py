@@ -60,9 +60,12 @@ def builder(buf, node, children):
             if metadata is None and getattr(c, "name", "") == dom.Metadata.name:
                 if c.text:
                     if c.text[0] and getattr(c.text[0], "name", "") == dom.BulletList.name:
-                        out = {}
+                        out = []
                         for item in c.text[0].text:
-                            out[" ".join(item.get_arg('label'))] = " ".join(item.text)
+                            out.append((
+                                        " ".join(item.get_arg('label')),
+                                        " ".join(item.text)
+                            ))
                         metadata = out
                         continue
                     else:

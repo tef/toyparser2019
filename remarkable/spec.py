@@ -116,6 +116,7 @@ class TestCase:
         try:
             result = self.test()
         except:
+            raise
             self.state = "skipped"
             return None
         else:

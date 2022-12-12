@@ -408,6 +408,22 @@ If metadata is provided, a `Document` is returned instead.
 @TestCase
       - [input_text]
 	```remark
+	@metadata
+	- [title] Example
+
+	```
+	
+      - [output_dom]
+	```rson
+	@Document {"title": "Example", "text": []}
+	```
+
+      - [description]
+	Metadata can be specified using a labeled list
+
+@TestCase
+      - [input_text]
+	```remark
 	@begin::document
 	@end
 	```
