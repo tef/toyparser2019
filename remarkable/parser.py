@@ -58,8 +58,18 @@ def builder(buf, node, children):
         for c in children:
             if c is None: continue
             if metadata is None and getattr(c, "name", "") == dom.Metadata.name:
-                metadata = c.args
-                continue
+                if c.args:
+                    metadata = c.args
+                    continue
+                elif c.text and c.text[0] and getattr(c.text[0], "name", "") == dom.BulletList.name:
+                    # todo
+                    out = {}
+                    for item in c.text[0].text:
+                        out[" ".join(item.get_arg('label'))] = " ".join(item.text)
+                    metadata = out
+                    continue
+                else:
+                    raise Exception(c.text)
             text.append(c)
 
         if metadata is None:

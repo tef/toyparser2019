@@ -40,7 +40,7 @@ class Console:
         self.stdin = stdin
         self.stdout = stdout
         self.stderr = stderr
-        self.encoding = None if stdout.encoding == 'UTF-8' else stdout.encoding
+        self.encoding = None # if stdout.encoding == 'UTF-8' else stdout.encoding
         self.buf = ""
         self.hacker = hacker
 
@@ -241,9 +241,8 @@ class LineConsole(Console):
 
     def render(self, obj):
         lines = obj.render(self.width, self.height, encoding=self.encoding)
-        out = "\n".join(lines)
-        self.stdout.write(out)
-        if not out.endswith("\n"):
+        for line in lines:
+            self.stdout.write(line)
             self.stdout.write("\n")
         self.stdout.flush()
 
@@ -429,7 +428,7 @@ class NoViewport:
     def __init__(self, obj, line=0):
         self.obj = obj
 
-    def render(self, width, height, encoding):
+    def render(self, width, height, encoding=None):
         mapping, buf = self.obj.render(width=width, height=height, encoding=encoding)
         return buf
 
