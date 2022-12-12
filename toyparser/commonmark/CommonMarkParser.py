@@ -19,21 +19,21 @@ class Node:
 
 regex_regex_0 = re.compile(r'''(?:\.\.\.|\-\-\-)''')
 regex_regex_1 = re.compile(r'''(?:[a-zA-Z])+''')
-regex_regex_2 = re.compile(r'''(?:[^\n])*''')
+regex_regex_2 = re.compile(r'''(?:[^\n])+''')
 regex_regex_3 = re.compile(r'''(?:(?:\#)){1,6}''')
 regex_regex_4 = re.compile(r'''(?:(?:\#))*''')
-regex_regex_5 = re.compile(r'''(?:[^\n])+''')
-regex_regex_6 = re.compile(r'''[^\n]''')
-regex_regex_7 = re.compile(r'''(?:(?:(?:```))|(?:(?:\~\~\~)))''')
-regex_regex_8 = re.compile(r'''(?:(?:`)){3,}''')
-regex_regex_9 = re.compile(r'''[!-/:-@\[-`\{-\~]''')
-regex_regex_10 = re.compile(r'''(?:[0-9]){1,7}''')
-regex_regex_11 = re.compile(r'''[xX]''')
-regex_regex_12 = re.compile(r'''[0-9a-fA-F]''')
-regex_regex_13 = re.compile(r'''(?:[0-9a-fA-F]){,6}''')
-regex_regex_14 = re.compile(r'''[a-zA-Z]''')
-regex_regex_15 = re.compile(r'''(?:[0-9a-zA-Z])+''')
-regex_regex_16 = re.compile(r'''(?:[^\n\\\&`])*''')
+regex_regex_5 = re.compile(r'''[^\n]''')
+regex_regex_6 = re.compile(r'''(?:(?:(?:```))|(?:(?:\~\~\~)))''')
+regex_regex_7 = re.compile(r'''(?:(?:`)){3,}''')
+regex_regex_8 = re.compile(r'''[!-/:-@\[-`\{-\~]''')
+regex_regex_9 = re.compile(r'''(?:[0-9]){1,7}''')
+regex_regex_10 = re.compile(r'''[xX]''')
+regex_regex_11 = re.compile(r'''[0-9a-fA-F]''')
+regex_regex_12 = re.compile(r'''(?:[0-9a-fA-F]){,6}''')
+regex_regex_13 = re.compile(r'''[a-zA-Z]''')
+regex_regex_14 = re.compile(r'''(?:[0-9a-zA-Z])+''')
+regex_regex_15 = re.compile(r'''(?:[^\n\\\&`])*''')
+regex_regex_16 = re.compile(r'''(?:[^\n])*''')
 regex_regex_17 = re.compile(r'''(?:(?:\~)){3,}''')
 regex_regex_18 = re.compile(r'''(?:[^\n\\\&])*''')
 regex_regex_19 = re.compile(r'''(?:(?:[\-\*\+])|(?:(?:[0-9]){1,9}[\.\)]))''')
@@ -447,67 +447,58 @@ class Parser:
                             break
 
                         count_1 = 0
-                        while True:
-                            offset_2 = offset_1
-                            column_2 = column_1
-                            indent_column_2 = list(indent_column_1)
-                            partial_tab_offset_2 = partial_tab_offset_1
-                            partial_tab_width_2 = partial_tab_width_1
-                            children_3 = [] if children_2 is not None else None
-                            while True:
-                                #print('entry rep rule', offset_1, offset_2)
-                                count_2 = 0
-                                while offset_2 < buf_eof:
-                                    codepoint = buf[offset_2]
-                                    if codepoint in ' \t':
-                                        if codepoint == '\t':
-                                            if offset_2 == partial_tab_offset_2 and partial_tab_width_2 > 0:
-                                                width = partial_tab_width_2
-                                            else:
-                                                width  = (self.tabstop-((column_2)%self.tabstop));
-                                            count_2 += width
-                                            column_2 += width
-                                            offset_2 += 1
-                                        else:
-                                            count_2 += 1
-                                            column_2 += 1
-                                            offset_2 += 1
+                        while offset_1 < buf_eof:
+                            codepoint = buf[offset_1]
+                            if codepoint in ' \t':
+                                if codepoint == '\t':
+                                    if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
+                                        width = partial_tab_width_1
                                     else:
-                                        break
-
-                                _match = regex_regex_1.match(buf, offset_2)
-                                if _match:
-                                    _end = _match.end()
-                                    column_2 += (_end - offset_2)
-                                    offset_2 = _end
+                                        width  = (self.tabstop-((column_1)%self.tabstop));
+                                    count_1 += width
+                                    column_1 += width
+                                    offset_1 += 1
                                 else:
-                                    offset_2 = -1
-                                    break
-
-                                if buf[offset_2:offset_2+1] == ':':
-                                    offset_2 += 1
-                                    column_2 += 1
-                                else:
-                                    offset_2 = -1
-                                    break
-
-                                #print('safe exit rep rule', offset_1, offset_2)
+                                    count_1 += 1
+                                    column_1 += 1
+                                    offset_1 += 1
+                            else:
                                 break
-                            #print('exit rep rule', offset_1, offset_2)
-                            if offset_2 == -1:
-                                break
-                            if offset_1 == offset_2: break
-                            if children_3 is not None and children_3 is not None:
-                                children_2.extend(children_3)
-                            offset_1 = offset_2
-                            column_1 = column_2
-                            indent_column_1 = indent_column_2
-                            partial_tab_offset_1 = partial_tab_offset_2
-                            partial_tab_width_1 = partial_tab_width_2
-                            count_1 += 1
-                        if offset_1 == -1:
+
+                        _match = regex_regex_1.match(buf, offset_1)
+                        if _match:
+                            _end = _match.end()
+                            column_1 += (_end - offset_1)
+                            offset_1 = _end
+                        else:
+                            offset_1 = -1
                             break
-                        value_2 = count_1
+
+                        if buf[offset_1:offset_1+1] == ':':
+                            offset_1 += 1
+                            column_1 += 1
+                        else:
+                            offset_1 = -1
+                            break
+
+                        count_1 = 0
+                        while offset_1 < buf_eof:
+                            codepoint = buf[offset_1]
+                            if codepoint in ' \t':
+                                if codepoint == '\t':
+                                    if offset_1 == partial_tab_offset_1 and partial_tab_width_1 > 0:
+                                        width = partial_tab_width_1
+                                    else:
+                                        width  = (self.tabstop-((column_1)%self.tabstop));
+                                    count_1 += width
+                                    column_1 += width
+                                    offset_1 += 1
+                                else:
+                                    count_1 += 1
+                                    column_1 += 1
+                                    offset_1 += 1
+                            else:
+                                break
 
                         _match = regex_regex_2.match(buf, offset_1)
                         if _match:
@@ -1869,7 +1860,7 @@ class Parser:
                             else:
                                 break
 
-                        _match = regex_regex_5.match(buf, offset_0)
+                        _match = regex_regex_2.match(buf, offset_0)
                         if _match:
                             _end = _match.end()
                             column_0 += (_end - offset_0)
@@ -2055,7 +2046,7 @@ class Parser:
                                             else:
                                                 break
 
-                                        _match = regex_regex_6.match(buf, offset_3)
+                                        _match = regex_regex_5.match(buf, offset_3)
                                         if _match:
                                             _end = _match.end()
                                             column_3 += (_end - offset_3)
@@ -2145,7 +2136,7 @@ class Parser:
                                             else:
                                                 break
 
-                                        _match = regex_regex_5.match(buf, offset_2)
+                                        _match = regex_regex_2.match(buf, offset_2)
                                         if _match:
                                             _end = _match.end()
                                             column_2 += (_end - offset_2)
@@ -2254,7 +2245,7 @@ class Parser:
                 else:
                     break
 
-            _match = regex_regex_7.match(buf, offset_0)
+            _match = regex_regex_6.match(buf, offset_0)
             if _match:
                 _end = _match.end()
                 column_0 += (_end - offset_0)
@@ -2311,7 +2302,7 @@ class Parser:
                 offset_1 = offset_0
                 column_1 = column_0
                 while True: # start count
-                    _match = regex_regex_8.match(buf, offset_1)
+                    _match = regex_regex_7.match(buf, offset_1)
                     if _match:
                         _end = _match.end()
                         column_1 += (_end - offset_1)
@@ -2385,7 +2376,7 @@ class Parser:
                                             children_6 = []
                                             value_5 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
                                             while True: # start capture
-                                                _match = regex_regex_9.match(buf, offset_3)
+                                                _match = regex_regex_8.match(buf, offset_3)
                                                 if _match:
                                                     _end = _match.end()
                                                     column_3 += (_end - offset_3)
@@ -2471,7 +2462,7 @@ class Parser:
                                                         else:
                                                             break
 
-                                                    _match = regex_regex_6.match(buf, offset_4)
+                                                    _match = regex_regex_5.match(buf, offset_4)
                                                     if _match:
                                                         _end = _match.end()
                                                         column_4 += (_end - offset_4)
@@ -2555,7 +2546,7 @@ class Parser:
                                             children_6 = []
                                             value_7 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
                                             while True: # start capture
-                                                _match = regex_regex_10.match(buf, offset_3)
+                                                _match = regex_regex_9.match(buf, offset_3)
                                                 if _match:
                                                     _end = _match.end()
                                                     column_3 += (_end - offset_3)
@@ -2606,7 +2597,7 @@ class Parser:
                                                 offset_3 = -1
                                                 break
 
-                                            _match = regex_regex_11.match(buf, offset_3)
+                                            _match = regex_regex_10.match(buf, offset_3)
                                             if _match:
                                                 _end = _match.end()
                                                 column_3 += (_end - offset_3)
@@ -2618,7 +2609,7 @@ class Parser:
                                             children_6 = []
                                             value_8 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
                                             while True: # start capture
-                                                _match = regex_regex_12.match(buf, offset_3)
+                                                _match = regex_regex_11.match(buf, offset_3)
                                                 if _match:
                                                     _end = _match.end()
                                                     column_3 += (_end - offset_3)
@@ -2627,7 +2618,7 @@ class Parser:
                                                     offset_3 = -1
                                                     break
 
-                                                _match = regex_regex_13.match(buf, offset_3)
+                                                _match = regex_regex_12.match(buf, offset_3)
                                                 if _match:
                                                     _end = _match.end()
                                                     column_3 += (_end - offset_3)
@@ -2674,7 +2665,7 @@ class Parser:
                                             children_6 = []
                                             value_9 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
                                             while True: # start capture
-                                                _match = regex_regex_14.match(buf, offset_3)
+                                                _match = regex_regex_13.match(buf, offset_3)
                                                 if _match:
                                                     _end = _match.end()
                                                     column_3 += (_end - offset_3)
@@ -2683,7 +2674,7 @@ class Parser:
                                                     offset_3 = -1
                                                     break
 
-                                                _match = regex_regex_15.match(buf, offset_3)
+                                                _match = regex_regex_14.match(buf, offset_3)
                                                 if _match:
                                                     _end = _match.end()
                                                     column_3 += (_end - offset_3)
@@ -2748,7 +2739,7 @@ class Parser:
                                     children_5 = []
                                     value_10 = Node(None, offset_2, offset_2, column_2, column_2, children_5, None)
                                     while True: # start capture
-                                        _match = regex_regex_6.match(buf, offset_2)
+                                        _match = regex_regex_5.match(buf, offset_2)
                                         if _match:
                                             _end = _match.end()
                                             column_2 += (_end - offset_2)
@@ -2757,7 +2748,7 @@ class Parser:
                                             offset_2 = -1
                                             break
 
-                                        _match = regex_regex_16.match(buf, offset_2)
+                                        _match = regex_regex_15.match(buf, offset_2)
                                         if _match:
                                             _end = _match.end()
                                             column_2 += (_end - offset_2)
@@ -3013,7 +3004,7 @@ class Parser:
                         children_3 = []
                         value_13 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
-                            _match = regex_regex_2.match(buf, offset_1)
+                            _match = regex_regex_16.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -3460,7 +3451,7 @@ class Parser:
                                             children_6 = []
                                             value_5 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
                                             while True: # start capture
-                                                _match = regex_regex_9.match(buf, offset_3)
+                                                _match = regex_regex_8.match(buf, offset_3)
                                                 if _match:
                                                     _end = _match.end()
                                                     column_3 += (_end - offset_3)
@@ -3546,7 +3537,7 @@ class Parser:
                                                         else:
                                                             break
 
-                                                    _match = regex_regex_6.match(buf, offset_4)
+                                                    _match = regex_regex_5.match(buf, offset_4)
                                                     if _match:
                                                         _end = _match.end()
                                                         column_4 += (_end - offset_4)
@@ -3630,7 +3621,7 @@ class Parser:
                                             children_6 = []
                                             value_7 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
                                             while True: # start capture
-                                                _match = regex_regex_10.match(buf, offset_3)
+                                                _match = regex_regex_9.match(buf, offset_3)
                                                 if _match:
                                                     _end = _match.end()
                                                     column_3 += (_end - offset_3)
@@ -3681,7 +3672,7 @@ class Parser:
                                                 offset_3 = -1
                                                 break
 
-                                            _match = regex_regex_11.match(buf, offset_3)
+                                            _match = regex_regex_10.match(buf, offset_3)
                                             if _match:
                                                 _end = _match.end()
                                                 column_3 += (_end - offset_3)
@@ -3693,7 +3684,7 @@ class Parser:
                                             children_6 = []
                                             value_8 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
                                             while True: # start capture
-                                                _match = regex_regex_12.match(buf, offset_3)
+                                                _match = regex_regex_11.match(buf, offset_3)
                                                 if _match:
                                                     _end = _match.end()
                                                     column_3 += (_end - offset_3)
@@ -3702,7 +3693,7 @@ class Parser:
                                                     offset_3 = -1
                                                     break
 
-                                                _match = regex_regex_13.match(buf, offset_3)
+                                                _match = regex_regex_12.match(buf, offset_3)
                                                 if _match:
                                                     _end = _match.end()
                                                     column_3 += (_end - offset_3)
@@ -3749,7 +3740,7 @@ class Parser:
                                             children_6 = []
                                             value_9 = Node(None, offset_3, offset_3, column_3, column_3, children_6, None)
                                             while True: # start capture
-                                                _match = regex_regex_14.match(buf, offset_3)
+                                                _match = regex_regex_13.match(buf, offset_3)
                                                 if _match:
                                                     _end = _match.end()
                                                     column_3 += (_end - offset_3)
@@ -3758,7 +3749,7 @@ class Parser:
                                                     offset_3 = -1
                                                     break
 
-                                                _match = regex_regex_15.match(buf, offset_3)
+                                                _match = regex_regex_14.match(buf, offset_3)
                                                 if _match:
                                                     _end = _match.end()
                                                     column_3 += (_end - offset_3)
@@ -3823,7 +3814,7 @@ class Parser:
                                     children_5 = []
                                     value_10 = Node(None, offset_2, offset_2, column_2, column_2, children_5, None)
                                     while True: # start capture
-                                        _match = regex_regex_6.match(buf, offset_2)
+                                        _match = regex_regex_5.match(buf, offset_2)
                                         if _match:
                                             _end = _match.end()
                                             column_2 += (_end - offset_2)
@@ -4078,7 +4069,7 @@ class Parser:
                         children_3 = []
                         value_13 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
-                            _match = regex_regex_2.match(buf, offset_1)
+                            _match = regex_regex_16.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -4562,7 +4553,7 @@ class Parser:
                         indent_column_2 = list(indent_column_1)
                         partial_tab_offset_2 = partial_tab_offset_1
                         partial_tab_width_2 = partial_tab_width_1
-                        _match = regex_regex_6.match(buf, offset_2)
+                        _match = regex_regex_5.match(buf, offset_2)
                         if _match:
                             _end = _match.end()
                             column_2 += (_end - offset_2)
@@ -5980,7 +5971,7 @@ class Parser:
                                         else:
                                             break
 
-                                    _match = regex_regex_6.match(buf, offset_3)
+                                    _match = regex_regex_5.match(buf, offset_3)
                                     if _match:
                                         _end = _match.end()
                                         column_3 += (_end - offset_3)
@@ -7815,7 +7806,7 @@ class Parser:
                                             indent_column_4 = list(indent_column_3)
                                             partial_tab_offset_4 = partial_tab_offset_3
                                             partial_tab_width_4 = partial_tab_width_3
-                                            _match = regex_regex_9.match(buf, offset_4)
+                                            _match = regex_regex_8.match(buf, offset_4)
                                             if _match:
                                                 _end = _match.end()
                                                 column_4 += (_end - offset_4)
@@ -7832,7 +7823,7 @@ class Parser:
                                         children_5 = []
                                         value_2 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
                                         while True: # start capture
-                                            _match = regex_regex_9.match(buf, offset_3)
+                                            _match = regex_regex_8.match(buf, offset_3)
                                             if _match:
                                                 _end = _match.end()
                                                 column_3 += (_end - offset_3)
@@ -8101,7 +8092,7 @@ class Parser:
                                         indent_column_4 = list(indent_column_3)
                                         partial_tab_offset_4 = partial_tab_offset_3
                                         partial_tab_width_4 = partial_tab_width_3
-                                        _match = regex_regex_9.match(buf, offset_4)
+                                        _match = regex_regex_8.match(buf, offset_4)
                                         if _match:
                                             _end = _match.end()
                                             column_4 += (_end - offset_4)
@@ -8118,7 +8109,7 @@ class Parser:
                                     children_4 = []
                                     value_2 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
                                     while True: # start capture
-                                        _match = regex_regex_9.match(buf, offset_3)
+                                        _match = regex_regex_8.match(buf, offset_3)
                                         if _match:
                                             _end = _match.end()
                                             column_3 += (_end - offset_3)
@@ -8513,7 +8504,7 @@ class Parser:
                                         indent_column_3 = list(indent_column_2)
                                         partial_tab_offset_3 = partial_tab_offset_2
                                         partial_tab_width_3 = partial_tab_width_2
-                                        _match = regex_regex_9.match(buf, offset_3)
+                                        _match = regex_regex_8.match(buf, offset_3)
                                         if _match:
                                             _end = _match.end()
                                             column_3 += (_end - offset_3)
@@ -8530,7 +8521,7 @@ class Parser:
                                     children_5 = []
                                     value_3 = Node(None, offset_2, offset_2, column_2, column_2, children_5, None)
                                     while True: # start capture
-                                        _match = regex_regex_9.match(buf, offset_2)
+                                        _match = regex_regex_8.match(buf, offset_2)
                                         if _match:
                                             _end = _match.end()
                                             column_2 += (_end - offset_2)
@@ -11644,7 +11635,7 @@ class Parser:
                     children_2 = []
                     value_0 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
-                        _match = regex_regex_14.match(buf, offset_1)
+                        _match = regex_regex_13.match(buf, offset_1)
                         if _match:
                             _end = _match.end()
                             column_1 += (_end - offset_1)
@@ -11918,7 +11909,7 @@ class Parser:
                             children_3 = []
                             value_2 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
                             while True: # start capture
-                                _match = regex_regex_10.match(buf, offset_2)
+                                _match = regex_regex_9.match(buf, offset_2)
                                 if _match:
                                     _end = _match.end()
                                     column_2 += (_end - offset_2)
@@ -11969,7 +11960,7 @@ class Parser:
                                 offset_2 = -1
                                 break
 
-                            _match = regex_regex_11.match(buf, offset_2)
+                            _match = regex_regex_10.match(buf, offset_2)
                             if _match:
                                 _end = _match.end()
                                 column_2 += (_end - offset_2)
@@ -11981,7 +11972,7 @@ class Parser:
                             children_3 = []
                             value_3 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
                             while True: # start capture
-                                _match = regex_regex_12.match(buf, offset_2)
+                                _match = regex_regex_11.match(buf, offset_2)
                                 if _match:
                                     _end = _match.end()
                                     column_2 += (_end - offset_2)
@@ -11990,7 +11981,7 @@ class Parser:
                                     offset_2 = -1
                                     break
 
-                                _match = regex_regex_13.match(buf, offset_2)
+                                _match = regex_regex_12.match(buf, offset_2)
                                 if _match:
                                     _end = _match.end()
                                     column_2 += (_end - offset_2)
@@ -12037,7 +12028,7 @@ class Parser:
                             children_3 = []
                             value_4 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
                             while True: # start capture
-                                _match = regex_regex_14.match(buf, offset_2)
+                                _match = regex_regex_13.match(buf, offset_2)
                                 if _match:
                                     _end = _match.end()
                                     column_2 += (_end - offset_2)
@@ -12046,7 +12037,7 @@ class Parser:
                                     offset_2 = -1
                                     break
 
-                                _match = regex_regex_15.match(buf, offset_2)
+                                _match = regex_regex_14.match(buf, offset_2)
                                 if _match:
                                     _end = _match.end()
                                     column_2 += (_end - offset_2)
@@ -12126,7 +12117,7 @@ class Parser:
                             children_3 = []
                             value_5 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
                             while True: # start capture
-                                _match = regex_regex_9.match(buf, offset_2)
+                                _match = regex_regex_8.match(buf, offset_2)
                                 if _match:
                                     _end = _match.end()
                                     column_2 += (_end - offset_2)
@@ -12212,7 +12203,7 @@ class Parser:
                                         else:
                                             break
 
-                                    _match = regex_regex_6.match(buf, offset_3)
+                                    _match = regex_regex_5.match(buf, offset_3)
                                     if _match:
                                         _end = _match.end()
                                         column_3 += (_end - offset_3)
@@ -12281,7 +12272,7 @@ class Parser:
                     children_2 = []
                     value_7 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
-                        _match = regex_regex_14.match(buf, offset_1)
+                        _match = regex_regex_13.match(buf, offset_1)
                         if _match:
                             _end = _match.end()
                             column_1 += (_end - offset_1)
@@ -16227,7 +16218,7 @@ class Parser:
                                             indent_column_4 = list(indent_column_3)
                                             partial_tab_offset_4 = partial_tab_offset_3
                                             partial_tab_width_4 = partial_tab_width_3
-                                            _match = regex_regex_9.match(buf, offset_4)
+                                            _match = regex_regex_8.match(buf, offset_4)
                                             if _match:
                                                 _end = _match.end()
                                                 column_4 += (_end - offset_4)
@@ -16244,7 +16235,7 @@ class Parser:
                                         children_5 = []
                                         value_2 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
                                         while True: # start capture
-                                            _match = regex_regex_9.match(buf, offset_3)
+                                            _match = regex_regex_8.match(buf, offset_3)
                                             if _match:
                                                 _end = _match.end()
                                                 column_3 += (_end - offset_3)
@@ -16515,7 +16506,7 @@ class Parser:
                                         indent_column_4 = list(indent_column_3)
                                         partial_tab_offset_4 = partial_tab_offset_3
                                         partial_tab_width_4 = partial_tab_width_3
-                                        _match = regex_regex_9.match(buf, offset_4)
+                                        _match = regex_regex_8.match(buf, offset_4)
                                         if _match:
                                             _end = _match.end()
                                             column_4 += (_end - offset_4)
@@ -16532,7 +16523,7 @@ class Parser:
                                     children_4 = []
                                     value_2 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
                                     while True: # start capture
-                                        _match = regex_regex_9.match(buf, offset_3)
+                                        _match = regex_regex_8.match(buf, offset_3)
                                         if _match:
                                             _end = _match.end()
                                             column_3 += (_end - offset_3)
@@ -16791,7 +16782,7 @@ class Parser:
                                             indent_column_4 = list(indent_column_3)
                                             partial_tab_offset_4 = partial_tab_offset_3
                                             partial_tab_width_4 = partial_tab_width_3
-                                            _match = regex_regex_9.match(buf, offset_4)
+                                            _match = regex_regex_8.match(buf, offset_4)
                                             if _match:
                                                 _end = _match.end()
                                                 column_4 += (_end - offset_4)
@@ -16808,7 +16799,7 @@ class Parser:
                                         children_5 = []
                                         value_2 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
                                         while True: # start capture
-                                            _match = regex_regex_9.match(buf, offset_3)
+                                            _match = regex_regex_8.match(buf, offset_3)
                                             if _match:
                                                 _end = _match.end()
                                                 column_3 += (_end - offset_3)
@@ -17117,7 +17108,7 @@ class Parser:
                                             indent_column_4 = list(indent_column_3)
                                             partial_tab_offset_4 = partial_tab_offset_3
                                             partial_tab_width_4 = partial_tab_width_3
-                                            _match = regex_regex_9.match(buf, offset_4)
+                                            _match = regex_regex_8.match(buf, offset_4)
                                             if _match:
                                                 _end = _match.end()
                                                 column_4 += (_end - offset_4)
@@ -17134,7 +17125,7 @@ class Parser:
                                         children_5 = []
                                         value_7 = Node(None, offset_3, offset_3, column_3, column_3, children_5, None)
                                         while True: # start capture
-                                            _match = regex_regex_9.match(buf, offset_3)
+                                            _match = regex_regex_8.match(buf, offset_3)
                                             if _match:
                                                 _end = _match.end()
                                                 column_3 += (_end - offset_3)
@@ -17495,7 +17486,7 @@ class Parser:
                                         indent_column_4 = list(indent_column_3)
                                         partial_tab_offset_4 = partial_tab_offset_3
                                         partial_tab_width_4 = partial_tab_width_3
-                                        _match = regex_regex_9.match(buf, offset_4)
+                                        _match = regex_regex_8.match(buf, offset_4)
                                         if _match:
                                             _end = _match.end()
                                             column_4 += (_end - offset_4)
@@ -17512,7 +17503,7 @@ class Parser:
                                     children_4 = []
                                     value_2 = Node(None, offset_3, offset_3, column_3, column_3, children_4, None)
                                     while True: # start capture
-                                        _match = regex_regex_9.match(buf, offset_3)
+                                        _match = regex_regex_8.match(buf, offset_3)
                                         if _match:
                                             _end = _match.end()
                                             column_3 += (_end - offset_3)
@@ -17723,7 +17714,7 @@ class Parser:
                     children_2 = []
                     value_0 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
-                        _match = regex_regex_10.match(buf, offset_1)
+                        _match = regex_regex_9.match(buf, offset_1)
                         if _match:
                             _end = _match.end()
                             column_1 += (_end - offset_1)
@@ -17774,7 +17765,7 @@ class Parser:
                         offset_1 = -1
                         break
 
-                    _match = regex_regex_11.match(buf, offset_1)
+                    _match = regex_regex_10.match(buf, offset_1)
                     if _match:
                         _end = _match.end()
                         column_1 += (_end - offset_1)
@@ -17786,7 +17777,7 @@ class Parser:
                     children_2 = []
                     value_1 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
-                        _match = regex_regex_12.match(buf, offset_1)
+                        _match = regex_regex_11.match(buf, offset_1)
                         if _match:
                             _end = _match.end()
                             column_1 += (_end - offset_1)
@@ -17795,7 +17786,7 @@ class Parser:
                             offset_1 = -1
                             break
 
-                        _match = regex_regex_13.match(buf, offset_1)
+                        _match = regex_regex_12.match(buf, offset_1)
                         if _match:
                             _end = _match.end()
                             column_1 += (_end - offset_1)
@@ -17842,7 +17833,7 @@ class Parser:
                     children_2 = []
                     value_2 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
                     while True: # start capture
-                        _match = regex_regex_14.match(buf, offset_1)
+                        _match = regex_regex_13.match(buf, offset_1)
                         if _match:
                             _end = _match.end()
                             column_1 += (_end - offset_1)
@@ -17851,7 +17842,7 @@ class Parser:
                             offset_1 = -1
                             break
 
-                        _match = regex_regex_15.match(buf, offset_1)
+                        _match = regex_regex_14.match(buf, offset_1)
                         if _match:
                             _end = _match.end()
                             column_1 += (_end - offset_1)
@@ -19761,7 +19752,7 @@ class Parser:
                                     offset_2 = -1
                                     break
 
-                                _match = regex_regex_6.match(buf, offset_2)
+                                _match = regex_regex_5.match(buf, offset_2)
                                 if _match:
                                     _end = _match.end()
                                     column_2 += (_end - offset_2)
@@ -19892,7 +19883,7 @@ class Parser:
                                             offset_3 = -1
                                             break
 
-                                        _match = regex_regex_6.match(buf, offset_3)
+                                        _match = regex_regex_5.match(buf, offset_3)
                                         if _match:
                                             _end = _match.end()
                                             column_3 += (_end - offset_3)
@@ -20025,7 +20016,7 @@ class Parser:
                                     offset_2 = -1
                                     break
 
-                                _match = regex_regex_6.match(buf, offset_2)
+                                _match = regex_regex_5.match(buf, offset_2)
                                 if _match:
                                     _end = _match.end()
                                     column_2 += (_end - offset_2)
@@ -20052,6 +20043,176 @@ class Parser:
                             break
                         value_8 = count_0
 
+                        count_0 = 0
+                        while True:
+                            offset_2 = offset_1
+                            column_2 = column_1
+                            indent_column_2 = list(indent_column_1)
+                            partial_tab_offset_2 = partial_tab_offset_1
+                            partial_tab_width_2 = partial_tab_width_1
+                            children_3 = [] if children_2 is not None else None
+                            while True:
+                                #print('entry rep rule', offset_1, offset_2)
+                                children_4 = []
+                                value_10 = Node(None, offset_2, offset_2, column_2, column_2, children_4, None)
+                                while True: # start capture
+                                    if offset_2 < buf_eof:
+                                        codepoint = buf[offset_2]
+                                        if codepoint in '\n':
+                                            offset_2 +=1
+                                            column_2 = 0
+                                            indent_column_2[:] = (0, )
+                                        else:
+                                            offset_2 = -1
+                                            break
+                                    else:
+                                        offset_2 = -1
+                                        break
+
+                                    break
+                                if offset_2 == -1:
+                                    break
+                                value_10.name = 'raw'
+                                value_10.end = offset_2
+                                value_10.end_column = column_2
+                                value_10.value = None
+                                children_3.append(value_10)
+
+                                if column_2 != 0:
+                                    offset_2 = -1
+                                    break
+                                # print('start')
+                                for indent, dedent in prefix_0:
+                                    # print(indent, dedent)
+                                    _children, _prefix = [], []
+                                    offset_3 = offset_2
+                                    offset_3, column_2, partial_tab_offset_2, partial_tab_width_2 = indent(buf, buf_start, buf_eof, offset_3, column_2, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
+                                    if _prefix or _children:
+                                       raise Exception('bar')
+                                    if offset_3 == -1:
+                                        if dedent is None:
+                                            offset_2 = -1
+                                            break
+                                        _children, _prefix = [], []
+                                        offset_3 = offset_2
+                                        offset_3, _column, _partial_tab_offset, _partial_tab_width = dedent(buf, buf_start, buf_eof, offset_3, column_2, list(indent_column_2), _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
+                                        if offset_3 != -1:
+                                            offset_2 = -1
+                                            break
+                                        else:
+                                            offset_3 = offset_2
+                                    offset_2 = offset_3
+                                    indent_column_2.append(column_2)
+                                if offset_2 == -1:
+                                    break
+
+                                children_4 = []
+                                value_11 = Node(None, offset_2, offset_2, column_2, column_2, children_4, None)
+                                while True: # start capture
+                                    count_1 = 0
+                                    while True:
+                                        offset_3 = offset_2
+                                        column_3 = column_2
+                                        indent_column_3 = list(indent_column_2)
+                                        partial_tab_offset_3 = partial_tab_offset_2
+                                        partial_tab_width_3 = partial_tab_width_2
+                                        children_5 = [] if children_4 is not None else None
+                                        while True:
+                                            #print('entry rep rule', offset_2, offset_3)
+                                            while True: # start reject
+                                                children_6 = []
+                                                offset_4 = offset_3 + 0
+                                                column_4 = column_3
+                                                indent_column_4 = list(indent_column_3)
+                                                partial_tab_offset_4 = partial_tab_offset_3
+                                                partial_tab_width_4 = partial_tab_width_3
+                                                _match = regex_regex_62.match(buf, offset_4)
+                                                if _match:
+                                                    _end = _match.end()
+                                                    column_4 += (_end - offset_4)
+                                                    offset_4 = _end
+                                                else:
+                                                    offset_4 = -1
+                                                    break
+
+                                                break
+                                            if offset_4 != -1:
+                                                offset_3 = -1
+                                                break
+
+                                            _match = regex_regex_5.match(buf, offset_3)
+                                            if _match:
+                                                _end = _match.end()
+                                                column_3 += (_end - offset_3)
+                                                offset_3 = _end
+                                            else:
+                                                offset_3 = -1
+                                                break
+
+                                            #print('safe exit rep rule', offset_2, offset_3)
+                                            break
+                                        #print('exit rep rule', offset_2, offset_3)
+                                        if offset_3 == -1:
+                                            break
+                                        if offset_2 == offset_3: break
+                                        if children_5 is not None and children_5 is not None:
+                                            children_4.extend(children_5)
+                                        offset_2 = offset_3
+                                        column_2 = column_3
+                                        indent_column_2 = indent_column_3
+                                        partial_tab_offset_2 = partial_tab_offset_3
+                                        partial_tab_width_2 = partial_tab_width_3
+                                        count_1 += 1
+                                    if offset_2 == -1:
+                                        break
+                                    value_12 = count_1
+
+                                    break
+                                if offset_2 == -1:
+                                    break
+                                value_11.name = 'raw'
+                                value_11.end = offset_2
+                                value_11.end_column = column_2
+                                value_11.value = None
+                                children_3.append(value_11)
+
+                                #print('safe exit rep rule', offset_1, offset_2)
+                                break
+                            #print('exit rep rule', offset_1, offset_2)
+                            if offset_2 == -1:
+                                break
+                            if offset_1 == offset_2: break
+                            if children_3 is not None and children_3 is not None:
+                                children_2.extend(children_3)
+                            offset_1 = offset_2
+                            column_1 = column_2
+                            indent_column_1 = indent_column_2
+                            partial_tab_offset_1 = partial_tab_offset_2
+                            partial_tab_width_1 = partial_tab_width_2
+                            count_0 += 1
+                        if offset_1 == -1:
+                            break
+                        value_9 = count_0
+
+                        children_3 = []
+                        value_13 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
+                        while True: # start capture
+                            if buf[offset_1:offset_1+3] == '-->':
+                                offset_1 += 3
+                                column_1 += 3
+                            else:
+                                offset_1 = -1
+                                break
+
+                            break
+                        if offset_1 == -1:
+                            break
+                        value_13.name = 'raw'
+                        value_13.end = offset_1
+                        value_13.end_column = column_1
+                        value_13.value = None
+                        children_2.append(value_13)
+
                         break
                     if offset_1 == -1:
                         break
@@ -20060,176 +20221,6 @@ class Parser:
                     value_7.end_column = column_1
                     value_7.value = None
                     children_1.append(value_7)
-
-                    count_0 = 0
-                    while True:
-                        offset_2 = offset_1
-                        column_2 = column_1
-                        indent_column_2 = list(indent_column_1)
-                        partial_tab_offset_2 = partial_tab_offset_1
-                        partial_tab_width_2 = partial_tab_width_1
-                        children_2 = [] if children_1 is not None else None
-                        while True:
-                            #print('entry rep rule', offset_1, offset_2)
-                            children_3 = []
-                            value_10 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
-                            while True: # start capture
-                                if offset_2 < buf_eof:
-                                    codepoint = buf[offset_2]
-                                    if codepoint in '\n':
-                                        offset_2 +=1
-                                        column_2 = 0
-                                        indent_column_2[:] = (0, )
-                                    else:
-                                        offset_2 = -1
-                                        break
-                                else:
-                                    offset_2 = -1
-                                    break
-
-                                break
-                            if offset_2 == -1:
-                                break
-                            value_10.name = 'raw'
-                            value_10.end = offset_2
-                            value_10.end_column = column_2
-                            value_10.value = None
-                            children_2.append(value_10)
-
-                            if column_2 != 0:
-                                offset_2 = -1
-                                break
-                            # print('start')
-                            for indent, dedent in prefix_0:
-                                # print(indent, dedent)
-                                _children, _prefix = [], []
-                                offset_3 = offset_2
-                                offset_3, column_2, partial_tab_offset_2, partial_tab_width_2 = indent(buf, buf_start, buf_eof, offset_3, column_2, indent_column_2, _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
-                                if _prefix or _children:
-                                   raise Exception('bar')
-                                if offset_3 == -1:
-                                    if dedent is None:
-                                        offset_2 = -1
-                                        break
-                                    _children, _prefix = [], []
-                                    offset_3 = offset_2
-                                    offset_3, _column, _partial_tab_offset, _partial_tab_width = dedent(buf, buf_start, buf_eof, offset_3, column_2, list(indent_column_2), _prefix, _children, partial_tab_offset_2, partial_tab_width_2)
-                                    if offset_3 != -1:
-                                        offset_2 = -1
-                                        break
-                                    else:
-                                        offset_3 = offset_2
-                                offset_2 = offset_3
-                                indent_column_2.append(column_2)
-                            if offset_2 == -1:
-                                break
-
-                            children_3 = []
-                            value_11 = Node(None, offset_2, offset_2, column_2, column_2, children_3, None)
-                            while True: # start capture
-                                count_1 = 0
-                                while True:
-                                    offset_3 = offset_2
-                                    column_3 = column_2
-                                    indent_column_3 = list(indent_column_2)
-                                    partial_tab_offset_3 = partial_tab_offset_2
-                                    partial_tab_width_3 = partial_tab_width_2
-                                    children_4 = [] if children_3 is not None else None
-                                    while True:
-                                        #print('entry rep rule', offset_2, offset_3)
-                                        while True: # start reject
-                                            children_5 = []
-                                            offset_4 = offset_3 + 0
-                                            column_4 = column_3
-                                            indent_column_4 = list(indent_column_3)
-                                            partial_tab_offset_4 = partial_tab_offset_3
-                                            partial_tab_width_4 = partial_tab_width_3
-                                            _match = regex_regex_62.match(buf, offset_4)
-                                            if _match:
-                                                _end = _match.end()
-                                                column_4 += (_end - offset_4)
-                                                offset_4 = _end
-                                            else:
-                                                offset_4 = -1
-                                                break
-
-                                            break
-                                        if offset_4 != -1:
-                                            offset_3 = -1
-                                            break
-
-                                        _match = regex_regex_6.match(buf, offset_3)
-                                        if _match:
-                                            _end = _match.end()
-                                            column_3 += (_end - offset_3)
-                                            offset_3 = _end
-                                        else:
-                                            offset_3 = -1
-                                            break
-
-                                        #print('safe exit rep rule', offset_2, offset_3)
-                                        break
-                                    #print('exit rep rule', offset_2, offset_3)
-                                    if offset_3 == -1:
-                                        break
-                                    if offset_2 == offset_3: break
-                                    if children_4 is not None and children_4 is not None:
-                                        children_3.extend(children_4)
-                                    offset_2 = offset_3
-                                    column_2 = column_3
-                                    indent_column_2 = indent_column_3
-                                    partial_tab_offset_2 = partial_tab_offset_3
-                                    partial_tab_width_2 = partial_tab_width_3
-                                    count_1 += 1
-                                if offset_2 == -1:
-                                    break
-                                value_12 = count_1
-
-                                break
-                            if offset_2 == -1:
-                                break
-                            value_11.name = 'raw'
-                            value_11.end = offset_2
-                            value_11.end_column = column_2
-                            value_11.value = None
-                            children_2.append(value_11)
-
-                            #print('safe exit rep rule', offset_1, offset_2)
-                            break
-                        #print('exit rep rule', offset_1, offset_2)
-                        if offset_2 == -1:
-                            break
-                        if offset_1 == offset_2: break
-                        if children_2 is not None and children_2 is not None:
-                            children_1.extend(children_2)
-                        offset_1 = offset_2
-                        column_1 = column_2
-                        indent_column_1 = indent_column_2
-                        partial_tab_offset_1 = partial_tab_offset_2
-                        partial_tab_width_1 = partial_tab_width_2
-                        count_0 += 1
-                    if offset_1 == -1:
-                        break
-                    value_9 = count_0
-
-                    children_2 = []
-                    value_13 = Node(None, offset_1, offset_1, column_1, column_1, children_2, None)
-                    while True: # start capture
-                        if buf[offset_1:offset_1+3] == '-->':
-                            offset_1 += 3
-                            column_1 += 3
-                        else:
-                            offset_1 = -1
-                            break
-
-                        break
-                    if offset_1 == -1:
-                        break
-                    value_13.name = 'raw'
-                    value_13.end = offset_1
-                    value_13.end_column = column_1
-                    value_13.value = None
-                    children_1.append(value_13)
 
 
                     break
@@ -20466,7 +20457,7 @@ class Parser:
                                     offset_2 = -1
                                     break
 
-                                _match = regex_regex_6.match(buf, offset_2)
+                                _match = regex_regex_5.match(buf, offset_2)
                                 if _match:
                                     _end = _match.end()
                                     column_2 += (_end - offset_2)
@@ -20597,7 +20588,7 @@ class Parser:
                                             offset_3 = -1
                                             break
 
-                                        _match = regex_regex_6.match(buf, offset_3)
+                                        _match = regex_regex_5.match(buf, offset_3)
                                         if _match:
                                             _end = _match.end()
                                             column_3 += (_end - offset_3)
@@ -20699,7 +20690,7 @@ class Parser:
                             offset_1 = -1
                             break
 
-                        _match = regex_regex_14.match(buf, offset_1)
+                        _match = regex_regex_13.match(buf, offset_1)
                         if _match:
                             _end = _match.end()
                             column_1 += (_end - offset_1)
@@ -21990,7 +21981,7 @@ class Parser:
                             offset_1 = -1
                             break
 
-                        _match = regex_regex_14.match(buf, offset_1)
+                        _match = regex_regex_13.match(buf, offset_1)
                         if _match:
                             _end = _match.end()
                             column_1 += (_end - offset_1)
@@ -22252,7 +22243,7 @@ class Parser:
                                 offset_1 = -1
                                 break
 
-                            _match = regex_regex_6.match(buf, offset_1)
+                            _match = regex_regex_5.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -22411,7 +22402,7 @@ class Parser:
                                         offset_2 = -1
                                         break
 
-                                    _match = regex_regex_6.match(buf, offset_2)
+                                    _match = regex_regex_5.match(buf, offset_2)
                                     if _match:
                                         _end = _match.end()
                                         column_2 += (_end - offset_2)
@@ -22485,7 +22476,7 @@ class Parser:
                                 offset_1 = -1
                                 break
 
-                            _match = regex_regex_2.match(buf, offset_1)
+                            _match = regex_regex_16.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -22569,7 +22560,7 @@ class Parser:
                                         offset_2 = -1
                                         break
 
-                                    _match = regex_regex_6.match(buf, offset_2)
+                                    _match = regex_regex_5.match(buf, offset_2)
                                     if _match:
                                         _end = _match.end()
                                         column_2 += (_end - offset_2)
@@ -22714,7 +22705,7 @@ class Parser:
                                 offset_1 = -1
                                 break
 
-                            _match = regex_regex_6.match(buf, offset_1)
+                            _match = regex_regex_5.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -22871,7 +22862,7 @@ class Parser:
                                         offset_2 = -1
                                         break
 
-                                    _match = regex_regex_6.match(buf, offset_2)
+                                    _match = regex_regex_5.match(buf, offset_2)
                                     if _match:
                                         _end = _match.end()
                                         column_2 += (_end - offset_2)
@@ -22943,7 +22934,7 @@ class Parser:
                                 offset_1 = -1
                                 break
 
-                            _match = regex_regex_2.match(buf, offset_1)
+                            _match = regex_regex_16.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -23025,7 +23016,7 @@ class Parser:
                                         offset_2 = -1
                                         break
 
-                                    _match = regex_regex_6.match(buf, offset_2)
+                                    _match = regex_regex_5.match(buf, offset_2)
                                     if _match:
                                         _end = _match.end()
                                         column_2 += (_end - offset_2)
@@ -23170,7 +23161,7 @@ class Parser:
                                 offset_1 = -1
                                 break
 
-                            _match = regex_regex_6.match(buf, offset_1)
+                            _match = regex_regex_5.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -23327,7 +23318,7 @@ class Parser:
                                         offset_2 = -1
                                         break
 
-                                    _match = regex_regex_6.match(buf, offset_2)
+                                    _match = regex_regex_5.match(buf, offset_2)
                                     if _match:
                                         _end = _match.end()
                                         column_2 += (_end - offset_2)
@@ -23399,7 +23390,7 @@ class Parser:
                                 offset_1 = -1
                                 break
 
-                            _match = regex_regex_2.match(buf, offset_1)
+                            _match = regex_regex_16.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -23481,7 +23472,7 @@ class Parser:
                                         offset_2 = -1
                                         break
 
-                                    _match = regex_regex_6.match(buf, offset_2)
+                                    _match = regex_regex_5.match(buf, offset_2)
                                     if _match:
                                         _end = _match.end()
                                         column_2 += (_end - offset_2)
@@ -23635,7 +23626,7 @@ class Parser:
                                 offset_1 = -1
                                 break
 
-                            _match = regex_regex_6.match(buf, offset_1)
+                            _match = regex_regex_5.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -23792,7 +23783,7 @@ class Parser:
                                         offset_2 = -1
                                         break
 
-                                    _match = regex_regex_6.match(buf, offset_2)
+                                    _match = regex_regex_5.match(buf, offset_2)
                                     if _match:
                                         _end = _match.end()
                                         column_2 += (_end - offset_2)
@@ -23864,7 +23855,7 @@ class Parser:
                                 offset_1 = -1
                                 break
 
-                            _match = regex_regex_2.match(buf, offset_1)
+                            _match = regex_regex_16.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -23946,7 +23937,7 @@ class Parser:
                                         offset_2 = -1
                                         break
 
-                                    _match = regex_regex_6.match(buf, offset_2)
+                                    _match = regex_regex_5.match(buf, offset_2)
                                     if _match:
                                         _end = _match.end()
                                         column_2 += (_end - offset_2)
@@ -24091,7 +24082,7 @@ class Parser:
                                 offset_1 = -1
                                 break
 
-                            _match = regex_regex_6.match(buf, offset_1)
+                            _match = regex_regex_5.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -24248,7 +24239,7 @@ class Parser:
                                         offset_2 = -1
                                         break
 
-                                    _match = regex_regex_6.match(buf, offset_2)
+                                    _match = regex_regex_5.match(buf, offset_2)
                                     if _match:
                                         _end = _match.end()
                                         column_2 += (_end - offset_2)
@@ -24320,7 +24311,7 @@ class Parser:
                                 offset_1 = -1
                                 break
 
-                            _match = regex_regex_2.match(buf, offset_1)
+                            _match = regex_regex_16.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -24402,7 +24393,7 @@ class Parser:
                                         offset_2 = -1
                                         break
 
-                                    _match = regex_regex_6.match(buf, offset_2)
+                                    _match = regex_regex_5.match(buf, offset_2)
                                     if _match:
                                         _end = _match.end()
                                         column_2 += (_end - offset_2)
@@ -24644,7 +24635,7 @@ class Parser:
                         offset_0 = -1
                         break
 
-                    _match = regex_regex_2.match(buf, offset_0)
+                    _match = regex_regex_16.match(buf, offset_0)
                     if _match:
                         _end = _match.end()
                         column_0 += (_end - offset_0)
@@ -24760,7 +24751,7 @@ class Parser:
                         children_3 = []
                         value_4 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
-                            _match = regex_regex_2.match(buf, offset_1)
+                            _match = regex_regex_16.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -25064,7 +25055,7 @@ class Parser:
                                 offset_1 = -1
                                 break
 
-                            _match = regex_regex_14.match(buf, offset_1)
+                            _match = regex_regex_13.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -25146,7 +25137,7 @@ class Parser:
                         partial_tab_width_1 = partial_tab_width_0
                         children_3 = [] if children_2 is not None else None
                         while True: # case
-                            _match = regex_regex_14.match(buf, offset_1)
+                            _match = regex_regex_13.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)
@@ -25486,7 +25477,7 @@ class Parser:
                         children_3 = []
                         value_6 = Node(None, offset_1, offset_1, column_1, column_1, children_3, None)
                         while True: # start capture
-                            _match = regex_regex_2.match(buf, offset_1)
+                            _match = regex_regex_16.match(buf, offset_1)
                             if _match:
                                 _end = _match.end()
                                 column_1 += (_end - offset_1)

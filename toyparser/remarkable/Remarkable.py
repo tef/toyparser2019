@@ -55,9 +55,9 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
             with self.case():
                 self.horizontal_rule()
             with self.case():
-                self.begin_end_directive()
-            with self.case():
                 self.raw_block_directive()
+            with self.case():
+                self.begin_end_directive()
             with self.case():
                 self.block_directive()
             with self.case():
@@ -380,13 +380,17 @@ class Remarkable(Grammar, start="remark_document", whitespace=[" ", "\t"], newli
                     self.directive_args()
                     self.literal("}")
                 self.whitespace()
-                with self.optional():
-                    self.newline()
-                    self.indent()
-                    self.whitespace(min=min_indent, max=min_indent)
-                    with self.reject():
-                        self.whitespace(min=1)
-                self.directive_code_block()
+                with self.choice():
+                    with self.case():
+                        with self.optional():
+                            self.newline()
+                            self.indent()
+                            self.whitespace(min=min_indent, max=min_indent)
+                            with self.reject():
+                                self.whitespace(min=1)
+                        self.directive_code_block()
+                    with self.case():
+                        self.line_end()
 
     @rule()
     def start_definition(self):
