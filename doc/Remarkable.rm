@@ -1,6 +1,6 @@
-@metadata {
-	author: "tef"
-	title:  "Remarkable, a restructured markup format"
+@metadata
+ - [author] tef
+ - [title] Remarkable: a restructured markup format
 }
 
 @begin::section introduction
