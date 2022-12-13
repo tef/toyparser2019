@@ -186,6 +186,7 @@ html_tags = {
        dom.RawBlock.name: "{text}",
        dom.RawSpan.name: "{text}",
        dom.Span.name: "<span>{text}</span>\n",
+       dom.Link.name: "<a href=\"{url}\">{text}</a>\n",
 }
 
 def to_html(obj):

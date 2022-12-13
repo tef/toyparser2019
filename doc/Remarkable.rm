@@ -11,8 +11,7 @@
 > to target multiple output formats (at least PDF, HTML, EPUB).
 > $em[John MacFarlane, author of Pandoc, editor of CommonMark.]
 
-Remark is an attempt to realise this dream: A markup format that isn't tied to one specific output format, without
-many of the shortcomings of other approaches. 
+Remark is an attempt to realise this dream: A markup format that isn't tied to one specific output format, without many of the shortcomings of other approaches. 
 
 - Unlike Markdown or CommonMark, Remark has a standard way to annotate text or blocks for processing
 - Unlike LaTeX or HTML, Remark has a consistent way to escape text
@@ -22,7 +21,7 @@ many of the shortcomings of other approaches.
 - Unlike RST, Remark doesn't require perfect alignment of ascii shorthand
 - Unlike Markdown, Remark doesn't care about the exact indentation or trailing whitespace
 
-In a nutshell: Remark is imagining an HTML like DOM, with LaTeX alike directives, with Markdown like shortcuts. As a bonuis, there's a grammar too!
+In a nutshell: Remark is imagining an HTML like DOM, with LaTeX alike directives, with Markdown like shortcuts. As a bonus, there's a grammar too!
 
 # A short worked example:
 

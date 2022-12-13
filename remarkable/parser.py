@@ -343,6 +343,12 @@ def builder(buf, node, children):
                 return dom.Table(args, text)
             if name == 'table' and text.name == "directive_table":
                 return dom.Table(args, text.text)
+            if name == 'figure':
+                text = text.text
+                if not args and text:
+                    url, text = text[0], text[2:] # skip whitespace ugh
+                    args =[('url', url)]
+                return dom.Figure(args, text)
 
             if text.name == 'directive_list':
                 text = [dom.BulletList(text.args, text.text)]
@@ -392,6 +398,11 @@ def builder(buf, node, children):
         args = children[2] if len(children) > 2 else []
         if text is not None:
             text = text.text
+
+        if name in ("a", "link", "img", "image"):
+            if not args and text:
+                url, text = text[0], text[1:]
+                args = [('url', url)]
 
         return dom.named_inline_directive(name, args, text)
     if kind == "arg":
